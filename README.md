@@ -1,2 +1,0 @@
-# lotsOfBSGdx
-Now with libGdx.
