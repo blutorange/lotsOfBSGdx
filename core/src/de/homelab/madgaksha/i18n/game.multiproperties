@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MultiProperties xmlns="hu.skzs.multiproperties">
+    <Version>1.2</Version>
+    <Name>i18n-main</Name>
+    <Description>Localized strings for the main program.</Description>
+    <Handler>Java Properties Handler</Handler>
+    <Columns>
+        <Key>
+            <Width>108</Width>
+        </Key>
+        <Column>
+            <Name>de</Name>
+            <Description>German</Description>
+            <Width>112</Width>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/game_de.properties|true|true|false|false</HandlerConfiguration>
+        </Column>
+        <Column>
+            <Name>en</Name>
+            <Description>English</Description>
+            <Width>226</Width>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/game_en.properties|true|true|false|false</HandlerConfiguration>
+        </Column>
+        <Column>
+            <Name>ja</Name>
+            <Description>Japanese</Description>
+            <Width>743</Width>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/game_ja.properties|true|true|false|false</HandlerConfiguration>
+        </Column>
+    </Columns>
+    <Records>
+        <Property>
+            <Name>window.title</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <DefaultValue>Hello World!</DefaultValue>
+            <Value disabled="false">Projektilsimulator :)</Value>
+            <Value disabled="false">Bullet Simulator :)</Value>
+            <Value disabled="false">弾幕シム</Value>
+        </Property>
+        <Property>
+            <Name>window.dialog.close</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Wirklich aufhören zu spielen?</Value>
+            <Value disabled="false">Would you care to stop playing?</Value>
+            <Value disabled="false">終わらせちまうのかよ？</Value>
+        </Property>
+        <Property>
+            <Name>window.dialog.close.title</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Spiel schließen?</Value>
+            <Value disabled="false">Exit entertainment?</Value>
+            <Value disabled="false">趣味終了？</Value>
+        </Property>
+    </Records>
+</MultiProperties>

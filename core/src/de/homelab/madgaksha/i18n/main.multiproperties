@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MultiProperties xmlns="hu.skzs.multiproperties">
+    <Version>1.2</Version>
+    <Name>i18n-main</Name>
+    <Description>Localized strings for the main program.</Description>
+    <Handler>Java Properties Handler</Handler>
+    <Columns>
+        <Key>
+            <Width>108</Width>
+        </Key>
+        <Column>
+            <Name>de</Name>
+            <Description>German</Description>
+            <Width>112</Width>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/main_de.properties|true|true|false|false</HandlerConfiguration>
+        </Column>
+        <Column>
+            <Name>en</Name>
+            <Description>English</Description>
+            <Width>969</Width>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/main_en.properties|true|true|false|false</HandlerConfiguration>
+        </Column>
+        <Column>
+            <Name>ja</Name>
+            <Description>Japanese</Description>
+            <Width>150</Width>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/main_ja.properties|true|true|false|false</HandlerConfiguration>
+        </Column>
+    </Columns>
+    <Records>
+        <Property>
+            <Name>helloWorld</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <DefaultValue>Hello World!</DefaultValue>
+            <Value disabled="false">Hallo Welt!</Value>
+            <Value disabled="false">Hello World!!</Value>
+            <Value disabled="true"></Value>
+        </Property>
+        <Property>
+            <Name>dialog.failure.resource</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Resource wurde nicht gefunden: </Value>
+            <Value disabled="false">Could not locate resource: </Value>
+            <Value disabled="false">ファイルはみつかりませんでした。</Value>
+        </Property>
+        <Property>
+            <Name>android.launcher.title</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Ruhe</Value>
+            <Value disabled="false">The Calmlands</Value>
+            <Value disabled="true"></Value>
+        </Property>
+        <Property>
+            <Name>android.game.title</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Sturm und Drang</Value>
+            <Value disabled="false">The Wildlands</Value>
+            <Value disabled="true"></Value>
+        </Property>
+    </Records>
+</MultiProperties>
