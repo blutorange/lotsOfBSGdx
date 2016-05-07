@@ -46,7 +46,7 @@
             <Value disabled="false">ファイルはみつかりませんでした。</Value>
         </Property>
         <Property>
-            <Name>android.launcher.title</Name>
+            <Name>desktop.launcher.title</Name>
             <Disabled>false</Disabled>
             <MultiLine>false</MultiLine>
             <Value disabled="false">Ruhe</Value>
@@ -54,11 +54,19 @@
             <Value disabled="true"></Value>
         </Property>
         <Property>
-            <Name>android.game.title</Name>
+            <Name>desktop.game.title</Name>
             <Disabled>false</Disabled>
             <MultiLine>false</MultiLine>
             <Value disabled="false">Sturm und Drang</Value>
             <Value disabled="false">The Wildlands</Value>
+            <Value disabled="true"></Value>
+        </Property>
+        <Property>
+            <Name>desktop.game.running</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Es gibt ein aktives Spiel. Dieses erst beenden.</Value>
+            <Value disabled="false">The game is running. Please close it first.</Value>
             <Value disabled="true"></Value>
         </Property>
     </Records>

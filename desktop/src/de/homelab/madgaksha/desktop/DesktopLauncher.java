@@ -20,7 +20,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -44,10 +44,30 @@ public class DesktopLauncher extends JFrame {
 	private static int width = 640;
 	private static int height = 480;
 	
-	private static DesktopLauncher instance;
-	private static ApplicationListener game;
-	private static LwjglApplication lwjglApplication;
-
+	private static DesktopLauncher instance = null;
+	private static LwjglApplication lwjglApplication = null;
+	private static Game game = null;
+	
+	/**
+	 * Exits and shows a message with the error.
+	 * @param level Severity.
+	 * @param log Log message.
+	 * @param msg GUI message.
+	 */
+	public static void exit(Level level, String log, String msg) {
+		LOG.log(level,log);
+		if (game != null) {
+			game.pause();
+			game.dispose();
+		}
+		if (instance != null) {
+			instance.setDefaultCloseOperation(EXIT_ON_CLOSE);
+			instance.setVisible(false);
+			instance.dispose();
+		}
+		JOptionPane.showMessageDialog(null, msg);
+		
+	}
 	
 	/**
 	 * Prints the help for the command line arguments to stdout.
@@ -167,7 +187,7 @@ public class DesktopLauncher extends JFrame {
 		setupWindowEvents();
 		
 		// Set our title.
-		this.setTitle(i18n.main("android.launcher.title"));
+		this.setTitle(i18n.main("desktop.launcher.title"));
 		
 		// Render the main launcher screen.
 		renderLauncher();
@@ -227,6 +247,7 @@ public class DesktopLauncher extends JFrame {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				setEnabled(false);
 				launchGame();
 			}
 		});
@@ -237,18 +258,20 @@ public class DesktopLauncher extends JFrame {
 	}
 	
 	// Now we actually get to the meat.
-	public static void launchGame() {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+	public void launchGame() {
+		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.foregroundFPS = fps;
 		config.fullscreen = fullscreen;
+		LOG.info(String.valueOf(fullscreen));
 		config.width = width;
 		config.height = height;
-		config.title = i18n.main("android.game.title");
+		config.title = i18n.main("desktop.game.title");
 		config.resizable = true;
 		config.x = -1;
 		config.y = -1;
+		config.forceExit = false;
 		
-		IGameParameters params = new IGameParameters() {
+		final IGameParameters params = new IGameParameters() {
 			
 			@Override
 			public int getRequestedWidth() {
@@ -276,9 +299,31 @@ public class DesktopLauncher extends JFrame {
 			}
 		};
 		
-		game = new Game(params);	
-	
 		LOG.fine("launching game");
-		lwjglApplication = new LwjglApplication(game, config);
+		game = new Game(params);
+		lwjglApplication = new LwjglApplication(game,config);
+		lwjglApplication.addLifecycleListener(new LifecycleListener() {
+			
+			@Override
+			public void resume() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void pause() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void dispose() {
+				// Let the user choose another level.
+				setEnabled(true);
+				lwjglApplication = null;
+				game = null;
+			}
+		});
 	}
+
 }
