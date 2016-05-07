@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.homelab.madgaksha.audiosystem.AwesomeAudio;
 import de.homelab.madgaksha.i18n.i18n;
 
 public class Game implements ApplicationListener {
@@ -49,6 +50,9 @@ public class Game implements ApplicationListener {
 	
 	@Override
 	public void create () {	
+		
+		// Setup audio system.
+		AwesomeAudio.initialize();
 		
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
