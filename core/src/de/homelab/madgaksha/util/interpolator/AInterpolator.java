@@ -57,10 +57,20 @@ public abstract class AInterpolator<T> {
 	 * @param x Position between start and end. Clipped to [0.0..1.0].
 	 * @return The interpolated value.
 	 */
-	protected abstract T doInterpolate(double x);
-	
+	protected abstract T doInterpolate(double x);	
 	public T interpolate(double x) {
 		return doInterpolate(x < 0.0d ? 0.0d : x>1.0d ? 1.0d : x);
+	}
+	/**
+	 * Performs the interpolation.
+	 * @param x Position between start and end. Clipped to [0.0..1.0].
+	 * @return The interpolated value.
+	 */
+	protected T doInterpolate(float x) {
+		return doInterpolate(x);
+	}
+	public T interpolate(float x) {
+		return doInterpolate(x < 0.0f ? 0.0f : x>1.0f ? 1.0f : x);
 	}
 	
 	private class InterpolatorTimerTask extends TimerTask {
