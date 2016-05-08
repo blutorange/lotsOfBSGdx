@@ -350,7 +350,6 @@ public class DesktopLauncher extends JFrame {
 			}
 		};
 		
-		LOG.info("launching game");
 		game = new Game(params);
 		lwjglApplication = new LwjglApplication(game,config);
 		lwjglApplication.addLifecycleListener(new LifecycleListener() {
@@ -370,9 +369,9 @@ public class DesktopLauncher extends JFrame {
 			@Override
 			public void dispose() {
 				// Let the user choose another level.
-				setEnabled(true);
 				lwjglApplication = null;
 				game = null;
+				setEnabled(true);
 			}
 		});
 	}

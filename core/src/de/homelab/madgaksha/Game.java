@@ -1,16 +1,11 @@
 package de.homelab.madgaksha;
 
-import java.util.Date;
 import java.util.Locale;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,10 +22,14 @@ public class Game implements ApplicationListener {
 	
 	private final static Logger LOG = Logger.getLogger(Game.class);
 	
+	/**
+	 * For playing music. No other instance should be created. 
+	 */
+	public static MusicPlayer musicPlayer = null;
+	
 	SpriteBatch batch;
 	Texture img;
 	
-	public AssetManager assetManager;
 	private int testx = 160;
 	private int testy = 160;
 	private float test1 = 0.0f;
@@ -57,9 +56,6 @@ public class Game implements ApplicationListener {
 				i18n.init(params.getRequestedLocale());
 			else i18n.init(Locale.getDefault());
 		}
-		
-		// Set the assets manager.
-		assetManager = new AssetManager();
 	}
 	
 	@Override
@@ -71,9 +67,11 @@ public class Game implements ApplicationListener {
 		// Set logging level.
 		Gdx.app.setLogLevel(params.getRequestedLogLevel());
 
-		Music m = MusicPlayer.loadNext(Ebgm.TEST_ADX_STEREO);
-		MusicPlayer.transition(4000);
+		musicPlayer = new MusicPlayer();
 		
+		// Create music player.
+		Game.musicPlayer.playNext(Ebgm.TEST_ADX_STEREO);
+				
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 		testc = new PerspectiveCamera(45,640,480);
@@ -137,11 +135,13 @@ public class Game implements ApplicationListener {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		try {
-			MusicPlayer.dispose();
+			Game.musicPlayer.dispose();
 			ResourceCache.clearAll();
 		}
 		catch (Exception e) {
 			LOG.error("error during cleanup",e);
 		}
+		batch.dispose();
+		img.dispose();
 	}
 }

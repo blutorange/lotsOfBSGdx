@@ -1,10 +1,13 @@
 package de.homelab.madgaksha.util.interpolator;
 
-import java.util.Timer;
+
+
 import java.util.TimerTask;
 
+import com.badlogic.gdx.utils.Timer;
+
 public abstract class AInterpolator<T> {
-	private final static int DEFAULT_TIMER_INTERVAL = 50;
+	private final static float DEFAULT_TIMER_INTERVAL = 0.050f;
 	protected T start;
 	protected T end;
 	protected final Object options; 
@@ -73,11 +76,11 @@ public abstract class AInterpolator<T> {
 		return doInterpolate(x < 0.0f ? 0.0f : x>1.0f ? 1.0f : x);
 	}
 	
-	private class InterpolatorTimerTask extends TimerTask {
-		private double pos = 0.0d;
-		private final double step;
+	private class InterpolatorTimerTask extends Timer.Task {
+		private float pos = 0.0f;
+		private final float step;
 		private final IInterpolatorCallback<T> callback;
-		public InterpolatorTimerTask(double s, IInterpolatorCallback<T> cb) {
+		public InterpolatorTimerTask(float s, IInterpolatorCallback<T> cb) {
 			step = s;
 			callback = cb;
 		}
@@ -102,22 +105,28 @@ public abstract class AInterpolator<T> {
 	 * @param time Time for the transition from the starting to the ending value.
 	 * @param cb Callback that gets called when a new value has been interpolated.
 	 */
-	public void run(double time, IInterpolatorCallback<T> cb) {
-		run(time,DEFAULT_TIMER_INTERVAL,cb);
+	public Timer.Task run(float time, IInterpolatorCallback<T> cb) {
+		return run(time,DEFAULT_TIMER_INTERVAL,cb);
+	}
+
+	public Timer.Task run(float time, float dt, IInterpolatorCallback<T> cb) {
+		final Timer timer = new Timer();
+		return run(timer, time, dt, cb);
 	}
 	
 	/**
 	 * Runs the interpolator in discrete time steps and calls the given callback for each step.
 	 * 
-	 * @param time Time for the transition from the starting to the ending value.
-	 * @param dt Update time interval in milliseconds.
+	 * @param time Time in seconds for the transition from the starting to the ending value.
+	 * @param dt Update time interval in seconds.
 	 * @param cb Callback that gets called when a new value has been interpolated.
+	 * @return The timer used for calling the callback.
 	 */
-	public void run(double time, long dt, IInterpolatorCallback<T> cb) {
-		double step = (double)dt/time;
-		final TimerTask task = new InterpolatorTimerTask(step, cb);
-		final Timer timer = new Timer();
-		timer.schedule(task,dt,dt);
+	public Timer.Task run(Timer timer, float time, float dt, IInterpolatorCallback<T> cb) {
+		float step = (float)dt/time;
+		final Timer.Task task = new InterpolatorTimerTask(step, cb);
+		timer.scheduleTask(task,dt,dt,(int)(time/dt)*2); // Make sure it won't keep going forever.
+		return task;
 	}
 	
 	@Override

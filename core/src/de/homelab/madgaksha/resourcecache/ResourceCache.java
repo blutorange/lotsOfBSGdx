@@ -17,24 +17,19 @@ public final class ResourceCache {
 	private final static Logger LOG = Logger.getLogger(ResourceCache.class);
 	
 	private final static List<Method> resourceClearerList;
-	private final static List<Method> resourceClearerBlockList;
 	
 	static {
 		resourceClearerList = new ArrayList<Method>();
-		resourceClearerBlockList = new ArrayList<Method>();
-		LOG.info("init");
-		for (Class c : Resources.class.getClasses()) {
+		for (Class<?> c : Resources.class.getClasses()) {
 			if (c.isAnnotationPresent(AnnotationResource.class)) {
 				Method m = null;
 				Method mb = null;
 				try {
 					m = c.getMethod("clearAll");
-					mb = c.getMethod("clearAllBlock");
 				} catch (Exception e) {
 					LOG.error("could not get clearAll/clearAllBlock method for " + c.getCanonicalName());
 				}
 				if (m != null) resourceClearerList.add(m);
-				if (mb != null) resourceClearerBlockList.add(mb);
 			}
 		}
 	}
