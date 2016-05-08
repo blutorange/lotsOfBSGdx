@@ -67,10 +67,11 @@ public class Game implements ApplicationListener {
 		// Set logging level.
 		Gdx.app.setLogLevel(params.getRequestedLogLevel());
 
-		musicPlayer = new MusicPlayer();
+		Game.musicPlayer = new MusicPlayer();
 		
 		// Create music player.
-		Game.musicPlayer.playNext(Ebgm.TEST_ADX_STEREO);
+		Game.musicPlayer.loadNext(Ebgm.TEST_ADX_STEREO);
+		Game.musicPlayer.playNext();
 				
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");

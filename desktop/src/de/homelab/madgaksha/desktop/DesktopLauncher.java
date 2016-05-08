@@ -60,9 +60,8 @@ public class DesktopLauncher extends JFrame {
 	 */
 	public static void exit(Level level, String log, String msg) {
 		LOG.log(level,log);
-		if (game != null) {
-			game.pause();
-			game.dispose();
+		if (lwjglApplication != null) {
+			lwjglApplication.stop();
 		}
 		if (instance != null) {
 			instance.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -70,7 +69,6 @@ public class DesktopLauncher extends JFrame {
 			instance.dispose();
 		}
 		JOptionPane.showMessageDialog(null, msg);
-		
 	}
 	
 	/**
@@ -375,5 +373,4 @@ public class DesktopLauncher extends JFrame {
 			}
 		});
 	}
-
 }
