@@ -3,6 +3,7 @@ package de.homelab.madgaksha.audiosystem;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Music.OnCompletionListener;
 
+import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.Resources.Ebgm;
 
 /**
@@ -12,18 +13,29 @@ import de.homelab.madgaksha.resourcecache.Resources.Ebgm;
  */
 public class MusicPlayer extends AAudioPlayer {
 	private MusicPlayer(){}
+	private final static Logger LOG = Logger.getLogger(MusicPlayer.class);
 	private static Music currentClip = null;
 	private static Music nextClip = null;
 
 	
 	/**
 	 * Loads the next clip to be played.
-	 * @param file
-	 * @return
+	 * @param bgm Audio track to load.
+	 * @param volume Volume of the new audio track. (0.0 <= volume <= 1.0) 
+	 * @return Handle to the loaded file. Normally not needed, as it can be controlled with this class. null if it could not be loaded.
+	 */
+	public static Music loadNext(Ebgm bgm, float volume) {
+		nextClip = load(bgm);
+		if (nextClip != null) nextClip.setVolume(volume);
+		return nextClip;
+	}
+	/**
+	 * Loads the next clip to be played.
+	 * @param bgm File to load.
+	 * @return Handle to the loaded file. Normally not needed, as it can be controlled with this class.
 	 */
 	public static Music loadNext(Ebgm bgm) {
-		nextClip = load(bgm);
-		return nextClip;
+		return loadNext(bgm, 1.0f);
 	}
 	
 	public static void transition(final double time, final float targetLevel) {
@@ -101,7 +113,10 @@ public class MusicPlayer extends AAudioPlayer {
 	}
 	
 	public static void dispose() {
-		if (currentClip != null) currentClip.dispose();
-		if (nextClip != null) nextClip.dispose();
+		LOG.debug("disposing music player");
+		currentClip = null;
+		nextClip = null;
+		// Disposing the Music clips is handled by the ResourceCache.
+		// Its clearAll method is always called upon disposing the game.
 	}
 }

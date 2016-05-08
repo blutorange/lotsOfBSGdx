@@ -18,9 +18,10 @@ public interface IResource {
 	 */
 	public Object getObject();
 	/**
-	 * Clears the cache hash map. The objects itself must not be cleared/deleted.
+	 * Disposes the object and removes from the cache. Blocks until done.
 	 */
 	public void clear();
+	
 	/**
 	 * The map used to cache the objects.
 	 */

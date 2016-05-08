@@ -23,6 +23,7 @@ import org.apache.commons.cli.ParseException;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
+import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -288,9 +289,9 @@ public class DesktopLauncher extends JFrame {
 	// Now we actually get to the meat.
 	public void launchGame() {
 		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.backgroundFPS = 5;
 		config.foregroundFPS = fps;
 		config.fullscreen = fullscreen;
-		LOG.info(String.valueOf(fullscreen));
 		config.width = width;
 		config.height = height;
 		config.title = i18n.main("desktop.game.title");
@@ -298,6 +299,23 @@ public class DesktopLauncher extends JFrame {
 		config.x = -1;
 		config.y = -1;
 		config.forceExit = false;
+		config.allowSoftwareMode = false;
+
+		// Set sane values or otherwise 100% CPU is used for the ADX
+		// audio decoding thread when calling
+		// com.badlogic.gdx.audio.AudioDevice#writeSamples.
+		//
+		// This is because the OpenALAudioDevice sleeps with a call to
+		//
+		//   Thread.sleep((long)(1000 * secondsPerBuffer / bufferCount));
+		//
+		// For the default value (512 and 9), this gives a sleeping time
+		// of 0, resulting in 100% CPU usage.
+		//
+		// This assumes the sampling rate will not be higher than 48000/s
+		// and the file will not contain more than 2 channels.
+		config.audioDeviceBufferSize = 2048;
+		config.audioDeviceBufferCount = 9;
 		
 		final IGameParameters params = new IGameParameters() {
 			
@@ -332,7 +350,7 @@ public class DesktopLauncher extends JFrame {
 			}
 		};
 		
-		LOG.fine("launching game");
+		LOG.info("launching game");
 		game = new Game(params);
 		lwjglApplication = new LwjglApplication(game,config);
 		lwjglApplication.addLifecycleListener(new LifecycleListener() {

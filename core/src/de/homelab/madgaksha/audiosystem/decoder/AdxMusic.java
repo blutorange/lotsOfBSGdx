@@ -6,6 +6,7 @@ import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -59,7 +60,7 @@ public class AdxMusic implements Music, Runnable {
 	/**
 	 * Handle to the adx file.
 	 */
-	private final FileHandle fileHandle;
+	private FileHandle fileHandle;
 	private final boolean bufferedAdx;
 	public AdxHeader adxHeader;
 	
@@ -593,7 +594,7 @@ public class AdxMusic implements Music, Runnable {
 	/**
 	 * Static factory method for creating a new instance.
 	 * @param file The file to open.
-	 * @param buffered Whether the file should be buffered (=preloaded to RAM) or streamed.
+	 * @param buffered Whether the file should be buffered (= preloaded to RAM) or streamed.
 	 * @return A reference to the opened file, or null if it could not be opened.
 	 */
 	public static AdxMusic newAdxMusic(FileHandle file, boolean buffered) {
@@ -612,7 +613,7 @@ public class AdxMusic implements Music, Runnable {
 	public void prepareDecoding() throws IOException, UnsupportedAudioFileException {
 		if (bufferedAdx) {
 			// Decode all data and write to array.
-			data = new short[(int)adxHeader.getTotalSamples() * adxHeader.getChannelCount() * SAMPLE_SIZE_IN_BITS / 8];
+			//data = new short[(int)adxHeader.getTotalSamples() * adxHeader.getChannelCount() * SAMPLE_SIZE_IN_BITS / 8];
 			InputStream is = null;
 			DataInput dis = null;
 			try {
@@ -652,9 +653,26 @@ public class AdxMusic implements Music, Runnable {
 					
 		try {
 			// Setup decoding, temporary variables etc.
-			//TODO
-			//start playing while decoding in progress
-			prepareDecoding();
+			// We decode in another thread so that playback can
+			// start as soon as possible.
+			data = new short[(int)adxHeader.getTotalSamples() * adxHeader.getChannelCount() * SAMPLE_SIZE_IN_BITS / 8];
+			new Thread(new Runnable() {				
+				@Override
+				public void run() {
+					try {
+						prepareDecoding();
+					} catch (Exception e) {
+						dispose(); // stop play back
+						LOG.error("could not decode adx stream",e);
+					}
+				}
+			}).start();
+			
+			// Wait a split second to give the decoding thread
+			// some time to write the first samples.
+			synchronized (lock) {
+				lock.wait(33);
+			}
 			
 			// Play the audio.
 			if (bufferedAdx) {
@@ -668,7 +686,7 @@ public class AdxMusic implements Music, Runnable {
 				
 				position = 0;
 				while (!stopRequested && position < totalSamples) {
-					// write a frame
+					// write some pcm data to the device
 					if (playing) {
 						inc = WRITE_PER_CYCLE * channelCount; 
 						if (position + inc > loopEnd) inc = loopEnd - position;
@@ -696,6 +714,15 @@ public class AdxMusic implements Music, Runnable {
 				}
 			} else {
 				//TODO streaming
+				//Probably not necessary anymore, as we decode the data
+				//asynchronously. As there is not way to do random file
+				//access with a FileHandle (short of copying the file
+				//to an external location), we need to read it to RAM
+				//anyway. The decoded pcm samples take four times as 
+				//much memory as the adx encoded data. 
+				//
+				//Could be done perhaps by closing the file and opening
+				//file, may have to do that later if it becomes an issue.
 			}
 		} catch (Exception e) {
 			LOG.error("error while playing back adx", e);
@@ -704,6 +731,7 @@ public class AdxMusic implements Music, Runnable {
 		// Cleanup.
 		running = false;
 		playing = false;
+		LOG.debug("disposing audio device");
 		audioDevice.dispose();
 		audioDevice = null;
 		if (onCompletionListener != null) onCompletionListener.onCompletion(this);
@@ -733,12 +761,12 @@ public class AdxMusic implements Music, Runnable {
 
 	@Override
 	public boolean isPlaying() {
-		return playing;
+		return playing && running;
 	}
 
 	@Override
 	public void setLooping(boolean isLooping) {
-		// TODO Unsupported.
+		// TODO Easy to implement, not needed now.
 		LOG.info("setLooping not supported for adx music");
 	}
 
@@ -748,13 +776,13 @@ public class AdxMusic implements Music, Runnable {
 	}
 
 	@Override
-	public void setVolume(float volume) {
+	public synchronized void setVolume(float volume) {
 		if (audioDevice != null) audioDevice.setVolume(this.volume = volume);
 	}
 
 	@Override
-	public float getVolume() {
-		return ((audioDevice == null) || !playing || !setPlayingRequested) ? 0.0f : volume;
+	public synchronized float getVolume() {
+		return (audioDevice == null) ? 0.0f : volume;
 	}
 
 	@Override
@@ -776,11 +804,25 @@ public class AdxMusic implements Music, Runnable {
 
 	@Override
 	public synchronized void dispose() {
+		LOG.debug("disposing adx");
 		pause();
 		stopRequested = true;
+		try {
+			if (thread != null) {
+				thread.join(100);
+				if (thread.isAlive()) {
+					LOG.error("could not join adx thread after 100ms wait");
+				}
+			}
+		} catch (InterruptedException e) {
+			LOG.error("could not join adx thread", e);
+		}
+		// Make GC easier.
 		thread = null;
+		data = null;
+		fileHandle = null;		
 	}
-
+	
 	@Override
 	public synchronized void setOnCompletionListener(OnCompletionListener listener) {
 		onCompletionListener = listener;

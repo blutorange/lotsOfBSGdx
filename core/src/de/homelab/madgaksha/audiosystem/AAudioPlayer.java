@@ -27,9 +27,9 @@ public abstract class AAudioPlayer {
 	}
 	
 	/**
-	 * Loads the specified music. Only for internal use, this does manage the clips.
+	 * Fetches the {@link Music} clip from the {@link ResourceCache}.
 	 * @param bgm The music to load.
-	 * @return The loaded music.
+	 * @return The music, or null if it could not be loaded.
 	 */
 	protected static Music load(Ebgm bgm) {
 		return ResourceCache.getBgm(bgm);

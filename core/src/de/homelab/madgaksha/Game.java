@@ -7,7 +7,10 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +20,7 @@ import de.homelab.madgaksha.audiosystem.AwesomeAudio;
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcecache.Resources.Ebgm;
 
 public class Game implements ApplicationListener {
@@ -26,6 +30,7 @@ public class Game implements ApplicationListener {
 	SpriteBatch batch;
 	Texture img;
 	
+	public AssetManager assetManager;
 	private int testx = 160;
 	private int testy = 160;
 	private float test1 = 0.0f;
@@ -52,18 +57,22 @@ public class Game implements ApplicationListener {
 				i18n.init(params.getRequestedLocale());
 			else i18n.init(Locale.getDefault());
 		}
+		
+		// Set the assets manager.
+		assetManager = new AssetManager();
 	}
 	
 	@Override
 	public void create () {	
+				
 		// Setup audio system.
 		AwesomeAudio.initialize();
 		
 		// Set logging level.
 		Gdx.app.setLogLevel(params.getRequestedLogLevel());
 
-		Music m = MusicPlayer.loadNext(Ebgm.TEST_BGM);
-		m.play();
+		Music m = MusicPlayer.loadNext(Ebgm.TEST_ADX_STEREO);
+		MusicPlayer.transition(4000);
 		
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
@@ -129,6 +138,7 @@ public class Game implements ApplicationListener {
 		// TODO Auto-generated method stub
 		try {
 			MusicPlayer.dispose();
+			ResourceCache.clearAll();
 		}
 		catch (Exception e) {
 			LOG.error("error during cleanup",e);

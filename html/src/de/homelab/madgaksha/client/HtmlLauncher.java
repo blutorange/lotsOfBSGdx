@@ -48,6 +48,12 @@ public class HtmlLauncher extends GwtApplication {
 						// TODO Auto-generated method stub
 						return 0;
 					}
+
+					@Override
+					public int getRequestedLogLevel() {
+						// TODO Auto-generated method stub
+						return 0;
+					}
 				});
         }
 }

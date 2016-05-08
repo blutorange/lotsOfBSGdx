@@ -25,7 +25,7 @@ public class LinearFloatInterpolator extends AInterpolator<Float> {
 	}
 	@Override
 	protected Float doInterpolate(double x) {
-		return doInterpolate(x);
+		return doInterpolate((float)x);
 	}
 	
 	@Override
