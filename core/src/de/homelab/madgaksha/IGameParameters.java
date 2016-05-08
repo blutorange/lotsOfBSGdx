@@ -11,4 +11,5 @@ public interface IGameParameters {
 	// getRequiredTextures()
 	// getRequiredAdx()
 	//...
+	int getRequestedLogLevel();
 }

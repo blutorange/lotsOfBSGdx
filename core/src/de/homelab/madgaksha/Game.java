@@ -1,20 +1,27 @@
 package de.homelab.madgaksha;
 
+import java.util.Date;
 import java.util.Locale;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.homelab.madgaksha.audiosystem.AwesomeAudio;
+import de.homelab.madgaksha.audiosystem.MusicPlayer;
 import de.homelab.madgaksha.i18n.i18n;
+import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.Resources.Ebgm;
 
 public class Game implements ApplicationListener {
+	
+	private final static Logger LOG = Logger.getLogger(Game.class);
 	
 	SpriteBatch batch;
 	Texture img;
@@ -45,14 +52,18 @@ public class Game implements ApplicationListener {
 				i18n.init(params.getRequestedLocale());
 			else i18n.init(Locale.getDefault());
 		}
-		
 	}
 	
 	@Override
 	public void create () {	
-		
 		// Setup audio system.
 		AwesomeAudio.initialize();
+		
+		// Set logging level.
+		Gdx.app.setLogLevel(params.getRequestedLogLevel());
+
+		Music m = MusicPlayer.loadNext(Ebgm.TEST_BGM);
+		m.play();
 		
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
@@ -117,10 +128,10 @@ public class Game implements ApplicationListener {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		try {
-			
+			MusicPlayer.dispose();
 		}
 		catch (Exception e) {
-			Gdx.app.error(this.getClass().getCanonicalName(),"error during cleanup",e);
+			LOG.error("error during cleanup",e);
 		}
 	}
 }

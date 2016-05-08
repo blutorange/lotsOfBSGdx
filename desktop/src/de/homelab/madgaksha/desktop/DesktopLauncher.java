@@ -20,6 +20,8 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -43,6 +45,7 @@ public class DesktopLauncher extends JFrame {
 	private static boolean fullscreen = false;
 	private static int width = 640;
 	private static int height = 480;
+	private static int verbosity = Application.LOG_ERROR;
 	
 	private static DesktopLauncher instance = null;
 	private static LwjglApplication lwjglApplication = null;
@@ -75,12 +78,13 @@ public class DesktopLauncher extends JFrame {
 	private static void showHelp() {
 		System.out.println("The following command line options are available:");
 		System.out.println("");
-		System.out.println("-fs [--fullscreen]   Activates fullscreen mode.");
 		System.out.println("-dw [--width]        Sets the width of the window.");
-		System.out.println("-dh [--height]        Sets the height of the window.");
+		System.out.println("-dh [--height]       Sets the height of the window.");
 		System.out.println("-f  [--fps]          Sets the framerate in frames per second.");
+		System.out.println("-fs [--fullscreen]   Activates fullscreen mode.");
 		System.out.println("-h  [--help]         Shows this help.");
 		System.out.println("-l  [--language]     Sets the language for the program.");
+		System.out.println("-v  [--verbosity]    Sets the logging level. 0=none, 1=info, 2=error, 3=debug.");
 	}
 	
 	/**
@@ -94,6 +98,7 @@ public class DesktopLauncher extends JFrame {
 		final CommandLineParser parser = new DefaultParser();
 		CommandLine line = null;
 
+		o.addOption("v", "verbosity", true, "Sets the logging level 0-3.");
 		o.addOption("l", "language", true, "Sets the language for the program.");
 		o.addOption("h", "help", false, "Show help.");
 		o.addOption("fs", "fullscreen", false, "Activates fullscreen mode.");
@@ -161,6 +166,29 @@ public class DesktopLauncher extends JFrame {
 			final Scanner s = new Scanner(h);
 			if (s.hasNextInt(10)) height = s.nextInt(10);
 			s.close();
+		}
+		
+		// Set logging level.
+		verbosity = Application.LOG_ERROR;
+		if (line.hasOption("verbosity")) {
+			final String v = line.getOptionValue("verbosity", String.valueOf(verbosity));
+			final Scanner s = new Scanner(v);
+			if (s.hasNextInt(10)) verbosity = s.nextInt(10);
+			s.close();
+		}
+		switch (verbosity) {
+		case 0:
+			verbosity = Application.LOG_NONE;
+		case 1:
+			verbosity = Application.LOG_INFO;
+		case 2:
+			verbosity = Application.LOG_ERROR;
+		case 3:
+			verbosity = Application.LOG_DEBUG;
+			break;
+		default:
+			System.out.println("Unknown logging level " + verbosity + ". Try --help.");
+			System.exit(-1);
 		}
 		
 		// Try to enable hardware acceleration, if available
@@ -296,6 +324,11 @@ public class DesktopLauncher extends JFrame {
 			@Override
 			public int getRequestedFps() {
 				return fps;
+			}
+			
+			@Override
+			public int getRequestedLogLevel() {
+				return verbosity;
 			}
 		};
 		

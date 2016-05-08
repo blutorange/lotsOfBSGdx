@@ -21,6 +21,8 @@ import de.homelab.madgaksha.util.IBitInputStream;
 
 public class AdxMusic implements Music, Runnable {
 
+	private final Object lock = new Object();
+	
 	private final static Logger LOG = Logger.getLogger(AdxMusic.class);
 	
 	/**
@@ -28,6 +30,11 @@ public class AdxMusic implements Music, Runnable {
 	 * playing music before checking again. 
 	 */
 	private final static long IDLE_WAIT = 50;
+	
+	/**
+	 * Number of samples written each loop in the main thread.
+	 */
+	private final static int WRITE_PER_CYCLE = ((int)IDLE_WAIT*44100)/1000;
 	
 	/**
 	 * The bit depth for the decoded pcm audio. Decoder needs to be changed when
@@ -52,19 +59,19 @@ public class AdxMusic implements Music, Runnable {
 	/**
 	 * Handle to the adx file.
 	 */
-	private FileHandle fileHandle;
+	private final FileHandle fileHandle;
+	private final boolean bufferedAdx;
 	public AdxHeader adxHeader;
-	private boolean bufferedAdx;
 	
 	// Variables for the main thread.
-	private int setPosRequested;
-	private boolean setPlayingRequested;
-	private boolean stopRequested;
-	private int position;
-	private boolean running;
-	private boolean playing;
-	private OnCompletionListener onCompletionListener = null;
-	private float volume = 1.0f;
+	private volatile int setPosRequested;
+	private volatile boolean setPlayingRequested;
+	private volatile boolean stopRequested;
+	private volatile int position;
+	private volatile boolean running;
+	private volatile boolean playing;
+	private volatile OnCompletionListener onCompletionListener = null;
+	private volatile float volume = 1.0f;
 	private AudioDevice audioDevice;
 	
 	
@@ -420,7 +427,7 @@ public class AdxMusic implements Music, Runnable {
 			if (__Scale < 0)
 				__Scale += 65536;
 			// Read one data block.
-			__AdxBlockList[j].swapBuffer(__BufferList[j], __Scale, __inputPosition+1);
+			__AdxBlockList[j].swapBuffer(input, __Scale, __inputPosition+1);
 			__inputPosition += __BlockSizeM2;
 		}
 		// When looping or seeking, we need to
@@ -552,10 +559,8 @@ public class AdxMusic implements Music, Runnable {
 	 * @throws IOException When an error occurred while reading the file.
 	 */
 	private AdxMusic(FileHandle file, boolean buffered) throws GdxRuntimeException, UnsupportedAudioFileException, IOException {
-		bufferedAdx = buffered;
-		
+		// Default values.
 		thread = null;
-		audioDevice = Gdx.audio.newAudioDevice((int) adxHeader.getSampleRate(),adxHeader.getChannelCount() == 1);
 		setPlayingRequested = false;
 		setPosRequested = -1;
 		stopRequested = false;
@@ -565,15 +570,21 @@ public class AdxMusic implements Music, Runnable {
 		onCompletionListener = null;
 		volume = 1.0f;
 		
+		bufferedAdx = buffered;
+		fileHandle = file;
+		
 		InputStream is = null;
 		try {
 			is = file.read();
 			adxHeader = new AdxHeader(new DataInputStream(is));
-			fileHandle = file;
 		}
 		finally {
 			if (is != null) is.close();
 		}
+		
+		// Setup a new audio device for playback.
+		audioDevice = Gdx.audio.newAudioDevice((int) adxHeader.getSampleRate(),adxHeader.getChannelCount() == 1);
+		
 		// Start the main thread for playing the audio. 
 		thread = new Thread(this);
 		thread.start();
@@ -635,48 +646,59 @@ public class AdxMusic implements Music, Runnable {
 	
 	public void run() {	
 		
+		LOG.debug("creating new thread for adx");
+		
 		running = true;
 					
 		try {
 			// Setup decoding, temporary variables etc.
+			//TODO
+			//start playing while decoding in progress
 			prepareDecoding();
 			
 			// Play the audio.
 			if (bufferedAdx) {
-				final int inc = adxHeader.getSamplesInFrame()*adxHeader.getChannelCount();
+				int inc;
+				final int channelCount = adxHeader.getChannelCount();
 				final int samples = adxHeader.getSamplesInFrame()*adxHeader.getChannelCount();
-				final int loopStart = (int)adxHeader.getLoopBeginSampleIndex() * adxHeader.getChannelCount();
-				final int loopEnd = (int)adxHeader.getLoopEndSampleIndex() * adxHeader.getChannelCount();
-				final int loopStartNextFrame = ((int)adxHeader.getLoopBeginFrameIndex() + 1) * adxHeader.getSamplesInFrame();
+				final int totalSamples = (int)adxHeader.getTotalSamples()*adxHeader.getChannelCount();
+				final int loopStart = adxHeader.isLoopEnabled() ? (int)adxHeader.getLoopBeginSampleIndex() * adxHeader.getChannelCount() : -1;
+				final int loopEnd = adxHeader.isLoopEnabled() ? (int)adxHeader.getLoopEndSampleIndex() * adxHeader.getChannelCount() : totalSamples + 1;
 				final int remSamplesInFrame = ((int)adxHeader.getLoopBeginFrameIndex() + 1) * adxHeader.getSamplesInFrame() - (int)adxHeader.getLoopBeginSampleIndex();
 				
 				position = 0;
-				while (!stopRequested && position < samples) {
+				while (!stopRequested && position < totalSamples) {
 					// write a frame
-					if (running) {
-						audioDevice.writeSamples(data, position, samples);
+					if (playing) {
+						inc = WRITE_PER_CYCLE * channelCount; 
+						if (position + inc > loopEnd) inc = loopEnd - position;
+						if (position + inc >= totalSamples) inc = totalSamples - position - channelCount;
+						audioDevice.writeSamples(data, position, inc);
 						position += inc;
-						if (setPosRequested != -1) {
-							position = setPosRequested;
-							final int frm = setPosRequested / adxHeader.getSamplesInFrame();
-							position = (frm + 1)*adxHeader.getSamplesInFrame();
-							audioDevice.writeSamples(data, setPosRequested, position - setPosRequested);							
-							setPosRequested = -1;
-						}
-						else if (position > loopEnd) {
-							position = loopStartNextFrame;
-							audioDevice.writeSamples(data, loopStart, remSamplesInFrame);
+						if (position == loopEnd) {
+							LOG.debug("adx looping");
+							position = loopStart;
 						}
 						playing = setPlayingRequested;
 					}
 					else {
-						wait(IDLE_WAIT);
+						LOG.debug("adx thread going to sleep");
+						synchronized(lock) {
+							while (!setPlayingRequested && !stopRequested) lock.wait(IDLE_WAIT);
+						}
+						if (setPlayingRequested) playing = true;
+						LOG.debug("adx thread awakened");
+					}
+					if (setPosRequested != -1) {
+						position = setPosRequested;
+						setPosRequested = -1;
 					}
 				}
 			} else {
 				//TODO streaming
 			}
 		} catch (Exception e) {
+			LOG.error("error while playing back adx", e);
 		}
 		
 		// Cleanup.
@@ -685,6 +707,8 @@ public class AdxMusic implements Music, Runnable {
 		audioDevice.dispose();
 		audioDevice = null;
 		if (onCompletionListener != null) onCompletionListener.onCompletion(this);
+		
+		LOG.debug("thread for adx finished");
 	}
 	
 	//

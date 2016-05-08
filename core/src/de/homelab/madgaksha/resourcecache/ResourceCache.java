@@ -56,6 +56,7 @@ public final class ResourceCache {
 			}
 			final Object r = res.getObject();
 			if (r != null) res.getMap().put(res.getEnum(), r);
+			else LOG.error("could not load resource: " + String.valueOf(res));
 			return r;
 		}
 	}

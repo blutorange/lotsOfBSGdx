@@ -19,20 +19,23 @@ public class Logger {
 		switch (level) {
 		case Application.LOG_INFO:
 			s = String.format(format, "INFO", date, loggerClass.getCanonicalName());
-			Gdx.app.log(s, msg, error);
+			if (error == null) Gdx.app.log(s, msg);
+			else Gdx.app.log(s, msg, error);
 			break;
 		case Application.LOG_ERROR:
 			s = String.format(format, "ERROR", date, loggerClass.getCanonicalName());
-			Gdx.app.error(s, msg, error);
+			if (error == null) Gdx.app.error(s, msg);
+			else Gdx.app.error(s, msg, error);
 			break;		
 		case Application.LOG_DEBUG:
 			s = String.format(format, "DEBUG", date, loggerClass.getCanonicalName());
-			Gdx.app.debug(s, msg, error);
+			if (error == null) Gdx.app.debug(s, msg);
+			else Gdx.app.debug(s, msg, error);
 			break;
 		}
 	}
 	
-	public void setLogLevel(int logLevel) {
+	public static void setDefaultLevel(int logLevel) {
 		Gdx.app.setLogLevel(logLevel);
 	}
 	
@@ -56,6 +59,15 @@ public class Logger {
 		debug(msg,null);
 	}
 	
+	public void info(Object msg) {
+		info(String.valueOf(msg),null);		
+	}
+	public void error(Object msg) {
+		error(String.valueOf(msg),null);
+	}
+	public void debug(Object msg) {
+		debug(String.valueOf(msg),null);
+	}
 	
 	/**
 	 * Get a logger for the provided class.

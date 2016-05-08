@@ -17,7 +17,7 @@ public final class Resources {
 	
 	@AnnotationResource
 	public static enum Ebgm implements IResource {
-		TEST_BGM("asd.adx");
+		TEST_BGM("bgm/testbgm2_1channel.adx");
 		private final static int LIMIT_BGM = 5;
 		private String filename;
 		private Ebgm(String f) {

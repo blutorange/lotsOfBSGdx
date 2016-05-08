@@ -44,6 +44,12 @@ public class AndroidLauncher extends AndroidApplication {
 				// TODO Auto-generated method stub
 				return 0;
 			}
+
+			@Override
+			public int getRequestedLogLevel() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
 		}), config);
 	}
 }

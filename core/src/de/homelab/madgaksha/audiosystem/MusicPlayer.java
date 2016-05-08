@@ -99,4 +99,9 @@ public class MusicPlayer extends AAudioPlayer {
 	public static void transition(double time) {
 		transition(time, nextClip != null ? nextClip.getVolume() : 0.0f);
 	}
+	
+	public static void dispose() {
+		if (currentClip != null) currentClip.dispose();
+		if (nextClip != null) nextClip.dispose();
+	}
 }
