@@ -38,8 +38,7 @@ public class MusicPlayer extends AAudioPlayer {
 	 * @return Whether the file was loaded successfully.
 	 */
 	public boolean loadNext(Ebgm bgm) {
-		boolean b = loadNext(bgm, 1.0f);
-		return b;
+		return loadNext(bgm, 1.0f);
 	}
 
 	/**
@@ -93,7 +92,8 @@ public class MusicPlayer extends AAudioPlayer {
 	}
 	
 	public void playNext(Ebgm bgm) {
-		if (loadNext(bgm)) playNext();
+		loadNext(bgm);
+		playNext();
 	}
 
 	
