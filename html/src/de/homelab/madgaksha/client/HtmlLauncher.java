@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.IGameParameters;
+import de.homelab.madgaksha.Level.ALevel;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -53,6 +54,12 @@ public class HtmlLauncher extends GwtApplication {
 					public int getRequestedLogLevel() {
 						// TODO Auto-generated method stub
 						return 0;
+					}
+
+					@Override
+					public ALevel getLevel() {
+						// TODO Auto-generated method stub
+						return null;
 					}
 				});
         }

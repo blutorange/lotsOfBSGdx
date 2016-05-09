@@ -7,6 +7,7 @@ import java.util.Locale;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import de.homelab.madgaksha.Game;
+import de.homelab.madgaksha.Level.ALevel;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -49,6 +50,12 @@ public class AndroidLauncher extends AndroidApplication {
 			public int getRequestedLogLevel() {
 				// TODO Auto-generated method stub
 				return 0;
+			}
+
+			@Override
+			public ALevel getLevel() {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		}), config);
 	}

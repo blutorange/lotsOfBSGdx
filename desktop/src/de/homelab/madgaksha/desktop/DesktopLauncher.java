@@ -70,6 +70,7 @@ int status = JavaProcess.exec(MyClass.class);
 
  */
 
+
 package de.homelab.madgaksha.desktop;
 
 import java.awt.FlowLayout;
@@ -398,6 +399,7 @@ public class DesktopLauncher extends JFrame {
 				return locale;
 			}
 			
+			
 			@Override
 			public int getRequestedHeight() {
 				return height;
@@ -417,12 +419,13 @@ public class DesktopLauncher extends JFrame {
 			public int getRequestedLogLevel() {
 				return verbosity;
 			}
-			
+		
 			@Override
 			public ALevel getLevel() {
 				//TODO
 				return null;
 			}
+
 		};
 		
 		game = new Game(params);
