@@ -346,6 +346,12 @@ public class DesktopLauncher extends JFrame {
 			public int getRequestedLogLevel() {
 				return verbosity;
 			}
+
+            @Override
+            public ALevel getLevel() {
+                //TODO
+                return null;
+            }
 		};
 		
 		game = new Game(params);

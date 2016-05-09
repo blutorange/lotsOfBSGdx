@@ -104,7 +104,7 @@ public class Game implements ApplicationListener {
 		testc.translate(test4, test5, test6);
 		
 		testc.update();
-		//Gdx.app.log("info", String.valueOf(testa));
+
 		batch.setProjectionMatrix(testc.combined);
 		
 		Gdx.gl.glClearColor(1, 0, 0, 1);
