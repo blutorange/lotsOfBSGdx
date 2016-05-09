@@ -42,18 +42,18 @@ public class Game implements ApplicationListener {
 	
 	private PerspectiveCamera testc;
 	
-	private final IGameParameters params;
+	private final AGameParameters params;
 	
 	/**
 	 * @param params Screen size, fps etc. that were requested.
 	 */
-	public Game(IGameParameters params) {
+	public Game(AGameParameters params) {
 		this.params = params;
 		
 		// Set locale if it has not been set yet.
 		if (!i18n.isInitiated()) {
-			if (params.getRequestedLocale() != null)
-				i18n.init(params.getRequestedLocale());
+			if (params.requestedLocale != null)
+				i18n.init(params.requestedLocale);
 			else i18n.init(Locale.getDefault());
 		}
 	}
@@ -65,7 +65,7 @@ public class Game implements ApplicationListener {
 		AwesomeAudio.initialize();
 		
 		// Set logging level.
-		Gdx.app.setLogLevel(params.getRequestedLogLevel());
+		Gdx.app.setLogLevel(params.requestedLogLevel);
 
 		Game.musicPlayer = new MusicPlayer();
 		

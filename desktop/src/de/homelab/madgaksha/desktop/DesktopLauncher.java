@@ -78,6 +78,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -94,14 +95,10 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.LifecycleListener;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-import de.homelab.madgaksha.Game;
-import de.homelab.madgaksha.IGameParameters;
-import de.homelab.madgaksha.Level.ALevel;
+import de.homelab.madgaksha.AGameParameters;
 import de.homelab.madgaksha.i18n.i18n;
+import de.homelab.madgaksha.level.FooLevel;
 import de.homelab.madgaksha.logging.LoggerFactory;
 
 public class DesktopLauncher extends JFrame {
@@ -113,16 +110,14 @@ public class DesktopLauncher extends JFrame {
 
 	private final static Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);
 
-	private static Locale locale = Locale.getDefault();
-	private static int fps = 30;
-	private static boolean fullscreen = false;
-	private static int width = 640;
-	private static int height = 480;
-	private static int verbosity = Application.LOG_ERROR;
-	
+	private Locale locale = Locale.getDefault();
+	private int fps = 30;
+	private boolean fullscreen = false;
+	private int width = 640;
+	private int height = 480;
+	private int verbosity = Application.LOG_ERROR;
+	private List<Process> processList;
 	private static DesktopLauncher instance = null;
-	private static LwjglApplication lwjglApplication = null;
-	private static Game game = null;
 	
 	/**
 	 * Exits and shows a message with the error.
@@ -131,9 +126,8 @@ public class DesktopLauncher extends JFrame {
 	 * @param msg GUI message.
 	 */
 	public static void exit(Level level, String log, String msg) {
-		LOG.log(level,log);
-		if (lwjglApplication != null) {
-			lwjglApplication.stop();
+		for (Process process : instance.processList) {
+			process.destroy();
 		}
 		if (instance != null) {
 			instance.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -205,7 +199,7 @@ public class DesktopLauncher extends JFrame {
 		}
 				
 		// Set the framerate
-		fps = 30;
+		int fps = 30;
 		if (line.hasOption("fps")) {
 			final Scanner s = new Scanner(line.getOptionValue("fps"));
 			if (s.hasNextInt(10)) fps = s.nextInt(10);
@@ -213,19 +207,19 @@ public class DesktopLauncher extends JFrame {
 		}
 		
 		// Set the language.
-		final Locale l;
+		Locale l;
 		if (line.hasOption("language")) {
 			l = new Locale(line.getOptionValue("language"));
 		} else {
 			l = Locale.getDefault();
 		}
-		locale = l;
+		Locale locale = l;
 		LOG.config("language set to " + l.getDisplayLanguage());
 		
 		// Set window dimensions.
-		width = 640;
-		height = 480;
-		fullscreen = line.hasOption("fullscreen");
+		int width = 640;
+		int height = 480;
+		boolean fullscreen = line.hasOption("fullscreen");
 		if (line.hasOption("width")) {
 			final String w = line.getOptionValue("width", "640");
 			final Scanner s = new Scanner(w);
@@ -240,7 +234,7 @@ public class DesktopLauncher extends JFrame {
 		}
 		
 		// Set logging level.
-		verbosity = Application.LOG_ERROR;
+		int verbosity = Application.LOG_ERROR;
 		if (line.hasOption("verbosity")) {
 			final String v = line.getOptionValue("verbosity", String.valueOf(verbosity));
 			final Scanner s = new Scanner(v);
@@ -270,11 +264,19 @@ public class DesktopLauncher extends JFrame {
 			LOG.log(Level.INFO, "could not enable hardware acceleration", e);
 		}
 		
-		instance = new DesktopLauncher();
+		DesktopLauncher.instance = new DesktopLauncher(fullscreen, width, height, fps, locale, verbosity);
 	}
 
 	
-	private DesktopLauncher() {
+	private DesktopLauncher(boolean fullscreen, int width, int height, int fps, Locale locale, int verbosity) {
+		// Save configuration.
+		this.fullscreen = fullscreen;
+		this.width = width;
+		this.height = height;
+		this.fps = fps;
+		this.locale = locale;
+		this.verbosity = verbosity;
+		
 		// Apply locale.
 		this.setLocale(locale);
 		JOptionPane.setDefaultLocale(locale);		
@@ -346,8 +348,15 @@ public class DesktopLauncher extends JFrame {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setEnabled(false);
-				launchGame();
+				DesktopLauncher.clearDeadProcesses();
+				if (DesktopLauncher.instance.processList.size() == 0) {
+					setEnabled(false);
+					launchGame();
+				}
+				else {
+					//TODO inform user?
+					LOG.info("cannot launch another game, still one active");
+				}
 			}
 		});
 		this.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -356,104 +365,51 @@ public class DesktopLauncher extends JFrame {
 		this.setVisible(true);
 	}
 	
+	protected static void clearDeadProcesses() {
+		if (DesktopLauncher.instance != null) {
+			for (Process process : DesktopLauncher.instance.processList) {
+				if (!process.isAlive()) DesktopLauncher.instance.processList.remove(process);
+			}
+		}
+	}
+
 	// Now we actually get to the meat.
-	public void launchGame() {
-		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.backgroundFPS = 5;
-		config.foregroundFPS = fps;
-		config.fullscreen = fullscreen;
-		config.width = width;
-		config.height = height;
-		config.title = i18n.main("desktop.game.title");
-		config.resizable = true;
-		config.x = -1;
-		config.y = -1;
-		config.forceExit = false;
-		config.allowSoftwareMode = false;
-
-		// Set sane values or otherwise 100% CPU is used for the ADX
-		// audio decoding thread when calling
-		// com.badlogic.gdx.audio.AudioDevice#writeSamples.
-		//
-		// This is because the OpenALAudioDevice sleeps with a call to
-		//
-		//   Thread.sleep((long)(1000 * secondsPerBuffer / bufferCount));
-		//
-		// For the default value (512 and 9), this gives a sleeping time
-		// of 0, resulting in 100% CPU usage.
-		//
-		// This assumes the sampling rate will not be higher than 48000/s
-		// and the file will not contain more than 2 channels.
-		config.audioDeviceBufferSize = 2048;
-		config.audioDeviceBufferCount = 9;
-		
-		final IGameParameters params = new IGameParameters() {
-			
-			@Override
-			public int getRequestedWidth() {
-				return width;
+	public boolean launchGame() {	
+		//TODO Add actual level.
+		final AGameParameters params = new AGameParameters.Builder(new FooLevel())
+				.requestedWidth(width)
+				.requestedLocale(locale)
+				.requestedHeight(height)
+				.requestedFullscreen(fullscreen)
+				.requestedFps(fps)
+				.requestedLogLevel(verbosity)
+				.requestedWindowTitle(i18n.main("desktop.game.title"))
+				.build();
+		// Serialize as string, pass to launcher, and run.
+		try {
+			final Process process = JavaProcess.exec(ProcessLauncher.class, params.toByteArray());
+			if (process != null) {
+				processList.add(process);
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							process.waitFor();
+							// TODO
+							// cleanup code when game finishes goes here
+							setEnabled(true); // enable 'launch game' button
+						} catch (InterruptedException e) {
+							LOG.log(Level.SEVERE,"game thread process was interrupted",e);
+						} 
+					}
+				}).start();
+				return true;
 			}
-			
-			@Override
-			public Locale getRequestedLocale() {
-				return locale;
-			}
-			
-			
-			@Override
-			public int getRequestedHeight() {
-				return height;
-			}
-			
-			@Override
-			public boolean getRequestedFullscreen() {
-				return fullscreen;
-			}
-			
-			@Override
-			public int getRequestedFps() {
-				return fps;
-			}
-			
-			@Override
-			public int getRequestedLogLevel() {
-				return verbosity;
-			}
-		
-			@Override
-			public ALevel getLevel() {
-				//TODO
-				return null;
-			}
-
-		};
-		
-		game = new Game(params);
-		lwjglApplication = new LwjglApplication(game,config);
-		lwjglApplication.addLifecycleListener(new LifecycleListener() {
-			
-			@Override
-			public void resume() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void pause() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void dispose() {
-				// Let the user choose another level.
-				lwjglApplication = null;
-				game = null;
-				setEnabled(true);
-			}
-		});
-		
-		
-		
+			return false;
+		}
+		catch (Exception e) {
+			LOG.log(Level.SEVERE, "unable to launch game", e);
+			return false;
+		}
 	}
 }

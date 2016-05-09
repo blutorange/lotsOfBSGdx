@@ -1,5 +1,8 @@
 package de.homelab.madgaksha.level;
 
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
@@ -11,13 +14,16 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  *
  * @author madgaksha
  */
-public abstract class ALevel {
+public abstract class ALevel implements Serializable {
 
     private static int VIEWPORT_GAME_AR_NUM = 8;
     private static int VIEWPORT_GAME_AR_DEN = 9;
     private static float VIEWPORT_INFO_WIDTH_MIN_S = 0.3f;
     private static float VIEWPORT_INFO_HEIGHT_MIN_S = 0.3f;
 
+    // No argument constructor for serialization.
+    public ALevel() {}
+    
     // Origin always at (0,0)
     /**
      * @return Width of the map in world coordinates.
@@ -85,7 +91,7 @@ public abstract class ALevel {
      * @return The viewport for the world.
      */
     public Viewport getWorldViewport() {
-      //TODO
+    	//TODO
     	return null;
     }
  

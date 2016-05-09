@@ -28,7 +28,7 @@ public final class JavaProcess {
      * @throws IOException 
      * @throws InterruptedException
      */
-    public static int exec(Class<?> c, byte[] data) throws IOException,
+    public static Process exec(Class<?> c, byte[] data) throws IOException,
                                                InterruptedException {
         final String javaHome = System.getProperty("java.home");
         final String javaBin = javaHome +
@@ -48,8 +48,7 @@ public final class JavaProcess {
         	stdin.write(data);
         }
 
-        process.waitFor();
-        return process.exitValue();
+        return process;
     }
     
 }
