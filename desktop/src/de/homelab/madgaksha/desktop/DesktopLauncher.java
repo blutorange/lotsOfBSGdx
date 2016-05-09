@@ -1,3 +1,75 @@
+/*
+
+http://stackoverflow.com/questions/31052775/adding-multiple-windows-in-libgdx
+http://badlogicgames.com/forum/viewtopic.php?f=11&t=7635
+
+Basically, you can run each window in a separate process (use the answer here to see how to 
+implement JavaProcess which is used below):
+
+public class Tiles {
+   public static void main(String[] args) {
+      LwjglApplicationConfiguration configForTiles = new LwjglApplicationConfiguration();
+      TilePresets tilesWindow = new TilePresets();
+      LwjglApplication tiles = new LwjglApplication(tilesWindow, configForTiles);
+   }
+}
+
+Wrapper.java is the main entry point. It's where launching both windows occurs:
+
+public class Wrapper {
+   public static void main(String[] args) {
+      // Launch mapWindow regularly 
+      LwjglApplicationConfiguration configForMap = new LwjglApplicationConfiguration();
+      MapMaker mapWindow = new MapMaker();
+      LwjglApplication map = new LwjglApplication(mapWindow, configForMap);
+
+      try {
+         int res = JavaProcess.exec(Tiles.class); // Where the second window is shown
+      } catch (IOException e) {
+         e.printStackTrace();
+      } catch (InterruptedException e) {
+         e.printStackTrace();
+      }
+   }
+}
+
+http://stackoverflow.com/questions/636367/executing-a-java-application-in-a-separate-process/723914#723914
+
+This is a synthesis of some of the other answers that have been provided. The Java system properties provide 
+enough information to come up with the path to the java command and the classpath in what, I think, is a 
+platform independent way.
+
+
+public final class JavaProcess {
+
+    private JavaProcess() {}        
+
+    public static int exec(Class klass) throws IOException,
+                                               InterruptedException {
+        String javaHome = System.getProperty("java.home");
+        String javaBin = javaHome +
+                File.separator + "bin" +
+                File.separator + "java";
+        String classpath = System.getProperty("java.class.path");
+        String className = klass.getCanonicalName();
+
+        ProcessBuilder builder = new ProcessBuilder(
+                javaBin, "-cp", classpath, className);
+
+        Process process = builder.start();
+        process.waitFor();
+        return process.exitValue();
+    }
+
+}
+
+You would run this method like so:
+
+int status = JavaProcess.exec(MyClass.class);
+
+
+ */
+
 package de.homelab.madgaksha.desktop;
 
 import java.awt.FlowLayout;
@@ -21,14 +93,13 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
-import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.IGameParameters;
+import de.homelab.madgaksha.Level.ALevel;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.logging.LoggerFactory;
 
@@ -346,6 +417,12 @@ public class DesktopLauncher extends JFrame {
 			public int getRequestedLogLevel() {
 				return verbosity;
 			}
+			
+			@Override
+			public ALevel getLevel() {
+				//TODO
+				return null;
+			}
 		};
 		
 		game = new Game(params);
@@ -372,5 +449,8 @@ public class DesktopLauncher extends JFrame {
 				setEnabled(true);
 			}
 		});
+		
+		
+		
 	}
 }

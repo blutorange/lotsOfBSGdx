@@ -1,11 +1,11 @@
 package de.homelab.madgaksha.resourcecache;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Method;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.Resources.Ebgm;
@@ -23,9 +23,9 @@ public final class ResourceCache {
 		for (Class<?> c : Resources.class.getClasses()) {
 			if (c.isAnnotationPresent(AnnotationResource.class)) {
 				Method m = null;
-				Method mb = null;
 				try {
-					m = c.getMethod("clearAll");
+					// For cross-platform support, we need to use libgdx reflection.
+					m = ClassReflection.getMethod(c, "clearAll"); 
 				} catch (Exception e) {
 					LOG.error("could not get clearAll/clearAllBlock method for " + c.getCanonicalName());
 				}
