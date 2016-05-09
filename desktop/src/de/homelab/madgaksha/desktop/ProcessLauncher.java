@@ -10,7 +10,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.Json;
 
 import de.homelab.madgaksha.Game;
-import de.homelab.madgaksha.AGameParameters;
+import de.homelab.madgaksha.GameParameters;
 import de.homelab.madgaksha.logging.LoggerFactory;
 
 /**
@@ -27,12 +27,14 @@ import de.homelab.madgaksha.logging.LoggerFactory;
  *
  */
 public class ProcessLauncher {
+	private final static Object lock = new Object();
 	private final static Logger LOG = LoggerFactory.getLogger(Process.class);
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 	    try {
-			final AGameParameters params = readParams();
+			final GameParameters params = readParams();
+			if (!params.isDeserializedSuccessfully()) System.exit(-1);
 			final LwjglApplicationConfiguration config = getConfig(params);
-			final Game game = new Game(params);
+			final Game game = new Game(new GameParameters());
 			final LwjglApplication lwjglApplication = new LwjglApplication(game,config);
 			lwjglApplication.addLifecycleListener(new LifecycleListener() {
 				
@@ -50,18 +52,29 @@ public class ProcessLauncher {
 				
 				@Override
 				public void dispose() {
-					// TODO Auto-generated method stub
+					// Let the libGdx thread awaken this thread again.
+					synchronized (lock) {
+						lock.notify();
+					}
 				}
 			});
+			// Wait until the game finishes.
+			synchronized(lock) {
+				lock.wait();
+			}
+			// Make sure the game has been closed down properly and
+			// all cleaning up to be done has been done.
+			lwjglApplication.stop();
+			// Exit normally.
+			System.exit(0);
 	    }
 		catch (Exception e) {
 			LOG.log(Level.SEVERE, "failed to launch game", e);
 			System.exit(-1);
 		}
-	    System.exit(0);
 	}
 	
-	private static LwjglApplicationConfiguration getConfig(AGameParameters params) {
+	private static LwjglApplicationConfiguration getConfig(GameParameters params) {
 		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.backgroundFPS = 5;
 		config.foregroundFPS = params.requestedFps;
@@ -74,6 +87,11 @@ public class ProcessLauncher {
 		config.y = -1;
 		config.forceExit = false;
 		config.allowSoftwareMode = false;
+
+		// Sanitize dimensions and fps.
+		if (config.width < 1) config.width = 320;
+		if (config.height < 1) config.width = 240;
+		if (config.foregroundFPS < 1) config.width = 30;
 
 		// Set sane values or otherwise 100% CPU is used for the ADX
 		// audio decoding thread when calling
@@ -94,10 +112,10 @@ public class ProcessLauncher {
 		return config;
 	}
 
-	private static AGameParameters readParams() {
+	private static GameParameters readParams() {
 		final Json json = new Json();
 		// Json#fromJson uses UTF-8 encoding, which we used in
 		// in IGameParameters#toByteArray to encode the json string.
-		return json.fromJson(AGameParameters.class, System.in);
-	}
+		return json.fromJson(GameParameters.class, System.in);
+	}	
 }

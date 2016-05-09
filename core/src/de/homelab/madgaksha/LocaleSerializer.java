@@ -10,13 +10,16 @@ public class LocaleSerializer implements Serializer<Locale> {
 
 	@Override
 	public void write(Json json, Locale locale, Class knownType) {
+		json.writeObjectStart();
 		json.writeValue("language", locale.getLanguage());
 		json.writeValue("country", locale.getCountry());
 		json.writeValue("variant", locale.getVariant());
+		json.writeObjectEnd();
 	}
 
 	@Override
 	public Locale read(Json json, JsonValue jsonData, Class type) {
+		System.out.println(jsonData.get("language"));
 		final String language = jsonData.get("language").asString();
 		final String country = jsonData.get("country").asString();
 		final String variant = jsonData.get("variant").asString();

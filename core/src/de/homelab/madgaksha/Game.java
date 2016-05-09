@@ -42,14 +42,13 @@ public class Game implements ApplicationListener {
 	
 	private PerspectiveCamera testc;
 	
-	private final AGameParameters params;
+	private final GameParameters params;
 	
 	/**
 	 * @param params Screen size, fps etc. that were requested.
 	 */
-	public Game(AGameParameters params) {
+	public Game(GameParameters params) {
 		this.params = params;
-		
 		// Set locale if it has not been set yet.
 		if (!i18n.isInitiated()) {
 			if (params.requestedLocale != null)
@@ -59,8 +58,9 @@ public class Game implements ApplicationListener {
 	}
 	
 	@Override
-	public void create () {	
-				
+	public void create () {
+		System.out.println("new game");
+
 		// Setup audio system.
 		AwesomeAudio.initialize();
 		

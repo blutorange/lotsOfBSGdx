@@ -5,7 +5,7 @@ import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 
 import de.homelab.madgaksha.Game;
-import de.homelab.madgaksha.AGameParameters;
+import de.homelab.madgaksha.GameParameters;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -16,7 +16,7 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener createApplicationListener () {
-        		final AGameParameters.Builder params = new AGameParameters.Builder(null);
+        		final GameParameters.Builder params = new GameParameters.Builder(null);
         		//TODO set params
                 return new Game(params.build());
         }

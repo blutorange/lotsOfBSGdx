@@ -69,5 +69,29 @@
             <Value disabled="false">The game is running. Please close it first.</Value>
             <Value disabled="true"></Value>
         </Property>
+        <Property>
+            <Name>desktop.running.no.close</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Es läuft bereits ein Spiel. Schließe dieses bitte zuerst.</Value>
+            <Value disabled="false">Please finish the current game before closing the application.</Value>
+            <Value disabled="true"></Value>
+        </Property>
+        <Property>
+            <Name>desktop.running.no.start</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Es läuft bereits ein Spiel. Vor dem Starten beende dieses bitte.</Value>
+            <Value disabled="false">Please end the current game before starting a new one.</Value>
+            <Value disabled="true"></Value>
+        </Property>
+        <Property>
+            <Name>desktop.launch.failed</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Es gabe leider einen Fehler beim Starten des Spiels. Versuche es bitte erneut oder kontaktiert mich unter s3002591@rz.ba-dresden.de. Ich werde vielleicht auch antworten(?)</Value>
+            <Value disabled="false">An unexpected error occured while launching the game. Please try again or contact me: s3002591@rz.ba-dresden.de. I might just answer (?)</Value>
+            <Value disabled="true"></Value>
+        </Property>
     </Records>
 </MultiProperties>

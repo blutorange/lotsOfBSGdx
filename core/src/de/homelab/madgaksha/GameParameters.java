@@ -2,7 +2,7 @@ package de.homelab.madgaksha;
 
 import java.nio.charset.Charset;
 import java.util.Locale;
-import java.util.logging.Level;
+
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.utils.Json;
@@ -11,9 +11,9 @@ import com.badlogic.gdx.utils.Json.Serializable;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.level.ALevel;
 
-public abstract class AGameParameters implements Serializable {
-	private final static Logger LOG = Logger.getLogger(AGameParameters.class);
-	public AGameParameters(){}	
+public class GameParameters implements Serializable {
+	private final static Logger LOG = Logger.getLogger(GameParameters.class);
+	public GameParameters(){}	
 	public Locale requestedLocale;
 	public int requestedWidth;
 	public int requestedHeight;
@@ -25,8 +25,7 @@ public abstract class AGameParameters implements Serializable {
 	private boolean deserializedSuccessfully = false;
 	@Override
 	public void write(Json json) {
-		json.setSerializer(Locale.class, new LocaleSerializer());
-		json.writeValue("levelClass", requestedLevel.getClass().getCanonicalName());
+		json.writeValue("levelClass", requestedLevel.getClass().getCanonicalName(), String.class);
 		json.writeValue("requestedLocale", requestedLocale);
 		json.writeValue("requestedWidth", requestedWidth);
 		json.writeValue("requestedHeight", requestedHeight);
@@ -50,12 +49,13 @@ public abstract class AGameParameters implements Serializable {
 			LOG.error("could not load level: " + levelClass,e);
 			return;
 		}
-		level.read(json, jsonData);
-		
+		level.read(json, levelValue);
 		requestedLevel = level;
-		requestedLocale = new LocaleSerializer().read(json, jsonData, null);
+		JsonValue localeValue = jsonData.get("requestedLocale");
+		requestedLocale = new LocaleSerializer().read(json, localeValue, null);
 		requestedFps = jsonData.get("requestedFps").asInt();
 		requestedWidth = jsonData.get("requestedWidth").asInt();
+		requestedHeight = jsonData.get("requestedHeight").asInt();
 		requestedFullscreen = jsonData.get("requestedFullscreen").asBoolean();
 		requestedLogLevel = jsonData.get("requestedLogLevel").asInt();
 		requestedWindowTitle = jsonData.get("requestedWindowTitle").asString();
@@ -63,7 +63,8 @@ public abstract class AGameParameters implements Serializable {
 	}
 	public byte[] toByteArray() {
 		final Json json = new Json();
-		final String string = json.toJson(this);
+		json.setSerializer(Locale.class, new LocaleSerializer());
+		final String string = json.prettyPrint(this);
 		final byte[] data = string.getBytes(Charset.forName("UTF-8"));
 		return data;
 	}
@@ -110,8 +111,8 @@ public abstract class AGameParameters implements Serializable {
 		}		
 		//TODO
 		// !!!Change the read/write methods when changing this!!!
-		public AGameParameters build() {
-			AGameParameters params = new AGameParameters() {};
+		public GameParameters build() {
+			GameParameters params = new GameParameters() {};
 			params.requestedFps = this.requestedFps;
 			params.requestedFullscreen = this.requestedFullscreen;
 			params.requestedHeight = this.requestedHeight;

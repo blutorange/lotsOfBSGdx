@@ -78,7 +78,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -87,6 +86,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -96,7 +96,7 @@ import org.apache.commons.cli.ParseException;
 
 import com.badlogic.gdx.Application;
 
-import de.homelab.madgaksha.AGameParameters;
+import de.homelab.madgaksha.GameParameters;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.level.FooLevel;
 import de.homelab.madgaksha.logging.LoggerFactory;
@@ -116,7 +116,7 @@ public class DesktopLauncher extends JFrame {
 	private int width = 640;
 	private int height = 480;
 	private int verbosity = Application.LOG_ERROR;
-	private List<Process> processList;
+	private Process gameProcess = null;
 	private static DesktopLauncher instance = null;
 	
 	/**
@@ -126,15 +126,17 @@ public class DesktopLauncher extends JFrame {
 	 * @param msg GUI message.
 	 */
 	public static void exit(Level level, String log, String msg) {
-		for (Process process : instance.processList) {
-			process.destroy();
-		}
+		killProcesses();
 		if (instance != null) {
 			instance.setDefaultCloseOperation(EXIT_ON_CLOSE);
 			instance.setVisible(false);
 			instance.dispose();
 		}
-		JOptionPane.showMessageDialog(null, msg);
+		alert(msg);
+	}
+	
+	public static void killProcesses() {
+		//TODO	
 	}
 	
 	/**
@@ -323,8 +325,14 @@ public class DesktopLauncher extends JFrame {
 			
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
+				if (gameProcess != null) {
+					DesktopLauncher.alert(i18n.main("desktop.running.no.close"));
+					instance.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+				}
+				else {
+					killProcesses();
+					instance.setDefaultCloseOperation(EXIT_ON_CLOSE);
+				}
 			}
 			
 			@Override
@@ -348,14 +356,16 @@ public class DesktopLauncher extends JFrame {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DesktopLauncher.clearDeadProcesses();
-				if (DesktopLauncher.instance.processList.size() == 0) {
-					setEnabled(false);
-					launchGame();
+				//TODO check if multiple games are running
+				if (gameProcess == null) {
+					disableUI();
+					if (!launchGame()) {
+						DesktopLauncher.alert(i18n.main("desktop.launch.failed"));
+					}
 				}
 				else {
-					//TODO inform user?
 					LOG.info("cannot launch another game, still one active");
+					DesktopLauncher.alert(i18n.main("desktop.running.no.start"));
 				}
 			}
 		});
@@ -365,27 +375,10 @@ public class DesktopLauncher extends JFrame {
 		this.setVisible(true);
 	}
 	
-	protected static void clearDeadProcesses() {
-		if (DesktopLauncher.instance != null) {
-			for (Process process : DesktopLauncher.instance.processList) {
-				// In Java 6, there is no isAlive method defined
-				// for threads. As a workaround, we use exitValue,
-				// which will throw an error if the process is still
-				// alive.
-				try {
-					process.exitValue();
-					DesktopLauncher.instance.processList.remove(process);
-				}
-				catch (IllegalThreadStateException e) {
-				}
-			}
-		}
-	}
-
 	// Now we actually get to the meat.
 	public boolean launchGame() {	
 		//TODO Add actual level.
-		final AGameParameters params = new AGameParameters.Builder(new FooLevel())
+		final GameParameters params = new GameParameters.Builder(new FooLevel())
 				.requestedWidth(width)
 				.requestedLocale(locale)
 				.requestedHeight(height)
@@ -396,30 +389,62 @@ public class DesktopLauncher extends JFrame {
 				.build();
 		// Serialize as string, pass to launcher, and run.
 		try {
-			final Process process = JavaProcess.exec(ProcessLauncher.class, params.toByteArray());
-			if (process != null) {
-				processList.add(process);
-				new Thread(new Runnable() {
+			gameProcess = JavaProcess.exec(ProcessLauncher.class, params.toByteArray());
+			if (gameProcess != null) {
+				// Launch new thread to notify us when the
+				// game thread finishes. UI should stay
+				// responsive.
+				new Thread(new Runnable() {						
 					@Override
 					public void run() {
 						try {
-							process.waitFor();
-							// TODO
-							// cleanup code when game finishes goes here
-							clearDeadProcesses();
-							setEnabled(true); // enable 'launch game' button
+							gameProcess.waitFor();
+							final int exitValue = gameProcess.exitValue();
+							if (exitValue != 0) {
+								LOG.warning("game exit value is " + String.valueOf(exitValue));
+								DesktopLauncher.alert(i18n.main("desktop.launch.failed"));
+							}
 						} catch (InterruptedException e) {
-							LOG.log(Level.SEVERE,"game thread process was interrupted",e);
-						} 
+							LOG.log(Level.SEVERE, "game process was interrupted", e);
+						}
+						finally {
+							enableUI();
+						}
 					}
 				}).start();
 				return true;
 			}
-			return false;
+			else {
+				enableUI();
+				return false;
+			}
 		}
 		catch (Exception e) {
 			LOG.log(Level.SEVERE, "unable to launch game", e);
+			enableUI();
 			return false;
 		}
+	}
+	
+	public void enableUI() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				gameProcess = null;
+				setEnabled(true);		
+			}
+		});
+	}
+	public void disableUI() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				//TODO when disabling UI				
+			}
+		});
+	}
+	
+	public static void alert(String msg) {
+		JOptionPane.showMessageDialog(null, msg);
 	}
 }

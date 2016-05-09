@@ -3,6 +3,9 @@ package de.homelab.madgaksha.desktop;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.ProcessBuilder.Redirect;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * Launches a class's main method as a new process.
@@ -30,22 +33,26 @@ public final class JavaProcess {
      */
     public static Process exec(Class<?> c, byte[] data) throws IOException,
                                                InterruptedException {
-        final String javaHome = System.getProperty("java.home");
-        final String javaBin = javaHome +
+        String javaHome = System.getProperty("java.home");
+        String javaBin = javaHome +
                 File.separator + "bin" +
                 File.separator + "java";
-        final String classpath = System.getProperty("java.class.path");
-        final String className = c.getCanonicalName();
+        String classpath = System.getProperty("java.class.path");
+        String className = c.getCanonicalName();
 
-        final ProcessBuilder builder = new ProcessBuilder(
+        ProcessBuilder builder = new ProcessBuilder(
                 javaBin, "-cp", classpath, className);
-        
-        final Process process = builder.start();
+    
+        // Make sure we receive console output.
+        builder.redirectOutput(Redirect.INHERIT);
+        builder.redirectError(Redirect.INHERIT);
+        Process process = builder.start();
         
         // Send data to the process.
         if (data != null) {
         	final OutputStream stdin = process.getOutputStream();
         	stdin.write(data);
+        	stdin.close();
         }
 
         return process;

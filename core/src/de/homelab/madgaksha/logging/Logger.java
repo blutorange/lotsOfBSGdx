@@ -16,19 +16,21 @@ public class Logger {
 	private void log(int level, String msg, Throwable error) {
 		final String s;
 		final String date = new Date().toString();
+		String loggerClassName = loggerClass.getCanonicalName();
+		if (loggerClassName == null) loggerClassName = "???undefined.class???";
 		switch (level) {
 		case Application.LOG_INFO:
-			s = String.format(format, "INFO", date, loggerClass.getCanonicalName());
+			s = String.format(format, "INFO", date, loggerClassName);
 			if (error == null) Gdx.app.log(s, msg);
 			else Gdx.app.log(s, msg, error);
 			break;
 		case Application.LOG_ERROR:
-			s = String.format(format, "ERROR", date, loggerClass.getCanonicalName());
+			s = String.format(format, "ERROR", date, loggerClassName);
 			if (error == null) Gdx.app.error(s, msg);
 			else Gdx.app.error(s, msg, error);
 			break;		
 		case Application.LOG_DEBUG:
-			s = String.format(format, "DEBUG", date, loggerClass.getCanonicalName());
+			s = String.format(format, "DEBUG", date, loggerClassName);
 			if (error == null) Gdx.app.debug(s, msg);
 			else Gdx.app.debug(s, msg, error);
 			break;
