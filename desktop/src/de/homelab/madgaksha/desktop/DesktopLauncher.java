@@ -368,7 +368,16 @@ public class DesktopLauncher extends JFrame {
 	protected static void clearDeadProcesses() {
 		if (DesktopLauncher.instance != null) {
 			for (Process process : DesktopLauncher.instance.processList) {
-				if (!process.isAlive()) DesktopLauncher.instance.processList.remove(process);
+				// In Java 6, there is no isAlive method defined
+				// for threads. As a workaround, we use exitValue,
+				// which will throw an error if the process is still
+				// alive.
+				try {
+					process.exitValue();
+					DesktopLauncher.instance.processList.remove(process);
+				}
+				catch (IllegalThreadStateException e) {
+				}
 			}
 		}
 	}
@@ -397,6 +406,7 @@ public class DesktopLauncher extends JFrame {
 							process.waitFor();
 							// TODO
 							// cleanup code when game finishes goes here
+							clearDeadProcesses();
 							setEnabled(true); // enable 'launch game' button
 						} catch (InterruptedException e) {
 							LOG.log(Level.SEVERE,"game thread process was interrupted",e);
