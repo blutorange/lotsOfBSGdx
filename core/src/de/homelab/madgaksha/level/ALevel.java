@@ -370,10 +370,8 @@ public abstract class ALevel implements Serializable {
 			if (gameHeight > (1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * screenHeight) {
 				gameHeight = (int)((1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * (float)screenHeight);
 				gameWidth = gameHeight*Game.VIEWPORT_GAME_AR_NUM/Game.VIEWPORT_GAME_AR_DEN;
-				System.out.println("portrait mode");
 			}
 		}
-		System.err.println("dimensions " + gameWidth + " " + gameHeight);
 		// Floats can store ints exactly, unless too large
 		// which screen dimensions are not. Mantissa 23 bit.
 		return new Vector2((float)gameWidth,(float)gameHeight);
@@ -384,7 +382,6 @@ public abstract class ALevel implements Serializable {
 	@Override
 	public void write(Json json) {
 		// TODO Auto-generated method stub
-		System.out.println(String.valueOf(json));
 		json.writeValue("mapWidthW",mapHeightW);
 		json.writeValue("mapHeightW",mapHeightW);
 		json.writeValue("backgroundImage", backgroundImage.toString());

@@ -6,9 +6,11 @@ import java.net.URL;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import com.badlogic.gdx.utils.StreamUtils;
+
 public class LoggerFactory {
 	
-	private final static String LOGGING_PROPERTIES = "./logging.properties";
+	private final static String LOGGING_PROPERTIES = "de/homelab/madgaksha/logging/logging.properties";
 	
 	private LoggerFactory() {
 	}
@@ -19,21 +21,15 @@ public class LoggerFactory {
 	static {
 		InputStream is = null;
 		try {
-			final URL url = LoggerFactory.class.getResource(LOGGING_PROPERTIES);
-			if (url == null) throw new IOException();
-			is = url.openStream();
+			is = LoggerFactory.class.getClassLoader().getResourceAsStream(LOGGING_PROPERTIES);
+			if (is == null) throw new IOException("could not acquire resource as stream");
 			LogManager.getLogManager().readConfiguration(is);
 		} catch (IOException e) {
 			System.err.println("unable to read logging.properties");
 			e.printStackTrace(System.err);
 			System.exit(-1);
 		} finally {
-			try {
-				if (is != null)
-					is.close();
-			} catch (IOException e) {
-				e.printStackTrace(System.err);
-			}
+			if (is != null) StreamUtils.closeQuietly(is);
 		}
 	}
 
