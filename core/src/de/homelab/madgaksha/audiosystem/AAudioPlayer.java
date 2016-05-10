@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Timer;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcecache.Resources.Ebgm;
+import de.homelab.madgaksha.resourcecache.Resources.EMusic;
 import de.homelab.madgaksha.util.interpolator.AInterpolator;
 import de.homelab.madgaksha.util.interpolator.IInterpolatorCallback;
 import de.homelab.madgaksha.util.interpolator.LinearFloatInterpolator;
@@ -52,8 +52,8 @@ public abstract class AAudioPlayer {
 	 * @param bgm The music to load.
 	 * @return The music, or null if it could not be loaded.
 	 */
-	protected Music load(Ebgm bgm) {
-		return ResourceCache.getBgm(bgm);
+	protected Music load(EMusic music) {
+		return ResourceCache.getMusic(music);
 	}
 	
 	protected void stopAllTasks() {

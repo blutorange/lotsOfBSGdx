@@ -12,7 +12,7 @@ public interface IResource {
 	 */
 	public int getLimit();
 	/**
-	 * Creates and returns an object representing this resource, eg. an {@see AudioFile}.
+	 * Creates and returns an object representing this resource, eg. an {@link Music}.
 	 * The data should be loaded into RAM.
 	 * @return The object representing this resource.
 	 */

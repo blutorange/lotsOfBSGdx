@@ -2,10 +2,9 @@ package de.homelab.madgaksha.audiosystem;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Music.OnCompletionListener;
-import com.sun.istack.internal.NotNull;
 
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.Resources.Ebgm;
+import de.homelab.madgaksha.resourcecache.Resources.EMusic;
 
 /**
  * Class for playing music.
@@ -23,26 +22,26 @@ public class MusicPlayer extends AAudioPlayer {
 	
 	/**
 	 * Loads the next clip to be played.
-	 * @param bgm Audio track to load.
+	 * @param music Audio track to load.
 	 * @param volume Volume of the new audio track. (0.0 <= volume <= 1.0) 
 	 * @return Whether the file was loaded successfully.
 	 */
-	public boolean loadNext(Ebgm bgm, float volume) {
-		nextClip = load(bgm);
+	public boolean loadNext(EMusic music, float volume) {
+		nextClip = load(music);
 		if (nextClip != null) setVolume(nextClip, volume);
 		return nextClip != null;
 	}
 	/**
 	 * Loads the next clip to be played.
-	 * @param bgm File to load.
+	 * @param music File to load.
 	 * @return Whether the file was loaded successfully.
 	 */
-	public boolean loadNext(Ebgm bgm) {
-		return loadNext(bgm, 1.0f);
+	public boolean loadNext(EMusic music) {
+		return loadNext(music, 1.0f);
 	}
 
 	/**
-	 * Opposite of {@link #loadNext(Ebgm, float)}. Removes the track schedule next.
+	 * Opposite of {@link #loadNext(EMusic, float)}. Removes the track schedule next.
 	 */
 	public void unloadNext() {
 		nextClip = null;
@@ -91,8 +90,8 @@ public class MusicPlayer extends AAudioPlayer {
 		play();
 	}
 	
-	public void playNext(Ebgm bgm) {
-		loadNext(bgm);
+	public void playNext(EMusic music) {
+		loadNext(music);
 		playNext();
 	}
 

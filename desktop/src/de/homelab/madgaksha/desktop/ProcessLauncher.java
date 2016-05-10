@@ -8,6 +8,7 @@ import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 
 import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.GameParameters;
@@ -34,7 +35,7 @@ public class ProcessLauncher {
 			final GameParameters params = readParams();
 			if (!params.isDeserializedSuccessfully()) System.exit(-1);
 			final LwjglApplicationConfiguration config = getConfig(params);
-			final Game game = new Game(new GameParameters());
+			final Game game = new Game(params);
 			final LwjglApplication lwjglApplication = new LwjglApplication(game,config);
 			lwjglApplication.addLifecycleListener(new LifecycleListener() {
 				

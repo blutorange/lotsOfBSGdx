@@ -1,16 +1,17 @@
-package entitysystem;
+package de.homelab.madgaksha.entitysystem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.dreizak.miniball.highdim.Miniball;
+import com.dreizak.miniball.model.PointSet;
 
 import de.homelab.madgaksha.Game;
+
 
 public class TrackingCamera extends Entity {
 
@@ -20,12 +21,34 @@ public class TrackingCamera extends Entity {
 		SOUTH,
 		WEST;
 	}
-		
-	// Camera object this entity is attached to.
-	private Camera camera;
 	
-	// Camera position.
-	private Vector2 isPositionW = null;
+	public enum DirectionStrategy {
+		MINIBALL,
+		ABSOLUTE,
+		RELATIVE;
+	}
+	
+	private class ArrayListPointSetVector2 extends ArrayList<Vector2> implements PointSet {
+		private static final long serialVersionUID = 1L;
+		@Override
+		public int size() {
+			return super.size();
+		}
+		@Override
+		public int dimension() {
+			return 2;
+		}
+		@Override
+		public double coord(int i, int j) {
+			return i==0 ? super.get(i).x : super.get(i).y;
+		}		
+	}
+	
+	// Camera object this entity is attached to.
+	private Viewport viewport;
+	
+	// Camera current position.
+	private Vector2 isPositionW = new Vector2(0.0f,0.0f);;
 	/**
 	 * Current angle of the camera in radians.
 	 * Range is within [-pi..pi]. Positive angles
@@ -35,9 +58,10 @@ public class TrackingCamera extends Entity {
 	 */
 	private float isAngleW = 0.0f;
 	private float isElevationW = 0.0f;
+	private Vector2 lastDirAboveThreshold = new Vector2(0,1);
 	
 	// Camera target position.
-	private Vector2 shouldPositionW = null;
+	private Vector2 shouldPositionW = new Vector2(0.0f,0.0f);
 	/**
 	 * Desired angle of the camera in radians.
 	 * Range is within [-pi..pi]. Positive angles
@@ -52,7 +76,7 @@ public class TrackingCamera extends Entity {
 	/**
 	 * List of points the camera should focus on.
 	 */
-	private List<Vector2> focusPoints = new ArrayList<Vector2>();
+	private ArrayListPointSetVector2 focusPoints = new ArrayListPointSetVector2();
 
 	/**
 	 * When computing the world rectangle the camera should
@@ -94,13 +118,24 @@ public class TrackingCamera extends Entity {
 	 */
 	private Vector2 playerPoint = new Vector2(0,0);
 	/**
-	 * If set to true, bossPoint is interpreted as 
-	 * the directional vector for the screen orientation.
 	 * 
-	 * If set to false, the screen orients itself in the
-	 * direction playerPoint-bossPoint.
+	 * How to determine the direction in which we are looking,
+	 * ie. the orientation of the screen.
+	 * 
+	 * ABSOLUTE: {@link #bossPoint} is interpreted as 
+	 *  the directional vector for the screen orientation.
+	 * 
+	 * RELATIVE: The screen orients itself in the direction
+	 *  of the vector {@link #playerPoint}-{@link #bossPoint}.
+	 * 
+	 * MINIBALL: We compute center C of the smallest enclosing
+	 *  circle of all focusPoints and look in the direction
+	 *  of {@link #playerPoint}-C. This uses the miniball library.
+	 *  
+	 *  <a href="https://github.com/hbf/miniball">Miniball library on github.</a>
+	 *  
 	 */
-	private boolean absoluteOrientation = true;
+	private DirectionStrategy directionStrategy = DirectionStrategy.ABSOLUTE;
 	/**
 	 * Which side of the screen is to be considered 'bottom'.
 	 */
@@ -128,23 +163,31 @@ public class TrackingCamera extends Entity {
 	 * computed camera world rectangle. 
 	 */
 	private float marginScalingFactor = 1.1f;
-	
-	public TrackingCamera(Vector2 playerPoint, Vector2 bossPoint, boolean absoluteOrientation) {
+
+	public TrackingCamera(Vector2 playerPoint, Vector2 bossPoint, DirectionStrategy directionStrategy) {
 			this.playerPoint = playerPoint;
 			this.bossPoint = bossPoint;
-			this.absoluteOrientation = absoluteOrientation;
+			this.directionStrategy = directionStrategy;
 	}
-
+	
 	@SuppressWarnings("incomplete-switch") // no rotation for 0 degrees...
-	private void updateShouldCoordinates() {
+	private void updateShouldCoordinates() {	
 		// Determine the direction the player
 		// should be looking at.
-		Vector2 dir;
-		if (absoluteOrientation) {
-			dir = bossPoint.cpy();
-		}
-		else {
-			dir = bossPoint.cpy().sub(playerPoint);
+		Vector2 dir = new Vector2();
+		switch (directionStrategy) {
+		case MINIBALL:
+			final double[] center = new Miniball(focusPoints).center();
+			dir.set((float)(center[0]-playerPoint.x),(float)(center[1]-playerPoint.y));
+			break;
+		case ABSOLUTE:
+			dir.set(bossPoint);
+			break;
+		case RELATIVE:
+			dir.set(bossPoint).sub(playerPoint);
+			break;
+		default:
+			dir.set(lastDirAboveThreshold);
 		}
 		// Check whether the direction is (almost) zero.
 		// If it is use, the last known direction.
@@ -152,8 +195,9 @@ public class TrackingCamera extends Entity {
 		// rotating all around when the player is near
 		// the enemy.
 		if (dir.len2() < playerBossThresholdW) {
-			
+			dir.set(lastDirAboveThreshold);
 		}
+		else lastDirAboveThreshold.set(dir);
 		// Apply desired gravity.
 		switch (gravity) {
 		case NORTH:
@@ -256,12 +300,12 @@ public class TrackingCamera extends Entity {
 		// Compute the height the camera needs to be located
 		// at.
 		//TODO
-		if (camera instanceof OrthographicCamera) {
-			final OrthographicCamera oc = (OrthographicCamera)camera;
+		if (viewport.getCamera() instanceof OrthographicCamera) {
+			final OrthographicCamera oc = (OrthographicCamera)viewport.getCamera();
 			oc.setToOrtho(false, hw*2.0f, hh*2.0f);
 		}
 		else /*if (camera instanceof PerspectiveCamera)*/ {
-			final PerspectiveCamera pc = (PerspectiveCamera)camera;
+			final PerspectiveCamera pc = (PerspectiveCamera)viewport.getCamera();
 			// fieldOfView is the double angle in degrees
 			// from bottom to top.
 			//  ^      /\
@@ -278,14 +322,19 @@ public class TrackingCamera extends Entity {
 			// tan(fovy/2) = hh/z
 			shouldElevationW = hh/(float)Math.tan(pc.fieldOfView*0.5f);
 		}
-
+		
 		// Compute the position the camera should be located
 		// at. We need to convert the coordinates back to the
 		// world coordinate system.
-		shouldPositionW = new Vector2(cx,cy).rotateRad(-shouldAngleW);
+		shouldPositionW.set(cx,cy).rotateRad(-shouldAngleW);
+		
+
 	}
 
 	private void update(float dt) {
-		
+		// Update viewport
+		// viewport.setWorldWidth(2*hw);
+		// viewport.setWorldHeight(2*hh);
+		// set clipping plane
 	}
 }

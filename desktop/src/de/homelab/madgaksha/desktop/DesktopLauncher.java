@@ -352,6 +352,7 @@ public class DesktopLauncher extends JFrame {
 	// just a simple button for testing now.
 	private void renderLauncher() {
 		final JButton button = new JButton("start");
+		final JButton buttonForceQuit = new JButton("ForceQuit Game");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		button.addActionListener(new ActionListener() {
 			@Override
@@ -369,8 +370,15 @@ public class DesktopLauncher extends JFrame {
 				}
 			}
 		});
+		buttonForceQuit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent paramActionEvent) {
+				if (gameProcess != null) gameProcess.destroy();
+			}
+		});
 		this.setLayout(new FlowLayout(FlowLayout.CENTER));
 		this.add(button);
+		this.add(buttonForceQuit);
 		this.setSize(320, 240);
 		this.setVisible(true);
 	}

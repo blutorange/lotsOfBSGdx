@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.Resources.Ebgm;
+import de.homelab.madgaksha.resourcecache.Resources.EMusic;
+import de.homelab.madgaksha.resourcecache.Resources.ETexture;
 
 public final class ResourceCache {
 
@@ -47,9 +49,12 @@ public final class ResourceCache {
 	 * @return An object representing the resource <code>res</code>. Must be typecast to the correct type.
 	 */
 	private static Object getResource(IResource res) {
+		if (res == null) return null;
 		if (res.getMap().containsKey(res)) {
+			// Fetch from cache.
 			return res.getMap().get(res);
 		} else {
+			// Load the object from disk.
 			if (res.getMap().size() > res.getLimit()) {
 				LOG.debug("cannot load any more resources of type " + String.valueOf(res));
 				return null;
@@ -60,12 +65,37 @@ public final class ResourceCache {
 		}
 	}
 
-	public static void clearBgm(Ebgm bgm) {
-		bgm.clear();
+	/**
+	 * Clears the given music object from the cache.
+	 * @param music Music object to clear.
+	 */
+	public static void clearMusic(EMusic music) {
+		music.clear();
 	}
-	public static void clearAllBgm() {
-		Ebgm.clearAll();
+	/**
+	 * Clears the given texture object from the cache.
+	 * @param texture Texture object to clear.
+	 */
+	public static void clearTexture(ETexture texture) {
+		texture.clear();
 	}
+
+	/**
+	 * Clears all music objects from the cache.
+	 */
+	public static void clearAllMusic() {
+		EMusic.clearAll();
+	}
+	/**
+	 * Clears all texture objects from the cache.
+	 */
+	public static void clearAllTexture() {
+		ETexture.clearAll();
+	}
+	
+	/**
+	 * Clears all resource objects.
+	 */
 	public static void clearAll() {
 		LOG.debug("clearing cache");
 		for (Method m : resourceClearerList)
@@ -76,9 +106,21 @@ public final class ResourceCache {
 			}
 	}
 	
-	
-	public static Music getBgm(Ebgm bgm) {
+	/**
+	 * Fetches the requested music from the cache, or loads it.
+	 * @param bgm Music to load.
+	 * @return Loaded music.
+	 */
+	public static Music getMusic(EMusic bgm) {
 		return (Music)getResource(bgm);
+	}
+	/**
+	 * Fetches the requested texture from the cache, or loads it.
+	 * @param bgm Texture to load.
+	 * @return Loaded texture.
+	 */
+	public static Texture getTexture(ETexture texture) {
+		return (Texture)getResource(texture);
 	}
 	
 }

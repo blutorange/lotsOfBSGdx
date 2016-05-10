@@ -3,14 +3,15 @@ package de.homelab.madgaksha;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Json.Serializable;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter;
+
+import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.util.LocaleSerializer;
-import de.homelab.madgaksha.level.ALevel;
 
 public class GameParameters implements Serializable {
 	private final static Logger LOG = Logger.getLogger(GameParameters.class);
@@ -47,7 +48,7 @@ public class GameParameters implements Serializable {
 			aLevelClass = (Class<ALevel>)Class.forName(levelClass);
 			level = aLevelClass.newInstance();
 		} catch (Exception e) {
-			LOG.error("could not load level: " + levelClass,e);
+			LOG.error("could not load level: " + levelClass, e);
 			return;
 		}
 		level.read(json, levelValue);
@@ -65,7 +66,8 @@ public class GameParameters implements Serializable {
 	public byte[] toByteArray() {
 		final Json json = new Json();
 		json.setSerializer(Locale.class, new LocaleSerializer());
-		final String string = json.prettyPrint(this);
+		json.setOutputType(JsonWriter.OutputType.json);
+		final String string = json.toJson(this);
 		final byte[] data = string.getBytes(Charset.forName("UTF-8"));
 		return data;
 	}

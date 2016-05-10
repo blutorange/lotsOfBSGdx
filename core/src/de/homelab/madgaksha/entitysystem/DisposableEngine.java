@@ -1,4 +1,4 @@
-package entitysystem;
+package de.homelab.madgaksha.entitysystem;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
