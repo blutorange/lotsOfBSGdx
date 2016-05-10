@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Json.Serializable;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.util.LocaleSerializer;
 import de.homelab.madgaksha.level.ALevel;
 
 public class GameParameters implements Serializable {

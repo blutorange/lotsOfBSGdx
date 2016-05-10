@@ -1,9 +1,14 @@
 package de.homelab.madgaksha.level;
 
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json.Serializable;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import de.homelab.madgaksha.Game;
 
 /**
  * Base class for all the different game levels.
@@ -15,11 +20,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * @author madgaksha
  */
 public abstract class ALevel implements Serializable {
-
-    private static int VIEWPORT_GAME_AR_NUM = 8;
-    private static int VIEWPORT_GAME_AR_DEN = 9;
-    private static float VIEWPORT_INFO_WIDTH_MIN_S = 0.3f;
-    private static float VIEWPORT_INFO_HEIGHT_MIN_S = 0.3f;
 
     // No argument constructor for serialization.
     public ALevel() {}
@@ -36,8 +36,139 @@ public abstract class ALevel implements Serializable {
 
     /**
      * The viewport for rendering the world, separate from
-     * the {@link #getInfoViewport()}. Rendering takes place
-     * as follows:
+     * the {@link #getInfoViewport()}.
+     *  
+     * @see #getInfoViewport()}
+     * @return The viewport for the world.
+     */
+    public Viewport getGameViewport(int screenWidth, int screenHeight) {
+    	return new GameViewport(screenWidth, screenHeight, false);
+    }
+ 
+    /**
+     * The viewport for the info screen.
+     * @see #getWorldViewport()
+     */  
+    public Viewport getInfoViewport(int screenWidth, int screenHeight) {
+        return new InfoViewport(screenWidth, screenHeight, false);
+    }
+
+    /**
+     * The viewport for drawing general elements directly
+     * in screen coordinates.
+     */
+    public Viewport getScreenViewport(int screenWidth, int screenHeight) {
+    	return new ExtendViewport(screenWidth, screenHeight, screenWidth, screenHeight);
+    }
+    
+    public class GameViewport extends Viewport {
+		public GameViewport(int screenWidth, int screenHeight, boolean centerCamera) {		
+			// Compute dimensions of the game window in pixels.
+			Vector2 screenDimensions = computeGameViewportDimensions(screenWidth, screenHeight);
+			int gameWidth = (int)screenDimensions.x;
+			int gameHeight = (int)screenDimensions.y;
+
+			// Create a new camera.
+			Camera camera = new PerspectiveCamera(30, gameWidth, gameHeight);
+			
+			// Connect camera.
+			setCamera(camera);
+			
+			// Game window goes to the top left.
+			setScreenBounds(0, 0, gameWidth, gameHeight);
+			
+			// Apply game dimensions.
+			apply(centerCamera);
+		}
+		
+		@Override
+		public void update(int screenWidth, int screenHeight, boolean centerCamera) {
+			// Compute dimensions of the game window in pixels.
+			Vector2 screenDimensions = computeGameViewportDimensions(screenWidth, screenHeight);
+			int gameWidth = (int)screenDimensions.x;
+			int gameHeight = (int)screenDimensions.y;
+
+			// Game window goes to the top left.
+			setScreenBounds(0, 0, gameWidth, gameHeight);
+			
+			// Apply game dimensions.
+			apply(centerCamera);			
+		}
+    }
+
+    public class InfoViewport extends Viewport {
+		public InfoViewport(int screenWidth, int screenHeight, boolean centerCamera) {
+			// Compute dimensions of the game window in pixels.
+			Vector2 screenDimensions = computeGameViewportDimensions(screenWidth, screenHeight);
+			
+			// Set info window to the right / top.
+			int gameWidth = (int)screenDimensions.x;
+			int gameHeight = (int)screenDimensions.y;
+			int infoWidth, infoHeight;
+			int infoX, infoY;
+			if (screenWidth > screenHeight) {
+				// Landscape
+				infoWidth = screenWidth-gameWidth;
+				infoHeight = screenHeight;
+				infoX = gameWidth;
+				infoY = 0;
+			}
+			else {
+				infoHeight = screenHeight-gameWidth;
+				infoWidth = screenWidth;				
+				infoX = 0;
+				infoY = gameHeight;
+			}
+			
+			// Create a new camera.
+			Camera camera = new OrthographicCamera(infoWidth, infoHeight);
+			
+			// Connect camera.
+			setCamera(camera);
+			
+			// Game window goes to the top left.
+			setScreenBounds(infoX, infoY, infoWidth, infoHeight);
+			
+			// Apply game dimensions.
+			apply(centerCamera);
+		}
+		
+		@Override
+		public void update(int screenWidth, int screenHeight, boolean centerCamera) {
+			// Compute dimensions of the game window in pixels.
+			Vector2 screenDimensions = computeGameViewportDimensions(screenWidth, screenHeight);
+			
+			// Set info window to the right / top.
+			int gameWidth = (int)screenDimensions.x;
+			int gameHeight = (int)screenDimensions.y;
+			int infoWidth, infoHeight;
+			int infoX, infoY;
+			if (screenWidth > screenHeight) {
+				// Landscape
+				infoWidth = screenWidth-gameWidth;
+				infoHeight = screenHeight;
+				infoX = gameWidth;
+				infoY = 0;
+			}
+			else {
+				infoHeight = screenHeight-gameWidth;
+				infoWidth = screenWidth;				
+				infoX = 0;
+				infoY = gameHeight;
+			}
+			
+			// Game window goes to the top left.
+			setScreenBounds(infoX, infoY, infoWidth, infoHeight);
+			
+			// Apply game dimensions.
+			apply(centerCamera);
+		}
+    }
+
+    
+    /**
+     * Computes the viewport for rendering the world. Rendering
+     * proceeds as follows:
      *  1) Render background.
      *  2) Render in-game.
      *  3) Render overly info. (high score, weapons, shields, etc.).
@@ -87,29 +218,35 @@ public abstract class ALevel implements Serializable {
      * |           |    |
      * |           |    |
      * \----------------/
-     * @see #getInfoViewport()}
-     * @return The viewport for the world.
+     * 
+     * @param screenWidth Current width of the screen in pixels.
+     * @param screenHeight Current height of the screen in pixels.
+     * @return Width and height of the game window in pixels.
      */
-    public Viewport getWorldViewport() {
-    	//TODO
-    	return null;
-    }
- 
-    /**
-     * The viewport for the info screen.
-     * @see #getWorldViewport()
-     */  
-    public Viewport getInfoViewport() {
-        //TODO
-    	return null;
-    }
-
-    /**
-     * The viewport for drawing general elements directly
-     * in screen coordinates.
-     */
-    public Viewport getScreenViewport() {
-    	//TODO
-    	return null;
+    private static Vector2 computeGameViewportDimensions(int screenWidth, int screenHeight) {
+    	int gameWidth, gameHeight;
+		if (screenWidth > screenHeight) {
+			// Landscape
+			gameHeight = screenHeight;
+			gameWidth = screenHeight*Game.VIEWPORT_GAME_AR_NUM/Game.VIEWPORT_GAME_AR_DEN;
+			// Allocate enough space to the right of the game window.
+			if (gameWidth > (1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * screenWidth) {
+				gameWidth = (int)((1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * screenWidth);
+				gameHeight = gameWidth * Game.VIEWPORT_GAME_AR_DEN / Game.VIEWPORT_GAME_AR_NUM;
+			}
+		}
+		else {
+			// Portrait.
+			gameWidth = screenWidth;
+			gameHeight = gameWidth * Game.VIEWPORT_GAME_AR_DEN / Game.VIEWPORT_GAME_AR_NUM;
+			// Allocate enough space to the top of the game window.
+			if (gameHeight > (1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * screenHeight) {
+				gameHeight = (int)((1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * screenHeight);
+				gameWidth = screenHeight*Game.VIEWPORT_GAME_AR_NUM/Game.VIEWPORT_GAME_AR_DEN;	
+			}
+		}
+		// Floats can store ints exactly, unless too large
+		// which screen dimensions are not. Mantissa 23 bit.
+		return new Vector2((float)gameWidth,(float)gameHeight);
     }
 }

@@ -1,4 +1,4 @@
-package de.homelab.madgaksha;
+package de.homelab.madgaksha.util;
 
 import java.util.Locale;
 
