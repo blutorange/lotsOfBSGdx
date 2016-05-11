@@ -48,6 +48,7 @@ public final class ResourceCache {
 	 *            {@link IResource} interface.
 	 * @return An object representing the resource <code>res</code>. Must be typecast to the correct type.
 	 */
+	@SuppressWarnings("unchecked")
 	private static Object getResource(IResource res) {
 		if (res == null) return null;
 		if (res.getMap().containsKey(res)) {

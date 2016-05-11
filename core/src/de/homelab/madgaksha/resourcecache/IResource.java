@@ -25,5 +25,6 @@ public interface IResource {
 	/**
 	 * The map used to cache the objects.
 	 */
+	@SuppressWarnings("rawtypes")
 	EnumMap getMap();
 }

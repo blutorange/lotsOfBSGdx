@@ -16,8 +16,11 @@ Now with libGDX, as a project for the BA.
 (3) Import and run the project
 
 > Eclipse: https://github.com/libgdx/libgdx/wiki/Gradle-and-Eclipse
+>
 > Intellij IDEA:  https://github.com/libgdx/libgdx/wiki/Gradle-and-Intellij-IDEA
+>
 > NetBeans: https://github.com/libgdx/libgdx/wiki/Gradle-and-NetBeans
+>
 > Command Line: https://github.com/libgdx/libgdx/wiki/Gradle-on-the-Commandline
 
 (4) Package the project

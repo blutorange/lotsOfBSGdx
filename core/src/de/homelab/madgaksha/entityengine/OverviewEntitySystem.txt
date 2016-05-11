@@ -23,5 +23,5 @@ EntitySystem
   CameraZoomingSystem <-- computes should-position and sets force
   DanmakuSystem <-- updates force for projectile trajectories
   CollisionSystem <-- 
-  NewtonianMovementSystem <- Updates velocity from force
+  NewtonianForceSystem <- Updates velocity from force
   MovementSystem <- updates position from velocity

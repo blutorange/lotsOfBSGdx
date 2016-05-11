@@ -1,5 +1,4 @@
-package de.homelab.madgaksha.entitysystem.component;
-
+package de.homelab.madgaksha.grantstrategy;
 
 /**
  * Let the component should-value be x_should.
@@ -30,8 +29,28 @@ package de.homelab.madgaksha.entitysystem.component;
  * These constants control how fast the is-values
  * approach the should-values. In particular, µ
  * should be set high enough to prevent rebouncing.
+ * 
+ * @author madgaksha
  */
-public class NewtonianGrantComponent {
-	public float harmonic;
-	public float friction;
+public class NewtonianGrantStrategy implements IGrantStrategy {
+	private final static float DEFAULT_HARMONIC = 1.0f;
+	private final static float DEFAULT_FRICTION = 1.0f;
+	
+	public float harmonic = DEFAULT_HARMONIC;
+	public float friction = DEFAULT_FRICTION;
+
+	public NewtonianGrantStrategy() {
+		harmonic = DEFAULT_HARMONIC;
+		friction = DEFAULT_FRICTION;
+	}
+	public NewtonianGrantStrategy(float harmonic, float friction) {
+		this.harmonic = harmonic;
+		this.friction = friction;
+	}
+
+	@Override
+	public float compromise(float is, float should) {
+		//TODO
+		return should;
+	}
 }
