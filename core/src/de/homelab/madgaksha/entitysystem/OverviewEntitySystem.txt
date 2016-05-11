@@ -1,0 +1,27 @@
+Entities
+  GameCamera
+  Player
+  Enemy
+  Projectile
+  
+Components
+  ForceComponent
+  VelocityComponent
+  PositionComponent
+  RotationComponent
+
+  CameraZoomComponent
+
+  ShouldPositionComponent
+  ShouldElevationComponent <-
+  ShouldRotationComponent
+
+Families
+
+
+EntitySystem
+  CameraZoomingSystem <-- computes should-position and sets force
+  DanmakuSystem <-- updates force for projectile trajectories
+  CollisionSystem <-- 
+  NewtonianMovementSystem <- Updates velocity from force
+  MovementSystem <- updates position from velocity
