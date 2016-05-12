@@ -5,9 +5,9 @@ import com.badlogic.gdx.utils.JsonValue;
 
 import de.homelab.madgaksha.resourcecache.Resources.ETexture;
 
-
 /**
  * Only for testing purposes.
+ * 
  * @author madgaksha
  */
 @Deprecated

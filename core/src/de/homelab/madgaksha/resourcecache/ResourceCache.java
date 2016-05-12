@@ -14,43 +14,48 @@ import de.homelab.madgaksha.resourcecache.Resources.ETexture;
 
 public final class ResourceCache {
 
-	private ResourceCache(){}
-	
+	private ResourceCache() {
+	}
+
 	private final static Logger LOG = Logger.getLogger(ResourceCache.class);
-	
+
 	private final static List<Method> resourceClearerList;
-	
+
 	static {
 		resourceClearerList = new ArrayList<Method>();
 		for (Class<?> c : Resources.class.getClasses()) {
 			if (c.isAnnotationPresent(AnnotationResource.class)) {
 				Method m = null;
 				try {
-					// For cross-platform support, we need to use libgdx reflection.
-					m = ClassReflection.getMethod(c, "clearAll"); 
+					// For cross-platform support, we need to use libgdx
+					// reflection.
+					m = ClassReflection.getMethod(c, "clearAll");
 				} catch (Exception e) {
 					LOG.error("could not get clearAll/clearAllBlock method for " + c.getCanonicalName());
 				}
-				if (m != null) resourceClearerList.add(m);
+				if (m != null)
+					resourceClearerList.add(m);
 			}
 		}
 	}
-	
+
 	/**
 	 * Loads the resource into memory. Applies caching via a Map. Each resource
 	 * defines limit on how many resources can be loaded at once. When there are
-	 * too many resources loaded, it will return null. Resources must be disposed
-	 * with a call to {@link ResourceCache#clearAll()} or 
+	 * too many resources loaded, it will return null. Resources must be
+	 * disposed with a call to {@link ResourceCache#clearAll()} or
 	 * {@link ResourceCache#clearBgm(Ebgm)} etc.
 	 * 
 	 * @param res
 	 *            The resource to load. An Enum implementing the
 	 *            {@link IResource} interface.
-	 * @return An object representing the resource <code>res</code>. Must be typecast to the correct type.
+	 * @return An object representing the resource <code>res</code>. Must be
+	 *         typecast to the correct type.
 	 */
 	@SuppressWarnings("unchecked")
 	private static Object getResource(IResource res) {
-		if (res == null) return null;
+		if (res == null)
+			return null;
 		if (res.getMap().containsKey(res)) {
 			// Fetch from cache.
 			return res.getMap().get(res);
@@ -61,21 +66,27 @@ public final class ResourceCache {
 				return null;
 			}
 			final Object r = res.getObject();
-			if (r != null) res.getMap().put(res.getEnum(), r);
+			if (r != null)
+				res.getMap().put(res.getEnum(), r);
 			return r;
 		}
 	}
 
 	/**
 	 * Clears the given music object from the cache.
-	 * @param music Music object to clear.
+	 * 
+	 * @param music
+	 *            Music object to clear.
 	 */
 	public static void clearMusic(EMusic music) {
 		music.clear();
 	}
+
 	/**
 	 * Clears the given texture object from the cache.
-	 * @param texture Texture object to clear.
+	 * 
+	 * @param texture
+	 *            Texture object to clear.
 	 */
 	public static void clearTexture(ETexture texture) {
 		texture.clear();
@@ -87,13 +98,14 @@ public final class ResourceCache {
 	public static void clearAllMusic() {
 		EMusic.clearAll();
 	}
+
 	/**
 	 * Clears all texture objects from the cache.
 	 */
 	public static void clearAllTexture() {
 		ETexture.clearAll();
 	}
-	
+
 	/**
 	 * Clears all resource objects.
 	 */
@@ -106,22 +118,27 @@ public final class ResourceCache {
 				LOG.error("could not clear resources", e);
 			}
 	}
-	
+
 	/**
 	 * Fetches the requested music from the cache, or loads it.
-	 * @param bgm Music to load.
+	 * 
+	 * @param bgm
+	 *            Music to load.
 	 * @return Loaded music.
 	 */
 	public static Music getMusic(EMusic bgm) {
-		return (Music)getResource(bgm);
+		return (Music) getResource(bgm);
 	}
+
 	/**
 	 * Fetches the requested texture from the cache, or loads it.
-	 * @param bgm Texture to load.
+	 * 
+	 * @param bgm
+	 *            Texture to load.
 	 * @return Loaded texture.
 	 */
 	public static Texture getTexture(ETexture texture) {
-		return (Texture)getResource(texture);
+		return (Texture) getResource(texture);
 	}
-	
+
 }

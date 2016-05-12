@@ -11,7 +11,7 @@ public class i18n {
 	private static Map<String, String> game;
 
 	private static boolean initiated = false;
-	
+
 	// not instantiable
 	private i18n() {
 	};
@@ -36,11 +36,12 @@ public class i18n {
 	public static boolean isInitiated() {
 		return initiated;
 	}
-	
+
 	/**
 	 * Converts all key-value pairs from a {@link ResourceBundle} to a HashMap.
 	 * 
-	 * @param rb The ResourceBundle to convert.
+	 * @param rb
+	 *            The ResourceBundle to convert.
 	 * @return The HashMap with all key-value pairs from the ResourceBundle.
 	 */
 	private static Map<String, String> rb2Map(ResourceBundle rb) {
@@ -52,15 +53,15 @@ public class i18n {
 		return m;
 	}
 
-	private static String getValue(Map<String,String> map, String key) {
+	private static String getValue(Map<String, String> map, String key) {
 		return map.containsKey(key) ? map.get(key) : "??" + key + "??";
 	}
-	
+
 	public static String main(String key) {
-		return getValue(main,key);
+		return getValue(main, key);
 	}
 
 	public static String game(String key) {
-		return getValue(game,key);
+		return getValue(game, key);
 	}
 }

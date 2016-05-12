@@ -19,11 +19,12 @@ public class ForceComponent implements Component, Poolable {
 	public float x = DEFAULT_X;
 	public float y = DEFAULT_Y;
 	public float z = DEFAULT_Z;
+
 	@Override
 	public void reset() {
 		x = DEFAULT_X;
 		y = DEFAULT_Y;
 		z = DEFAULT_Z;
 	}
-	
+
 }

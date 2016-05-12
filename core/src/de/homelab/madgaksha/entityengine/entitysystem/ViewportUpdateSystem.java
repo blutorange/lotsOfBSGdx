@@ -16,23 +16,25 @@ public class ViewportUpdateSystem extends IteratingSystem {
 	public ViewportUpdateSystem() {
 		this(DefaultPriority.viewportUpdateSystem);
 	}
+
 	@SuppressWarnings("unchecked")
 	public ViewportUpdateSystem(int priority) {
 		super(Family.all(ViewportComponent.class, PositionComponent.class, RotationComponent.class).get(), priority);
 	}
+
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		final ViewportComponent vc = Mapper.viewportComponent.get(entity);
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		final RotationComponent rc = Mapper.rotationComponent.get(entity);
-		//TODO
+		// TODO
 	}
-	
-	//private void update(float dt) {
+
+	// private void update(float dt) {
 	// Update viewport
 	// viewport.setWorldWidth(2*hw);
 	// viewport.setWorldHeight(2*hh);
 	// set clipping plane
-//}
-	
+	// }
+
 }

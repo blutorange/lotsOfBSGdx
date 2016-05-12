@@ -8,15 +8,17 @@ import de.homelab.madgaksha.grantstrategy.IGrantStrategy;
 
 /**
  * The rotation an object should take in the immediate future.
- * @see RotationComponent 
+ * 
+ * @see RotationComponent
  * @author madgaksha
  *
  */
 public class ShouldRotationComponent extends RotationComponent implements Component, Poolable {
 	private final static IGrantStrategy DEFAULT_GRANT_STRATEGY = new ExponentialGrantStrategy();
 	public IGrantStrategy grantStrategy = DEFAULT_GRANT_STRATEGY;
-	public void reset () {
+
+	public void reset() {
 		super.reset();
 		grantStrategy = DEFAULT_GRANT_STRATEGY;
-	}	
+	}
 }

@@ -8,6 +8,7 @@ import de.homelab.madgaksha.grantstrategy.IGrantStrategy;
 
 /**
  * The position an object should take in the immediate future.
+ * 
  * @see PositionComponent
  * @author madgaksha
  *
@@ -15,7 +16,8 @@ import de.homelab.madgaksha.grantstrategy.IGrantStrategy;
 public class ShouldPositionComponent extends PositionComponent implements Component, Poolable {
 	private final static IGrantStrategy DEFAULT_GRANT_STRATEGY = new ExponentialGrantStrategy();
 	public IGrantStrategy grantStrategy = DEFAULT_GRANT_STRATEGY;
-	public void reset () {
+
+	public void reset() {
 		super.reset();
 		grantStrategy = DEFAULT_GRANT_STRATEGY;
 	}

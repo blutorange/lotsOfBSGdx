@@ -27,13 +27,13 @@ public class ManyTrackingComponent implements Component, Poolable {
 	private final static float DEFAULT_WORLD_BORDER_TOP_W = 100.0f;
 	private final static float DEFAULT_WORLD_BORDER_BOTTOM_W = 0.0f;
 	private final static float DEFAULT_MARGIN_SCALING_FACTOR = 1.1f;
-	
+
 	private final static Entity DEFAULT_PLAYER_POINT = new Entity().add(new PositionComponent());
-	private final static Entity DEFAULT_BOSS_POINT = new Entity().add(new PositionComponent(0.0f,1.0f));
-	
-	private final static TrackingOrientationStrategy DEFAULT_TRACKING_ORIENTATION_STRATEGY = TrackingOrientationStrategy.ABSOLUTE;	
+	private final static Entity DEFAULT_BOSS_POINT = new Entity().add(new PositionComponent(0.0f, 1.0f));
+
+	private final static TrackingOrientationStrategy DEFAULT_TRACKING_ORIENTATION_STRATEGY = TrackingOrientationStrategy.ABSOLUTE;
 	private final static Gravity DEFAULT_GRAVITY = Gravity.SOUTH;
-	
+
 	@Override
 	public void reset() {
 		adjustmentPointTop = DEFAULT_ADJUSTMENT_POINT_TOP;
@@ -45,10 +45,10 @@ public class ManyTrackingComponent implements Component, Poolable {
 		worldBorderBottomW = DEFAULT_WORLD_BORDER_BOTTOM_W;
 		worldBorderLeftW = DEFAULT_WORLD_BORDER_LEFT_W;
 		worldBorderRightW = DEFAULT_ADJUSTMENT_POINT_RIGHT;
-		
+
 		bossPoint = DEFAULT_BOSS_POINT;
 		playerPoint = DEFAULT_PLAYER_POINT;
-		
+
 		trackingOrientationStrategy = DEFAULT_TRACKING_ORIENTATION_STRATEGY;
 		gravity = DEFAULT_GRAVITY;
 	}

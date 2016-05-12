@@ -3,22 +3,31 @@ package de.homelab.madgaksha;
 import java.util.Locale;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.homelab.madgaksha.audiosystem.AwesomeAudio;
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
+import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteComponent;
+import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.level.ALevel;
+import de.homelab.madgaksha.level.GameViewport;
+import de.homelab.madgaksha.level.InfoViewport;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcecache.Resources.EMusic;
+import de.homelab.madgaksha.resourcecache.Resources.ETexture;
 
 public class Game implements ApplicationListener {
 
@@ -30,35 +39,35 @@ public class Game implements ApplicationListener {
 	public final static float VIEWPORT_INFO_HEIGHT_MIN_S = 0.3f;
 	public final static float VIEWPORT_GAME_AR = (float) VIEWPORT_GAME_AR_NUM / (float) VIEWPORT_GAME_AR_DEN;
 	public final static float VIEWPORT_GAME_AR_INV = (float) VIEWPORT_GAME_AR_DEN / (float) VIEWPORT_GAME_AR_NUM;
-	/** This will cause slowdown on slow devices, but game logic would get messed
-	 *  up for high dt. 
+	/**
+	 * This will cause slowdown on slow devices, but game logic would get messed
+	 * up for high dt.
 	 */
 	public final static float MAX_DELTA_TIME = 0.1f;
-	
+
 	/**
 	 * For playing music. No other instance should be created.
 	 */
 	public static MusicPlayer musicPlayer = null;
 
-	/** For drawing the main game. **/
-	private SpriteBatch batchGame;
 	/** For drawing the info screen, score etc. */
-	private SpriteBatch batchInfo;
+	private static SpriteBatch batchInfo;
+	/** For drawing the game window. */
+	private static SpriteBatch batchGame;
 	/** For drawing the background directly to the screen. */
-	private SpriteBatch batchScreen;
+	private static SpriteBatch batchScreen;
 
 	/** Entity engine ASHLEY */
 	private Engine entityEngine;
 
 	/** Controls the speed of the game. */
 	private float timeScalingFactor = 1.0f;
-	
+
 	/** Whether the game is active. */
 	private boolean running = false;
-	
+
 	// TODO remove me
 	// only for testing
-	Texture img;
 	private float testx = 0.5f;
 	private float testy = 0.5f;
 	private float test1 = 0.0f;
@@ -74,9 +83,9 @@ public class Game implements ApplicationListener {
 	private final ALevel level;
 
 	private Texture backgroundImage;
-	public static Viewport viewportGame;
-	public static Viewport viewportInfo;
-	public static Viewport viewportScreen;
+	private static GameViewport viewportGame;
+	private static InfoViewport viewportInfo;
+	private static Viewport viewportScreen;
 
 	/**
 	 * @param params
@@ -103,8 +112,8 @@ public class Game implements ApplicationListener {
 		viewportInfo = level.getInfoViewport(params.requestedWidth, params.requestedHeight);
 		viewportScreen = level.getScreenViewport(params.requestedWidth, params.requestedHeight);
 
-		// Create a new entity engine.
-		entityEngine = new Engine();
+		// Create a new entity engine and setup basic entity systems.
+		createEntityEngine();
 
 		// Setup audio system.
 		AwesomeAudio.initialize();
@@ -128,11 +137,9 @@ public class Game implements ApplicationListener {
 		batchScreen.disableBlending();
 		batchGame.disableBlending();
 		batchInfo.disableBlending();
-		
+
 		// Start the game.
 		running = true;
-		
-		img = new Texture("badlogic.jpg");
 	}
 
 	@Override
@@ -161,18 +168,16 @@ public class Game implements ApplicationListener {
 		// TESTING ENDS HERE
 		// ============================================================
 
-	
 		// Clear the screen before drawing.
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// Render background screen first.
 		renderScreen();
-		
+
 		// Now render the game.
 		renderGame();
-		
-		
+
 		// Render info window last.
 		renderInfo();
 	}
@@ -209,21 +214,23 @@ public class Game implements ApplicationListener {
 		// Dispose loaded resources.
 		try {
 			ResourceCache.clearAll();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LOG.error("could not clear resource cache", e);
 		}
 
 		// Dispose sprite batches.
-		batchGame.dispose();
 		batchInfo.dispose();
+		batchGame.dispose();
 		batchScreen.dispose();
 
-		// Remove all entities.
+		// Remove all entities and systems to trigger cleanup.
 		entityEngine.removeAllEntities();
+		for (EntitySystem es : entityEngine.getSystems()) {
+			entityEngine.removeSystem(es);
+		}
 
-		// TODO remove me, only testing
-		img.dispose();
+		// TODO
+		// dispose sprites etc.
 	}
 
 	public void renderScreen() {
@@ -247,21 +254,25 @@ public class Game implements ApplicationListener {
 		viewportGame.getCamera().rotate(test6, 0, 0, 1);
 		viewportGame.getCamera().far += test7;
 		viewportGame.getCamera().update();
-		
-		batchGame.setProjectionMatrix(viewportGame.getCamera().combined);
-		
+
+		// Clear game window so that the background won't show.
+		Gdx.gl.glScissor(viewportGame.getScreenX(), viewportGame.getScreenY(), viewportGame.getScreenWidth(),
+				viewportGame.getScreenHeight());
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+
 		// Update the game.
+		final float deltaTime = timeScalingFactor * Math.min(Gdx.graphics.getRawDeltaTime(), MAX_DELTA_TIME);
 		if (running) {
-			float deltaTime = timeScalingFactor * Math.min(Gdx.graphics.getRawDeltaTime(),MAX_DELTA_TIME);
 			entityEngine.update(deltaTime);
+		} else {
+			final SpriteRenderSystem draw2dSystem = entityEngine.getSystem(SpriteRenderSystem.class);
+			if (draw2dSystem != null)
+				draw2dSystem.update(deltaTime);
+			// entityEngine.getSystem(Draw3dSystem.class).update(deltaTime);
 		}
-		//TODO
-		// setup engine for rendering
-		// separate 2D/3D primitives?
-		
-		batchGame.begin();
-		batchGame.draw(img, testx, testy);
-		batchGame.end();
 	}
 
 	public void renderInfo() {
@@ -269,9 +280,24 @@ public class Game implements ApplicationListener {
 
 		batchInfo.setProjectionMatrix(viewportInfo.getCamera().combined);
 		batchInfo.begin();
-		
-		//TODO
-		
+
+		if (viewportInfo.isLandscapeMode()) {
+
+		} else { // if (viewportInfo.isPortraitMode())
+		}
+
 		batchInfo.end();
+	}
+
+	public void createEntityEngine() {
+		entityEngine = new Engine();
+
+		entityEngine.addSystem(new SpriteRenderSystem(viewportGame, batchGame));
+
+		Entity myEntity = new Entity();
+		myEntity.add(new PositionComponent(0.5f, 0.5f));
+		myEntity.add(new SpriteComponent(new Sprite(ResourceCache.getTexture(ETexture.BADLOGIC))));
+		entityEngine.addEntity(myEntity);
+
 	}
 }

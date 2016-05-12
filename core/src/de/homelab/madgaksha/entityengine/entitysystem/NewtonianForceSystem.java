@@ -22,7 +22,7 @@ public class NewtonianForceSystem extends IteratingSystem {
 	public NewtonianForceSystem() {
 		this(DefaultPriority.newtonianForceSystem);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public NewtonianForceSystem(int priority) {
 		super(Family.all(VelocityComponent.class, InverseMassComponent.class, ForceComponent.class).get(), priority);

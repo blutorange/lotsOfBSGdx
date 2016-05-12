@@ -11,7 +11,8 @@ import de.homelab.madgaksha.entityengine.component.TimeScaleComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 
 /**
- * Updates an object's position its velocity over a small time step dt. 
+ * Updates an object's position its velocity over a small time step dt.
+ * 
  * @author madgaksha
  */
 public class MovementSystem extends IteratingSystem {
@@ -19,21 +20,22 @@ public class MovementSystem extends IteratingSystem {
 	public MovementSystem() {
 		this(DefaultPriority.movementSystem);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public MovementSystem(int priority) {
 		super(Family.all(PositionComponent.class, VelocityComponent.class).get(), priority);
 	}
-	
+
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		final PositionComponent r = Mapper.positionComponent.get(entity);
 		final VelocityComponent v = Mapper.velocityComponent.get(entity);
 		final TimeScaleComponent tsf = Mapper.timeScaleComponent.get(entity);
-		if (tsf != null) deltaTime *= tsf.timeScalingFactor;
+		if (tsf != null)
+			deltaTime *= tsf.timeScalingFactor;
 		r.x += v.x * deltaTime;
 		r.y += v.y * deltaTime;
 		r.z += v.z * deltaTime;
 	}
-	
+
 }
