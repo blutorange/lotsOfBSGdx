@@ -4,8 +4,9 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
- * Represents the orientation of an object relative to the world coordinate
- * system.
+ * Represents the rotation of a sprite or object. This is similar to {@link DirectionComponent},
+ * but this is a rotation of the sprite and rendered by rotating the sprite, the direction
+ * corresponds to a different sprite altogether.
  * 
  * The rotation is specified by three angles:
  * 
@@ -15,7 +16,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  * angle. Theta_x : Rotation around the x-axis. Theta_y : Rotation around the
  * y-axis.
  * 
- * Unit: Radian.
+ * Unit: Degree.
  * 
  * The center of rotation is given relative to the objects dimensions. A value
  * of 0.5f corresponds to the center of the object. By default, the center of
@@ -27,29 +28,41 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  */
 public class RotationComponent implements Component, Poolable {
 
-	private final static float DEFAULT_THETA_X = 0.0f;
-	private final static float DEFAULT_THETA_Y = 0.0f;
 	private final static float DEFAULT_THETA_Z = 0.0f;
 	private final static float DEFAULT_CENTER_X = 0.5f;
 	private final static float DEFAULT_CENTER_Y = 0.5f;
-	private final static float DEFAULT_CENTER_Z = 0.5f;
-
-	public float thetaX = DEFAULT_THETA_X;
-	public float thetaY = DEFAULT_THETA_Y;
-	public float thetaZ = DEFAULT_THETA_Z;
+	private final static boolean DEFAULT_INVERSE_TO_CAMERA = true;
+	
 	public float centerX = DEFAULT_CENTER_X;
 	public float centerY = DEFAULT_CENTER_Y;
-	public float centerZ = DEFAULT_CENTER_Z;
+	public float thetaZ = DEFAULT_THETA_Z;
+	public boolean inverseToCamera = DEFAULT_INVERSE_TO_CAMERA;
 
+	public RotationComponent() {}
+	public RotationComponent(float tz) {
+		thetaZ = tz;
+	}
+	public RotationComponent(float tz, float cx, float cy) {
+		thetaZ = tz;
+		centerX = cx;
+		centerY = cy;
+	}
+	public RotationComponent(float tz, boolean ic) {
+		thetaZ = tz;
+		inverseToCamera = ic;
+	}
+	public RotationComponent(float tz, float cx, float cy, boolean ic) {
+		thetaZ = tz;
+		centerX = cx;
+		centerY = cy;
+		inverseToCamera = ic;
+	}
+	
 	@Override
 	public void reset() {
-		thetaX = DEFAULT_THETA_X;
-		thetaY = DEFAULT_THETA_Y;
-		thetaZ = DEFAULT_THETA_Z;
 		centerX = DEFAULT_CENTER_X;
 		centerY = DEFAULT_CENTER_Y;
-		centerZ = DEFAULT_CENTER_Z;
-
+		thetaZ = DEFAULT_THETA_Z;
 	}
 
 }

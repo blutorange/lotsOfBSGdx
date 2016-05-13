@@ -3,9 +3,11 @@ package de.homelab.madgaksha.level;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.homelab.madgaksha.Game;
+import de.homelab.madgaksha.logging.Logger;
 
 /**
  * A viewport for the game world. The game world is always located at the
@@ -18,6 +20,31 @@ import de.homelab.madgaksha.Game;
  *
  */
 public class GameViewport extends Viewport {
+	private final static Logger LOG = Logger.getLogger(GameViewport.class);
+	
+	private PerspectiveCamera perspectiveCamera;
+	private float tanFovyH;
+	private float angleUpXY = 0.0f;
+	private float angleDirXY = 0.0f;
+	
+	private Vector2 yPlus = new Vector2(0.0f,1.0f);
+	private Vector2 u = new Vector2();
+	private Vector3 v;
+	
+	@Override
+	public void apply() {
+		super.apply(false);
+		angleDirXY = computeRotationDirXY();
+		angleUpXY = computeRotationUpXY();
+	}
+	@Override
+	public void apply(boolean x) {
+		super.apply(x);
+		angleDirXY = computeRotationDirXY();
+		angleUpXY = computeRotationUpXY();
+	}
+	
+	
 	public GameViewport(int screenWidth, int screenHeight, float mapWidthW, float mapHeightW, boolean centerCamera) {
 		// Compute dimensions of the game window in pixels.
 		Vector2 screenDimensions = computeGameViewportDimensions(screenWidth, screenHeight);
@@ -26,11 +53,14 @@ public class GameViewport extends Viewport {
 
 		// Create a new camera.
 		Camera camera = new PerspectiveCamera(ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y, gameWidth, gameHeight);
-
+		perspectiveCamera = (PerspectiveCamera)camera;
+		
 		// Position camera to show entire world height initially.
 		float elevation = mapHeightW * 0.5f / (float) Math.tan(ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y * Math.PI / 180.0f);
 		camera.position.set(mapWidthW * 0.5f, mapHeightW * 0.5f, elevation);
 
+		tanFovyH = (float)Math.tan(0.5*ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y);
+		
 		setWorldHeight(mapHeightW);
 		setWorldWidth(mapHeightW * Game.VIEWPORT_GAME_AR);
 
@@ -40,7 +70,7 @@ public class GameViewport extends Viewport {
 
 		// Now look down on the world initially.
 		camera.direction.set(0.0f, 0.0f, -1.0f);
-
+	
 		// Connect camera.
 		setCamera(camera);
 
@@ -124,5 +154,36 @@ public class GameViewport extends Viewport {
 		// Floats can store ints exactly, unless too large
 		// which screen dimensions are not. Mantissa 23 bit.
 		return new Vector2((float) gameWidth, (float) gameHeight);
+	}
+	
+	public PerspectiveCamera getPerspectiveCamera() {
+		return perspectiveCamera;
+	}
+	/**
+	 * @return tan(fieldOfView/2)
+	 */
+	public float getTanFovyH() {
+		return tanFovyH;
+	}
+
+	public void setRotation(float thetaZ) {
+		perspectiveCamera.up.set(1.0f,0.0f,0.0f).rotate(perspectiveCamera.direction, thetaZ);
+		perspectiveCamera.direction.set(0.0f,0.0f,-1.0f);
+	}
+	
+	private float computeRotationUpXY() {
+		v = perspectiveCamera.up;
+		return u.set(v.x,v.y).angle(yPlus);
+	}
+	private float computeRotationDirXY() {
+		v = perspectiveCamera.direction;
+		return u.set(v.x,v.y).angle(yPlus);
+	}
+	
+	public float getRotationUpXY() {
+		return angleUpXY;
+	}
+	public float getRotationDirXY() {
+		return angleDirXY;
 	}
 }

@@ -2,7 +2,8 @@ package de.homelab.madgaksha.entityengine;
 
 import com.badlogic.ashley.core.ComponentMapper;
 
-import de.homelab.madgaksha.entityengine.component.BirdsViewSpriteComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.ForceComponent;
 import de.homelab.madgaksha.entityengine.component.InverseMassComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
@@ -20,10 +21,10 @@ public class Mapper {
 	private Mapper() {
 	};
 
-	public final static ComponentMapper<SpriteAnimationComponent> spriteAnimationComponent = ComponentMapper
-			.getFor(SpriteAnimationComponent.class);
-	public final static ComponentMapper<BirdsViewSpriteComponent> birdsViewSpriteComponent = ComponentMapper
-			.getFor(BirdsViewSpriteComponent.class);
+	public final static ComponentMapper<SpriteForDirectionComponent> spriteForDirectionComponent = ComponentMapper
+			.getFor(SpriteForDirectionComponent.class);
+	public final static ComponentMapper<DirectionComponent> directionComponent = ComponentMapper
+			.getFor(DirectionComponent.class);
 	public final static ComponentMapper<ForceComponent> forceComponent = ComponentMapper.getFor(ForceComponent.class);
 	public final static ComponentMapper<InverseMassComponent> inverseMassComponent = ComponentMapper
 			.getFor(InverseMassComponent.class);
@@ -37,6 +38,8 @@ public class Mapper {
 			.getFor(ShouldPositionComponent.class);
 	public final static ComponentMapper<ShouldRotationComponent> shouldRotationComponent = ComponentMapper
 			.getFor(ShouldRotationComponent.class);
+	public final static ComponentMapper<SpriteAnimationComponent> spriteAnimationComponent = ComponentMapper
+			.getFor(SpriteAnimationComponent.class);
 	public final static ComponentMapper<SpriteComponent> spriteComponent = ComponentMapper
 			.getFor(SpriteComponent.class);
 	public final static ComponentMapper<TimeScaleComponent> timeScaleComponent = ComponentMapper

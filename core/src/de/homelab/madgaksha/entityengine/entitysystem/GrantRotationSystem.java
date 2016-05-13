@@ -24,11 +24,8 @@ public class GrantRotationSystem extends IteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		final RotationComponent rc = Mapper.rotationComponent.get(entity);
 		final ShouldRotationComponent src = Mapper.shouldRotationComponent.get(entity);
-		rc.thetaX = src.grantStrategy.compromise(rc.thetaX, src.thetaX, deltaTime);
-		rc.thetaY = src.grantStrategy.compromise(rc.thetaY, src.thetaY, deltaTime);
 		rc.thetaZ = src.grantStrategy.compromise(rc.thetaZ, src.thetaZ, deltaTime);
 		rc.centerX = src.grantStrategy.compromise(rc.centerX, src.centerX, deltaTime);
 		rc.centerY = src.grantStrategy.compromise(rc.centerY, src.centerY, deltaTime);
-		rc.centerZ = src.grantStrategy.compromise(rc.centerZ, src.centerZ, deltaTime);
 	}
 }

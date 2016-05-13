@@ -11,23 +11,29 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.homelab.madgaksha.audiosystem.AwesomeAudio;
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
+import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.RotationComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.SpriteAnimationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
+import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.level.GameViewport;
 import de.homelab.madgaksha.level.InfoViewport;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
+import de.homelab.madgaksha.resourcecache.Resources.EAnimationList;
 import de.homelab.madgaksha.resourcecache.Resources.EMusic;
-import de.homelab.madgaksha.resourcecache.Resources.ETexture;
 
 public class Game implements ApplicationListener {
 
@@ -37,7 +43,9 @@ public class Game implements ApplicationListener {
 	public final static int VIEWPORT_GAME_AR_DEN = 9;
 	public final static float VIEWPORT_INFO_WIDTH_MIN_S = 0.3f;
 	public final static float VIEWPORT_INFO_HEIGHT_MIN_S = 0.3f;
+	/** 8/9 */
 	public final static float VIEWPORT_GAME_AR = (float) VIEWPORT_GAME_AR_NUM / (float) VIEWPORT_GAME_AR_DEN;
+	/** 9/8 */
 	public final static float VIEWPORT_GAME_AR_INV = (float) VIEWPORT_GAME_AR_DEN / (float) VIEWPORT_GAME_AR_NUM;
 	/**
 	 * This will cause slowdown on slow devices, but game logic would get messed
@@ -68,8 +76,8 @@ public class Game implements ApplicationListener {
 
 	// TODO remove me
 	// only for testing
-	private float testx = 0.5f;
-	private float testy = 0.5f;
+	public static float testx = 0.5f;
+	public static float testy = 0.5f;
 	private float test1 = 0.0f;
 	private float test2 = 0.0f;
 	private float test3 = 0.0f;
@@ -112,9 +120,6 @@ public class Game implements ApplicationListener {
 		viewportInfo = level.getInfoViewport(params.requestedWidth, params.requestedHeight);
 		viewportScreen = level.getScreenViewport(params.requestedWidth, params.requestedHeight);
 
-		// Create a new entity engine and setup basic entity systems.
-		createEntityEngine();
-
 		// Setup audio system.
 		AwesomeAudio.initialize();
 
@@ -138,6 +143,9 @@ public class Game implements ApplicationListener {
 		batchGame.disableBlending();
 		batchInfo.disableBlending();
 
+		// Create a new entity engine and setup basic entity systems.
+		createEntityEngine();
+		
 		// Start the game.
 		running = true;
 	}
@@ -150,20 +158,21 @@ public class Game implements ApplicationListener {
 		// SHOULD BE REMOVED
 		// ============================================================
 		if (Gdx.input.isKeyPressed(Keys.RIGHT))
-			testx += 3;
+			testx += 4;
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-			testx -= 3;
+			testx -= 4;
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-			testy -= 3;
+			testy -= 4;
 		if (Gdx.input.isKeyPressed(Input.Keys.UP))
-			testy += 3;
-		test1 = Gdx.input.isKeyPressed(Input.Keys.Q) ? 0.5f : Gdx.input.isKeyPressed(Input.Keys.A) ? -0.5f : 0.0f;
-		test2 = Gdx.input.isKeyPressed(Input.Keys.W) ? 0.5f : Gdx.input.isKeyPressed(Input.Keys.S) ? -0.5f : 0.0f;
-		test3 = Gdx.input.isKeyPressed(Input.Keys.E) ? 0.5f : Gdx.input.isKeyPressed(Input.Keys.D) ? -0.5f : 0.0f;
+			testy += 4;
+		test1 = Gdx.input.isKeyPressed(Input.Keys.Q) ? 6.5f : Gdx.input.isKeyPressed(Input.Keys.A) ? -6.5f : 0.0f;
+		test2 = Gdx.input.isKeyPressed(Input.Keys.W) ? 6.5f : Gdx.input.isKeyPressed(Input.Keys.S) ? -6.5f : 0.0f;
+		test3 = Gdx.input.isKeyPressed(Input.Keys.E) ? 10.5f : Gdx.input.isKeyPressed(Input.Keys.D) ? -10.5f : 0.0f;
 		test4 = Gdx.input.isKeyPressed(Input.Keys.R) ? 0.5f : Gdx.input.isKeyPressed(Input.Keys.F) ? -0.5f : 0.0f;
 		test5 = Gdx.input.isKeyPressed(Input.Keys.T) ? 0.5f : Gdx.input.isKeyPressed(Input.Keys.G) ? -0.5f : 0.0f;
 		test6 = Gdx.input.isKeyPressed(Input.Keys.Z) ? 1.2f : Gdx.input.isKeyPressed(Input.Keys.H) ? -1.2f : 0.0f;
 		test7 += Gdx.input.isKeyPressed(Input.Keys.O) ? 0.5f : Gdx.input.isKeyPressed(Input.Keys.L) ? -0.5f : 0.0f;
+
 		// ============================================================
 		// TESTING ENDS HERE
 		// ============================================================
@@ -195,11 +204,13 @@ public class Game implements ApplicationListener {
 	@Override
 	public void pause() {
 		running = false;
+		musicPlayer.pause();
 	}
 
 	@Override
 	public void resume() {
 		running = true;
+		musicPlayer.play();
 	}
 
 	@Override
@@ -246,14 +257,11 @@ public class Game implements ApplicationListener {
 	}
 
 	public void renderGame() {
-		viewportGame.apply(false);
-
 		viewportGame.getCamera().translate(test1, test2, test3);
 		viewportGame.getCamera().rotate(test4, 1, 0, 0);
 		viewportGame.getCamera().rotate(test5, 0, 1, 0);
 		viewportGame.getCamera().rotate(test6, 0, 0, 1);
 		viewportGame.getCamera().far += test7;
-		viewportGame.getCamera().update();
 
 		// Clear game window so that the background won't show.
 		Gdx.gl.glScissor(viewportGame.getScreenX(), viewportGame.getScreenY(), viewportGame.getScreenWidth(),
@@ -263,14 +271,14 @@ public class Game implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
 
-		// Update the game.
+		// Update the game
 		final float deltaTime = timeScalingFactor * Math.min(Gdx.graphics.getRawDeltaTime(), MAX_DELTA_TIME);
 		if (running) {
 			entityEngine.update(deltaTime);
 		} else {
-			final SpriteRenderSystem draw2dSystem = entityEngine.getSystem(SpriteRenderSystem.class);
-			if (draw2dSystem != null)
-				draw2dSystem.update(deltaTime);
+			final SpriteRenderSystem spriteRenderSystem = entityEngine.getSystem(SpriteRenderSystem.class);
+			if (spriteRenderSystem != null)
+				spriteRenderSystem.update(deltaTime);
 			// entityEngine.getSystem(Draw3dSystem.class).update(deltaTime);
 		}
 	}
@@ -292,11 +300,21 @@ public class Game implements ApplicationListener {
 	public void createEntityEngine() {
 		entityEngine = new Engine();
 
+		entityEngine.addSystem(new BirdsViewSpriteSystem(viewportGame));
+		entityEngine.addSystem(new SpriteAnimationSystem());
 		entityEngine.addSystem(new SpriteRenderSystem(viewportGame, batchGame));
-
+		
 		Entity myEntity = new Entity();
-		myEntity.add(new PositionComponent(0.5f, 0.5f));
-		myEntity.add(new SpriteComponent(new Sprite(ResourceCache.getTexture(ETexture.BADLOGIC))));
+		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(EAnimationList.ESTELLE_RUNNING,ESpriteDirectionStrategy.ZENITH);
+		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
+		
+		myEntity.add(new PositionComponent(1920.0f/4.0f, 1080.0f/2.0f));
+		myEntity.add(new RotationComponent(0.0f, true));
+		myEntity.add(sfdc);
+		myEntity.add(sac);
+		myEntity.add(new SpriteComponent(sac));
+		myEntity.add(new DirectionComponent());
+		
 		entityEngine.addEntity(myEntity);
 
 	}

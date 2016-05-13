@@ -27,12 +27,12 @@ public class FooLevel extends ALevel {
 
 	@Override
 	public float requestedMapWidthW() {
-		return 10.0f;
+		return 1920.0f;
 	}
 
 	@Override
 	public float requestedMapHeightW() {
-		return 10.0f;
+		return 1080.0f;
 	}
 
 	@Override

@@ -5,10 +5,13 @@ import java.util.List;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.Resources.EAnimation;
+import de.homelab.madgaksha.resourcecache.Resources.EAnimationList;
 import de.homelab.madgaksha.resourcecache.Resources.EMusic;
 import de.homelab.madgaksha.resourcecache.Resources.ETexture;
 
@@ -91,6 +94,26 @@ public final class ResourceCache {
 	public static void clearTexture(ETexture texture) {
 		texture.clear();
 	}
+	
+	/**
+	 * Clears the given texture object from the cache.
+	 * 
+	 * @param texture
+	 *            Texture object to clear.
+	 */
+	public static void clearAnimation(EAnimation texture) {
+		texture.clear();
+	}
+	
+	/**
+	 * Clears the given texture object from the cache.
+	 * 
+	 * @param texture
+	 *            Texture object to clear.
+	 */
+	public static void clearAnimationList(EAnimationList animationList) {
+		animationList.clear();
+	}
 
 	/**
 	 * Clears all music objects from the cache.
@@ -106,6 +129,20 @@ public final class ResourceCache {
 		ETexture.clearAll();
 	}
 
+	/**
+	 * Clears all animation objects from the cache.
+	 */
+	public static void clearAllAnimation() {
+		EAnimation.clearAll();
+	}
+	
+	/**
+	 * Clears all animation objects from the cache.
+	 */
+	public static void clearAllAnimationLists() {
+		EAnimationList.clearAll();
+	}
+	
 	/**
 	 * Clears all resource objects.
 	 */
@@ -139,6 +176,28 @@ public final class ResourceCache {
 	 */
 	public static Texture getTexture(ETexture texture) {
 		return (Texture) getResource(texture);
+	}
+	
+	/**
+	 * Fetches the requested animation from the cache, or loads it.
+	 * 
+	 * @param bgm
+	 *            Animation to load.
+	 * @return Loaded animation.
+	 */
+	public static Animation getAnimation(EAnimation animation) {
+		return (Animation) getResource(animation);
+	}
+	
+	/**
+	 * Fetches the requested animation list from the cache, or loads it.
+	 * 
+	 * @param bgm
+	 *            Texture to load.
+	 * @return Loaded texture.
+	 */
+	public static Animation[] getAnimationList(EAnimationList animationList) {
+		return (Animation[]) getResource(animationList);
 	}
 
 }
