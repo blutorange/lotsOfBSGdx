@@ -21,6 +21,10 @@ import de.homelab.madgaksha.resourcecache.Resources.ETexture;
  */
 public abstract class ALevel implements Serializable {
 
+	public final static float WORLD_X = 0.0f;
+	public final static float WORLD_Y = 0.0f;
+	
+	
 	public final static float CAMERA_GAME_FIELD_OF_VIEW_Y = 30.0f;
 
 	/**

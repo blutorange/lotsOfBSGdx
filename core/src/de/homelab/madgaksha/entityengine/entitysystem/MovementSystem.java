@@ -3,12 +3,14 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.MathUtils;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.TimeScaleComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
+import de.homelab.madgaksha.level.ALevel;
 
 /**
  * Updates an object's position its velocity over a small time step dt.
@@ -17,25 +19,36 @@ import de.homelab.madgaksha.entityengine.component.VelocityComponent;
  */
 public class MovementSystem extends IteratingSystem {
 
-	public MovementSystem() {
-		this(DefaultPriority.movementSystem);
+	private float worldXMin, worldXMax;
+	private float worldYMin, worldYMax;
+	
+	public MovementSystem(ALevel level) {
+		this(level, DefaultPriority.movementSystem);
 	}
 
 	@SuppressWarnings("unchecked")
-	public MovementSystem(int priority) {
+	public MovementSystem(ALevel level, int priority) {
 		super(Family.all(PositionComponent.class, VelocityComponent.class).get(), priority);
+		worldXMin = ALevel.WORLD_X;
+		worldYMin = ALevel.WORLD_Y;
+		worldXMax = level.getMapWidthW();
+		worldYMax = level.getMapHeightW();
 	}
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
-		final PositionComponent r = Mapper.positionComponent.get(entity);
-		final VelocityComponent v = Mapper.velocityComponent.get(entity);
-		final TimeScaleComponent tsf = Mapper.timeScaleComponent.get(entity);
-		if (tsf != null)
-			deltaTime *= tsf.timeScalingFactor;
-		r.x += v.x * deltaTime;
-		r.y += v.y * deltaTime;
-		r.z += v.z * deltaTime;
+		final PositionComponent rc = Mapper.positionComponent.get(entity);
+		final VelocityComponent vc = Mapper.velocityComponent.get(entity);
+		final TimeScaleComponent tsfc = Mapper.timeScaleComponent.get(entity);
+		if (tsfc != null)
+			deltaTime *= tsfc.timeScalingFactor;
+		rc.x += vc.x * deltaTime;
+		rc.y += vc.y * deltaTime;
+		rc.z += vc.z * deltaTime;
+		if (rc.limitToMap) {
+			rc.x = MathUtils.clamp(rc.x, worldXMin, worldXMax);
+			rc.y = MathUtils.clamp(rc.y, worldYMin, worldYMax);
+		}
 	}
 
 }
