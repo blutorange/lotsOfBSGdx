@@ -63,7 +63,7 @@ public class SpriteRenderSystem extends EntitySystem {
 				else 
 					sc.sprite.setRotation(rc.thetaZ);
 			}	
-			sc.sprite.setCenter(pc.x+Game.testx, pc.y+Game.testy);
+			sc.sprite.setCenter(pc.x+(i==0 ? Game.testx : Game.testx2), pc.y+(i==0 ? Game.testy : Game.testy2));
 			sc.sprite.draw(batch);
 		}
 		batch.end();

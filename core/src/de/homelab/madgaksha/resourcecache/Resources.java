@@ -102,9 +102,12 @@ public final class Resources {
 	public enum ETexture implements IResource {
 		BADLOGIC("badlogic.jpg"),
 		FOOLEVEL_BACKGROUND("texture/foolevelBackground.jpg"),
+		
 		ESTELLE_RUNNING("texture/ch00001.png"),
 		ESTELLE_STANDING("texture/ch0010b.png"),
-		ESTELLE_SWINGING("texture/ch00107.png");
+		ESTELLE_SWINGING("texture/ch00107.png"),
+		
+		JOSHUA_RUNNING("texture/ch00011.png");
 		
 		private final static int LIMIT = 25;
 		
@@ -174,7 +177,11 @@ public final class Resources {
 	public enum EAnimation implements IResource {
 		ESTELLE_RUNNING(ETexture.ESTELLE_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP),
 		ESTELLE_STANDING(ETexture.ESTELLE_STANDING, 128, 128, 40, 0.2f, Animation.PlayMode.LOOP),
-		ESTELLE_SWINGING(ETexture.ESTELLE_SWINGING, 128, 128, 20, 0.1f, Animation.PlayMode.LOOP);
+		ESTELLE_SWINGING(ETexture.ESTELLE_SWINGING, 128, 128, 20, 0.1f, Animation.PlayMode.LOOP),
+		
+		JOSHUA_RUNNING(ETexture.JOSHUA_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP)
+		;
+		
 		private ETexture eTexture;
 		private int tileWidth;
 		private int tileHeight;
@@ -229,7 +236,8 @@ public final class Resources {
 	
 	@AnnotationResource
 	public enum EAnimationList implements IResource {
-		ESTELLE_RUNNING(ETexture.ESTELLE_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8);
+		ESTELLE_RUNNING(ETexture.ESTELLE_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
+		JOSHUA_RUNNING(ETexture.JOSHUA_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8);
 		private ETexture eTexture;
 		private int tileWidth;
 		private int tileHeight;

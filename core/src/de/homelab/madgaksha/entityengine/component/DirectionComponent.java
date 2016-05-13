@@ -26,10 +26,17 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  *
  */
 public class DirectionComponent implements Component, Poolable {
-	public float degree = 0.0f;
+	private final static float DEFAULT_DEGREE = 0.0f;
+	public float degree = DEFAULT_DEGREE;
 
+	public DirectionComponent() {
+	}
+	public DirectionComponent(float d) {
+		degree = d;
+	}
+	
 	@Override
 	public void reset() {
-		degree = 0.0f;		
+		degree = DEFAULT_DEGREE;		
 	}
 }

@@ -56,10 +56,10 @@ public final class ResourceCache {
 	 *         typecast to the correct type.
 	 */
 	@SuppressWarnings("unchecked")
-	private static Object getResource(IResource res) {
+	private static Object getResource(IResource res, boolean cached) {
 		if (res == null)
 			return null;
-		if (res.getMap().containsKey(res)) {
+		if (cached && res.getMap().containsKey(res)) {
 			// Fetch from cache.
 			return res.getMap().get(res);
 		} else {
@@ -164,7 +164,7 @@ public final class ResourceCache {
 	 * @return Loaded music.
 	 */
 	public static Music getMusic(EMusic bgm) {
-		return (Music) getResource(bgm);
+		return (Music) getResource(bgm, true);
 	}
 
 	/**
@@ -175,7 +175,10 @@ public final class ResourceCache {
 	 * @return Loaded texture.
 	 */
 	public static Texture getTexture(ETexture texture) {
-		return (Texture) getResource(texture);
+		return (Texture) getResource(texture, true);
+	}
+	public static Texture getTexture(ETexture texture, boolean cached) {
+		return (Texture) getResource(texture, cached);
 	}
 	
 	/**
@@ -186,7 +189,7 @@ public final class ResourceCache {
 	 * @return Loaded animation.
 	 */
 	public static Animation getAnimation(EAnimation animation) {
-		return (Animation) getResource(animation);
+		return (Animation) getResource(animation, true);
 	}
 	
 	/**
@@ -197,7 +200,10 @@ public final class ResourceCache {
 	 * @return Loaded texture.
 	 */
 	public static Animation[] getAnimationList(EAnimationList animationList) {
-		return (Animation[]) getResource(animationList);
+		return (Animation[]) getResource(animationList, true);
+	}
+	public static Animation[] getAnimationList(EAnimationList animationList, boolean cached) {
+		return (Animation[]) getResource(animationList, cached);
 	}
 
 }

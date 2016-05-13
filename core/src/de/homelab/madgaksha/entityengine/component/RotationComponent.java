@@ -63,6 +63,7 @@ public class RotationComponent implements Component, Poolable {
 		centerX = DEFAULT_CENTER_X;
 		centerY = DEFAULT_CENTER_Y;
 		thetaZ = DEFAULT_THETA_Z;
+		inverseToCamera = DEFAULT_INVERSE_TO_CAMERA;
 	}
 
 }

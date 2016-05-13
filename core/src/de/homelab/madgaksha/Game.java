@@ -78,6 +78,8 @@ public class Game implements ApplicationListener {
 	// only for testing
 	public static float testx = 0.5f;
 	public static float testy = 0.5f;
+	public static float testx2 = 0.5f;
+	public static float testy2 = 0.5f;
 	private float test1 = 0.0f;
 	private float test2 = 0.0f;
 	private float test3 = 0.0f;
@@ -140,7 +142,6 @@ public class Game implements ApplicationListener {
 		batchInfo = new SpriteBatch();
 
 		batchScreen.disableBlending();
-		batchGame.disableBlending();
 		batchInfo.disableBlending();
 
 		// Create a new entity engine and setup basic entity systems.
@@ -165,6 +166,14 @@ public class Game implements ApplicationListener {
 			testy -= 4;
 		if (Gdx.input.isKeyPressed(Input.Keys.UP))
 			testy += 4;
+		if (Gdx.input.isKeyPressed(Keys.PAGE_DOWN))
+			testx2 += 4;
+		if (Gdx.input.isKeyPressed(Input.Keys.FORWARD_DEL))
+			testx2 -= 4;
+		if (Gdx.input.isKeyPressed(Input.Keys.END))
+			testy2 -= 4;
+		if (Gdx.input.isKeyPressed(Input.Keys.HOME))
+			testy2 += 4;
 		test1 = Gdx.input.isKeyPressed(Input.Keys.Q) ? 6.5f : Gdx.input.isKeyPressed(Input.Keys.A) ? -6.5f : 0.0f;
 		test2 = Gdx.input.isKeyPressed(Input.Keys.W) ? 6.5f : Gdx.input.isKeyPressed(Input.Keys.S) ? -6.5f : 0.0f;
 		test3 = Gdx.input.isKeyPressed(Input.Keys.E) ? 10.5f : Gdx.input.isKeyPressed(Input.Keys.D) ? -10.5f : 0.0f;
@@ -307,7 +316,6 @@ public class Game implements ApplicationListener {
 		Entity myEntity = new Entity();
 		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(EAnimationList.ESTELLE_RUNNING,ESpriteDirectionStrategy.ZENITH);
 		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
-		
 		myEntity.add(new PositionComponent(1920.0f/4.0f, 1080.0f/2.0f));
 		myEntity.add(new RotationComponent(0.0f, true));
 		myEntity.add(sfdc);
@@ -315,7 +323,18 @@ public class Game implements ApplicationListener {
 		myEntity.add(new SpriteComponent(sac));
 		myEntity.add(new DirectionComponent());
 		
+		Entity yourEntity = new Entity();
+		SpriteForDirectionComponent sfdc2 = new SpriteForDirectionComponent(EAnimationList.JOSHUA_RUNNING,ESpriteDirectionStrategy.ZENITH);
+		SpriteAnimationComponent sac2 = new SpriteAnimationComponent(sfdc2);
+		yourEntity.add(new SpriteComponent(sac2));
+		yourEntity.add(new PositionComponent(1920.0f/4.0f-40.0f, 1080.0f/2.0f));
+		yourEntity.add(new RotationComponent(0.0f, true));
+		yourEntity.add(sfdc2);
+		yourEntity.add(sac2);
+		yourEntity.add(new DirectionComponent(90.0f));
+		
 		entityEngine.addEntity(myEntity);
-
+		entityEngine.addEntity(yourEntity);
+		
 	}
 }

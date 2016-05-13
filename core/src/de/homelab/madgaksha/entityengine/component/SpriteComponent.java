@@ -36,6 +36,7 @@ public class SpriteComponent implements Component, Poolable {
 		final TextureRegion tr = sac.animation.getKeyFrame(0.0f);
 		sprite = new Sprite(tr); // constructor calls #setOriginCenter()
 		sprite.setTexture(tr.getTexture());
+		LOG.debug(sprite.getTexture());
 	}
 	
 	@Override

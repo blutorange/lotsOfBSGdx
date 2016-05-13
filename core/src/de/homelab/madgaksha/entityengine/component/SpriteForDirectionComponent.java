@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
+import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcecache.Resources.EAnimationList;
 
@@ -32,27 +33,38 @@ import de.homelab.madgaksha.resourcecache.Resources.EAnimationList;
  *
  */
 public class SpriteForDirectionComponent implements Component, Poolable {
-	private static final Animation[] RESET_LIST = new Animation[0];
-	public Animation[] animationList = {};
-	public ESpriteDirectionStrategy spriteDirectionStrategy = ESpriteDirectionStrategy.STATIC;
+	private final static Logger LOG = Logger.getLogger(SpriteForDirectionComponent.class);
+	private final static Animation[] DEFAULT_ANIMATION_LIST = new Animation[0];
+	private final static ESpriteDirectionStrategy DEFAULT_SPRITE_DIRECTION_STRATEGY = ESpriteDirectionStrategy.STATIC;
+	
+	
+	public Animation[] animationList = DEFAULT_ANIMATION_LIST;
+	public ESpriteDirectionStrategy spriteDirectionStrategy = DEFAULT_SPRITE_DIRECTION_STRATEGY;
+	
 	
 	public SpriteForDirectionComponent(Animation[] al) {
 		animationList = al;
 	}
 	public SpriteForDirectionComponent(Animation[] al, ESpriteDirectionStrategy estrat) {
 		animationList = al;
-		spriteDirectionStrategy = estrat;
+		spriteDirectionStrategy = DEFAULT_SPRITE_DIRECTION_STRATEGY;
 	}
 	public SpriteForDirectionComponent(EAnimationList eal) {
-		animationList = ResourceCache.getAnimationList(eal);
+		this(eal, DEFAULT_SPRITE_DIRECTION_STRATEGY, false);
 	}
 	public SpriteForDirectionComponent(EAnimationList eal, ESpriteDirectionStrategy estrat) {
-		animationList = ResourceCache.getAnimationList(eal);
+		this(eal, estrat, true);
+	}
+	public SpriteForDirectionComponent(EAnimationList eal, ESpriteDirectionStrategy estrat, boolean cached) {
+		animationList = ResourceCache.getAnimationList(eal, cached);
+		LOG.debug(animationList);
 		spriteDirectionStrategy = estrat;
-	}	
+	}
+	
 	
 	@Override
 	public void reset() {
-		animationList = RESET_LIST;
+		animationList = DEFAULT_ANIMATION_LIST;
+		spriteDirectionStrategy = DEFAULT_SPRITE_DIRECTION_STRATEGY;
 	}
 }
