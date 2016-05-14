@@ -41,9 +41,7 @@ public class SpriteRenderSystem extends EntitySystem {
 	}
 		
 	@Override
-	public void update (float deltaTime) {
-		viewport.apply();//removeme, done by viewportupdatesystem
-		
+	public void update (float deltaTime) {	
 		// Apply projection matrix.
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 
@@ -51,6 +49,7 @@ public class SpriteRenderSystem extends EntitySystem {
 		final float cameraUpAngleXY = viewport.getRotationUpXY();
 		
 		batch.begin();
+		batch.draw(Game.img, 500.0f,550.f);
 		for (int i = 0; i < entities.size(); ++i) {
 			final Entity entity = entities.get(i);
 			final SpriteComponent sc = Mapper.spriteComponent.get(entity);
@@ -63,7 +62,12 @@ public class SpriteRenderSystem extends EntitySystem {
 				else 
 					sc.sprite.setRotation(rc.thetaZ);
 			}	
-			sc.sprite.setCenter(pc.x+(i==0 ? Game.testx : Game.testx2), pc.y+(i==0 ? Game.testy : Game.testy2));
+			
+			//TODO remove me, testing only
+			pc.x+=(i==0 ? Game.testx : Game.testx2); // <-- this
+			pc.y+=(i==0 ? Game.testy : Game.testy2); // <-- this
+			
+			sc.sprite.setCenter(pc.x, pc.y);
 			sc.sprite.draw(batch);
 		}
 		batch.end();

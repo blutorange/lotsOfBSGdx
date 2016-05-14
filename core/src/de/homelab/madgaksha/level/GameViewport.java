@@ -56,7 +56,7 @@ public class GameViewport extends Viewport {
 		perspectiveCamera = (PerspectiveCamera)camera;
 		
 		// Position camera to show entire world height initially.
-		float elevation = mapHeightW * 0.5f / (float) Math.tan(ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y * Math.PI / 180.0f);
+		float elevation = mapHeightW * 0.5f * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF_INV;
 		camera.position.set(mapWidthW * 0.5f, mapHeightW * 0.5f, elevation);
 
 		tanFovyH = (float)Math.tan(0.5*ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y);

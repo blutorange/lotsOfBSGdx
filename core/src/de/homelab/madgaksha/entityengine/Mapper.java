@@ -16,13 +16,17 @@ import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.TimeScaleComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.ViewportComponent;
+import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
+import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 
 public class Mapper {
 	private Mapper() {
 	};
 
-	public final static ComponentMapper<SpriteForDirectionComponent> spriteForDirectionComponent = ComponentMapper
-			.getFor(SpriteForDirectionComponent.class);
+	public final static ComponentMapper<BoundingBoxComponent> boundingBoxComponent = ComponentMapper
+			.getFor(BoundingBoxComponent.class);
+	public final static ComponentMapper<BoundingSphereComponent> boundingSphereComponent = ComponentMapper
+			.getFor(BoundingSphereComponent.class);
 	public final static ComponentMapper<DirectionComponent> directionComponent = ComponentMapper
 			.getFor(DirectionComponent.class);
 	public final static ComponentMapper<ForceComponent> forceComponent = ComponentMapper.getFor(ForceComponent.class);
@@ -42,6 +46,8 @@ public class Mapper {
 			.getFor(SpriteAnimationComponent.class);
 	public final static ComponentMapper<SpriteComponent> spriteComponent = ComponentMapper
 			.getFor(SpriteComponent.class);
+	public final static ComponentMapper<SpriteForDirectionComponent> spriteForDirectionComponent = ComponentMapper
+			.getFor(SpriteForDirectionComponent.class);
 	public final static ComponentMapper<TimeScaleComponent> timeScaleComponent = ComponentMapper
 			.getFor(TimeScaleComponent.class);
 	public final static ComponentMapper<VelocityComponent> velocityComponent = ComponentMapper

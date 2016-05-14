@@ -11,11 +11,14 @@ import com.dreizak.miniball.highdim.Miniball;
 import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
+import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.level.GameViewport;
+import de.homelab.madgaksha.logging.Logger;
 
 /**
  * Computes the ideal position for the camera.
@@ -25,22 +28,28 @@ import de.homelab.madgaksha.level.GameViewport;
  */
 public class CameraTracingSystem extends IntervalIteratingSystem {
 
+	private final static Logger LOG = Logger.getLogger(CameraTracingSystem.class);
+	
 	/** In seconds. */
-	private final static float SHOULD_POSITION_UPDATE_INTERVAL = 0.2f;
+	private final static float DEFAULT_UPDATE_INTERVAL = 0.2f;
 
 	private GameViewport viewport;
 
 	private Vector2 lastDirAboveThreshold = new Vector2(0, 1);
 
 	public CameraTracingSystem(GameViewport viewport) {
-		this(viewport, DefaultPriority.cameraZoomingSystem);
+		this(viewport, DEFAULT_UPDATE_INTERVAL, DefaultPriority.cameraZoomingSystem);
 	}
 
 	@SuppressWarnings("unchecked")
-	public CameraTracingSystem(GameViewport viewport, int priority) {
+	public CameraTracingSystem(GameViewport viewport, float updateInterval, int priority) {
 		super(Family.all(ManyTrackingComponent.class, ShouldPositionComponent.class, ShouldRotationComponent.class)
-				.get(), SHOULD_POSITION_UPDATE_INTERVAL, priority);
+				.get(), updateInterval, priority);
 		this.viewport = viewport;
+	}
+	
+	public CameraTracingSystem(GameViewport viewport, int priority) {
+		this(viewport, DEFAULT_UPDATE_INTERVAL, priority);
 	}
 
 	@SuppressWarnings("incomplete-switch")
@@ -52,7 +61,7 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		final PositionComponent playerPoint = Mapper.positionComponent.get(mtc.playerPoint);
 		final PositionComponent bossPoint = Mapper.positionComponent.get(mtc.bossPoint);
 
-		if (playerPoint == null)
+		if (playerPoint == null || mtc.focusPoints.size() == 0)
 			return;
 
 		// Determine the direction the player
@@ -88,17 +97,16 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		// Apply desired gravity.
 		switch (mtc.gravity) {
 		case NORTH:
-			dir.rotate(180.0f);
-			break;
-		case WEST:
 			dir.rotate(270.0f);
 			break;
-		case EAST:
-			dir.rotate(90.0f);
+		case WEST:
+			dir.rotate(180.0f);
 			break;
-		/*
-		 * case SOUTH: dir.rotate(0); break;
-		 */
+		/*case EAST:
+			dir.rotate(0.0f);
+			break;*/
+		case SOUTH:
+			dir.rotate(90.0f); break;
 		}
 		// Normalize, we need a unit vector
 		// for the coordinate system.
@@ -120,55 +128,63 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		final Vector2 v = new Vector2();
 		for (Entity e : mtc.focusPoints) {
 			final PositionComponent vpc = Mapper.positionComponent.get(e);
-			v.set(vpc.x, vpc.y);
+			final BoundingSphereComponent bsc = Mapper.boundingSphereComponent.get(e);
+			v.set(vpc.x-playerPoint.x, vpc.y-playerPoint.y);
 			vDir = v.dot(dir);
 			vBase = v.dot(base);
 			if (vBase < minx)
-				minx = vDir;
+				minx = vBase - (bsc == null ? 0.0f : bsc.radius);
 			else if (vBase > maxx)
-				maxx = vBase;
+				maxx = vBase + (bsc == null ? 0.0f : bsc.radius);
 			if (vDir < miny)
-				miny = vBase;
-			else if (vDir < maxy)
-				maxx = vDir;
+				miny = vDir - (bsc == null ? 0.0f : bsc.radius);
+			else if (vDir > maxy)
+				maxy = vDir + (bsc == null ? 0.0f : bsc.radius);
 		}
-		for (int i = 0; i != 4; ++i) {
-			if (mtc.adjustmentPointLeft < minx)
-				minx = mtc.adjustmentPointLeft;
-			else if (mtc.adjustmentPointRight > maxx)
-				maxx = mtc.adjustmentPointRight;
-			if (mtc.adjustmentPointBottom < miny)
-				miny = mtc.adjustmentPointBottom;
-			else if (mtc.adjustmentPointTop > maxy)
-				maxy = mtc.adjustmentPointTop;
-		}
-		// Clip to world boundaries.
-		if (maxx - minx < mtc.worldBorderRightW - mtc.worldBorderLeftW) {
-			float dx = 0.0f;
-			if (minx < mtc.worldBorderLeftW) {
-				dx = mtc.worldBorderLeftW - minx;
-			} else if (maxx > mtc.worldBorderRightW) {
-				dx = mtc.worldBorderRightW - maxx;
-			}
-			minx += dx;
-			maxx += dx;
-		} else {
-			minx = mtc.worldBorderLeftW;
-			maxx = mtc.worldBorderRightW;
-		}
-		if (maxy - miny < mtc.worldBorderTopW - mtc.worldBorderBottomW) {
-			float dy = 0.0f;
-			if (miny < mtc.worldBorderBottomW) {
-				dy = mtc.worldBorderBottomW - minx;
-			} else if (maxy > mtc.worldBorderTopW) {
-				dy = mtc.worldBorderTopW - maxx;
-			}
-			miny += dy;
-			maxy += dy;
-		} else {
-			miny = mtc.worldBorderBottomW;
-			maxy = mtc.worldBorderTopW;
-		}
+		if (minx == Float.MAX_VALUE) minx = maxx;
+		if (miny == Float.MAX_VALUE) miny = maxy;
+		if (maxx == -Float.MAX_VALUE) maxx = minx;
+		if (maxy == -Float.MAX_VALUE) maxy = miny;
+		// Margin
+		if (mtc.adjustmentPointLeft < minx)
+			minx = mtc.adjustmentPointLeft;
+		else if (mtc.adjustmentPointRight > maxx)
+			maxx = mtc.adjustmentPointRight;
+		if (mtc.adjustmentPointBottom < miny)
+			miny = mtc.adjustmentPointBottom;
+		else if (mtc.adjustmentPointTop > maxy)
+			maxy = mtc.adjustmentPointTop;
+
+//		// Clip to world boundaries.
+//		//TODO
+//		// must be done in the same coordinate system...
+//		if (maxx - minx < mtc.worldBorderRightW - mtc.worldBorderLeftW) {
+//			float dx = 0.0f;
+//			if (minx < mtc.worldBorderLeftW) {
+//				dx = mtc.worldBorderLeftW - minx;
+//			} else if (maxx > mtc.worldBorderRightW) {
+//				dx = mtc.worldBorderRightW - maxx;
+//			}
+//			minx += dx;
+//			maxx += dx;
+//		} else {
+//			minx = mtc.worldBorderLeftW;
+//			maxx = mtc.worldBorderRightW;
+//		}
+//		if (maxy - miny < mtc.worldBorderTopW - mtc.worldBorderBottomW) {
+//			float dy = 0.0f;
+//			if (miny < mtc.worldBorderBottomW) {
+//				dy = mtc.worldBorderBottomW - minx;
+//			} else if (maxy > mtc.worldBorderTopW) {
+//				dy = mtc.worldBorderTopW - maxx;
+//			}
+//			miny += dy;
+//			maxy += dy;
+//		} else {
+//			miny = mtc.worldBorderBottomW;
+//			maxy = mtc.worldBorderTopW;
+//		}
+
 		// Get the center of the rectangle
 		float cx = (maxx + minx) * 0.5f; // center base coordinate
 		float cy = (maxy + miny) * 0.5f; // center dir coordinate
@@ -187,14 +203,14 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 			hw = hh * Game.VIEWPORT_GAME_AR;
 		}
 		// Compute the rotation angle of this rectangle.
-		src.thetaZ = base.angleRad();
+		src.thetaZ = 360.0f-base.angle();
+
 		// Compute the height the camera needs to be located
 		// at.
 		if (viewport.getCamera() instanceof OrthographicCamera) {
 			final OrthographicCamera ocam = (OrthographicCamera) viewport.getCamera();
 			ocam.setToOrtho(false, hw * 2.0f, hh * 2.0f);
 		} else /* if (camera instanceof PerspectiveCamera) */ {
-			final PerspectiveCamera pcam = (PerspectiveCamera) viewport.getCamera();
 			// fieldOfView is the double angle in degrees
 			// from bottom to top.
 			// ^ /\
@@ -209,14 +225,14 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 			//
 			//
 			// tan(fovy/2) = hh/z
-			spc.z = hh / (float) Math.tan(pcam.fieldOfView * 0.5f);
+			spc.z = hh * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF_INV;
 		}
-
+		// Apply minimum elevation.
+		if (spc.z < mtc.minimumElevationW) spc.z = mtc.minimumElevationW;
 		// Compute the position the camera should be located
 		// at. We need to convert the coordinates back to the
 		// world coordinate system.
-		dir.set(cx, cy).rotateRad(-src.thetaZ);
-		spc.x = dir.x;
-		spc.y = dir.y;
+		spc.x = base.x*cx + dir.x*cy + playerPoint.x;
+		spc.y = base.y*cx + dir.y*cy + playerPoint.y;
 	}
 }

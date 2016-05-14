@@ -17,15 +17,18 @@ import de.homelab.madgaksha.util.ArrayListEntityPointSet;
  */
 public class ManyTrackingComponent implements Component, Poolable {
 
+	private final static float DEFAULT_MINIMUM_ELEVATION_W = 400.0f;
 	private final static float DEFAULT_ADJUSTMENT_POINT_TOP = 1.0f;
 	private final static float DEFAULT_ADJUSTMENT_POINT_BOTTOM = -1.0f;
 	private final static float DEFAULT_ADJUSTMENT_POINT_LEFT = -1.0f;
 	private final static float DEFAULT_ADJUSTMENT_POINT_RIGHT = 1.0f;
-	private final static float DEFAULT_PLAYER_BOSS_THRESHOLD_W = 0.1f;
+	/** @see #playerBossThresholdW */
+	private final static float DEFAULT_PLAYER_BOSS_THRESHOLD_W = 75.0f*75.0f;
 	private final static float DEFAULT_WORLD_BORDER_LEFT_W = 0.0f;
 	private final static float DEFAULT_WORLD_BORDER_RIGHT_W = 100.0f;
 	private final static float DEFAULT_WORLD_BORDER_TOP_W = 100.0f;
 	private final static float DEFAULT_WORLD_BORDER_BOTTOM_W = 0.0f;
+	/** @see #marginScalingFactor */
 	private final static float DEFAULT_MARGIN_SCALING_FACTOR = 1.1f;
 
 	private final static Entity DEFAULT_PLAYER_POINT = new Entity().add(new PositionComponent());
@@ -34,6 +37,13 @@ public class ManyTrackingComponent implements Component, Poolable {
 	private final static TrackingOrientationStrategy DEFAULT_TRACKING_ORIENTATION_STRATEGY = TrackingOrientationStrategy.ABSOLUTE;
 	private final static Gravity DEFAULT_GRAVITY = Gravity.SOUTH;
 
+	public ManyTrackingComponent(float worldBorderLeftW, float worldBorderBottomW, float worldBorderRightW, float worldBorderTopW) {
+		this.worldBorderTopW = worldBorderTopW;
+		this.worldBorderBottomW = worldBorderBottomW;
+		this.worldBorderLeftW = worldBorderLeftW;
+		this.worldBorderRightW = worldBorderRightW;
+	}
+	
 	@Override
 	public void reset() {
 		adjustmentPointTop = DEFAULT_ADJUSTMENT_POINT_TOP;
@@ -51,6 +61,8 @@ public class ManyTrackingComponent implements Component, Poolable {
 
 		trackingOrientationStrategy = DEFAULT_TRACKING_ORIENTATION_STRATEGY;
 		gravity = DEFAULT_GRAVITY;
+		
+		minimumElevationW = DEFAULT_MINIMUM_ELEVATION_W;
 	}
 
 	// Camera tracking options.
@@ -61,8 +73,10 @@ public class ManyTrackingComponent implements Component, Poolable {
 
 	/**
 	 * When computing the world rectangle the camera should look at, these
-	 * points are added to the focus points, but in player-boss coordinates (the
-	 * looking direction of the player and the axis orthogonal to that). <br>
+	 * points are added to the focus points, but in rotated player-boss 
+	 * world coordinates (the looking direction of the player and the axis
+	 * orthogonal to that).
+	 * <br>
 	 * This is essentially the smallest rectangle in world coordinates and
 	 * prevents the camera from zooming-in too close. <br>
 	 * Should be set along with {@link #playerBossThresholdW} and is typically
@@ -97,17 +111,17 @@ public class ManyTrackingComponent implements Component, Poolable {
 	 * 
 	 * How to determine the direction in which we are looking, ie. the
 	 * orientation of the screen.
-	 * 
+	 * <br><br>
 	 * ABSOLUTE: {@link #bossPoint} is interpreted as the directional vector for
 	 * the screen orientation.
-	 * 
+	 * <br><br>
 	 * RELATIVE: The screen orients itself in the direction of the vector
 	 * {@link #playerPoint}-{@link #bossPoint}.
-	 * 
+	 * <br><br>
 	 * MINIBALL: We compute center C of the smallest enclosing circle of all
 	 * focusPoints and look in the direction of {@link #playerPoint}-C. This
 	 * uses the miniball library.
-	 * 
+	 * <br><br>
 	 * <a href="https://github.com/hbf/miniball">Miniball library on github.</a>
 	 * 
 	 */
@@ -121,6 +135,8 @@ public class ManyTrackingComponent implements Component, Poolable {
 	 * Minimum distance between the player and the boss for the camera to adjust
 	 * rotation. When the distance is below this threshold, rotation will not be
 	 * adjusted anymore.
+	 * 
+	 * This is the square of the distance.
 	 */
 	public float playerBossThresholdW = DEFAULT_PLAYER_BOSS_THRESHOLD_W;
 
@@ -135,5 +151,8 @@ public class ManyTrackingComponent implements Component, Poolable {
 
 	/** Relative margin to be added to the computed camera world rectangle. */
 	public float marginScalingFactor = DEFAULT_MARGIN_SCALING_FACTOR;
+	
+	/** The minimum height of the camera above the world. */
+	public float minimumElevationW = DEFAULT_MINIMUM_ELEVATION_W;
 
 }

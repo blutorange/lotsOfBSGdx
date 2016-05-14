@@ -1,7 +1,5 @@
 package de.homelab.madgaksha.grantstrategy;
 
-import com.badlogic.gdx.math.MathUtils;
-
 /**
  * Sets current value to the should-value exponentially. Let x_is be the current
  * value. Let x_should be the target value. <br>
@@ -19,14 +17,19 @@ import com.badlogic.gdx.math.MathUtils;
  * @author madgaksha
  */
 public class ExponentialGrantStrategy implements IGrantStrategy {
-	private final static float DEFAULT_COMBINED_FACTOR = 1.0f / 0.033f;
-
+	private final static float DEFAULT_TARGET_TIME = 0.033f;
+	private final static float DEFAULT_COMBINED_FACTOR = 1.0f / DEFAULT_TARGET_TIME;
+		
 	private float combinedFactor = DEFAULT_COMBINED_FACTOR;
 
 	public ExponentialGrantStrategy() {
 		combinedFactor = DEFAULT_COMBINED_FACTOR;
 	}
 
+	public ExponentialGrantStrategy(float reductionFactor) {
+		this.combinedFactor = reductionFactor / DEFAULT_TARGET_TIME;
+	}	
+	
 	public ExponentialGrantStrategy(float reductionFactor, float targetTime) {
 		this.combinedFactor = reductionFactor / targetTime;
 	}

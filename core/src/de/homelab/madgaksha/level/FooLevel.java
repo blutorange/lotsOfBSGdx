@@ -3,7 +3,7 @@ package de.homelab.madgaksha.level;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 
-import de.homelab.madgaksha.resourcecache.Resources.ETexture;
+import de.homelab.madgaksha.resourcecache.ETexture;
 
 /**
  * Only for testing purposes.

@@ -12,28 +12,42 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.homelab.madgaksha.audiosystem.AwesomeAudio;
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
+import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
+import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
+import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
+import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.ViewportComponent;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.CameraTracingSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.GrantRotationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteAnimationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.ViewportUpdateSystem;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
+import de.homelab.madgaksha.enums.Gravity;
+import de.homelab.madgaksha.enums.TrackingOrientationStrategy;
+import de.homelab.madgaksha.grantstrategy.ExponentialGrantStrategy;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.level.GameViewport;
 import de.homelab.madgaksha.level.InfoViewport;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.EAnimationList;
+import de.homelab.madgaksha.resourcecache.EMusic;
+import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcecache.Resources.EAnimationList;
-import de.homelab.madgaksha.resourcecache.Resources.EMusic;
 
 public class Game implements ApplicationListener {
 
@@ -76,6 +90,7 @@ public class Game implements ApplicationListener {
 
 	// TODO remove me
 	// only for testing
+	public static Vector2 testA = new Vector2();
 	public static float testx = 0.5f;
 	public static float testy = 0.5f;
 	public static float testx2 = 0.5f;
@@ -87,6 +102,7 @@ public class Game implements ApplicationListener {
 	private float test5 = 0.0f;
 	private float test6 = 0.0f;
 	private float test7 = 100.0f;
+	public static Texture img;
 	// testing end
 
 	private final GameParameters params;
@@ -147,6 +163,8 @@ public class Game implements ApplicationListener {
 		// Create a new entity engine and setup basic entity systems.
 		createEntityEngine();
 		
+		img = ResourceCache.getTexture(ETexture.BADLOGIC);
+		
 		// Start the game.
 		running = true;
 	}
@@ -158,22 +176,13 @@ public class Game implements ApplicationListener {
 		// TESTING STARTS HERE
 		// SHOULD BE REMOVED
 		// ============================================================
-		if (Gdx.input.isKeyPressed(Keys.RIGHT))
-			testx += 4;
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-			testx -= 4;
-		if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-			testy -= 4;
-		if (Gdx.input.isKeyPressed(Input.Keys.UP))
-			testy += 4;
-		if (Gdx.input.isKeyPressed(Keys.PAGE_DOWN))
-			testx2 += 4;
-		if (Gdx.input.isKeyPressed(Input.Keys.FORWARD_DEL))
-			testx2 -= 4;
-		if (Gdx.input.isKeyPressed(Input.Keys.END))
-			testy2 -= 4;
-		if (Gdx.input.isKeyPressed(Input.Keys.HOME))
-			testy2 += 4;
+		testx = (Gdx.input.isKeyPressed(Keys.RIGHT)) ? 3.5f : (Gdx.input.isKeyPressed(Input.Keys.LEFT)) ? -3.5f : 0.0f;
+		testy = (Gdx.input.isKeyPressed(Keys.UP)) ? 3.5f : (Gdx.input.isKeyPressed(Input.Keys.DOWN)) ? -3.5f : 0.0f;
+		testA.set(testx,testy).rotate(-viewportGame.getRotationUpXY());
+		testx = testA.x;
+		testy = testA.y;
+		testx2 = (Gdx.input.isKeyPressed(Keys.PAGE_DOWN)) ? 3.5f : (Gdx.input.isKeyPressed(Input.Keys.DEL)) ? -3.5f : 0.0f;
+		testy2 = (Gdx.input.isKeyPressed(Keys.HOME)) ? 3.5f : (Gdx.input.isKeyPressed(Input.Keys.END)) ? -3.5f : 0.0f;
 		test1 = Gdx.input.isKeyPressed(Input.Keys.Q) ? 6.5f : Gdx.input.isKeyPressed(Input.Keys.A) ? -6.5f : 0.0f;
 		test2 = Gdx.input.isKeyPressed(Input.Keys.W) ? 6.5f : Gdx.input.isKeyPressed(Input.Keys.S) ? -6.5f : 0.0f;
 		test3 = Gdx.input.isKeyPressed(Input.Keys.E) ? 10.5f : Gdx.input.isKeyPressed(Input.Keys.D) ? -10.5f : 0.0f;
@@ -279,7 +288,7 @@ public class Game implements ApplicationListener {
 		Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
-
+		
 		// Update the game
 		final float deltaTime = timeScalingFactor * Math.min(Gdx.graphics.getRawDeltaTime(), MAX_DELTA_TIME);
 		if (running) {
@@ -312,29 +321,51 @@ public class Game implements ApplicationListener {
 		entityEngine.addSystem(new BirdsViewSpriteSystem(viewportGame));
 		entityEngine.addSystem(new SpriteAnimationSystem());
 		entityEngine.addSystem(new SpriteRenderSystem(viewportGame, batchGame));
-		
+		entityEngine.addSystem(new CameraTracingSystem(viewportGame));
+		entityEngine.addSystem(new ViewportUpdateSystem());
+		entityEngine.addSystem(new GrantPositionSystem());
+		entityEngine.addSystem(new GrantRotationSystem());
+			
 		Entity myEntity = new Entity();
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(EAnimationList.ESTELLE_RUNNING,ESpriteDirectionStrategy.ZENITH);
+		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(EAnimationList.ESTELLE_RUNNING, ESpriteDirectionStrategy.ZENITH);
 		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
-		myEntity.add(new PositionComponent(1920.0f/4.0f, 1080.0f/2.0f));
-		myEntity.add(new RotationComponent(0.0f, true));
+		myEntity.add(new PositionComponent(1920.0f/4.0f+120.0f, 1080.0f/2.0f));
 		myEntity.add(sfdc);
 		myEntity.add(sac);
+		myEntity.add(new RotationComponent(true));
+		myEntity.add(new BoundingSphereComponent(70.0f));
 		myEntity.add(new SpriteComponent(sac));
 		myEntity.add(new DirectionComponent());
 		
 		Entity yourEntity = new Entity();
-		SpriteForDirectionComponent sfdc2 = new SpriteForDirectionComponent(EAnimationList.JOSHUA_RUNNING,ESpriteDirectionStrategy.ZENITH);
+		SpriteForDirectionComponent sfdc2 = new SpriteForDirectionComponent(EAnimationList.JOSHUA_RUNNING, ESpriteDirectionStrategy.ZENITH);
 		SpriteAnimationComponent sac2 = new SpriteAnimationComponent(sfdc2);
 		yourEntity.add(new SpriteComponent(sac2));
-		yourEntity.add(new PositionComponent(1920.0f/4.0f-40.0f, 1080.0f/2.0f));
-		yourEntity.add(new RotationComponent(0.0f, true));
+		yourEntity.add(new PositionComponent(1920.0f/4.0f-80.0f, 1080.0f/2.0f));
 		yourEntity.add(sfdc2);
 		yourEntity.add(sac2);
+		yourEntity.add(new RotationComponent(true));
+		yourEntity.add(new BoundingSphereComponent(70.0f));
 		yourEntity.add(new DirectionComponent(90.0f));
+			
+		Entity myCamera = new Entity();
+		ManyTrackingComponent mtc = new ManyTrackingComponent(level.getMapXW(),level.getMapYW(),level.getMapWidthW(),level.getMapHeightW());
+		mtc.focusPoints.add(myEntity);
+		mtc.focusPoints.add(yourEntity);
+		mtc.playerPoint = myEntity;
+		mtc.bossPoint = yourEntity;
+		mtc.gravity = Gravity.SOUTH;
+		mtc.trackingOrientationStrategy = TrackingOrientationStrategy.RELATIVE;		
+		myCamera.add(mtc);
+		myCamera.add(new PositionComponent());
+		myCamera.add(new RotationComponent());
+		myCamera.add(new ShouldPositionComponent(new ExponentialGrantStrategy(0.5f,0.25f)));
+		myCamera.add(new ShouldRotationComponent(new ExponentialGrantStrategy(0.5f,0.25f)));
+		myCamera.add(new ViewportComponent(viewportGame));
+
 		
 		entityEngine.addEntity(myEntity);
 		entityEngine.addEntity(yourEntity);
-		
+		entityEngine.addEntity(myCamera);
 	}
 }

@@ -73,6 +73,8 @@ int status = JavaProcess.exec(MyClass.class);
 
 package de.homelab.madgaksha.desktop;
 
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -86,7 +88,9 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -111,13 +115,14 @@ public class DesktopLauncher extends JFrame {
 	private final static Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);
 
 	private Locale locale = Locale.getDefault();
-	private int fps = 30;
-	private boolean fullscreen = false;
-	private int width = 640;
-	private int height = 480;
+	private Integer fps = null;
+	private Boolean fullscreen = null;
+	private Integer width = null;
+	private Integer height = null;
 	private int verbosity = Application.LOG_ERROR;
 	private Process gameProcess = null;
 	private static DesktopLauncher instance = null;
+	private MainPanel mainPanel = null;
 	
 	/**
 	 * Exits and shows a message with the error.
@@ -168,8 +173,8 @@ public class DesktopLauncher extends JFrame {
 		o.addOption("v", "verbosity", true, "Sets the logging level 0-3.");
 		o.addOption("l", "language", true, "Sets the language for the program.");
 		o.addOption("h", "help", false, "Show help.");
-		o.addOption("fs", "fullscreen", false, "Activates fullscreen mode.");
-		o.addOption("f", "fps", false, "Framerate in frames per second.");
+		o.addOption("fs", "fullscreen", true, "Activates fullscreen mode.");
+		o.addOption("f", "fps", true, "Framerate in frames per second.");
 		o.addOption("dw", "width", true, "Window width.");
 		o.addOption("dh", "height", true, "Window height");
 		
@@ -201,12 +206,14 @@ public class DesktopLauncher extends JFrame {
 		}
 				
 		// Set the framerate
-		int fps = 30;
+		final Integer fps;
 		if (line.hasOption("fps")) {
 			final Scanner s = new Scanner(line.getOptionValue("fps"));
 			if (s.hasNextInt(10)) fps = s.nextInt(10);
+			else fps = null;
 			s.close();
 		}
+		else fps = null;
 		
 		// Set the language.
 		Locale l;
@@ -215,46 +222,60 @@ public class DesktopLauncher extends JFrame {
 		} else {
 			l = Locale.getDefault();
 		}
-		Locale locale = l;
+		final Locale locale = l;
 		LOG.config("language set to " + l.getDisplayLanguage());
 		
 		// Set window dimensions.
-		int width = 640;
-		int height = 480;
-		boolean fullscreen = line.hasOption("fullscreen");
+		final Integer width;
+		final Integer height;
+		final Boolean fullscreen;
+		if (line.hasOption("fullscreen")) {
+			fullscreen = line.getOptionValue("fullscreen").equalsIgnoreCase("true");
+		}
+		else fullscreen = null;
 		if (line.hasOption("width")) {
 			final String w = line.getOptionValue("width", "640");
 			final Scanner s = new Scanner(w);
 			if (s.hasNextInt(10)) width = s.nextInt(10);
+			else width = null;
 			s.close();
 		}
+		else width = null;
+
 		if (line.hasOption("height")) {
 			final String h = line.getOptionValue("height", "480");
 			final Scanner s = new Scanner(h);
 			if (s.hasNextInt(10)) height = s.nextInt(10);
+			else height = null;
 			s.close();
 		}
+		else height = null;
 		
 		// Set logging level.
-		int verbosity = Application.LOG_ERROR;
+		int requestedVerbosity = Application.LOG_ERROR;
 		if (line.hasOption("verbosity")) {
-			final String v = line.getOptionValue("verbosity", String.valueOf(verbosity));
+			final String v = line.getOptionValue("verbosity", String.valueOf(requestedVerbosity));
 			final Scanner s = new Scanner(v);
-			if (s.hasNextInt(10)) verbosity = s.nextInt(10);
+			if (s.hasNextInt(10)) requestedVerbosity = s.nextInt(10);
 			s.close();
 		}
-		switch (verbosity) {
+		final int verbosity;
+		switch (requestedVerbosity) {
 		case 0:
 			verbosity = Application.LOG_NONE;
+			break;
 		case 1:
 			verbosity = Application.LOG_INFO;
+			break;
 		case 2:
 			verbosity = Application.LOG_ERROR;
+			break;
 		case 3:
 			verbosity = Application.LOG_DEBUG;
 			break;
 		default:
-			System.out.println("Unknown logging level " + verbosity + ". Try --help.");
+			verbosity = Application.LOG_NONE;
+			System.out.println("Unknown logging level " + requestedVerbosity + ". Try --help.");
 			System.exit(-1);
 		}
 		
@@ -266,11 +287,20 @@ public class DesktopLauncher extends JFrame {
 			LOG.log(Level.INFO, "could not enable hardware acceleration", e);
 		}
 		
-		DesktopLauncher.instance = new DesktopLauncher(fullscreen, width, height, fps, locale, verbosity);
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					DesktopLauncher.instance = new DesktopLauncher(fullscreen, width, height, fps, locale, verbosity);
+					DesktopLauncher.instance.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	
-	private DesktopLauncher(boolean fullscreen, int width, int height, int fps, Locale locale, int verbosity) {
+	private DesktopLauncher(Boolean fullscreen, Integer width, Integer height, Integer fps, Locale locale, int verbosity) {
 		// Save configuration.
 		this.fullscreen = fullscreen;
 		this.width = width;
@@ -325,6 +355,7 @@ public class DesktopLauncher extends JFrame {
 			
 			@Override
 			public void windowClosing(WindowEvent arg0) {
+				if (mainPanel != null) mainPanel.writeConfig();
 				if (gameProcess != null) {
 					DesktopLauncher.alert(i18n.main("desktop.running.no.close"));
 					instance.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -351,10 +382,16 @@ public class DesktopLauncher extends JFrame {
 	//TODO
 	// just a simple button for testing now.
 	private void renderLauncher() {
-		final JButton button = new JButton("start");
+		
+		mainPanel = new MainPanel(width, height, fps, fullscreen);
+
+		final JButton startButton = mainPanel.getStartButton();
+	
 		final JButton buttonForceQuit = new JButton("ForceQuit Game");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		button.addActionListener(new ActionListener() {
+		
+		// Starting the game
+		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//TODO check if multiple games are running
@@ -370,22 +407,27 @@ public class DesktopLauncher extends JFrame {
 				}
 			}
 		});
+		
+		// Force quit, only for debugging
 		buttonForceQuit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				if (gameProcess != null) gameProcess.destroy();
 			}
 		});
-		this.setLayout(new FlowLayout(FlowLayout.CENTER));
-		this.add(button);
-		this.add(buttonForceQuit);
-		this.setSize(320, 240);
-		this.setVisible(true);
+
+		this.setContentPane(mainPanel);
+		this.setBounds(100, 100, 450, 300);
+		this.pack();
 	}
 	
 	// Now we actually get to the meat.
-	public boolean launchGame() {	
+	private boolean launchGame() {	
 		//TODO Add actual level.
+		width = mainPanel.getConfigWidth();
+		height = mainPanel.getConfigHeight();
+		fps = mainPanel.getConfigFps();
+		fullscreen = mainPanel.getConfigFullscreen();
 		final GameParameters params = new GameParameters.Builder(new FooLevel())
 				.requestedWidth(width)
 				.requestedLocale(locale)
@@ -434,7 +476,7 @@ public class DesktopLauncher extends JFrame {
 		}
 	}
 	
-	public void enableUI() {
+	private void enableUI() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -443,7 +485,7 @@ public class DesktopLauncher extends JFrame {
 			}
 		});
 	}
-	public void disableUI() {
+	private void disableUI() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -452,7 +494,7 @@ public class DesktopLauncher extends JFrame {
 		});
 	}
 	
-	public static void alert(String msg) {
+	private static void alert(String msg) {
 		JOptionPane.showMessageDialog(null, msg);
 	}
 }

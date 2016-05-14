@@ -17,13 +17,13 @@
         <Column>
             <Name>en</Name>
             <Description>English</Description>
-            <Width>969</Width>
+            <Width>377</Width>
             <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/main_en.properties|true|true|false|false</HandlerConfiguration>
         </Column>
         <Column>
             <Name>ja</Name>
             <Description>Japanese</Description>
-            <Width>150</Width>
+            <Width>487</Width>
             <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/main_ja.properties|true|true|false|false</HandlerConfiguration>
         </Column>
     </Columns>
@@ -92,6 +92,78 @@
             <Value disabled="false">Es gabe leider einen Fehler beim Starten des Spiels. Versuche es bitte erneut oder kontaktiert mich unter s3002591@rz.ba-dresden.de. Ich werde vielleicht auch antworten(?)</Value>
             <Value disabled="false">An unexpected error occured while launching the game. Please try again or contact me: s3002591@rz.ba-dresden.de. I might just answer (?)</Value>
             <Value disabled="true"></Value>
+        </Property>
+        <Property>
+            <Name>desktop.game.start</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Starten</Value>
+            <Value disabled="false">Start</Value>
+            <Value disabled="false">開始</Value>
+        </Property>
+        <Property>
+            <Name>desktop.options</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Optionen</Value>
+            <Value disabled="false">Options</Value>
+            <Value disabled="false">設定</Value>
+        </Property>
+        <Property>
+            <Name>desktop.options.fps</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Bilder pro Sekunde</Value>
+            <Value disabled="false">Frame rate</Value>
+            <Value disabled="false">フレームレート</Value>
+        </Property>
+        <Property>
+            <Name>desktop.options.width</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Breite</Value>
+            <Value disabled="false">Width</Value>
+            <Value disabled="false"></Value>
+        </Property>
+        <Property>
+            <Name>desktop.options.height</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Höhe</Value>
+            <Value disabled="false">Height</Value>
+            <Value disabled="false"></Value>
+        </Property>
+        <Property>
+            <Name>desktop.options.fullscreen</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Vollbild</Value>
+            <Value disabled="false">Fullscreen</Value>
+            <Value disabled="false">全画面</Value>
+        </Property>
+        <Property>
+            <Name>desktop.options.default</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Standardeinstellungen</Value>
+            <Value disabled="false">Default settings</Value>
+            <Value disabled="false"></Value>
+        </Property>
+        <Property>
+            <Name>desktop.options.close</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Schließen</Value>
+            <Value disabled="false">Close</Value>
+            <Value disabled="false"></Value>
+        </Property>
+        <Property>
+            <Name>desktop.options.title</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Konfiguration</Value>
+            <Value disabled="false">Settings</Value>
+            <Value disabled="false">設定</Value>
         </Property>
     </Records>
 </MultiProperties>

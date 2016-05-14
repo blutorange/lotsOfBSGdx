@@ -8,8 +8,8 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcecache.Resources.ETexture;
 
 /**
  * Base class for all the different game levels.
@@ -26,6 +26,8 @@ public abstract class ALevel implements Serializable {
 	
 	
 	public final static float CAMERA_GAME_FIELD_OF_VIEW_Y = 30.0f;
+	public final static float CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF = (float)Math.tan(CAMERA_GAME_FIELD_OF_VIEW_Y*0.5f*Math.PI/180.0f);
+	public final static float CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF_INV = 1.0f / CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF;
 
 	/**
 	 * The info window can work with virtual coordinates [0.0-1.0].
@@ -106,6 +108,14 @@ public abstract class ALevel implements Serializable {
 		return mapWidthW;
 	}
 
+	public float getMapXW() {
+		return WORLD_X;
+	}
+
+	public float getMapYW() {
+		return WORLD_Y;
+	}
+	
 	/**
 	 * @return The height of the map in world coordinates.
 	 */

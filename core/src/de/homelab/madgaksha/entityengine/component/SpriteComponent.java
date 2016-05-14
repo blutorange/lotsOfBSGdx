@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.Resources.ETexture;
+import de.homelab.madgaksha.resourcecache.ETexture;
 
 public class SpriteComponent implements Component, Poolable {
 	

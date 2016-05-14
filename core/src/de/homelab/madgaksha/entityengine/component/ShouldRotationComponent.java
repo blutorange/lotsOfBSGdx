@@ -17,6 +17,10 @@ public class ShouldRotationComponent extends RotationComponent implements Compon
 	private final static IGrantStrategy DEFAULT_GRANT_STRATEGY = new ExponentialGrantStrategy();
 	public IGrantStrategy grantStrategy = DEFAULT_GRANT_STRATEGY;
 
+	public ShouldRotationComponent(IGrantStrategy gs) {
+		grantStrategy = gs;
+	}
+	
 	public void reset() {
 		super.reset();
 		grantStrategy = DEFAULT_GRANT_STRATEGY;

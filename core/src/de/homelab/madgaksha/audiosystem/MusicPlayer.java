@@ -4,7 +4,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Music.OnCompletionListener;
 
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.Resources.EMusic;
+import de.homelab.madgaksha.resourcecache.EMusic;
 
 /**
  * Class for playing music.

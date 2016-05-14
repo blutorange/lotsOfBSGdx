@@ -4,8 +4,8 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import de.homelab.madgaksha.resourcecache.EAnimation;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcecache.Resources.EAnimation;
 
 public class SpriteAnimationComponent implements Component, Poolable {
 	public Animation animation = null;

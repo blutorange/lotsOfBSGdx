@@ -6,8 +6,8 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcecache.Resources.EAnimationList;
 
 /**
  * Component for sprites that are pseudo 3D, ie. with a different sprite for

@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.scenes.scene2d.ui.Table.Debug;
 
 import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
@@ -11,6 +12,8 @@ import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.ViewportComponent;
+import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.util.DebugStringifier;
 
 /**
  * Updates camera and viewport.
@@ -18,6 +21,7 @@ import de.homelab.madgaksha.entityengine.component.ViewportComponent;
  *
  */
 public class ViewportUpdateSystem extends IteratingSystem {
+	private final static Logger LOG = Logger.getLogger(ViewportUpdateSystem.class);
 	public ViewportUpdateSystem() {
 		this(DefaultPriority.viewportUpdateSystem);
 	}
@@ -53,7 +57,7 @@ public class ViewportUpdateSystem extends IteratingSystem {
 		psc.far  = 1.5f * pc.z;
 		
 		// Update viewport, which updates the camera.
-		vc.viewport.apply();
+		vc.viewport.apply();		
 	}
 }
 

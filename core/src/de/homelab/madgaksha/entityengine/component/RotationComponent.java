@@ -47,6 +47,9 @@ public class RotationComponent implements Component, Poolable {
 		centerX = cx;
 		centerY = cy;
 	}
+	public RotationComponent(boolean ic) {
+		inverseToCamera = ic;
+	}
 	public RotationComponent(float tz, boolean ic) {
 		thetaZ = tz;
 		inverseToCamera = ic;

@@ -24,6 +24,12 @@ public class GrantRotationSystem extends IteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		final RotationComponent rc = Mapper.rotationComponent.get(entity);
 		final ShouldRotationComponent src = Mapper.shouldRotationComponent.get(entity);
+		// Make sure we rotate in the direction of the lesser angle...
+		if (Math.abs(src.thetaZ-rc.thetaZ) > 180.0f) {
+			if (src.thetaZ < rc.thetaZ) src.thetaZ += 360.0;
+			else rc.thetaZ += 360.0f;
+		}
+		System.out.println(rc.thetaZ + " " + src.thetaZ);
 		rc.thetaZ = src.grantStrategy.compromise(rc.thetaZ, src.thetaZ, deltaTime);
 		rc.centerX = src.grantStrategy.compromise(rc.centerX, src.centerX, deltaTime);
 		rc.centerY = src.grantStrategy.compromise(rc.centerY, src.centerY, deltaTime);

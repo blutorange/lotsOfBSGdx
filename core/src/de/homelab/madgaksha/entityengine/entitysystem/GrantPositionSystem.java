@@ -25,8 +25,8 @@ public class GrantPositionSystem extends IteratingSystem {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		final ShouldPositionComponent spc = Mapper.shouldPositionComponent.get(entity);
 		pc.x = spc.grantStrategy.compromise(pc.x, spc.x, deltaTime);
-		pc.y = spc.grantStrategy.compromise(pc.x, spc.y, deltaTime);
-		pc.z = spc.grantStrategy.compromise(pc.x, spc.z, deltaTime);
+		pc.y = spc.grantStrategy.compromise(pc.y, spc.y, deltaTime);
+		pc.z = spc.grantStrategy.compromise(pc.z, spc.z, deltaTime);
 	}
 
 }

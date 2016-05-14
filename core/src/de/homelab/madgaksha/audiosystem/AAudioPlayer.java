@@ -5,8 +5,8 @@ import com.badlogic.gdx.audio.Music.OnCompletionListener;
 import com.badlogic.gdx.utils.Timer;
 
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcecache.Resources.EMusic;
 import de.homelab.madgaksha.util.interpolator.AInterpolator;
 import de.homelab.madgaksha.util.interpolator.IInterpolatorCallback;
 import de.homelab.madgaksha.util.interpolator.LinearFloatInterpolator;

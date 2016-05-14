@@ -15,7 +15,8 @@ public class Resource {
 	public static final Logger LOG = LoggerFactory.getLogger(Resource.class);
 	
 	public enum EIcon implements IResource {
-		DIALOG_CLOSE("iconConfirmClose.gif");
+		DIALOG_CLOSE("iconConfirmClose.gif"),
+		LEVEL_FOO("foolevel.jpg");
 		private final static int LIMIT = 20;
 		private final URL url;
 		private EIcon(String file) {
