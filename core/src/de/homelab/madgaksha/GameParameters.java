@@ -31,32 +31,29 @@ public class GameParameters implements Serializable {
 
 	@Override
 	public void write(Json json) {
-		json.writeValue("levelClass", requestedLevel.getClass().getCanonicalName(), String.class);
+		json.writeValue("requestedLevel", requestedLevel.getClass().getCanonicalName(), String.class);
 		json.writeValue("requestedLocale", requestedLocale);
 		json.writeValue("requestedWidth", requestedWidth);
 		json.writeValue("requestedHeight", requestedHeight);
 		json.writeValue("requestedFullscreen", requestedFullscreen);
 		json.writeValue("requestedFps", requestedFps);
 		json.writeValue("requestedLogLevel", requestedLogLevel);
-		json.writeValue("requestedLevel", requestedLevel);
 		json.writeValue("requestedWindowTitle", requestedWindowTitle);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void read(Json json, JsonValue jsonData) {
-		final String levelClass = jsonData.get("levelClass").asString();
-		final JsonValue levelValue = jsonData.get("requestedLevel");
-		Class<ALevel> aLevelClass;
-		ALevel level;
+		final String levelClass = jsonData.get("requestedLevel").asString();
 		try {
-			aLevelClass = (Class<ALevel>) Class.forName(levelClass);
+			ALevel level;
+			Class<ALevel> aLevelClass = (Class<ALevel>) Class.forName(levelClass);
 			level = aLevelClass.newInstance();
+			requestedLevel = level;
 		} catch (Exception e) {
 			LOG.error("could not load level: " + levelClass, e);
 			return;
 		}
-		level.read(json, levelValue);
-		requestedLevel = level;
 		JsonValue localeValue = jsonData.get("requestedLocale");
 		requestedLocale = new LocaleSerializer().read(json, localeValue, null);
 		requestedFps = jsonData.get("requestedFps").asInt();

@@ -2,13 +2,13 @@ package de.homelab.madgaksha.level;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.Json.Serializable;
-import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ETiledMap;
@@ -23,8 +23,10 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
  *
  * @author madgaksha
  */
-public abstract class ALevel implements Serializable {
+public abstract class ALevel {
 
+	private final static Logger LOG = Logger.getLogger(ALevel.class);
+	
 	public final static float WORLD_X = 0.0f;
 	public final static float WORLD_Y = 0.0f;
 
@@ -51,38 +53,38 @@ public abstract class ALevel implements Serializable {
 	 */
 	public final static float VIEWPORT_SCREEN_VIRTUAL_HEIGHT = 720.0f;
 
-	protected float mapWidthW = 10.0f;
-	protected float mapHeightW = 10.0f;
-	protected ETexture backgroundImage = null;
-	protected IResource[] requiredResources;
-	protected EMusic bgm;
-	protected ETiledMap tiledMap;
+	private OrthogonalTiledMapRenderer mapRenderer;
+	private TiledMap loadedTiledMap;
+	private MapProperties mapProperties;
+	private float mapWidthW = 10.0f;
+	private float mapHeightW = 10.0f;
+	private ETexture backgroundImage = null;
+	private IResource[] requiredResources;
+	private EMusic bgm;
+	private ETiledMap tiledMap;
 	
 	// =============================
 	// Constructor
 	// =============================
 	public ALevel() {
-		mapWidthW = requestedMapWidthW();
-		mapHeightW = requestedMapHeightW();
 		backgroundImage = requestedBackgroundImage();
 		requiredResources = requestedRequiredResources();
 		bgm = requestedBgm();
 		tiledMap = requestedTiledMap();
 	}
+	
+	public void initialize(SpriteBatch batch) {
+		loadedTiledMap = ResourceCache.getTiledMap(tiledMap);
+		mapProperties = new MapProperties(loadedTiledMap);
+		mapWidthW = mapProperties.getWidthPixel();
+		mapHeightW = mapProperties.getHeightPixel();
+		LOG.debug(batch);
+		mapRenderer = new OrthogonalTiledMapRenderer(loadedTiledMap, 1.0f, batch);
+	}
 
 	// =============================
 	// Abstract methods
 	// =============================
-
-	/**
-	 * @return The width of the map in world coordinates.
-	 */
-	protected abstract float requestedMapWidthW();
-
-	/**
-	 * @return The height of the map in world coordinates.
-	 */
-	protected abstract float requestedMapHeightW();
 
 	/**
 	 * The image to use as a background for those portions of the screen that
@@ -129,16 +131,22 @@ public abstract class ALevel implements Serializable {
 	// Implementations
 	// =============================
 
-	/**
-	 * @return The width of the map in world coordinates.
-	 */
+
+	public MapProperties getMapProperties() {
+		return mapProperties;
+	}
+	
+	/** @return Returns the renderer to render the map. */
+	public OrthogonalTiledMapRenderer getMapRenderer() {
+		return mapRenderer;
+	}
+	
+	/** @return The width of the map in world coordinates. */
 	public float getMapWidthW() {
 		return mapWidthW;
 	}
 
-	/**
-	 * @return The height of the map in world coordinates.
-	 */
+	/** @return The height of the map in world coordinates. */
 	public float getMapHeightW() {
 		return mapHeightW;
 	}
@@ -198,51 +206,6 @@ public abstract class ALevel implements Serializable {
 		GameViewport vw = new GameViewport(screenWidth, screenHeight, getMapWidthW(), getMapHeightW(), false);
 		setupInitialGameViewport(vw);
 		return vw;
-	}
-
-	// TODO
-	// change this when making updates and adding more fields
-	@Override
-	public void write(Json json) {
-		// TODO Auto-generated method stub
-		json.writeValue("mapWidthW", mapHeightW);
-		json.writeValue("mapHeightW", mapHeightW);
-		json.writeValue("backgroundImage", backgroundImage.toString());
-
-		json.writeObjectStart("requiredResources");
-		json.writeValue("length", requiredResources.length);
-		json.writeArrayStart("list");
-		for (IResource resource : requiredResources) {
-			json.writeObjectStart();
-			json.writeValue("class", resource.getClass().getCanonicalName());
-			json.writeValue("name", resource.toString());
-			json.writeObjectEnd();
-		}
-		json.writeArrayEnd();
-		json.writeObjectEnd();
-	}
-
-	@Override
-	public void read(Json json, JsonValue jsonData) {
-		mapWidthW = jsonData.get("mapWidthW").asFloat();
-		mapHeightW = jsonData.get("mapHeightW").asFloat();
-		backgroundImage = ETexture.valueOf(jsonData.get("backgroundImage").asString());
-
-		JsonValue rr = jsonData.get("requiredResources");
-		int length = rr.get("length").asInt();
-		requiredResources = new IResource[length];
-		for (int i = 0; i != length; ++i) {
-			JsonValue list = rr.get("list");
-			JsonValue entry = list.get(i);
-			try {
-				// Get enum constant from enum class name and constant name.
-				IResource r = (IResource) getClass().getClassLoader().loadClass(entry.get("class").asString())
-						.getMethod("valueOf", String.class).invoke(null, entry.get("name").asString());
-				requiredResources[i] = r;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 }

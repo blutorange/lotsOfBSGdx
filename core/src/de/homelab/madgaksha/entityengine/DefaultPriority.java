@@ -19,13 +19,14 @@ public class DefaultPriority {
 	public final static int danmakuSystem = 1;
 	public final static int grantPositionSystem = 2;
 	public final static int grantRotationSystem = 3;
-	public final static int newtonianForceSystem = 4;
-	public final static int movementSystem = 5;
-	public final static int collisionSystem = 6;
-	public final static int viewportUpdateSystem = 7;
+	public final static int inputVelocitySystem = 4;
+	public final static int newtonianForceSystem = 5;
+	public final static int movementSystem = 6;
+	public final static int collisionSystem = 7;
+	public final static int viewportUpdateSystem = 8;
 
 	// drawing
-	public final static int birdsViewSpriteSystem = 8;
-	public final static int spriteAnimationSystem = 9;
-	public final static int spriteRenderSystem = 10;
+	public final static int birdsViewSpriteSystem = 9;
+	public final static int spriteAnimationSystem = 10;
+	public final static int spriteRenderSystem = 11;
 }

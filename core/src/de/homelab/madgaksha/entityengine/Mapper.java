@@ -6,6 +6,7 @@ import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.ForceComponent;
+import de.homelab.madgaksha.entityengine.component.InputComponent;
 import de.homelab.madgaksha.entityengine.component.InverseMassComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
@@ -33,6 +34,8 @@ public class Mapper {
 	public final static ComponentMapper<ForceComponent> forceComponent = ComponentMapper.getFor(ForceComponent.class);
 	public final static ComponentMapper<InverseMassComponent> inverseMassComponent = ComponentMapper
 			.getFor(InverseMassComponent.class);
+	public final static ComponentMapper<InputComponent> inputComponent = ComponentMapper
+			.getFor(InputComponent.class);	
 	public final static ComponentMapper<ManyTrackingComponent> manyTrackingComponent = ComponentMapper
 			.getFor(ManyTrackingComponent.class);
 	public final static ComponentMapper<PositionComponent> positionComponent = ComponentMapper

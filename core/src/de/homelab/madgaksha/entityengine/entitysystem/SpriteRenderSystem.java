@@ -63,12 +63,12 @@ public class SpriteRenderSystem extends EntitySystem {
 		final float cameraUpAngleXY = viewport.getRotationUpXY();
 		
 		// Render map.
-		GlobalBag.tiledMapRenderer.setView(viewport.getCamera().combined,
+		GlobalBag.level.getMapRenderer().setView(viewport.getCamera().combined,
 				MathUtils.clamp(GlobalBag.worldVisibleMinX, mapBoundaryMinX, mapBoundaryMaxX),
 				MathUtils.clamp(GlobalBag.worldVisibleMinY, mapBoundaryMinY, mapBoundaryMaxY),
 				MathUtils.clamp(GlobalBag.worldVisibleMaxX, mapBoundaryMaxX, mapBoundaryMaxX),
 				MathUtils.clamp(GlobalBag.worldVisibleMaxY, mapBoundaryMinY, mapBoundaryMaxY));
-		GlobalBag.tiledMapRenderer.render();
+		GlobalBag.level.getMapRenderer().render();
 
 		// Render sprites.
 		batch.begin();
@@ -84,10 +84,6 @@ public class SpriteRenderSystem extends EntitySystem {
 				else
 					sc.sprite.setRotation(rc.thetaZ);
 			}
-
-			// TODO remove me, testing only
-			pc.x += (i == 0 ? Game.testx : Game.testx2); // <-- this
-			pc.y += (i == 0 ? Game.testy : Game.testy2); // <-- this
 
 			sc.sprite.setCenter(pc.x, pc.y);
 			sc.sprite.draw(batch);

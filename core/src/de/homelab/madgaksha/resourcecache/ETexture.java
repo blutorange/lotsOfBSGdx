@@ -17,14 +17,13 @@ import de.homelab.madgaksha.logging.Logger;
  *
  */
 public enum ETexture implements IResource {
-	BADLOGIC("badlogic.jpg"),
-	FOOLEVEL_BACKGROUND("texture/foolevelBackground.jpg"),
-	TEST_PROJECTILE("texture/testProjectile.png"),
+	FOOLEVEL_BACKGROUND("sprite/foolevelBackground.jpg"),
 	
-	ESTELLE_RUNNING("texture/ch00001.png"), ESTELLE_STANDING("texture/ch0010b.png"), ESTELLE_SWINGING(
-			"texture/ch00107.png"),
+	ESTELLE_RUNNING("sprite/ch00001.png"),
+	ESTELLE_STANDING("sprite/ch0010b.png"),
+	ESTELLE_SWINGING("sprite/ch00107.png"),
 
-	JOSHUA_RUNNING("texture/ch00011.png");
+	JOSHUA_RUNNING("sprite/ch00011.png");
 
 	private final static Logger LOG = Logger.getLogger(ETexture.class);
 	private final static EnumMap<ETexture, Texture> textureCache = new EnumMap<ETexture, Texture>(ETexture.class);
