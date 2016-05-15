@@ -6,8 +6,11 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 
 import de.homelab.madgaksha.Game;
+import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
@@ -24,7 +27,13 @@ public class SpriteRenderSystem extends EntitySystem {
 	private Family family = null;
 	private ImmutableArray<Entity> entities;
 
-	public SpriteRenderSystem (GameViewport v, SpriteBatch b) {
+	private float mapBoundaryMinX;
+	private float mapBoundaryMinY;
+	private float mapBoundaryMaxX;
+	private float mapBoundaryMaxY;
+
+	
+	public SpriteRenderSystem(GameViewport v, SpriteBatch b) {
 		this(v, b, DefaultPriority.spriteRenderSystem);
 	}
 
@@ -34,52 +43,65 @@ public class SpriteRenderSystem extends EntitySystem {
 		this.family = Family.all(SpriteComponent.class, PositionComponent.class).get();
 		this.batch = b;
 		this.viewport = v;
+		
+		mapBoundaryMinX = GlobalBag.level.getMapXW();
+		mapBoundaryMinY = GlobalBag.level.getMapYW();
+		mapBoundaryMaxX = mapBoundaryMinX + GlobalBag.level.getMapWidthW();
+		mapBoundaryMaxY = mapBoundaryMinY + GlobalBag.level.getMapHeightW();		
 	}
 
-	public ImmutableArray<Entity> getEntities () {
+	public ImmutableArray<Entity> getEntities() {
 		return entities;
 	}
-		
+
 	@Override
-	public void update (float deltaTime) {	
+	public void update(float deltaTime) {
 		// Apply projection matrix.
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 
 		// Get rotation of camera relative to xy plane.
 		final float cameraUpAngleXY = viewport.getRotationUpXY();
 		
+		// Render map.
+		GlobalBag.tiledMapRenderer.setView(viewport.getCamera().combined,
+				MathUtils.clamp(GlobalBag.worldVisibleMinX, mapBoundaryMinX, mapBoundaryMaxX),
+				MathUtils.clamp(GlobalBag.worldVisibleMinY, mapBoundaryMinY, mapBoundaryMaxY),
+				MathUtils.clamp(GlobalBag.worldVisibleMaxX, mapBoundaryMaxX, mapBoundaryMaxX),
+				MathUtils.clamp(GlobalBag.worldVisibleMaxY, mapBoundaryMinY, mapBoundaryMaxY));
+		GlobalBag.tiledMapRenderer.render();
+
+		// Render sprites.
 		batch.begin();
-		batch.draw(Game.img, 500.0f,550.f);
 		for (int i = 0; i < entities.size(); ++i) {
 			final Entity entity = entities.get(i);
 			final SpriteComponent sc = Mapper.spriteComponent.get(entity);
 			final PositionComponent pc = Mapper.positionComponent.get(entity);
 			final RotationComponent rc = Mapper.rotationComponent.get(entity);
-			
+
 			if (rc != null) {
 				if (rc.inverseToCamera)
 					sc.sprite.setRotation(rc.thetaZ - cameraUpAngleXY);
-				else 
+				else
 					sc.sprite.setRotation(rc.thetaZ);
-			}	
-			
-			//TODO remove me, testing only
-			pc.x+=(i==0 ? Game.testx : Game.testx2); // <-- this
-			pc.y+=(i==0 ? Game.testy : Game.testy2); // <-- this
-			
+			}
+
+			// TODO remove me, testing only
+			pc.x += (i == 0 ? Game.testx : Game.testx2); // <-- this
+			pc.y += (i == 0 ? Game.testy : Game.testy2); // <-- this
+
 			sc.sprite.setCenter(pc.x, pc.y);
 			sc.sprite.draw(batch);
 		}
 		batch.end();
 	}
-	
+
 	@Override
-	public void addedToEngine (Engine engine) {
+	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(family);
 	}
 
 	@Override
-	public void removedFromEngine (Engine engine) {
+	public void removedFromEngine(Engine engine) {
 		entities = null;
 	}
 }

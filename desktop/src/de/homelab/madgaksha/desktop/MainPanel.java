@@ -59,6 +59,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 	private JPanel pnlCenter;
 	private JLabel lblLevelImage;
 	private JButton btnStart;
+	private JButton btnDebug;
 	private JButton btnOptions; 
 	private JLabel lblTitle;
 	private JLabel lblDescription;
@@ -171,6 +172,9 @@ public class MainPanel extends JPanel implements ComponentListener {
 		btnStart = new JButton(i18n.main("desktop.game.start"));
 		panel.add(btnStart);
 
+		btnDebug = new JButton("debug button");
+		panel.add(btnDebug);
+		
 		panel.add(Box.createHorizontalGlue());
 
 		final OptionsFrame frmOptions = new OptionsFrame(launchConfig);
@@ -272,7 +276,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 	}
 	
 	public JButton getDebugButton() {
-		return null;
+		return btnDebug;
 	}
 
 	// http://stackoverflow.com/a/28226779/3925216

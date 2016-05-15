@@ -2,7 +2,8 @@ package de.homelab.madgaksha.entityengine;
 
 import com.badlogic.ashley.core.ComponentMapper;
 
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
+import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.ForceComponent;
 import de.homelab.madgaksha.entityengine.component.InverseMassComponent;
@@ -13,11 +14,11 @@ import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
 import de.homelab.madgaksha.entityengine.component.TimeScaleComponent;
+import de.homelab.madgaksha.entityengine.component.TrajectoryComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.ViewportComponent;
-import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
-import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 
 public class Mapper {
 	private Mapper() {
@@ -50,6 +51,8 @@ public class Mapper {
 			.getFor(SpriteForDirectionComponent.class);
 	public final static ComponentMapper<TimeScaleComponent> timeScaleComponent = ComponentMapper
 			.getFor(TimeScaleComponent.class);
+	public final static ComponentMapper<TrajectoryComponent> trajectoryComponent = ComponentMapper
+			.getFor(TrajectoryComponent.class);
 	public final static ComponentMapper<VelocityComponent> velocityComponent = ComponentMapper
 			.getFor(VelocityComponent.class);
 	public final static ComponentMapper<ViewportComponent> viewportComponent = ComponentMapper

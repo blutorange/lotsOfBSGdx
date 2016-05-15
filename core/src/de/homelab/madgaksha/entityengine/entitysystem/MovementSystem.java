@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 
+import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
@@ -22,17 +23,17 @@ public class MovementSystem extends IteratingSystem {
 	private float worldXMin, worldXMax;
 	private float worldYMin, worldYMax;
 	
-	public MovementSystem(ALevel level) {
-		this(level, DefaultPriority.movementSystem);
+	public MovementSystem() {
+		this(DefaultPriority.movementSystem);
 	}
 
 	@SuppressWarnings("unchecked")
-	public MovementSystem(ALevel level, int priority) {
+	public MovementSystem(int priority) {
 		super(Family.all(PositionComponent.class, VelocityComponent.class).get(), priority);
-		worldXMin = ALevel.WORLD_X;
-		worldYMin = ALevel.WORLD_Y;
-		worldXMax = level.getMapWidthW();
-		worldYMax = level.getMapHeightW();
+		worldXMin = GlobalBag.level.getMapXW();
+		worldYMin = GlobalBag.level.getMapYW();
+		worldXMax = GlobalBag.level.getMapWidthW();
+		worldYMax = GlobalBag.level.getMapHeightW();
 	}
 
 	@Override

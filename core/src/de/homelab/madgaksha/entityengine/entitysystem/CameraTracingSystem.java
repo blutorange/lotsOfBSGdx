@@ -5,7 +5,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IntervalIteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.NumberUtils;
 import com.dreizak.miniball.highdim.Miniball;
 
 import de.homelab.madgaksha.Game;
@@ -229,10 +231,18 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		}
 		// Apply minimum elevation.
 		if (spc.z < mtc.minimumElevationW) spc.z = mtc.minimumElevationW;
+		// Apply maximum elevation
+		else if (spc.z > mtc.maximumElevationW) {
+			spc.z = mtc.maximumElevationW;
+			float ratio = spc.z*ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF/hh;
+			cy *= ratio;
+			cx *= ratio;
+		}
 		// Compute the position the camera should be located
 		// at. We need to convert the coordinates back to the
 		// world coordinate system.
 		spc.x = base.x*cx + dir.x*cy + playerPoint.x;
 		spc.y = base.y*cx + dir.y*cy + playerPoint.y;
+
 	}
 }

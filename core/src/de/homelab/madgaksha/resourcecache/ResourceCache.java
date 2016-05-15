@@ -1,14 +1,10 @@
 package de.homelab.madgaksha.resourcecache;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
-import com.badlogic.gdx.utils.reflect.Method;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import de.homelab.madgaksha.logging.Logger;
 
@@ -56,6 +52,15 @@ public final class ResourceCache {
 				res.getMap().put(res.getEnum(), r);
 			return r;
 		}
+	}
+	
+	/**
+	 * Fetches the resources and puts it in the cache for later use.
+	 * @param res Resource to pre-load.
+	 * @return Whether it was loaded sucessfully.
+	 */
+	public static boolean loadToRam(IResource res) {
+		return getResource(res, true) != null;
 	}
 
 	/**
@@ -127,6 +132,13 @@ public final class ResourceCache {
 	}
 	
 	/**
+	 * Clears all sound objects from the cache.
+	 */
+	public static void clearAllTiledMap() {
+		ETiledMap.clearAll();
+	}
+	
+	/**
 	 * Clears all animation objects from the cache.
 	 */
 	public static void clearAllAnimationLists() {
@@ -142,6 +154,7 @@ public final class ResourceCache {
 		clearAllTexture();
 		clearAllAnimation();
 		clearAllAnimationLists();
+		clearAllTiledMap();
 	}
 
 	/**
@@ -210,8 +223,21 @@ public final class ResourceCache {
 	public static Sound getSound(ESound sound) {
 		return (Sound) getResource(sound, true);
 	}
-	public static Sound getMusic(ESound sound, boolean cached) {
+	public static Sound getSound(ESound sound, boolean cached) {
 		return (Sound) getResource(sound, cached);
 	}
-	
+
+	/**
+	 * Fetches the requested tiled map from the cache, or loads it.
+	 * 
+	 * @param tiledMap
+	 *            Tile map to load.
+	 * @return Loaded tiled map.
+	 */
+	public static TiledMap getTiledMap(ETiledMap tiledMap) {
+		return (TiledMap) getResource(tiledMap, true);
+	}
+	public static TiledMap getTiledMap(ETiledMap tiledMap, boolean cached) {
+		return (TiledMap) getResource(tiledMap, cached);
+	}
 }

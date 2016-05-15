@@ -18,6 +18,7 @@ import de.homelab.madgaksha.util.ArrayListEntityPointSet;
 public class ManyTrackingComponent implements Component, Poolable {
 
 	private final static float DEFAULT_MINIMUM_ELEVATION_W = 400.0f;
+	private final static float DEFAULT_MAXIMUM_ELEVATION_W = 2000.0f;
 	private final static float DEFAULT_ADJUSTMENT_POINT_TOP = 1.0f;
 	private final static float DEFAULT_ADJUSTMENT_POINT_BOTTOM = -1.0f;
 	private final static float DEFAULT_ADJUSTMENT_POINT_LEFT = -1.0f;
@@ -63,6 +64,7 @@ public class ManyTrackingComponent implements Component, Poolable {
 		gravity = DEFAULT_GRAVITY;
 		
 		minimumElevationW = DEFAULT_MINIMUM_ELEVATION_W;
+		maximumElevationW = DEFAULT_MAXIMUM_ELEVATION_W;
 	}
 
 	// Camera tracking options.
@@ -154,5 +156,7 @@ public class ManyTrackingComponent implements Component, Poolable {
 	
 	/** The minimum height of the camera above the world. */
 	public float minimumElevationW = DEFAULT_MINIMUM_ELEVATION_W;
+	/** The maximum height of the camera above the world. */
+	public float maximumElevationW = DEFAULT_MAXIMUM_ELEVATION_W;
 
 }

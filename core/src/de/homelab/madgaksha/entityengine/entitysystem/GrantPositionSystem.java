@@ -19,7 +19,6 @@ public class GrantPositionSystem extends IteratingSystem {
 	public GrantPositionSystem(int priority) {
 		super(Family.all(PositionComponent.class, ShouldPositionComponent.class).get(), priority);
 	}
-
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);

@@ -386,8 +386,7 @@ public class DesktopLauncher extends JFrame {
 		mainPanel = new MainPanel(width, height, fps, fullscreen);
 
 		final JButton startButton = mainPanel.getStartButton();
-	
-		final JButton buttonForceQuit = new JButton("ForceQuit Game");
+		final JButton buttonForceQuit = mainPanel.getDebugButton();
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		// Starting the game

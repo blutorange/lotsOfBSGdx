@@ -2,13 +2,17 @@ package de.homelab.madgaksha.level;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ETexture;
+import de.homelab.madgaksha.resourcecache.ETiledMap;
+import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 /**
@@ -23,10 +27,10 @@ public abstract class ALevel implements Serializable {
 
 	public final static float WORLD_X = 0.0f;
 	public final static float WORLD_Y = 0.0f;
-	
-	
+
 	public final static float CAMERA_GAME_FIELD_OF_VIEW_Y = 30.0f;
-	public final static float CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF = (float)Math.tan(CAMERA_GAME_FIELD_OF_VIEW_Y*0.5f*Math.PI/180.0f);
+	public final static float CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF = (float) Math
+			.tan(CAMERA_GAME_FIELD_OF_VIEW_Y * 0.5f * Math.PI / 180.0f);
 	public final static float CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF_INV = 1.0f / CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF;
 
 	/**
@@ -50,7 +54,10 @@ public abstract class ALevel implements Serializable {
 	protected float mapWidthW = 10.0f;
 	protected float mapHeightW = 10.0f;
 	protected ETexture backgroundImage = null;
-
+	protected IResource[] requiredResources;
+	protected EMusic bgm;
+	protected ETiledMap tiledMap;
+	
 	// =============================
 	// Constructor
 	// =============================
@@ -58,6 +65,9 @@ public abstract class ALevel implements Serializable {
 		mapWidthW = requestedMapWidthW();
 		mapHeightW = requestedMapHeightW();
 		backgroundImage = requestedBackgroundImage();
+		requiredResources = requestedRequiredResources();
+		bgm = requestedBgm();
+		tiledMap = requestedTiledMap();
 	}
 
 	// =============================
@@ -97,6 +107,24 @@ public abstract class ALevel implements Serializable {
 	protected void setupInitialGameViewport(GameViewport viewport) {
 	};
 
+	/**
+	 * Must return a list of all resources that the level requires. They will
+	 * then be loaded into RAM before the level is started.
+	 * 
+	 * @return List of all required resources.
+	 */
+	protected abstract IResource[] requestedRequiredResources();
+
+	/**
+	 * @return Initial music that should be playing. Null if none.
+	 */
+	public abstract EMusic requestedBgm();
+
+	/**
+	 * @return The map to be loaded initially.
+	 */
+	public abstract ETiledMap requestedTiledMap();
+	
 	// =============================
 	// Implementations
 	// =============================
@@ -108,6 +136,13 @@ public abstract class ALevel implements Serializable {
 		return mapWidthW;
 	}
 
+	/**
+	 * @return The height of the map in world coordinates.
+	 */
+	public float getMapHeightW() {
+		return mapHeightW;
+	}
+	
 	public float getMapXW() {
 		return WORLD_X;
 	}
@@ -115,14 +150,19 @@ public abstract class ALevel implements Serializable {
 	public float getMapYW() {
 		return WORLD_Y;
 	}
+
+	public IResource[] getRequiredResources() {
+		return requiredResources;
+	}
 	
-	/**
-	 * @return The height of the map in world coordinates.
-	 */
-	public float getMapHeightW() {
-		return mapHeightW;
+	public EMusic getBgm() {
+		return bgm;
 	}
 
+	public ETiledMap getTiledMap() {
+		return tiledMap;
+	}
+	
 	public Texture getBackgroundImage() {
 		return ResourceCache.getTexture(backgroundImage);
 	}
@@ -168,6 +208,18 @@ public abstract class ALevel implements Serializable {
 		json.writeValue("mapWidthW", mapHeightW);
 		json.writeValue("mapHeightW", mapHeightW);
 		json.writeValue("backgroundImage", backgroundImage.toString());
+
+		json.writeObjectStart("requiredResources");
+		json.writeValue("length", requiredResources.length);
+		json.writeArrayStart("list");
+		for (IResource resource : requiredResources) {
+			json.writeObjectStart();
+			json.writeValue("class", resource.getClass().getCanonicalName());
+			json.writeValue("name", resource.toString());
+			json.writeObjectEnd();
+		}
+		json.writeArrayEnd();
+		json.writeObjectEnd();
 	}
 
 	@Override
@@ -175,5 +227,22 @@ public abstract class ALevel implements Serializable {
 		mapWidthW = jsonData.get("mapWidthW").asFloat();
 		mapHeightW = jsonData.get("mapHeightW").asFloat();
 		backgroundImage = ETexture.valueOf(jsonData.get("backgroundImage").asString());
+
+		JsonValue rr = jsonData.get("requiredResources");
+		int length = rr.get("length").asInt();
+		requiredResources = new IResource[length];
+		for (int i = 0; i != length; ++i) {
+			JsonValue list = rr.get("list");
+			JsonValue entry = list.get(i);
+			try {
+				// Get enum constant from enum class name and constant name.
+				IResource r = (IResource) getClass().getClassLoader().loadClass(entry.get("class").asString())
+						.getMethod("valueOf", String.class).invoke(null, entry.get("name").asString());
+				requiredResources[i] = r;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
+
 }

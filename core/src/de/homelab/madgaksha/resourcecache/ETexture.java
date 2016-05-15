@@ -17,8 +17,10 @@ import de.homelab.madgaksha.logging.Logger;
  *
  */
 public enum ETexture implements IResource {
-	BADLOGIC("badlogic.jpg"), FOOLEVEL_BACKGROUND("texture/foolevelBackground.jpg"),
-
+	BADLOGIC("badlogic.jpg"),
+	FOOLEVEL_BACKGROUND("texture/foolevelBackground.jpg"),
+	TEST_PROJECTILE("texture/testProjectile.png"),
+	
 	ESTELLE_RUNNING("texture/ch00001.png"), ESTELLE_STANDING("texture/ch0010b.png"), ESTELLE_SWINGING(
 			"texture/ch00107.png"),
 

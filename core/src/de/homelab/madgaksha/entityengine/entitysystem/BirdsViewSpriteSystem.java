@@ -57,7 +57,7 @@ public class BirdsViewSpriteSystem extends IteratingSystem {
 		
 		switch (sfdc.spriteDirectionStrategy) {
 		case ZENITH:
-			sac.animation = sfdc.animationList[((int)(((dc.degree+viewport.getRotationUpXY() - 90 + 360) + 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f))
+			sac.animation = sfdc.animationList[((int)(((dc.degree-viewport.getRotationUpXY() - 90 + 360) + 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f))
 			               					% sfdc.animationList.length];			
 			break;
 		case SIDEWAYS:

@@ -73,6 +73,7 @@ public class GameParameters implements Serializable {
 		json.setSerializer(Locale.class, new LocaleSerializer());
 		json.setOutputType(JsonWriter.OutputType.json);
 		final String string = json.toJson(this);
+		System.out.println(string);
 		final byte[] data = string.getBytes(Charset.forName("UTF-8"));
 		return data;
 	}

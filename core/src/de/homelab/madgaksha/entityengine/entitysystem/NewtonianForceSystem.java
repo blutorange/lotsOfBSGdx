@@ -25,20 +25,19 @@ public class NewtonianForceSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public NewtonianForceSystem(int priority) {
-		super(Family.all(VelocityComponent.class, InverseMassComponent.class, ForceComponent.class).get(), priority);
+		super(Family.all(VelocityComponent.class, ForceComponent.class).get(), priority);
 	}
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		final VelocityComponent v = Mapper.velocityComponent.get(entity);
 		final ForceComponent f = Mapper.forceComponent.get(entity);
-		final InverseMassComponent im = Mapper.inverseMassComponent.get(entity);
 		final TimeScaleComponent tsf = Mapper.timeScaleComponent.get(entity);
 		if (tsf != null)
 			deltaTime *= tsf.timeScalingFactor;
-		v.x += f.x * im.imass * deltaTime;
-		v.y += f.y * im.imass * deltaTime;
-		v.y += f.y * im.imass * deltaTime;
+		v.x += f.x * deltaTime;
+		v.y += f.y * deltaTime;
+		v.y += f.y * deltaTime;
 	}
 
 }

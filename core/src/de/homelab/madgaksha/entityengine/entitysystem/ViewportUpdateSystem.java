@@ -4,16 +4,16 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.scenes.scene2d.ui.Table.Debug;
 
 import de.homelab.madgaksha.Game;
+import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.ViewportComponent;
+import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.util.DebugStringifier;
 
 /**
  * Updates camera and viewport.
@@ -22,6 +22,9 @@ import de.homelab.madgaksha.util.DebugStringifier;
  */
 public class ViewportUpdateSystem extends IteratingSystem {
 	private final static Logger LOG = Logger.getLogger(ViewportUpdateSystem.class);
+	private static float upx,upy,otx,oty, hh, hw;
+	private static float tmp, mapMinX, mapMinY, mapMaxX, mapMaxY;
+	
 	public ViewportUpdateSystem() {
 		this(DefaultPriority.viewportUpdateSystem);
 	}
@@ -57,7 +60,64 @@ public class ViewportUpdateSystem extends IteratingSystem {
 		psc.far  = 1.5f * pc.z;
 		
 		// Update viewport, which updates the camera.
-		vc.viewport.apply();		
+		vc.viewport.apply();
+		
+		// TODO
+		// Compute the frustum. Compute the four rays for each corner
+		// and intersect with the xy-plane.
+		// 
+		// Compute visible boundaries of the xy-plane.
+		//  - pc is the center of the rectangle.
+		//  - up is the vector along the vertical screen axis
+		//  - ort = up x z = (up_y, -up_x) is the vector orthogonal to to the up vector
+		//  -  hh and hw are half the width / height of the rectangle.
+		// The four corner of the visible area in world coordinates are then:
+		//   pc+ot*hw
+		//   pc-ot*hw
+		//   pc+up*hh
+		//   pc-up*hh
+		upx = psc.up.x;
+		upy = psc.up.y;
+		otx = upy;
+		oty = -upx;
+		hh = 2.0f*ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF * pc.z;
+		hw = hh * Game.VIEWPORT_GAME_AR;
+		
+		mapMinX = pc.x+otx*hw;
+		mapMinY = pc.y+oty*hw;
+		mapMaxX = mapMinX;
+		mapMaxY = mapMinY;
+		
+		tmp = pc.x-otx*hw;
+		if (tmp < mapMinX) mapMinX = tmp;
+		else if (tmp > mapMaxX) mapMaxX = tmp;
+		
+		tmp = pc.x+upx*hh;
+		if (tmp < mapMinX) mapMinX = tmp;
+		else if (tmp > mapMaxX) mapMaxX = tmp;
+			
+		tmp = pc.x-upx*hh;
+		if (tmp < mapMinX) mapMinX = tmp;
+		else if (tmp > mapMaxX) mapMaxX = tmp;
+
+		tmp = pc.y-oty*hw;
+		if (tmp < mapMinY) mapMinY = tmp;
+		else if (tmp > mapMaxY) mapMaxY = tmp;
+		
+		tmp = pc.y+upy*hh;
+		if (tmp < mapMinY) mapMinY = tmp;
+		else if (tmp > mapMaxY) mapMaxY = tmp;
+			
+		tmp = pc.y-upy*hh;
+		if (tmp < mapMinY) mapMinY = tmp;
+		else if (tmp > mapMaxY) mapMaxY = tmp;
+		
+		//LOG.debug(mapMinX + " " + mapMaxX + " " + mapMinY + " " + mapMaxY);
+		GlobalBag.worldVisibleMinX = mapMinX;
+		GlobalBag.worldVisibleMaxX = mapMaxX;
+		GlobalBag.worldVisibleMinY = mapMinY;
+		GlobalBag.worldVisibleMaxY = mapMaxY;
+		
 	}
 }
 
