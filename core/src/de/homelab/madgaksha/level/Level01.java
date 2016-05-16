@@ -23,7 +23,7 @@ public class Level01 extends ALevel {
 	protected IResource[] requestedRequiredResources() {
 		return new IResource[] {
 				ETexture.JOSHUA_RUNNING,
-				EMusic.SOPHISTICATED_FIGHT,
+				EMusic.ROCK_ON_THE_ROAD,
 				ETiledMap.LEVEL_01
 		};
 	}
@@ -35,7 +35,7 @@ public class Level01 extends ALevel {
 	
 	@Override
 	public EMusic requestedBgm() {
-		return EMusic.SOPHISTICATED_FIGHT;
+		return EMusic.ROCK_ON_THE_ROAD;
 	}
 
 	@Override

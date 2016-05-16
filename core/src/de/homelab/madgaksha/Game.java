@@ -153,14 +153,12 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void create() {
-		LOG.debug("creating new game");
 		//testing
 		bombEffect = new ParticleEffect();
 		bombEffect.load(Gdx.files.internal("particle/sparkleEffect.p"), Gdx.files.internal("particle"));
 		bombEffect.setDuration(500000);
-		bombEffect.scaleEffect(2.0f);
 		bombEffect.start();
-				
+		
 		// Setup audio system.
 		AwesomeAudio.initialize();
 
@@ -457,7 +455,7 @@ public class Game implements ApplicationListener {
 		playerEntity.add(sac);
 		playerEntity.add(sfdc);
 
-		playerEntity.add(new BoundingSphereComponent(player.getBoundingCircle().radius*3.0f));
+		playerEntity.add(new BoundingSphereComponent(player.getBoundingCircle()));
 		playerEntity.add(new PositionComponent(level.getPlayerInitialPosition(), true));
 		playerEntity.add(new VelocityComponent(0.0f, 0.0f));
 		playerEntity.add(new RotationComponent(true));

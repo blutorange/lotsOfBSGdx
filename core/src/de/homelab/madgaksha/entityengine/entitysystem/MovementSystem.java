@@ -20,7 +20,7 @@ import de.homelab.madgaksha.logging.Logger;
  */
 public class MovementSystem extends IteratingSystem {
 	private final static Logger LOG = Logger.getLogger(MovementSystem.class);
-	private static float newx, newy;
+	private static float newx, newy, tmp;
 
 	private final MapProperties mapProperties;
 	private final float tileWidth;
@@ -81,8 +81,31 @@ public class MovementSystem extends IteratingSystem {
 					}
 				}
 			} else {
-				pc.x = newx;
-				pc.y = newy;
+				// TODO refactor?
+				// Make sure we are not too fast and would move through a blocking tile.
+				// Bottom left tile point.
+				int tx = (int) (pc.x * tileWidthInverse);
+				int ty = (int) (pc.y * tileHeightInverse);
+				// Get quadrant of of velocity vector
+				if (vc.x > 0)
+					++tx;
+				if (vc.y > 0)
+					++ty;
+				// Check which tile this movement would get us in and move only vertically/horizontally.
+				if (vc.x*vc.y*(vc.x * (ty * tileHeight - pc.y) -vc.y * (tx * tileWidth - pc.x)) > 0) {
+					tmp = pc.y + vc.y*deltaTime;
+					if (!mapProperties.isTileBlocking(pc.x, tmp)) {
+						pc.x = newx;
+						pc.y = newy;
+					}
+				}
+				else {
+					tmp = pc.x + vc.x*deltaTime;
+					if (!mapProperties.isTileBlocking(tmp, pc.y)) {
+						pc.x = newx;
+						pc.y = newy;
+					}
+				}
 			}
 		} else {
 			pc.x += vc.x * deltaTime;
