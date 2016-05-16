@@ -8,7 +8,7 @@ import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
-import de.homelab.madgaksha.entityengine.component.TimeScaleComponent;
+import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.level.MapProperties;
 import de.homelab.madgaksha.logging.Logger;
@@ -34,7 +34,7 @@ public class MovementSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public MovementSystem(int priority) {
-		super(Family.all(PositionComponent.class, VelocityComponent.class).get(), priority);
+		super(Family.all(PositionComponent.class, VelocityComponent.class, TemporalComponent.class).get(), priority);
 		mapProperties = GlobalBag.level.getMapProperties();
 		tileWidth = mapProperties.getWidthTiles();
 		tileHeight = mapProperties.getHeightTiles();
@@ -46,9 +46,7 @@ public class MovementSystem extends IteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		final VelocityComponent vc = Mapper.velocityComponent.get(entity);
-		final TimeScaleComponent tsfc = Mapper.timeScaleComponent.get(entity);
-		if (tsfc != null)
-			deltaTime *= tsfc.timeScalingFactor;
+		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
 		if (pc.limitToMap) {
 			newx = pc.x + vc.x * deltaTime;
 			newy = pc.y + vc.y * deltaTime;

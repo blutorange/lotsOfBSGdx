@@ -73,9 +73,7 @@ int status = JavaProcess.exec(MyClass.class);
 
 package de.homelab.madgaksha.desktop;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -88,9 +86,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -102,8 +98,11 @@ import com.badlogic.gdx.Application;
 
 import de.homelab.madgaksha.GameParameters;
 import de.homelab.madgaksha.i18n.i18n;
-import de.homelab.madgaksha.level.FooLevel;
+import de.homelab.madgaksha.level.ALevel;
+import de.homelab.madgaksha.level.Level01;
 import de.homelab.madgaksha.logging.LoggerFactory;
+import de.homelab.madgaksha.player.APlayer;
+import de.homelab.madgaksha.player.PEstelle;
 
 public class DesktopLauncher extends JFrame {
 	
@@ -422,19 +421,21 @@ public class DesktopLauncher extends JFrame {
 	
 	// Now we actually get to the meat.
 	private boolean launchGame() {	
-		//TODO Add actual level.
+		//TODO Add actual level and player.
 		width = mainPanel.getConfigWidth();
 		height = mainPanel.getConfigHeight();
 		fps = mainPanel.getConfigFps();
 		fullscreen = mainPanel.getConfigFullscreen();
-		final GameParameters params = new GameParameters.Builder(new FooLevel())
+		ALevel level = new Level01();
+		APlayer player = new PEstelle();
+		final GameParameters params = new GameParameters.Builder(level, player)
 				.requestedWidth(width)
 				.requestedLocale(locale)
 				.requestedHeight(height)
 				.requestedFullscreen(fullscreen)
 				.requestedFps(fps)
 				.requestedLogLevel(verbosity)
-				.requestedWindowTitle(i18n.main("desktop.game.title"))
+				.requestedWindowTitle(level.getName())
 				.build();
 		// Serialize as string, pass to launcher, and run.
 		try {

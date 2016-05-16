@@ -5,10 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ETiledMap;
@@ -56,12 +59,13 @@ public abstract class ALevel {
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMap loadedTiledMap;
 	private MapProperties mapProperties;
-	private float mapWidthW = 10.0f;
-	private float mapHeightW = 10.0f;
-	private ETexture backgroundImage = null;
-	private IResource[] requiredResources;
-	private EMusic bgm;
-	private ETiledMap tiledMap;
+	private final ETexture backgroundImage;
+	private final IResource[] requiredResources;
+	private final EMusic bgm;
+	private final ETiledMap tiledMap;
+	private final String i18nNameKey;
+	/** Initial position of the player in tiles. */
+	private Vector2 playerInitialPosition;
 	
 	// =============================
 	// Constructor
@@ -71,15 +75,22 @@ public abstract class ALevel {
 		requiredResources = requestedRequiredResources();
 		bgm = requestedBgm();
 		tiledMap = requestedTiledMap();
+		playerInitialPosition = requestedPlayerInitialPosition();
+		i18nNameKey = requestedI18nNameKey();
 	}
 	
-	public void initialize(SpriteBatch batch) {
+	public boolean initialize(SpriteBatch batch) {
 		loadedTiledMap = ResourceCache.getTiledMap(tiledMap);
-		mapProperties = new MapProperties(loadedTiledMap);
-		mapWidthW = mapProperties.getWidthPixel();
-		mapHeightW = mapProperties.getHeightPixel();
-		LOG.debug(batch);
+		if (loadedTiledMap == null) return false;
+		try {
+			mapProperties = new MapProperties(loadedTiledMap);
+		}
+		catch (Exception e) {
+			LOG.error("failed to load map", e);
+			return false;
+		}
 		mapRenderer = new OrthogonalTiledMapRenderer(loadedTiledMap, 1.0f, batch);
+		return true;
 	}
 
 	// =============================
@@ -113,6 +124,8 @@ public abstract class ALevel {
 	 * Must return a list of all resources that the level requires. They will
 	 * then be loaded into RAM before the level is started.
 	 * 
+	 * Does not include the player resources, see {@link APlayer#requestedRequiredResources}.
+	 * 
 	 * @return List of all required resources.
 	 */
 	protected abstract IResource[] requestedRequiredResources();
@@ -127,8 +140,14 @@ public abstract class ALevel {
 	 */
 	public abstract ETiledMap requestedTiledMap();
 	
+	/** Initial position of the player in tiles. */
+	public abstract Vector2 requestedPlayerInitialPosition();
+		
+	public abstract String requestedI18nNameKey();
+	
+	
 	// =============================
-	// Implementations
+	//       Implementations
 	// =============================
 
 
@@ -143,12 +162,12 @@ public abstract class ALevel {
 	
 	/** @return The width of the map in world coordinates. */
 	public float getMapWidthW() {
-		return mapWidthW;
+		return mapProperties.getWidthPixel();
 	}
 
 	/** @return The height of the map in world coordinates. */
 	public float getMapHeightW() {
-		return mapHeightW;
+		return mapProperties.getHeightPixel();
 	}
 	
 	public float getMapXW() {
@@ -174,6 +193,22 @@ public abstract class ALevel {
 	public Texture getBackgroundImage() {
 		return ResourceCache.getTexture(backgroundImage);
 	}
+	
+	public String getName() {
+		return i18n.game(i18nNameKey);
+	}
+	
+	/** Initial position of the player in pixels. This converts
+	 * the position from tiles to pixels.
+	 * 
+	 * @return Initial position of the player in pixels.
+	 */
+	public Vector2 getPlayerInitialPosition(){
+		return new Vector2(
+				playerInitialPosition.x*mapProperties.getWidthTiles(),
+				playerInitialPosition.y*mapProperties.getHeightTiles());
+	}
+
 
 	/**
 	 * The viewport for the info screen.

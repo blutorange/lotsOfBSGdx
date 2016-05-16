@@ -7,8 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.ForceComponent;
-import de.homelab.madgaksha.entityengine.component.InverseMassComponent;
-import de.homelab.madgaksha.entityengine.component.TimeScaleComponent;
+import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 
 /**
@@ -25,16 +24,14 @@ public class NewtonianForceSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public NewtonianForceSystem(int priority) {
-		super(Family.all(VelocityComponent.class, ForceComponent.class).get(), priority);
+		super(Family.all(TemporalComponent.class, VelocityComponent.class, ForceComponent.class).get(), priority);
 	}
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		final VelocityComponent v = Mapper.velocityComponent.get(entity);
 		final ForceComponent f = Mapper.forceComponent.get(entity);
-		final TimeScaleComponent tsf = Mapper.timeScaleComponent.get(entity);
-		if (tsf != null)
-			deltaTime *= tsf.timeScalingFactor;
+		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
 		v.x += f.x * deltaTime;
 		v.y += f.y * deltaTime;
 		v.y += f.y * deltaTime;

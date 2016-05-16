@@ -10,6 +10,7 @@ import de.homelab.madgaksha.logging.Logger;
 
 public enum EAnimationList implements IResource {
 	ESTELLE_RUNNING(ETexture.ESTELLE_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
+	ESTELLE_STANDING(ETexture.ESTELLE_STANDING, 128, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
 	JOSHUA_RUNNING(ETexture.JOSHUA_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8);
 	
 	private final static Logger LOG = Logger.getLogger(EAnimationList.class);

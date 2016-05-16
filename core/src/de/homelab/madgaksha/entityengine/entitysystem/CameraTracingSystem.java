@@ -132,6 +132,10 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 			final PositionComponent vpc = Mapper.positionComponent.get(e);
 			final BoundingSphereComponent bsc = Mapper.boundingSphereComponent.get(e);
 			v.set(vpc.x-playerPoint.x, vpc.y-playerPoint.y);
+			// Move to logical center of the sprite.
+			if (bsc != null) v.add(bsc.centerX,bsc.centerY);
+			// Get rotated and translated coordinate system with the
+			// ordinate in the looking direction.
 			vDir = v.dot(dir);
 			vBase = v.dot(base);
 			if (vBase < minx)

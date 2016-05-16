@@ -15,8 +15,9 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  */
 public enum EMusic implements IResource {
-	TEST_WAV("music/testbgm.wav"), TEST_ADX_STEREO("music/testbgm2_2channels.adx"), TEST_ADX_MONO(
-			"music/testbgm2_1channel.adx");
+	ROCK_ON_THE_ROAD("music/rockontheroad.adx"),
+	SOPHISTICATED_FIGHT("music/sophisticatedfight.adx"),
+	SILVER_WILL("music/silverwill.adx");
 
 	private final static Logger LOG = Logger.getLogger(EMusic.class);
 	private final static EnumMap<EMusic, Music> musicCache = new EnumMap<EMusic, Music>(EMusic.class);

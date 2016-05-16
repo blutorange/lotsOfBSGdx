@@ -4,11 +4,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
-import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
+import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 
 public class GrantRotationSystem extends IteratingSystem {
 
@@ -18,13 +18,14 @@ public class GrantRotationSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public GrantRotationSystem(int priority) {
-		super(Family.all(RotationComponent.class, ShouldRotationComponent.class).get(), priority);
+		super(Family.all(TemporalComponent.class, RotationComponent.class, ShouldRotationComponent.class).get(), priority);
 	}
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		final RotationComponent rc = Mapper.rotationComponent.get(entity);
 		final ShouldRotationComponent src = Mapper.shouldRotationComponent.get(entity);
+		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
 		// Make sure we rotate in the direction of the lesser angle...
 		if (Math.abs(src.thetaZ-rc.thetaZ) > 180.0f) {
 			if (src.thetaZ < rc.thetaZ) src.thetaZ += 360.0;

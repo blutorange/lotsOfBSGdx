@@ -9,7 +9,7 @@ import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
-import de.homelab.madgaksha.entityengine.component.TimeScaleComponent;
+import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 
 public class SpriteAnimationSystem extends IteratingSystem {
 	
@@ -19,17 +19,15 @@ public class SpriteAnimationSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public SpriteAnimationSystem(int priority) {
-		super(Family.all(SpriteAnimationComponent.class, SpriteComponent.class).get(), priority);
+		super(Family.all(TemporalComponent.class, SpriteAnimationComponent.class, SpriteComponent.class).get(), priority);
 	}
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		final SpriteComponent sc = Mapper.spriteComponent.get(entity);
 		final SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
-		final TimeScaleComponent tsc = Mapper.timeScaleComponent.get(entity);
-		// Scale time as requested.
-		if (tsc != null) deltaTime *= tsc.timeScalingFactor;
-		final TextureRegion tr = sac.animation.getKeyFrame(sac.stateTime+=deltaTime);
+		deltaTime = Mapper.temporalComponent.get(entity).totalTime;
+		final TextureRegion tr = sac.animation.getKeyFrame(deltaTime);
 		sc.sprite.setRegion(tr);
 		sc.sprite.setOriginCenter();
 	}

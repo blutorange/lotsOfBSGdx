@@ -7,14 +7,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -22,17 +20,20 @@ import de.homelab.madgaksha.audiosystem.AwesomeAudio;
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
-import de.homelab.madgaksha.entityengine.component.ForceComponent;
+import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
 import de.homelab.madgaksha.entityengine.component.InputComponent;
+import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
+import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
+import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
-import de.homelab.madgaksha.entityengine.component.TrajectoryComponent;
+import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.ViewportComponent;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
@@ -40,11 +41,14 @@ import de.homelab.madgaksha.entityengine.entitysystem.CameraTracingSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.DanmakuSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantRotationSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.GrantScaleSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.InputVelocitySystem;
 import de.homelab.madgaksha.entityengine.entitysystem.MovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.NewtonianForceSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.PostEffectSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteAnimationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.TemporalSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ViewportUpdateSystem;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.enums.Gravity;
@@ -55,8 +59,8 @@ import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.level.GameViewport;
 import de.homelab.madgaksha.level.InfoViewport;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
-import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
@@ -98,7 +102,7 @@ public class Game implements ApplicationListener {
 
 	/** Whether the game is active. */
 	private boolean running = false;
-
+	
 	// TODO remove me
 	// only for testing
 	public static Vector2 testA = new Vector2();
@@ -115,9 +119,12 @@ public class Game implements ApplicationListener {
 	public static float test7 = 100.0f;
 	ParticleEffect bombEffect;
 	// testing end
+	
+	private BitmapFont debugFont; 
 
 	private final GameParameters params;
 	private final ALevel level;
+	private final APlayer player;
 	
 	private Texture backgroundImage;	
 	
@@ -131,6 +138,7 @@ public class Game implements ApplicationListener {
 	 */
 	public Game(GameParameters params) {
 		this.params = params;
+		this.player = params.requestedPlayer;
 		this.level = params.requestedLevel;
 		GlobalBag.level = this.level;
 		
@@ -146,17 +154,12 @@ public class Game implements ApplicationListener {
 	@Override
 	public void create() {
 		LOG.debug("creating new game");
-
 		//testing
 		bombEffect = new ParticleEffect();
 		bombEffect.load(Gdx.files.internal("particle/sparkleEffect.p"), Gdx.files.internal("particle"));
+		bombEffect.setDuration(500000);
+		bombEffect.scaleEffect(2.0f);
 		bombEffect.start();
-		
-        // Get viewports for the game, info and screen windows.
-		viewportGame = level.getGameViewport(params.requestedWidth, params.requestedHeight);
-		viewportInfo = level.getInfoViewport(params.requestedWidth, params.requestedHeight);
-		viewportScreen = level.getScreenViewport(params.requestedWidth, params.requestedHeight);
-		GlobalBag.viewportGame = viewportGame;
 				
 		// Setup audio system.
 		AwesomeAudio.initialize();
@@ -167,13 +170,23 @@ public class Game implements ApplicationListener {
 		// Start with loading resources.
 		for (IResource r : level.getRequiredResources()) {
 			LOG.debug("fetch " + r);
-			ResourceCache.loadToRam(r);
+			if (!ResourceCache.loadToRam(r)) {
+				Gdx.app.exit();
+				return;
+			}
+		}
+		for (IResource r : player.getRequiredResources()) {
+			LOG.debug("fetch " + r);
+			if (!ResourceCache.loadToRam(r)) {
+				Gdx.app.exit();
+				return;
+			}
 		}
 
 		// Create music player.
 		Game.musicPlayer = new MusicPlayer();
 		Game.musicPlayer.loadNext(level.getBgm());
-		Game.musicPlayer.playNext();
+		Game.musicPlayer.transition(2.0f);
 
 		// Load background image.
 		backgroundImage = level.getBackgroundImage();
@@ -183,14 +196,25 @@ public class Game implements ApplicationListener {
 		batchGame = new SpriteBatch();
 		batchInfo = new SpriteBatch();
 
-		batchScreen.disableBlending();
 		batchInfo.disableBlending();
 
 		// Initialize map.
-		level.initialize(batchGame);
+		if (!level.initialize(batchGame)) {
+			Gdx.app.exit();
+			return;
+		};
+		
+        // Get viewports for the game, info and screen windows.
+		viewportGame = level.getGameViewport(params.requestedWidth, params.requestedHeight);
+		viewportInfo = level.getInfoViewport(params.requestedWidth, params.requestedHeight);
+		viewportScreen = level.getScreenViewport(params.requestedWidth, params.requestedHeight);
+		GlobalBag.viewportGame = viewportGame;
 		
 		// Create a new entity engine and setup basic entity systems.
 		createEntityEngine();
+		
+		//TODO remove me for release
+		createDebugFont();
 		
 		// Start the game.
 		running = true;
@@ -210,12 +234,13 @@ public class Game implements ApplicationListener {
 
 		// Render info window last.
 		renderInfo();
+		
+		// Render debug.
+		renderDebug();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
 		// Update our viewports.
 		viewportGame.update(width, height);
 		viewportInfo.update(width, height);
@@ -225,20 +250,20 @@ public class Game implements ApplicationListener {
 	@Override
 	public void pause() {
 		running = false;
-		musicPlayer.pause();
+		if (musicPlayer != null) musicPlayer.pause();
 	}
 
 	@Override
 	public void resume() {
 		running = true;
-		musicPlayer.play();
+		if (musicPlayer != null) musicPlayer.play();
 	}
 
 	@Override
 	public void dispose() {
 		// Dispose music player.
 		try {
-			Game.musicPlayer.dispose();
+			if (musicPlayer != null) musicPlayer.dispose();
 		} catch (Exception e) {
 			LOG.error("could not clear music player", e);
 		}
@@ -251,18 +276,21 @@ public class Game implements ApplicationListener {
 		}
 
 		// Dispose sprite batches.
-		batchInfo.dispose();
-		batchGame.dispose();
-		batchScreen.dispose();
+		if (batchInfo != null) batchInfo.dispose();
+		if (batchGame != null) batchGame.dispose();
+		if (batchScreen != null) batchScreen.dispose();
 
 		// Remove all entities and systems to trigger cleanup.
-		entityEngine.removeAllEntities();
-		for (EntitySystem es : entityEngine.getSystems()) {
-			entityEngine.removeSystem(es);
+		if (entityEngine != null) {
+			entityEngine.removeAllEntities();
+			for (EntitySystem es : entityEngine.getSystems()) {
+				entityEngine.removeSystem(es);
+			}
 		}
 
 		// TODO
-		// dispose sprites etc.
+		debugFont.dispose();
+		bombEffect.dispose();
 	}
 
 	public void renderScreen() {
@@ -293,16 +321,24 @@ public class Game implements ApplicationListener {
 			entityEngine.update(deltaTime);
 		} else {
 			final SpriteRenderSystem spriteRenderSystem = entityEngine.getSystem(SpriteRenderSystem.class);
-			if (spriteRenderSystem != null)
+			if (spriteRenderSystem != null) {
+				viewportGame.apply();
 				spriteRenderSystem.update(deltaTime);
+			}
 			// entityEngine.getSystem(Draw3dSystem.class).update(deltaTime);
 		}
 		//testing
 		batchGame.begin();
-		bombEffect.setPosition(500.0f, 500.0f);
-		bombEffect.draw(batchGame,deltaTime);
+		bombEffect.setPosition(1000.0f, 1000.0f);
+		bombEffect.draw(batchGame,0.25f*deltaTime);
+		bombEffect.setPosition(1400.0f, 1000.0f);
+		bombEffect.draw(batchGame,0.25f*deltaTime);
+		bombEffect.setPosition(1000.0f, 1400.0f);
+		bombEffect.draw(batchGame,0.25f*deltaTime);
+		bombEffect.setPosition(1400.0f, 1400.0f);
+		bombEffect.draw(batchGame,0.25f*deltaTime);
 		batchGame.end();
-		bombEffect.setDuration(500000);
+//		bombEffect.update(deltaTime);
 		if (bombEffect.isComplete()) bombEffect.reset();
 	}
 
@@ -319,6 +355,23 @@ public class Game implements ApplicationListener {
 
 		batchInfo.end();
 	}
+	
+	//TODO remove me for release
+	private Vector2 screenPos = new Vector2();
+	public void renderDebug() {
+		viewportScreen.apply(false);
+		batchScreen.begin();
+		final Vector2 pos = viewportScreen.unproject(screenPos.set(0.0f,0.0f));
+		debugFont.draw(batchScreen, "fps: " + (int)(1.0f/Gdx.graphics.getRawDeltaTime()), pos.x, pos.y);
+		batchScreen.end();
+	}
+	
+	//TODO remove me for release
+	public void createDebugFont() {
+		debugFont = new BitmapFont(Gdx.files.internal("font/debugFont.fnt"));
+		debugFont.setColor(Color.RED);
+	}
+	
 
 	public void createEntityEngine() {
 		entityEngine = new Engine();
@@ -330,53 +383,48 @@ public class Game implements ApplicationListener {
 		entityEngine.addSystem(new ViewportUpdateSystem());
 		entityEngine.addSystem(new GrantPositionSystem());
 		entityEngine.addSystem(new GrantRotationSystem());
+		entityEngine.addSystem(new GrantScaleSystem());
 		entityEngine.addSystem(new NewtonianForceSystem());
 		entityEngine.addSystem(new MovementSystem());
 		entityEngine.addSystem(new DanmakuSystem());
 		entityEngine.addSystem(new InputVelocitySystem());
+		entityEngine.addSystem(new PostEffectSystem());
+		entityEngine.addSystem(new TemporalSystem());
 
-		Entity myEntity = new Entity();
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(EAnimationList.ESTELLE_RUNNING,
-				ESpriteDirectionStrategy.ZENITH);
-		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
-		myEntity.add(new PositionComponent(level.getMapWidthW()/2.0f-60.0f, level.getMapHeightW()/2.0f, true));
-		myEntity.add(new VelocityComponent());
-		myEntity.add(sfdc);
-		myEntity.add(sac);
-		myEntity.add(new RotationComponent(true));
-		myEntity.add(new BoundingSphereComponent(70.0f));
-		myEntity.add(new SpriteComponent(sac));
-		myEntity.add(new DirectionComponent());
-		myEntity.add(new InputComponent(200.0f));
-
+		GlobalBag.playerEntity = createPlayerEntity();
+		
 		Entity yourEntity = new Entity();
 		SpriteForDirectionComponent sfdc2 = new SpriteForDirectionComponent(EAnimationList.JOSHUA_RUNNING,
 				ESpriteDirectionStrategy.ZENITH);
 		SpriteAnimationComponent sac2 = new SpriteAnimationComponent(sfdc2);
 		yourEntity.add(new SpriteComponent(sac2));
-		yourEntity.add(new PositionComponent(level.getMapWidthW()/2.0f+60.0f, level.getMapHeightW()/2.0f));
+		yourEntity.add(new PositionComponent(level.getMapWidthW()/2.0f, 50.0f*32.0f));
 		yourEntity.add(sfdc2);
 		yourEntity.add(sac2);
 		yourEntity.add(new RotationComponent(true));
 		yourEntity.add(new BoundingSphereComponent(70.0f));
 		yourEntity.add(new DirectionComponent(90.0f));
+		yourEntity.add(new TemporalComponent());
 
 		Entity myCamera = new Entity();
 		ManyTrackingComponent mtc = new ManyTrackingComponent(level.getMapXW(), level.getMapYW(), level.getMapWidthW(),
 				level.getMapHeightW());
-		mtc.focusPoints.add(myEntity);
+		mtc.focusPoints.add(GlobalBag.playerEntity);
 		mtc.focusPoints.add(yourEntity);
-		mtc.playerPoint = myEntity;
+		mtc.playerPoint = GlobalBag.playerEntity;
 		mtc.bossPoint = yourEntity;
 		mtc.gravity = Gravity.SOUTH;
 		mtc.trackingOrientationStrategy = TrackingOrientationStrategy.RELATIVE;
 		myCamera.add(mtc);
 		myCamera.add(new PositionComponent(1920/4,1080/2));
 		myCamera.add(new RotationComponent());
+		
 		myCamera.add(new ShouldPositionComponent(new ExponentialGrantStrategy(0.6f, 0.25f)));
 		myCamera.add(new ShouldRotationComponent(new ExponentialGrantStrategy(0.6f, 0.25f)));
 		myCamera.add(new ViewportComponent(viewportGame));
+		myCamera.add(new TemporalComponent());
 
+		
 //		Entity myProjectile = new Entity();
 //		myProjectile.add(new PositionComponent(1920.0f/4.0f,500.0f));
 //		myProjectile.add(new VelocityComponent(60.0f,0.0f));
@@ -384,10 +432,41 @@ public class Game implements ApplicationListener {
 //		myProjectile.add(new ForceComponent());
 //		myProjectile.add(new SpriteComponent(ETexture.TEST_PROJECTILE));
 		
-		entityEngine.addEntity(myEntity);
+		entityEngine.addEntity(GlobalBag.playerEntity);
 		entityEngine.addEntity(yourEntity);
 		entityEngine.addEntity(myCamera);
 //		entityEngine.addEntity(myProjectile);
+
+	}
+
+	private Entity createPlayerEntity() {
+		Entity playerEntity = new Entity();
+
+		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(player.getAnimationList(),
+				ESpriteDirectionStrategy.ZENITH);
+		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
+		SpriteComponent sc = new SpriteComponent(sac);
+		
+		playerEntity.add(new LeanEffectComponent(30.0f,0.10f,10.0f));
+		playerEntity.add(new HoverEffectComponent(8.0f, 1.0f));
+		
+		playerEntity.add(new ShouldRotationComponent(new ExponentialGrantStrategy(0.1f)));
+		playerEntity.add(new ShouldScaleComponent(new ExponentialGrantStrategy(0.1f)));
+		
+		playerEntity.add(sc);
+		playerEntity.add(sac);
+		playerEntity.add(sfdc);
+
+		playerEntity.add(new BoundingSphereComponent(player.getBoundingCircle().radius*3.0f));
+		playerEntity.add(new PositionComponent(level.getPlayerInitialPosition(), true));
+		playerEntity.add(new VelocityComponent(0.0f, 0.0f));
+		playerEntity.add(new RotationComponent(true));
+		playerEntity.add(new ScaleComponent());
+		playerEntity.add(new DirectionComponent());
+
+		playerEntity.add(new InputComponent(player.getMovementSpeed()));
+		playerEntity.add(new TemporalComponent());
+		return playerEntity;
 
 	}
 }

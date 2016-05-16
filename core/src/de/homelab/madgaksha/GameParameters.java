@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.util.LocaleSerializer;
 
 public class GameParameters implements Serializable {
@@ -26,12 +27,14 @@ public class GameParameters implements Serializable {
 	public int requestedFps;
 	public int requestedLogLevel;
 	public ALevel requestedLevel;
+	public APlayer requestedPlayer;
 	public String requestedWindowTitle;
 	private boolean deserializedSuccessfully = false;
 
 	@Override
 	public void write(Json json) {
 		json.writeValue("requestedLevel", requestedLevel.getClass().getCanonicalName(), String.class);
+		json.writeValue("requestedPlayer", requestedPlayer.getClass().getCanonicalName(), String.class);
 		json.writeValue("requestedLocale", requestedLocale);
 		json.writeValue("requestedWidth", requestedWidth);
 		json.writeValue("requestedHeight", requestedHeight);
@@ -44,14 +47,17 @@ public class GameParameters implements Serializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void read(Json json, JsonValue jsonData) {
-		final String levelClass = jsonData.get("requestedLevel").asString();
+		String levelClass = jsonData.get("requestedLevel").asString();
+		String playerClass = jsonData.get("requestedPlayer").asString();
 		try {
-			ALevel level;
-			Class<ALevel> aLevelClass = (Class<ALevel>) Class.forName(levelClass);
-			level = aLevelClass.newInstance();
-			requestedLevel = level;
-		} catch (Exception e) {
-			LOG.error("could not load level: " + levelClass, e);
+			Class<ALevel> level = (Class<ALevel>)Class.forName(levelClass);
+			Class<APlayer> player = (Class<APlayer>)Class.forName(playerClass);
+			requestedLevel = level.newInstance();
+			requestedPlayer = player.newInstance();
+		}
+		catch (Exception e) {
+			System.err.println("could not load level " + levelClass + " for player " + playerClass);
+			e.printStackTrace(System.err);
 			return;
 		}
 		JsonValue localeValue = jsonData.get("requestedLocale");
@@ -82,27 +88,31 @@ public class GameParameters implements Serializable {
 		private boolean requestedFullscreen = false;
 		private int requestedFps = 30;
 		private int requestedLogLevel = Application.LOG_ERROR;
-		private ALevel requestedLevel = null;
 		private String requestedWindowTitle = "";
-
-		public Builder(ALevel level) {
+		private final APlayer requestedPlayer; 
+		private final ALevel requestedLevel;
+		
+		public Builder(ALevel level, APlayer player) {
 			if (level == null)
 				throw new NullPointerException("level cannot be null");
+			if (player == null)
+				throw new NullPointerException("player cannot be null");
 			requestedLevel = level;
+			requestedPlayer = player;
 		}
 
 		public Builder requestedLocale(Locale x) {
-			requestedLocale = x;
+			if (x != null) requestedLocale = x;
 			return this;
 		}
 
 		public Builder requestedWidth(int x) {
-			requestedWidth = x;
+			if (x>0) requestedWidth = x;
 			return this;
 		}
 
 		public Builder requestedHeight(int x) {
-			requestedHeight = x;
+			if (x>0) requestedHeight = x;
 			return this;
 		}
 
@@ -112,25 +122,26 @@ public class GameParameters implements Serializable {
 		}
 
 		public Builder requestedFps(int x) {
-			requestedFps = x;
+			if (x>0) requestedFps = x;
 			return this;
 		}
 
 		public Builder requestedLogLevel(int x) {
-			requestedLogLevel = x;
+			if (x>=0) requestedLogLevel = x;
 			return this;
 		}
 
 		public Builder requestedWindowTitle(String x) {
-			requestedWindowTitle = x;
+			requestedWindowTitle = String.valueOf(x);
 			return this;
 		}
-
+		
 		// TODO
 		// !!!Change the read/write methods when changing this!!!
 		public GameParameters build() {
-			GameParameters params = new GameParameters() {
-			};
+			if (requestedPlayer == null || requestedLevel == null)
+				throw new NullPointerException("level and player must not be null");
+			GameParameters params = new GameParameters();
 			params.requestedFps = this.requestedFps;
 			params.requestedFullscreen = this.requestedFullscreen;
 			params.requestedHeight = this.requestedHeight;
@@ -139,6 +150,7 @@ public class GameParameters implements Serializable {
 			params.requestedLogLevel = this.requestedLogLevel;
 			params.requestedWidth = this.requestedWidth;
 			params.requestedWindowTitle = this.requestedWindowTitle;
+			params.requestedPlayer = this.requestedPlayer;
 			return params;
 		}
 	}

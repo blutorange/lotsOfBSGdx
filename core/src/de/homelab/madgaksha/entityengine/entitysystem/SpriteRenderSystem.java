@@ -6,15 +6,14 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 
-import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
+import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.level.GameViewport;
 import de.homelab.madgaksha.logging.Logger;
@@ -74,19 +73,23 @@ public class SpriteRenderSystem extends EntitySystem {
 		batch.begin();
 		for (int i = 0; i < entities.size(); ++i) {
 			final Entity entity = entities.get(i);
-			final SpriteComponent sc = Mapper.spriteComponent.get(entity);
+			final SpriteComponent spc = Mapper.spriteComponent.get(entity);
 			final PositionComponent pc = Mapper.positionComponent.get(entity);
 			final RotationComponent rc = Mapper.rotationComponent.get(entity);
+			final ScaleComponent sc = Mapper.scaleComponent.get(entity);
 
 			if (rc != null) {
 				if (rc.inverseToCamera)
-					sc.sprite.setRotation(rc.thetaZ - cameraUpAngleXY);
+					spc.sprite.setRotation(rc.thetaZ - cameraUpAngleXY);
 				else
-					sc.sprite.setRotation(rc.thetaZ);
+					spc.sprite.setRotation(rc.thetaZ);
 			}
-
-			sc.sprite.setCenter(pc.x, pc.y);
-			sc.sprite.draw(batch);
+			if (sc != null) {
+				spc.sprite.setScale(sc.scaleX);
+				spc.sprite.setScale(sc.scaleY);
+			}
+			spc.sprite.setCenter(pc.x+pc.offsetX, pc.y+pc.offsetY);
+			spc.sprite.draw(batch);
 		}
 		batch.end();
 	}

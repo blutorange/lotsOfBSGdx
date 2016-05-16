@@ -1,41 +1,51 @@
 package de.homelab.madgaksha.level;
 
+import com.badlogic.gdx.math.Vector2;
+
 import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ETiledMap;
-import de.homelab.madgaksha.resourcecache.IResource;
+import de.homelab.madgaksha.resourcecache.IResource;;
 
 /**
  * Only for testing purposes.
  * 
  * @author madgaksha
  */
-@Deprecated
-public class FooLevel extends ALevel {
+public class Level01 extends ALevel {
 
 	@Override
 	protected ETexture requestedBackgroundImage() {
-		return ETexture.FOOLEVEL_BACKGROUND;
+		return ETexture.MAIN_BACKGROUND;
 	}
 
 	@Override
 	protected IResource[] requestedRequiredResources() {
 		return new IResource[] {
-				ETexture.ESTELLE_RUNNING,
 				ETexture.JOSHUA_RUNNING,
-				EMusic.TEST_ADX_STEREO,
-				ETiledMap.MAP_FOOLEVEL
+				EMusic.SOPHISTICATED_FIGHT,
+				ETiledMap.LEVEL_01
 		};
 	}
 
 	@Override
 	public ETiledMap requestedTiledMap() {
-		return ETiledMap.MAP_FOOLEVEL;
+		return ETiledMap.LEVEL_01;
 	}	
 	
 	@Override
 	public EMusic requestedBgm() {
-		return EMusic.TEST_ADX_STEREO;
+		return EMusic.SOPHISTICATED_FIGHT;
+	}
+
+	@Override
+	public Vector2 requestedPlayerInitialPosition() {
+		return new Vector2(35,20);
+	}
+
+	@Override
+	public String requestedI18nNameKey() {
+		return "level.01.name";
 	}
 
 }

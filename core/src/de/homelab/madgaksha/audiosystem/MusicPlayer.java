@@ -168,7 +168,7 @@ public class MusicPlayer extends AAudioPlayer {
 	 * level of the next clip.
 	 * 
 	 * @param time
-	 *            The time for the transition in milliseconds.
+	 *            The time for the transition in seconds.
 	 */
 	public void transition(float time) {
 		transition(time, nextClip != null ? getVolume(nextClip) : 0.0f);

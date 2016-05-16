@@ -81,6 +81,7 @@ public class GameViewport extends Viewport {
 		// apply(centerCamera);
 	}
 
+
 	@Override
 	public void update(int screenWidth, int screenHeight, boolean centerCamera) {
 		// Compute dimensions of the game window in pixels.
@@ -91,8 +92,7 @@ public class GameViewport extends Viewport {
 		// Game window goes to the bottom left.
 		setScreenBounds(0, 0, gameWidth, gameHeight);
 
-		// Apply needs to be called by the update loop anyway.
-		// apply(false);
+		apply(centerCamera);
 	}
 
 	/**
