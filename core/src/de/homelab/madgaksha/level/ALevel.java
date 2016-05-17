@@ -62,6 +62,7 @@ public abstract class ALevel {
 	private final ETexture backgroundImage;
 	private final IResource[] requiredResources;
 	private final EMusic bgm;
+	private final EMusic battleBgm;
 	private final ETiledMap tiledMap;
 	private final String i18nNameKey;
 	/** Initial position of the player in tiles. */
@@ -77,6 +78,7 @@ public abstract class ALevel {
 		tiledMap = requestedTiledMap();
 		playerInitialPosition = requestedPlayerInitialPosition();
 		i18nNameKey = requestedI18nNameKey();
+		battleBgm = requestedBattleBgm();
 	}
 	
 	public boolean initialize(SpriteBatch batch) {
@@ -130,20 +132,22 @@ public abstract class ALevel {
 	 */
 	protected abstract IResource[] requestedRequiredResources();
 
-	/**
-	 * @return Initial music that should be playing. Null if none.
-	 */
-	public abstract EMusic requestedBgm();
+	/**@return Initial music that should be playing. Null if none. */
+	protected abstract EMusic requestedBgm();
 
+	/** @return Music while fighting. */
+	protected abstract EMusic requestedBattleBgm();
+
+	
 	/**
 	 * @return The map to be loaded initially.
 	 */
-	public abstract ETiledMap requestedTiledMap();
+	protected abstract ETiledMap requestedTiledMap();
 	
 	/** Initial position of the player in tiles. */
-	public abstract Vector2 requestedPlayerInitialPosition();
+	protected abstract Vector2 requestedPlayerInitialPosition();
 		
-	public abstract String requestedI18nNameKey();
+	protected abstract String requestedI18nNameKey();
 	
 	
 	// =============================
@@ -185,7 +189,10 @@ public abstract class ALevel {
 	public EMusic getBgm() {
 		return bgm;
 	}
-
+	public EMusic getBattleBgm() {
+		return battleBgm;
+	}
+	
 	public ETiledMap getTiledMap() {
 		return tiledMap;
 	}

@@ -10,7 +10,7 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		final AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		final GameParameters params = new GameParameters.Builder(null)
+		final GameParameters params = new GameParameters.Builder(null, null)
 				//TODO set params
 				.build();
 		initialize(new Game(params), config);

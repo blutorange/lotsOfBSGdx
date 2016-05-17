@@ -1,10 +1,11 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
+import static de.homelab.madgaksha.GlobalBag.level;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
-import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
@@ -19,6 +20,7 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  */
 public class MovementSystem extends IteratingSystem {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(MovementSystem.class);
 	private static float newx, newy, tmp;
 
@@ -35,7 +37,7 @@ public class MovementSystem extends IteratingSystem {
 	@SuppressWarnings("unchecked")
 	public MovementSystem(int priority) {
 		super(Family.all(PositionComponent.class, VelocityComponent.class, TemporalComponent.class).get(), priority);
-		mapProperties = GlobalBag.level.getMapProperties();
+		mapProperties = level.getMapProperties();
 		tileWidth = mapProperties.getWidthTiles();
 		tileHeight = mapProperties.getHeightTiles();
 		tileWidthInverse = 1.0f/mapProperties.getWidthTiles();

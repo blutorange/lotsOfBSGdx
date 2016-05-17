@@ -3,8 +3,6 @@ package de.homelab.madgaksha.entityengine.component;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-import de.homelab.madgaksha.Game;
-
 public class TimeScaleComponent implements Component, Poolable {
 	private final static float DEFAULT_TIME_SCALING_FACTOR = 1.0f;
 

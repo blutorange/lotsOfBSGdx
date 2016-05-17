@@ -1,12 +1,16 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
+import static de.homelab.madgaksha.GlobalBag.worldVisibleMaxX;
+import static de.homelab.madgaksha.GlobalBag.worldVisibleMaxY;
+import static de.homelab.madgaksha.GlobalBag.worldVisibleMinX;
+import static de.homelab.madgaksha.GlobalBag.worldVisibleMinY;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 
 import de.homelab.madgaksha.Game;
-import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
@@ -21,6 +25,7 @@ import de.homelab.madgaksha.logging.Logger;
  *
  */
 public class ViewportUpdateSystem extends IteratingSystem {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(ViewportUpdateSystem.class);
 	private static float upx,upy,otx,oty, hh, hw;
 	private static float tmp, mapMinX, mapMinY, mapMaxX, mapMaxY;
@@ -112,12 +117,10 @@ public class ViewportUpdateSystem extends IteratingSystem {
 		if (tmp < mapMinY) mapMinY = tmp;
 		else if (tmp > mapMaxY) mapMaxY = tmp;
 		
-		//LOG.debug(mapMinX + " " + mapMaxX + " " + mapMinY + " " + mapMaxY);
-		GlobalBag.worldVisibleMinX = mapMinX;
-		GlobalBag.worldVisibleMaxX = mapMaxX;
-		GlobalBag.worldVisibleMinY = mapMinY;
-		GlobalBag.worldVisibleMaxY = mapMaxY;
-		
+		worldVisibleMinX = mapMinX;
+		worldVisibleMaxX = mapMaxX;
+		worldVisibleMinY = mapMinY;
+		worldVisibleMaxY = mapMaxY;
 	}
 }
 

@@ -1,10 +1,20 @@
 package de.homelab.madgaksha;
 
+import static de.homelab.madgaksha.GlobalBag.batchGame;
+import static de.homelab.madgaksha.GlobalBag.batchInfo;
+import static de.homelab.madgaksha.GlobalBag.batchScreen;
+import static de.homelab.madgaksha.GlobalBag.level;
+import static de.homelab.madgaksha.GlobalBag.musicPlayer;
+import static de.homelab.madgaksha.GlobalBag.player;
+import static de.homelab.madgaksha.GlobalBag.soundPlayer;
+import static de.homelab.madgaksha.GlobalBag.viewportGame;
+import static de.homelab.madgaksha.GlobalBag.viewportInfo;
+import static de.homelab.madgaksha.GlobalBag.viewportScreen;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -14,53 +24,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.homelab.madgaksha.audiosystem.AwesomeAudio;
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
-import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
-import de.homelab.madgaksha.entityengine.component.DirectionComponent;
-import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
-import de.homelab.madgaksha.entityengine.component.InputComponent;
-import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
-import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
-import de.homelab.madgaksha.entityengine.component.PositionComponent;
-import de.homelab.madgaksha.entityengine.component.RotationComponent;
-import de.homelab.madgaksha.entityengine.component.ScaleComponent;
-import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
-import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
-import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
-import de.homelab.madgaksha.entityengine.component.TemporalComponent;
-import de.homelab.madgaksha.entityengine.component.VelocityComponent;
-import de.homelab.madgaksha.entityengine.component.ViewportComponent;
-import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.CameraTracingSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.DanmakuSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.GrantRotationSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.GrantScaleSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.InputVelocitySystem;
-import de.homelab.madgaksha.entityengine.entitysystem.MovementSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.NewtonianForceSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.PostEffectSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.SpriteAnimationSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.TemporalSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.ViewportUpdateSystem;
-import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
-import de.homelab.madgaksha.enums.Gravity;
-import de.homelab.madgaksha.enums.TrackingOrientationStrategy;
-import de.homelab.madgaksha.grantstrategy.ExponentialGrantStrategy;
+import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.i18n.i18n;
-import de.homelab.madgaksha.level.ALevel;
-import de.homelab.madgaksha.level.GameViewport;
-import de.homelab.madgaksha.level.InfoViewport;
+import de.homelab.madgaksha.layer.ALayer;
+import de.homelab.madgaksha.layer.EntityLayer;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.player.APlayer;
-import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
@@ -82,20 +53,10 @@ public class Game implements ApplicationListener {
 	 */
 	public final static float MAX_DELTA_TIME = 0.1f;
 
-	/**
-	 * For playing music. No other instance should be created.
-	 */
-	private static MusicPlayer musicPlayer = null;
-
-	/** For drawing the info screen, score etc. */
-	private static SpriteBatch batchInfo;
-	/** For drawing the game window. */
-	private static SpriteBatch batchGame;
-	/** For drawing the background directly to the screen. */
-	private static SpriteBatch batchScreen;
-
-	/** Entity engine ASHLEY */
-	private Engine entityEngine;
+	private final List<ALayer> layerStack = new ArrayList<ALayer>(10); 
+	private final List<ALayer> layerStackPopQueue = new ArrayList<ALayer>(10);
+	private final List<ALayer> layerStackPushQueue = new ArrayList<ALayer>(10);
+	private ALayer entityLayer;
 
 	/** Controls the speed of the game. */
 	private float timeScalingFactor = 1.0f;
@@ -106,41 +67,19 @@ public class Game implements ApplicationListener {
 	// TODO remove me
 	// only for testing
 	public static Vector2 testA = new Vector2();
-	public static float testx = 0.5f;
-	public static float testy = 0.5f;
-	public static float testx2 = 0.5f;
-	public static float testy2 = 0.5f;
-	public static float test1 = 0.0f;
-	public static float test2 = 0.0f;
-	public static float test3 = 0.0f;
-	public static float test4 = 0.0f;
-	public static float test5 = 0.0f;
-	public static float test6 = 0.0f;
-	public static float test7 = 100.0f;
 	ParticleEffect bombEffect;
+	private BitmapFont debugFont; 
 	// testing end
 	
-	private BitmapFont debugFont; 
-
 	private final GameParameters params;
-	private final ALevel level;
-	private final APlayer player;
+	private Texture backgroundImage;		
 	
-	private Texture backgroundImage;	
-	
-	private static GameViewport viewportGame;
-	private static InfoViewport viewportInfo;
-	private static Viewport viewportScreen;
-	
-	/**
-	 * @param params
-	 *            Screen size, fps etc. that were requested.
-	 */
+	/**@param params Screen size, fps etc. that were requested. */
 	public Game(GameParameters params) {
+		// Read requested level and player.
 		this.params = params;
-		this.player = params.requestedPlayer;
-		this.level = params.requestedLevel;
-		GlobalBag.level = this.level;
+		player = params.requestedPlayer;
+		level = params.requestedLevel;
 		
 		// Set locale if it has not been set yet.
 		if (!i18n.isInitiated()) {
@@ -182,10 +121,13 @@ public class Game implements ApplicationListener {
 		}
 
 		// Create music player.
-		Game.musicPlayer = new MusicPlayer();
-		Game.musicPlayer.loadNext(level.getBgm());
-		Game.musicPlayer.transition(2.0f);
+		musicPlayer = new MusicPlayer();
+		musicPlayer.loadNext(level.getBgm());
+		musicPlayer.transition(2.0f);
 
+		// Create sound player.
+		soundPlayer = new SoundPlayer();
+		
 		// Load background image.
 		backgroundImage = level.getBackgroundImage();
 
@@ -193,7 +135,7 @@ public class Game implements ApplicationListener {
 		batchScreen = new SpriteBatch();
 		batchGame = new SpriteBatch();
 		batchInfo = new SpriteBatch();
-
+	
 		batchInfo.disableBlending();
 
 		// Initialize map.
@@ -206,10 +148,12 @@ public class Game implements ApplicationListener {
 		viewportGame = level.getGameViewport(params.requestedWidth, params.requestedHeight);
 		viewportInfo = level.getInfoViewport(params.requestedWidth, params.requestedHeight);
 		viewportScreen = level.getScreenViewport(params.requestedWidth, params.requestedHeight);
-		GlobalBag.viewportGame = viewportGame;
-		
-		// Create a new entity engine and setup basic entity systems.
-		createEntityEngine();
+				
+		// Initialize the layer stack.
+		// Start off with a layer stack containing only the entity engine.
+		// This initializes the entity engine as well.
+		entityLayer = new EntityLayer();
+		layerStack.add(entityLayer);
 		
 		//TODO remove me for release
 		createDebugFont();
@@ -235,6 +179,23 @@ public class Game implements ApplicationListener {
 		
 		// Render debug.
 		renderDebug();
+		
+		// Process layer stack queue.
+		// Must be done at once after the update and
+		// render methods, or sync becomes an issue.
+		// Adding / removing layers does not happen
+		// frequently, so we check if there is any
+		// work to be done first.
+		if (layerStackPopQueue.size() > 0) {
+			layerStack.removeAll(layerStackPopQueue);
+			layerStackPopQueue.clear();
+			for (ALayer layer : layerStackPopQueue) layer.removedFromStack();
+		}
+		if (layerStackPushQueue.size() > 0) {
+			layerStack.addAll(layerStackPushQueue);
+			layerStackPushQueue.clear();
+			for (ALayer layer : layerStackPushQueue) layer.addedToStack();
+		}
 	}
 
 	@Override
@@ -263,7 +224,14 @@ public class Game implements ApplicationListener {
 		try {
 			if (musicPlayer != null) musicPlayer.dispose();
 		} catch (Exception e) {
-			LOG.error("could not clear music player", e);
+			LOG.error("could not dispose music player", e);
+		}
+
+		// Dispose sound player.
+		try {
+			if (soundPlayer != null) soundPlayer.dispose();
+		} catch (Exception e) {
+			LOG.error("could not dispose sound player", e);
 		}
 
 		// Dispose loaded resources.
@@ -279,14 +247,14 @@ public class Game implements ApplicationListener {
 		if (batchScreen != null) batchScreen.dispose();
 
 		// Remove all entities and systems to trigger cleanup.
-		if (entityEngine != null) {
-			entityEngine.removeAllEntities();
-			for (EntitySystem es : entityEngine.getSystems()) {
-				entityEngine.removeSystem(es);
-			}
+		for (ALayer layer : layerStack) {
+			layer.removedFromStack();
 		}
+		layerStack.clear();
+		layerStackPopQueue.clear();
+		layerStackPushQueue.clear();
 
-		// TODO
+		// TODO remove me
 		debugFont.dispose();
 		bombEffect.dispose();
 	}
@@ -304,7 +272,6 @@ public class Game implements ApplicationListener {
 	}
 
 	public void renderGame() {
-		
 		// Clear game window so that the background won't show.
 		Gdx.gl.glScissor(viewportGame.getScreenX(), viewportGame.getScreenY(), viewportGame.getScreenWidth(),
 				viewportGame.getScreenHeight());
@@ -315,16 +282,20 @@ public class Game implements ApplicationListener {
 			
 		// Update and render the game.
 		final float deltaTime = timeScalingFactor * Math.min(Gdx.graphics.getRawDeltaTime(), MAX_DELTA_TIME);
-		if (running) {
-			entityEngine.update(deltaTime);
-		} else {
-			final SpriteRenderSystem spriteRenderSystem = entityEngine.getSystem(SpriteRenderSystem.class);
-			if (spriteRenderSystem != null) {
-				viewportGame.apply();
-				spriteRenderSystem.update(deltaTime);
-			}
-			// entityEngine.getSystem(Draw3dSystem.class).update(deltaTime);
+		
+		// Start with the topmost item on the layer stack and proceed
+		// with the layers down on the stack only if the layers
+		// above did not stop propagation.
+		int mode = running ? ALayer.PROCESS_FULLY : ALayer.DRAW_ONLY;
+		int i = layerStack.size();
+		while (mode == ALayer.PROCESS_FULLY && --i >= 0) {
+			mode -= layerStack.get(i).processFully(deltaTime);
 		}
+		while (mode == ALayer.DRAW_ONLY && --i >= 0) {
+			mode -= layerStack.get(i).drawOnly(deltaTime);
+		}
+		
+		//TODO remove me
 		//testing
 		batchGame.begin();
 		bombEffect.setPosition(1000.0f, 1000.0f);
@@ -336,8 +307,7 @@ public class Game implements ApplicationListener {
 		bombEffect.setPosition(1400.0f, 1400.0f);
 		bombEffect.draw(batchGame,0.25f*deltaTime);
 		batchGame.end();
-//		bombEffect.update(deltaTime);
-		if (bombEffect.isComplete()) bombEffect.reset();
+		//if (bombEffect.isComplete()) bombEffect.reset();
 	}
 
 	public void renderInfo() {
@@ -369,102 +339,20 @@ public class Game implements ApplicationListener {
 		debugFont = new BitmapFont(Gdx.files.internal("font/debugFont.fnt"));
 		debugFont.setColor(Color.RED);
 	}
+
 	
-
-	public void createEntityEngine() {
-		entityEngine = new Engine();
-
-		entityEngine.addSystem(new BirdsViewSpriteSystem(viewportGame));
-		entityEngine.addSystem(new SpriteAnimationSystem());
-		entityEngine.addSystem(new SpriteRenderSystem(viewportGame, batchGame));
-		entityEngine.addSystem(new CameraTracingSystem(viewportGame));
-		entityEngine.addSystem(new ViewportUpdateSystem());
-		entityEngine.addSystem(new GrantPositionSystem());
-		entityEngine.addSystem(new GrantRotationSystem());
-		entityEngine.addSystem(new GrantScaleSystem());
-		entityEngine.addSystem(new NewtonianForceSystem());
-		entityEngine.addSystem(new MovementSystem());
-		entityEngine.addSystem(new DanmakuSystem());
-		entityEngine.addSystem(new InputVelocitySystem());
-		entityEngine.addSystem(new PostEffectSystem());
-		entityEngine.addSystem(new TemporalSystem());
-
-		GlobalBag.playerEntity = createPlayerEntity();
-		
-		Entity yourEntity = new Entity();
-		SpriteForDirectionComponent sfdc2 = new SpriteForDirectionComponent(EAnimationList.JOSHUA_RUNNING,
-				ESpriteDirectionStrategy.ZENITH);
-		SpriteAnimationComponent sac2 = new SpriteAnimationComponent(sfdc2);
-		yourEntity.add(new SpriteComponent(sac2));
-		yourEntity.add(new PositionComponent(level.getMapWidthW()/2.0f, 50.0f*32.0f));
-		yourEntity.add(sfdc2);
-		yourEntity.add(sac2);
-		yourEntity.add(new RotationComponent(true));
-		yourEntity.add(new BoundingSphereComponent(70.0f));
-		yourEntity.add(new DirectionComponent(90.0f));
-		yourEntity.add(new TemporalComponent());
-
-		Entity myCamera = new Entity();
-		ManyTrackingComponent mtc = new ManyTrackingComponent(level.getMapXW(), level.getMapYW(), level.getMapWidthW(),
-				level.getMapHeightW());
-		mtc.focusPoints.add(GlobalBag.playerEntity);
-		mtc.focusPoints.add(yourEntity);
-		mtc.playerPoint = GlobalBag.playerEntity;
-		mtc.bossPoint = yourEntity;
-		mtc.gravity = Gravity.SOUTH;
-		mtc.trackingOrientationStrategy = TrackingOrientationStrategy.RELATIVE;
-		myCamera.add(mtc);
-		myCamera.add(new PositionComponent(1920/4,1080/2));
-		myCamera.add(new RotationComponent());
-		
-		myCamera.add(new ShouldPositionComponent(new ExponentialGrantStrategy(0.6f, 0.25f)));
-		myCamera.add(new ShouldRotationComponent(new ExponentialGrantStrategy(0.6f, 0.25f)));
-		myCamera.add(new ViewportComponent(viewportGame));
-		myCamera.add(new TemporalComponent());
-
-		
-//		Entity myProjectile = new Entity();
-//		myProjectile.add(new PositionComponent(1920.0f/4.0f,500.0f));
-//		myProjectile.add(new VelocityComponent(60.0f,0.0f));
-//		myProjectile.add(new TrajectoryComponent());
-//		myProjectile.add(new ForceComponent());
-//		myProjectile.add(new SpriteComponent(ETexture.TEST_PROJECTILE));
-		
-		entityEngine.addEntity(GlobalBag.playerEntity);
-		entityEngine.addEntity(yourEntity);
-		entityEngine.addEntity(myCamera);
-//		entityEngine.addEntity(myProjectile);
-
+	/** Requests the layer to be remove from the layer stack.
+	 * It is removed at the end of the update/render loop.
+	 * @param layer Layer to be removed.
+	 */
+	public void popLayer(ALayer layer) {
+		layerStackPopQueue.add(layer);
 	}
-
-	private Entity createPlayerEntity() {
-		Entity playerEntity = new Entity();
-
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(player.getAnimationList(),
-				ESpriteDirectionStrategy.ZENITH);
-		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
-		SpriteComponent sc = new SpriteComponent(sac);
-		
-		playerEntity.add(new LeanEffectComponent(30.0f,0.10f,10.0f));
-		playerEntity.add(new HoverEffectComponent(8.0f, 1.0f));
-		
-		playerEntity.add(new ShouldRotationComponent(new ExponentialGrantStrategy(0.1f)));
-		playerEntity.add(new ShouldScaleComponent(new ExponentialGrantStrategy(0.1f)));
-		
-		playerEntity.add(sc);
-		playerEntity.add(sac);
-		playerEntity.add(sfdc);
-
-		playerEntity.add(new BoundingSphereComponent(player.getBoundingCircle()));
-		playerEntity.add(new PositionComponent(level.getPlayerInitialPosition(), true));
-		playerEntity.add(new VelocityComponent(0.0f, 0.0f));
-		playerEntity.add(new RotationComponent(true));
-		playerEntity.add(new ScaleComponent());
-		playerEntity.add(new DirectionComponent());
-
-		playerEntity.add(new InputComponent(player.getMovementSpeed()));
-		playerEntity.add(new TemporalComponent());
-		return playerEntity;
-
+	/** Requests the layer to be added to the layer stack.
+	 * It is added at the end of the update/render loop.
+	 * @param layer Layer to be added.
+	 */
+	public void pushLayer(ALayer layer) {
+		layerStackPushQueue.add(layer);
 	}
 }

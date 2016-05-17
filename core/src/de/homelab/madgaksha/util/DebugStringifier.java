@@ -2,6 +2,7 @@ package de.homelab.madgaksha.util;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class DebugStringifier {
@@ -53,4 +54,23 @@ public class DebugStringifier {
 		.append("\n  far=").append(c.far)
 		.append("\n  fieldOfView=").append(c.fieldOfView)
 		.toString();
-	}}
+	}
+	public static String get(NinePatch np) {
+		return new StringBuilder()
+		.append(np.toString())
+		.append("\n  color=").append(np.getColor())
+		.append("\n  topHeight=").append(np.getTopHeight())
+		.append("\n  bottomHeight=").append(np.getBottomHeight())
+		.append("\n  middleHeight=").append(np.getMiddleHeight())
+		.append("\n  leftWidth=").append(np.getLeftWidth())
+		.append("\n  middleWidth=").append(np.getMiddleWidth())
+		.append("\n  rightWidth=").append(np.getRightWidth())
+		.append("\n  padTop=").append(np.getPadTop())
+		.append("\n  padRight=").append(np.getPadRight())
+		.append("\n  padBottom=").append(np.getPadBottom())
+		.append("\n  padLeft=").append(np.getPadLeft())
+		.append("\n  totalHeight=").append(np.getTotalHeight())
+		.append("\n  totalWidth=").append(np.getTotalWidth())
+		.toString();
+		}
+}

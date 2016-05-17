@@ -3,7 +3,6 @@ package de.homelab.madgaksha.util;
 import java.util.ArrayList;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 import com.dreizak.miniball.model.PointSet;
 
 import de.homelab.madgaksha.entityengine.Mapper;

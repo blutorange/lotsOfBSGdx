@@ -1,13 +1,11 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
+import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IntervalIteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.NumberUtils;
 import com.dreizak.miniball.highdim.Miniball;
 
 import de.homelab.madgaksha.Game;
@@ -19,7 +17,6 @@ import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
 import de.homelab.madgaksha.level.ALevel;
-import de.homelab.madgaksha.level.GameViewport;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
@@ -30,28 +27,27 @@ import de.homelab.madgaksha.logging.Logger;
  */
 public class CameraTracingSystem extends IntervalIteratingSystem {
 
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(CameraTracingSystem.class);
 	
 	/** In seconds. */
 	private final static float DEFAULT_UPDATE_INTERVAL = 0.2f;
 
-	private GameViewport viewport;
-
+	/** Last vector longer than the threshold. */
 	private Vector2 lastDirAboveThreshold = new Vector2(0, 1);
 
-	public CameraTracingSystem(GameViewport viewport) {
-		this(viewport, DEFAULT_UPDATE_INTERVAL, DefaultPriority.cameraZoomingSystem);
+	public CameraTracingSystem() {
+		this(DEFAULT_UPDATE_INTERVAL, DefaultPriority.cameraZoomingSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public CameraTracingSystem(GameViewport viewport, float updateInterval, int priority) {
-		super(Family.all(ManyTrackingComponent.class, ShouldPositionComponent.class, ShouldRotationComponent.class)
-				.get(), updateInterval, priority);
-		this.viewport = viewport;
+	public CameraTracingSystem(int priority) {
+		this( DEFAULT_UPDATE_INTERVAL, priority);
 	}
 	
-	public CameraTracingSystem(GameViewport viewport, int priority) {
-		this(viewport, DEFAULT_UPDATE_INTERVAL, priority);
+	@SuppressWarnings("unchecked")
+	public CameraTracingSystem(float updateInterval, int priority) {
+		super(Family.all(ManyTrackingComponent.class, ShouldPositionComponent.class, ShouldRotationComponent.class)
+				.get(), updateInterval, priority);
 	}
 
 	@SuppressWarnings("incomplete-switch")
@@ -161,36 +157,6 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		else if (mtc.adjustmentPointTop > maxy)
 			maxy = mtc.adjustmentPointTop;
 
-//		// Clip to world boundaries.
-//		//TODO
-//		// must be done in the same coordinate system...
-//		if (maxx - minx < mtc.worldBorderRightW - mtc.worldBorderLeftW) {
-//			float dx = 0.0f;
-//			if (minx < mtc.worldBorderLeftW) {
-//				dx = mtc.worldBorderLeftW - minx;
-//			} else if (maxx > mtc.worldBorderRightW) {
-//				dx = mtc.worldBorderRightW - maxx;
-//			}
-//			minx += dx;
-//			maxx += dx;
-//		} else {
-//			minx = mtc.worldBorderLeftW;
-//			maxx = mtc.worldBorderRightW;
-//		}
-//		if (maxy - miny < mtc.worldBorderTopW - mtc.worldBorderBottomW) {
-//			float dy = 0.0f;
-//			if (miny < mtc.worldBorderBottomW) {
-//				dy = mtc.worldBorderBottomW - minx;
-//			} else if (maxy > mtc.worldBorderTopW) {
-//				dy = mtc.worldBorderTopW - maxx;
-//			}
-//			miny += dy;
-//			maxy += dy;
-//		} else {
-//			miny = mtc.worldBorderBottomW;
-//			maxy = mtc.worldBorderTopW;
-//		}
-
 		// Get the center of the rectangle
 		float cx = (maxx + minx) * 0.5f; // center base coordinate
 		float cy = (maxy + miny) * 0.5f; // center dir coordinate
@@ -213,8 +179,8 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 
 		// Compute the height the camera needs to be located
 		// at.
-		if (viewport.getCamera() instanceof OrthographicCamera) {
-			final OrthographicCamera ocam = (OrthographicCamera) viewport.getCamera();
+		if (viewportGame.getCamera() instanceof OrthographicCamera) {
+			final OrthographicCamera ocam = (OrthographicCamera) viewportGame.getCamera();
 			ocam.setToOrtho(false, hw * 2.0f, hh * 2.0f);
 		} else /* if (camera instanceof PerspectiveCamera) */ {
 			// fieldOfView is the double angle in degrees

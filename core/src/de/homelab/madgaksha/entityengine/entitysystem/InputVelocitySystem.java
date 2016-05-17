@@ -1,12 +1,13 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
+import static de.homelab.madgaksha.GlobalBag.viewportGame;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
-import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
@@ -22,6 +23,7 @@ import de.homelab.madgaksha.logging.Logger;
  */
 public class InputVelocitySystem extends IteratingSystem {
 
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(InputVelocitySystem.class);
 	private static Vector2 v = new Vector2();
 	private static Vector2 w = new Vector2();
@@ -45,10 +47,10 @@ public class InputVelocitySystem extends IteratingSystem {
 		      (Gdx.input.isKeyPressed(ic.up)) ? ic.speed : (Gdx.input.isKeyPressed(ic.down)) ? -ic.speed : 0.0f);
 		w.set((Gdx.input.isKeyPressed(ic.directionLeft)) ? 1.0f : (Gdx.input.isKeyPressed(ic.directionRight)) ? -1.0f : 0.0f,
 		      (Gdx.input.isKeyPressed(ic.directionUp)) ? 1.0f : (Gdx.input.isKeyPressed(ic.directionDown)) ? -1.0f : 0.0f);
-		if (ic.relativeToCamera) v.rotate(-GlobalBag.viewportGame.getRotationUpXY());
-		if (ic.orientToScreen) dc.degree = 450.0f+GlobalBag.viewportGame.getRotationUpXY()+ic.screenOrientation;
-		else if (w.len2() > 0.5f) dc.degree = 450.0f+GlobalBag.viewportGame.getRotationUpXY()+(lastAngle=w.angle());
-		else dc.degree = 450.0f+GlobalBag.viewportGame.getRotationUpXY()+(lastAngle);
+		if (ic.relativeToCamera) v.rotate(-viewportGame.getRotationUpXY());
+		if (ic.orientToScreen) dc.degree = 450.0f+viewportGame.getRotationUpXY()+ic.screenOrientation;
+		else if (w.len2() > 0.5f) dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle=w.angle());
+		else dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle);
 		vc.x = v.x;
 		vc.y = v.y;
 	}

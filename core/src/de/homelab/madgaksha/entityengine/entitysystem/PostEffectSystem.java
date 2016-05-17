@@ -1,5 +1,7 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
+import static de.homelab.madgaksha.GlobalBag.viewportGame;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -8,7 +10,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
-import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
@@ -21,6 +22,7 @@ import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.logging.Logger;
 
 public class PostEffectSystem extends EntitySystem {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(PostEffectSystem.class);
 
 	private Family familyLeanEffect;
@@ -39,7 +41,7 @@ public class PostEffectSystem extends EntitySystem {
 	@SuppressWarnings("unchecked")
 	public PostEffectSystem(int priority) {
 		super(priority);
-		this.upVector = GlobalBag.viewportGame.getCamera().up;
+		this.upVector = viewportGame.getCamera().up;
 		this.familyLeanEffect = Family.all(ShouldRotationComponent.class, ShouldScaleComponent.class, LeanEffectComponent.class, VelocityComponent.class).get();
 		this.familyHoverEffect = Family.all(TemporalComponent.class, PositionComponent.class, HoverEffectComponent.class).get();
 	}

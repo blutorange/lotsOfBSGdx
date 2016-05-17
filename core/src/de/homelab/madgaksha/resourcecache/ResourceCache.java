@@ -4,6 +4,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import de.homelab.madgaksha.logging.Logger;
@@ -17,6 +19,8 @@ public final class ResourceCache {
 	public final static int LIMIT_ANIMATION = 50;
 	public final static int LIMIT_ANIMATION_LIST = 50;
 	public final static int LIMIT_SOUND = 100;
+	public final static int LIMIT_NINE_PATCH = 20;
+	public final static int LIMIT_TEXTURE_ATLAS = 20;
 	
 	private ResourceCache() {
 	}
@@ -26,11 +30,13 @@ public final class ResourceCache {
 	 * defines limit on how many resources can be loaded at once. When there are
 	 * too many resources loaded, it will return null. Resources must be
 	 * disposed with a call to {@link ResourceCache#clearAll()} or
-	 * {@link ResourceCache#clearBgm(Ebgm)} etc.
+	 * {@link ResourceCache#clearMusic(EMusic)} etc.
 	 * 
 	 * @param res
 	 *            The resource to load. An Enum implementing the
 	 *            {@link IResource} interface.
+	 * @param cached When false, does not look up the object in the cache and loads
+	 *               it again.
 	 * @return An object representing the resource <code>res</code>. Must be
 	 *         typecast to the correct type.
 	 */
@@ -146,15 +152,31 @@ public final class ResourceCache {
 	}
 	
 	/**
+	 * Clears all texture atlas objects from the cache.
+	 */
+	public static void clearAllTextureAtlas() {
+		ETextureAtlas.clearAll();
+	}
+	
+	/**
+	 * Clears all animation objects from the cache.
+	 */
+	public static void clearAllNinePatch() {
+		ENinePatch.clearAll();
+	}
+	
+	/**
 	 * Clears all resource objects.
 	 */
 	public static void clearAll() {
 		clearAllMusic();
 		clearAllSound();
-		clearAllTexture();
-		clearAllAnimation();
 		clearAllAnimationLists();
+		clearAllAnimation();
+		clearAllTexture();
 		clearAllTiledMap();
+		clearAllTextureAtlas();
+		clearAllNinePatch();
 	}
 
 	/**
@@ -239,5 +261,33 @@ public final class ResourceCache {
 	}
 	public static TiledMap getTiledMap(ETiledMap tiledMap, boolean cached) {
 		return (TiledMap) getResource(tiledMap, cached);
+	}
+	
+	/**
+	 * Fetches the requested texture atlas from the cache, or loads it.
+	 * 
+	 * @param textureAtlas
+	 *            Texture atlas to load.
+	 * @return Loaded texture atlas.
+	 */
+	public static TextureAtlas getTextureAtlas(ETextureAtlas textureAtlas) {
+		return (TextureAtlas) getResource(textureAtlas, true);
+	}
+	public static TextureAtlas getTextureAtlas(ETextureAtlas textureAtlas, boolean cached) {
+		return (TextureAtlas) getResource(textureAtlas, cached);
+	}
+	
+	/**
+	 * Fetches the requested nine patch from the cache, or loads it.
+	 * 
+	 * @param ninePatch
+	 *            Nine patch to load.
+	 * @return Loaded nine patch.
+	 */
+	public static NinePatch getNinePatch(ENinePatch ninePatch) {
+		return (NinePatch) getResource(ninePatch, true);
+	}
+	public static NinePatch getNinePatch(ENinePatch ninePatch, boolean cached) {
+		return (NinePatch) getResource(ninePatch, cached);
 	}
 }
