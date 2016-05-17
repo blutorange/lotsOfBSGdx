@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.homelab.madgaksha.logging.Logger;
 
 public enum ESound implements IResource {
-	TEST_SOUND("sound/test.wav");
+	TEXTBOX_NEXT("sound/ed6se002.wav");
 
 	private final static Logger LOG = Logger.getLogger(ESound.class);
 	private final static EnumMap<ESound, Sound> soundCache = new EnumMap<ESound, Sound>(ESound.class);

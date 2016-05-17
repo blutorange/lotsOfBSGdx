@@ -21,6 +21,7 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
  *
  */
 public class SoundPlayer extends AAudioPlayer {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(SoundPlayer.class);
 
 	private final Map<Long,Sound> soundMap = new HashMap<Long,Sound>();
@@ -29,6 +30,9 @@ public class SoundPlayer extends AAudioPlayer {
 		super();
 	}
 	
+	public long play(ESound sound) {
+		return play(sound, PlayMode.NORMAL, 1.0f, 1.0f, 0.0f);
+	}
 	public long play(ESound sound, PlayMode mode) {
 		return play(sound, mode, 1.0f, 1.0f, 0.0f);
 	}

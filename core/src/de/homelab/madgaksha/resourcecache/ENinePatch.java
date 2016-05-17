@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.resourcecache;
 
+import java.awt.Dimension;
 import java.util.EnumMap;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -16,17 +17,33 @@ import de.homelab.madgaksha.logging.Logger;
  *
  */
 public enum ENinePatch implements IResource {
-	TEXTBOX_BLUE(ETextureAtlas.NINE_PATCHES,"textbox-blue");
+	TEXTBOX_BLUE(ETextureAtlas.NINE_PATCHES,"textbox-blue",new Dimension(-5,40),new Dimension(10,-17), new Dimension(128,128));
 
 	private final static Logger LOG = Logger.getLogger(ENinePatch.class);
 	private final static EnumMap<ENinePatch, NinePatch> ninePatchCache = new EnumMap<ENinePatch, NinePatch>(ENinePatch.class);
 
-	private String patchName;
-	private ETextureAtlas textureAtlas;
+	private final String patchName;
+	private final ETextureAtlas textureAtlas;
+	private final Dimension offsetFace;
+	private final Dimension offsetSpeaker;
+	private final Dimension sizeFace;
 
-	private ENinePatch(ETextureAtlas ta, String p) {
+	/**
+	 * 
+	 * @param ta Texture atlas containing the nine patch.
+	 * @param p Name of the nine patch.
+	 * @param os Speaker name offset to the left point where the text starts, and to the middle of the text line. From the top left of content area.
+	 * @param of Face image offset to the image's bottom left point. In Pixels from the bottom right corner of the content area.
+	 * @param sf Size of the face area (width x height) in pixels. 
+	 * 
+	 * os, of, and sf can be any value when nine patch is not used as a text box.
+	 */
+	private ENinePatch(ETextureAtlas ta, String p, Dimension os, Dimension of, Dimension sf) {
 		patchName = p;
 		textureAtlas = ta;
+		offsetSpeaker = os;
+		offsetFace = of;
+		sizeFace = sf;
 	}
 
 	public static void clearAll() {
@@ -35,6 +52,26 @@ public enum ENinePatch implements IResource {
 			np.clear();
 		}
 	}
+	
+	public int getOffsetSpeakerX() {
+		return offsetSpeaker.width;
+	}
+	public int getOffsetSpeakerY() {
+		return offsetSpeaker.height;
+	}
+	public int getOffsetFaceX() {
+		return offsetFace.width;
+	}
+	public int getOffsetFaceY() {
+		return offsetFace.height;
+	}
+	public int getFaceWidth() {
+		return sizeFace.width;
+	}
+	public int getFaceHeight() {
+		return sizeFace.height;
+	}
+
 	
 	@Override
 	public NinePatch getObject() {
@@ -68,4 +105,5 @@ public enum ENinePatch implements IResource {
 	public EnumMap<ENinePatch, NinePatch> getMap() {
 		return ninePatchCache;
 	}
+
 }

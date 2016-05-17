@@ -26,10 +26,22 @@ import de.homelab.madgaksha.player.APlayer;
 public final class GlobalBag {
 	private GlobalBag(){}
 		
+	public static int bitmapFontRasterSize;
+	
+	public static int currentMonitorWidth;
+	public static int currentMonitorHeight;
+	/** Maximum supported width in pixels of all monitors. */
+	public static int maxMonitorWidth;
+	/** Maximum supported height in pixels of all monitors. */
+	public static int maxMonitorHeight;
+	
 	public static float worldVisibleMinX;
 	public static float worldVisibleMaxX;
 	public static float worldVisibleMinY;
 	public static float worldVisibleMaxY;
+	
+	/** The instance of the running game. */
+	public static Game game;
 	
 	/** For playing music. Only one instance should be created. */
 	public static MusicPlayer musicPlayer = null;
@@ -44,6 +56,7 @@ public final class GlobalBag {
 	public static GameViewport viewportGame;
 	public static InfoViewport viewportInfo;
 	public static Viewport viewportScreen;
+	public static Viewport viewportPixel;
 	
 	/** For drawing the game window. */
 	public static SpriteBatch batchGame;
@@ -51,6 +64,8 @@ public final class GlobalBag {
 	public static SpriteBatch batchInfo;
 	/** For drawing the background directly to the screen. */
 	public static SpriteBatch batchScreen;
+	/** For drawing the background directly to the screen. */
+	public static SpriteBatch batchPixel;
 	
 	/** The player entity the player plays */
 	public static Entity playerEntity;

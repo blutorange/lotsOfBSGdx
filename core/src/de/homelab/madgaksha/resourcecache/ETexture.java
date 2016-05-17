@@ -23,7 +23,11 @@ public enum ETexture implements IResource {
 	ESTELLE_STANDING("sprite/estelle00100.png"),
 	ESTELLE_SWINGING("sprite/estelle00107.png"),
 
-	JOSHUA_RUNNING("sprite/joshua00011.png");
+	JOSHUA_RUNNING("sprite/joshua00011.png"),
+	
+	FACE_ESTELLE_01("texture/face/estelle01.png")
+	
+	;
 
 	private final static Logger LOG = Logger.getLogger(ETexture.class);
 	private final static EnumMap<ETexture, Texture> textureCache = new EnumMap<ETexture, Texture>(ETexture.class);

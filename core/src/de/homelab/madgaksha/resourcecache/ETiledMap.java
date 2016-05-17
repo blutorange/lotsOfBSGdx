@@ -59,7 +59,7 @@ public enum ETiledMap implements IResource {
 
 	@Override
 	public int getLimit() {
-		return ResourceCache.LIMIT_TEXTURE;
+		return ResourceCache.LIMIT_TILED_MAP;
 	}
 
 	@Override

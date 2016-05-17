@@ -2,10 +2,8 @@ package de.homelab.madgaksha.level;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.utils.Array;
 
 import de.homelab.madgaksha.logging.Logger;
 
@@ -18,6 +16,7 @@ import de.homelab.madgaksha.logging.Logger;
  */
 public class MapProperties {
 
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(MapProperties.class);
 
 	/**

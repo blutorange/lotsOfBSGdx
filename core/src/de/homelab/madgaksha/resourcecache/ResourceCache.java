@@ -1,9 +1,12 @@
 package de.homelab.madgaksha.resourcecache;
 
+import java.util.Set;
+
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,6 +22,8 @@ public final class ResourceCache {
 	public final static int LIMIT_ANIMATION = 50;
 	public final static int LIMIT_ANIMATION_LIST = 50;
 	public final static int LIMIT_SOUND = 100;
+	public final static int LIMIT_TILED_MAP = 4;
+	public final static int LIMIT_BITMAP_FONT = 20;
 	public final static int LIMIT_NINE_PATCH = 20;
 	public final static int LIMIT_TEXTURE_ATLAS = 20;
 	
@@ -166,6 +171,23 @@ public final class ResourceCache {
 	}
 	
 	/**
+	 * Clears all bitmap font objects from the cache.
+	 */
+	public static void clearAllBitmapFont() {
+		EBitmapFont.clearAll();
+	}
+	/**
+	 * Reloads all bitmap fonts. Happens when the game window
+	 * resizes.
+	 */
+	public static void reloadAllBitmapFont() {
+		Set<EBitmapFont> set = EBitmapFont.getMapKeys();
+		clearAllBitmapFont();
+		for (EBitmapFont bf : set) bf.getObject();
+	}
+
+	
+	/**
 	 * Clears all resource objects.
 	 */
 	public static void clearAll() {
@@ -177,6 +199,7 @@ public final class ResourceCache {
 		clearAllTiledMap();
 		clearAllTextureAtlas();
 		clearAllNinePatch();
+		clearAllBitmapFont();
 	}
 
 	/**
@@ -290,4 +313,19 @@ public final class ResourceCache {
 	public static NinePatch getNinePatch(ENinePatch ninePatch, boolean cached) {
 		return (NinePatch) getResource(ninePatch, cached);
 	}
+	
+	/**
+	 * Fetches the requested bitmap font from the cache, or loads it.
+	 * 
+	 * @param bitmapFont
+	 *            Bitmap font to load.
+	 * @return Loaded bitmap font.
+	 */
+	public static BitmapFont getBitmapFont(EBitmapFont bitmapFont) {
+		return (BitmapFont) getResource(bitmapFont, true);
+	}
+	public static BitmapFont getBitmapFont(ENinePatch bitmapFont, boolean cached) {
+		return (BitmapFont) getResource(bitmapFont, cached);
+	}
+
 }

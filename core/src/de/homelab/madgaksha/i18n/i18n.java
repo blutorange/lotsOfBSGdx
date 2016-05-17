@@ -9,6 +9,7 @@ import java.util.Set;
 public class i18n {
 	private static Map<String, String> main;
 	private static Map<String, String> game;
+	private static Map<String, String> font;
 
 	private static boolean initiated = false;
 
@@ -28,8 +29,10 @@ public class i18n {
 	public static void init(Locale locale) {
 		ResourceBundle rbMain = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.main", locale);
 		ResourceBundle rbGame = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.game", locale);
+		ResourceBundle rbFont = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.font", locale);
 		main = rb2Map(rbMain);
 		game = rb2Map(rbGame);
+		font = rb2Map(rbFont);
 		initiated = true;
 	}
 
@@ -63,5 +66,9 @@ public class i18n {
 
 	public static String game(String key) {
 		return getValue(game, key);
+	}
+	
+	public static String font(String key) {
+		return getValue(font, key);
 	}
 }

@@ -20,6 +20,7 @@ import de.homelab.madgaksha.logging.Logger;
  *
  */
 public class GameViewport extends Viewport {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(GameViewport.class);
 	
 	private PerspectiveCamera perspectiveCamera;

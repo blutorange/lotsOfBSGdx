@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MultiProperties xmlns="hu.skzs.multiproperties">
+    <Version>1.2</Version>
+    <Name>i18n-main</Name>
+    <Description>Localized fonts. They must be placed inside the assets/font folder.</Description>
+    <Handler>Java Properties Handler</Handler>
+    <Columns>
+        <Key>
+            <Width>187</Width>
+        </Key>
+        <Column>
+            <Name>de</Name>
+            <Description>German</Description>
+            <Width>112</Width>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/font_de.properties|true|true|false|false</HandlerConfiguration>
+        </Column>
+        <Column>
+            <Name>en</Name>
+            <Description>English</Description>
+            <Width>377</Width>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/font_en.properties|true|true|false|false</HandlerConfiguration>
+        </Column>
+        <Column>
+            <Name>ja</Name>
+            <Description>Japanese</Description>
+            <Width>490</Width>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/font_ja.properties|true|true|false|false</HandlerConfiguration>
+        </Column>
+    </Columns>
+    <Records>
+        <Property>
+            <Name>mainFont</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">LiberationSansRegular.ttf</Value>
+            <Value disabled="false">LiberationSansRegular.ttf</Value>
+            <Value disabled="false">VLGothicRegular.ttf</Value>
+        </Property>
+        <Property>
+            <Name>mainFontChars</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">!\&quot;\#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ £¥¦§¨©ª«¬­®°´·¸¹º»äüößÄÖÜ</Value>
+            <Value disabled="false">!\&quot;\#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ £¥¦§¨©ª«¬­®°´·¸¹º»äüößÄÖÜ</Value>
+            <Value disabled="false">　 あアかカさサたタなナはハまマやヤらラわワんンいイきキしシちチにニひヒみミりリゐヰうウくクすスつツぬヌふフむムゆユるルえエけケせセてテねネへヘめメ※れレゑヱおオこコそソとトのノほホもモよヨろロをヲ。、！？「」がガざザだダばバぱパぎギじジぢヂびビぴピぐグずズづヅぶブぷプげゲぜゼでデべベぺペごゴぞゾどドぼボぽポょゅゃぁぃぅぇぉァィゥェォヴゔ</Value>
+        </Property>
+    </Records>
+</MultiProperties>

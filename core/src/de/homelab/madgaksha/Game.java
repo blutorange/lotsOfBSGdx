@@ -2,13 +2,21 @@ package de.homelab.madgaksha;
 
 import static de.homelab.madgaksha.GlobalBag.batchGame;
 import static de.homelab.madgaksha.GlobalBag.batchInfo;
+import static de.homelab.madgaksha.GlobalBag.batchPixel;
 import static de.homelab.madgaksha.GlobalBag.batchScreen;
+import static de.homelab.madgaksha.GlobalBag.bitmapFontRasterSize;
+import static de.homelab.madgaksha.GlobalBag.currentMonitorHeight;
+import static de.homelab.madgaksha.GlobalBag.currentMonitorWidth;
 import static de.homelab.madgaksha.GlobalBag.level;
+import static de.homelab.madgaksha.GlobalBag.game;
+import static de.homelab.madgaksha.GlobalBag.maxMonitorHeight;
+import static de.homelab.madgaksha.GlobalBag.maxMonitorWidth;
 import static de.homelab.madgaksha.GlobalBag.musicPlayer;
 import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.soundPlayer;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import static de.homelab.madgaksha.GlobalBag.viewportInfo;
+import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 import static de.homelab.madgaksha.GlobalBag.viewportScreen;
 
 import java.util.ArrayList;
@@ -17,6 +25,9 @@ import java.util.Locale;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics.DisplayMode;
+import com.badlogic.gdx.Graphics.Monitor;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,6 +35,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.homelab.madgaksha.audiosystem.AwesomeAudio;
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
@@ -31,9 +43,15 @@ import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.layer.ALayer;
 import de.homelab.madgaksha.layer.EntityLayer;
+import de.homelab.madgaksha.layer.TextboxLayer;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.EBitmapFont;
+import de.homelab.madgaksha.resourcecache.ENinePatch;
+import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
+import de.homelab.madgaksha.textboxsystem.FaceTextbox;
+import de.homelab.madgaksha.textboxsystem.SpeakerTextbox;
 
 public class Game implements ApplicationListener {
 
@@ -88,6 +106,8 @@ public class Game implements ApplicationListener {
 			else
 				i18n.init(Locale.getDefault());
 		}
+		
+		game = this;
 	}
 
 	@Override
@@ -97,6 +117,12 @@ public class Game implements ApplicationListener {
 		bombEffect.load(Gdx.files.internal("particle/sparkleEffect.p"), Gdx.files.internal("particle"));
 		bombEffect.setDuration(500000);
 		bombEffect.start();
+		
+		// Check monitor resolution and get highest possible resolution.
+		readMonitorInfo();
+		
+		// Set size at which freetype fonts will be rasterized.
+		bitmapFontRasterSize = Gdx.graphics.getDisplayMode().width/80;
 		
 		// Setup audio system.
 		AwesomeAudio.initialize();
@@ -112,6 +138,7 @@ public class Game implements ApplicationListener {
 				return;
 			}
 		}
+		
 		for (IResource r : player.getRequiredResources()) {
 			LOG.debug("fetch " + r);
 			if (!ResourceCache.loadToRam(r)) {
@@ -135,6 +162,7 @@ public class Game implements ApplicationListener {
 		batchScreen = new SpriteBatch();
 		batchGame = new SpriteBatch();
 		batchInfo = new SpriteBatch();
+		batchPixel = new SpriteBatch();
 	
 		batchInfo.disableBlending();
 
@@ -148,12 +176,14 @@ public class Game implements ApplicationListener {
 		viewportGame = level.getGameViewport(params.requestedWidth, params.requestedHeight);
 		viewportInfo = level.getInfoViewport(params.requestedWidth, params.requestedHeight);
 		viewportScreen = level.getScreenViewport(params.requestedWidth, params.requestedHeight);
-				
+		viewportPixel = new ScreenViewport();		
+		
 		// Initialize the layer stack.
 		// Start off with a layer stack containing only the entity engine.
 		// This initializes the entity engine as well.
 		entityLayer = new EntityLayer();
 		layerStack.add(entityLayer);
+		entityLayer.addedToStack();
 		
 		//TODO remove me for release
 		createDebugFont();
@@ -204,6 +234,12 @@ public class Game implements ApplicationListener {
 		viewportGame.update(width, height);
 		viewportInfo.update(width, height);
 		viewportScreen.update(width, height);
+		viewportPixel.update(width, height);
+		currentMonitorWidth = width;
+		currentMonitorHeight = height;
+		bitmapFontRasterSize = viewportGame.getScreenWidth()/40-1;
+		LOG.debug(viewportGame.getScreenWidth());
+		ResourceCache.reloadAllBitmapFont();
 	}
 
 	@Override
@@ -245,6 +281,7 @@ public class Game implements ApplicationListener {
 		if (batchInfo != null) batchInfo.dispose();
 		if (batchGame != null) batchGame.dispose();
 		if (batchScreen != null) batchScreen.dispose();
+		if (batchPixel != null) batchPixel.dispose();
 
 		// Remove all entities and systems to trigger cleanup.
 		for (ALayer layer : layerStack) {
@@ -259,19 +296,17 @@ public class Game implements ApplicationListener {
 		bombEffect.dispose();
 	}
 
-	public void renderScreen() {
+	private void renderScreen() {
 		viewportScreen.apply(false);
-
 		batchScreen.setProjectionMatrix(viewportScreen.getCamera().combined);
 		batchScreen.begin();
-
 		if (backgroundImage != null)
 			batchScreen.draw(backgroundImage, 0.0f, 0.0f);
 
 		batchScreen.end();
 	}
 
-	public void renderGame() {
+	private void renderGame() {
 		// Clear game window so that the background won't show.
 		Gdx.gl.glScissor(viewportGame.getScreenX(), viewportGame.getScreenY(), viewportGame.getScreenWidth(),
 				viewportGame.getScreenHeight());
@@ -286,17 +321,45 @@ public class Game implements ApplicationListener {
 		// Start with the topmost item on the layer stack and proceed
 		// with the layers down on the stack only if the layers
 		// above did not stop propagation.
-		int mode = running ? ALayer.PROCESS_FULLY : ALayer.DRAW_ONLY;
-		int i = layerStack.size();
-		while (mode == ALayer.PROCESS_FULLY && --i >= 0) {
-			mode -= layerStack.get(i).processFully(deltaTime);
+		int j = 0;
+		if (running) {
+			for (int i = layerStack.size() - 1; i != -1; --i) {
+				final ALayer layer = layerStack.get(i);
+				// Save first layer that block drawing.
+				if (layer.isBlockDraw() && j != 0) j = i;
+				// Update layer.
+				layer.update(deltaTime);
+				// Check if layer block updating, if so, break loop.
+				if (layer.isBlockUpdate()) {
+					// But first search for the first layer that blocks drawing.
+					while (j==0 && ((--i) != -1)) if (layerStack.get(i).isBlockDraw()) j = i;
+					break;
+				}
+			}
 		}
-		while (mode == ALayer.DRAW_ONLY && --i >= 0) {
-			mode -= layerStack.get(i).drawOnly(deltaTime);
+		else {
+			// Game is paused.
+			// Still need to search for the first layer that blocks drawing.
+			int i = layerStack.size();
+			while (j==0 && ((--i) != -1)) if (layerStack.get(i).isBlockDraw()) j = i;
 		}
+	
+		// Render all layer that need to be rendered.
+		final int size = layerStack.size();
+		for (; j != size; ++j) layerStack.get(j).draw(deltaTime);
 		
 		//TODO remove me
 		//testing
+		if (Gdx.input.isKeyPressed(Keys.C) && layerStack.size() < 2) {
+			SpeakerTextbox[] tb = new SpeakerTextbox[2];
+			tb[0] = new FaceTextbox("I was just taking a casual stroll, relaxing from work.\nWhere is this? And why am I floating in air?\nCome to think of it, the tomatoes I ate looked kind of\nbad... But this still can't be real!",
+					EBitmapFont.MAIN_FONT,
+					ENinePatch.TEXTBOX_BLUE, "Phantom Joshua", ETexture.FACE_ESTELLE_01);
+			tb[1] = new FaceTextbox("I must have got out of band the wrong... let's do this!",
+					EBitmapFont.MAIN_FONT,
+					ENinePatch.TEXTBOX_BLUE, "Phantom Estelle", ETexture.FACE_ESTELLE_01);
+			this.pushLayer(new TextboxLayer(tb)); 
+		}
 		batchGame.begin();
 		bombEffect.setPosition(1000.0f, 1000.0f);
 		bombEffect.draw(batchGame,0.25f*deltaTime);
@@ -310,7 +373,7 @@ public class Game implements ApplicationListener {
 		//if (bombEffect.isComplete()) bombEffect.reset();
 	}
 
-	public void renderInfo() {
+	private void renderInfo() {
 		viewportInfo.apply(false);
 
 		batchInfo.setProjectionMatrix(viewportInfo.getCamera().combined);
@@ -326,7 +389,7 @@ public class Game implements ApplicationListener {
 	
 	//TODO remove me for release
 	private Vector2 screenPos = new Vector2();
-	public void renderDebug() {
+	private void renderDebug() {
 		viewportScreen.apply(false);
 		batchScreen.begin();
 		final Vector2 pos = viewportScreen.unproject(screenPos.set(0.0f,0.0f));
@@ -335,11 +398,24 @@ public class Game implements ApplicationListener {
 	}
 	
 	//TODO remove me for release
-	public void createDebugFont() {
+	private void createDebugFont() {
 		debugFont = new BitmapFont(Gdx.files.internal("font/debugFont.fnt"));
 		debugFont.setColor(Color.RED);
 	}
 
+	private void readMonitorInfo() {
+		maxMonitorWidth = 0;
+		maxMonitorHeight = 0;
+		for (Monitor m : Gdx.graphics.getMonitors()) {
+			for (DisplayMode dm : Gdx.graphics.getDisplayModes(m)) {
+				if (dm.width > maxMonitorWidth) maxMonitorWidth = dm.width;
+				if (dm.height > maxMonitorHeight) maxMonitorHeight = dm.height;
+			}
+		}
+		currentMonitorWidth = Gdx.graphics.getDisplayMode().width;
+		currentMonitorHeight = Gdx.graphics.getDisplayMode().height;
+	}
+	
 	
 	/** Requests the layer to be remove from the layer stack.
 	 * It is removed at the end of the update/render loop.
@@ -355,4 +431,6 @@ public class Game implements ApplicationListener {
 	public void pushLayer(ALayer layer) {
 		layerStackPushQueue.add(layer);
 	}
+	
+	
 }
