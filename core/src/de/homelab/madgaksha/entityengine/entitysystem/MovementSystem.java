@@ -11,7 +11,7 @@ import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
-import de.homelab.madgaksha.level.MapProperties;
+import de.homelab.madgaksha.level.MapData;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
@@ -24,7 +24,7 @@ public class MovementSystem extends IteratingSystem {
 	private final static Logger LOG = Logger.getLogger(MovementSystem.class);
 	private static float newx, newy, tmp;
 
-	private final MapProperties mapProperties;
+	private final MapData mapProperties;
 	private final float tileWidth;
 	private final float tileHeight;
 	private final float tileWidthInverse;

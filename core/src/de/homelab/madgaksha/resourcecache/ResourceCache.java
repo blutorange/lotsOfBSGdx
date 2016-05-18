@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
@@ -26,6 +27,7 @@ public final class ResourceCache {
 	public final static int LIMIT_BITMAP_FONT = 20;
 	public final static int LIMIT_NINE_PATCH = 20;
 	public final static int LIMIT_TEXTURE_ATLAS = 20;
+	public final static int  LIMIT_PARTICLE_EFFECT = 20;
 	
 	private ResourceCache() {
 	}
@@ -185,21 +187,29 @@ public final class ResourceCache {
 		clearAllBitmapFont();
 		for (EBitmapFont bf : set) bf.getObject();
 	}
+	
+	/**
+	 * Clears all particle effect objects from the cache.
+	 */
+	public static void clearAllParticleEffect() {
+		EParticleEffect.clearAll();
+	}
 
 	
 	/**
 	 * Clears all resource objects.
 	 */
-	public static void clearAll() {
-		clearAllMusic();
-		clearAllSound();
-		clearAllAnimationLists();
+	public static void clearAll() {		
 		clearAllAnimation();
-		clearAllTexture();
-		clearAllTiledMap();
-		clearAllTextureAtlas();
-		clearAllNinePatch();
+		clearAllAnimationLists();
 		clearAllBitmapFont();
+		clearAllMusic();
+		clearAllNinePatch();
+		clearAllParticleEffect();
+		clearAllSound();
+		clearAllTexture();
+		clearAllTextureAtlas();
+		clearAllTiledMap();
 	}
 
 	/**
@@ -326,6 +336,20 @@ public final class ResourceCache {
 	}
 	public static BitmapFont getBitmapFont(ENinePatch bitmapFont, boolean cached) {
 		return (BitmapFont) getResource(bitmapFont, cached);
+	}
+	
+	/**
+	 * Fetches the requested particle effect font from the cache, or loads it.
+	 * 
+	 * @param particleEffect
+	 *            particle effect to load.
+	 * @return Loaded particle effect.
+	 */
+	public static ParticleEffect getParticleEffect(EParticleEffect particleEffect) {
+		return (ParticleEffect) getResource(particleEffect, true);
+	}
+	public static ParticleEffect getParticleEffect(EParticleEffect particleEffect, boolean cached) {
+		return (ParticleEffect) getResource(particleEffect, cached);
 	}
 
 }

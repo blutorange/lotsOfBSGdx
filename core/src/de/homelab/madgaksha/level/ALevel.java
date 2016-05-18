@@ -58,7 +58,7 @@ public abstract class ALevel {
 
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMap loadedTiledMap;
-	private MapProperties mapProperties;
+	private MapData mapProperties;
 	private final ETexture backgroundImage;
 	private final IResource[] requiredResources;
 	private final EMusic bgm;
@@ -85,7 +85,7 @@ public abstract class ALevel {
 		loadedTiledMap = ResourceCache.getTiledMap(tiledMap);
 		if (loadedTiledMap == null) return false;
 		try {
-			mapProperties = new MapProperties(loadedTiledMap);
+			mapProperties = new MapData(loadedTiledMap, getClass());
 		}
 		catch (Exception e) {
 			LOG.error("failed to load map", e);
@@ -155,7 +155,7 @@ public abstract class ALevel {
 	// =============================
 
 
-	public MapProperties getMapProperties() {
+	public MapData getMapProperties() {
 		return mapProperties;
 	}
 	

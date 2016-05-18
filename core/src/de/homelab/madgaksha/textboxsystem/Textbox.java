@@ -100,7 +100,7 @@ public class Textbox {
 		boxx = -0.5f*viewportPixel.getScreenWidth();
 		boxy = -0.5f*viewportPixel.getScreenHeight();
 		boxw = viewportGame.getScreenWidth();
-		boxh = textHeight + ninePatch.getPadBottom() + ninePatch.getPadTop();
+		boxh = textHeight + ninePatch.getPadBottom() + ninePatch.getPadTop();	
 		
 		// Distance of between one line and the next.
 		lineHeight = bitmapFont.getLineHeight();

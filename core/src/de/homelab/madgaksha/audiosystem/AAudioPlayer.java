@@ -210,7 +210,7 @@ public abstract class AAudioPlayer {
 
 	protected void dispose() {
 		wasDisposed = true;
-		LOG.debug("disposing audio player");
+		LOG.debug("disposing audio player " + this);
 		stopAllTasks();
 	}
 }

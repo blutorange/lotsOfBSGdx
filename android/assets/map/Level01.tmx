@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="610" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="610" tilewidth="32" tileheight="32" nextobjectid="10">
  <tileset firstgid="1" name="Wood &amp; Forest - 0001" tilewidth="32" tileheight="32" tilecount="1752" columns="8">
   <image source="Level01-1.png" width="256" height="7028"/>
   <tile id="0">
@@ -8778,4 +8778,18 @@
    eJzt3LtO22Ach2HHUrgHCnSC7h1TJm4HboYRCSqQylAKDJwGTqKcSsduVUdG7qJ/E0Vy0JeoVSRs7OeRfouz2G/sJAMiywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA6mmlU/UZUCfuB6BqPoeAf7XZzbLp2LvSZrr917a61Z5b1Wbj+udKe9/yHgPz0WGhtA+68J/+lH6n7Lb0/vmUuO7H6PKxpT3GKbr0dBlS3CePLf+9n3pWerokn5Xi2FPLuxQWX7QZtHp5HAAAAAAA3qJepz+GLXX6Y5guabqk6QIAAAAAAAAAAACv52de9RnU0y9dkn7rkqRL2pUuSQ+6AFADvqcBAAAAAAAAAADqZz2fbBsN/duwL/lk225ol8Jy4n95p46lXttraJejfPQ+l655VLumdjnPR+9wTLPBjhvaZZyzMc0Gu2hhFwAAAADaZWcqy77FdmN7sf2pqs+oHg6iw2HsKHYcO9Hl2Wl0OIudxy5il7o8u44ON7Hb2F3sXpfWWfWeJ63pkrSlS9JXXWBi3z1HQ37oAQDAK/gL7PlaOw==
   </data>
  </layer>
+ <objectgroup name="MyObjects">
+  <object id="3" name="MyFirstEnemy" type="Enemy" x="1126" y="17464" width="67" height="66">
+   <properties>
+    <property name="spawn" value="startup"/>
+    <property name="species" value="Slime"/>
+   </properties>
+  </object>
+  <object id="8" name="InitialDialog" type="Callback" x="1313" y="18917" width="276" height="83">
+   <properties>
+    <property name="name" value="initialDialog"/>
+    <property name="trigger" value="startup"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

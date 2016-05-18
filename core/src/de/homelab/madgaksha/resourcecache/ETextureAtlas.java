@@ -17,7 +17,8 @@ import de.homelab.madgaksha.logging.Logger;
  *
  */
 public enum ETextureAtlas implements IResource {
-	NINE_PATCHES("9patch/packed/9patchPacked.atlas");
+	NINE_PATCHES("9patch/packed/9patchPacked.atlas"),
+	PARTICLE_EFFECTS("particle/packed/particleEffectPacked.atlas");
 
 	private final static Logger LOG = Logger.getLogger(ETextureAtlas.class);
 	private final static EnumMap<ETextureAtlas, TextureAtlas> textureAtlasCache = new EnumMap<ETextureAtlas, TextureAtlas>(ETextureAtlas.class);
@@ -41,7 +42,7 @@ public enum ETextureAtlas implements IResource {
 		try {
 			return new TextureAtlas(fileHandle);
 		} catch (GdxRuntimeException e) {
-			LOG.error("could not locate or open resource: " + String.valueOf(this));
+			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 			return null;
 		}
 	}

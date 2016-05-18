@@ -23,7 +23,7 @@ public class TextboxLayer extends ALayer {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(TextboxLayer.class);
-	private final static float ANIMATION_SPEED = 350.0f;
+	private final static float ANIMATION_SPEED = 550.0f;
 	private final static float ANIMATION_SPEED_180 = 180.0f/ANIMATION_SPEED;
 	private final static float ANIMATION_SPEED_540 = 540.0f/ANIMATION_SPEED;
 	private final static float ANIMATION_SPEED_720 = 720.0f/ANIMATION_SPEED;

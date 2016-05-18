@@ -62,7 +62,7 @@ public enum EBitmapFont implements IResource {
 			BitmapFont bf = g.generateFont(p);
 			return bf;
 		} catch (Exception e) {
-			LOG.error("could not locate or open resource: " + String.valueOf(this));
+			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 			return null;
 		}
 		finally {

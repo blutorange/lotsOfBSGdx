@@ -99,8 +99,6 @@ public class EntityLayer extends ALayer {
 	}
 	
 	public void createEngine() {
-		gameEntityEngine = new Engine();
-
 		gameEntityEngine.addSystem(new BirdsViewSpriteSystem());
 		gameEntityEngine.addSystem(new SpriteAnimationSystem());
 		gameEntityEngine.addSystem(new SpriteRenderSystem());

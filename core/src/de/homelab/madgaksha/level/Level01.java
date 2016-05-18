@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.level;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.resourcecache.EMusic;
@@ -53,5 +54,12 @@ public class Level01 extends ALevel {
 	public String requestedI18nNameKey() {
 		return "level.01.name";
 	}
-
+	
+	// =========================
+	//      Callback methods
+	// =========================
+	
+	public void initialDialog(Entity me) {
+		
+	}
 }

@@ -7,8 +7,9 @@ import static de.homelab.madgaksha.GlobalBag.batchScreen;
 import static de.homelab.madgaksha.GlobalBag.bitmapFontRasterSize;
 import static de.homelab.madgaksha.GlobalBag.currentMonitorHeight;
 import static de.homelab.madgaksha.GlobalBag.currentMonitorWidth;
-import static de.homelab.madgaksha.GlobalBag.level;
 import static de.homelab.madgaksha.GlobalBag.game;
+import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
+import static de.homelab.madgaksha.GlobalBag.level;
 import static de.homelab.madgaksha.GlobalBag.maxMonitorHeight;
 import static de.homelab.madgaksha.GlobalBag.maxMonitorWidth;
 import static de.homelab.madgaksha.GlobalBag.musicPlayer;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
@@ -52,7 +54,6 @@ import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.textboxsystem.FaceTextbox;
 import de.homelab.madgaksha.textboxsystem.SpeakerTextbox;
-
 public class Game implements ApplicationListener {
 
 	private final static Logger LOG = Logger.getLogger(Game.class);
@@ -81,6 +82,8 @@ public class Game implements ApplicationListener {
 
 	/** Whether the game is active. */
 	private boolean running = false;
+	/** Whether the application was requested to exit. */
+	private boolean exitRequested = false;
 	
 	// TODO remove me
 	// only for testing
@@ -90,7 +93,7 @@ public class Game implements ApplicationListener {
 	// testing end
 	
 	private final GameParameters params;
-	private Texture backgroundImage;		
+	private Texture backgroundImage = null;		
 	
 	/**@param params Screen size, fps etc. that were requested. */
 	public Game(GameParameters params) {
@@ -117,18 +120,19 @@ public class Game implements ApplicationListener {
 		bombEffect.load(Gdx.files.internal("particle/sparkleEffect.p"), Gdx.files.internal("particle"));
 		bombEffect.setDuration(500000);
 		bombEffect.start();
-		
-		// Check monitor resolution and get highest possible resolution.
-		readMonitorInfo();
-		
-		// Set size at which freetype fonts will be rasterized.
-		bitmapFontRasterSize = Gdx.graphics.getDisplayMode().width/80;
-		
-		// Setup audio system.
-		AwesomeAudio.initialize();
 
 		// Set logging level.
 		Gdx.app.setLogLevel(params.requestedLogLevel);
+	
+		// Check monitor resolution and get highest possible resolution.
+		readMonitorInfo();
+
+		// Set size at which freetype fonts will be rasterized.
+		bitmapFontRasterSize = Gdx.graphics.getDisplayMode().width/80;
+		if (bitmapFontRasterSize < 5) bitmapFontRasterSize = 5;
+		
+		// Setup audio system.
+		AwesomeAudio.initialize();
 
 		// Start with loading resources.
 		for (IResource r : level.getRequiredResources()) {
@@ -138,7 +142,6 @@ public class Game implements ApplicationListener {
 				return;
 			}
 		}
-		
 		for (IResource r : player.getRequiredResources()) {
 			LOG.debug("fetch " + r);
 			if (!ResourceCache.loadToRam(r)) {
@@ -155,9 +158,6 @@ public class Game implements ApplicationListener {
 		// Create sound player.
 		soundPlayer = new SoundPlayer();
 		
-		// Load background image.
-		backgroundImage = level.getBackgroundImage();
-
 		// Create sprite batches.
 		batchScreen = new SpriteBatch();
 		batchGame = new SpriteBatch();
@@ -166,8 +166,12 @@ public class Game implements ApplicationListener {
 	
 		batchInfo.disableBlending();
 
-		// Initialize map.
+		// Initialize the entity engine.
+		gameEntityEngine = new Engine();
+
+		// Initialize map and load level.
 		if (!level.initialize(batchGame)) {
+			exitRequested = true;
 			Gdx.app.exit();
 			return;
 		};
@@ -176,17 +180,19 @@ public class Game implements ApplicationListener {
 		viewportGame = level.getGameViewport(params.requestedWidth, params.requestedHeight);
 		viewportInfo = level.getInfoViewport(params.requestedWidth, params.requestedHeight);
 		viewportScreen = level.getScreenViewport(params.requestedWidth, params.requestedHeight);
-		viewportPixel = new ScreenViewport();		
+		viewportPixel = new ScreenViewport();
 		
 		// Initialize the layer stack.
 		// Start off with a layer stack containing only the entity engine.
-		// This initializes the entity engine as well.
 		entityLayer = new EntityLayer();
 		layerStack.add(entityLayer);
 		entityLayer.addedToStack();
 		
 		//TODO remove me for release
 		createDebugFont();
+		
+		// Load background image.
+		backgroundImage = level.getBackgroundImage();
 		
 		// Start the game.
 		running = true;
@@ -230,16 +236,18 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void resize(int width, int height) {
-		// Update our viewports.
-		viewportGame.update(width, height);
-		viewportInfo.update(width, height);
-		viewportScreen.update(width, height);
-		viewportPixel.update(width, height);
-		currentMonitorWidth = width;
-		currentMonitorHeight = height;
-		bitmapFontRasterSize = viewportGame.getScreenWidth()/40-1;
-		LOG.debug(viewportGame.getScreenWidth());
-		ResourceCache.reloadAllBitmapFont();
+		if (!exitRequested) {
+			// Update our viewports.
+			viewportGame.update(width, height);
+			viewportInfo.update(width, height);
+			viewportScreen.update(width, height);
+			viewportPixel.update(width, height);
+			currentMonitorWidth = width;
+			currentMonitorHeight = height;
+			bitmapFontRasterSize = viewportGame.getScreenWidth()/40-1;
+			if (bitmapFontRasterSize < 5) bitmapFontRasterSize = 5;
+			ResourceCache.reloadAllBitmapFont();
+		}
 	}
 
 	@Override
@@ -256,6 +264,8 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void dispose() {
+		exitRequested = true;
+		
 		// Dispose music player.
 		try {
 			if (musicPlayer != null) musicPlayer.dispose();
@@ -291,6 +301,10 @@ public class Game implements ApplicationListener {
 		layerStackPopQueue.clear();
 		layerStackPushQueue.clear();
 
+		// Dipose background image.
+		if (backgroundImage != null) backgroundImage.dispose();
+
+		
 		// TODO remove me
 		debugFont.dispose();
 		bombEffect.dispose();
@@ -362,13 +376,13 @@ public class Game implements ApplicationListener {
 		}
 		batchGame.begin();
 		bombEffect.setPosition(1000.0f, 1000.0f);
-		bombEffect.draw(batchGame,0.25f*deltaTime);
+		bombEffect.draw(batchGame);
 		bombEffect.setPosition(1400.0f, 1000.0f);
-		bombEffect.draw(batchGame,0.25f*deltaTime);
+		bombEffect.draw(batchGame);
 		bombEffect.setPosition(1000.0f, 1400.0f);
-		bombEffect.draw(batchGame,0.25f*deltaTime);
+		bombEffect.draw(batchGame);
 		bombEffect.setPosition(1400.0f, 1400.0f);
-		bombEffect.draw(batchGame,0.25f*deltaTime);
+		bombEffect.draw(batchGame, deltaTime);
 		batchGame.end();
 		//if (bombEffect.isComplete()) bombEffect.reset();
 	}

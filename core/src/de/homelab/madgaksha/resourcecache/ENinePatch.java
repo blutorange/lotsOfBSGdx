@@ -17,7 +17,7 @@ import de.homelab.madgaksha.logging.Logger;
  *
  */
 public enum ENinePatch implements IResource {
-	TEXTBOX_BLUE(ETextureAtlas.NINE_PATCHES,"textbox-blue",new Dimension(-5,40),new Dimension(10,-17), new Dimension(128,128));
+	TEXTBOX_BLUE(ETextureAtlas.NINE_PATCHES,"textbox-blue",new Dimension(-5,36),new Dimension(10,-17), new Dimension(128,128));
 
 	private final static Logger LOG = Logger.getLogger(ENinePatch.class);
 	private final static EnumMap<ENinePatch, NinePatch> ninePatchCache = new EnumMap<ENinePatch, NinePatch>(ENinePatch.class);

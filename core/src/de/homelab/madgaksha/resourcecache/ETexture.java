@@ -64,7 +64,7 @@ public enum ETexture implements IResource {
 		try {
 			return new Texture(fileHandle);
 		} catch (GdxRuntimeException e) {
-			LOG.error("could not locate or open resource: " + String.valueOf(this));
+			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 			return null;
 		}
 	}
