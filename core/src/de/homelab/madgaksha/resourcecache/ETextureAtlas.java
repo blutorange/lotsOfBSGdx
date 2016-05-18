@@ -4,14 +4,13 @@ import java.util.EnumMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import de.homelab.madgaksha.logging.Logger;
 
 /**
- * For loading, caching and disposing {@link Texture} resources.
+ * For loading, caching and disposing {@link TextureAtlas} resources.
  * 
  * @author madgaksha
  *
