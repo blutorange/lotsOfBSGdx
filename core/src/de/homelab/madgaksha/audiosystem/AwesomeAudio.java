@@ -58,7 +58,7 @@ public class AwesomeAudio implements Audio {
 	public Music newMusic(FileHandle file) {
 		try {
 			if (file.extension().equalsIgnoreCase("adx")) {
-				return AdxMusic.newAdxMusic(file, true);
+				return AdxMusic.newAdxMusic(file, false);
 			}
 		} catch (Exception e) {
 			LOG.error("could not open adx file", e);

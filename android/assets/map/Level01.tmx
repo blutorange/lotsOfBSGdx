@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="610" tilewidth="32" tileheight="32" nextobjectid="10">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="610" tilewidth="32" tileheight="32" nextobjectid="12">
  <tileset firstgid="1" name="Wood &amp; Forest - 0001" tilewidth="32" tileheight="32" tilecount="1752" columns="8">
   <image source="Level01-1.png" width="256" height="7028"/>
   <tile id="0">
@@ -8529,7 +8529,7 @@
   </tile>
   <tile id="1705">
    <properties>
-    <property name="blocking" type="bool" value="true"/>
+    <property name="blocking" type="bool" value="false"/>
    </properties>
   </tile>
   <tile id="1706">
@@ -8604,27 +8604,27 @@
   </tile>
   <tile id="1720">
    <properties>
-    <property name="blocking" type="bool" value="false"/>
+    <property name="blocking" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1721">
    <properties>
-    <property name="blocking" type="bool" value="false"/>
+    <property name="blocking" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1722">
    <properties>
-    <property name="blocking" type="bool" value="true"/>
+    <property name="blocking" type="bool" value="false"/>
    </properties>
   </tile>
   <tile id="1723">
    <properties>
-    <property name="blocking" type="bool" value="false"/>
+    <property name="blocking" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1724">
    <properties>
-    <property name="blocking" type="bool" value="false"/>
+    <property name="blocking" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1725">
@@ -8654,7 +8654,7 @@
   </tile>
   <tile id="1730">
    <properties>
-    <property name="blocking" type="bool" value="true"/>
+    <property name="blocking" type="bool" value="false"/>
    </properties>
   </tile>
   <tile id="1731">
@@ -8775,7 +8775,7 @@
  </layer>
  <layer name="OverLayer2" width="70" height="610">
   <data encoding="base64" compression="zlib">
-   eJzt3LtO22Ach2HHUrgHCnSC7h1TJm4HboYRCSqQylAKDJwGTqKcSsduVUdG7qJ/E0Vy0JeoVSRs7OeRfouz2G/sJAMiywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA6mmlU/UZUCfuB6BqPoeAf7XZzbLp2LvSZrr917a61Z5b1Wbj+udKe9/yHgPz0WGhtA+68J/+lH6n7Lb0/vmUuO7H6PKxpT3GKbr0dBlS3CePLf+9n3pWerokn5Xi2FPLuxQWX7QZtHp5HAAAAAAA3qJepz+GLXX6Y5guabqk6QIAAAAAAAAAAACv52de9RnU0y9dkn7rkqRL2pUuSQ+6AFADvqcBAAAAAAAAAADqZz2fbBsN/duwL/lk225ol8Jy4n95p46lXttraJejfPQ+l655VLumdjnPR+9wTLPBjhvaZZyzMc0Gu2hhFwAAAADaZWcqy77FdmN7sf2pqs+oHg6iw2HsKHYcO9Hl2Wl0OIudxy5il7o8u44ON7Hb2F3sXpfWWfWeJ63pkrSlS9JXXWBi3z1HQ37oAQDAK/gL7PlaOw==
+   eJzt3MtK41AcwOE0UN9hvK1G9y6rK19HX8aloKKgC68LbwtrxQuOM8vZDbN06Vt4YltI5bQoBROT74M/gWRz8mvSZlGSJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5bTaKHoFlInrASia7yHgo7abSfIjzGRupprdYzvNYtdWtOlw/jO5ma15j76focNcbuZ14ZP+555Tjmp6/SxGzvs5dFmoaY9Rsi4tXQZk18lzzZ/3Y/dKS5fovZLte6l5l8zSuzb9Vu/3AwAAAADAd9RqdIdBy43uMEiXOF3idAEAAAAAAAAAAICv8yctegXl9FeXqH+6ROkSd6tL1G9dACgBv9MAAAAAAAAAAADls5GON5sV/W/Ybjre7FW0S2Yl8i7v2L7YseOKdjlPh89W7pyHtatql+t0+JyNaNafi4p2GaU9oll/OjXsAgAAAEC9HEwkyWGYozDHYU4mil5ROZyGDme9Fhdhe6nLm6vQod1r0QnbG13e3IcOD70Wj2H7S5faWfOZR63rErWjS9S+LjC2O/fRgCc9AAD4Aq8ZRlf4
   </data>
  </layer>
  <objectgroup name="MyObjects">

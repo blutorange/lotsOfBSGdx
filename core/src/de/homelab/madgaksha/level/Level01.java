@@ -26,6 +26,7 @@ public class Level01 extends ALevel {
 				ETexture.JOSHUA_RUNNING,
 				EMusic.ROCK_ON_THE_ROAD,
 				EMusic.SOPHISTICATED_FIGHT,
+				EMusic.SILVER_WILL,
 				ETiledMap.LEVEL_01
 		};
 	}

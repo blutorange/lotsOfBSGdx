@@ -85,6 +85,10 @@ public class Game implements ApplicationListener {
 	/** Whether the application was requested to exit. */
 	private boolean exitRequested = false;
 	
+	/** Screen resolution before the latest resize. */
+	private int lastWidth;
+	private int lastHeight;
+	
 	// TODO remove me
 	// only for testing
 	public static Vector2 testA = new Vector2();
@@ -126,7 +130,9 @@ public class Game implements ApplicationListener {
 	
 		// Check monitor resolution and get highest possible resolution.
 		readMonitorInfo();
-
+		lastWidth = Gdx.graphics.getWidth();
+		lastHeight = Gdx.graphics.getHeight();		
+		
 		// Set size at which freetype fonts will be rasterized.
 		bitmapFontRasterSize = Gdx.graphics.getDisplayMode().width/80;
 		if (bitmapFontRasterSize < 5) bitmapFontRasterSize = 5;
@@ -246,7 +252,9 @@ public class Game implements ApplicationListener {
 			currentMonitorHeight = height;
 			bitmapFontRasterSize = viewportGame.getScreenWidth()/40-1;
 			if (bitmapFontRasterSize < 5) bitmapFontRasterSize = 5;
-			ResourceCache.reloadAllBitmapFont();
+			if (width != lastWidth || height != lastHeight) ResourceCache.reloadAllBitmapFont();
+			lastWidth = Gdx.graphics.getWidth();
+			lastHeight = Gdx.graphics.getHeight();
 		}
 	}
 

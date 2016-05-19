@@ -6,7 +6,6 @@ import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -15,6 +14,7 @@ import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.StreamUtils;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.util.BitInputStream;
@@ -54,13 +54,11 @@ public class AdxMusic implements Music, Runnable {
 	 */
 	private short[] data;
 	/**
-	 * Undecoded data, used for streaming.
-	 */
-	private byte[] stream;
-	/**
 	 * Handle to the adx file.
 	 */
 	private FileHandle fileHandle;
+	private InputStream adxInputStream;
+	private volatile InputStream adxInputStream2 = null;
 	private final boolean bufferedAdx;
 	public AdxHeader adxHeader;
 	
@@ -413,10 +411,9 @@ public class AdxMusic implements Music, Runnable {
 	 * The variables __outputPosition and __inputPosition must be set
 	 * to one byte before the actual byte to write/read.
 	 * 
-	 * @param di Array from which data is read.
+	 * @param input Array from which data is read.
 	 * @param output Array for storing the decoded pcm samples.
 	 * Must be big enough to hold one frame.
-	 * @param offset Position in the <i>output</i> array.
 	 * @return Number of samples from all channels actually read. 0 when the frame could not be read.
 	 */
 	private int decodeAdxStandardFrame(byte[] input, short[] output) {
@@ -503,11 +500,20 @@ public class AdxMusic implements Music, Runnable {
 		return __SamplesRead;
 	}
 	
+	protected synchronized void setStopRequested(boolean b) {
+		stopRequested = b;
+		
+	}
+
+	protected synchronized void setNextAdxInputStream(InputStream stream) {
+		adxInputStream2 = stream;
+	}
+
 	/**
 	 * Resets the decoder state to the given playback position.
-	 * NOTE: This does not reset the previous to samples, this
+	 * NOTE: This does not reset the previously decoded samples, this
 	 * must be handled separately by the method calling this
-	 * method, as it is impossible to do generally without
+	 * method, as it is impossible to do so generally without
 	 * decoding from the start of the file to this position.
 	 * @param frame The frame to seek to.
 	 * @param samplesToSkip The samples to skip from the frame.
@@ -516,17 +522,11 @@ public class AdxMusic implements Music, Runnable {
 	private boolean setDecoderState(int frame, int samplesToSkip) {
 		// Adjust current position in the stream.
 		__SamplePosition = frame*adxHeader.getSamplesInBlock();
-
 		// The number of samples to discard from the beginning
 		// of the frame we rewind to.
 		__SamplesToSkip = samplesToSkip;
-		// Perform the actual seek.
-		try {
-			__inputPosition = adxHeader.getHeaderByteCount() + frame * adxHeader.getFrameByteCount() - 1;
-		}
-		catch (Exception e) {
-			return false;
-		}
+		// Perform the seek.
+		__inputPosition = adxHeader.getHeaderByteCount() + frame * adxHeader.getFrameByteCount() - 1;
 		return true;
 	}
 	private boolean rewindToBeginning() {
@@ -629,18 +629,17 @@ public class AdxMusic implements Music, Runnable {
 		}
 		else {
 			// Open file in random access mode and prepare for streaming.
-			InputStream is = null;
+			adxInputStream = null;
 			try {
-				is = fileHandle.read();
+				adxInputStream = fileHandle.read();
 				// Load file to RAM.
-				stream = new byte[(int)adxHeader.getDataByteCount()+adxHeader.getHeaderByteCount()];
-				is.read(stream, 0, stream.length);
-				__inputPosition = adxHeader.getHeaderByteCount() - 1;
+				adxInputStream.skip(adxHeader.getHeaderByteCount());
 				// Setup decoding.
 				prepareAdxStandardDecoding();
 			}
-			finally {
-				if (is != null) is.close();
+			catch (Exception e) {
+				LOG.error("failed to seek to adx data position start", e);
+				adxInputStream = null;
 			}
 		}
 	}
@@ -653,52 +652,70 @@ public class AdxMusic implements Music, Runnable {
 					
 		try {
 			// Setup decoding, temporary variables etc.
+
+			// For buffered files, we decode the entire audio to 2 byte
+			// pcm samples and load it to RAM.
 			// We decode in another thread so that playback can
 			// start as soon as possible.
-			data = new short[(int)adxHeader.getTotalSamples() * adxHeader.getChannelCount() * SAMPLE_SIZE_IN_BITS / 8];
-			new Thread(new Runnable() {				
-				@Override
-				public void run() {
-					try {
-						prepareDecoding();
-					} catch (Exception e) {
-						dispose(); // stop play back
-						LOG.error("could not decode adx stream",e);
+			if (bufferedAdx) {
+				data = new short[(int)adxHeader.getTotalSamples() * adxHeader.getChannelCount() * SAMPLE_SIZE_IN_BITS / 8];
+				new Thread(new Runnable() {				
+					@Override
+					public void run() {
+						try {
+							prepareDecoding();
+						} catch (Exception e) {
+							dispose(); // stop play back
+							LOG.error("could not decode adx stream",e);
+						}
 					}
+				}).start();
+				// Wait a split second to give the decoding thread
+				// some time to write the first samples.
+				// When we cannot get samples in time, the playback
+				// thread will play back silence - the data array gets
+				// initialized to 0.
+				synchronized (lock) {
+					lock.wait(33);
 				}
-			}).start();
-			
-			// Wait a split second to give the decoding thread
-			// some time to write the first samples.
-			synchronized (lock) {
-				lock.wait(33);
+			}
+			// For streamed adx files, we read and decode audio data on
+			// the fly. First we need to open the input stream and skip
+			// to the initial position where the audio data starts.
+			else {
+				prepareDecoding();
+				//TODO check if adxInputStream is null
 			}
 			
 			// Play the audio.
 			if (bufferedAdx) {
 				int inc;
 				final int channelCount = adxHeader.getChannelCount();
-				final int samples = adxHeader.getSamplesInFrame()*adxHeader.getChannelCount();
+				//final int samples = adxHeader.getSamplesInFrame()*adxHeader.getChannelCount();
 				final int totalSamples = (int)adxHeader.getTotalSamples()*adxHeader.getChannelCount();
 				final int loopStart = adxHeader.isLoopEnabled() ? (int)adxHeader.getLoopBeginSampleIndex() * adxHeader.getChannelCount() : -1;
 				final int loopEnd = adxHeader.isLoopEnabled() ? (int)adxHeader.getLoopEndSampleIndex() * adxHeader.getChannelCount() : totalSamples + 1;
-				final int remSamplesInFrame = ((int)adxHeader.getLoopBeginFrameIndex() + 1) * adxHeader.getSamplesInFrame() - (int)adxHeader.getLoopBeginSampleIndex();
+				//final int remSamplesInFrame = ((int)adxHeader.getLoopBeginFrameIndex() + 1) * adxHeader.getSamplesInFrame() - (int)adxHeader.getLoopBeginSampleIndex();
 				
 				position = 0;
 				while (!stopRequested && position < totalSamples) {
-					// write some pcm data to the device
+					// write some pcm data to the device when active
 					if (playing) {
+						// how many samples we can write, less when the loop point is near
 						inc = WRITE_PER_CYCLE * channelCount; 
 						if (position + inc > loopEnd) inc = loopEnd - position;
 						if (position + inc >= totalSamples) inc = totalSamples - position - channelCount;
+						// write the actual audio samples
 						audioDevice.writeSamples(data, position, inc);
 						position += inc;
+						// check if we are at the end of the loop
 						if (position == loopEnd) {
 							LOG.debug("adx looping");
 							position = loopStart;
 						}
 						playing = setPlayingRequested;
 					}
+					// sleep when we are not required
 					else {
 						LOG.debug("adx thread going to sleep");
 						synchronized(lock) {
@@ -707,22 +724,110 @@ public class AdxMusic implements Music, Runnable {
 						if (setPlayingRequested) playing = true;
 						LOG.debug("adx thread awakened");
 					}
+					// seek to the requested position when asked to
 					if (setPosRequested != -1) {
 						position = setPosRequested;
 						setPosRequested = -1;
 					}
 				}
-			} else {
-				//TODO streaming
-				//Probably not necessary anymore, as we decode the data
-				//asynchronously. As there is not way to do random file
-				//access with a FileHandle (short of copying the file
-				//to an external location), we need to read it to RAM
-				//anyway. The decoded pcm samples take four times as 
-				//much memory as the adx encoded data. 
-				//
-				//Could be done perhaps by closing the file and opening
-				//file, may have to do that later if it becomes an issue.
+			} else if (adxInputStream != null) {
+				//Streaming mode.
+				int inc;
+				final int frameByteCount = adxHeader.getFrameByteCount();
+				final int framesPerCycle = 350;
+				final byte[] input = new byte [frameByteCount];
+				final short[] output = new short[__SamplesInFrame*framesPerCycle];
+				
+				final int channelCount = adxHeader.getChannelCount();
+				final int totalSamples = (int)adxHeader.getTotalSamples()*adxHeader.getChannelCount();
+				final int loopStart = adxHeader.isLoopEnabled() ? (int)adxHeader.getLoopBeginSampleIndex() * adxHeader.getChannelCount() : -1;
+				final int loopEnd = adxHeader.isLoopEnabled() ? (int)adxHeader.getLoopEndSampleIndex() * adxHeader.getChannelCount() : totalSamples + 1;
+
+				while (!stopRequested && position < totalSamples) {
+					// write some pcm data to the device when active
+					if (playing) {
+						// how many samples we can write, less when the loop point is near
+						inc = __SamplesInFrame*framesPerCycle; 
+						// prepare new input stream for looping
+						if (position<= loopStart && position+inc>loopStart) {
+							LOG.debug("preparing new adx file handle for looping");
+							// Prepare new input stream for next loop.
+							new Thread(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										// Open new file handle.
+										final InputStream stream = fileHandle.read();
+										// Skip header.
+										stream.skip(adxHeader.getHeaderByteCount());
+										// Skip to loop begin.
+										stream.skip(adxHeader.getLoopBeginFrameIndex()*adxHeader.getFrameByteCount());
+										setNextAdxInputStream(stream);
+										LOG.debug("new adx file for looping prepared");
+										}
+									catch (IOException e) {
+										LOG.error("failed to open new adx stream, stop looping", e);
+										setStopRequested(true);
+									}
+								}
+							}).start();
+						}
+						if (position + inc > loopEnd) inc = loopEnd - position;
+						if (position + inc >= totalSamples) inc = totalSamples - position - channelCount;
+						// read some samples...
+						// ...decode some samples...
+						__outputPosition = -1;
+						for (int i=0; i!= framesPerCycle; ++i) {
+							__inputPosition = -1;
+							adxInputStream.read(input, 0, frameByteCount);
+							decodeAdxStandardFrame(input, output);
+						}
+						// ...and output them
+						audioDevice.writeSamples(output, 0, inc);
+						position += inc;
+						// check if we are at the end of the loop
+						if (position == loopEnd) {						
+							LOG.debug("adx looping");
+							// Close old file handle as it does not
+							// support random access.
+							StreamUtils.closeQuietly(adxInputStream);
+
+							// The new input stream should be ready by a long time
+							// now. If it is not, grant a short grace period,
+							// and if it still is not available, kill it.
+							if (adxInputStream2 == null) {
+								synchronized(lock) {
+									lock.wait(200L);
+								}
+							}
+							adxInputStream = adxInputStream2;
+							adxInputStream2 = null;
+							if (adxInputStream != null) {
+								position = loopStart;
+							}
+							else {
+								LOG.error("could not seek to the adx loop start position");
+								stopRequested = true;
+							}
+						}
+						playing = setPlayingRequested;
+					}
+					// sleep when we are not required
+					else {
+						LOG.debug("adx thread going to sleep");
+						synchronized(lock) {
+							while (!setPlayingRequested && !stopRequested) lock.wait(IDLE_WAIT);
+						}
+						if (setPlayingRequested) playing = true;
+						LOG.debug("adx thread awakened");
+					}
+					// seek to the requested position when asked to
+					if (setPosRequested != -1) {
+						LOG.error("seek unsupported on non-buffered adx streams");
+						setPosRequested = -1;
+					}
+				}
+				
 			}
 		} catch (Exception e) {
 			LOG.error("error while playing back adx", e);
@@ -734,6 +839,10 @@ public class AdxMusic implements Music, Runnable {
 		LOG.debug("disposing audio device");
 		audioDevice.dispose();
 		audioDevice = null;
+		synchronized (lock) {
+			if (adxInputStream != null) StreamUtils.closeQuietly(adxInputStream);
+			if (adxInputStream2 != null) StreamUtils.closeQuietly(adxInputStream2);			
+		}
 		if (onCompletionListener != null) onCompletionListener.onCompletion(this);
 		
 		LOG.debug("thread for adx finished");
@@ -816,6 +925,10 @@ public class AdxMusic implements Music, Runnable {
 			}
 		} catch (InterruptedException e) {
 			LOG.error("could not join adx thread", e);
+		}
+		synchronized (lock) {
+			if (adxInputStream != null) StreamUtils.closeQuietly(adxInputStream);
+			if (adxInputStream2 != null) StreamUtils.closeQuietly(adxInputStream2);			
 		}
 		// Make GC easier.
 		thread = null;
