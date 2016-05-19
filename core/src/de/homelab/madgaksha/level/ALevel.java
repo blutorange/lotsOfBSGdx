@@ -58,7 +58,7 @@ public abstract class ALevel {
 
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMap loadedTiledMap;
-	private MapData mapProperties;
+	private MapData mapData;
 	private final ETexture backgroundImage;
 	private final IResource[] requiredResources;
 	private final EMusic bgm;
@@ -85,7 +85,7 @@ public abstract class ALevel {
 		loadedTiledMap = ResourceCache.getTiledMap(tiledMap);
 		if (loadedTiledMap == null) return false;
 		try {
-			mapProperties = new MapData(loadedTiledMap, getClass());
+			mapData = new MapData(loadedTiledMap, getClass());
 		}
 		catch (Exception e) {
 			LOG.error("failed to load map", e);
@@ -155,8 +155,8 @@ public abstract class ALevel {
 	// =============================
 
 
-	public MapData getMapProperties() {
-		return mapProperties;
+	public MapData getMapData() {
+		return mapData;
 	}
 	
 	/** @return Returns the renderer to render the map. */
@@ -166,12 +166,12 @@ public abstract class ALevel {
 	
 	/** @return The width of the map in world coordinates. */
 	public float getMapWidthW() {
-		return mapProperties.getWidthPixel();
+		return mapData.getWidthPixel();
 	}
 
 	/** @return The height of the map in world coordinates. */
 	public float getMapHeightW() {
-		return mapProperties.getHeightPixel();
+		return mapData.getHeightPixel();
 	}
 	
 	public float getMapXW() {
@@ -212,8 +212,8 @@ public abstract class ALevel {
 	 */
 	public Vector2 getPlayerInitialPosition(){
 		return new Vector2(
-				playerInitialPosition.x*mapProperties.getWidthTiles(),
-				playerInitialPosition.y*mapProperties.getHeightTiles());
+				playerInitialPosition.x*mapData.getWidthTiles(),
+				playerInitialPosition.y*mapData.getHeightTiles());
 	}
 
 

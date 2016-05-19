@@ -33,6 +33,7 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
  *
  */
 public class SpriteForDirectionComponent implements Component, Poolable {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(SpriteForDirectionComponent.class);
 	private final static Animation[] DEFAULT_ANIMATION_LIST = new Animation[0];
 	private final static ESpriteDirectionStrategy DEFAULT_SPRITE_DIRECTION_STRATEGY = ESpriteDirectionStrategy.STATIC;
@@ -57,7 +58,6 @@ public class SpriteForDirectionComponent implements Component, Poolable {
 	}
 	public SpriteForDirectionComponent(EAnimationList eal, ESpriteDirectionStrategy estrat, boolean cached) {
 		animationList = ResourceCache.getAnimationList(eal, cached);
-		LOG.debug(animationList);
 		spriteDirectionStrategy = estrat;
 	}
 	

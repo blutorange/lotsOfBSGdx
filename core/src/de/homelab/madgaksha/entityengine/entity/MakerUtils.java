@@ -11,13 +11,20 @@ import com.badlogic.gdx.math.Shape2D;
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.ReceiveTouchComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerScreenComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
-import de.homelab.madgaksha.entityengine.component.TriggerTouchComponent;
+import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01Component;
+import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup02Component;
+import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup03Component;
+import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup04Component;
+import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup05Component;
+import de.homelab.madgaksha.enums.ECollisionGroup;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.util.GeoUtil;
 
 public final class MakerUtils {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(MakerUtils.class);
 	private MakerUtils(){}
 
@@ -57,19 +64,36 @@ public final class MakerUtils {
 		return pc;
 	}
 
-	public static Component makeTrigger(ETrigger trigger, Shape2D shape) {
-		Rectangle box = GeoUtil.getBoundingBox(shape);
+	public static Component makeTrigger(ITrigger triggerAcceptingObject, IReceive triggerReceivingObject, ETrigger trigger, ECollisionGroup group) {
 		switch (trigger) {
 		case MANUAL:
 			return null;
 		case SCREEN:		
-			return new TriggerScreenComponent();
+			return new TriggerScreenComponent(triggerAcceptingObject);
 		case STARTUP:
-			return new TriggerStartupComponent();
+			return new TriggerStartupComponent(triggerAcceptingObject);
 		case TOUCH:
-			return new TriggerTouchComponent(box);
+			final ReceiveTouchComponent ttc = makeReceiveTouch(group, triggerReceivingObject);
+			return ttc;
 		default:
 			return null;		
+		}
+	}
+	
+	public static ReceiveTouchComponent makeReceiveTouch(ECollisionGroup group, IReceive triggerReceivingObject) {
+		switch (group) {
+		case GROUP_01:
+			return new ReceiveTouchGroup01Component(triggerReceivingObject);
+		case GROUP_02:
+			return new ReceiveTouchGroup02Component(triggerReceivingObject);
+		case GROUP_03:
+			return new ReceiveTouchGroup03Component(triggerReceivingObject);
+		case GROUP_04:
+			return new ReceiveTouchGroup04Component(triggerReceivingObject);
+		case GROUP_05:
+			return new ReceiveTouchGroup05Component(triggerReceivingObject);
+		default:
+			return new ReceiveTouchGroup05Component(triggerReceivingObject);
 		}
 	}
 }

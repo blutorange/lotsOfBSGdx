@@ -64,7 +64,7 @@ import de.homelab.madgaksha.resourcecache.EParticleEffect;
  * An event with a backing callback java function that will be invoked when the event triggers. The callback function
  * must have this signature:
  * 
- * <code>public void myCallback(AMapObject mapObject)</code>
+ * <code>public void myCallback()</code>
  * 
  * <ul>
  * <li>name: Name of the callback function. Must be defined in the implementing {@link ALevel} class.</li>

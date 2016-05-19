@@ -2,6 +2,7 @@ package de.homelab.madgaksha;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -69,7 +70,7 @@ public final class GlobalBag {
 	
 	/** The player entity the player plays */
 	public static Entity playerEntity;
-	
+		
 	/** Entity engine ASHLEY for the main game.*/
 	public static Engine gameEntityEngine;
 }

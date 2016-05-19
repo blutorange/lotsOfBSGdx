@@ -11,6 +11,7 @@ import de.homelab.madgaksha.resourcecache.ETexture;
 
 public class SpriteComponent implements Component, Poolable {
 	
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(SpriteComponent.class);
 	
 	public Sprite sprite;
@@ -36,7 +37,6 @@ public class SpriteComponent implements Component, Poolable {
 		final TextureRegion tr = sac.animation.getKeyFrame(0.0f);
 		sprite = new Sprite(tr); // constructor calls #setOriginCenter()
 		sprite.setTexture(tr.getTexture());
-		LOG.debug(sprite.getTexture());
 	}
 	
 	@Override

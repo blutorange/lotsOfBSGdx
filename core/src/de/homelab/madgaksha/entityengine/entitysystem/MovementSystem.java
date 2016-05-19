@@ -37,7 +37,7 @@ public class MovementSystem extends IteratingSystem {
 	@SuppressWarnings("unchecked")
 	public MovementSystem(int priority) {
 		super(Family.all(PositionComponent.class, VelocityComponent.class, TemporalComponent.class).get(), priority);
-		mapProperties = level.getMapProperties();
+		mapProperties = level.getMapData();
 		tileWidth = mapProperties.getWidthTiles();
 		tileHeight = mapProperties.getHeightTiles();
 		tileWidthInverse = 1.0f/mapProperties.getWidthTiles();

@@ -10,8 +10,10 @@ public abstract class APlayer {
 
 	final private EAnimationList animationList;
 	final private float movementSpeed;
+	/** x,y are the offset relative to the center of the sprites (bottom left). Radius is the circe's size. */
 	final private Circle boundingCircle;
 	final private Rectangle boundingBox;
+	/** x,y are the offset relative to the center of the sprites (bottom left). Width and height are the dimensions. */ 
 	final private IResource[] requiredResources;
 	
 	public APlayer() {
@@ -60,7 +62,6 @@ public abstract class APlayer {
 	public Circle getBoundingCircle() {
 		return boundingCircle;
 	}
-	
 	public Rectangle getBoundingBox() {
 		return boundingBox;
 	}

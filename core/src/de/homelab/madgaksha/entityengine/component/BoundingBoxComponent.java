@@ -56,6 +56,13 @@ public class BoundingBoxComponent implements Component, Poolable {
 		this.centerX = x;
 		this.centerY = y;
 	}
+	
+	public void set(Rectangle r) {
+		this.halfwidth = 0.5f*r.width;
+		this.halfheight = 0.5f*r.height;
+		this.centerX = r.x + this.halfwidth;
+		this.centerY = r.y + this.halfheight;
+	}
 
 	@Override
 	public void reset() {

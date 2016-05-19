@@ -8,7 +8,11 @@ import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 
+import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
@@ -25,10 +29,13 @@ import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
+import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.ViewportComponent;
+import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup01Component;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CameraTracingSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.DanmakuSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantRotationSystem;
@@ -45,6 +52,7 @@ import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.enums.Gravity;
 import de.homelab.madgaksha.enums.TrackingOrientationStrategy;
 import de.homelab.madgaksha.grantstrategy.ExponentialGrantStrategy;
+import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 
 /**
@@ -55,6 +63,8 @@ import de.homelab.madgaksha.resourcecache.EAnimationList;
  */
 public class EntityLayer extends ALayer {
 
+	@SuppressWarnings("unused")
+	private final static Logger LOG = Logger.getLogger(EntityLayer.class);
 	private boolean doUpdate;
 	
 	public EntityLayer() {
@@ -93,8 +103,27 @@ public class EntityLayer extends ALayer {
 
 	@Override
 	public void addedToStack() {
-		// TODO Auto-generated method stub
-		
+		// We need to remove entities while an entity system is being
+		// updated, otherwise removal won't be queued and not all
+		// entities will be processed.
+		final EntitySystem mySystem = new EntitySystem() {
+			@Override
+			public void update(float deltaTime) {
+				@SuppressWarnings("unchecked")
+				Family family = Family.all(TriggerStartupComponent.class).get();
+				ImmutableArray<Entity> entities = gameEntityEngine.getEntitiesFor(family);
+				for (Entity e : entities) {
+					TriggerStartupComponent tsc = Mapper.triggerStartupComponent.get(e);
+					tsc.triggerAcceptingObject.callbackStartup();
+				}
+				for (Entity e : entities) {
+					e.remove(TriggerStartupComponent.class);
+				}
+			}
+		};
+		gameEntityEngine.addSystem(mySystem);
+		mySystem.update(0);
+		gameEntityEngine.removeSystem(mySystem);
 	}
 	
 	public void createEngine() {
@@ -112,6 +141,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new InputVelocitySystem());
 		gameEntityEngine.addSystem(new PostEffectSystem());
 		gameEntityEngine.addSystem(new TemporalSystem());
+		gameEntityEngine.addSystem(new CollisionSystem());
 
 		playerEntity = createPlayerEntity();
 		
@@ -179,7 +209,9 @@ public class EntityLayer extends ALayer {
 		playerEntity.add(sac);
 		playerEntity.add(sfdc);
 
+		playerEntity.add(new TriggerTouchGroup01Component());
 		playerEntity.add(new BoundingSphereComponent(player.getBoundingCircle()));
+		playerEntity.add(new BoundingBoxComponent(player.getBoundingBox()));
 		playerEntity.add(new PositionComponent(level.getPlayerInitialPosition(), true));
 		playerEntity.add(new VelocityComponent(0.0f, 0.0f));
 		playerEntity.add(new RotationComponent(true));
