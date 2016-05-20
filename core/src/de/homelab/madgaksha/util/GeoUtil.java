@@ -12,9 +12,13 @@ import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
+import de.homelab.madgaksha.enums.EShapeType;
+
 public class GeoUtil {
 	private GeoUtil() {
 	}
+	
+	private final static Polygon p1 = new Polygon();
 	
 	private final static Vector3 v1 = new Vector3();
 	private final static Vector3 v2 = new Vector3();
@@ -81,5 +85,87 @@ public class GeoUtil {
 		output[9] = v4.x;
 		output[10] = v4.y;
 		output[11] = v4.z;
+	}
+	
+	public static boolean isCollision(Shape2D a, Shape2D b, EShapeType sa, EShapeType sb){
+		switch (sa) {
+		case CIRCLE:
+			switch (sa) {
+			case CIRCLE:
+				return ((Circle)a).overlaps((Circle)b);
+			case ELLIPSE:
+				break;
+			case POLYGON:
+				break;
+			case POLYLINE:
+				break;
+			case RECTANGLE:
+				break;
+			default:
+				return false;
+			}
+		case ELLIPSE:
+			switch (sa) {
+			case CIRCLE:
+				break;
+			case ELLIPSE:
+				break;
+			case POLYGON:
+				break;
+			case POLYLINE:
+				break;
+			case RECTANGLE:
+				break;
+			default:
+				return false;
+			}
+		case POLYGON:
+			switch (sa) {
+			case CIRCLE:
+				break;
+			case ELLIPSE:
+				break;
+			case POLYGON:
+				return Intersector.intersectPolygons((Polygon)a,(Polygon)b, p1);
+			case POLYLINE:
+				break;
+			case RECTANGLE:
+				break;
+			default:
+				return false;
+			}
+		case POLYLINE:
+			switch (sa) {
+			case CIRCLE:
+				break;
+			case ELLIPSE:
+				break;
+			case POLYGON:
+				break;
+			case POLYLINE:
+				break;
+			case RECTANGLE:
+				break;
+			default:
+				return false;
+			}
+		case RECTANGLE:
+			switch (sa) {
+			case CIRCLE:
+				break;
+			case ELLIPSE:
+				break;
+			case POLYGON:
+				break;
+			case POLYLINE:
+				break;
+			case RECTANGLE:
+				return ((Rectangle)a).overlaps((Rectangle)b);
+			default:
+				return false;
+			}
+		default:
+			return false;
+		}
 	}
 }

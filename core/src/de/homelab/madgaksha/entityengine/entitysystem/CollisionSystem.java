@@ -24,41 +24,42 @@ import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup03
 import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup04Component;
 import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup05Component;
 import de.homelab.madgaksha.logging.Logger;
-
+import de.homelab.madgaksha.util.GeoUtil;
 
 /**
  * <table>
- *  <tr>
- *   <th>Group</th>
- *   <th>{@link TriggerTouchComponent}</th>
- *   <th>{@link ReceiveTouchComponent}</th>
- *  </tr>
- *  <tr>
- *   <td>01</td>
- *   <td>Player</td>
- *   <td>Enemy, GeneralMapEvent</td>
- *  </tr>
- *  <tr>
- *   <td>02</td>
- *   <td></td>
- *   <td></td>
- *  </tr>  
- *  <tr>
- *   <td>03</td>
- *   <td></td>
- *   <td></td>
- *  </tr>  
- *  <tr>
- *   <td>04</td>
- *   <td></td>
- *   <td></td>
- *  </tr>  
- *  <tr>
- *   <td>05</td>
- *   <td></td>
- *   <td></td>
- *  </tr>  
+ * <tr>
+ * <th>Group</th>
+ * <th>{@link TriggerTouchComponent}</th>
+ * <th>{@link ReceiveTouchComponent}</th>
+ * </tr>
+ * <tr>
+ * <td>01</td>
+ * <td>Player</td>
+ * <td>Enemy, GeneralMapEvent</td>
+ * </tr>
+ * <tr>
+ * <td>02</td>
+ * <td></td>
+ * <td></td>
+ * </tr>
+ * <tr>
+ * <td>03</td>
+ * <td></td>
+ * <td></td>
+ * </tr>
+ * <tr>
+ * <td>04</td>
+ * <td></td>
+ * <td></td>
+ * </tr>
+ * <tr>
+ * <td>05</td>
+ * <td></td>
+ * <td></td>
+ * </tr>
  * </table>
+ * 
  * @author madgaksha
  *
  */
@@ -190,9 +191,19 @@ public class CollisionSystem extends EntitySystem {
 		final ShapeComponent scAlice = Mapper.shapeComponent.get(alice);
 		final ShapeComponent scBob = Mapper.shapeComponent.get(bob);
 		// TODO actual collision checking
-		if (true) {
-			ttc.triggerAcceptingObject.callbackTouch(bob);
-			rtc.triggerReceivingObject.callbackTouched(alice);
+		if (bbcAlice.maxX > bbcBob.minX) {
+			if (bbcAlice.minX < bbcBob.maxX) {
+				if (bbcAlice.maxY > bbcBob.minY) {
+					if (bbcAlice.minY < bbcBob.maxY) {
+						// test exact shape if asked to
+						if (scAlice != null && scBob != null) {
+							GeoUtil.collide(scAlice.shape, scBob.shape);
+						}
+						ttc.triggerAcceptingObject.callbackTouch(bob);
+						rtc.triggerReceivingObject.callbackTouched(alice);
+					}
+				}
+			}
 		}
 	}
 }
