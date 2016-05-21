@@ -7,14 +7,17 @@ import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.ForceComponent;
 import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
+import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.InputComponent;
 import de.homelab.madgaksha.entityengine.component.InverseMassComponent;
+import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.entityengine.component.ParticleEffectComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
+import de.homelab.madgaksha.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
@@ -75,10 +78,14 @@ public final class Mapper {
 			.getFor(DirectionComponent.class);
 	public final static ComponentMapper<ForceComponent> forceComponent = ComponentMapper.getFor(ForceComponent.class);
 	public final static ComponentMapper<HoverEffectComponent> hoverEffectComponent = ComponentMapper.getFor(HoverEffectComponent.class);
-	public final static ComponentMapper<InverseMassComponent> inverseMassComponent = ComponentMapper
-			.getFor(InverseMassComponent.class);
+	public final static ComponentMapper<InactiveComponent> inactiveComponent = ComponentMapper
+			.getFor(InactiveComponent.class);
 	public final static ComponentMapper<InputComponent> inputComponent = ComponentMapper
 			.getFor(InputComponent.class);	
+	public final static ComponentMapper<InverseMassComponent> inverseMassComponent = ComponentMapper
+			.getFor(InverseMassComponent.class);
+	public final static ComponentMapper<InvisibleComponent> invisibleComponent = ComponentMapper
+			.getFor(InvisibleComponent.class);
 	public final static ComponentMapper<LeanEffectComponent> leanEffectComponent = ComponentMapper
 			.getFor(LeanEffectComponent.class);	
 	public final static ComponentMapper<ManyTrackingComponent> manyTrackingComponent = ComponentMapper
@@ -91,6 +98,8 @@ public final class Mapper {
 			.getFor(RotationComponent.class);
 	public final static ComponentMapper<ScaleComponent> scaleComponent = ComponentMapper
 			.getFor(ScaleComponent.class);
+	public final static ComponentMapper<ShadowComponent> shadowComponent = ComponentMapper
+			.getFor(ShadowComponent.class);
 	public final static ComponentMapper<ShapeComponent> shapeComponent = ComponentMapper
 			.getFor(ShapeComponent.class);
 	public final static ComponentMapper<ShouldPositionComponent> shouldPositionComponent = ComponentMapper

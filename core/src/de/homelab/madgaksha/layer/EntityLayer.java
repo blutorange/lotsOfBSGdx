@@ -6,33 +6,28 @@ import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.playerEntity;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 
 import de.homelab.madgaksha.entityengine.Mapper;
-import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
-import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
-import de.homelab.madgaksha.entityengine.component.InputComponent;
-import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
-import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
-import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
-import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.ViewportComponent;
-import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup01Component;
+import de.homelab.madgaksha.entityengine.entity.MakerUtils;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CameraTracingSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
@@ -43,6 +38,7 @@ import de.homelab.madgaksha.entityengine.entitysystem.GrantScaleSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.InputVelocitySystem;
 import de.homelab.madgaksha.entityengine.entitysystem.MovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.NewtonianForceSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.ParticleEffectRenderSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.PostEffectSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteAnimationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
@@ -106,27 +102,20 @@ public class EntityLayer extends ALayer {
 		// We need to remove entities while an entity system is being
 		// updated, otherwise removal won't be queued and not all
 		// entities will be processed.
-		final EntitySystem mySystem = new EntitySystem() {
-			@Override
-			public void update(float deltaTime) {
-				@SuppressWarnings("unchecked")
-				Family family = Family.all(TriggerStartupComponent.class).get();
-				ImmutableArray<Entity> entities = gameEntityEngine.getEntitiesFor(family);
-				for (Entity e : entities) {
-					TriggerStartupComponent tsc = Mapper.triggerStartupComponent.get(e);
-					tsc.triggerAcceptingObject.callbackStartup();
-				}
-				for (Entity e : entities) {
-					e.remove(TriggerStartupComponent.class);
-				}
-			}
-		};
-		gameEntityEngine.addSystem(mySystem);
-		mySystem.update(0);
-		gameEntityEngine.removeSystem(mySystem);
+		final List<Entity> myList = new ArrayList<Entity>(20);
+		final Family family = Family.all(TriggerStartupComponent.class).get();
+		for (Entity e : gameEntityEngine.getEntitiesFor(family)) {
+			myList.add(e);
+		}
+		for (Entity e : myList) {
+			TriggerStartupComponent tsc = Mapper.triggerStartupComponent.get(e);
+			tsc.triggerAcceptingObject.callbackStartup();
+			e.remove(TriggerStartupComponent.class);
+		}
 	}
 	
 	public void createEngine() {
+		gameEntityEngine.addSystem(new ParticleEffectRenderSystem());
 		gameEntityEngine.addSystem(new BirdsViewSpriteSystem());
 		gameEntityEngine.addSystem(new SpriteAnimationSystem());
 		gameEntityEngine.addSystem(new SpriteRenderSystem());
@@ -142,8 +131,8 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new PostEffectSystem());
 		gameEntityEngine.addSystem(new TemporalSystem());
 		gameEntityEngine.addSystem(new CollisionSystem());
-
-		playerEntity = createPlayerEntity();
+		
+		playerEntity = MakerUtils.makePlayer(player);
 		
 		Entity yourEntity = new Entity();
 		SpriteForDirectionComponent sfdc2 = new SpriteForDirectionComponent(EAnimationList.JOSHUA_RUNNING,
@@ -189,38 +178,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addEntity(myCamera);
 //		gameEntityEngine.addEntity(myProjectile);
 
-	}
 
-	private Entity createPlayerEntity() {
-		playerEntity = new Entity();
-
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(player.getAnimationList(),
-				ESpriteDirectionStrategy.ZENITH);
-		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
-		SpriteComponent sc = new SpriteComponent(sac);
-		
-		playerEntity.add(new LeanEffectComponent(30.0f,0.10f,10.0f));
-		playerEntity.add(new HoverEffectComponent(8.0f, 1.0f));
-		
-		playerEntity.add(new ShouldRotationComponent(new ExponentialGrantStrategy(0.1f)));
-		playerEntity.add(new ShouldScaleComponent(new ExponentialGrantStrategy(0.1f)));
-		
-		playerEntity.add(sc);
-		playerEntity.add(sac);
-		playerEntity.add(sfdc);
-
-		playerEntity.add(new TriggerTouchGroup01Component());
-		playerEntity.add(new BoundingSphereComponent(player.getBoundingCircle()));
-		playerEntity.add(new BoundingBoxComponent(player.getBoundingBox()));
-		playerEntity.add(new PositionComponent(level.getPlayerInitialPosition(), true));
-		playerEntity.add(new VelocityComponent(0.0f, 0.0f));
-		playerEntity.add(new RotationComponent(true));
-		playerEntity.add(new ScaleComponent());
-		playerEntity.add(new DirectionComponent());
-
-		playerEntity.add(new InputComponent(player.getMovementSpeed()));
-		playerEntity.add(new TemporalComponent());
-		return playerEntity;
 	}
 
 	@Override

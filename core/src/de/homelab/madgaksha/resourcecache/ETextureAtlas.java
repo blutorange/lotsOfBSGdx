@@ -17,7 +17,8 @@ import de.homelab.madgaksha.logging.Logger;
  */
 public enum ETextureAtlas implements IResource {
 	NINE_PATCHES("9patch/packed/9patchPacked.atlas"),
-	PARTICLE_EFFECTS("particle/packed/particleEffectPacked.atlas");
+	PARTICLE_EFFECTS("particle/packed/particleEffectPacked.atlas"),
+	MISC("texture/misc/packed/miscPacked.atlas");
 
 	private final static Logger LOG = Logger.getLogger(ETextureAtlas.class);
 	private final static EnumMap<ETextureAtlas, TextureAtlas> textureAtlasCache = new EnumMap<ETextureAtlas, TextureAtlas>(ETextureAtlas.class);

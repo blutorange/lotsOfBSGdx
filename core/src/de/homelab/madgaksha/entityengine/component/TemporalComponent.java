@@ -3,6 +3,17 @@ package de.homelab.madgaksha.entityengine.component;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+/**
+ * Component every entity needs to have for it to be processed by an entity system
+ * requiring access to deltaTime.
+ * <br>
+ * The deltaTime passed in by ashley to the update function must not be used.
+ * <br>
+ * deltaTime must be accessed via <code>Mapper.temporalComponent.get(entity).deltaTime</code>.
+ * 
+ * @author madgaksha
+ *
+ */
 public class TemporalComponent implements Component, Poolable {
 	private final static float DEFAULT_DELTA_TIME= 0.033f;
 	private final static float DEFAULT_TOTAL_TIME= 0.0f;

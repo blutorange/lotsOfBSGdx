@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
@@ -19,7 +20,7 @@ public class SpriteAnimationSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public SpriteAnimationSystem(int priority) {
-		super(Family.all(TemporalComponent.class, SpriteAnimationComponent.class, SpriteComponent.class).get(), priority);
+		super(Family.all(TemporalComponent.class, SpriteAnimationComponent.class, SpriteComponent.class).exclude(InactiveComponent.class).get(), priority);
 	}
 
 	@Override

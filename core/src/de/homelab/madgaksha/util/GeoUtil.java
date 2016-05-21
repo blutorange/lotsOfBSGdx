@@ -4,31 +4,61 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
+import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.enums.EShapeType;
+import de.homelab.madgaksha.logging.Logger;
 
 public class GeoUtil {
 	private GeoUtil() {
 	}
 	
-	private final static Polygon p1 = new Polygon();
+	private final static Logger LOG = Logger.getLogger(GeoUtil.class);
 	
+	private final static Polygon p1 = new Polygon();
+	private final static Polygon p2 = new Polygon();
+	private final static Polygon p3 = new Polygon();
+		
 	private final static Vector3 v1 = new Vector3();
 	private final static Vector3 v2 = new Vector3();
 	private final static Vector3 v3 = new Vector3();
 	private final static Vector3 v4 = new Vector3();
 	
+	private final static Vector2 w1 = new Vector2();
+	private final static Vector2 w2 = new Vector2();
+	private final static Vector2 w3 = new Vector2();
+	
+	private final static Circle c1 = new Circle();
+	private final static Circle c2 = new Circle();
+	
+	private final static Rectangle t1 = new Rectangle();
+	
 	private final static Ray r1 = new Ray();
 	private final static Ray r2 = new Ray();
 	private final static Ray r3 = new Ray();
 	private final static Ray r4 = new Ray();
+	
+	private static float f1 = 0.0f;
+	private static float f2 = 0.0f;
+	private static float f3 = 0.0f;
+	
+	private final static float[] fa8 = new float[8];
+	private final static float[] fa82 = new float[8];
+	
+	private static Circle c;
+	private static Ellipse e, ee;
+	private static Polyline l;
+	private static Rectangle t;
+	private static Polygon p, pp;
 	
 	public static Rectangle getBoundingBox(Shape2D shape) {
 		final Rectangle r;
@@ -86,85 +116,276 @@ public class GeoUtil {
 		output[10] = v4.y;
 		output[11] = v4.z;
 	}
-	
-	public static boolean isCollision(Shape2D a, Shape2D b, EShapeType sa, EShapeType sb){
+
+	public static boolean isCollision(Shape2D a, Shape2D b, EShapeType sa, EShapeType sb, PositionComponent pa, PositionComponent pb){
 		switch (sa) {
 		case CIRCLE:
 			switch (sa) {
 			case CIRCLE:
-				return ((Circle)a).overlaps((Circle)b);
+				c1.set((Circle)a);
+				c2.set((Circle)b);
+				f1 = f1-c2.x-pb.x;
+				f2 = f2-c2.y-pb.y;
+				return f1*f1+f2*f2 <= (c1.radius+c2.radius)*(c1.radius+c2.radius);
 			case ELLIPSE:
-				break;
+				// convert ellipse to polygon
+				e = (Ellipse)b;
+				for (int i = 0 ; i != 8; i+=2) {
+					fa8[i] = e.x + e.width * MathUtils.sinDeg(45.0f*i);  
+					fa8[i+1] = e.y + e.height * MathUtils.cosDeg(45.0f*i);
+				}
+				p2.setVertices(fa8);
+				p2.setOrigin(pb.x, pb.y);
+
+				// convert circle to polygon
+				c = (Circle)a;
+				for (int i = 0 ; i != 8; i+=2) {
+					fa82[i] = e.x + c.radius * MathUtils.sinDeg(45.0f*i);  
+					fa82[i+1] = e.y + c.radius * MathUtils.cosDeg(45.0f*i);
+				}
+				p1.setVertices(fa82);
+				p1.setOrigin(pa.x, pa.y);
+				
+				return Intersector.intersectPolygons(p1,p2, p3);
 			case POLYGON:
-				break;
+				c = (Circle)a;
+				p = (Polygon)b;
+				for (int i = 0 ; i != 8; i+=2) {
+					fa8[i] = c.x + c.radius * MathUtils.sinDeg(45.0f*i);  
+					fa8[i+1] = c.y + c.radius * MathUtils.cosDeg(45.0f*i);
+				}
+				p1.setVertices(fa8);
+				p2.setVertices(p.getVertices());
+				p1.setOrigin(pa.x, pa.y);
+				p2.setOrigin(p.getOriginX()+pb.x, p.getOriginY()+pb.y);
+				return Intersector.intersectPolygons(p1,p2, p3);
 			case POLYLINE:
-				break;
+				// check each line segment separately
+				c = (Circle)a;
+				l = (Polyline)b;
+				final float [] f = l.getVertices();
+				f1 = c.radius*c.radius;
+				f2 = pb.x + l.getOriginX();
+				f3 = pb.y + l.getOriginY();
+				w1.x = c.x + pa.x;
+				w1.y = c.y + pa.y;
+				// Degenerate point
+				if (f.length == 2) return c.contains(f[0]+f2, f[1]+f3);
+				w3.x = f[f.length-2] + f2;
+				w3.y = f[f.length-1] + f3;
+				for (int i = f.length-4; i >= 0; i -= 2) {
+					w2.x = f[i] + f2;
+					w2.y = f[i+1] + f3;
+					if (Intersector.intersectSegmentCircle(w2, w3, w1, f1)) return true;
+					w3.x = w2.x;
+					w3.y = w2.y;
+				}
+				return false;
 			case RECTANGLE:
-				break;
+				// overlaps does not check for the case when the circle
+				// is completely contained in the rectangle
+				c1.set((Circle)a);
+				t1.set((Rectangle)b);
+				c1.x += pa.x;
+				c1.y += pa.y;
+				t1.x += pb.x;
+				t1.y += pb.y;
+				return t1.contains(c1.x,c1.y) || Intersector.overlaps(c1,t1);
 			default:
+				LOG.debug("unknown shape:" + b);
 				return false;
 			}
 		case ELLIPSE:
 			switch (sa) {
 			case CIRCLE:
-				break;
+				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case ELLIPSE:
-				break;
+				// convert ellipse to circle
+				e = (Ellipse)a;
+				ee = (Ellipse)b;
+				f1 = e.x+pa.x-ee.x-pb.x;
+				f2 = e.y+pa.y-ee.y-pb.y;
+				f3 = Math.max(e.width, e.height) + Math.max(ee.width, ee.height);
+				return f1*f1+f2*f2 <= f3*f3;
 			case POLYGON:
-				break;
+				// convert ellipse to polygon
+				e = (Ellipse)a;
+				p = (Polygon)b;
+				for (int i = 0 ; i != 8; i+=2) {
+					fa8[i] = e.x + e.width * MathUtils.sinDeg(45.0f*i);  
+					fa8[i+1] = e.y + e.height * MathUtils.cosDeg(45.0f*i);
+				}
+				p1.setVertices(fa8);
+				p2.setVertices(p.getVertices());
+				p1.setOrigin(pa.x, pa.y);
+				p2.setOrigin(p.getOriginX()+pb.x, p.getOriginY()+pb.y);
+				return Intersector.intersectPolygons(p1,p2, p3);
 			case POLYLINE:
+				LOG.debug("collision ellipse-polyline unsupported");
 				break;
 			case RECTANGLE:
-				break;
+				// convert ellipse to polygon
+				e = (Ellipse)a;
+				for (int i = 0 ; i != 8; i+=2) {
+					fa8[i] = e.x + e.width * MathUtils.sinDeg(45.0f*i);  
+					fa8[i+1] = e.y + e.height * MathUtils.cosDeg(45.0f*i);
+				}
+				p1.setVertices(fa8);
+				p1.setOrigin(pa.x, pa.y);
+				
+				// convert rectangle to polygon
+				t = (Rectangle)b;
+				fa8[0] = t.x;
+				fa8[1] = t.y;
+				fa8[2] = t.x+t.width;
+				fa8[3] = t.y;
+				fa8[4] = t.x+t.width;
+				fa8[5] = t.y+t.height;
+				fa8[6] = t.x;
+				fa8[7] = t.y+t.height;
+				p2.setVertices(fa8);
+				p2.setOrigin(pb.x, pb.y);
+
+				return Intersector.intersectPolygons(p1,p2, p3);
 			default:
+				LOG.debug("unknown shape:" + b);
 				return false;
 			}
 		case POLYGON:
 			switch (sa) {
 			case CIRCLE:
-				break;
+				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case ELLIPSE:
-				break;
+				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case POLYGON:
-				return Intersector.intersectPolygons((Polygon)a,(Polygon)b, p1);
+				p = (Polygon)a;
+				pp = (Polygon)b;
+				p1.setVertices(p.getVertices());
+				p2.setVertices(pp.getVertices());
+				p1.setOrigin(p.getOriginX()+pa.x, p.getOriginY()+pa.y);
+				p2.setOrigin(pp.getOriginX()+pb.x, pp.getOriginY()+pb.y);
+				return Intersector.intersectPolygons(p1,p2, p3);
 			case POLYLINE:
-				break;
+				p = (Polygon)a;
+				l = (Polyline)b;
+
+				p1.setVertices(p.getVertices());
+				p1.setOrigin(p.getOriginX()+pa.x, p.getOriginY()+pa.y);
+				
+				f2 = pb.x + l.getOriginX();
+				f3 = pb.y + l.getOriginY();
+				final float [] f = l.getVertices();
+				if (f.length == 2) return c.contains(f[0]+f2, f[1]+f3); // degenerate point
+
+				// check each line segment separately
+				w3.x = f[f.length-2] + f2;
+				w3.y = f[f.length-1] + f3;
+				for (int i = f.length-4; i >= 0; i -= 2) {
+					w2.x = f[i] + f2;
+					w2.y = f[i+1] + f3;
+					if (Intersector.intersectSegmentPolygon(w2, w3, p1)) return true;
+					w3.x = w2.x;
+					w3.y = w2.y;
+				}
+				return false;
 			case RECTANGLE:
-				break;
+				p = (Polygon)a;
+				t = (Rectangle)b;
+
+				p1.setVertices(p.getVertices());
+				p1.setOrigin(p.getOriginX()+pa.x, p.getOriginY()+pa.y);
+
+				fa8[0] = t.x;
+				fa8[1] = t.y;
+				fa8[2] = t.x+t.width;
+				fa8[3] = t.y;
+				fa8[4] = t.x+t.width;
+				fa8[5] = t.y+t.height;
+				fa8[6] = t.x;
+				fa8[7] = t.y+t.height;
+				p2.setVertices(fa8);
+				p2.setOrigin(pb.x, pb.y);
+
+				return Intersector.intersectPolygons(p1,p2, p3);
 			default:
+				LOG.debug("unknown shape:" + b);
 				return false;
 			}
 		case POLYLINE:
 			switch (sa) {
 			case CIRCLE:
-				break;
+				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case ELLIPSE:
-				break;
+				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case POLYGON:
-				break;
+				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case POLYLINE:
-				break;
+				LOG.debug("collision polyline-polyline unsupported");
+				return false;
 			case RECTANGLE:
-				break;
+				l = (Polyline)a;
+				f2 = pa.x + l.getOriginX();
+				f3 = pa.y + l.getOriginY();
+				final float[] f = l.getVertices();
+				if (f.length == 2) return t.contains(f[0]+f2, f[1]+f3); // degenerate point
+				
+				// convert rectangle to polygon
+				t = (Rectangle)b;
+				fa8[0] = t.x;
+				fa8[1] = t.y;
+				fa8[2] = t.x+t.width;
+				fa8[3] = t.y;
+				fa8[4] = t.x+t.width;
+				fa8[5] = t.y+t.height;
+				fa8[6] = t.x;
+				fa8[7] = t.y+t.height;
+				p2.setVertices(fa8);
+				p2.setOrigin(pb.x, pb.y);
+				
+				// intersect polygon-polyline
+				w3.x = f[f.length-2] + f2;
+				w3.y = f[f.length-1] + f3;
+				for (int i = f.length-4; i >= 0; i -= 2) {
+					w2.x = f[i] + f2;
+					w2.y = f[i+1] + f3;
+					if (Intersector.intersectSegmentPolygon(w2, w3, p)) return true;
+					w3.x = w2.x;
+					w3.y = w2.y;
+				}
+				
+				return false;
 			default:
+				LOG.debug("unknown shape:" + b);
 				return false;
 			}
 		case RECTANGLE:
 			switch (sa) {
 			case CIRCLE:
-				break;
+				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case ELLIPSE:
-				break;
+				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case POLYGON:
-				break;
+				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case POLYLINE:
-				break;
+				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case RECTANGLE:
-				return ((Rectangle)a).overlaps((Rectangle)b);
-			default:
+				Rectangle r1 = (Rectangle)a;
+				Rectangle r2 = (Rectangle)b;
+				if (r1.x + r1.width + pa.x > r2.x +pb.x) {
+					if (r1.x + pa.x < r2.x + r2.width + pb.x) {
+						if (r1.y + r1.height +pa.y > r2.y + pb.y) {
+							if (r1.y + pa.y < r2.y + r2.height + pb.y) {
+								return true;
+							}
+						}
+					}
+				}
 				return false;
+			default:
+				LOG.debug("unknown shape:" + b);
 			}
 		default:
+			LOG.debug("unknown shape:" + a);
 			return false;
 		}
 	}

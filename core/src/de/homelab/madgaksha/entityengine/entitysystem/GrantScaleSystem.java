@@ -6,6 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
@@ -18,7 +19,7 @@ public class GrantScaleSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public GrantScaleSystem(int priority) {
-		super(Family.all(ScaleComponent.class, ShouldScaleComponent.class, TemporalComponent.class).get(), priority);
+		super(Family.all(ScaleComponent.class, ShouldScaleComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(), priority);
 	}
 
 	@Override

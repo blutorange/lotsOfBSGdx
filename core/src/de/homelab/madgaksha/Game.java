@@ -92,7 +92,7 @@ public class Game implements ApplicationListener {
 	// TODO remove me
 	// only for testing
 	public static Vector2 testA = new Vector2();
-	ParticleEffect bombEffect;
+	//ParticleEffect bombEffect;
 	private BitmapFont debugFont; 
 	// testing end
 	
@@ -119,11 +119,12 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void create() {
+		//TODO remove me
 		//testing
-		bombEffect = new ParticleEffect();
-		bombEffect.load(Gdx.files.internal("particle/sparkleEffect.p"), Gdx.files.internal("particle"));
-		bombEffect.setDuration(500000);
-		bombEffect.start();
+//		bombEffect = new ParticleEffect();
+//		bombEffect.load(Gdx.files.internal("particle/sparkleEffect.p"), Gdx.files.internal("particle"));
+//		bombEffect.setDuration(500000);
+//		bombEffect.start();
 
 		// Set logging level.
 		Gdx.app.setLogLevel(params.requestedLogLevel);
@@ -315,7 +316,7 @@ public class Game implements ApplicationListener {
 		
 		// TODO remove me
 		debugFont.dispose();
-		bombEffect.dispose();
+		//bombEffect.dispose();
 	}
 
 	private void renderScreen() {
@@ -372,27 +373,27 @@ public class Game implements ApplicationListener {
 		
 		//TODO remove me
 		//testing
-		if (Gdx.input.isKeyPressed(Keys.C) && layerStack.size() < 2) {
-			SpeakerTextbox[] tb = new SpeakerTextbox[2];
-			tb[0] = new FaceTextbox("I was just taking a casual stroll, relaxing from work.\nWhere is this? And why am I floating in air?\nCome to think of it, the tomatoes I ate looked kind of\nbad... But this still can't be real!",
-					EBitmapFont.MAIN_FONT,
-					ENinePatch.TEXTBOX_BLUE, "Phantom Joshua", ETexture.FACE_ESTELLE_01);
-			tb[1] = new FaceTextbox("I must have got out of band the wrong... let's do this!",
-					EBitmapFont.MAIN_FONT,
-					ENinePatch.TEXTBOX_BLUE, "Phantom Estelle", ETexture.FACE_ESTELLE_01);
-			this.pushLayer(new TextboxLayer(tb)); 
-		}
-		batchGame.begin();
-		bombEffect.setPosition(1000.0f, 1000.0f);
-		bombEffect.draw(batchGame);
-		bombEffect.setPosition(1400.0f, 1000.0f);
-		bombEffect.draw(batchGame);
-		bombEffect.setPosition(1000.0f, 1400.0f);
-		bombEffect.draw(batchGame);
-		bombEffect.setPosition(1400.0f, 1400.0f);
-		bombEffect.draw(batchGame, deltaTime);
-		batchGame.end();
-		//if (bombEffect.isComplete()) bombEffect.reset();
+//		if (Gdx.input.isKeyPressed(Keys.C) && layerStack.size() < 2) {
+//			SpeakerTextbox[] tb = new SpeakerTextbox[2];
+//			tb[0] = new FaceTextbox("I was just taking a casual stroll, relaxing from work.\nWhere is this? And why am I floating in air?\nCome to think of it, the tomatoes I ate looked kind of\nbad... But this still can't be real!",
+//					EBitmapFont.MAIN_FONT,
+//					ENinePatch.TEXTBOX_BLUE, "Phantom Joshua", ETexture.FACE_ESTELLE_01);
+//			tb[1] = new FaceTextbox("I must have got out of band the wrong... let's do this!",
+//					EBitmapFont.MAIN_FONT,
+//					ENinePatch.TEXTBOX_BLUE, "Phantom Estelle", ETexture.FACE_ESTELLE_01);
+//			this.pushLayer(new TextboxLayer(tb)); 
+//		}
+//		batchGame.begin();
+//		bombEffect.setPosition(1000.0f, 1000.0f);
+//		bombEffect.draw(batchGame);
+//		bombEffect.setPosition(1400.0f, 1000.0f);
+//		bombEffect.draw(batchGame);
+//		bombEffect.setPosition(1000.0f, 1400.0f);
+//		bombEffect.draw(batchGame);
+//		bombEffect.setPosition(1400.0f, 1400.0f);
+//		bombEffect.draw(batchGame, deltaTime);
+//		batchGame.end();
+//		if (bombEffect.isComplete()) bombEffect.reset();
 	}
 
 	private void renderInfo() {

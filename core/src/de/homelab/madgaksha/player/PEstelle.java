@@ -3,14 +3,16 @@ package de.homelab.madgaksha.player;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 
+import de.homelab.madgaksha.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
+import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 
 public class PEstelle extends APlayer {
 
 	@Override
 	protected IResource[] requestedRequiredResources() {
-		return new IResource[] {EAnimationList.ESTELLE_STANDING};
+		return new IResource[] {EAnimationList.ESTELLE_STANDING, ETexture.OVAL_SHADOW};
 	}
 	
 	@Override
@@ -31,6 +33,17 @@ public class PEstelle extends APlayer {
 	@Override
 	protected Rectangle requestedBoundingBox() {
 		return new Rectangle(-18.0f, -18.0f, 36.0f, 36.0f);
+	}
+
+	@Override
+	protected int requestedMaxPainPoints() {
+		// TODO Auto-generated method stub
+		return 420000000;
+	}
+	
+	@Override
+	public ShadowComponent makeShadow() {
+		return new ShadowComponent(ETexture.OVAL_SHADOW, 12.5f,-60.0f,0.0f,-0.010f, 0.5f, 0.0f);
 	}
 
 }

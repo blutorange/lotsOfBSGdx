@@ -914,13 +914,14 @@ public class AdxMusic implements Music, Runnable {
 	@Override
 	public synchronized void dispose() {
 		LOG.debug("disposing adx");
+		setVolume(0.0f);
 		pause();
 		stopRequested = true;
 		try {
 			if (thread != null) {
-				thread.join(100);
+				thread.join(500);
 				if (thread.isAlive()) {
-					LOG.error("could not join adx thread after 100ms wait");
+					LOG.error("could not join adx thread after 500ms wait");
 				}
 			}
 		} catch (InterruptedException e) {

@@ -6,6 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
@@ -18,7 +19,7 @@ public class GrantPositionSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public GrantPositionSystem(int priority) {
-		super(Family.all(TemporalComponent.class, PositionComponent.class, ShouldPositionComponent.class).get(), priority);
+		super(Family.all(TemporalComponent.class, PositionComponent.class, ShouldPositionComponent.class).exclude(InactiveComponent.class).get(), priority);
 	}
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {

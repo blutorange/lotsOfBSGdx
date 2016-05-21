@@ -34,9 +34,7 @@ public class GameViewport extends Viewport {
 	
 	@Override
 	public void apply() {
-		super.apply(false);
-		angleDirXY = computeRotationDirXY();
-		angleUpXY = computeRotationUpXY();
+		apply(false);
 	}
 	@Override
 	public void apply(boolean x) {

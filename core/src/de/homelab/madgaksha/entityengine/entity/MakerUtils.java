@@ -1,6 +1,10 @@
 package de.homelab.madgaksha.entityengine.entity;
 
+import static de.homelab.madgaksha.GlobalBag.level;
+import static de.homelab.madgaksha.GlobalBag.playerEntity;
+
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Polygon;
@@ -10,17 +14,36 @@ import com.badlogic.gdx.math.Shape2D;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
+import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
+import de.homelab.madgaksha.entityengine.component.DirectionComponent;
+import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
+import de.homelab.madgaksha.entityengine.component.InputComponent;
+import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ReceiveTouchComponent;
+import de.homelab.madgaksha.entityengine.component.RotationComponent;
+import de.homelab.madgaksha.entityengine.component.ScaleComponent;
+import de.homelab.madgaksha.entityengine.component.ShadowComponent;
+import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
+import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerScreenComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
+import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup02Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup03Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup04Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup05Component;
+import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup01Component;
 import de.homelab.madgaksha.enums.ECollisionGroup;
+import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
+import de.homelab.madgaksha.grantstrategy.ExponentialGrantStrategy;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.util.GeoUtil;
 
 public final class MakerUtils {
@@ -95,5 +118,40 @@ public final class MakerUtils {
 		default:
 			return new ReceiveTouchGroup05Component(triggerReceivingObject);
 		}
+	}
+	
+	public static Entity makePlayer(APlayer player) {
+		playerEntity = new Entity();
+
+		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(player.getAnimationList(),
+				ESpriteDirectionStrategy.ZENITH);
+		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
+		SpriteComponent sc = new SpriteComponent(sac);
+		ShadowComponent kc = player.makeShadow();
+		
+		playerEntity.add(new LeanEffectComponent(30.0f,0.10f,10.0f));
+		playerEntity.add(new HoverEffectComponent(8.0f, 1.0f));
+		
+		playerEntity.add(new ShouldRotationComponent(new ExponentialGrantStrategy(0.1f)));
+		playerEntity.add(new ShouldScaleComponent(new ExponentialGrantStrategy(0.1f)));
+			
+		playerEntity.add(sc);
+		playerEntity.add(sac);
+		playerEntity.add(sfdc);
+
+		playerEntity.add(new TriggerTouchGroup01Component());
+		playerEntity.add(new BoundingSphereComponent(player.getBoundingCircle()));
+		playerEntity.add(new BoundingBoxComponent(player.getBoundingBox()));
+		playerEntity.add(new PositionComponent(level.getPlayerInitialPosition(), true));
+		playerEntity.add(new VelocityComponent(0.0f, 0.0f));
+		playerEntity.add(new RotationComponent(true));
+		playerEntity.add(new ScaleComponent());
+		playerEntity.add(new DirectionComponent());
+		
+
+		if (kc != null) playerEntity.add(kc);
+		playerEntity.add(new InputComponent(player.getMovementSpeed()));
+		playerEntity.add(new TemporalComponent());
+		return playerEntity;
 	}
 }

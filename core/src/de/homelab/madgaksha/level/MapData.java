@@ -19,6 +19,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Shape2D;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.Method;
@@ -31,10 +32,8 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EParticleEffect;
 
 /**
- * Reads a tiled map and extracts properties for later use. Properties must be
- * set on the
- *
- * Objects can be added directly via the map editor.
+ * Reads a tiled map and extracts properties for later use. Objects can be added directly via the map editor. 
+ * All tile layer must have the same tile size. Tile height and width may be different.
  * 
  * <br><br>
  * 
@@ -55,8 +54,10 @@ import de.homelab.madgaksha.resourcecache.EParticleEffect;
  *  <ul>
  *   <li>startup: When the map has finished loading.
  *   <li>screen: When the enemy becomes visible on screen.</li>
- *   <li>manual: can only be triggered via a backing java function from a class of type {@link ALevel}. See type <code>callback</code>.</li>
- *  </ul> 
+ *   <li>manual: Can only be triggered via a backing java function from a class of type {@link ALevel}. See type <code>callback</code>.</li>
+ *  </ul>
+ * <li> initX: (optional) Displacement of the initial position in x-direction in tiles. If 0, the enemy is placed at the center of the bounding box of the object's shape.</li>
+ * <li> initY: (optional) Displacement of the initial position in y-direction in tiles. If 0, the enemy is placed at the center of the bounding box of the object's shape.</li>  
  * </ul>
  *  
  * <h3>type: Callback</h3>
@@ -64,7 +65,7 @@ import de.homelab.madgaksha.resourcecache.EParticleEffect;
  * An event with a backing callback java function that will be invoked when the event triggers. The callback function
  * must have this signature:
  * 
- * <code>public void myCallback()</code>
+ * <code>public void myCallback(MapProperties properties)</code>
  * 
  * <ul>
  * <li>name: Name of the callback function. Must be defined in the implementing {@link ALevel} class.</li>
@@ -166,6 +167,7 @@ public class MapData {
 		int y = (int) (h * heightTilesInverse);
 		return isTileBlocking(x < 0 ? 0 : x >= width ? width - 1 : x, y < 0 ? 0 : y >= height ? height - 1 : y);
 	}
+	
 
 	/**
 	 * This will not perform sanity checks.
@@ -316,15 +318,27 @@ public class MapData {
 
 	@SuppressWarnings("unchecked")
 	private Entity processObjectEnemy(MapProperties props, Shape2D shape) {
+		Integer initX = 0;
+		Integer initY = 0;
+		Float initDir = 0.0f;
+		
 		// Fetch parameters.
 		String species = WordUtils.capitalizeFully(props.get("species", String.class));
 		String spawn = props.get("spawn", String.class).toUpperCase(Locale.ROOT);
-
+		if (props.containsKey("initX")) initX = Integer.valueOf(String.valueOf(props.get("initX")));
+		if (props.containsKey("initY")) initY = Integer.valueOf(String.valueOf(props.get("initY")));
+		if (props.containsKey("initDir")) initDir = Float.valueOf(String.valueOf(props.get("initDir")));
+		
+		
+		// Convert position in tiles to world units (=1 pixel).
+		initX *= (int)getWidthTiles();
+		initY *= (int)getHeightTiles();
+		
 		// Get species class and its constructor with the appropriate constructor.
 		Constructor enemyConstructor;
 		try {
 			Class<? extends EnemyMaker> enemyClass = ClassReflection.forName(ENEMY_PACKAGE + species + "Maker");
-			enemyConstructor = ClassReflection.getConstructor(enemyClass, Shape2D.class, ETrigger.class);
+			enemyConstructor = ClassReflection.getConstructor(enemyClass, Shape2D.class, ETrigger.class, Vector2.class, Float.class);
 		}
 		catch (Exception e) {
 			LOG.error("no such enemy class with appropriate constructor: " + ENEMY_PACKAGE + "Enemy" + species, e);
@@ -344,7 +358,7 @@ public class MapData {
 		// Try to initialize a new enemy of the given class.
 		Entity enemy;
 		try {
-			enemy = (Entity)enemyConstructor.newInstance(shape, spawnEnum);
+			enemy = (Entity)enemyConstructor.newInstance(shape, spawnEnum, new Vector2(initX,initY), initDir);
 		} catch (Exception e) {
 			LOG.error("failed to initialize enemy instance: " + species, e);
 			return null;
@@ -359,13 +373,13 @@ public class MapData {
 		String trigger = props.get("trigger", String.class).toUpperCase(Locale.ROOT);
 		Integer loop = 0;
 		Float interval = 1.0f;
-		if (props.containsKey("loop")) loop = props.get("loop", Integer.class);
-		if (props.containsKey("interval")) interval = props.get("interval", Float.class);
+		if (props.containsKey("loop")) loop = Integer.valueOf(String.valueOf(props.get("loop")));
+		if (props.containsKey("interval")) interval = Float.valueOf(String.valueOf(props.get("interval")));
 				
 		// Search for the method and perform sanity checks.
 		Method method;
 		try {
-			method = ClassReflection.getDeclaredMethod(levelClass, name, Entity.class);
+			method = ClassReflection.getDeclaredMethod(levelClass, name, MapProperties.class);
 			if (method.getReturnType() != Void.TYPE) {
 				LOG.error("callback function must return void");
 				return null;
@@ -391,7 +405,7 @@ public class MapData {
 		}
 				
 		// Create new object and return it.
-		return new CallbackMaker(shape, triggerEnum, method, loop, interval);
+		return new CallbackMaker(shape, triggerEnum, method, props, loop, interval);
 	}
 
 	private Entity processObjectParticleEffect(MapProperties props, Shape2D shape) {

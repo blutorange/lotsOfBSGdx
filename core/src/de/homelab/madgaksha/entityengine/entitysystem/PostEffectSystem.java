@@ -35,7 +35,7 @@ public class PostEffectSystem extends EntitySystem {
 	private float a, b;
 	
 	public PostEffectSystem() {
-		this(DefaultPriority.spriteRenderSystem);
+		this(DefaultPriority.postEffectSystem);
 	}
 
 	@SuppressWarnings("unchecked")

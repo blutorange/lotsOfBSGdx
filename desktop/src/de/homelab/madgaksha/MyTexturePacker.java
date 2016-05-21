@@ -15,5 +15,12 @@ public class MyTexturePacker {
 		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/particle";
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/particle/packed";
 		packFileName = "particleEffectPacked";
-		TexturePacker.process(inputDir, outputDir, packFileName);	}
+		TexturePacker.process(inputDir, outputDir, packFileName);
+		
+		System.out.println("packing misc textures...");
+		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/texture/misc";
+		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/texture/misc/packed";
+		packFileName = "miscPacked";
+		TexturePacker.process(inputDir, outputDir, packFileName);
+	}
 }

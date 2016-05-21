@@ -191,16 +191,15 @@ public class CollisionSystem extends EntitySystem {
 		final ShapeComponent scAlice = Mapper.shapeComponent.get(alice);
 		final ShapeComponent scBob = Mapper.shapeComponent.get(bob);
 		// TODO actual collision checking
-		if (bbcAlice.maxX > bbcBob.minX) {
-			if (bbcAlice.minX < bbcBob.maxX) {
-				if (bbcAlice.maxY > bbcBob.minY) {
-					if (bbcAlice.minY < bbcBob.maxY) {
+		if (bbcAlice.maxX + pcAlice.x > bbcBob.minX +pcBob.x) {
+			if (bbcAlice.minX + pcAlice.x < bbcBob.maxX + pcBob.x) {
+				if (bbcAlice.maxY + pcAlice.y > bbcBob.minY + pcBob.y) {
+					if (bbcAlice.minY + pcAlice.y < bbcBob.maxY + pcBob.y) {
 						// test exact shape if asked to
-						if (scAlice != null && scBob != null) {
-							GeoUtil.collide(scAlice.shape, scBob.shape);
+						if (scAlice == null || scBob == null || GeoUtil.isCollision(scAlice.shape, scBob.shape, scAlice.shapeType, scBob.shapeType, pcAlice, pcBob)) {
+							ttc.triggerAcceptingObject.callbackTouch(bob);
+							rtc.triggerReceivingObject.callbackTouched(alice);
 						}
-						ttc.triggerAcceptingObject.callbackTouch(bob);
-						rtc.triggerReceivingObject.callbackTouched(alice);
 					}
 				}
 			}

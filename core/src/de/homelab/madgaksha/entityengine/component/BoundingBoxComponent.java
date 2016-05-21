@@ -54,4 +54,9 @@ public class BoundingBoxComponent implements Component, Poolable {
 		maxY = DEFAULT_MAX_Y;
 	}
 
+	@Override
+	public String toString() {
+		return "(" + minX + ", " + minY + ")-(" + maxX + ", " + maxY + ")";
+	}
+	
 }

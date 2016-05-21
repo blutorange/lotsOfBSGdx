@@ -34,4 +34,5 @@ public class DefaultPriority {
 	public final static int birdsViewSpriteSystem = 12;
 	public final static int spriteAnimationSystem = 13;
 	public final static int spriteRenderSystem = 14;
+	public final static int particleEffectRenderSystem = 15;
 }

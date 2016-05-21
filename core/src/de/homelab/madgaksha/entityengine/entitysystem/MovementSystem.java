@@ -8,6 +8,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
@@ -36,7 +37,7 @@ public class MovementSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public MovementSystem(int priority) {
-		super(Family.all(PositionComponent.class, VelocityComponent.class, TemporalComponent.class).get(), priority);
+		super(Family.all(PositionComponent.class, VelocityComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(), priority);
 		mapProperties = level.getMapData();
 		tileWidth = mapProperties.getWidthTiles();
 		tileHeight = mapProperties.getHeightTiles();

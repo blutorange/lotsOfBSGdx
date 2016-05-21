@@ -5,11 +5,16 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
+import de.homelab.madgaksha.entityengine.component.DirectionComponent;
+import de.homelab.madgaksha.entityengine.component.InactiveComponent;
+import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.enums.ECollisionGroup;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.util.GeoUtil;
@@ -19,32 +24,37 @@ public abstract class EnemyMaker extends AEntityMaker implements IBehaviour, ITr
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(EnemyMaker.class);
 	
-	private Rectangle boundingBox;
-	private Circle boundingCircle;
+	private PositionComponent positionComponent;
+	private BoundingSphereComponent boundingSphereComponent;
 	private BoundingBoxComponent boundingBoxComponent = new BoundingBoxComponent();
+	private TemporalComponent temporalComponent = new TemporalComponent();
+	private Class<Component>triggerComponentClass;
 	
-	public EnemyMaker(Shape2D shape, ETrigger trigger) {
+	@SuppressWarnings("unchecked")
+	public EnemyMaker(Shape2D shape, ETrigger trigger, Vector2 initialPosition, Float initDir) {
 		super();
 		
-		boundingBox = requestedBoundingBox();
-		boundingCircle = requestedBoundingCircle();
+		Component tc = MakerUtils.makeTrigger(this, this, trigger, ECollisionGroup.PLAYER_GROUP);
+		PositionComponent pc = MakerUtils.makePositionAtCenter(shape);
+		triggerComponentClass = (Class<Component>)tc.getClass();
 		
-		Component triggerComponent = MakerUtils.makeTrigger(this, this, trigger, ECollisionGroup.PLAYER_GROUP);
-		PositionComponent positionComponent = MakerUtils.makePositionAtCenter(shape);
+		boundingBoxComponent = new BoundingBoxComponent(requestedBoundingBox());
+		boundingSphereComponent = new BoundingSphereComponent(requestedBoundingCircle());
+		positionComponent = new PositionComponent(initialPosition.x+pc.x,initialPosition.y+pc.y);
 		
-		// First the bounding box is what's been set on the map, we change it
-		// when the enemy spawns.
+		// Initially the bounding box is the area the player needs to
+		// touch to spawn the enemy. When 
+		// Bounding box needs to be relative to the enemy's origin.
 		Rectangle r = GeoUtil.getBoundingBox(shape);
-		boundingBoxComponent.centerX = r.x;
-		boundingBoxComponent.centerY = r.y;
-		boundingBoxComponent.halfwidth = r.width*0.5f;
-		boundingBoxComponent.halfheight = r.height*0.5f;
-				
-		add(boundingBoxComponent);	
-		add(positionComponent);
-		if (triggerComponent != null) add(triggerComponent);
-		
-		
+		r.x -= pc.x;
+		r.y -= pc.y;
+	
+		add(new DirectionComponent(initDir));
+		add(new InactiveComponent());
+		add(new InvisibleComponent());
+		add(new BoundingBoxComponent(r));
+		add(pc);
+		if (tc != null) add(tc);
 		
 		//TODO remove component when triggered to activate enemy ?
 		// this.add(deactivatedComponent / inactiveComponent);
@@ -63,39 +73,37 @@ public abstract class EnemyMaker extends AEntityMaker implements IBehaviour, ITr
 	
 	@Override
 	public void callbackStartup() {
-		// Enemy spawning, add real bounding box.
-		boundingBoxComponent.set(boundingBox);
-		add(new BoundingSphereComponent(boundingCircle));
+		sinSpawn();
 		triggeredStartup();
 	}
 	@Override
 	public void callbackTouch(Entity e) {
-		// Enemy spawning, add real bounding box.
-		boundingBoxComponent.set(boundingBox);
-		add(new BoundingSphereComponent(boundingCircle));
+		sinSpawn();
 		triggeredTouch(e);
 	}
 	@Override
 	public void callbackScreen() {
-		// Enemy spawning, add real bounding box.
-		boundingBoxComponent.set(boundingBox);
-		add(new BoundingSphereComponent(boundingCircle));
+		sinSpawn();
 		triggeredScreen();
 	}
 	@Override
 	public void callbackTouched(Entity e) {
-		// Enemy spawning, add real bounding box.
-		boundingBoxComponent.set(boundingBox);
-		add(new BoundingSphereComponent(boundingCircle));
+		sinSpawn();
 		triggeredTouched(e);
 		
 	}
 	
-	public Rectangle getBoundingBox() {
+	private void sinSpawn() {
 		// Enemy spawning, add real bounding box.
-		boundingBoxComponent.set(boundingBox);
-		add(new BoundingSphereComponent(boundingCircle));
-		return boundingBox;
+		remove(BoundingBoxComponent.class);
+		remove(InactiveComponent.class);
+		remove(InvisibleComponent.class);
+		remove(PositionComponent.class);
+		remove(triggerComponentClass);
+		add(positionComponent);
+		add(boundingBoxComponent);
+		add(boundingSphereComponent);
+		add(temporalComponent);
 	}
 	
 	protected abstract Rectangle requestedBoundingBox();

@@ -73,5 +73,10 @@ public class PositionComponent implements Component, Poolable {
 
 		limitToMap = DEFAULT_LIMIT_TO_MAP;
 	}
+	
+	@Override
+	public String toString(){
+		return "(" + x + "," + y + "," + z + ")+(" + offsetX + "," + offsetY + "," + offsetZ + ");limitToMap=" + limitToMap;
+	}
 
 }

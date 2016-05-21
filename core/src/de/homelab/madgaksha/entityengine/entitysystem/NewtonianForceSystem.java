@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.ForceComponent;
+import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 
@@ -24,7 +25,7 @@ public class NewtonianForceSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public NewtonianForceSystem(int priority) {
-		super(Family.all(TemporalComponent.class, VelocityComponent.class, ForceComponent.class).get(), priority);
+		super(Family.all(TemporalComponent.class, VelocityComponent.class, ForceComponent.class).exclude(InactiveComponent.class).get(), priority);
 	}
 
 	@Override

@@ -28,12 +28,6 @@ public class BirdsViewSpriteSystem extends IteratingSystem {
 	public BirdsViewSpriteSystem() {
 		this(DefaultPriority.birdsViewSpriteSystem);
 	}
-
-	@Override
-	public void update(float deltaTime) {
-		// Iterate.
-		super.update(deltaTime);		
-	}
 	
 	@SuppressWarnings("unchecked")
 	public BirdsViewSpriteSystem(int priority) {

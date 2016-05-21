@@ -36,7 +36,7 @@ public class TextboxLayer extends ALayer {
 	private float animationFactor = 1.0f;
 	
 	/** We do not want to create a new textbox object all the time...*/
-	public static Textbox[] POOL = new Textbox[100];
+	public final static Textbox[] POOL = new Textbox[100];
 	
 	/**
 	 * Adds a new layer with a set of textboxes. 
@@ -112,5 +112,4 @@ public class TextboxLayer extends ALayer {
 	public boolean isBlockUpdate() {
 		return false;
 	}
-
 }
