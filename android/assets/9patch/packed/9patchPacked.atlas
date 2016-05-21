@@ -1,0 +1,15 @@
+
+9patchPacked.png
+size: 256,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+textbox-blue
+  rotate: false
+  xy: 2, 2
+  size: 210, 113
+  split: 43, 153, 65, 35
+  pad: 32, 169, 73, 24
+  orig: 210, 113
+  offset: 0, 0
+  index: -1

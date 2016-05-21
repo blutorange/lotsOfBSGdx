@@ -1,0 +1,13 @@
+
+miscPacked.png
+size: 64,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ovalShadow
+  rotate: false
+  xy: 2, 2
+  size: 33, 18
+  orig: 33, 18
+  offset: 0, 0
+  index: -1
