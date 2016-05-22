@@ -2,13 +2,15 @@ package de.homelab.madgaksha.entityengine;
 
 import com.badlogic.ashley.core.ComponentMapper;
 
+import de.homelab.madgaksha.entityengine.component.AngularVelocityComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
+import de.homelab.madgaksha.entityengine.component.CameraFocusComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.ForceComponent;
 import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
-import de.homelab.madgaksha.entityengine.component.InputComponent;
+import de.homelab.madgaksha.entityengine.component.InputDesktopComponent;
 import de.homelab.madgaksha.entityengine.component.InverseMassComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
@@ -70,18 +72,22 @@ public final class Mapper {
 	public final static ComponentMapper<ReceiveTouchGroup05Component> receiveTouchGroup05Component = ComponentMapper
 			.getFor(ReceiveTouchGroup05Component.class);
 	
+	public final static ComponentMapper<AngularVelocityComponent> angularVelocityComponent = ComponentMapper
+			.getFor(AngularVelocityComponent.class);
 	public final static ComponentMapper<BoundingBoxComponent> boundingBoxComponent = ComponentMapper
 			.getFor(BoundingBoxComponent.class);
 	public final static ComponentMapper<BoundingSphereComponent> boundingSphereComponent = ComponentMapper
 			.getFor(BoundingSphereComponent.class);
+	public final static ComponentMapper<CameraFocusComponent> cameraFocusComponent = ComponentMapper
+			.getFor(CameraFocusComponent .class);
 	public final static ComponentMapper<DirectionComponent> directionComponent = ComponentMapper
 			.getFor(DirectionComponent.class);
 	public final static ComponentMapper<ForceComponent> forceComponent = ComponentMapper.getFor(ForceComponent.class);
 	public final static ComponentMapper<HoverEffectComponent> hoverEffectComponent = ComponentMapper.getFor(HoverEffectComponent.class);
 	public final static ComponentMapper<InactiveComponent> inactiveComponent = ComponentMapper
 			.getFor(InactiveComponent.class);
-	public final static ComponentMapper<InputComponent> inputComponent = ComponentMapper
-			.getFor(InputComponent.class);	
+	public final static ComponentMapper<InputDesktopComponent> inputDesktopComponent = ComponentMapper
+			.getFor(InputDesktopComponent.class);	
 	public final static ComponentMapper<InverseMassComponent> inverseMassComponent = ComponentMapper
 			.getFor(InverseMassComponent.class);
 	public final static ComponentMapper<InvisibleComponent> invisibleComponent = ComponentMapper

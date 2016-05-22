@@ -41,7 +41,7 @@ public final class JavaProcess {
         String className = c.getCanonicalName();
 
         ProcessBuilder builder = new ProcessBuilder(
-                javaBin, "-cp", classpath, className);
+                javaBin, "-cp", classpath, "-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005", className);
     
         // Make sure we receive console output.
         builder.redirectOutput(Redirect.INHERIT);

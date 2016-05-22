@@ -1,19 +1,21 @@
 package de.homelab.madgaksha.util;
 
-import java.util.ArrayList;
-
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.utils.Array;
 import com.dreizak.miniball.model.PointSet;
 
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 
-public class ArrayListEntityPointSet extends ArrayList<Entity> implements PointSet {
-	private static final long serialVersionUID = 1L;
-
-	@Override
-	public int size() {
-		return super.size();
+/**
+ * Extending ImmutableArray with two methods to use it with miniball. 
+ * @author madgaksha
+ *
+ */
+public class ImmutableArrayEntityPointSet extends ImmutableArray<Entity> implements PointSet {
+	public ImmutableArrayEntityPointSet(Array<Entity> array) {
+		super(array);
 	}
 
 	@Override

@@ -29,12 +29,10 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Graphics.Monitor;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -45,15 +43,10 @@ import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.layer.ALayer;
 import de.homelab.madgaksha.layer.EntityLayer;
-import de.homelab.madgaksha.layer.TextboxLayer;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.EBitmapFont;
-import de.homelab.madgaksha.resourcecache.ENinePatch;
-import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.textboxsystem.FaceTextbox;
-import de.homelab.madgaksha.textboxsystem.SpeakerTextbox;
+import de.homelab.madgaksha.resourcepool.ResourcePool;
 public class Game implements ApplicationListener {
 
 	private final static Logger LOG = Logger.getLogger(Game.class);
@@ -156,6 +149,9 @@ public class Game implements ApplicationListener {
 				return;
 			}
 		}
+		
+		// Initialize resource pool.
+		ResourcePool.init();
 
 		// Create music player.
 		musicPlayer = new MusicPlayer();
@@ -182,7 +178,7 @@ public class Game implements ApplicationListener {
 			Gdx.app.exit();
 			return;
 		};
-		
+				
         // Get viewports for the game, info and screen windows.
 		viewportGame = level.getGameViewport(params.requestedWidth, params.requestedHeight);
 		viewportInfo = level.getInfoViewport(params.requestedWidth, params.requestedHeight);
@@ -200,7 +196,7 @@ public class Game implements ApplicationListener {
 		
 		// Load background image.
 		backgroundImage = level.getBackgroundImage();
-		
+				
 		// Start the game.
 		running = true;
 	}

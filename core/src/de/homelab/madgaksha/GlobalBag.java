@@ -3,11 +3,13 @@ package de.homelab.madgaksha;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
+import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.level.GameViewport;
 import de.homelab.madgaksha.level.InfoViewport;
@@ -36,10 +38,9 @@ public final class GlobalBag {
 	/** Maximum supported height in pixels of all monitors. */
 	public static int maxMonitorHeight;
 	
-	public static float worldVisibleMinX;
-	public static float worldVisibleMaxX;
-	public static float worldVisibleMinY;
-	public static float worldVisibleMaxY;
+	public static Polygon visibleWorld = new Polygon(new float[8]);
+	public static Rectangle visibleWorldBoundingBox = new Rectangle();
+	
 	
 	/** The instance of the running game. */
 	public static Game game;
@@ -73,4 +74,14 @@ public final class GlobalBag {
 		
 	/** Entity engine ASHLEY for the main game.*/
 	public static Engine gameEntityEngine;
+
+	/** The tracking component of the camera. */
+	public static ManyTrackingComponent cameraTrackingComponent;
+	
+	static {
+		visibleWorld.setPosition(0.0f, 0.0f);
+		visibleWorld.setOrigin(0.0f, 0.0f);
+		visibleWorld.setRotation(0.0f);
+		visibleWorld.setScale(1.0f, 1.0f);
+	}
 }

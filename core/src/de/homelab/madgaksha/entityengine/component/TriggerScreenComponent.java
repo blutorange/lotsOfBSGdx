@@ -19,8 +19,11 @@ public class TriggerScreenComponent implements Component, Poolable {
 		@Override public void callbackScreen() {}
 	};
 	
+	private final static boolean DEFAULT_PRECISE_CHECK = false;
+	
 	public ITrigger triggerAcceptingObject = DEFAULT_TRIGGER_ACCEPTING_OBJECT;
-
+	public boolean preciseCheck = DEFAULT_PRECISE_CHECK;
+	
 	public TriggerScreenComponent() {
 	}
 	
@@ -28,8 +31,14 @@ public class TriggerScreenComponent implements Component, Poolable {
 		this.triggerAcceptingObject = triggerAcceptingObject;
 	}
 	
+	public TriggerScreenComponent(ITrigger triggerAcceptingObject, boolean preciseCheck) {
+		this.triggerAcceptingObject = triggerAcceptingObject;
+		this.preciseCheck = preciseCheck;
+	}
+	
 	@Override
 	public void reset() {
 		triggerAcceptingObject = DEFAULT_TRIGGER_ACCEPTING_OBJECT;
+		preciseCheck = DEFAULT_PRECISE_CHECK;
 	}
 }

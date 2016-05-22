@@ -2,6 +2,7 @@ package de.homelab.madgaksha.level;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -57,8 +58,9 @@ public class GameViewport extends Viewport {
 		// Position camera to show entire world height initially.
 		float elevation = mapHeightW * 0.5f * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF_INV;
 		camera.position.set(mapWidthW * 0.5f, mapHeightW * 0.5f, elevation);
+		camera.up.rotate(270f,0f,0f,1f);
 
-		tanFovyH = (float)Math.tan(0.5*ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y);
+		tanFovyH = (float)Math.tan(0.5*ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y*MathUtils.degreesToRadians);
 		
 		setWorldHeight(mapHeightW);
 		setWorldWidth(mapHeightW * Game.VIEWPORT_GAME_AR);
@@ -76,8 +78,7 @@ public class GameViewport extends Viewport {
 		// Game window goes to the bottom left.
 		setScreenBounds(0, 0, gameWidth, gameHeight);
 
-		// Apply needs to be called by the update loop anyway.
-		// apply(centerCamera);
+		apply(centerCamera);
 	}
 
 

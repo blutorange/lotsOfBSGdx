@@ -1,14 +1,15 @@
 package de.homelab.madgaksha.level;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.APlayer;
@@ -59,14 +60,13 @@ public abstract class ALevel {
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMap loadedTiledMap;
 	private MapData mapData;
+	private Entity baseDirectionEntity;
 	private final ETexture backgroundImage;
-	private final IResource[] requiredResources;
+	private final IResource<? extends Enum<?>,?>[] requiredResources;
 	private final EMusic bgm;
 	private final EMusic battleBgm;
 	private final ETiledMap tiledMap;
 	private final String i18nNameKey;
-	/** Initial position of the player in tiles. */
-	private Vector2 playerInitialPosition;
 	
 	// =============================
 	// Constructor
@@ -76,7 +76,6 @@ public abstract class ALevel {
 		requiredResources = requestedRequiredResources();
 		bgm = requestedBgm();
 		tiledMap = requestedTiledMap();
-		playerInitialPosition = requestedPlayerInitialPosition();
 		i18nNameKey = requestedI18nNameKey();
 		battleBgm = requestedBattleBgm();
 	}
@@ -92,6 +91,8 @@ public abstract class ALevel {
 			return false;
 		}
 		mapRenderer = new OrthogonalTiledMapRenderer(loadedTiledMap, 1.0f, batch);
+		baseDirectionEntity = new Entity();
+		baseDirectionEntity.add(new PositionComponent(mapData.getBaseDirection()));
 		return true;
 	}
 
@@ -130,7 +131,7 @@ public abstract class ALevel {
 	 * 
 	 * @return List of all required resources.
 	 */
-	protected abstract IResource[] requestedRequiredResources();
+	protected abstract IResource<? extends Enum<?>,?>[] requestedRequiredResources();
 
 	/**@return Initial music that should be playing. Null if none. */
 	protected abstract EMusic requestedBgm();
@@ -143,9 +144,6 @@ public abstract class ALevel {
 	 * @return The map to be loaded initially.
 	 */
 	protected abstract ETiledMap requestedTiledMap();
-	
-	/** Initial position of the player in tiles. */
-	protected abstract Vector2 requestedPlayerInitialPosition();
 		
 	protected abstract String requestedI18nNameKey();
 	
@@ -182,7 +180,7 @@ public abstract class ALevel {
 		return WORLD_Y;
 	}
 
-	public IResource[] getRequiredResources() {
+	public IResource<? extends Enum<?>,?>[] getRequiredResources() {
 		return requiredResources;
 	}
 	
@@ -205,18 +203,6 @@ public abstract class ALevel {
 		return i18n.game(i18nNameKey);
 	}
 	
-	/** Initial position of the player in pixels. This converts
-	 * the position from tiles to pixels.
-	 * 
-	 * @return Initial position of the player in pixels.
-	 */
-	public Vector2 getPlayerInitialPosition(){
-		return new Vector2(
-				playerInitialPosition.x*mapData.getWidthTiles(),
-				playerInitialPosition.y*mapData.getHeightTiles());
-	}
-
-
 	/**
 	 * The viewport for the info screen.
 	 * 
@@ -247,7 +233,12 @@ public abstract class ALevel {
 	public GameViewport getGameViewport(int screenWidth, int screenHeight) {
 		GameViewport vw = new GameViewport(screenWidth, screenHeight, getMapWidthW(), getMapHeightW(), false);
 		setupInitialGameViewport(vw);
+		vw.apply();
 		return vw;
+	}
+
+	public Entity getBaseDirectionEntity() {
+		return baseDirectionEntity;
 	}
 
 }

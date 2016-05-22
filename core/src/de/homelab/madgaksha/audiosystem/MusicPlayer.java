@@ -13,6 +13,7 @@ import de.homelab.madgaksha.resourcecache.EMusic;
  *
  */
 public class MusicPlayer extends AAudioPlayer {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(MusicPlayer.class);
 	private Music currentClip = null;
 	private Music nextClip = null;

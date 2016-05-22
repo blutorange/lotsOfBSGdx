@@ -15,7 +15,7 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum ETextureAtlas implements IResource {
+public enum ETextureAtlas implements IResource<ETextureAtlas,TextureAtlas> {
 	NINE_PATCHES("9patch/packed/9patchPacked.atlas"),
 	PARTICLE_EFFECTS("particle/packed/particleEffectPacked.atlas"),
 	MISC("texture/misc/packed/miscPacked.atlas");

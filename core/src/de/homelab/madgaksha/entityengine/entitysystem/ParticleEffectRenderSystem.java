@@ -8,23 +8,31 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter.ScaledNumericValue;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.DirectionComponent;
+import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.ParticleEffectComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.logging.Logger;
+
 /**
  * Updates an object's position its velocity over a small time step dt.
  * 
  * @author madgaksha
  */
 public class ParticleEffectRenderSystem extends EntitySystem {
-	
+
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(ParticleEffectRenderSystem.class);
 	private ImmutableArray<Entity> entities;
-	
+
 	public ParticleEffectRenderSystem() {
 		super(DefaultPriority.particleEffectRenderSystem);
 	}
@@ -34,19 +42,17 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 		// Apply projection matrix.
 		batchGame.setProjectionMatrix(viewportGame.getCamera().combined);
 
-		// Render sprites.
+		// Draw each particle effect.
 		batchGame.begin();
 		for (int i = 0; i < entities.size(); ++i) {
 			final Entity entity = entities.get(i);
 			final ParticleEffectComponent pec = Mapper.particleEffectComponent.get(entity);
 			final PositionComponent pc = Mapper.positionComponent.get(entity);
-
-			// Apply projection matrix.
-			pec.particleEffect.start();
-			pec.particleEffect.setDuration(500000);
-			if (pec.particleEffect.isComplete()) pec.particleEffect.reset();
-			pec.particleEffect.setPosition(pc.x,pc.y);
-			pec.particleEffect.draw(batchGame,0.05f);
+			final DirectionComponent dc = Mapper.directionComponent.get(entity);
+			deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
+			if (dc != null) setAngle(pec.particleEffect, dc.degree);
+			if (pc != null) pec.particleEffect.setPosition(pc.x, pc.y);
+			pec.particleEffect.draw(batchGame, deltaTime);
 		}
 		batchGame.end();
 	}
@@ -54,7 +60,10 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, ParticleEffectComponent.class).exclude(InvisibleComponent.class).get());
+		entities = engine.getEntitiesFor(Family.all(
+				TemporalComponent.class,
+				ParticleEffectComponent.class)
+				.exclude(InvisibleComponent.class, InactiveComponent.class).get());
 	}
 
 	@Override
@@ -62,4 +71,22 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 		entities = null;
 	}
 	
+	public void setAngle(PooledEffect pe, float angle) {
+		float a;
+		float r = pe.getEmitters().get(0).getAngle().getLowMin();
+		for (ParticleEmitter e : pe.getEmitters()) {
+			final ScaledNumericValue snv = e.getAngle();
+			snv.setHighMax(snv.getHighMax()-r+angle);
+			snv.setHighMin(snv.getHighMin()-r+angle);
+			snv.setLowMax(snv.getLowMax()-r+angle);
+			snv.setLowMin(snv.getLowMin()-r+angle);
+			//a = (snv.getHighMax()-snv.getHighMin())*0.5f;
+//			snv.setHighMax(angle+a+r);
+//			snv.setHighMin(angle-a+r);
+//			a = (snv.getLowMax()-snv.getLowMin())*0.5f;
+//			snv.setLowMax(angle+a+r);
+//			snv.setLowMin(angle-a+r);
+		}
+	}
+
 }

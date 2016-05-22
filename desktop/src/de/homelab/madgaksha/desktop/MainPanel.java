@@ -15,6 +15,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -37,6 +38,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
@@ -47,6 +49,9 @@ import javax.swing.event.ChangeListener;
 import org.apache.commons.io.IOUtils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
+import com.badlogic.gdx.backends.lwjgl.LwjglAWTInput;
 
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.logging.LoggerFactory;
@@ -402,8 +407,30 @@ public class MainPanel extends JPanel implements ComponentListener {
 			pnlKeyVal.add(lblFullscreen);
 			pnlKeyVal.add(cbFullscreen);			
 			
+			// =====================
+			//     INTPUT KEYS
+			// =====================
+//			final JLabel lblMoveRight = new JLabel(i18n.main("desktop.options.key.right"));
+//			final JTextField tfMoveRight = new JTextField();
+//			tfMoveRight.addKeyListener(new KeyAdapter() {
+//				@Override
+//				public void keyReleased(KeyEvent ev) {
+//					setKey(ev);
+//				}
+//				@Override
+//				public void keyPressed(KeyEvent ev) {
+//					setKey(ev);
+//				}
+//				private void setKey(KeyEvent ev) {
+//					System.out.println(ev.toString());
+//					tfMoveRight.setText(ev.getKeyText(ev.getKeyCode()));
+//				}
+//			});
+//			pnlKeyVal.add(lblMoveRight);
+//			pnlKeyVal.add(tfMoveRight);
+			
 			// Set key-value input fields.
-			SpringUtilities.makeCompactGrid(pnlKeyVal, 4, 2, 3, 3, 3, 3);
+			SpringUtilities.makeCompactGrid(pnlKeyVal, 5, 2, 3, 3, 3, 3);
 			pnlContent.add(pnlKeyVal);
 			
 			// Close button

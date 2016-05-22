@@ -9,8 +9,11 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import de.homelab.madgaksha.logging.Logger;
 
-public enum ESound implements IResource {
-	TEXTBOX_NEXT("sound/ed6se002.wav");
+public enum ESound implements IResource<ESound,Sound> {
+	TEXTBOX_NEXT("sound/ed6se002.wav"),
+	ENEMY_SWITCH("sound/ed6se049.wav"),
+	ORA_KOCCHI_DA_ZE("sound/ed6t1252.wav"),
+	;
 
 	private final static Logger LOG = Logger.getLogger(ESound.class);
 	private final static EnumMap<ESound, Sound> soundCache = new EnumMap<ESound, Sound>(ESound.class);
@@ -29,7 +32,7 @@ public enum ESound implements IResource {
 	}
 
 	@Override
-	public Enum<?> getEnum() {
+	public Enum<ESound> getEnum() {
 		return this;
 	}
 

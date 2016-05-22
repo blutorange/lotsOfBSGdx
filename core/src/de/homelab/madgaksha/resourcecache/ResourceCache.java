@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
@@ -27,7 +26,6 @@ public final class ResourceCache {
 	public final static int LIMIT_BITMAP_FONT = 20;
 	public final static int LIMIT_NINE_PATCH = 20;
 	public final static int LIMIT_TEXTURE_ATLAS = 20;
-	public final static int  LIMIT_PARTICLE_EFFECT = 20;
 	
 	private ResourceCache() {
 	}
@@ -48,7 +46,7 @@ public final class ResourceCache {
 	 *         typecast to the correct type.
 	 */
 	@SuppressWarnings("unchecked")
-	private static Object getResource(IResource res, boolean cached) {
+	private static Object getResource(IResource<? extends Enum<?>,?> res, boolean cached) {
 		if (res == null)
 			return null;
 		if (cached && res.getMap().containsKey(res)) {
@@ -61,7 +59,7 @@ public final class ResourceCache {
 				return null;
 			}
 			final Object r = res.getObject();
-			if (r != null)
+			if (r != null && cached)
 				res.getMap().put(res.getEnum(), r);
 			return r;
 		}
@@ -72,7 +70,7 @@ public final class ResourceCache {
 	 * @param res Resource to pre-load.
 	 * @return Whether it was loaded sucessfully.
 	 */
-	public static boolean loadToRam(IResource res) {
+	public static boolean loadToRam(IResource<? extends Enum<?>,?> res) {
 		return getResource(res, true) != null;
 	}
 
@@ -188,13 +186,6 @@ public final class ResourceCache {
 		for (EBitmapFont bf : set) bf.getObject();
 	}
 	
-	/**
-	 * Clears all particle effect objects from the cache.
-	 */
-	public static void clearAllParticleEffect() {
-		EParticleEffect.clearAll();
-	}
-
 	
 	/**
 	 * Clears all resource objects.
@@ -205,7 +196,6 @@ public final class ResourceCache {
 		clearAllBitmapFont();
 		clearAllMusic();
 		clearAllNinePatch();
-		clearAllParticleEffect();
 		clearAllSound();
 		clearAllTexture();
 		clearAllTextureAtlas();
@@ -336,20 +326,6 @@ public final class ResourceCache {
 	}
 	public static BitmapFont getBitmapFont(ENinePatch bitmapFont, boolean cached) {
 		return (BitmapFont) getResource(bitmapFont, cached);
-	}
-	
-	/**
-	 * Fetches the requested particle effect font from the cache, or loads it.
-	 * 
-	 * @param particleEffect
-	 *            particle effect to load.
-	 * @return Loaded particle effect.
-	 */
-	public static ParticleEffect getParticleEffect(EParticleEffect particleEffect) {
-		return (ParticleEffect) getResource(particleEffect, true);
-	}
-	public static ParticleEffect getParticleEffect(EParticleEffect particleEffect, boolean cached) {
-		return (ParticleEffect) getResource(particleEffect, cached);
 	}
 
 }

@@ -17,18 +17,31 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum ETexture implements IResource {
+public enum ETexture implements IResource<ETexture,Texture> {
 	MAIN_BACKGROUND("texture/mainBackground.jpg"),
 	
 	OVAL_SHADOW(ETextureAtlas.MISC, "ovalShadow"),
 	
+	// ==================
+	//      ESTELLE
+	// ==================
 	ESTELLE_RUNNING("sprite/estelle00001.png"),
 	ESTELLE_STANDING("sprite/estelle00100.png"),
 	ESTELLE_SWINGING("sprite/estelle00107.png"),
 
+	FACE_ESTELLE_01("texture/face/estelle01.png"),
+
+	// ==================
+	//      JOSHUA
+	// ==================
 	JOSHUA_RUNNING("sprite/joshua00011.png"),
 	
-	FACE_ESTELLE_01("texture/face/estelle01.png")
+	
+	// ===================
+	//      ENEMIES
+	// ===================
+	SOLIDER_RED_0("sprite/soldierRed0.png"),
+	
 	;
 
 	private final static Logger LOG = Logger.getLogger(ETexture.class);
@@ -83,7 +96,7 @@ public enum ETexture implements IResource {
 	}
 
 	@Override
-	public Enum<?> getEnum() {
+	public Enum<ETexture> getEnum() {
 		return this;
 	}
 

@@ -1,11 +1,11 @@
 package de.homelab.madgaksha.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-import de.homelab.madgaksha.resourcecache.EParticleEffect;
-import de.homelab.madgaksha.resourcecache.ResourceCache;
+import de.homelab.madgaksha.resourcepool.EParticleEffect;
+import de.homelab.madgaksha.resourcepool.ResourcePool;
 
 /**
  * Stores the the inverse mass of a component.
@@ -16,16 +16,16 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
  *
  */
 public class ParticleEffectComponent implements Component, Poolable {
-	private final static ParticleEffect DEFAULT_PARTICLE_EFFECT = null;
+	private final static PooledEffect DEFAULT_PARTICLE_EFFECT = null;
 	
-	public ParticleEffect particleEffect = DEFAULT_PARTICLE_EFFECT;
-
+	public PooledEffect particleEffect = DEFAULT_PARTICLE_EFFECT;
+	
 	public ParticleEffectComponent() {
 	}
 	public ParticleEffectComponent(EParticleEffect particleEffect) {
-		this.particleEffect = ResourceCache.getParticleEffect(particleEffect);
+		this.particleEffect = ResourcePool.obtainParticleEffect(particleEffect);
 	}
-	public ParticleEffectComponent(ParticleEffect particleEffect) {
+	public ParticleEffectComponent(PooledEffect particleEffect) {
 		this.particleEffect = particleEffect;
 	}
 	

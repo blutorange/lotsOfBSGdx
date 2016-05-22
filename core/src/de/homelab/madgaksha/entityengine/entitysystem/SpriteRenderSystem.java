@@ -3,23 +3,18 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import static de.homelab.madgaksha.GlobalBag.batchGame;
 import static de.homelab.madgaksha.GlobalBag.level;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
-import static de.homelab.madgaksha.GlobalBag.worldVisibleMaxX;
-import static de.homelab.madgaksha.GlobalBag.worldVisibleMaxY;
-import static de.homelab.madgaksha.GlobalBag.worldVisibleMinX;
-import static de.homelab.madgaksha.GlobalBag.worldVisibleMinY;
+import static de.homelab.madgaksha.GlobalBag.visibleWorldBoundingBox;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 
-import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
@@ -27,6 +22,7 @@ import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.util.GeoUtil;
 
 public class SpriteRenderSystem extends EntitySystem {
 
@@ -42,7 +38,7 @@ public class SpriteRenderSystem extends EntitySystem {
 
 	private float shadowRotateX;
 	private float shadowRotateY;
-	
+
 	public SpriteRenderSystem() {
 		this(DefaultPriority.spriteRenderSystem);
 	}
@@ -73,10 +69,12 @@ public class SpriteRenderSystem extends EntitySystem {
 
 		// Render map.
 		level.getMapRenderer().setView(viewportGame.getCamera().combined,
-				MathUtils.clamp(worldVisibleMinX, mapBoundaryMinX, mapBoundaryMaxX),
-				MathUtils.clamp(worldVisibleMinY, mapBoundaryMinY, mapBoundaryMaxY),
-				MathUtils.clamp(worldVisibleMaxX, mapBoundaryMaxX, mapBoundaryMaxX),
-				MathUtils.clamp(worldVisibleMaxY, mapBoundaryMinY, mapBoundaryMaxY));
+				MathUtils.clamp(visibleWorldBoundingBox.x, mapBoundaryMinX, mapBoundaryMaxX),
+				MathUtils.clamp(visibleWorldBoundingBox.y, mapBoundaryMinY, mapBoundaryMaxY),
+				MathUtils.clamp(visibleWorldBoundingBox.x + visibleWorldBoundingBox.width, mapBoundaryMaxX,
+						mapBoundaryMaxX),
+				MathUtils.clamp(visibleWorldBoundingBox.y + visibleWorldBoundingBox.height, mapBoundaryMinY,
+						mapBoundaryMaxY));
 		level.getMapRenderer().render();
 
 		// Render sprites.
@@ -88,10 +86,14 @@ public class SpriteRenderSystem extends EntitySystem {
 			final RotationComponent rc = Mapper.rotationComponent.get(entity);
 			final ScaleComponent sc = Mapper.scaleComponent.get(entity);
 			final ShadowComponent kc = Mapper.shadowComponent.get(entity);
-		
+			final BoundingBoxComponent bbc = Mapper.boundingBoxComponent.get(entity);
+			
+			// Do not render if off-screen.
+			if (bbc != null && !GeoUtil.boundingBoxVisible(bbc,pc)) continue;
+
 			shadowRotateX = 0.0f;
 			shadowRotateY = 0.0f;
-			
+
 			// Rotate if desired.
 			if (rc != null) {
 				if (rc.inverseToCamera)
@@ -109,19 +111,22 @@ public class SpriteRenderSystem extends EntitySystem {
 
 			// Drop shadow if desired.
 			if (kc != null) {
-				// Should be a tangent (offsetRotateX = tan(rc.thetaZ)*(shadowPositionY-rotateOriginY)),
+				// Should be a tangent (offsetRotateX =
+				// tan(rc.thetaZ)*(shadowPositionY-rotateOriginY)),
 				// but for small angles, a linear approximation is good enough.
-				shadowRotateX = shadowRotateX*kc.offsetRotateX+kc.offsetX;
-				shadowRotateY = shadowRotateY*kc.offsetRotateY+kc.offsetY;
+				shadowRotateX = shadowRotateX * kc.offsetRotateX + kc.offsetX;
+				shadowRotateY = shadowRotateY * kc.offsetRotateY + kc.offsetY;
 				kc.sprite.setScale(1.0f + pc.offsetX * kc.scaleFactorX + pc.offsetY * kc.scaleFactorY);
 				kc.sprite.setCenter(
-						pc.x + shadowRotateY * viewportGame.getCamera().up.x + shadowRotateX * viewportGame.getCamera().up.y,
-						pc.y + shadowRotateY * viewportGame.getCamera().up.y - shadowRotateX * viewportGame.getCamera().up.x);
+						pc.x + shadowRotateY * viewportGame.getCamera().up.x
+								+ shadowRotateX * viewportGame.getCamera().up.y,
+						pc.y + shadowRotateY * viewportGame.getCamera().up.y
+								- shadowRotateX * viewportGame.getCamera().up.x);
 				kc.sprite.setRotation(-viewportGame.getRotationUpXY());
 
 				kc.sprite.draw(batchGame);
 			}
-			
+
 			// Draw main sprite.
 			spc.sprite.setCenter(pc.x + pc.offsetX, pc.y + pc.offsetY);
 			spc.sprite.draw(batchGame);

@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.enums.ECollisionGroup;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.IResource;
 public class CallbackMaker extends AEntityMaker implements ITrigger, IReceive {
 
 	private final static Logger LOG = Logger.getLogger(AEntityMaker.class);
@@ -66,6 +67,11 @@ public class CallbackMaker extends AEntityMaker implements ITrigger, IReceive {
 		} catch (ReflectionException ex) {
 			LOG.error("could not invoke callback: " + this, ex);
 		}
+	}
+
+	@Override
+	protected IResource<? extends Enum<?>, ?>[] requestedResources() {
+		return null;
 	}
 
 }

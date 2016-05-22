@@ -22,7 +22,7 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum EBitmapFont implements IResource {
+public enum EBitmapFont implements IResource<EBitmapFont,BitmapFont> {
 	MAIN_FONT("mainFont");
 	private final static Logger LOG = Logger.getLogger(EBitmapFont.class);
 	private final static EnumMap<EBitmapFont, BitmapFont> bitmapFontCache = new EnumMap<EBitmapFont, BitmapFont>(EBitmapFont.class);

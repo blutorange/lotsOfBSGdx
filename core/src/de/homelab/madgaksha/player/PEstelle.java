@@ -10,19 +10,15 @@ import de.homelab.madgaksha.resourcecache.IResource;
 
 public class PEstelle extends APlayer {
 
+	@SuppressWarnings("unchecked")
 	@Override
-	protected IResource[] requestedRequiredResources() {
+	protected IResource<? extends Enum<?>,?>[] requestedRequiredResources() {
 		return new IResource[] {EAnimationList.ESTELLE_STANDING, ETexture.OVAL_SHADOW};
 	}
 	
 	@Override
 	public EAnimationList requestedAnimationList() {
 		return EAnimationList.ESTELLE_STANDING;
-	}
-
-	@Override
-	public float requestedMovementSpeed() {
-		return 200.0f;
 	}
 
 	@Override
@@ -45,5 +41,26 @@ public class PEstelle extends APlayer {
 	public ShadowComponent makeShadow() {
 		return new ShadowComponent(ETexture.OVAL_SHADOW, 12.5f,-60.0f,0.0f,-0.010f, 0.5f, 0.0f);
 	}
+
+	@Override
+	protected float requestedMovementAccelerationFactor() {
+		return 60.0f;
+	}
+
+	@Override
+	protected float requestedMovementFrictionFactor() {
+		return 0.8f;
+	}
+
+	@Override
+	protected float requestedMovementSpeedLow() {
+		return 200.0f;
+	}
+
+	@Override
+	protected float requestedMovementSpeedHigh() {
+		return 700.0f;
+	}
+
 
 }

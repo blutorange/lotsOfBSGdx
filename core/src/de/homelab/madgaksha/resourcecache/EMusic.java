@@ -14,7 +14,7 @@ import de.homelab.madgaksha.logging.Logger;
  * 
  * @author madgaksha
  */
-public enum EMusic implements IResource {
+public enum EMusic implements IResource<EMusic,Music> {
 	ROCK_ON_THE_ROAD("music/rockontheroad.adx"),
 	SOPHISTICATED_FIGHT("music/sophisticatedfight.adx"),
 	SILVER_WILL("music/silverwill.adx");
@@ -47,7 +47,7 @@ public enum EMusic implements IResource {
 	}
 
 	@Override
-	public Enum<?> getEnum() {
+	public Enum<EMusic> getEnum() {
 		return this;
 	}
 

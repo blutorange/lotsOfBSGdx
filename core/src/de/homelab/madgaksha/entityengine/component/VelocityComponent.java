@@ -17,8 +17,8 @@ public class VelocityComponent implements Component, Poolable {
 	private final static float DEFAULT_Y = 0.0f;
 	private final static float DEFAULT_Z = 0.0f;
 
-	public float x;
-	public float y;
+	public float x = 0.0f;
+	public float y = 0.0f;
 	public float z = 0.0f;
 
 	public VelocityComponent() {

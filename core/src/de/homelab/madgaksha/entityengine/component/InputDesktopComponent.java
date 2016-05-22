@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  * 
  * @author mad_gaksha
  */
-public class InputComponent implements Component, Poolable {
+public class InputDesktopComponent implements Component, Poolable {
 	private final static int DEFAULT_LEFT = Keys.LEFT;
 	private final static int DEFAULT_RIGHT = Keys.RIGHT;
 	private final static int DEFAULT_DOWN = Keys.DOWN;
@@ -24,10 +24,19 @@ public class InputComponent implements Component, Poolable {
 	private final static int DEFAULT_DIRECTION_RIGHT = Keys.D;
 	private final static int DEFAULT_DIRECTION_LEFT = Keys.A;
 	
-	private final static float DEFAULT_SPEED = 1.0f;
+	private final static int DEFAULT_SPEED_TRIGGER = Keys.SHIFT_LEFT; 
+	
+	private final static float DEFAULT_FRICTION_FACTOR = 0.8f;
+	private final static float DEFAULT_ACCELERATION_FACTOR = 80.0f;
+	
+	private final static float DEFAULT_LOW_SPEED = 200.0f;
+	private final static float DEFAULT_HIGH_SPEED = 800.0f;
 	private final static float DEFAULT_SCREEN_ORIENTATION = 0.0f;
 	private final static boolean DEFAULT_RELATIVE_TO_CAMERA = true;
 	private final static boolean DEFAULT_ORIENT_TO_SCREEN = false;
+	
+	private final static int DEFAULT_ENEMY_SWITCHER_NEXT = Keys.PAGE_DOWN;
+	private final static int DEFAULT_ENEMY_SWITCHER_PREV = Keys.FORWARD_DEL;
 	
 	public int left = DEFAULT_LEFT;
 	public int right = DEFAULT_RIGHT;
@@ -39,28 +48,41 @@ public class InputComponent implements Component, Poolable {
 	public int directionLeft = DEFAULT_DIRECTION_LEFT;
 	public int directionRight = DEFAULT_DIRECTION_RIGHT;
 	
-	public float speed = DEFAULT_SPEED;	
+	public int speedTrigger = DEFAULT_SPEED_TRIGGER;
+	public int enemySwitcherPrev = DEFAULT_ENEMY_SWITCHER_PREV;
+	public int enemySwitcherNext = DEFAULT_ENEMY_SWITCHER_NEXT;
+		
+	public float frictionFactor = DEFAULT_FRICTION_FACTOR;
+	public float accelerationFactor = DEFAULT_ACCELERATION_FACTOR;
+	
+	public float lowSpeed = DEFAULT_LOW_SPEED;	
+	public float highSpeed = DEFAULT_HIGH_SPEED;
 	public float screenOrientation = DEFAULT_SCREEN_ORIENTATION;
 	public boolean relativeToCamera = DEFAULT_RELATIVE_TO_CAMERA;
 	public boolean orientToScreen = DEFAULT_ORIENT_TO_SCREEN;
 	
-	public InputComponent() {
+	
+	public InputDesktopComponent() {
 	}
-	public InputComponent(float speed) {
-		this.speed = speed;
+	public InputDesktopComponent(float speed) {
+		this.lowSpeed = this.highSpeed = speed;
 	}
-	public InputComponent(float speed, boolean r, boolean o) {
-		this.speed = speed;
+	public InputDesktopComponent(float lowSpeed, float highSpeed, float frictionFactor, float accelerationFactor, boolean r, boolean o) {
+		this.lowSpeed = lowSpeed;
+		this.highSpeed = highSpeed;
+		this.frictionFactor = frictionFactor;
+		this.accelerationFactor = accelerationFactor;
 		this.orientToScreen = o;
 		this.relativeToCamera = r;
 	}
-	public static InputComponent relativeToCamera(float speed, boolean b) {
-		final InputComponent ic = new InputComponent(speed);
+
+	public static InputDesktopComponent relativeToCamera(float speed, boolean b) {
+		final InputDesktopComponent ic = new InputDesktopComponent(speed);
 		ic.relativeToCamera = b;
 		return ic;
 	}
-	public static InputComponent orientToScreen(float speed, float screenOrientation, boolean b) {
-		final InputComponent ic = new InputComponent(speed);
+	public static InputDesktopComponent orientToScreen(float speed, float screenOrientation, boolean b) {
+		final InputDesktopComponent ic = new InputDesktopComponent(speed);
 		ic.orientToScreen = b;
 		ic.screenOrientation = screenOrientation;
 		return ic;
@@ -78,10 +100,19 @@ public class InputComponent implements Component, Poolable {
 		directionLeft = DEFAULT_DIRECTION_LEFT;
 		directionRight = DEFAULT_DIRECTION_RIGHT;
 		
+		speedTrigger = DEFAULT_SPEED_TRIGGER;
+		
 		relativeToCamera = DEFAULT_RELATIVE_TO_CAMERA;
 		orientToScreen = DEFAULT_ORIENT_TO_SCREEN;
 		screenOrientation = DEFAULT_SCREEN_ORIENTATION;
-		speed = DEFAULT_SPEED;
+		lowSpeed = DEFAULT_LOW_SPEED;
+		highSpeed = DEFAULT_HIGH_SPEED;
+		frictionFactor = DEFAULT_FRICTION_FACTOR;
+		accelerationFactor = DEFAULT_ACCELERATION_FACTOR;
+		
+		enemySwitcherPrev = DEFAULT_ENEMY_SWITCHER_PREV;
+		enemySwitcherNext = DEFAULT_ENEMY_SWITCHER_NEXT;
+
 	}
 
 }

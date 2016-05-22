@@ -1,10 +1,8 @@
 package de.homelab.madgaksha.level;
 
 import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.GlobalBag;
-import de.homelab.madgaksha.entityengine.entitysystem.InputVelocitySystem;
 import de.homelab.madgaksha.layer.TextboxLayer;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EBitmapFont;
@@ -29,8 +27,9 @@ public class Level01 extends ALevel {
 		return ETexture.MAIN_BACKGROUND;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	protected IResource[] requestedRequiredResources() {
+	protected IResource<? extends Enum<?>,?>[] requestedRequiredResources() {
 		return new IResource[] {
 				ETexture.JOSHUA_RUNNING,
 				EMusic.ROCK_ON_THE_ROAD,
@@ -41,12 +40,12 @@ public class Level01 extends ALevel {
 	}
 
 	@Override
-	public ETiledMap requestedTiledMap() {
+	protected ETiledMap requestedTiledMap() {
 		return ETiledMap.LEVEL_01;
 	}	
 	
 	@Override
-	public EMusic requestedBgm() {
+	protected EMusic requestedBgm() {
 		return EMusic.ROCK_ON_THE_ROAD;
 	}
 	
@@ -56,13 +55,17 @@ public class Level01 extends ALevel {
 	}
 
 	@Override
-	public Vector2 requestedPlayerInitialPosition() {
-		return new Vector2(35,20);
-	}
-
-	@Override
-	public String requestedI18nNameKey() {
+	protected String requestedI18nNameKey() {
 		return "level.01.name";
+	}
+	
+	@Override
+	protected void setupInitialGameViewport(GameViewport viewport) {
+		viewport.getCamera().position.x = getMapData().getPlayerInitialPosition().x;
+		viewport.getCamera().position.y = -50.0f*32.0f;
+		viewport.getCamera().position.z = 1000.0f;
+		viewport.getCamera().up.x = 0;
+		viewport.getCamera().up.y = 1;
 	}
 	
 	// =========================

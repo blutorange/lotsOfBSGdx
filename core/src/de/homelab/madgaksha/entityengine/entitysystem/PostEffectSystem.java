@@ -95,5 +95,6 @@ public class PostEffectSystem extends EntitySystem {
 	@Override
 	public void removedFromEngine(Engine engine) {
 		entitiesLeanEffect = null;
+		entitiesHoverEffect = null;
 	}
 }

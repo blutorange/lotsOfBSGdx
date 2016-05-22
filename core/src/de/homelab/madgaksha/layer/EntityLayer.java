@@ -12,22 +12,12 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.Gdx;
 
 import de.homelab.madgaksha.entityengine.Mapper;
-import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
-import de.homelab.madgaksha.entityengine.component.DirectionComponent;
-import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
-import de.homelab.madgaksha.entityengine.component.PositionComponent;
-import de.homelab.madgaksha.entityengine.component.RotationComponent;
-import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
-import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
-import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
-import de.homelab.madgaksha.entityengine.component.ViewportComponent;
 import de.homelab.madgaksha.entityengine.entity.MakerUtils;
+import de.homelab.madgaksha.entityengine.entitysystem.AngularMovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CameraTracingSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
@@ -35,7 +25,7 @@ import de.homelab.madgaksha.entityengine.entitysystem.DanmakuSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantRotationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantScaleSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.InputVelocitySystem;
+import de.homelab.madgaksha.entityengine.entitysystem.InputPlayerDesktopSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.MovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.NewtonianForceSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ParticleEffectRenderSystem;
@@ -44,12 +34,7 @@ import de.homelab.madgaksha.entityengine.entitysystem.SpriteAnimationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.TemporalSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ViewportUpdateSystem;
-import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
-import de.homelab.madgaksha.enums.Gravity;
-import de.homelab.madgaksha.enums.TrackingOrientationStrategy;
-import de.homelab.madgaksha.grantstrategy.ExponentialGrantStrategy;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.EAnimationList;
 
 /**
  * Creates and renders the main entity engine.
@@ -103,6 +88,7 @@ public class EntityLayer extends ALayer {
 		// updated, otherwise removal won't be queued and not all
 		// entities will be processed.
 		final List<Entity> myList = new ArrayList<Entity>(20);
+		@SuppressWarnings("unchecked")
 		final Family family = Family.all(TriggerStartupComponent.class).get();
 		for (Entity e : gameEntityEngine.getEntitiesFor(family)) {
 			myList.add(e);
@@ -126,45 +112,41 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new GrantScaleSystem());
 		gameEntityEngine.addSystem(new NewtonianForceSystem());
 		gameEntityEngine.addSystem(new MovementSystem());
+		gameEntityEngine.addSystem(new AngularMovementSystem());
 		gameEntityEngine.addSystem(new DanmakuSystem());
-		gameEntityEngine.addSystem(new InputVelocitySystem());
 		gameEntityEngine.addSystem(new PostEffectSystem());
 		gameEntityEngine.addSystem(new TemporalSystem());
 		gameEntityEngine.addSystem(new CollisionSystem());
+
+		switch (Gdx.app.getType()) {
+		case Android:
+			//TODO
+			break;
+		case Applet:
+			//TODO
+			break;
+		case Desktop:
+			gameEntityEngine.addSystem(new InputPlayerDesktopSystem());
+			break;
+		case HeadlessDesktop:
+			//TODO
+			break;
+		case WebGL:
+			//TODO
+			break;
+		case iOS:
+			//TODO
+			break;
+		default:
+			//TODO
+			break;
+		}
 		
 		playerEntity = MakerUtils.makePlayer(player);
+		Entity myCamera = MakerUtils.makeCamera(level);
 		
-		Entity yourEntity = new Entity();
-		SpriteForDirectionComponent sfdc2 = new SpriteForDirectionComponent(EAnimationList.JOSHUA_RUNNING,
-				ESpriteDirectionStrategy.ZENITH);
-		SpriteAnimationComponent sac2 = new SpriteAnimationComponent(sfdc2);
-		yourEntity.add(new SpriteComponent(sac2));
-		yourEntity.add(new PositionComponent(level.getMapWidthW()/2.0f, 50.0f*32.0f));
-		yourEntity.add(sfdc2);
-		yourEntity.add(sac2);
-		yourEntity.add(new RotationComponent(true));
-		yourEntity.add(new BoundingSphereComponent(70.0f));
-		yourEntity.add(new DirectionComponent(90.0f));
-		yourEntity.add(new TemporalComponent());
-
-		Entity myCamera = new Entity();
-		ManyTrackingComponent mtc = new ManyTrackingComponent(level.getMapXW(), level.getMapYW(), level.getMapWidthW(),
-				level.getMapHeightW());
-		mtc.focusPoints.add(playerEntity);
-		mtc.focusPoints.add(yourEntity);
-		mtc.playerPoint = playerEntity;
-		mtc.bossPoint = yourEntity;
-		mtc.gravity = Gravity.SOUTH;
-		mtc.trackingOrientationStrategy = TrackingOrientationStrategy.RELATIVE;
-		myCamera.add(mtc);
-		myCamera.add(new PositionComponent(1920/4,1080/2));
-		myCamera.add(new RotationComponent());
-		
-		myCamera.add(new ShouldPositionComponent(new ExponentialGrantStrategy(0.6f, 0.25f)));
-		myCamera.add(new ShouldRotationComponent(new ExponentialGrantStrategy(0.6f, 0.25f)));
-		myCamera.add(new ViewportComponent(viewportGame));
-		myCamera.add(new TemporalComponent());
-
+		gameEntityEngine.addEntity(playerEntity);
+		gameEntityEngine.addEntity(myCamera);
 		
 //		Entity myProjectile = new Entity();
 //		myProjectile.add(new PositionComponent(1920.0f/4.0f,500.0f));
@@ -172,13 +154,7 @@ public class EntityLayer extends ALayer {
 //		myProjectile.add(new TrajectoryComponent());
 //		myProjectile.add(new ForceComponent());
 //		myProjectile.add(new SpriteComponent(ETexture.TEST_PROJECTILE));
-		
-		gameEntityEngine.addEntity(playerEntity);
-		gameEntityEngine.addEntity(yourEntity);
-		gameEntityEngine.addEntity(myCamera);
 //		gameEntityEngine.addEntity(myProjectile);
-
-
 	}
 
 	@Override

@@ -8,13 +8,26 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.homelab.madgaksha.logging.Logger;
 
-public enum EAnimation implements IResource {
+public enum EAnimation implements IResource<EAnimation,Animation> {
+	// =================
+	//      ESTELLE
+	// =================
 	ESTELLE_RUNNING(ETexture.ESTELLE_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP),
 	ESTELLE_STANDING(ETexture.ESTELLE_STANDING, 128, 128, 40, 0.2f, Animation.PlayMode.LOOP),
 	ESTELLE_SWINGING(ETexture.ESTELLE_SWINGING, 128, 128, 20, 0.1f, Animation.PlayMode.LOOP),
 
+	// =================
+	//      JOSHUA
+	// =================
 	JOSHUA_RUNNING(ETexture.JOSHUA_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP);
 
+	// =================
+	//      ENEMIES
+	// =================
+	//SOLDIER_RED_0(ETexture.JOSHUA_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP),
+	
+	;
+	
 	private final static Logger LOG = Logger.getLogger(EAnimation.class);
 	private final static EnumMap<EAnimation, Animation> animationCache = new EnumMap<EAnimation, Animation>(
 			EAnimation.class);
@@ -43,7 +56,7 @@ public enum EAnimation implements IResource {
 	}
 
 	@Override
-	public Enum<?> getEnum() {
+	public Enum<EAnimation> getEnum() {
 		return this;
 	}
 

@@ -10,12 +10,16 @@ import de.homelab.madgaksha.resourcecache.IResource;
 public abstract class APlayer {
 
 	final private EAnimationList animationList;
-	final private float movementSpeed;
+	final private float movementSpeedLow;
+	final private float movementSpeedHigh;
+	final private float movementFrictionFactor;
+	final private float movementAccelerationFactor;
+
 	/** x,y are the offset relative to the center of the sprites (bottom left). Radius is the circe's size. */
 	final private Circle boundingCircle;
 	final private Rectangle boundingBox;
 	/** x,y are the offset relative to the center of the sprites (bottom left). Width and height are the dimensions. */ 
-	final private IResource[] requiredResources;
+	final private IResource<? extends Enum<?>,?>[] requiredResources;
 	
 	/** Player current pain points. */
 	private int painPoints;
@@ -23,7 +27,10 @@ public abstract class APlayer {
 	private int maxPainPoints;
 	
 	public APlayer() {
-		this.movementSpeed = requestedMovementSpeed();
+		this.movementSpeedLow = requestedMovementSpeedLow();
+		this.movementSpeedHigh = requestedMovementSpeedHigh();
+		this.movementFrictionFactor = requestedMovementFrictionFactor();
+		this.movementAccelerationFactor = requestedMovementAccelerationFactor();
 		this.animationList = requestedAnimationList();
 		this.boundingCircle = requestedBoundingCircle();
 		this.boundingBox = requestedBoundingBox();
@@ -38,9 +45,18 @@ public abstract class APlayer {
 	/** @return The animated sprite used for the player. */
 	protected abstract EAnimationList requestedAnimationList();
 
-	/** @return Speed of the character. */
-	protected abstract float requestedMovementSpeed();
-	
+	/** @return Acceleration factor of the player. */
+	protected abstract float requestedMovementAccelerationFactor();
+
+	/** @return Friction factor of the player. */
+	protected abstract float requestedMovementFrictionFactor();
+
+	/** @return High maximum speed of the player, when speed trigger is pressed. */
+	protected abstract float requestedMovementSpeedHigh();
+
+	/** @return Low maximum speed of the player. */
+	protected abstract float requestedMovementSpeedLow();	
+
 	/** @return Radius of the sphere bounding the player. */
 	protected abstract Circle requestedBoundingCircle();
 	
@@ -56,7 +72,7 @@ public abstract class APlayer {
 	 * 
 	 * @return List of all required resources.
 	 */
-	protected abstract IResource[] requestedRequiredResources();
+	protected abstract IResource<? extends Enum<?>,?>[] requestedRequiredResources();
 	
 	// ====================================
 	//          Implementations
@@ -68,9 +84,6 @@ public abstract class APlayer {
 	
 	public EAnimationList getAnimationList() {
 		return animationList;
-	}
-	public float getMovementSpeed() {
-		return movementSpeed;
 	}
 
 	public Circle getBoundingCircle() {
@@ -87,7 +100,7 @@ public abstract class APlayer {
 		return boundingBox.y + 0.5f*boundingBox.height;
 	}
 	
-	public IResource[] getRequiredResources() {
+	public IResource<? extends Enum<?>,?>[] getRequiredResources() {
 		return requiredResources;
 	}
 	
@@ -124,5 +137,21 @@ public abstract class APlayer {
 	/** @return Whether the player is completely healed :) */
 	public boolean isUndamaged() {
 		return painPoints <= 0;
+	}
+
+	public float getMovementSpeedLow() {
+		return movementSpeedLow;
+	}
+
+	public float getMovementSpeedHigh() {
+		return movementSpeedHigh;
+	}
+
+	public float getMovementFrictionFactor() {
+		return movementFrictionFactor;
+	}
+
+	public float getMovementAccelerationFactor() {
+		return movementAccelerationFactor;
 	}
 }

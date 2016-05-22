@@ -28,14 +28,27 @@ import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.entity.CallbackMaker;
 import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
 import de.homelab.madgaksha.entityengine.entity.ParticleEffectMaker;
+import de.homelab.madgaksha.enums.Gravity;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.EParticleEffect;
+import de.homelab.madgaksha.resourcepool.EParticleEffect;
 
 /**
  * Reads a tiled map and extracts properties for later use. Objects can be added directly via the map editor. 
  * All tile layer must have the same tile size. Tile height and width may be different.
  * 
  * <br><br>
+ * 
+ * <h2>Map properties</h2>
+ * 
+ * <ul>
+ * <li>baseDirX: X-component of the base direction of the camera when there are no target points.</li>
+ * <li>baseDirY: Y-component of the base direction of the camera when there are no target points.</li>
+ * <li>gravity: Preferred direction of the screen where the player will be located.</li>
+ * <li>minElevation: Minimum distance of the camera above the world.</li>
+ * <li>maxElevation: Maximum distance of the camera above the world.</li>
+ * <li>playerX: Initial position x of the player in tiles.</li>
+ * <li>playerY: Initial position y of the player in tiles.</li>
+ * </ul>
  * 
  * <h2>Global properties</h2>
  * 
@@ -84,7 +97,11 @@ import de.homelab.madgaksha.resourcecache.EParticleEffect;
  * Adds a particle effect positioned at the center of the event shape.
  * <ul>
  *  <li>name: Name of the particle effect. Must be defined in {@link EParticleEffect}</li>
+ *  <li>speed: How fast the particle effect should rotate. Useful for flame wheels etc.</li>
  * </ul>
+ * 
+ *  <h3>type: NPC</h3>
+ * 
  * @author madgaksha
  *
  */
@@ -120,6 +137,12 @@ public class MapData {
 	/** Map size in pixels. */
 	private int widthPixel, heightPixel;
 
+	private Vector2 playerInitialPosition;
+	private Vector2 baseDirection;
+	private float minimumCameraElevation;
+	private float maximumCameraElevation;
+	private Gravity preferredPlayerLocation;
+	private float playerInitialDirection;
 	private float widthTilesInverse, heightTilesInverse;
 
 	// ===========================
@@ -187,6 +210,8 @@ public class MapData {
 		tileFlags = new int[width][height]; // initialized to 0
 		this.levelClass = levelClass;
 		
+		processMapProperties(map.getProperties());
+		
 		for (int i = 0; i != map.getLayers().getCount(); ++i) {
 			MapLayer mapLayer = map.getLayers().get(i);
 			if (mapLayer instanceof TiledMapTileLayer) {
@@ -203,6 +228,7 @@ public class MapData {
 	// Internal private methods.
 	// =========================
 	
+
 	private void setMapDimensions(TiledMap map) {
 		width = height = 0;
 		widthTiles = heightTiles = 0.0f;
@@ -239,7 +265,7 @@ public class MapData {
 			}
 		}
 	}
-	
+
 	private void processMapObject(MapObject mapObject) {
 		if (!mapObject.isVisible()) return;
 		
@@ -316,6 +342,36 @@ public class MapData {
 		gameEntityEngine.addEntity(entity);
 	}
 
+	private void processMapProperties(MapProperties props) {
+		// Default data.
+		Integer playerX = 0;
+		Integer playerY = 0;
+		Float minElevation = 500.0f;
+		Float maxElevation = 4000.0f;
+		Float baseDirX = 0.0f;
+		Float baseDirY = 1.0f;
+		Gravity gravity = Gravity.SOUTH;
+		Float playerDir = 90.0f;
+		
+		// Fetch available data.
+		if (props.containsKey("playerX")) playerX = Integer.valueOf(String.valueOf(props.get("playerX")));
+		if (props.containsKey("playerY")) playerY = Integer.valueOf(String.valueOf(props.get("playerY")));
+		if (props.containsKey("minElevation")) minElevation = Float.valueOf(String.valueOf(props.get("minElevation")));
+		if (props.containsKey("maxElevation")) maxElevation = Float.valueOf(String.valueOf(props.get("maxElevation")));
+		if (props.containsKey("baseDirX")) baseDirX = Float.valueOf(String.valueOf(props.get("baseDirX")));
+		if (props.containsKey("baseDirY")) baseDirY = Float.valueOf(String.valueOf(props.get("baseDirY")));
+		if (props.containsKey("gravity")) gravity = Gravity.valueOf(String.valueOf(props.get("gravity")).toUpperCase(Locale.ROOT));
+		if (props.containsKey("playerDir")) playerDir = Float.valueOf(String.valueOf(props.get("playerDir")));
+		
+		// Save data.
+		minimumCameraElevation = minElevation;
+		maximumCameraElevation = maxElevation;
+		baseDirection = new Vector2(baseDirX,baseDirY);
+		playerInitialPosition = new Vector2(playerX*widthTiles,playerY*heightTiles);
+		playerInitialDirection = playerDir;
+		preferredPlayerLocation = gravity;		
+	}
+	
 	@SuppressWarnings("unchecked")
 	private Entity processObjectEnemy(MapProperties props, Shape2D shape) {
 		Integer initX = 0;
@@ -323,7 +379,8 @@ public class MapData {
 		Float initDir = 0.0f;
 		
 		// Fetch parameters.
-		String species = WordUtils.capitalizeFully(props.get("species", String.class));
+		String species = WordUtils.capitalizeFully(props.get("species", String.class)).replace(" ", "");
+		
 		String spawn = props.get("spawn", String.class).toUpperCase(Locale.ROOT);
 		if (props.containsKey("initX")) initX = Integer.valueOf(String.valueOf(props.get("initX")));
 		if (props.containsKey("initY")) initY = Integer.valueOf(String.valueOf(props.get("initY")));
@@ -411,6 +468,8 @@ public class MapData {
 	private Entity processObjectParticleEffect(MapProperties props, Shape2D shape) {
 		// Fetch parameters.
 		String name = props.get("name", String.class).toUpperCase(Locale.ROOT);
+		Float spin = 0.0f;
+		if (props.containsKey("spin")) spin = Float.valueOf(String.valueOf(props.get("spin")));
 		
 		// Try to get the corresponding enum.
 		EParticleEffect particleEffect;
@@ -421,7 +480,31 @@ public class MapData {
 			LOG.error("no such particle effect: " + name, e);
 			return null;
 		}
-		
-		return new ParticleEffectMaker(shape, particleEffect);
-	}	
+		return new ParticleEffectMaker(shape, particleEffect, spin);
+	}
+
+	public Vector2 getBaseDirection() {
+		return baseDirection;
+	}
+
+	public Vector2 getPlayerInitialPosition() {
+		return playerInitialPosition;
+	}
+
+	public float getMinimumCameraElevation() {
+		return minimumCameraElevation;
+	}
+
+	public float getMaximumCameraElevation() {
+		return maximumCameraElevation;
+	}
+	
+	public float getPlayerInitialDirection() {
+		return playerInitialDirection;
+	}
+	
+	public Gravity getPreferredPlayerLocation() {
+		return preferredPlayerLocation;
+	}
+	
 }

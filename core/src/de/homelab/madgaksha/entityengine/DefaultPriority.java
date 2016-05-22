@@ -22,17 +22,17 @@ public class DefaultPriority {
 	public final static int grantPositionSystem = 3;
 	public final static int grantRotationSystem = 4;
 	public final static int grantScaleSystem = 5;
-	public final static int inputVelocitySystem = 6;
+	public final static int inputPlayerDesktopSystem = 6;
 	public final static int newtonianForceSystem = 7;
 	public final static int movementSystem = 8;
 	public final static int collisionSystem = 9;
 	
-	public final static int postEffectSystem = 10;	
+	public final static int postEffectSystem = 11;	
 
 	// drawing
-	public final static int viewportUpdateSystem = 11;
-	public final static int birdsViewSpriteSystem = 12;
-	public final static int spriteAnimationSystem = 13;
-	public final static int spriteRenderSystem = 14;
-	public final static int particleEffectRenderSystem = 15;
+	public final static int viewportUpdateSystem = 12;
+	public final static int birdsViewSpriteSystem = 13;
+	public final static int spriteAnimationSystem = 14;
+	public final static int spriteRenderSystem = 15;
+	public final static int particleEffectRenderSystem = 16;
 }

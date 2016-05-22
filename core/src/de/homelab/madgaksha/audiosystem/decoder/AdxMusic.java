@@ -797,7 +797,11 @@ public class AdxMusic implements Music, Runnable {
 							// and if it still is not available, kill it.
 							if (adxInputStream2 == null) {
 								synchronized(lock) {
-									lock.wait(200L);
+									try {
+										lock.wait(200L);
+									} catch (InterruptedException e) {
+										LOG.error("error while waiting for adx input stream to become ready", e);
+									}
 								}
 							}
 							adxInputStream = adxInputStream2;
@@ -816,14 +820,60 @@ public class AdxMusic implements Music, Runnable {
 					else {
 						LOG.debug("adx thread going to sleep");
 						synchronized(lock) {
-							while (!setPlayingRequested && !stopRequested) lock.wait(IDLE_WAIT);
+							while (!setPlayingRequested && !stopRequested)
+								try {
+									lock.wait(IDLE_WAIT);
+								} catch (InterruptedException e) {
+									LOG.error("error while adx thread was sleeping", e);
+								}
 						}
 						if (setPlayingRequested) playing = true;
 						LOG.debug("adx thread awakened");
 					}
 					// seek to the requested position when asked to
 					if (setPosRequested != -1) {
-						LOG.error("seek unsupported on non-buffered adx streams");
+						if (setPosRequested == 0) {
+							// Close old file handle as it does not
+							// support random access.
+							StreamUtils.closeQuietly(adxInputStream);
+							
+							// The new input stream should be ready by a long time
+							// now. If it is not, grant a short grace period,
+							// and if it still is not available, kill it.
+							if (adxInputStream2 == null) {
+								synchronized(lock) {
+									try {
+										lock.wait(200L);
+									} catch (InterruptedException e) {
+										LOG.error("error while waiting for adx input stream to become ready", e);
+									}
+								}
+							}
+							
+							// Close stream for loop start.
+							adxInputStream = adxInputStream2;
+							adxInputStream2 = null;
+							if (adxInputStream != null) {
+								StreamUtils.closeQuietly(adxInputStream);
+							}
+							else {
+								LOG.error("could not seek to the adx loop start position");
+							}
+							
+							// Open new stream at the beginning of the file.
+							adxInputStream = fileHandle.read();
+							try {
+								adxInputStream.skip(adxHeader.getHeaderByteCount());
+								rewindToBeginning();
+								position = 0;
+							} catch (IOException e) {
+								LOG.error("failed to opne adx file for streaming", e);
+								stopRequested = true;
+							}
+						}
+						else {
+							LOG.error("seek unsupported on non-buffered adx streams");
+						}
 						setPosRequested = -1;
 					}
 				}

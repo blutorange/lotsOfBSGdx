@@ -23,7 +23,7 @@
         <Column>
             <Name>ja</Name>
             <Description>Japanese</Description>
-            <Width>487</Width>
+            <Width>525</Width>
             <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/main_ja.properties|true|true|false|false</HandlerConfiguration>
         </Column>
     </Columns>
@@ -164,6 +164,15 @@
             <Value disabled="false">Konfiguration</Value>
             <Value disabled="false">Settings</Value>
             <Value disabled="false">設定</Value>
+        </Property>
+        <Empty/>
+        <Property>
+            <Name>desktop.options.key.right</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Rechts</Value>
+            <Value disabled="false">Right</Value>
+            <Value disabled="false">右</Value>
         </Property>
     </Records>
 </MultiProperties>

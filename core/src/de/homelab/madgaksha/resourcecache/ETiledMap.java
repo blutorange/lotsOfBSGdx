@@ -14,7 +14,7 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum ETiledMap implements IResource {	
+public enum ETiledMap implements IResource<ETiledMap,TiledMap> {	
 	LEVEL_01("map/Level01.tmx", Type.TMX);
 
 	private static enum Type {
@@ -53,7 +53,7 @@ public enum ETiledMap implements IResource {
 	}
 
 	@Override
-	public Enum<?> getEnum() {
+	public Enum<ETiledMap> getEnum() {
 		return this;
 	}
 

@@ -1,4 +1,5 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
+import static de.homelab.madgaksha.GlobalBag.visibleWorldBoundingBox;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -6,12 +7,14 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 
+import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ReceiveTouchComponent;
 import de.homelab.madgaksha.entityengine.component.ShapeComponent;
+import de.homelab.madgaksha.entityengine.component.TriggerScreenComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerTouchComponent;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup02Component;
@@ -23,6 +26,7 @@ import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup02
 import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup03Component;
 import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup04Component;
 import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup05Component;
+import de.homelab.madgaksha.enums.EShapeType;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.util.GeoUtil;
 
@@ -79,7 +83,7 @@ public class CollisionSystem extends EntitySystem {
 	private Family familyReceive03 = null;
 	private Family familyReceive04 = null;
 	private Family familyReceive05 = null;
-
+	
 	private ImmutableArray<Entity> entitiesTouch01;
 	private ImmutableArray<Entity> entitiesTouch02;
 	private ImmutableArray<Entity> entitiesTouch03;
@@ -91,7 +95,12 @@ public class CollisionSystem extends EntitySystem {
 	private ImmutableArray<Entity> entitiesReceive03;
 	private ImmutableArray<Entity> entitiesReceive04;
 	private ImmutableArray<Entity> entitiesReceive05;
+	
+	private Family familyScreen = null;
+	private ImmutableArray<Entity> entitiesScreen;
 
+	private final static PositionComponent nullPositionComponent = new PositionComponent(0f,0f,0f);
+	
 	public CollisionSystem() {
 		this(DefaultPriority.collisionSystem);
 	}
@@ -110,12 +119,15 @@ public class CollisionSystem extends EntitySystem {
 		this.familyReceive03 = Family.all(PositionComponent.class, ReceiveTouchGroup03Component.class).get();
 		this.familyReceive04 = Family.all(PositionComponent.class, ReceiveTouchGroup04Component.class).get();
 		this.familyReceive05 = Family.all(PositionComponent.class, ReceiveTouchGroup05Component.class).get();
+		
+		this.familyScreen = Family.all(TriggerScreenComponent.class,PositionComponent.class).get();
 	}
 
 	@Override
 	public void update(float deltaTime) {
 		TriggerTouchComponent ttc;
 		ReceiveTouchComponent rtc;
+		
 		for (Entity alice : entitiesTouch01) {
 			for (Entity bob : entitiesReceive01) {
 				ttc = Mapper.triggerTouchGroup01Component.get(alice);
@@ -151,6 +163,10 @@ public class CollisionSystem extends EntitySystem {
 				collide(alice, bob, ttc, rtc);
 			}
 		}
+		
+		for (Entity odo : entitiesScreen) {
+			collideScreen(odo);
+		}
 	}
 
 	@Override
@@ -166,6 +182,8 @@ public class CollisionSystem extends EntitySystem {
 		entitiesReceive03 = engine.getEntitiesFor(familyReceive03);
 		entitiesReceive04 = engine.getEntitiesFor(familyReceive04);
 		entitiesReceive05 = engine.getEntitiesFor(familyReceive05);
+		
+		entitiesScreen = engine.getEntitiesFor(familyScreen);
 	}
 
 	@Override
@@ -205,4 +223,30 @@ public class CollisionSystem extends EntitySystem {
 			}
 		}
 	}
+	
+
+	private void collideScreen(Entity odo) {
+		final PositionComponent pc = Mapper.positionComponent.get(odo);
+		final BoundingBoxComponent bbc = Mapper.boundingBoxComponent.get(odo);
+		final ShapeComponent sc = Mapper.shapeComponent.get(odo);
+		final TriggerScreenComponent tsc = Mapper.triggerScreenComponent.get(odo);
+		if (visibleWorldBoundingBox.x + visibleWorldBoundingBox.width > bbc.minX +pc.x) {
+			if (visibleWorldBoundingBox.x < bbc.maxX + pc.x) {
+				if (visibleWorldBoundingBox.y + visibleWorldBoundingBox.height > bbc.minY + pc.y) {
+					if (visibleWorldBoundingBox.y < bbc.maxY + pc.y) {
+						// inside screen bounding box
+						//TODO
+						if (tsc.preciseCheck && sc != null) {
+							if (GeoUtil.isCollision(GlobalBag.visibleWorld, sc.shape, EShapeType.POLYGON, sc.shapeType, nullPositionComponent, pc)) {
+								tsc.triggerAcceptingObject.callbackScreen();	
+							}
+						}
+						else
+							tsc.triggerAcceptingObject.callbackScreen();
+					}
+				}
+			}
+		}			
+	}
+
 }

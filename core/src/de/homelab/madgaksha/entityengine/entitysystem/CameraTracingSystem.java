@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IntervalIteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.dreizak.miniball.highdim.Miniball;
 
 import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
@@ -16,6 +15,7 @@ import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
+import de.homelab.madgaksha.enums.TrackingOrientationStrategy;
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.logging.Logger;
 
@@ -57,38 +57,25 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		final ShouldRotationComponent src = Mapper.shouldRotationComponent.get(entity);
 		final ManyTrackingComponent mtc = Mapper.manyTrackingComponent.get(entity);
 		final PositionComponent playerPoint = Mapper.positionComponent.get(mtc.playerPoint);
-		final PositionComponent bossPoint = Mapper.positionComponent.get(mtc.bossPoint);
 
-		if (playerPoint == null || mtc.focusPoints.size() == 0)
-			return;
+		if (playerPoint == null) return;
 
 		// Determine the direction the player
-		// should be looking at.
+		// should be looking in.
 		Vector2 dir = new Vector2();
-		switch (mtc.trackingOrientationStrategy) {
-		case MINIBALL:
-			final double[] center = new Miniball(mtc.focusPoints).center();
-			dir.set((float) (center[0] - playerPoint.x), (float) (center[1] - playerPoint.y));
-			break;
-		case ABSOLUTE:
-			if (bossPoint == null)
-				return;
-			dir.set(bossPoint.x, bossPoint.y);
-			break;
-		case RELATIVE:
-			if (bossPoint == null)
-				return;
-			dir.set(bossPoint.x, bossPoint.y).sub(playerPoint.x, playerPoint.y);
-			break;
-		default:
-			dir.set(lastDirAboveThreshold);
+		if (mtc.focusPoints.size() > 0 && mtc.trackingOrientationStrategy == TrackingOrientationStrategy.RELATIVE) {
+			if (mtc.trackedPointIndex >= mtc.focusPoints.size()) mtc.trackedPointIndex = mtc.focusPoints.size()-1;
+			final PositionComponent pc = Mapper.positionComponent.get(mtc.focusPoints.get(mtc.trackedPointIndex));
+			dir.set(pc.x, pc.y).sub(playerPoint.x, playerPoint.y);			
 		}
+		else dir.set(mtc.baseDirection.x, mtc.baseDirection.y);
+		
 		// Check whether the direction is (almost) zero.
 		// If it is use, the last known direction.
 		// This helps to prevent the camera from
 		// rotating all around when the player is near
 		// the enemy.
-		if (dir.len2() < mtc.playerBossThresholdW) {
+		if (dir.len2() < mtc.playerBossThreshold) {
 			dir.set(lastDirAboveThreshold);
 		} else
 			lastDirAboveThreshold.set(dir);
@@ -119,10 +106,11 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		// and get min / max coordinates to determine
 		// the bounding rectangle.
 		float vBase, vDir;
-		float minx = Float.MAX_VALUE;
-		float miny = Float.MAX_VALUE;
-		float maxx = -Float.MAX_VALUE;
-		float maxy = -Float.MAX_VALUE;
+		// Player point is at (0,0) by definition.
+		float minx = 0.0f;
+		float miny = 0.0f;
+		float maxx = 0.0f;
+		float maxy = 0.0f;
 		final Vector2 v = new Vector2();
 		for (Entity e : mtc.focusPoints) {
 			final PositionComponent vpc = Mapper.positionComponent.get(e);
@@ -143,10 +131,7 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 			else if (vDir > maxy)
 				maxy = vDir + (bsc == null ? 0.0f : bsc.radius);
 		}
-		if (minx == Float.MAX_VALUE) minx = maxx;
-		if (miny == Float.MAX_VALUE) miny = maxy;
-		if (maxx == -Float.MAX_VALUE) maxx = minx;
-		if (maxy == -Float.MAX_VALUE) maxy = miny;
+
 		// Margin
 		if (mtc.adjustmentPointLeft < minx)
 			minx = mtc.adjustmentPointLeft;
@@ -156,7 +141,7 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 			miny = mtc.adjustmentPointBottom;
 		else if (mtc.adjustmentPointTop > maxy)
 			maxy = mtc.adjustmentPointTop;
-
+		
 		// Get the center of the rectangle
 		float cx = (maxx + minx) * 0.5f; // center base coordinate
 		float cy = (maxy + miny) * 0.5f; // center dir coordinate
@@ -200,10 +185,10 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 			spc.z = hh * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF_INV;
 		}
 		// Apply minimum elevation.
-		if (spc.z < mtc.minimumElevationW) spc.z = mtc.minimumElevationW;
+		if (spc.z < mtc.minimumElevation) spc.z = mtc.minimumElevation;
 		// Apply maximum elevation
-		else if (spc.z > mtc.maximumElevationW) {
-			spc.z = mtc.maximumElevationW;
+		else if (spc.z > mtc.maximumElevation) {
+			spc.z = mtc.maximumElevation;
 			float ratio = spc.z*ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF/hh;
 			cy *= ratio;
 			cx *= ratio;

@@ -2,11 +2,11 @@ package de.homelab.madgaksha.resourcecache;
 
 import java.util.EnumMap;
 
-public interface IResource {
+public interface IResource<K extends Enum<K>,V> {
 	/**
 	 * @return This. The Enum instance representing this resource.
 	 */
-	public Enum<?> getEnum();
+	public Enum<K> getEnum();
 
 	/**
 	 * @return The maximum number of resources that can be loaded/cached at
@@ -20,7 +20,7 @@ public interface IResource {
 	 * 
 	 * @return The object representing this resource.
 	 */
-	public Object getObject();
+	public V getObject();
 
 	/**
 	 * Disposes the object and removes from the cache. Blocks until done.
