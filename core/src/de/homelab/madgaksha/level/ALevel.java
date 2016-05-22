@@ -138,21 +138,20 @@ public abstract class ALevel {
 
 	/** @return Music while fighting. */
 	protected abstract EMusic requestedBattleBgm();
-
 	
 	/**
 	 * @return The map to be loaded initially.
 	 */
 	protected abstract ETiledMap requestedTiledMap();
 		
+	/** Name of the level. */
 	protected abstract String requestedI18nNameKey();
 	
 	
 	// =============================
 	//       Implementations
 	// =============================
-
-
+	
 	public MapData getMapData() {
 		return mapData;
 	}
@@ -204,12 +203,10 @@ public abstract class ALevel {
 	}
 	
 	/**
-	 * The viewport for the info screen.
-	 * 
-	 * @see #getWorldViewport()
+	 * Status screen data with pixel values etc.
 	 */
-	public InfoViewport getInfoViewport(int screenWidth, int screenHeight) {
-		return new InfoViewport(screenWidth, screenHeight);
+	public StatusScreen getStatusScreen(int w, int h) {
+		return new StatusScreen(w,h);
 	}
 
 	/**

@@ -15,7 +15,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -38,7 +37,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
@@ -47,11 +45,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.commons.io.IOUtils;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
-import com.badlogic.gdx.backends.lwjgl.LwjglAWTInput;
 
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.logging.LoggerFactory;
@@ -430,7 +423,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 //			pnlKeyVal.add(tfMoveRight);
 			
 			// Set key-value input fields.
-			SpringUtilities.makeCompactGrid(pnlKeyVal, 5, 2, 3, 3, 3, 3);
+			SpringUtilities.makeCompactGrid(pnlKeyVal, 4, 2, 3, 3, 3, 3);
 			pnlContent.add(pnlKeyVal);
 			
 			// Close button

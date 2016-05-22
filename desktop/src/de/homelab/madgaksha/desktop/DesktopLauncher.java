@@ -146,7 +146,8 @@ public class DesktopLauncher extends JFrame {
 	/**
 	 * Prints the help for the command line arguments to stdout.
 	 */
-	private static void showHelp() {
+	private static void showHelp() {		
+		
 		System.out.println("The following command line options are available:");
 		System.out.println("");
 		System.out.println("-dw [--width]        Sets the width of the window.");
@@ -195,7 +196,7 @@ public class DesktopLauncher extends JFrame {
 	 * @param args
 	 *            Command line options.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
 		final CommandLine line = parseCommandLine(args);
 
 		// Print help if asked to and exit.

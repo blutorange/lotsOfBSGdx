@@ -4,9 +4,17 @@ size: 256,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-textbox-blue
+pixel
   rotate: false
   xy: 2, 2
+  size: 5, 5
+  split: 0, 0, 0, 0
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+textbox-blue
+  rotate: false
+  xy: 2, 9
   size: 210, 113
   split: 43, 153, 65, 35
   pad: 32, 169, 73, 24

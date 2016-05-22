@@ -12,7 +12,7 @@ import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.level.GameViewport;
-import de.homelab.madgaksha.level.InfoViewport;
+import de.homelab.madgaksha.level.StatusScreen;
 import de.homelab.madgaksha.player.APlayer;
 
 /**
@@ -55,17 +55,12 @@ public final class GlobalBag {
 	/** Current player data. */
 	public static APlayer player;
 	
-	public static GameViewport viewportGame;
-	public static InfoViewport viewportInfo;
-	public static Viewport viewportScreen;
+	public static GameViewport viewportGame;	
 	public static Viewport viewportPixel;
+	public static StatusScreen statusScreen;
 	
 	/** For drawing the game window. */
 	public static SpriteBatch batchGame;
-	/** For drawing the info screen, score etc. */
-	public static SpriteBatch batchInfo;
-	/** For drawing the background directly to the screen. */
-	public static SpriteBatch batchScreen;
 	/** For drawing the background directly to the screen. */
 	public static SpriteBatch batchPixel;
 	
