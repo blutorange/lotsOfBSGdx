@@ -94,11 +94,11 @@ public class Textbox {
 		targetWidth = viewportGame.getScreenWidth() - ninePatch.getPadLeft() - ninePatch.getPadRight();
 		
 		// Get bottom-left position for the starting line.
-		textx = ninePatch.getPadLeft() - 0.5f*viewportPixel.getScreenWidth();
-		texty = ninePatch.getPadBottom() + textHeight - 0.5f*viewportPixel.getScreenHeight();
+		textx = ninePatch.getPadLeft() ;
+		texty = ninePatch.getPadBottom() + textHeight ;
 		
-		boxx = -0.5f*viewportPixel.getScreenWidth();
-		boxy = -0.5f*viewportPixel.getScreenHeight();
+		boxx = 0;
+		boxy = 0;
 		boxw = viewportGame.getScreenWidth();
 		boxh = textHeight + ninePatch.getPadBottom() + ninePatch.getPadTop();	
 		

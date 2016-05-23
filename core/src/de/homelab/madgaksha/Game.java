@@ -180,6 +180,15 @@ public class Game implements ApplicationListener {
 		viewportPixel.update(currentMonitorWidth, currentMonitorHeight, true);
 		computeBackgroundImageRectangle(currentMonitorWidth, currentMonitorHeight);
 		
+		// Load resources required by the status screen.
+		for (IResource<? extends Enum<?>,?> r : statusScreen.getRequiredResources()) {
+			LOG.debug("fetch " + r);
+			if (!ResourceCache.loadToRam(r)) {
+				Gdx.app.exit();
+				return;
+			}
+		}
+		
 		// Initialize the layer stack.
 		// Start off with a layer stack containing only the entity engine.
 		entityLayer = new EntityLayer();
@@ -392,7 +401,7 @@ public class Game implements ApplicationListener {
 	private void renderDebug() {
 		viewportPixel.apply(false);
 		batchPixel.begin();
-		debugFont.draw(batchPixel, "fps: " + (int) (1.0f / Gdx.graphics.getRawDeltaTime()), 0.0f, 0.0f);
+		debugFont.draw(batchPixel, "fps: " + (int) (1.0f / Gdx.graphics.getRawDeltaTime()), 0.0f, viewportGame.getScreenHeight());
 		batchPixel.end();
 	}
 

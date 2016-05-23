@@ -2,7 +2,6 @@ package de.homelab.madgaksha.textboxsystem;
 
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
-import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -165,8 +164,8 @@ public class FaceTextbox extends SpeakerTextbox {
 	public void render(float animationFactor) {
 		super.render(animationFactor);
 		if (viewportGame.getScreenWidth() > 459) {
-			final int faceX = offsetFaceX + viewportGame.getScreenWidth() - (int) ninePatch.getPadRight() - viewportPixel.getScreenWidth()/2;
-			final int faceY = offsetFaceY + ((int)ninePatch.getPadBottom())- viewportPixel.getScreenHeight()/2;		
+			final int faceX = offsetFaceX + viewportGame.getScreenWidth() - (int) ninePatch.getPadRight();
+			final int faceY = offsetFaceY + ((int)ninePatch.getPadBottom());
 			batchPixel.draw(faceTexture, faceX, faceY-animationFactor*boxh, faceWidth, faceHeight);
 		}
 	}

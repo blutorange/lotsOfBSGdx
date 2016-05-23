@@ -1,7 +1,6 @@
 package de.homelab.madgaksha.textboxsystem;
 
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
-import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -106,7 +105,7 @@ public class SpeakerTextbox extends Textbox {
 		bitmapFont.draw(batchPixel,
 				speaker,
 				textx + offsetSpeakerX,
-				offsetSpeakerY + boxh - viewportPixel.getScreenHeight() / 2 - ninePatch.getPadTop()	- animationFactor * boxh,
+				offsetSpeakerY + boxh - ninePatch.getPadTop() - animationFactor * boxh,
 				0,
 				speaker.length(),
 				targetWidth,
