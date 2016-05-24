@@ -2,7 +2,6 @@ package de.homelab.madgaksha.resourcecache;
 
 import java.util.EnumMap;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -68,11 +67,11 @@ public enum EAnimation implements IResource<EAnimation,Animation> {
 	@Override
 	public Animation getObject() {
 		// Get texture
-		final Texture texture = ResourceCache.getTexture(eTexture);
-		if (texture == null)
+		final TextureRegion textureRegion = ResourceCache.getTexture(eTexture);
+		if (textureRegion == null)
 			return null;
-		final TextureRegion[] textureRegion = splitTexture(texture, tileWidth, tileHeight, count);
-		final Animation animation = new Animation(frameDuration, textureRegion);
+		final TextureRegion[] textureRegionArray = splitTextureRegion(textureRegion, tileWidth, tileHeight, count);
+		final Animation animation = new Animation(frameDuration, textureRegionArray);
 		animation.setPlayMode(playMode);
 		return animation;
 	}
@@ -90,18 +89,17 @@ public enum EAnimation implements IResource<EAnimation,Animation> {
 		return animationCache;
 	}
 
-	private static TextureRegion[] splitTexture(Texture texture, int tileWidth, int tileHeight, int count) {
-		TextureRegion region = new TextureRegion(texture);
-		int x = region.getRegionX();
-		int y = region.getRegionY();
-		int width = region.getRegionWidth();
+	private static TextureRegion[] splitTextureRegion(TextureRegion textureRegion, int tileWidth, int tileHeight, int count) {
+		int x = textureRegion.getRegionX();
+		int y = textureRegion.getRegionY();
+		int width = textureRegion.getRegionWidth();
 		int cols = width / tileWidth;
 
 		int startX = x;
 		TextureRegion[] tiles = new TextureRegion[count];
 		int col = 0;
 		for (int i = 0; i != count; ++i) {
-			tiles[i] = new TextureRegion(texture, x, y, tileWidth, tileHeight);
+			tiles[i] = new TextureRegion(textureRegion, x, y, tileWidth, tileHeight);
 			++col;
 			x += tileWidth;
 			if (col == cols) {

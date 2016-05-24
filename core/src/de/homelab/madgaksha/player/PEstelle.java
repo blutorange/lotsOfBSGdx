@@ -39,7 +39,7 @@ public class PEstelle extends APlayer {
 	
 	@Override
 	public ShadowComponent makeShadow() {
-		return new ShadowComponent(ETexture.OVAL_SHADOW, 12.5f,-60.0f,0.0f,-0.010f, 0.5f, 0.0f);
+		return new ShadowComponent(ETexture.OVAL_SHADOW, 0.0f,-60.0f,0.0f,-0.010f, 0.5f, 0.0f);
 	}
 
 	@Override

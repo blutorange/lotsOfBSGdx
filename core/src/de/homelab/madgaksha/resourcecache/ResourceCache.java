@@ -4,11 +4,11 @@ import java.util.Set;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import de.homelab.madgaksha.logging.Logger;
@@ -223,11 +223,11 @@ public final class ResourceCache {
 	 *            Texture to load.
 	 * @return Loaded texture.
 	 */
-	public static Texture getTexture(ETexture texture) {
-		return (Texture) getResource(texture, true);
+	public static TextureRegion getTexture(ETexture texture) {
+		return (TextureRegion) getResource(texture, true);
 	}
-	public static Texture getTexture(ETexture texture, boolean cached) {
-		return (Texture) getResource(texture, cached);
+	public static TextureRegion getTexture(ETexture texture, boolean cached) {
+		return (TextureRegion) getResource(texture, cached);
 	}
 	
 	/**

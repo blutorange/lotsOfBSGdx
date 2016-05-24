@@ -1,0 +1,188 @@
+
+statusScreenPacked.png
+size: 512,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+iconEnemySmall
+  rotate: false
+  xy: 337, 71
+  size: 33, 34
+  orig: 34, 34
+  offset: 0, 0
+  index: -1
+iconScoreSmall
+  rotate: false
+  xy: 134, 29
+  size: 25, 32
+  orig: 32, 32
+  offset: 3, 0
+  index: -1
+iconTimeSmall
+  rotate: false
+  xy: 337, 37
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+iconTokugiSmall
+  rotate: false
+  xy: 463, 220
+  size: 34, 34
+  orig: 34, 34
+  offset: 0, 0
+  index: -1
+iconWeaponSmall
+  rotate: false
+  xy: 372, 72
+  size: 33, 33
+  orig: 33, 33
+  offset: 0, 0
+  index: -1
+javanese0
+  rotate: false
+  xy: 255, 41
+  size: 46, 61
+  orig: 146, 165
+  offset: 50, 71
+  index: -1
+javanese0c
+  rotate: false
+  xy: 255, 41
+  size: 46, 61
+  orig: 46, 61
+  offset: 0, 0
+  index: -1
+javanese1
+  rotate: false
+  xy: 2, 63
+  size: 131, 59
+  orig: 146, 165
+  offset: 7, 71
+  index: -1
+javanese1c
+  rotate: false
+  xy: 2, 63
+  size: 131, 59
+  orig: 131, 59
+  offset: 0, 0
+  index: -1
+javanese2
+  rotate: false
+  xy: 150, 125
+  size: 110, 129
+  orig: 146, 165
+  offset: 18, 1
+  index: -1
+javanese2c
+  rotate: false
+  xy: 150, 125
+  size: 110, 129
+  orig: 110, 129
+  offset: 0, 0
+  index: -1
+javanese3
+  rotate: false
+  xy: 2, 124
+  size: 146, 130
+  orig: 146, 165
+  offset: 0, 0
+  index: -1
+javanese3c
+  rotate: false
+  xy: 2, 124
+  size: 146, 130
+  orig: 146, 130
+  offset: 0, 0
+  index: -1
+javanese4
+  rotate: false
+  xy: 427, 98
+  size: 42, 94
+  orig: 146, 165
+  offset: 52, 71
+  index: -1
+javanese4c
+  rotate: false
+  xy: 427, 98
+  size: 42, 94
+  orig: 42, 94
+  offset: 0, 0
+  index: -1
+javanese5
+  rotate: false
+  xy: 262, 104
+  size: 67, 150
+  orig: 146, 165
+  offset: 39, 2
+  index: -1
+javanese5c
+  rotate: false
+  xy: 262, 104
+  size: 67, 150
+  orig: 67, 150
+  offset: 0, 0
+  index: -1
+javanese6
+  rotate: false
+  xy: 331, 107
+  size: 94, 85
+  orig: 146, 165
+  offset: 26, 49
+  index: -1
+javanese6c
+  rotate: false
+  xy: 331, 107
+  size: 94, 85
+  orig: 94, 85
+  offset: 0, 0
+  index: -1
+javanese7
+  rotate: false
+  xy: 2, 2
+  size: 130, 59
+  orig: 146, 165
+  offset: 8, 71
+  index: -1
+javanese7c
+  rotate: false
+  xy: 2, 2
+  size: 130, 59
+  orig: 130, 59
+  offset: 0, 0
+  index: -1
+javanese8
+  rotate: false
+  xy: 150, 63
+  size: 103, 60
+  orig: 146, 165
+  offset: 21, 70
+  index: -1
+javanese8c
+  rotate: false
+  xy: 150, 63
+  size: 103, 60
+  orig: 103, 60
+  offset: 0, 0
+  index: -1
+javanese9
+  rotate: false
+  xy: 331, 194
+  size: 130, 60
+  orig: 146, 165
+  offset: 8, 70
+  index: -1
+javanese9c
+  rotate: false
+  xy: 331, 194
+  size: 130, 60
+  orig: 130, 60
+  offset: 0, 0
+  index: -1
+slash
+  rotate: false
+  xy: 303, 30
+  size: 32, 72
+  orig: 42, 84
+  offset: 5, 6
+  index: -1

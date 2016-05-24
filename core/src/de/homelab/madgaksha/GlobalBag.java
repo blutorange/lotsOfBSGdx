@@ -14,6 +14,8 @@ import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.level.GameViewport;
 import de.homelab.madgaksha.level.StatusScreen;
 import de.homelab.madgaksha.player.APlayer;
+import de.homelab.madgaksha.util.Clock;
+import de.homelab.madgaksha.util.Score;
 
 /**
  * Holds global (static) game data. Objects of which only
@@ -72,6 +74,9 @@ public final class GlobalBag {
 
 	/** The tracking component of the camera. */
 	public static ManyTrackingComponent cameraTrackingComponent;
+	
+	public static Clock gameClock = new Clock();
+	public static Score gameScore = new Score();
 	
 	static {
 		visibleWorld.setPosition(0.0f, 0.0f);

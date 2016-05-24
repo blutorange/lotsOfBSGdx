@@ -1,0 +1,1 @@
+{"requestedLevel":"de.homelab.madgaksha.level.Level01","requestedPlayer":"de.homelab.madgaksha.player.PEstelle","requestedLocale":{"language":"en","country":"","variant":""},"requestedWidth":720,"requestedHeight":405,"requestedFullscreen":false,"requestedFps":30,"requestedLogLevel":3,"requestedWindowTitle":"??level.01.name??"}

@@ -25,8 +25,7 @@ public class SpriteComponent implements Component, Poolable {
 	 * @param texture Texture for the sprite.
 	 */
 	public SpriteComponent(ETexture texture) {
-		sprite = new Sprite();
-		texture.toSprite(sprite);
+		sprite = texture.asSprite();
 	}
 
 	public SpriteComponent(SpriteAnimationComponent sac) {

@@ -22,5 +22,11 @@ public class MyTexturePacker {
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/texture/misc/packed";
 		packFileName = "miscPacked";
 		TexturePacker.process(inputDir, outputDir, packFileName);
+		
+		System.out.println("packing status screen textures...");
+		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/texture/statusscreen";
+		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/texture/statusscreen/packed";
+		packFileName = "statusScreenPacked";
+		TexturePacker.process(inputDir, outputDir, packFileName);
 	}
 }

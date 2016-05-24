@@ -7,6 +7,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import de.homelab.madgaksha.logging.Logger;
@@ -17,7 +18,7 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum ETexture implements IResource<ETexture,Texture> {
+public enum ETexture implements IResource<ETexture,TextureRegion> {
 	MAIN_BACKGROUND("texture/mainBackground.jpg"),
 	
 	OVAL_SHADOW(ETextureAtlas.MISC, "ovalShadow"),
@@ -42,10 +43,32 @@ public enum ETexture implements IResource<ETexture,Texture> {
 	// ===================
 	SOLIDER_RED_0("sprite/soldierRed0.png"),
 	
+	
+	// ===================
+	//    STATUSSCREEN
+	// ===================
+	STATUS_ICON_TIME(ETextureAtlas.STATUS_SCREEN, "iconTimeSmall"),
+	STATUS_ICON_SCORE(ETextureAtlas.STATUS_SCREEN, "iconScoreSmall"),
+	STATUS_ICON_WEAPON(ETextureAtlas.STATUS_SCREEN, "iconWeaponSmall"),
+	STATUS_ICON_TOKUGI(ETextureAtlas.STATUS_SCREEN, "iconTokugiSmall"),
+	STATUS_ICON_ENEMY(ETextureAtlas.STATUS_SCREEN, "iconEnemySmall"),
+	
+	STATUS_ICON_NUMERAL_0(ETextureAtlas.STATUS_SCREEN, "javanese0c"),
+	STATUS_ICON_NUMERAL_1(ETextureAtlas.STATUS_SCREEN, "javanese1c"),
+	STATUS_ICON_NUMERAL_2(ETextureAtlas.STATUS_SCREEN, "javanese2c"),
+	STATUS_ICON_NUMERAL_3(ETextureAtlas.STATUS_SCREEN, "javanese3c"),
+	STATUS_ICON_NUMERAL_4(ETextureAtlas.STATUS_SCREEN, "javanese4c"),
+	STATUS_ICON_NUMERAL_5(ETextureAtlas.STATUS_SCREEN, "javanese5c"),
+	STATUS_ICON_NUMERAL_6(ETextureAtlas.STATUS_SCREEN, "javanese6c"),
+	STATUS_ICON_NUMERAL_7(ETextureAtlas.STATUS_SCREEN, "javanese7c"),
+	STATUS_ICON_NUMERAL_8(ETextureAtlas.STATUS_SCREEN, "javanese8c"),
+	STATUS_ICON_NUMERAL_9(ETextureAtlas.STATUS_SCREEN, "javanese9c"),
+	STATUS_ICON_SEPARATOR_TIME(ETextureAtlas.STATUS_SCREEN, "slash"),
+	
 	;
 
 	private final static Logger LOG = Logger.getLogger(ETexture.class);
-	private final static EnumMap<ETexture, Texture> textureCache = new EnumMap<ETexture, Texture>(ETexture.class);
+	private final static EnumMap<ETexture, TextureRegion> textureCache = new EnumMap<ETexture, TextureRegion>(ETexture.class);
 
 	private String filename;
 	private ETextureAtlas textureAtlas = null;	
@@ -65,29 +88,21 @@ public enum ETexture implements IResource<ETexture,Texture> {
 		}
 	}
 
-	public void toSprite(Sprite sprite) {
-		final Texture texture = ResourceCache.getTexture(this);
-		sprite.setTexture(texture);
-		sprite.setSize(texture.getWidth(), texture.getHeight());
-		sprite.setRegion(0, 0, texture.getWidth(), texture.getHeight());
-	}
-
 	public Sprite asSprite() {
-		final Sprite sprite = new Sprite();
-		toSprite(sprite);
-		return sprite;
+		if (textureAtlas != null) return ResourceCache.getTextureAtlas(textureAtlas).createSprite(filename);
+		return new Sprite(ResourceCache.getTexture(this));
 	}
 
 	@Override
-	public Texture getObject() {
+	public TextureRegion getObject() {
 		if (textureAtlas != null) {
-			TextureAtlas ta = ResourceCache.getTextureAtlas(textureAtlas); 
-			return ta == null ? null : ta.findRegion(filename).getTexture();
+			TextureAtlas ta = ResourceCache.getTextureAtlas(textureAtlas);
+			return ta == null ? null : ta.findRegion(filename);
 		}
 		else {
 			final FileHandle fileHandle = Gdx.files.internal(filename);
 			try {
-				return new Texture(fileHandle);
+				return new TextureRegion(new Texture(fileHandle));
 			} catch (GdxRuntimeException e) {
 				LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 				return null;
@@ -108,14 +123,14 @@ public enum ETexture implements IResource<ETexture,Texture> {
 	@Override
 	public void clear() {
 		LOG.debug("disposing texture: " + String.valueOf(this));
-		final Texture t = textureCache.get(this);
-		if (t != null)
-			t.dispose();
+		final TextureRegion tr = textureCache.get(this);
+		if (tr != null)
+			tr.getTexture().dispose();
 		textureCache.remove(this);
 	}
 
 	@Override
-	public EnumMap<ETexture, Texture> getMap() {
+	public EnumMap<ETexture, TextureRegion> getMap() {
 		return textureCache;
 	}
 }

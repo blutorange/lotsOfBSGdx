@@ -2,7 +2,6 @@ package de.homelab.madgaksha.resourcecache;
 
 import java.util.EnumMap;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -65,12 +64,12 @@ public enum EAnimationList implements IResource<EAnimationList,Animation[]> {
 	@Override
 	public Animation[] getObject() {
 		// Get texture
-		final Texture texture = ResourceCache.getTexture(eTexture);
-		if (texture == null) return null;
-		final TextureRegion[][] textureRegion = TextureRegion.split(texture, tileWidth, tileHeight);
+		final TextureRegion textureRegion = ResourceCache.getTexture(eTexture);
+		if (textureRegion == null) return null;
+		final TextureRegion[][] textureRegionArray = textureRegion.split(tileWidth, tileHeight);
 		final Animation[] animationList = new Animation[animationModeCount];
 		for (int i = 0; i != animationModeCount; ++i) {
-			animationList[i] = new Animation(frameDuration, textureRegion[i]);
+			animationList[i] = new Animation(frameDuration, textureRegionArray[i]);
 			animationList[i].setPlayMode(playMode);
 		}
 		return animationList;

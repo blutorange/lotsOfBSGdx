@@ -1,6 +1,8 @@
 
 package de.homelab.madgaksha.desktop;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,8 +10,8 @@ import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
 
+import de.homelab.madgaksha.DebugMode;
 import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.GameParameters;
 import de.homelab.madgaksha.logging.LoggerFactory;
@@ -30,7 +32,15 @@ import de.homelab.madgaksha.logging.LoggerFactory;
 public class ProcessLauncher {
 	private final static Object lock = new Object();
 	private final static Logger LOG = LoggerFactory.getLogger(Process.class);
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
+		if (DebugMode.activated) {
+			try {
+				System.setIn(new FileInputStream(DebugMode.debugConfiguration));
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+				return;
+			}
+		}
 	    try {
 			final GameParameters params = readParams();
 			if (!params.isDeserializedSuccessfully()) System.exit(-1);

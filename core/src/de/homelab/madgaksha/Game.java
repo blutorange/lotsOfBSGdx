@@ -6,6 +6,7 @@ import static de.homelab.madgaksha.GlobalBag.bitmapFontRasterSize;
 import static de.homelab.madgaksha.GlobalBag.currentMonitorHeight;
 import static de.homelab.madgaksha.GlobalBag.currentMonitorWidth;
 import static de.homelab.madgaksha.GlobalBag.game;
+import static de.homelab.madgaksha.GlobalBag.gameClock;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import static de.homelab.madgaksha.GlobalBag.level;
 import static de.homelab.madgaksha.GlobalBag.maxMonitorHeight;
@@ -28,9 +29,9 @@ import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -44,6 +45,7 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcepool.ResourcePool;
+import de.homelab.madgaksha.util.Clock;
 
 public class Game implements ApplicationListener {
 
@@ -86,7 +88,7 @@ public class Game implements ApplicationListener {
 	// testing end
 
 	private final GameParameters params;
-	private Texture backgroundImage = null;
+	private TextureRegion backgroundImage = null;
 	private Rectangle backgroundImageRectangle = new Rectangle();
 
 	/**
@@ -180,21 +182,15 @@ public class Game implements ApplicationListener {
 		viewportPixel.update(currentMonitorWidth, currentMonitorHeight, true);
 		computeBackgroundImageRectangle(currentMonitorWidth, currentMonitorHeight);
 		
-		// Load resources required by the status screen.
-		for (IResource<? extends Enum<?>,?> r : statusScreen.getRequiredResources()) {
-			LOG.debug("fetch " + r);
-			if (!ResourceCache.loadToRam(r)) {
-				Gdx.app.exit();
-				return;
-			}
-		}
-		
 		// Initialize the layer stack.
 		// Start off with a layer stack containing only the entity engine.
 		entityLayer = new EntityLayer();
 		layerStack.add(entityLayer);
 		entityLayer.addedToStack();
 
+		// Keep track of the time.
+		gameClock = new Clock();
+		
 		// TODO remove me for release
 		createDebugFont();
 
@@ -325,7 +321,7 @@ public class Game implements ApplicationListener {
 
 		// Dispose background image.
 		if (backgroundImage != null)
-			backgroundImage.dispose();
+			backgroundImage.getTexture().dispose();
 
 		// TODO remove me
 		debugFont.dispose();
@@ -359,6 +355,7 @@ public class Game implements ApplicationListener {
 		// above did not stop propagation.
 		int j = 0;
 		if (running) {
+			gameClock.update(deltaTime);
 			for (int i = layerStack.size() - 1; i != -1; --i) {
 				final ALayer layer = layerStack.get(i);
 				// Save first layer that block drawing.
@@ -429,8 +426,8 @@ public class Game implements ApplicationListener {
 	private void computeBackgroundImageRectangle(int width, int height) {
 		float cx = width*0.5f;
 		float cy = height*0.5f;
-		float hw = backgroundImage.getWidth();
-		float hh = backgroundImage.getHeight();
+		float hw = backgroundImage.getRegionWidth();
+		float hh = backgroundImage.getRegionHeight();
 		float scale = cx/hw;
 		scale = Math.max(scale, cy/hh);
 		hw *= scale;

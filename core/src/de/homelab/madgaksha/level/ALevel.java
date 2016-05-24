@@ -2,8 +2,8 @@ package de.homelab.madgaksha.level;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -194,7 +194,7 @@ public abstract class ALevel {
 		return tiledMap;
 	}
 	
-	public Texture getBackgroundImage() {
+	public TextureRegion getBackgroundImage() {
 		return ResourceCache.getTexture(backgroundImage);
 	}
 	
