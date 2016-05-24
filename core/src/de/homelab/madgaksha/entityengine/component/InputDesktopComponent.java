@@ -27,10 +27,9 @@ public class InputDesktopComponent implements Component, Poolable {
 	private final static int DEFAULT_SPEED_TRIGGER = Keys.SHIFT_LEFT; 
 	
 	private final static float DEFAULT_FRICTION_FACTOR = 0.8f;
-	private final static float DEFAULT_ACCELERATION_FACTOR = 80.0f;
+	private final static float DEFAULT_ACCELERATION_FACTOR_LOW = 80.0f;
+	private final static float DEFAULT_ACCELERATION_FACTOR_HIGH = 160.0f;
 	
-	private final static float DEFAULT_LOW_SPEED = 200.0f;
-	private final static float DEFAULT_HIGH_SPEED = 800.0f;
 	private final static float DEFAULT_SCREEN_ORIENTATION = 0.0f;
 	private final static boolean DEFAULT_RELATIVE_TO_CAMERA = true;
 	private final static boolean DEFAULT_ORIENT_TO_SCREEN = false;
@@ -53,10 +52,9 @@ public class InputDesktopComponent implements Component, Poolable {
 	public int enemySwitcherNext = DEFAULT_ENEMY_SWITCHER_NEXT;
 		
 	public float frictionFactor = DEFAULT_FRICTION_FACTOR;
-	public float accelerationFactor = DEFAULT_ACCELERATION_FACTOR;
+	public float accelerationFactorLow = DEFAULT_ACCELERATION_FACTOR_LOW;
+	public float accelerationFactorHigh = DEFAULT_ACCELERATION_FACTOR_HIGH;
 	
-	public float lowSpeed = DEFAULT_LOW_SPEED;	
-	public float highSpeed = DEFAULT_HIGH_SPEED;
 	public float screenOrientation = DEFAULT_SCREEN_ORIENTATION;
 	public boolean relativeToCamera = DEFAULT_RELATIVE_TO_CAMERA;
 	public boolean orientToScreen = DEFAULT_ORIENT_TO_SCREEN;
@@ -64,14 +62,13 @@ public class InputDesktopComponent implements Component, Poolable {
 	
 	public InputDesktopComponent() {
 	}
-	public InputDesktopComponent(float speed) {
-		this.lowSpeed = this.highSpeed = speed;
+	public InputDesktopComponent(float accerlerationFactor) {
+		this.accelerationFactorHigh= this.accelerationFactorLow = accerlerationFactor;
 	}
-	public InputDesktopComponent(float lowSpeed, float highSpeed, float frictionFactor, float accelerationFactor, boolean r, boolean o) {
-		this.lowSpeed = lowSpeed;
-		this.highSpeed = highSpeed;
+	public InputDesktopComponent(float accelerationFactorLow, float accelerationFactorHIgh, float frictionFactor, boolean r, boolean o) {
+		this.accelerationFactorLow = accelerationFactorLow;
+		this.accelerationFactorHigh = accelerationFactorHIgh;
 		this.frictionFactor = frictionFactor;
-		this.accelerationFactor = accelerationFactor;
 		this.orientToScreen = o;
 		this.relativeToCamera = r;
 	}
@@ -105,10 +102,9 @@ public class InputDesktopComponent implements Component, Poolable {
 		relativeToCamera = DEFAULT_RELATIVE_TO_CAMERA;
 		orientToScreen = DEFAULT_ORIENT_TO_SCREEN;
 		screenOrientation = DEFAULT_SCREEN_ORIENTATION;
-		lowSpeed = DEFAULT_LOW_SPEED;
-		highSpeed = DEFAULT_HIGH_SPEED;
 		frictionFactor = DEFAULT_FRICTION_FACTOR;
-		accelerationFactor = DEFAULT_ACCELERATION_FACTOR;
+		accelerationFactorLow = DEFAULT_ACCELERATION_FACTOR_LOW;
+		accelerationFactorHigh = DEFAULT_ACCELERATION_FACTOR_HIGH;
 		
 		enemySwitcherPrev = DEFAULT_ENEMY_SWITCHER_PREV;
 		enemySwitcherNext = DEFAULT_ENEMY_SWITCHER_NEXT;

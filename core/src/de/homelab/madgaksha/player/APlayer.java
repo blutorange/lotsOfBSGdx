@@ -1,20 +1,25 @@
 package de.homelab.madgaksha.player;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 
 import de.homelab.madgaksha.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.IResource;
+import de.homelab.madgaksha.util.MoreMathUtils;
 
 public abstract class APlayer {
 
-	final private EAnimationList animationList;
-	final private float movementSpeedLow;
-	final private float movementSpeedHigh;
-	final private float movementFrictionFactor;
-	final private float movementAccelerationFactor;
-
+	private final EAnimationList animationList;
+	private final float movementAccelerationFactorLow;
+	private final float movementAccelerationFactorHigh;
+	private final float movementFrictionFactor;
+	private final Color painBarColorLow = new Color();
+	private final Color painBarColorMid = new Color();
+	private final Color painBarColorHigh = new Color();
+	private final int[] painPointsDigits = new int[10];
+	
 	/** x,y are the offset relative to the center of the sprites (bottom left). Radius is the circe's size. */
 	final private Circle boundingCircle;
 	final private Rectangle boundingBox;
@@ -22,21 +27,28 @@ public abstract class APlayer {
 	final private IResource<? extends Enum<?>,?>[] requiredResources;
 	
 	/** Player current pain points. */
-	private int painPoints;
+	private long painPoints;
 	/** Player maximum paint points. */
-	private int maxPainPoints;
+	private long maxPainPoints;
+	private float painPointsRatio;
 	
 	public APlayer() {
-		this.movementSpeedLow = requestedMovementSpeedLow();
-		this.movementSpeedHigh = requestedMovementSpeedHigh();
+		this.movementAccelerationFactorLow = requestedMovementAccelerationFactorLow();
+		this.movementAccelerationFactorHigh = requestedMovementAccelerationFactorHigh();
 		this.movementFrictionFactor = requestedMovementFrictionFactor();
-		this.movementAccelerationFactor = requestedMovementAccelerationFactor();
 		this.animationList = requestedAnimationList();
 		this.boundingCircle = requestedBoundingCircle();
 		this.boundingBox = requestedBoundingBox();
+		this.painBarColorLow.set(requestedPainBarColorLow());
+		this.painBarColorMid.set(requestedPainBarColorMid());
+		this.painBarColorHigh.set(requestedPainBarColorHigh());
+				
 		this.requiredResources = requestedRequiredResources();
 		this.maxPainPoints = requestedMaxPainPoints();
-		this.painPoints = this.maxPainPoints;
+		if (this.maxPainPoints >= MoreMathUtils.pow(10L, painPointsDigits.length))
+			this.maxPainPoints = MoreMathUtils.pow(10L, painPointsDigits.length) - 1L; 
+		this.untakeDamage(this.maxPainPoints);
+		
 	}
 
 	// ====================================
@@ -45,17 +57,15 @@ public abstract class APlayer {
 	/** @return The animated sprite used for the player. */
 	protected abstract EAnimationList requestedAnimationList();
 
-	/** @return Acceleration factor of the player. */
-	protected abstract float requestedMovementAccelerationFactor();
 
 	/** @return Friction factor of the player. */
 	protected abstract float requestedMovementFrictionFactor();
 
-	/** @return High maximum speed of the player, when speed trigger is pressed. */
-	protected abstract float requestedMovementSpeedHigh();
+	/** @return High acceleration of the player, when the speed trigger button is pressed. */
+	protected abstract float requestedMovementAccelerationFactorHigh();
 
-	/** @return Low maximum speed of the player. */
-	protected abstract float requestedMovementSpeedLow();	
+	/** @return Low acceleration of the player. */
+	protected abstract float requestedMovementAccelerationFactorLow();	
 
 	/** @return Radius of the sphere bounding the player. */
 	protected abstract Circle requestedBoundingCircle();
@@ -104,31 +114,61 @@ public abstract class APlayer {
 		return requiredResources;
 	}
 	
-	public int getPainPoints() {
+	public long getPainPoints() {
 		return painPoints;
 	}
 	
-	public int getMaxPainPoints() {
+	public long getMaxPainPoints() {
 		return maxPainPoints;
 	}
+	
+	/** Can be overridden for a custom HP bar color.
+	 * 
+	 * @return The color when the pain bar is low.
+	 */
+	protected Color requestedPainBarColorLow() {
+		return new Color(0.0f, 204.0f/255.0f, 102.0f/255.0f, 1.0f);
+	}
+	/** Can be overridden for a custom HP bar color.
+	 * 
+	 * @return The color when the pain bar is halfway to full.
+	 */
+	protected Color requestedPainBarColorMid() {
+		return new Color(255.0f, 153.0f/255.0f, 51.0f/255.0f, 1.0f);
+	}
+	/** Can be overridden for a custom HP bar color.
+	 * 
+	 * @return The color when the pain bar is high.
+	 */
+	protected Color requestedPainBarColorHigh() {
+		return new Color(255.0f, 80.0f/255.0f, 80.0f/255.0f, 1.0f);
+	}
+	
+	
 	
 	/**
 	 * @param damage Amount of damage to take.
 	 * @return Whether the player is now dead :(
 	 */
-	public boolean takeDamage(int damage) {
+	public boolean takeDamage(long damage) {
 		painPoints += damage;
-		if (painPoints > maxPainPoints) painPoints = maxPainPoints;
+		updatePainPoints();
 		return isDead();
 	}
 	/**
 	 * @param health 
 	 * @return Whether the player is now completely undamaged :)
 	 */
-	public boolean untakeDamage(int health) {
+	public boolean untakeDamage(long health) {
 		painPoints -= health;
-		if (painPoints < 0) painPoints = 0;
+		updatePainPoints();
 		return isUndamaged();
+	}
+	public boolean takeDamage(int damage) {
+		return takeDamage((long)damage);
+	}
+	public boolean untakeDamage(int health) {
+		return untakeDamage((long)health);
 	}
 	/** @return Whether the player is dead :( */
 	public boolean isDead() {
@@ -138,20 +178,50 @@ public abstract class APlayer {
 	public boolean isUndamaged() {
 		return painPoints <= 0;
 	}
-
-	public float getMovementSpeedLow() {
-		return movementSpeedLow;
+	/** @return The ratio currentPainPoints / maximumPaintPoints. */
+	public float getPainPointsRatio() {
+		return painPointsRatio;
 	}
+	
+	public int getPainPointsDigit(int i) {
+		return painPointsDigits[i];
+	}	
 
-	public float getMovementSpeedHigh() {
-		return movementSpeedHigh;
+	private void updatePainPoints() {
+		if (painPoints < 0) painPoints = 0;
+		if (painPoints > maxPainPoints) painPoints = maxPainPoints;
+
+		painPointsRatio = ((float)painPoints) / ((float)maxPainPoints);
+		
+		long digit = painPoints;
+		for (int i = painPointsDigits.length; i --> 0;) {
+			painPointsDigits[i] = (int)(digit % 10L);
+			digit /= 10;
+		}
 	}
-
+	
 	public float getMovementFrictionFactor() {
 		return movementFrictionFactor;
 	}
 
-	public float getMovementAccelerationFactor() {
-		return movementAccelerationFactor;
+	public float getMovementAccelerationFactorLow() {
+		return movementAccelerationFactorLow;
 	}
+	public float getMovementAccelerationFactorHigh() {
+		return movementAccelerationFactorHigh;
+	}
+
+	public Color getPainBarColorLow() {
+		return painBarColorLow;
+	}
+	
+	public Color getPainBarColorMid() {
+		return painBarColorMid;
+	}
+	
+	public Color getPainBarColorHigh() {
+		return painBarColorHigh;
+	}
+
+	
 }

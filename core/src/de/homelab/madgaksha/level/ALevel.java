@@ -1,7 +1,10 @@
 package de.homelab.madgaksha.level;
 
+import java.io.IOException;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -67,6 +70,9 @@ public abstract class ALevel {
 	private final EMusic battleBgm;
 	private final ETiledMap tiledMap;
 	private final String i18nNameKey;
+	private final Color enemyPainBarColorLow = new Color();
+	private final Color enemyPainBarColorMid = new Color();
+	private final Color enemyPainBarColorHigh = new Color();
 	
 	// =============================
 	// Constructor
@@ -78,8 +84,11 @@ public abstract class ALevel {
 		tiledMap = requestedTiledMap();
 		i18nNameKey = requestedI18nNameKey();
 		battleBgm = requestedBattleBgm();
+		enemyPainBarColorLow.set(requestedEnemyPainBarColorLow());
+		enemyPainBarColorMid.set(requestedEnemyPainBarColorMid());
+		enemyPainBarColorHigh.set(requestedEnemyPainBarColorHigh());
 	}
-	
+
 	public boolean initialize(SpriteBatch batch) {
 		loadedTiledMap = ResourceCache.getTiledMap(tiledMap);
 		if (loadedTiledMap == null) return false;
@@ -205,7 +214,7 @@ public abstract class ALevel {
 	/**
 	 * Status screen data with pixel values etc.
 	 */
-	public StatusScreen getStatusScreen(int w, int h) {
+	public StatusScreen getStatusScreen(int w, int h) throws IOException {
 		return new StatusScreen(w,h);
 	}
 
@@ -238,4 +247,40 @@ public abstract class ALevel {
 		return baseDirectionEntity;
 	}
 
+	/** Can be overridden for a custom HP bar color.
+	 * 
+	 * @return The color when the pain (HP) bar is at low health.
+	 */
+	protected Color requestedEnemyPainBarColorLow() {
+		return new Color(255.0f, 80.0f/255.0f, 80.0f/255.0f, 1.0f);
+	}
+	
+	/** Can be overridden for a custom HP bar color.
+	 * 
+	 * @return The color when the pain bar is halfway to full.
+	 */
+	protected Color requestedEnemyPainBarColorMid() {
+		return new Color(255.0f, 153.0f/255.0f, 51.0f/255.0f, 1.0f);
+	}
+	
+	/** Can be overridden for a custom HP bar color.
+	 * 
+	 * @return The color when the pain (HP) bar is at high health.
+	 */
+	protected Color requestedEnemyPainBarColorHigh() {
+		return new Color(0.0f, 204.0f/255.0f, 102.0f/255.0f, 1.0f);
+	}
+
+	public Color getEnemyPainBarColorLow() {
+		return enemyPainBarColorLow;
+	}
+
+	public Color getEnemyPainBarColorMid() {
+		return enemyPainBarColorMid;
+	}
+
+	public Color getEnemyPainBarColorHigh() {
+		return enemyPainBarColorHigh;
+	}
+	
 }

@@ -30,7 +30,6 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 	private final static Logger LOG = Logger.getLogger(InputPlayerDesktopSystem.class);
 	private static Vector2 v = new Vector2();
 	private static Vector2 w = new Vector2();
-	private static float f,g;
 	private float lastAngle = 180.0f;
 	
 	public InputPlayerDesktopSystem() {
@@ -58,15 +57,15 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		else if (w.len2() > 0.5f) dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle=w.angle());
 		else dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle);
 		
-		f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.highSpeed : ic.lowSpeed;
-		vc.x = (vc.x+ic.accelerationFactor*v.x)*ic.frictionFactor;
-		vc.y = (vc.y+ic.accelerationFactor*v.y)*ic.frictionFactor;
-		g = vc.x*vc.x+vc.y*vc.y;
-		if (g>f*f) {
-			f = f*f/g;
-			vc.x *= f;
-			vc.y *= f;
-		}
+		float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.accelerationFactorHigh : ic.accelerationFactorLow;
+		vc.x = (vc.x+f*v.x)*ic.frictionFactor;
+		vc.y = (vc.y+f*v.y)*ic.frictionFactor;
+//		g = vc.x*vc.x+vc.y*vc.y;
+//		if (g>f*f) {
+//			f = f*f/g;
+//			vc.x *= f;
+//			vc.y *= f;
+//		}
 		
 		if (cameraTrackingComponent.focusPoints.size() > 1) {
 			if (Gdx.input.isKeyJustPressed(ic.enemySwitcherPrev)) {

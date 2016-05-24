@@ -13,11 +13,13 @@ import static de.homelab.madgaksha.GlobalBag.maxMonitorHeight;
 import static de.homelab.madgaksha.GlobalBag.maxMonitorWidth;
 import static de.homelab.madgaksha.GlobalBag.musicPlayer;
 import static de.homelab.madgaksha.GlobalBag.player;
+import static de.homelab.madgaksha.GlobalBag.shapeRenderer;
 import static de.homelab.madgaksha.GlobalBag.soundPlayer;
 import static de.homelab.madgaksha.GlobalBag.statusScreen;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -32,6 +34,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -161,10 +164,12 @@ public class Game implements ApplicationListener {
 		// Create sound player.
 		soundPlayer = new SoundPlayer();
 
-		// Create sprite batches.
+		// Create batches.
 		batchGame = new SpriteBatch();
 		batchPixel = new SpriteBatch();
-
+		shapeRenderer = new ShapeRenderer();
+		
+		
 		// Initialize the entity engine.
 		gameEntityEngine = new Engine();
 
@@ -177,7 +182,14 @@ public class Game implements ApplicationListener {
 
 		// Get viewports and set them up.
 		viewportGame = level.getGameViewport(currentMonitorWidth, currentMonitorHeight);
-		statusScreen = level.getStatusScreen(currentMonitorWidth, currentMonitorHeight);
+		try {
+			statusScreen = level.getStatusScreen(currentMonitorWidth, currentMonitorHeight);
+		} catch (IOException e) {
+			LOG.error("failed to initialize status screen", e);
+			exitRequested = true;
+			Gdx.app.exit();
+			return;
+		}
 		viewportPixel = new ScreenViewport();
 		viewportPixel.update(currentMonitorWidth, currentMonitorHeight, true);
 		computeBackgroundImageRectangle(currentMonitorWidth, currentMonitorHeight);
@@ -324,7 +336,7 @@ public class Game implements ApplicationListener {
 			backgroundImage.getTexture().dispose();
 
 		// TODO remove me
-		debugFont.dispose();
+		if (debugFont != null) debugFont.dispose();
 	}
 
 	private void renderBackground() {
@@ -390,9 +402,8 @@ public class Game implements ApplicationListener {
 	private void renderStatusScreen() {
 		viewportPixel.apply(false);
 		batchPixel.setProjectionMatrix(viewportPixel.getCamera().combined);
-		batchPixel.begin();
+		shapeRenderer.setProjectionMatrix(viewportPixel.getCamera().combined);
 		statusScreen.render();
-		batchPixel.end();
 	}
 
 	private void renderDebug() {

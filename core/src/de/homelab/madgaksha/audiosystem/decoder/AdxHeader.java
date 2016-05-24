@@ -7,7 +7,7 @@ import java.io.Serializable;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import de.homelab.madgaksha.util.SignUtils;
+import de.homelab.madgaksha.util.MoreMathUtils;
 
 public class AdxHeader implements Serializable {
 	/**
@@ -105,19 +105,19 @@ public class AdxHeader implements Serializable {
 	public AdxHeader(final DataInputStream dis)
 			throws UnsupportedAudioFileException, IOException {
 		final short magic = dis.readShort();
-		final int copyRightOffset = SignUtils.signedToUnsigned(dis
+		final int copyRightOffset = MoreMathUtils.signedToUnsigned(dis
 				.readShort());
-		encodingType = EncodingType.getType(SignUtils.signedToUnsigned(dis
+		encodingType = EncodingType.getType(MoreMathUtils.signedToUnsigned(dis
 				.readByte()));
-		blockSize = SignUtils.signedToUnsigned(dis.readByte());
-		sampleBitDepth = SignUtils.signedToUnsigned(dis.readByte());
-		channelCount = SignUtils.signedToUnsigned(dis.readByte());
-		sampleRate = (int) SignUtils.signedToUnsigned(dis.readInt());
-		totalSamples = (int) SignUtils.signedToUnsigned(dis.readInt()); // per channel!!
+		blockSize = MoreMathUtils.signedToUnsigned(dis.readByte());
+		sampleBitDepth = MoreMathUtils.signedToUnsigned(dis.readByte());
+		channelCount = MoreMathUtils.signedToUnsigned(dis.readByte());
+		sampleRate = (int) MoreMathUtils.signedToUnsigned(dis.readInt());
+		totalSamples = (int) MoreMathUtils.signedToUnsigned(dis.readInt()); // per channel!!
 		highPassFrequency = (int) dis.readShort();
 		version = Version
-				.getType(SignUtils.signedToUnsigned(dis.readByte()));
-		final int flags = SignUtils.signedToUnsigned(dis.readByte());
+				.getType(MoreMathUtils.signedToUnsigned(dis.readByte()));
+		final int flags = MoreMathUtils.signedToUnsigned(dis.readByte());
 
 		headerByteCount = copyRightOffset + 4;
 		
@@ -150,13 +150,13 @@ public class AdxHeader implements Serializable {
 			case ADX3_OTHER_DECODER:
 			case ADX3:
 				loopEnabled = dis.readInt() != 0;
-				loopBeginSampleIndex = SignUtils.signedToUnsigned(dis
+				loopBeginSampleIndex = MoreMathUtils.signedToUnsigned(dis
 						.readInt());
-				loopBeginByteIndex = SignUtils.signedToUnsigned(dis
+				loopBeginByteIndex = MoreMathUtils.signedToUnsigned(dis
 						.readInt());
-				loopEndSampleIndex = SignUtils.signedToUnsigned(dis
+				loopEndSampleIndex = MoreMathUtils.signedToUnsigned(dis
 						.readInt());
-				loopEndByteIndex = SignUtils
+				loopEndByteIndex = MoreMathUtils
 						.signedToUnsigned(dis.readInt());
 				// Now at 0x2c, skip padding.
 				// Copyright string starts at
@@ -167,13 +167,13 @@ public class AdxHeader implements Serializable {
 			case ADX4:
 				dis.skipBytes(4 * 3);
 				loopEnabled = dis.readInt() != 0;
-				loopBeginSampleIndex = SignUtils.signedToUnsigned(dis
+				loopBeginSampleIndex = MoreMathUtils.signedToUnsigned(dis
 						.readInt());
-				loopBeginByteIndex = SignUtils.signedToUnsigned(dis
+				loopBeginByteIndex = MoreMathUtils.signedToUnsigned(dis
 						.readInt());
-				loopEndSampleIndex = SignUtils.signedToUnsigned(dis
+				loopEndSampleIndex = MoreMathUtils.signedToUnsigned(dis
 						.readInt());
-				loopEndByteIndex = SignUtils
+				loopEndByteIndex = MoreMathUtils
 						.signedToUnsigned(dis.readInt());
 				// Now at 0x38, skip padding.
 				// Copyright string starts at

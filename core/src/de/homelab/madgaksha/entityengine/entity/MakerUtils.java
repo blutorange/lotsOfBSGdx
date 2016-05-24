@@ -152,10 +152,9 @@ public final class MakerUtils {
 			break;
 		case Desktop:
 			InputDesktopComponent ic = new InputDesktopComponent();
-			ic.lowSpeed = player.getMovementSpeedLow();
-			ic.highSpeed = player.getMovementSpeedHigh();
 			ic.frictionFactor = player.getMovementFrictionFactor();
-			ic.accelerationFactor= player.getMovementAccelerationFactor();
+			ic.accelerationFactorLow = player.getMovementAccelerationFactorLow();
+			ic.accelerationFactorHigh = player.getMovementAccelerationFactorHigh();
 			playerEntity.add(ic);
 			break;
 		case HeadlessDesktop:

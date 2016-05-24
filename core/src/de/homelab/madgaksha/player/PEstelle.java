@@ -43,24 +43,18 @@ public class PEstelle extends APlayer {
 	}
 
 	@Override
-	protected float requestedMovementAccelerationFactor() {
-		return 60.0f;
+	protected float requestedMovementAccelerationFactorLow() {
+		return 40.0f;
+	}
+	
+	@Override
+	protected float requestedMovementAccelerationFactorHigh() {
+		return 80.0f;
 	}
 
 	@Override
 	protected float requestedMovementFrictionFactor() {
 		return 0.8f;
 	}
-
-	@Override
-	protected float requestedMovementSpeedLow() {
-		return 200.0f;
-	}
-
-	@Override
-	protected float requestedMovementSpeedHigh() {
-		return 700.0f;
-	}
-
 
 }

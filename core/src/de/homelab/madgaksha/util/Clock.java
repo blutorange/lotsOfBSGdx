@@ -6,7 +6,10 @@ public class Clock {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(Clock.class);
 	
-	private float time = 0.0f;
+	private int ms = 0;
+	private int s = 0;
+	private int m = 0;
+	private int h = 0;
 	
 	public Clock(){};
 	
@@ -15,7 +18,19 @@ public class Clock {
 	 * @param deltaTime Elapsed time since last update in seconds.
 	 */
 	public void update(float deltaTime) {
-		time += deltaTime;
+		ms += (int)(1000.0f*deltaTime);
+		if (ms > 999) {
+			s += ms / 1000;
+			ms %= 1000;
+			if (s > 59) {
+				m += s / 60;
+				s %= 60;
+				if (m > 59) {
+					h += m / 60;
+					m %= 60;
+				}
+			}
+		}
 	}
 	
 	public int getMinutesOne() {
@@ -24,49 +39,45 @@ public class Clock {
 	public int getMinutesTen() {
 		return getMinutes() / 10;
 	}
-	public int getSecondsOneClipped() {
-		return getSecondsClipped() % 10;
+	public int getSecondsOne() {
+		return s % 10;
 	}
-	public int getSecondsTenClipped() {
-		return getSecondsClipped() / 10;
+	public int getSecondsTen() {
+		return s / 10;
 	}
 	public int getMillisecondsHundred() {
-		return ((int)(time*10))%10;
+		return ms / 100;
 	}
 	public int getMillisecondsTen() {
-		return ((int)(time*100))%10;
+		return (ms % 100) / 10;
+	}
+	public int getMillisecondsOne() {
+		return (ms % 10);
 	}
 	
 	public int getHours() {
-		return ((int)time)/3600;
+		return h;
 	}
 	
 	public int getMinutes() {
-		return ((int)time)/60;
-	}
-	public int getMinutesClipped() {
-		return (((int)time)%3600)/60;
+		return m;
 	}
 	
 	public int getSeconds() {
-		return ((int)time);
+		return s;
 	}
 	
-	public int getSecondsClipped() {
-		return ((int)time)%60;
-	}
-	
-	public int getMillisecondsClipped() {
-		return ((int)(time*1000))%1000;
+	public int getMilliseconds() {
+		return ms;
 	}
 	
 	public void reset() {
-		time = 0.0f;
+		ms = s = m = h = 0;
 	}
 
 	@Override
 	public String toString(){
-		return String.format("%02d:%02d:%02d.%03d", getHours(), getMinutesClipped(), getSecondsClipped(), getMillisecondsClipped());
+		return String.format("%02d:%02d:%02d.%03d", h, m, s, ms);
 	}
 	
 	public static void main(String[] args) {

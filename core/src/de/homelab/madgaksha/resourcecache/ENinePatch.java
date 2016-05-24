@@ -17,8 +17,15 @@ import de.homelab.madgaksha.logging.Logger;
  *
  */
 public enum ENinePatch implements IResource<ENinePatch,NinePatch> {
-	TEXTBOX_BLUE(ETextureAtlas.NINE_PATCHES,"textbox-blue",new Dimension(-5,36),new Dimension(10,-17), new Dimension(128,128)),
-	TEST_PIXEL(ETextureAtlas.NINE_PATCHES,"pixel",null,null,null),
+	//TEXTBOX_BLUE(ETextureAtlas.NINE_PATCHES,"textbox-blue",new Dimension(-5,36),new Dimension(10,-17), new Dimension(128,128)),
+	TEXTBOX_BLUE(ETextureAtlas.NINE_PATCHES,"textbox-blue-fc",new Dimension(-3,29),new Dimension(-128,-10), new Dimension(128,128)),
+	
+	STATUS_SCREEN_MAIN_FRAME(ETextureAtlas.STATUS_SCREEN,"soraFcBrownBox"),
+	STATUS_SCREEN_CELL_FRAME(ETextureAtlas.STATUS_SCREEN,"niceBrownBox"),
+	STATUS_SCREEN_HP_BAR_PLAYER(ETextureAtlas.STATUS_SCREEN,"pointBarBrownEllipse"),
+	STATUS_SCREEN_HP_BAR_FILL(ETextureAtlas.STATUS_SCREEN,"hpBarFill"),
+	STATUS_SCREEN_DATA_FRAME(ETextureAtlas.STATUS_SCREEN,"bracketsLrtd"),
+	
 	;
 
 	private final static Logger LOG = Logger.getLogger(ENinePatch.class);
@@ -46,6 +53,14 @@ public enum ENinePatch implements IResource<ENinePatch,NinePatch> {
 		offsetSpeaker = os;
 		offsetFace = of;
 		sizeFace = sf;
+	}
+	
+	private ENinePatch(ETextureAtlas ta, String p) {
+		patchName = p;
+		textureAtlas = ta;
+		offsetSpeaker = null;
+		offsetFace = null;
+		sizeFace = null;
 	}
 
 	public static void clearAll() {

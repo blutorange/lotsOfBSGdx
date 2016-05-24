@@ -49,6 +49,7 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	// ===================
 	STATUS_ICON_TIME(ETextureAtlas.STATUS_SCREEN, "iconTimeSmall"),
 	STATUS_ICON_SCORE(ETextureAtlas.STATUS_SCREEN, "iconScoreSmall"),
+	STATUS_ICON_PAINBAR(ETextureAtlas.STATUS_SCREEN, "iconPainBarSmall"),
 	STATUS_ICON_WEAPON(ETextureAtlas.STATUS_SCREEN, "iconWeaponSmall"),
 	STATUS_ICON_TOKUGI(ETextureAtlas.STATUS_SCREEN, "iconTokugiSmall"),
 	STATUS_ICON_ENEMY(ETextureAtlas.STATUS_SCREEN, "iconEnemySmall"),

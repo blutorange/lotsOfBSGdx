@@ -18,7 +18,7 @@ import de.homelab.madgaksha.logging.Logger;
 public enum ETextureAtlas implements IResource<ETextureAtlas,TextureAtlas> {
 	NINE_PATCHES("9patch/packed/9patchPacked.atlas"),
 	PARTICLE_EFFECTS("particle/packed/particleEffectPacked.atlas"),
-	STATUS_SCREEN("texture/statusscreen/packed/statusScreenPacked.atlas"),
+	STATUS_SCREEN("statusscreen/packed/statusScreenPacked.atlas"),
 	MISC("texture/misc/packed/miscPacked.atlas");
 
 	private final static Logger LOG = Logger.getLogger(ETextureAtlas.class);

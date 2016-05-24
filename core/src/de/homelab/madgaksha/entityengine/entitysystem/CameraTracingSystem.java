@@ -31,7 +31,7 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 	private final static Logger LOG = Logger.getLogger(CameraTracingSystem.class);
 	
 	/** In seconds. */
-	private final static float DEFAULT_UPDATE_INTERVAL = 0.2f;
+	private final static float DEFAULT_UPDATE_INTERVAL = 0.05f;
 
 	/** Last vector longer than the threshold. */
 	private Vector2 lastDirAboveThreshold = new Vector2(0, 1);
