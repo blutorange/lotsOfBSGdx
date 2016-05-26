@@ -40,7 +40,7 @@ public enum EMusic implements IResource<EMusic,Music> {
 		final FileHandle fileHandle = Gdx.files.internal(filename);
 		try {
 			return Gdx.audio.newMusic(fileHandle);
-		} catch (GdxRuntimeException e) {
+		} catch (Exception e) {
 			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 			return null;
 		}

@@ -1,7 +1,11 @@
 package de.homelab.madgaksha.entityengine.entity;
 
+import static de.homelab.madgaksha.GlobalBag.statusScreen;
+import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
@@ -18,22 +22,34 @@ import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.enums.ECollisionGroup;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.player.IPainBar;
+import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.util.GeoUtil;
+import de.homelab.madgaksha.util.MoreMathUtils;
 
-public abstract class EnemyMaker extends AEntityMaker implements IBehaviour, ITrigger, IReceive {
+public abstract class EntityEnemy extends AEntity implements IBehaviour, ITrigger, IReceive, IPainBar {
 
 	@SuppressWarnings("unused")
-	private final static Logger LOG = Logger.getLogger(EnemyMaker.class);
+	private final static Logger LOG = Logger.getLogger(EntityEnemy.class);
 
 	private PositionComponent positionComponent;
 	private BoundingSphereComponent boundingSphereComponent;
 	private BoundingBoxComponent boundingBoxComponent = new BoundingBoxComponent();
 	private TemporalComponent temporalComponent = new TemporalComponent();
 	private Class<Component> triggerComponentClass;
+	
+	private final Sprite iconMain;
+	private final Sprite iconSubHorizontal;
+	private final Sprite iconSubVertical;
 
+	private long painPoints;
+	private long maxPainPoints;
+	private float painPointsRatio;
+
+	
 	@SuppressWarnings("unchecked")
-	public EnemyMaker(Shape2D shape, ETrigger trigger, Vector2 initialPosition, Float initDir) {
+	public EntityEnemy(Shape2D shape, ETrigger trigger, Vector2 initialPosition, Float initDir) {
 		super();
 
 		Component tc = MakerUtils.makeTrigger(this, this, trigger, ECollisionGroup.PLAYER_GROUP);
@@ -59,11 +75,14 @@ public abstract class EnemyMaker extends AEntityMaker implements IBehaviour, ITr
 		add(pc);
 		if (tc != null)
 			add(tc);
+		
+		iconMain = requestedIconMain().asSprite();
+		iconSubHorizontal = requestedIconSubHorizontal().asSprite();
+		iconSubVertical = requestedIconSubVertical().asSprite();
 
-		// TODO remove component when triggered to activate enemy ?
-		// this.add(deactivatedComponent / inactiveComponent);
-		// TODO
-		// Or add a PropertiesToBeAddedLaterComponent?
+		maxPainPoints = requestedMaxPainPoints();
+		untakeDamage(maxPainPoints);
+
 	}
 	
 	@Override
@@ -110,14 +129,25 @@ public abstract class EnemyMaker extends AEntityMaker implements IBehaviour, ITr
 		add(boundingBoxComponent);
 		add(boundingSphereComponent);
 		add(temporalComponent);
+		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size())
+			statusScreen.targetEnemy(this);
+		else 
+			statusScreen.targetEnemy(cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
 	}
 
+	protected abstract ETexture requestedIconMain();
+	protected abstract ETexture requestedIconSubHorizontal();
+	protected abstract ETexture requestedIconSubVertical();
+	
 	protected abstract IResource<? extends Enum<?>, ?>[] requestedResources();
 
 	protected abstract Rectangle requestedBoundingBox();
 
 	protected abstract Circle requestedBoundingCircle();
 
+	/** @return Enemy maximum pain points (pp). */
+	protected abstract int requestedMaxPainPoints();
+	
 	protected abstract void triggeredStartup();
 
 	protected abstract void triggeredTouch(Entity e);
@@ -125,4 +155,76 @@ public abstract class EnemyMaker extends AEntityMaker implements IBehaviour, ITr
 	protected abstract void triggeredScreen();
 
 	protected abstract void triggeredTouched(Entity e);
+	
+	
+	public Sprite getIconMain() {
+		return iconMain;
+	}
+	public Sprite getIconSubHorizontal() {
+		return iconSubHorizontal;
+	}
+	public Sprite getIconSubVertical() {
+		return iconSubVertical;
+	}
+
+	/**
+	 * @param damage Amount of damage to take.
+	 * @return Whether the player is now dead :(
+	 */
+	@Override
+	public boolean takeDamage(long damage) {
+		painPoints += damage;
+		updatePainPoints();
+		return isDead();
+	}
+	/**
+	 * @param health 
+	 * @return Whether the player is now completely undamaged :)
+	 */
+	@Override
+	public boolean untakeDamage(long health) {
+		painPoints -= health;
+		updatePainPoints();
+		return isUndamaged();
+	}
+	@Override
+	public boolean takeDamage(int damage) {
+		return takeDamage((long)damage);
+	}
+	@Override
+	public boolean untakeDamage(int health) {
+		return untakeDamage((long)health);
+	}
+	/** @return Whether the enemy is dead :) */
+	@Override
+	public boolean isDead() {
+		return painPoints >= maxPainPoints;
+	}
+	/** @return Whether the enemy is completely healed :( */
+	@Override
+	public boolean isUndamaged() {
+		return painPoints <= 0;
+	}
+	/** @return The ratio currentPainPoints / maximumPaintPoints. */
+	@Override
+	public float getPainPointsRatio() {
+		return painPointsRatio;
+	}
+	
+	@Override
+	public long getPainPoints() {
+		return painPoints;
+	}
+	
+	@Override
+	public long getMaxPainPoints() {
+		return maxPainPoints;
+	}
+
+	private void updatePainPoints() {
+		if (painPoints < 0) painPoints = 0;
+		if (painPoints > maxPainPoints) painPoints = maxPainPoints;
+
+		painPointsRatio = ((float)painPoints) / ((float)maxPainPoints);
+	}
 }

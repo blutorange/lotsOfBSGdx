@@ -1,5 +1,7 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
+import static de.homelab.madgaksha.GlobalBag.statusScreen;
+
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
 import static de.homelab.madgaksha.GlobalBag.soundPlayer;
@@ -60,12 +62,6 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.accelerationFactorHigh : ic.accelerationFactorLow;
 		vc.x = (vc.x+f*v.x)*ic.frictionFactor;
 		vc.y = (vc.y+f*v.y)*ic.frictionFactor;
-//		g = vc.x*vc.x+vc.y*vc.y;
-//		if (g>f*f) {
-//			f = f*f/g;
-//			vc.x *= f;
-//			vc.y *= f;
-//		}
 		
 		if (cameraTrackingComponent.focusPoints.size() > 1) {
 			if (Gdx.input.isKeyJustPressed(ic.enemySwitcherPrev)) {
@@ -74,12 +70,14 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 				if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
 					cameraTrackingComponent.trackedPointIndex = 0;
 				}
+				statusScreen.targetEnemy(cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
 			} else if (Gdx.input.isKeyJustPressed(ic.enemySwitcherNext)) {
 				soundPlayer.play(ESound.ENEMY_SWITCH);
 				cameraTrackingComponent.trackedPointIndex--;
 				if (cameraTrackingComponent.trackedPointIndex < 0) {
 					cameraTrackingComponent.trackedPointIndex = cameraTrackingComponent.focusPoints.size() - 1;
 				}
+				statusScreen.targetEnemy(cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
 			}
 		}
 	}

@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 bracketsLrtd
   rotate: false
-  xy: 630, 114
+  xy: 622, 152
   size: 46, 15
   split: 15, 15, 4, 5
   pad: 10, 10, 5, 7
@@ -15,7 +15,7 @@ bracketsLrtd
   index: -1
 hpBarFill
   rotate: false
-  xy: 134, 56
+  xy: 302, 155
   size: 5, 5
   split: 0, 0, 0, 0
   orig: 5, 5
@@ -23,49 +23,91 @@ hpBarFill
   index: -1
 iconEnemySmall
   rotate: false
-  xy: 232, 126
+  xy: 490, 104
   size: 33, 34
   orig: 34, 34
   offset: 0, 0
   index: -1
 iconPainBarSmall
   rotate: false
-  xy: 797, 227
+  xy: 921, 164
   size: 30, 27
   orig: 30, 27
   offset: 0, 0
   index: -1
 iconScoreSmall
   rotate: false
-  xy: 727, 220
+  xy: 232, 126
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: -1
 iconTimeSmall
   rotate: false
-  xy: 763, 222
+  xy: 268, 128
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+iconTokugiNoneMain
+  rotate: false
+  xy: 969, 202
+  size: 53, 52
+  orig: 53, 52
+  offset: 0, 0
+  index: -1
+iconWeaponNoneMain
+  rotate: false
+  xy: 969, 202
+  size: 53, 52
+  orig: 53, 52
+  offset: 0, 0
+  index: -1
+iconTokugiNoneSubh
+  rotate: false
+  xy: 490, 140
+  size: 130, 52
+  orig: 130, 52
+  offset: 0, 0
+  index: -1
+iconWeaponNoneSubh
+  rotate: false
+  xy: 490, 140
+  size: 130, 52
+  orig: 130, 52
+  offset: 0, 0
+  index: -1
+iconTokugiNoneSubv
+  rotate: false
+  xy: 823, 124
+  size: 52, 130
+  orig: 52, 130
+  offset: 0, 0
+  index: -1
+iconWeaponNoneSubv
+  rotate: false
+  xy: 823, 124
+  size: 52, 130
+  orig: 52, 130
+  offset: 0, 0
+  index: -1
 iconTokugiSmall
   rotate: false
-  xy: 267, 128
+  xy: 525, 106
   size: 28, 32
   orig: 28, 32
   offset: 0, 0
   index: -1
 iconWeaponSmall
   rotate: false
-  xy: 178, 89
+  xy: 877, 125
   size: 33, 33
   orig: 33, 33
   offset: 0, 0
   index: -1
 javanese0c
   rotate: false
-  xy: 630, 131
+  xy: 921, 193
   size: 46, 61
   orig: 52, 67
   offset: 3, 3
@@ -93,7 +135,7 @@ javanese3c
   index: -1
 javanese4c
   rotate: false
-  xy: 586, 98
+  xy: 877, 160
   size: 42, 94
   orig: 48, 100
   offset: 3, 3
@@ -107,7 +149,7 @@ javanese5c
   index: -1
 javanese6c
   rotate: false
-  xy: 490, 107
+  xy: 622, 169
   size: 94, 85
   orig: 100, 91
   offset: 3, 3
@@ -121,7 +163,7 @@ javanese7c
   index: -1
 javanese8c
   rotate: false
-  xy: 622, 194
+  xy: 718, 194
   size: 103, 60
   orig: 109, 66
   offset: 3, 3
@@ -135,7 +177,7 @@ javanese9c
   index: -1
 niceBrownBox
   rotate: false
-  xy: 135, 81
+  xy: 169, 81
   size: 41, 41
   split: 9, 9, 9, 9
   orig: 41, 41
@@ -151,7 +193,7 @@ noteBook
   index: -1
 pointBarBrownEllipse
   rotate: false
-  xy: 135, 63
+  xy: 718, 176
   size: 29, 16
   split: 7, 7, 7, 7
   pad: 1, 1, 2, 2
@@ -160,7 +202,7 @@ pointBarBrownEllipse
   index: -1
 slash
   rotate: false
-  xy: 678, 120
+  xy: 135, 50
   size: 32, 72
   orig: 42, 84
   offset: 5, 6

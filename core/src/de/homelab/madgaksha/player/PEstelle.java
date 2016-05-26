@@ -57,4 +57,14 @@ public class PEstelle extends APlayer {
 		return 0.8f;
 	}
 
+	@Override
+	protected EWeapon[] requestedSupportedWeapons() {
+		return null;
+	}
+
+	@Override
+	protected ETokugi[] requestedSupportedTokugi() {
+		return null;
+	}
+
 }

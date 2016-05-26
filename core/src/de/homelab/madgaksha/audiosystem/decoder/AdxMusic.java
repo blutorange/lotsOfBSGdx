@@ -867,7 +867,7 @@ public class AdxMusic implements Music, Runnable {
 								rewindToBeginning();
 								position = 0;
 							} catch (IOException e) {
-								LOG.error("failed to opne adx file for streaming", e);
+								LOG.error("failed to open adx file for streaming", e);
 								stopRequested = true;
 							}
 						}

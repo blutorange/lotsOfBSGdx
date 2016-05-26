@@ -22,7 +22,8 @@ public enum EAnimationList implements IResource<EAnimationList,Animation[]> {
 	// =================
 	//      ENEMIES
 	// =================
-	SOLDIER_RED_0(ETexture.SOLIDER_RED_0, 128, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
+	SOLDIER_RED_0(ETexture.SOLDIER_RED_0, 128, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
+	SOLDIER_GREEN_0(ETexture.SOLDIER_GREEN_0, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
 	
 	;
 	

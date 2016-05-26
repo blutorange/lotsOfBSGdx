@@ -10,7 +10,7 @@ public class i18n {
 	private static Map<String, String> main;
 	private static Map<String, String> game;
 	private static Map<String, String> font;
-
+	private static Locale locale;
 	private static boolean initiated = false;
 
 	// not instantiable
@@ -26,7 +26,8 @@ public class i18n {
 	 * @param locale
 	 *            The locale to use.
 	 */
-	public static void init(Locale locale) {
+	public static void init(Locale l) {
+		locale = l;
 		ResourceBundle rbMain = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.main", locale);
 		ResourceBundle rbGame = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.game", locale);
 		ResourceBundle rbFont = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.font", locale);
@@ -54,6 +55,14 @@ public class i18n {
 			m.put(k, rb.getString(k));
 		}
 		return m;
+	}
+	
+	/**
+	 * @return The short name of the current locale (eg. de, en, ja).
+	 */
+	public static String getShortName() {
+		System.out.println(locale.getLanguage());
+		return locale.getLanguage();
 	}
 
 	private static String getValue(Map<String, String> map, String key) {

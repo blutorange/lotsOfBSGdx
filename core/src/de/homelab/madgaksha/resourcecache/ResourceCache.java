@@ -73,6 +73,20 @@ public final class ResourceCache {
 	public static boolean loadToRam(IResource<? extends Enum<?>,?> res) {
 		return getResource(res, true) != null;
 	}
+	
+	/** Loads all resources to ram.
+	 * 
+	 * @param requiredResources Resources to load to RAM.
+	 * @return Whether all resources could be loaded successfully.
+	 * @see ResourceCache#loadToRam(IResource)
+	 */
+	public static boolean loadToRam(IResource<? extends Enum<?>, ?>[] requiredResources) {
+		for (IResource<? extends Enum<?>,?> r : requiredResources) {
+			LOG.debug("fetch: " + r);
+			if (!loadToRam(r)) return false;
+		}
+		return true;
+	}
 
 	/**
 	 * Clears the given music object from the cache.
@@ -327,5 +341,4 @@ public final class ResourceCache {
 	public static BitmapFont getBitmapFont(ENinePatch bitmapFont, boolean cached) {
 		return (BitmapFont) getResource(bitmapFont, cached);
 	}
-
 }

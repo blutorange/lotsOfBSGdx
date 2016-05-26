@@ -11,11 +11,11 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
 
-public class ParticleEffectMaker extends AEntityMaker {
+public class EntityParticleEffect extends AEntity {
 	@SuppressWarnings("unused")
-	private final static Logger LOG = Logger.getLogger(ParticleEffectMaker.class);
+	private final static Logger LOG = Logger.getLogger(EntityParticleEffect.class);
 
-	public ParticleEffectMaker(Shape2D shape, EParticleEffect particleEffect, float spin) {
+	public EntityParticleEffect(Shape2D shape, EParticleEffect particleEffect, float spin) {
 		super();
 		PositionComponent positionComponent = MakerUtils.makePositionAtCenter(shape);
 		ParticleEffectComponent particleEffectComponent = new ParticleEffectComponent(particleEffect);

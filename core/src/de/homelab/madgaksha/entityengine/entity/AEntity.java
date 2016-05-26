@@ -5,8 +5,8 @@ import com.badlogic.ashley.core.Entity;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
-public abstract class AEntityMaker extends Entity {
-	public AEntityMaker() {
+public abstract class AEntity extends Entity {
+	public AEntity() {
 		super();
 		// load to ram
 		IResource<? extends Enum<?>, ?>[] resourceList = requestedResources();

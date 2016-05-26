@@ -12,7 +12,8 @@ import de.homelab.madgaksha.logging.Logger;
 public enum ESound implements IResource<ESound,Sound> {
 	TEXTBOX_NEXT("sound/ed6se002.wav"),
 	ENEMY_SWITCH("sound/ed6se049.wav"),
-	ORA_KOCCHI_DA_ZE("sound/ed6t1252.wav"),
+	HORA_KOCCHI_DA_ZE("sound/ed6t1252.wav"),
+	HOOORGH("sound/ed6t1257.wav"),
 	;
 
 	private final static Logger LOG = Logger.getLogger(ESound.class);

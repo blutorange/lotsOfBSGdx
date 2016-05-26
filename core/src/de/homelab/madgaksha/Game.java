@@ -29,6 +29,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Graphics.Monitor;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -36,6 +37,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.homelab.madgaksha.audiosystem.AwesomeAudio;
@@ -45,7 +47,6 @@ import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.layer.ALayer;
 import de.homelab.madgaksha.layer.EntityLayer;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcepool.ResourcePool;
 import de.homelab.madgaksha.util.Clock;
@@ -133,22 +134,18 @@ public class Game implements ApplicationListener {
 		// Setup audio system.
 		AwesomeAudio.initialize();
 
-		// Start with loading resources.
-		for (IResource<? extends Enum<?>,?> r : level.getRequiredResources()) {
-			LOG.debug("fetch " + r);
-			if (!ResourceCache.loadToRam(r)) {
-				Gdx.app.exit();
-				return;
-			}
+		// Load player data.
+		if (!player.loadToRam()) {
+			LOG.error("failed to load player resources");
+			exitRequested = true;
+			Gdx.app.exit();
+			return;
 		}
-		for (IResource<? extends Enum<?>,?> r : player.getRequiredResources()) {
-			LOG.debug("fetch " + r);
-			if (!ResourceCache.loadToRam(r)) {
-				Gdx.app.exit();
-				return;
-			}
-		}
+		
+		// Load background image for weird aspect ratios.
 		if ((backgroundImage = level.getBackgroundImage()) == null) {
+			LOG.error("failed to load background image");
+			exitRequested = true;
 			Gdx.app.exit();
 			return;
 		}
@@ -337,6 +334,16 @@ public class Game implements ApplicationListener {
 
 		// TODO remove me
 		if (debugFont != null) debugFont.dispose();
+		
+		// Dispose temporary files.
+		LOG.debug("emptying temporary directory tempadx");
+		FileHandle dest = Gdx.files.local("tempadx/");
+		try {
+			dest.emptyDirectory();
+		}
+		catch (GdxRuntimeException e) {
+			LOG.error("failed to empty temporary directory tempadx", e);
+		}
 	}
 
 	private void renderBackground() {

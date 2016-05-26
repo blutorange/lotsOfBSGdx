@@ -68,6 +68,11 @@ public class Level01 extends ALevel {
 		viewport.getCamera().up.y = 1;
 	}
 	
+	@Override
+	public ETexture requestedIconHorizontal() {
+		return ETexture.LEVEL_01_ICON_HORIZONTAL;
+	}
+	
 	// =========================
 	//      Callback methods
 	// =========================

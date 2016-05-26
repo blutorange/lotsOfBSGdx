@@ -13,13 +13,13 @@ import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.enums.ECollisionGroup;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.IResource;
-public class CallbackMaker extends AEntityMaker implements ITrigger, IReceive {
+public class EntityCallback extends AEntity implements ITrigger, IReceive {
 
-	private final static Logger LOG = Logger.getLogger(AEntityMaker.class);
+	private final static Logger LOG = Logger.getLogger(AEntity.class);
 	private Method callback;
 	private MapProperties properties;
 	
-	public CallbackMaker(Shape2D shape, ETrigger trigger, Method callback, MapProperties properties, int loop, float interval) {
+	public EntityCallback(Shape2D shape, ETrigger trigger, Method callback, MapProperties properties, int loop, float interval) {
 		super();
 		this.callback = callback;
 		this.properties = properties;

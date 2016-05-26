@@ -1,5 +1,8 @@
 package de.homelab.madgaksha.resourcecache;
 
+import de.homelab.madgaksha.i18n.i18n;
+
+import java.io.File;
 import java.util.EnumMap;
 
 import com.badlogic.gdx.Gdx;
@@ -41,8 +44,16 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	// ===================
 	//      ENEMIES
 	// ===================
-	SOLIDER_RED_0("sprite/soldierRed0.png"),
+	SOLDIER_RED_0("sprite/soldierRed0.png"),
+	SOLDIER_RED_0_MAIN("texture/statusicon/enemy/soldierRed-main.png"),
+	SOLDIER_RED_0_SUBH("texture/statusicon/enemy","soldierRed-h.png"),
+	SOLDIER_RED_0_SUBV("texture/statusicon/enemy","soldierRed-h.png"),
 	
+	SOLDIER_GREEN_0("sprite/soldierGreen0.png"),
+	SOLDIER_GREEN_0_MAIN("texture/statusicon/enemy/soldierGreen-main.png"),
+	SOLDIER_GREEN_0_SUBH("texture/statusicon/enemy","soldierGreen-h.png"),
+	SOLDIER_GREEN_0_SUBV("texture/statusicon/enemy","soldierGreen-h.png"),
+
 	
 	// ===================
 	//    STATUSSCREEN
@@ -64,7 +75,37 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	STATUS_ICON_NUMERAL_7(ETextureAtlas.STATUS_SCREEN, "javanese7c"),
 	STATUS_ICON_NUMERAL_8(ETextureAtlas.STATUS_SCREEN, "javanese8c"),
 	STATUS_ICON_NUMERAL_9(ETextureAtlas.STATUS_SCREEN, "javanese9c"),
-	STATUS_ICON_SEPARATOR_TIME(ETextureAtlas.STATUS_SCREEN, "slash"),
+	STATUS_ICON_SEPARATOR_TIME(ETextureAtlas.STATUS_SCREEN, "slash"), 
+	STATUS_ICON_NO_ENEMY_MAIN("texture/statusicon/enemy/none-main.png"),
+	STATUS_ICON_NO_ENEMY_SUBH("texture/statusicon/enemy","none-h.png"),
+	STATUS_ICON_NO_ENEMY_SUBV("texture/statusicon/enemy","none-h.png"),
+	
+	// =========================================================================
+	//       WEAPONS
+	// main icons must be 1:1 aspect ratio
+	// sub icons must be 2.5:1 aspect ratio (horizontally) or 1:2.5 (vertically) 
+	// =========================================================================
+	WEAPON_NONE_ICON_MAIN(ETextureAtlas.STATUS_SCREEN, "iconWeaponNoneMain"),
+	WEAPON_NONE_ICON_SUBV(ETextureAtlas.STATUS_SCREEN, "iconWeaponNoneSubv"),
+	WEAPON_NONE_ICON_SUBH("texture/statusicon/weapon","none-h.png"),
+	
+	
+	// =========================================================================
+	//       TOKUGI
+	// main icons must be 1:1 aspect ratio
+	// sub icons must be 2.5:1 aspect ratio (horizontally) or 1:2.5 (vertically) 
+	// =========================================================================
+	TOKUGI_NONE_ICON_MAIN(ETextureAtlas.STATUS_SCREEN, "iconTokugiNoneMain"),
+	TOKUGI_NONE_ICON_SUBV(ETextureAtlas.STATUS_SCREEN, "iconTokugiNoneSubv"),
+	TOKUGI_NONE_ICON_SUBH("texture/statusicon/tokugi","none-h.png"),
+	
+	// =========================================================================
+	//     LEVEL
+	// icons horizontal must be 3:1 aspect ratio
+	// icons vertical must be 1:3 aspect ratio
+	// =========================================================================
+	LEVEL_01_ICON_HORIZONTAL("map/level01-icon-h.png"),
+	LEVEL_01_ICON_VERTICAL("map/level01-icon-v.png"), 
 	
 	;
 
@@ -72,10 +113,16 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	private final static EnumMap<ETexture, TextureRegion> textureCache = new EnumMap<ETexture, TextureRegion>(ETexture.class);
 
 	private String filename;
+	private String basename = null;
 	private ETextureAtlas textureAtlas = null;	
 
+	
 	private ETexture(String f) {
 		filename = f;
+	}
+	private ETexture(String dir, String name) {
+		filename = dir;
+		basename = name;
 	}
 	private ETexture(ETextureAtlas ta, String f) {
 		textureAtlas = ta;
@@ -101,7 +148,13 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 			return ta == null ? null : ta.findRegion(filename);
 		}
 		else {
-			final FileHandle fileHandle = Gdx.files.internal(filename);
+			String path;
+			if (basename != null) {
+				// localizable images
+				path = filename + File.separator + i18n.getShortName() + File.separator + basename; 
+			}
+			else path = filename;
+			final FileHandle fileHandle = Gdx.files.internal(path);
 			try {
 				return new TextureRegion(new Texture(fileHandle));
 			} catch (GdxRuntimeException e) {

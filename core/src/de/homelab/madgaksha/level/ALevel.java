@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -73,6 +74,7 @@ public abstract class ALevel {
 	private final Color enemyPainBarColorLow = new Color();
 	private final Color enemyPainBarColorMid = new Color();
 	private final Color enemyPainBarColorHigh = new Color();
+	private Sprite iconHorizontal;
 	
 	// =============================
 	// Constructor
@@ -89,7 +91,17 @@ public abstract class ALevel {
 		enemyPainBarColorHigh.set(requestedEnemyPainBarColorHigh());
 	}
 
+	/** Loads all necessary resources and reads the map.
+	 * 
+	 * @param batch Sprite batch for this level.
+	 * @return Whether the level could be initialized successfully.
+	 */
 	public boolean initialize(SpriteBatch batch) {
+		iconHorizontal = requestedIconHorizontal().asSprite();
+		if (iconHorizontal == null) return false;
+		
+		if (!ResourceCache.loadToRam(requiredResources)) return false;
+		
 		loadedTiledMap = ResourceCache.getTiledMap(tiledMap);
 		if (loadedTiledMap == null) return false;
 		try {
@@ -102,6 +114,7 @@ public abstract class ALevel {
 		mapRenderer = new OrthogonalTiledMapRenderer(loadedTiledMap, 1.0f, batch);
 		baseDirectionEntity = new Entity();
 		baseDirectionEntity.add(new PositionComponent(mapData.getBaseDirection()));
+		
 		return true;
 	}
 
@@ -156,7 +169,13 @@ public abstract class ALevel {
 	/** Name of the level. */
 	protected abstract String requestedI18nNameKey();
 	
-	
+
+	/** A small icon for the level or its name.
+	 * Its aspect ration must be 3:1.
+	 * @return The icon for the level.
+	 */
+	public abstract ETexture requestedIconHorizontal();
+		
 	// =============================
 	//       Implementations
 	// =============================
@@ -188,10 +207,6 @@ public abstract class ALevel {
 		return WORLD_Y;
 	}
 
-	public IResource<? extends Enum<?>,?>[] getRequiredResources() {
-		return requiredResources;
-	}
-	
 	public EMusic getBgm() {
 		return bgm;
 	}
@@ -282,5 +297,9 @@ public abstract class ALevel {
 	public Color getEnemyPainBarColorHigh() {
 		return enemyPainBarColorHigh;
 	}
-	
+
+	public Sprite getIconHorizontal() {
+		return iconHorizontal;
+	}
+
 }

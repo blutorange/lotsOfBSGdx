@@ -25,9 +25,9 @@ import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.Method;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
-import de.homelab.madgaksha.entityengine.entity.CallbackMaker;
-import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
-import de.homelab.madgaksha.entityengine.entity.ParticleEffectMaker;
+import de.homelab.madgaksha.entityengine.entity.EntityCallback;
+import de.homelab.madgaksha.entityengine.entity.EntityEnemy;
+import de.homelab.madgaksha.entityengine.entity.EntityParticleEffect;
 import de.homelab.madgaksha.enums.Gravity;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
@@ -62,7 +62,7 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
  * <br>
  * Represents an enemy that can engage in combat with the player.
  * <ul>
- * <li>species: The type of a enemy. There must exist a corresponding subclass of {@link AEnemy} with the name <code>Enemy&lt;species&gt;</code>.</li>
+ * <li>species: The type of a enemy. There must exist a corresponding subclass of {@link EntityEnemy} with the name <code>Enemy&lt;species&gt;</code>.</li>
  * <li>spawn: How and when the enemy should spawn. Possible values are:
  *  <ul>
  *   <li>startup: When the map has finished loading.
@@ -394,7 +394,7 @@ public class MapData {
 		// Get species class and its constructor with the appropriate constructor.
 		Constructor enemyConstructor;
 		try {
-			Class<? extends EnemyMaker> enemyClass = ClassReflection.forName(ENEMY_PACKAGE + species + "Maker");
+			Class<? extends EntityEnemy> enemyClass = ClassReflection.forName(ENEMY_PACKAGE + "Enemy" + species);
 			enemyConstructor = ClassReflection.getConstructor(enemyClass, Shape2D.class, ETrigger.class, Vector2.class, Float.class);
 		}
 		catch (Exception e) {
@@ -462,7 +462,7 @@ public class MapData {
 		}
 				
 		// Create new object and return it.
-		return new CallbackMaker(shape, triggerEnum, method, props, loop, interval);
+		return new EntityCallback(shape, triggerEnum, method, props, loop, interval);
 	}
 
 	private Entity processObjectParticleEffect(MapProperties props, Shape2D shape) {
@@ -480,7 +480,7 @@ public class MapData {
 			LOG.error("no such particle effect: " + name, e);
 			return null;
 		}
-		return new ParticleEffectMaker(shape, particleEffect, spin);
+		return new EntityParticleEffect(shape, particleEffect, spin);
 	}
 
 	public Vector2 getBaseDirection() {
