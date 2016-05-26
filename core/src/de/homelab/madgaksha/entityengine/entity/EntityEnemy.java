@@ -40,8 +40,7 @@ public abstract class EntityEnemy extends AEntity implements IBehaviour, ITrigge
 	private Class<Component> triggerComponentClass;
 	
 	private final Sprite iconMain;
-	private final Sprite iconSubHorizontal;
-	private final Sprite iconSubVertical;
+	private final Sprite iconSub;
 
 	private long painPoints;
 	private long maxPainPoints;
@@ -77,8 +76,7 @@ public abstract class EntityEnemy extends AEntity implements IBehaviour, ITrigge
 			add(tc);
 		
 		iconMain = requestedIconMain().asSprite();
-		iconSubHorizontal = requestedIconSubHorizontal().asSprite();
-		iconSubVertical = requestedIconSubVertical().asSprite();
+		iconSub= requestedIconSub().asSprite();
 
 		maxPainPoints = requestedMaxPainPoints();
 		untakeDamage(maxPainPoints);
@@ -136,8 +134,7 @@ public abstract class EntityEnemy extends AEntity implements IBehaviour, ITrigge
 	}
 
 	protected abstract ETexture requestedIconMain();
-	protected abstract ETexture requestedIconSubHorizontal();
-	protected abstract ETexture requestedIconSubVertical();
+	protected abstract ETexture requestedIconSub();
 	
 	protected abstract IResource<? extends Enum<?>, ?>[] requestedResources();
 
@@ -160,11 +157,8 @@ public abstract class EntityEnemy extends AEntity implements IBehaviour, ITrigge
 	public Sprite getIconMain() {
 		return iconMain;
 	}
-	public Sprite getIconSubHorizontal() {
-		return iconSubHorizontal;
-	}
-	public Sprite getIconSubVertical() {
-		return iconSubVertical;
+	public Sprite getIconSub() {
+		return iconSub;
 	}
 
 	/**

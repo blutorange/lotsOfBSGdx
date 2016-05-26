@@ -93,14 +93,10 @@ public class EnemySoldierGreen extends EntityEnemy {
 	}
 
 	@Override
-	protected ETexture requestedIconSubHorizontal() {
-		return ETexture.SOLDIER_GREEN_0_SUBV;
+	protected ETexture requestedIconSub() {
+		return ETexture.SOLDIER_GREEN_0_SUB;
 	}
 
-	@Override
-	protected ETexture requestedIconSubVertical() {
-		return ETexture.SOLDIER_GREEN_0_SUBV;
-	}
 
 	@Override
 	protected int requestedMaxPainPoints() {

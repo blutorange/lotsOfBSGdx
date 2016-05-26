@@ -23,6 +23,7 @@ import de.homelab.madgaksha.resourcecache.IResource;
 
 
 public class EnemySoldierRed extends EntityEnemy {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(EnemySoldierRed.class);
 
 	@SuppressWarnings("unchecked")
@@ -70,7 +71,6 @@ public class EnemySoldierRed extends EntityEnemy {
 
 	@Override
 	protected void triggeredTouched(Entity e) {
-		LOG.debug("aasdasd");
 		triggered();
 	}
 
@@ -93,14 +93,10 @@ public class EnemySoldierRed extends EntityEnemy {
 	}
 
 	@Override
-	protected ETexture requestedIconSubHorizontal() {
-		return ETexture.SOLDIER_RED_0_SUBV;
+	protected ETexture requestedIconSub() {
+		return ETexture.SOLDIER_RED_0_SUB;
 	}
 
-	@Override
-	protected ETexture requestedIconSubVertical() {
-		return ETexture.SOLDIER_RED_0_SUBV;
-	}
 
 	@Override
 	protected int requestedMaxPainPoints() {

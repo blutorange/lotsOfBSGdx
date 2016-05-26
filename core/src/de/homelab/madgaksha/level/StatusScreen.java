@@ -139,8 +139,7 @@ public class StatusScreen {
 	private Sprite textureIconTokugi;
 	private Sprite textureIconWeapon;
 	private Sprite textureNoEnemyMain;
-	private Sprite textureNoEnemyHorizontal;
-	private Sprite textureNoEnemyVertical;
+	private Sprite textureNoEnemy;
 	
 	private final Sprite spriteNumeral[] = new Sprite[10];
 	private Sprite spriteSeparatorTime;
@@ -186,8 +185,7 @@ public class StatusScreen {
 		textureIconWeapon = ETexture.STATUS_ICON_WEAPON.asSprite();
 		
 		textureNoEnemyMain = ETexture.STATUS_ICON_NO_ENEMY_MAIN.asSprite();
-		textureNoEnemyHorizontal = ETexture.STATUS_ICON_NO_ENEMY_SUBH.asSprite();
-		textureNoEnemyVertical = ETexture.STATUS_ICON_NO_ENEMY_SUBV.asSprite();
+		textureNoEnemy = ETexture.STATUS_ICON_NO_ENEMY_SUB.asSprite();
 		
 		spriteNumeral[0] = ETexture.STATUS_ICON_NUMERAL_0.asSprite();
 		spriteNumeral[1] = ETexture.STATUS_ICON_NUMERAL_1.asSprite();
@@ -212,92 +210,92 @@ public class StatusScreen {
 		
 		batchPixel.begin();				
 		
-//		// TODO remove me
-//		// for testing: draw rectangles
-//		if (false) {
-//			NinePatch myNinePatch = ResourceCache.getNinePatch(ENinePatch.STATUS_SCREEN_HP_BAR_FILL);
-//
-//			myNinePatch.setColor(new Color(255, 255, 255, 0.5f));
-//			myNinePatch.draw(batchPixel, uiLevelName.x, uiLevelName.y, uiLevelName.width, uiLevelName.height);
-//			myNinePatch.draw(batchPixel, uiTime.x, uiTime.y, uiTime.width, uiTime.height);
-//			myNinePatch.draw(batchPixel, uiScore.x, uiScore.y, uiScore.width, uiScore.height);
-//			myNinePatch.draw(batchPixel, uiPainBar.x, uiPainBar.y, uiPainBar.width, uiPainBar.height);
-//			myNinePatch.draw(batchPixel, uiWeapon.x, uiWeapon.y, uiWeapon.width, uiWeapon.height);
-//			myNinePatch.draw(batchPixel, uiTokugi.x, uiTokugi.y, uiTokugi.width, uiTokugi.height);
-//			myNinePatch.draw(batchPixel, uiEnemy.x, uiEnemy.y, uiEnemy.width, uiEnemy.height);
-//
-//			myNinePatch.setColor(new Color(255, 0, 0, 0.5f));
-//
-//			myNinePatch.draw(batchPixel, uiPainBarMeter.x, uiPainBarMeter.y, uiPainBarMeter.width,
-//					uiPainBarMeter.height);
-//			myNinePatch.draw(batchPixel, uiPainBarCounter.x, uiPainBarCounter.y, uiPainBarCounter.width,
-//					uiPainBarCounter.height);
-//
-//			myNinePatch.draw(batchPixel, uiColumnIconTime.x, uiColumnIconTime.y, uiColumnIconTime.width,
-//					uiColumnIconTime.height);
-//			myNinePatch.draw(batchPixel, uiColumnIconScore.x, uiColumnIconScore.y, uiColumnIconScore.width,
-//					uiColumnIconScore.height);
-//			myNinePatch.draw(batchPixel, uiColumnIconPainBar.x, uiColumnIconPainBar.y, uiColumnIconPainBar.width,
-//					uiColumnIconPainBar.height);
-//			myNinePatch.draw(batchPixel, uiColumnIconWeapon.x, uiColumnIconWeapon.y, uiColumnIconWeapon.width,
-//					uiColumnIconWeapon.height);
-//			myNinePatch.draw(batchPixel, uiColumnIconTokugi.x, uiColumnIconTokugi.y, uiColumnIconTokugi.width,
-//					uiColumnIconTokugi.height);
-//			myNinePatch.draw(batchPixel, uiColumnIconEnemy.x, uiColumnIconEnemy.y, uiColumnIconEnemy.width,
-//					uiColumnIconEnemy.height);
-//
-//			myNinePatch.draw(batchPixel, uiColumnDataTime.x, uiColumnDataTime.y, uiColumnDataTime.width,
-//					uiColumnDataTime.height);
-//			myNinePatch.draw(batchPixel, uiColumnDataScore.x, uiColumnDataScore.y, uiColumnDataScore.width,
-//					uiColumnDataScore.height);
-//			myNinePatch.draw(batchPixel, uiColumnDataPainBar.x, uiColumnDataPainBar.y, uiColumnDataPainBar.width,
-//					uiColumnDataPainBar.height);
-//			myNinePatch.draw(batchPixel, uiColumnDataWeapon.x, uiColumnDataWeapon.y, uiColumnDataWeapon.width,
-//					uiColumnDataWeapon.height);
-//			myNinePatch.draw(batchPixel, uiColumnDataTokugi.x, uiColumnDataTokugi.y, uiColumnDataTokugi.width,
-//					uiColumnDataTokugi.height);
-//			myNinePatch.draw(batchPixel, uiColumnDataEnemy.x, uiColumnDataEnemy.y, uiColumnDataEnemy.width,
-//					uiColumnDataEnemy.height);
-//			myNinePatch.draw(batchPixel, uiImageLevelName.x, uiImageLevelName.y, uiImageLevelName.width,
-//					uiImageLevelName.height);
-//
-//			myNinePatch.setColor(new Color(0, 255, 0, 0.5f));
-//			myNinePatch.draw(batchPixel, uiIconTime.x, uiIconTime.y, uiIconTime.width, uiIconTime.height);
-//			myNinePatch.draw(batchPixel, uiIconScore.x, uiIconScore.y, uiIconScore.width, uiIconScore.height);
-//			myNinePatch.draw(batchPixel, uiIconPainBar.x, uiIconPainBar.y, uiIconPainBar.width, uiIconPainBar.height);
-//			myNinePatch.draw(batchPixel, uiIconWeapon.x, uiIconWeapon.y, uiIconWeapon.width, uiIconWeapon.height);
-//			myNinePatch.draw(batchPixel, uiIconTokugi.x, uiIconTokugi.y, uiIconTokugi.width, uiIconTokugi.height);
-//			myNinePatch.draw(batchPixel, uiIconEnemy.x, uiIconEnemy.y, uiIconEnemy.width, uiIconEnemy.height);
-//
-//			myNinePatch.draw(batchPixel, uiImageWeaponMain.x, uiImageWeaponMain.y, uiImageWeaponMain.width,
-//					uiImageWeaponMain.height);
-//			myNinePatch.draw(batchPixel, uiImageTokugiMain.x, uiImageTokugiMain.y, uiImageTokugiMain.width,
-//					uiImageTokugiMain.height);
-//
-//			if (uiImageWeaponMode == Mode.FULL)
-//				myNinePatch.draw(batchPixel, uiImageWeaponSub.x, uiImageWeaponSub.y, uiImageWeaponSub.width,
-//						uiImageWeaponSub.height);
-//			if (uiImageTokugiMode == Mode.FULL)
-//				myNinePatch.draw(batchPixel, uiImageTokugiSub.x, uiImageTokugiSub.y,
-//						uiImageTokugiSub.width, uiImageTokugiSub.height);
-//
-//			myNinePatch.draw(batchPixel, uiCellEnemyImage.x, uiCellEnemyImage.y, uiCellEnemyImage.width,
-//					uiCellEnemyImage.height);
-//			myNinePatch.draw(batchPixel, uiCellEnemyPainBar.x, uiCellEnemyPainBar.y, uiCellEnemyPainBar.width,
-//					uiCellEnemyPainBar.height);
-//
-//			myNinePatch.setColor(new Color(0, 0, 255, 0.5f));
-//
-//			myNinePatch.draw(batchPixel, uiImageEnemyMain.x, uiImageEnemyMain.y, uiImageEnemyMain.width,
-//					uiImageEnemyMain.height);
-//			if (uiImageEnemyMode == Mode.FULL)
-//				myNinePatch.draw(batchPixel, uiImageEnemySub.x, uiImageEnemySub.y, uiImageEnemySub.width,
-//						uiImageEnemySub.height);
-//			
-//			batchPixel.end();
-//			
-//			return;
-//		}
+		// TODO remove me
+		// for testing: draw rectangles
+		if (false) {
+			NinePatch myNinePatch = ResourceCache.getNinePatch(ENinePatch.STATUS_SCREEN_HP_BAR_FILL);
+
+			myNinePatch.setColor(new Color(255, 255, 255, 0.5f));
+			myNinePatch.draw(batchPixel, uiLevelName.x, uiLevelName.y, uiLevelName.width, uiLevelName.height);
+			myNinePatch.draw(batchPixel, uiTime.x, uiTime.y, uiTime.width, uiTime.height);
+			myNinePatch.draw(batchPixel, uiScore.x, uiScore.y, uiScore.width, uiScore.height);
+			myNinePatch.draw(batchPixel, uiPainBar.x, uiPainBar.y, uiPainBar.width, uiPainBar.height);
+			myNinePatch.draw(batchPixel, uiWeapon.x, uiWeapon.y, uiWeapon.width, uiWeapon.height);
+			myNinePatch.draw(batchPixel, uiTokugi.x, uiTokugi.y, uiTokugi.width, uiTokugi.height);
+			myNinePatch.draw(batchPixel, uiEnemy.x, uiEnemy.y, uiEnemy.width, uiEnemy.height);
+
+			myNinePatch.setColor(new Color(255, 0, 0, 0.5f));
+
+			myNinePatch.draw(batchPixel, uiPainBarMeter.x, uiPainBarMeter.y, uiPainBarMeter.width,
+					uiPainBarMeter.height);
+			myNinePatch.draw(batchPixel, uiPainBarCounter.x, uiPainBarCounter.y, uiPainBarCounter.width,
+					uiPainBarCounter.height);
+
+			myNinePatch.draw(batchPixel, uiColumnIconTime.x, uiColumnIconTime.y, uiColumnIconTime.width,
+					uiColumnIconTime.height);
+			myNinePatch.draw(batchPixel, uiColumnIconScore.x, uiColumnIconScore.y, uiColumnIconScore.width,
+					uiColumnIconScore.height);
+			myNinePatch.draw(batchPixel, uiColumnIconPainBar.x, uiColumnIconPainBar.y, uiColumnIconPainBar.width,
+					uiColumnIconPainBar.height);
+			myNinePatch.draw(batchPixel, uiColumnIconWeapon.x, uiColumnIconWeapon.y, uiColumnIconWeapon.width,
+					uiColumnIconWeapon.height);
+			myNinePatch.draw(batchPixel, uiColumnIconTokugi.x, uiColumnIconTokugi.y, uiColumnIconTokugi.width,
+					uiColumnIconTokugi.height);
+			myNinePatch.draw(batchPixel, uiColumnIconEnemy.x, uiColumnIconEnemy.y, uiColumnIconEnemy.width,
+					uiColumnIconEnemy.height);
+
+			myNinePatch.draw(batchPixel, uiColumnDataTime.x, uiColumnDataTime.y, uiColumnDataTime.width,
+					uiColumnDataTime.height);
+			myNinePatch.draw(batchPixel, uiColumnDataScore.x, uiColumnDataScore.y, uiColumnDataScore.width,
+					uiColumnDataScore.height);
+			myNinePatch.draw(batchPixel, uiColumnDataPainBar.x, uiColumnDataPainBar.y, uiColumnDataPainBar.width,
+					uiColumnDataPainBar.height);
+			myNinePatch.draw(batchPixel, uiColumnDataWeapon.x, uiColumnDataWeapon.y, uiColumnDataWeapon.width,
+					uiColumnDataWeapon.height);
+			myNinePatch.draw(batchPixel, uiColumnDataTokugi.x, uiColumnDataTokugi.y, uiColumnDataTokugi.width,
+					uiColumnDataTokugi.height);
+			myNinePatch.draw(batchPixel, uiColumnDataEnemy.x, uiColumnDataEnemy.y, uiColumnDataEnemy.width,
+					uiColumnDataEnemy.height);
+			myNinePatch.draw(batchPixel, uiImageLevelName.x, uiImageLevelName.y, uiImageLevelName.width,
+					uiImageLevelName.height);
+
+			myNinePatch.setColor(new Color(0, 255, 0, 0.5f));
+			myNinePatch.draw(batchPixel, uiIconTime.x, uiIconTime.y, uiIconTime.width, uiIconTime.height);
+			myNinePatch.draw(batchPixel, uiIconScore.x, uiIconScore.y, uiIconScore.width, uiIconScore.height);
+			myNinePatch.draw(batchPixel, uiIconPainBar.x, uiIconPainBar.y, uiIconPainBar.width, uiIconPainBar.height);
+			myNinePatch.draw(batchPixel, uiIconWeapon.x, uiIconWeapon.y, uiIconWeapon.width, uiIconWeapon.height);
+			myNinePatch.draw(batchPixel, uiIconTokugi.x, uiIconTokugi.y, uiIconTokugi.width, uiIconTokugi.height);
+			myNinePatch.draw(batchPixel, uiIconEnemy.x, uiIconEnemy.y, uiIconEnemy.width, uiIconEnemy.height);
+
+			myNinePatch.draw(batchPixel, uiImageWeaponMain.x, uiImageWeaponMain.y, uiImageWeaponMain.width,
+					uiImageWeaponMain.height);
+			myNinePatch.draw(batchPixel, uiImageTokugiMain.x, uiImageTokugiMain.y, uiImageTokugiMain.width,
+					uiImageTokugiMain.height);
+
+			if (uiImageWeaponMode == Mode.FULL)
+				myNinePatch.draw(batchPixel, uiImageWeaponSub.x, uiImageWeaponSub.y, uiImageWeaponSub.width,
+						uiImageWeaponSub.height);
+			if (uiImageTokugiMode == Mode.FULL)
+				myNinePatch.draw(batchPixel, uiImageTokugiSub.x, uiImageTokugiSub.y,
+						uiImageTokugiSub.width, uiImageTokugiSub.height);
+
+			myNinePatch.draw(batchPixel, uiCellEnemyImage.x, uiCellEnemyImage.y, uiCellEnemyImage.width,
+					uiCellEnemyImage.height);
+			myNinePatch.draw(batchPixel, uiCellEnemyPainBar.x, uiCellEnemyPainBar.y, uiCellEnemyPainBar.width,
+					uiCellEnemyPainBar.height);
+
+			myNinePatch.setColor(new Color(0, 0, 255, 0.5f));
+
+			myNinePatch.draw(batchPixel, uiImageEnemyMain.x, uiImageEnemyMain.y, uiImageEnemyMain.width,
+					uiImageEnemyMain.height);
+			if (uiImageEnemyMode == Mode.FULL)
+				myNinePatch.draw(batchPixel, uiImageEnemySub.x, uiImageEnemySub.y, uiImageEnemySub.width,
+						uiImageEnemySub.height);
+			
+			batchPixel.end();
+			
+			return;
+		}
 		
 		// Draw main frame containing all ui elements.
 		frameMain.draw(batchPixel, screenBounds.x, screenBounds.y, screenBounds.width, screenBounds.height);
@@ -310,16 +308,25 @@ public class StatusScreen {
 		frameCell.draw(batchPixel, uiTokugi.x, uiTokugi.y, uiTokugi.width, uiTokugi.height);
 		frameCell.draw(batchPixel, uiEnemy.x, uiEnemy.y, uiEnemy.width, uiEnemy.height);
 
-		// Draw data frame.
-//		frameData.draw(batchPixel, uiLevelName.x, uiLevelName.y, uiLevelName.width, uiLevelName.height);
-		frameData.draw(batchPixel, uiColumnDataPainBar.x, uiColumnDataPainBar.y, uiColumnDataPainBar.width,
-				uiColumnDataPainBar.height);
-//		frameData.draw(batchPixel, uiColumnDataWeapon.x, uiColumnDataWeapon.y, uiColumnDataWeapon.width,
-//				uiColumnDataWeapon.height);
-//		frameData.draw(batchPixel, uiColumnDataTokugi.x, uiColumnDataTokugi.y, uiColumnDataTokugi.width,
-//				uiColumnDataTokugi.height);
-		frameData.draw(batchPixel, uiColumnDataEnemy.x, uiColumnDataEnemy.y, uiColumnDataEnemy.width,
-				uiColumnDataEnemy.height);
+		if (!landscapeMode) {
+			// Frame for pain bar and enemy cell.
+			frameData.draw(batchPixel, uiColumnDataPainBar.x, uiColumnDataPainBar.y, uiColumnDataPainBar.width,
+					uiColumnDataPainBar.height);
+			frameData.draw(batchPixel, uiColumnDataEnemy.x, uiColumnDataEnemy.y, uiColumnDataEnemy.width,
+					uiColumnDataEnemy.height);
+			// HP meter counter.
+			boolean activated = false;
+			int digit;
+			for (int i = 0; i!= uiPainBarDigits.length; ++i) {
+				digit = player.getPainPointsDigit(i);
+				activated = activated || digit > 0;
+				if (activated) {
+					spriteNumeral[digit].setBounds(uiPainBarDigits[i].x, uiPainBarDigits[i].y,
+							uiPainBarDigits[i].width, uiPainBarDigits[i].height);
+					spriteNumeral[digit].draw(batchPixel);
+				}
+			}
+		}
 
 		// Draw icons.
 		textureIconEnemy.draw(batchPixel);
@@ -378,13 +385,6 @@ public class StatusScreen {
 			spriteNumeral[gameScore.getDigit(i)].setBounds(uiScoreDigits[i].x, uiScoreDigits[i].y,
 					uiScoreDigits[i].width, uiScoreDigits[i].height);
 			spriteNumeral[gameScore.getDigit(i)].draw(batchPixel);
-		}
-
-		// HP meter counter.
-		for (int i = uiPainBarDigits.length; i-- > 0;) {
-			spriteNumeral[player.getPainPointsDigit(i)].setBounds(uiPainBarDigits[i].x, uiPainBarDigits[i].y,
-					uiPainBarDigits[i].width, uiPainBarDigits[i].height);
-			spriteNumeral[player.getPainPointsDigit(i)].draw(batchPixel);
 		}
 
 		// HP meter player.
@@ -447,47 +447,32 @@ public class StatusScreen {
 		
 		// Draw images for level name, weapon, tokugi and enemy.
 		// We draw them last because they use different texture files.
-
+		
+		// Weapon icon
 		player.getWeapon().getIconMain().draw(batchPixel);
-
+		
+		// Tokugi icon
 		player.getTokugi().getIconMain().draw(batchPixel);
 
+		// Enemy icon.
 		if (targettedEnemy != null) targettedEnemy.getIconMain().draw(batchPixel);
 		else textureNoEnemyMain.draw(batchPixel);
 
-		// Level
-		level.getIconHorizontal().draw(batchPixel);
-
+		// Level icon.
+		level.getIcon().draw(batchPixel);
 		
-		if (landscapeMode) {
-			// Weapon
-			if (uiImageWeaponMode == Mode.FULL)
-				player.getWeapon().getIconSubVertical().draw(batchPixel);
+		// Weapon details.
+		if (uiImageWeaponMode == Mode.FULL)
+			player.getWeapon().getIconSub().draw(batchPixel);
 			
-			// Tokugi
-			if (uiImageTokugiMode == Mode.FULL)
-				player.getTokugi().getIconSubVertical().draw(batchPixel);
+		// Tokugi details.
+		if (uiImageTokugiMode == Mode.FULL)
+			player.getTokugi().getIconSub().draw(batchPixel);
 			
-			// Enemy
-			if (uiImageEnemyMode == Mode.FULL) {
-				if (targettedEnemy != null) targettedEnemy.getIconSubVertical().draw(batchPixel);
-				else textureNoEnemyVertical.draw(batchPixel);
-			}
-		}
-		else {
-			// Weapon
-			if (uiImageWeaponMode == Mode.FULL)
-				player.getWeapon().getIconSubHorizontal().draw(batchPixel);
-			
-			// Tokugi
-			if (uiImageTokugiMode == Mode.FULL)
-				player.getTokugi().getIconSubHorizontal().draw(batchPixel);
-			
-			// Enemy
-			if (uiImageEnemyMode == Mode.FULL) {
-				if (targettedEnemy != null) targettedEnemy.getIconSubHorizontal().draw(batchPixel);
-				else textureNoEnemyHorizontal.draw(batchPixel);
-			}
+		// Enemy details.
+		if (uiImageEnemyMode == Mode.FULL) {
+			if (targettedEnemy != null) targettedEnemy.getIconSub().draw(batchPixel);
+			else textureNoEnemy.draw(batchPixel);
 		}
 		
 		// HP bar overlay.
@@ -545,7 +530,7 @@ public class StatusScreen {
 			infoY = gameHeight;
 		}
 
-		landscapeMode = infoWidth > infoHeight;
+		landscapeMode = (infoWidth > infoHeight);
 		
 		// Store info.
 		screenBounds.set(infoX, infoY, infoWidth, infoHeight);		
@@ -564,7 +549,7 @@ public class StatusScreen {
 		textureIconWeapon.setBounds(uiIconWeapon.x, uiIconWeapon.y, uiIconWeapon.width, uiIconWeapon.height);
 
 		// Level
-		level.getIconHorizontal().setBounds(uiImageLevelName.x, uiImageLevelName.y, uiImageLevelName.width, uiImageLevelName.height);
+		level.getIcon().setBounds(uiImageLevelName.x, uiImageLevelName.y, uiImageLevelName.width, uiImageLevelName.height);
 		
 		// Position for image icons level, weapon and tokugi.
 		player.getWeapon().getIconMain().setBounds(uiImageWeaponMain.x, uiImageWeaponMain.y, uiImageWeaponMain.width,
@@ -572,22 +557,11 @@ public class StatusScreen {
 		player.getTokugi().getIconMain().setBounds(uiImageTokugiMain.x, uiImageTokugiMain.y, uiImageTokugiMain.width,
 				uiImageTokugiMain.height);
 
-		if (landscapeMode) {
-			// Weapon
-			if (uiImageWeaponMode == Mode.FULL)
-				player.getWeapon().getIconSubVertical().setBounds(uiImageWeaponSub.x, uiImageWeaponSub.y, uiImageWeaponSub.width, uiImageWeaponSub.height);
-			// Tokugi
-			if (uiImageTokugiMode == Mode.FULL)
-				player.getTokugi().getIconSubVertical().setBounds(uiImageTokugiSub.x, uiImageTokugiSub.y, uiImageTokugiSub.width, uiImageTokugiSub.height);
-		}
-		else {
-			// Weapon
-			if (uiImageWeaponMode == Mode.FULL)
-				player.getWeapon().getIconSubHorizontal().setBounds(uiImageWeaponSub.x, uiImageWeaponSub.y, uiImageWeaponSub.width, uiImageWeaponSub.height);
-			// Tokugi
-			if (uiImageTokugiMode == Mode.FULL)
-				player.getTokugi().getIconSubHorizontal().setBounds(uiImageTokugiSub.x, uiImageTokugiSub.y, uiImageTokugiSub.width, uiImageTokugiSub.height);
-		}
+		if (uiImageWeaponMode == Mode.FULL)
+			player.getWeapon().getIconSub().setBounds(uiImageWeaponSub.x, uiImageWeaponSub.y, uiImageWeaponSub.width, uiImageWeaponSub.height);
+		// Tokugi
+		if (uiImageTokugiMode == Mode.FULL)
+			player.getTokugi().getIconSub().setBounds(uiImageTokugiSub.x, uiImageTokugiSub.y, uiImageTokugiSub.width, uiImageTokugiSub.height);
 		
 		// Image icons for enemy.
 		setEnemyImageBounds();
@@ -596,17 +570,13 @@ public class StatusScreen {
 	private void setEnemyImageBounds() {
 		if (targettedEnemy != null) {
 			targettedEnemy.getIconMain().setBounds(uiImageEnemyMain.x,uiImageEnemyMain.y,uiImageEnemyMain.width,uiImageEnemyMain.height);
-			if (landscapeMode)
-				targettedEnemy.getIconSubVertical().setBounds(uiImageEnemySub.x,uiImageEnemySub.y,uiImageEnemySub.width,uiImageEnemySub.height);
-			else 
-				targettedEnemy.getIconSubHorizontal().setBounds(uiImageEnemySub.x,uiImageEnemySub.y,uiImageEnemySub.width,uiImageEnemySub.height);
+			if (!landscapeMode)
+				targettedEnemy.getIconSub().setBounds(uiImageEnemySub.x,uiImageEnemySub.y,uiImageEnemySub.width,uiImageEnemySub.height);
 		}
 		else {
 			textureNoEnemyMain.setBounds(uiImageEnemyMain.x,uiImageEnemyMain.y,uiImageEnemyMain.width,uiImageEnemyMain.height);
-			if (landscapeMode)
-				textureNoEnemyVertical.setBounds(uiImageEnemySub.x,uiImageEnemySub.y,uiImageEnemySub.width,uiImageEnemySub.height);
-			else 
-				textureNoEnemyHorizontal.setBounds(uiImageEnemySub.x,uiImageEnemySub.y,uiImageEnemySub.width,uiImageEnemySub.height);
+			if (!landscapeMode)
+				textureNoEnemy.setBounds(uiImageEnemySub.x,uiImageEnemySub.y,uiImageEnemySub.width,uiImageEnemySub.height);
 		}
 	}
 	
@@ -702,10 +672,22 @@ public class StatusScreen {
 		uiImageWeaponMode = Layouter.layoutLeftRightWithAspectRatio(uiColumnDataWeapon, PortraitLayout.paddingWeaponImage,
 				PortraitLayout.imageWeaponLeftAspectRatio, PortraitLayout.imageWeaponRightAspectRatio, 1.0f, 0.0f,
 				uiImageWeaponMain, uiImageWeaponSub);	
+		// Do not show info text if available width is too small.
+		if (uiImageWeaponSub.width < PortraitLayout.thresholdInfoText) {
+			uiImageWeaponMode = Mode.COMPACTED;
+			uiImageWeaponMain.set(Layouter.layoutCenteredInBoxAndKeepAspectRatio(uiColumnDataWeapon,
+					PortraitLayout.paddingWeaponImage, PortraitLayout.imageWeaponLeftAspectRatio));
+		}
 		
 		uiImageTokugiMode = Layouter.layoutLeftRightWithAspectRatio(uiColumnDataTokugi, PortraitLayout.paddingTokugiImage,
 				PortraitLayout.imageTokugiLeftAspectRatio, PortraitLayout.imageTokugiRightAspectRatio, 1.0f, 0.0f,
 				uiImageTokugiMain, uiImageTokugiSub);
+		// Do not show info text if available width is too small.
+		if (uiImageTokugiSub.width < PortraitLayout.thresholdInfoText) {
+			uiImageTokugiMode = Mode.COMPACTED;
+			uiImageTokugiMain.set(Layouter.layoutCenteredInBoxAndKeepAspectRatio(uiColumnDataTokugi,
+					PortraitLayout.paddingTokugiImage, PortraitLayout.imageTokugiLeftAspectRatio));
+		}
 		
 		// Enemy cell.
 		Layouter.layoutTopBottomWithRelativeWidth(uiColumnDataEnemy, PortraitLayout.paddingEnemyDataPainBar,
@@ -715,6 +697,12 @@ public class StatusScreen {
 		uiImageEnemyMode = Layouter.layoutLeftRightWithAspectRatio(uiCellEnemyImage, PortraitLayout.paddingEnemyIcons,
 				PortraitLayout.imageEnemyLeftAspectRatio, PortraitLayout.imageEnemyRightAspectRatio, 1.0f, 0.0f,
 				uiImageEnemyMain, uiImageEnemySub);
+		// Do not show info text if available width is too small.
+		if (uiImageEnemySub.width < PortraitLayout.thresholdInfoText ) {
+			uiImageEnemyMode = Mode.COMPACTED;
+			uiImageEnemyMain.set(Layouter.layoutCenteredInBoxAndKeepAspectRatio(uiCellEnemyImage,
+					PortraitLayout.paddingEnemyIcons, PortraitLayout.imageEnemyLeftAspectRatio));
+		}
 
 		uiCellEnemyPainBarLowMid.x = uiCellEnemyPainBar.x + framePainBar.getPadLeft();
 		uiCellEnemyPainBarLowMid.y = uiCellEnemyPainBar.y + framePainBar.getPadBottom();
@@ -776,13 +764,13 @@ public class StatusScreen {
 		//  and level name vertically above.
 		// =====================================
 		
-		Rectangle topPane = new Rectangle();
+		//Rectangle topPane = new Rectangle();
 		Rectangle bottomPane = new Rectangle();
 		Layouter.layoutTopBottomWithRelativeWidth(screenBounds, LandscapeLayout.padding1,
-				LandscapeLayout.upperRowHeight, LandscapeLayout.lowerRowHeight, topPane, bottomPane);
+				LandscapeLayout.upperRowHeight, LandscapeLayout.lowerRowHeight, uiLevelName, bottomPane);
 
 		// Level name on top pane.
-		uiImageLevelName.set(Layouter.layoutAlignedInBoxAndKeepAspectRatio(topPane, NULL_PADDING,
+		uiImageLevelName.set(Layouter.layoutAlignedInBoxAndKeepAspectRatio(uiLevelName, NULL_PADDING,
 				LandscapeLayout.imageLevelNameAspectRatio, 0.5f, 0.5f));
 		
 		// Rest, other than level name on bottom pane.		
@@ -828,17 +816,14 @@ public class StatusScreen {
 
 		Layouter.layoutTopBottomWithRelativeWidth(uiTime, LandscapeLayout.padding2,
 				LandscapeLayout.rowIconHeight, LandscapeLayout.rowDataHeight,
-				uiColumnIconTime, uiColumnDataTime);
-		
-//		// Level name text/image dimensions (1 column)
-//		uiImageLevelName.set(Layouter.layoutAlignedInBoxAndKeepAspectRatio(uiLevelName, NULL_PADDING,
-//				LandscapeLayout.imageLevelNameAspectRatio, 0.5f, 0.5f));		
+				uiColumnIconTime, uiColumnDataTime);	
 		
 		// HP bar player (no counter).
-		uiPainBarMeterFill.x = uiColumnDataPainBar.x + framePainBar.getPadLeft();
-		uiPainBarMeterFill.y = uiColumnDataPainBar.y + framePainBar.getPadBottom();
-		uiPainBarMeterFill.width = uiColumnDataPainBar.width - framePainBar.getPadLeft() - framePainBar.getPadRight();
-		uiPainBarMeterFill.height = uiColumnDataPainBar.height - framePainBar.getPadTop() - framePainBar.getPadBottom();		
+		Layouter.layoutHorizontallyWithRelativeWidth(uiColumnDataPainBar, LandscapeLayout.paddingPainBar, 1.0f, uiPainBarMeter);
+		uiPainBarMeterFill.x = uiPainBarMeter.x + framePainBar.getPadLeft();
+		uiPainBarMeterFill.y = uiPainBarMeter.y + framePainBar.getPadBottom();
+		uiPainBarMeterFill.width = uiPainBarMeter.width - framePainBar.getPadLeft() - framePainBar.getPadRight();
+		uiPainBarMeterFill.height = uiPainBarMeter.height - framePainBar.getPadTop() - framePainBar.getPadBottom();		
 
 		
 		// ====================================
@@ -865,76 +850,61 @@ public class StatusScreen {
 		// ====================================
 
 		// Weapon and tokugi image.
-		uiImageWeaponMode = Layouter.layoutTopBottomWithAspectRatio(uiColumnDataWeapon, LandscapeLayout.paddingWeaponImage,
-				LandscapeLayout.imageWeaponTopInverseAspectRatio, LandscapeLayout.imageWeaponBottomInverseAspectRatio,
-				0.0f, 1.0f, uiImageWeaponMain, uiImageWeaponSub);
+		uiImageWeaponMode = Mode.COMPACTED;
+		uiImageWeaponMain.set(Layouter.layoutAlignedInBoxAndKeepAspectRatio(uiColumnDataWeapon,
+				LandscapeLayout.paddingWeaponImage, LandscapeLayout.imageWeaponTopAspectRatio, 0.5f, 0.5f));
 
-		uiImageTokugiMode = Layouter.layoutTopBottomWithAspectRatio(uiColumnDataTokugi, LandscapeLayout.paddingTokugiImage,
-				LandscapeLayout.imageTokugiTopInverseAspectRatio, LandscapeLayout.imageTokugiBottomInverseAspectRatio,
-				0.0f, 1.0f, uiImageTokugiMain, uiImageTokugiSub);
+		uiImageTokugiMode = Mode.COMPACTED;
+		uiImageTokugiMain.set(Layouter.layoutAlignedInBoxAndKeepAspectRatio(uiColumnDataTokugi,
+				LandscapeLayout.paddingTokugiImage, LandscapeLayout.imageTokugiTopAspectRatio, 0.5f, 0.5f));
 
 		// Enemy pain bar
 		Layouter.layoutTopBottomWithRelativeWidth(uiColumnDataEnemy, LandscapeLayout.paddingEnemyIcons,
 				LandscapeLayout.cellEnemyImageHeight, LandscapeLayout.cellEnemyPainBarHeight, uiCellEnemyImage,
 				uiCellEnemyPainBar);
-		
+
 		uiCellEnemyPainBarLowMid.x = uiCellEnemyPainBar.x + framePainBar.getPadLeft();
 		uiCellEnemyPainBarLowMid.y = uiCellEnemyPainBar.y + framePainBar.getPadBottom();
 		uiCellEnemyPainBarLowMid.width = uiCellEnemyPainBar.width * 0.5f - framePainBar.getPadLeft();
 		uiCellEnemyPainBarLowMid.height = uiCellEnemyPainBar.height - framePainBar.getPadBottom();
-		
-		uiCellEnemyPainBarMidHigh.x = uiCellEnemyPainBar.x + uiCellEnemyPainBar.width* 0.5f;
+
+		uiCellEnemyPainBarMidHigh.x = uiCellEnemyPainBar.x + uiCellEnemyPainBar.width * 0.5f;
 		uiCellEnemyPainBarMidHigh.y = uiCellEnemyPainBar.y + framePainBar.getPadBottom();
 		uiCellEnemyPainBarMidHigh.width = uiCellEnemyPainBar.width * 0.5f - framePainBar.getPadRight();
-		uiCellEnemyPainBarMidHigh.height = uiCellEnemyPainBar.height - framePainBar.getPadTop() - framePainBar.getPadBottom();
+		uiCellEnemyPainBarMidHigh.height = uiCellEnemyPainBar.height - framePainBar.getPadTop()
+				- framePainBar.getPadBottom();
 
 		// Enemy image.
-		uiImageEnemyMode = Layouter.layoutTopBottomWithAspectRatio(uiCellEnemyImage, LandscapeLayout.paddingEnemyDataPainBar,
-				LandscapeLayout.imageEnemyTopInverseAspectRatio, LandscapeLayout.imageEnemyBottomInverseAspectRatio,
-				0.0f, 1.0f, uiImageEnemyMain, uiImageEnemySub);
-		
+		uiImageEnemyMode = Mode.COMPACTED;
+		uiImageEnemyMain.set(Layouter.layoutAlignedInBoxAndKeepAspectRatio(uiCellEnemyImage,
+				LandscapeLayout.paddingEnemyDataPainBar, LandscapeLayout.imageEnemyTopAspectRatio, 0.5f, 0.5f));
+
 		// Time digits
 		LandscapeLayout.paddingTime.at(uiColumnDataTime);
-		float fontTimeWidth = uiColumnDataTime.width - LandscapeLayout.paddingTime.left() + LandscapeLayout.paddingTime.right();
-		float fontTimeHeight = fontTimeWidth / spriteNumeral[0].getRegionWidth() * spriteNumeral[0].getRegionHeight();
-		Layouter.layoutVerticallyWithAbsoluteHeight(uiColumnDataTime, LandscapeLayout.paddingTime, 0.5f, true, fontTimeHeight, new Rectangle[]{ 
-				uiTimeMillisecondTen,
-				uiTimeMillisecondHundred,
-				uiTimeSecondMillisecondSeparator,
-				uiTimeSecondOne,
-				uiTimeSecondTen,
-				uiTimeMinuteSecondSeparator,
-				uiTimeMinuteOne,
-				uiTimeMinuteTen,
-			}
-		);
+		Rectangle timeUpper = new Rectangle();
+		Rectangle timeMiddle = new Rectangle();
+		Rectangle timeLower = new Rectangle();
 		
+		Layouter.layoutVerticallyWithRelativeHeight(uiColumnDataTime, LandscapeLayout.paddingTime, new float[]{0.3f,0.1f,0.3f,0.1f,0.3f}, timeLower, uiTimeSecondMillisecondSeparator, timeMiddle,  uiTimeMinuteSecondSeparator, timeUpper);
+
+		float fontTimeHeight = timeUpper.height;
+		float fontTimeWidth = fontTimeHeight / spriteNumeral[0].getRegionHeight() * spriteNumeral[0].getRegionWidth();	
+	
+		Layouter.layoutHorizontallyWithAbsoluteWidth(timeLower, LandscapeLayout.paddingTimeDigits, 0.5f, true, fontTimeWidth,
+				uiTimeMillisecondTen, uiTimeMillisecondHundred);
+		Layouter.layoutHorizontallyWithAbsoluteWidth(timeMiddle, LandscapeLayout.paddingTimeDigits, 0.5f, true, fontTimeWidth,
+				uiTimeSecondTen, uiTimeSecondOne);
+		Layouter.layoutHorizontallyWithAbsoluteWidth(timeUpper, LandscapeLayout.paddingTimeDigits, 0.5f, true, fontTimeWidth,
+				uiTimeMinuteTen, uiTimeMinuteOne);
+		
+
 		// Score digits
 		LandscapeLayout.paddingScore.at(uiColumnDataTime);
-		float fontScoreWidth = uiColumnDataScore.width - LandscapeLayout.paddingScore.right() + LandscapeLayout.paddingScore.left();
+		float fontScoreWidth = uiColumnDataScore.width - LandscapeLayout.paddingScore.right()
+				+ LandscapeLayout.paddingScore.left();
 		float fontScoreHeight = fontScoreWidth / spriteNumeral[0].getRegionWidth() * spriteNumeral[0].getRegionHeight();
-		Layouter.layoutVerticallyWithAbsoluteHeight(uiColumnDataScore, LandscapeLayout.paddingScore, 0.5f, true, fontScoreHeight, MiscUtils.reverseCopyArray(uiScoreDigits));
-		
-		// Pain bar digits.
-//		LandscapeLayout.paddingPainBar.at(uiPainBarCounter);
-//		float fontPainBarWidth = uiPainBarCounter.width - LandscapeLayout.paddingPainBar.left() + LandscapeLayout.paddingPainBar.right();
-//		float fontPainBarHeight = fontPainBarWidth / spriteNumeral[0].getRegionWidth() * spriteNumeral[0].getRegionHeight();
-//		Layouter.layoutVerticallyWithAbsoluteHeight(uiPainBarCounter, LandscapeLayout.paddingPainBar, 0.5f, true, fontPainBarHeight, new Rectangle[]{
-//				uiPainBarDigits[9],
-//				uiPainBarDigits[8],
-//				uiPainBarDigits[7],
-//				uiPainBarDigitsSeparatorK1,
-//				uiPainBarDigits[6],
-//				uiPainBarDigits[5],
-//				uiPainBarDigits[4],
-//				uiPainBarDigitsSeparatorMK,
-//				uiPainBarDigits[3],
-//				uiPainBarDigits[2],
-//				uiPainBarDigits[1],
-//				uiPainBarDigitsSeparatorGM,
-//				uiPainBarDigits[0],
-//		});
-
+		Layouter.layoutVerticallyWithAbsoluteHeight(uiColumnDataScore, LandscapeLayout.paddingScore, 0.5f, true,
+				fontScoreHeight, MiscUtils.reverseCopyArray(uiScoreDigits));
 	}
 	
 	
@@ -965,11 +935,11 @@ public class StatusScreen {
 		private final static Padding paddingTime = new Padding.Relative()
 				.top(0.3f).bottom(0.3f)
 				.left(0.016f).right(0.016f)
-				.vertical(0.0f).horizontal(0.0f);
+				.vertical(0.0f).horizontal(0.02f);
 		private final static Padding paddingScore = new Padding.Relative()
 				.top(0.3f).bottom(0.3f)
 				.left(0.016f).right(0.016f)
-				.vertical(0.0f).horizontal(0.0f);
+				.vertical(0.0f).horizontal(0.02f);
 		private final static Padding paddingPainBar = new Padding.Absolute().all(1.0f);
 		private static final Padding paddingTokugiImage = new Padding.Relative()
 				.top(0.016f).bottom(0.016f)
@@ -986,6 +956,7 @@ public class StatusScreen {
 				.left(0.04f).right(0.04f)
 				.horizontal(0.04f).vertical(0.04f);
 
+		public static float thresholdInfoText = 180.0f;
 		
 		private final static float widgetLevelNameHeight = 10;
 		private final static float widgetTimeHeight = 8;
@@ -1020,6 +991,8 @@ public class StatusScreen {
 	
 	private final static class LandscapeLayout {
 
+		public static final Padding paddingTimeDigits = new Padding.Absolute().all(2.0f);
+
 		public static Padding padding1 = new Padding.Relative()
 				.top(0.06f).bottom(0.06f)
 				.right(0.016f).left(0.016f)
@@ -1040,7 +1013,9 @@ public class StatusScreen {
 		// More paddings.
 		private final static Padding paddingTime = new Padding.Absolute().all(1.0f);
 		private final static Padding paddingScore = new Padding.Absolute().all(1.0f);
-		private final static Padding paddingPainBar = new Padding.Absolute().all(1.0f);
+		private final static Padding paddingPainBar = new Padding.Relative()
+				.top(0.1f).bottom(0.1f)
+				.left(0.2f).right(0.2f);
 		private static final Padding paddingEnemyIcons = new Padding.Relative()
 				.top(0.1f).bottom(0.1f)
 				.left(0.0f).right(0.0f)
@@ -1061,32 +1036,25 @@ public class StatusScreen {
 		public static final float lowerRowHeight = 80;
 		public static final float upperRowHeight = 20;
 		
-		private final static float widgetLevelNameWidth = 10;
 		private final static float widgetTimeWidth = 10;
 		private final static float widgetScoreWidth = 10;
-		private final static float widgetPainBarWidth = 15;
+		private final static float widgetPainBarWidth = 10;
 		private final static float widgetWeaponWidth = 15;
 		private final static float widgetTokugiWidth = 15;
 		private final static float widgetEnemyWidth = 25;
 		
 		private final static float rowIconHeight = 20;
 		private final static float rowDataHeight = 80;
-		
-		private final static float painBarMeterWidth = 65;
-		private final static float painBarCounterWidth = 35;
-		
+				
 		private final static float iconAspectRatio = 1.0f;
 				
-		private static final float imageLevelNameAspectRatio = 1.0f/5.0f;
+		private static final float imageLevelNameAspectRatio = 5.0f;
 		
-		private static final float imageWeaponTopInverseAspectRatio = 1.0f;
-		private static final float imageWeaponBottomInverseAspectRatio = 2.5f;
+		private static final float imageWeaponTopAspectRatio = 1.0f;
 
-		private static final float imageTokugiTopInverseAspectRatio = 1.0f;
-		private static final float imageTokugiBottomInverseAspectRatio = 2.5f;
+		private static final float imageTokugiTopAspectRatio = 1.0f;
 		
-		private static final float imageEnemyTopInverseAspectRatio = 1.0f;
-		private static final float imageEnemyBottomInverseAspectRatio = 2.5f;
+		private static final float imageEnemyTopAspectRatio = 1.0f;
 
 		private static final float cellEnemyImageHeight = 80;
 		private static final float cellEnemyPainBarHeight = 20;

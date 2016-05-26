@@ -74,7 +74,7 @@ public abstract class ALevel {
 	private final Color enemyPainBarColorLow = new Color();
 	private final Color enemyPainBarColorMid = new Color();
 	private final Color enemyPainBarColorHigh = new Color();
-	private Sprite iconHorizontal;
+	private Sprite icon;
 	
 	// =============================
 	// Constructor
@@ -97,8 +97,8 @@ public abstract class ALevel {
 	 * @return Whether the level could be initialized successfully.
 	 */
 	public boolean initialize(SpriteBatch batch) {
-		iconHorizontal = requestedIconHorizontal().asSprite();
-		if (iconHorizontal == null) return false;
+		icon = requestedIcon().asSprite();
+		if (icon == null) return false;
 		
 		if (!ResourceCache.loadToRam(requiredResources)) return false;
 		
@@ -170,11 +170,11 @@ public abstract class ALevel {
 	protected abstract String requestedI18nNameKey();
 	
 
-	/** A small icon for the level or its name.
-	 * Its aspect ration must be 3:1.
+	/** A small icon for the level which may contain its name or an illustration.
+	 * Its aspect ration must be 5:1.
 	 * @return The icon for the level.
 	 */
-	public abstract ETexture requestedIconHorizontal();
+	public abstract ETexture requestedIcon();
 		
 	// =============================
 	//       Implementations
@@ -298,8 +298,8 @@ public abstract class ALevel {
 		return enemyPainBarColorHigh;
 	}
 
-	public Sprite getIconHorizontal() {
-		return iconHorizontal;
+	public Sprite getIcon() {
+		return icon;
 	}
 
 }

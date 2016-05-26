@@ -13,12 +13,7 @@ public class TokugiNone extends ATokugi {
 	}
 
 	@Override
-	protected ETexture requestedIconSubHorizontal() {
-		return ETexture.TOKUGI_NONE_ICON_SUBH;
-	}
-
-	@Override
-	protected ETexture requestedIconSubVertical() {
-		return ETexture.TOKUGI_NONE_ICON_SUBV;
+	protected ETexture requestedIconSub() {
+		return ETexture.TOKUGI_NONE_ICON_SUB;
 	}
 }

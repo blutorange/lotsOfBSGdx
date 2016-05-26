@@ -10,32 +10,26 @@ public abstract class ATokugi {
 	private final static Logger LOG = Logger.getLogger(ATokugi.class);
 	
 	private Sprite iconMain = null;
-	private Sprite iconSubVertical = null;
-	private Sprite iconSubHorizontal = null;
+	private Sprite iconSub = null;
 	
 	public ATokugi() {
 	}
 	
 	protected abstract ETexture requestedIconMain();
-	protected abstract ETexture requestedIconSubHorizontal();
-	protected abstract ETexture requestedIconSubVertical();
+	protected abstract ETexture requestedIconSub();
 	
 	public Sprite getIconMain() {
 		return iconMain;
 	}
 
-	public Sprite getIconSubVertical() {
-		return iconSubVertical;
+	public Sprite getIconSub() {
+		return iconSub;
 	}
 
-	public Sprite getIconSubHorizontal() {
-		return iconSubHorizontal;
-	}
 
 	public boolean initialize() {
 		iconMain = requestedIconMain().asSprite();
-		iconSubHorizontal = requestedIconSubHorizontal().asSprite();
-		iconSubVertical = requestedIconSubVertical().asSprite();
-		return (iconMain != null) && (iconSubHorizontal != null) && (iconSubVertical != null);
+		iconSub = requestedIconSub().asSprite();
+		return (iconMain != null) && (iconSub != null);
 	}
 }

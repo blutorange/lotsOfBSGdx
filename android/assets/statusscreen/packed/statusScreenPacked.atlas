@@ -1,12 +1,12 @@
 
 statusScreenPacked.png
-size: 1024,256
+size: 512,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bracketsLrtd
   rotate: false
-  xy: 622, 152
+  xy: 279, 57
   size: 46, 15
   split: 15, 15, 4, 5
   pad: 10, 10, 5, 7
@@ -15,7 +15,7 @@ bracketsLrtd
   index: -1
 hpBarFill
   rotate: false
-  xy: 302, 155
+  xy: 348, 78
   size: 5, 5
   split: 0, 0, 0, 0
   orig: 5, 5
@@ -23,161 +23,147 @@ hpBarFill
   index: -1
 iconEnemySmall
   rotate: false
-  xy: 490, 104
+  xy: 243, 2
   size: 33, 34
   orig: 34, 34
   offset: 0, 0
   index: -1
 iconPainBarSmall
   rotate: false
-  xy: 921, 164
+  xy: 2, 5
   size: 30, 27
   orig: 30, 27
   offset: 0, 0
   index: -1
 iconScoreSmall
   rotate: false
-  xy: 232, 126
+  xy: 243, 38
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: -1
 iconTimeSmall
   rotate: false
-  xy: 268, 128
+  xy: 161, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 iconTokugiNoneMain
   rotate: false
-  xy: 969, 202
+  xy: 293, 74
   size: 53, 52
   orig: 53, 52
   offset: 0, 0
   index: -1
 iconWeaponNoneMain
   rotate: false
-  xy: 969, 202
+  xy: 293, 74
   size: 53, 52
   orig: 53, 52
   offset: 0, 0
   index: -1
-iconTokugiNoneSubh
+iconTokugiNoneSub
   rotate: false
-  xy: 490, 140
+  xy: 161, 74
   size: 130, 52
   orig: 130, 52
   offset: 0, 0
   index: -1
-iconWeaponNoneSubh
+iconWeaponNoneSub
   rotate: false
-  xy: 490, 140
+  xy: 161, 74
   size: 130, 52
   orig: 130, 52
-  offset: 0, 0
-  index: -1
-iconTokugiNoneSubv
-  rotate: false
-  xy: 823, 124
-  size: 52, 130
-  orig: 52, 130
-  offset: 0, 0
-  index: -1
-iconWeaponNoneSubv
-  rotate: false
-  xy: 823, 124
-  size: 52, 130
-  orig: 52, 130
   offset: 0, 0
   index: -1
 iconTokugiSmall
   rotate: false
-  xy: 525, 106
+  xy: 195, 2
   size: 28, 32
   orig: 28, 32
   offset: 0, 0
   index: -1
 iconWeaponSmall
   rotate: false
-  xy: 877, 125
+  xy: 391, 93
   size: 33, 33
   orig: 33, 33
   offset: 0, 0
   index: -1
-javanese0c
+latin0
   rotate: false
-  xy: 921, 193
-  size: 46, 61
-  orig: 52, 67
-  offset: 3, 3
+  xy: 34, 14
+  size: 10, 18
+  orig: 10, 18
+  offset: 0, 0
   index: -1
-javanese1c
+latin1
   rotate: false
-  xy: 2, 63
-  size: 131, 59
-  orig: 137, 65
-  offset: 3, 3
+  xy: 142, 14
+  size: 6, 18
+  orig: 10, 18
+  offset: 2, 0
   index: -1
-javanese2c
+latin2
   rotate: false
-  xy: 309, 125
-  size: 110, 129
-  orig: 116, 135
-  offset: 3, 3
+  xy: 46, 14
+  size: 10, 18
+  orig: 10, 18
+  offset: 0, 0
   index: -1
-javanese3c
+latin3
   rotate: false
-  xy: 2, 124
-  size: 146, 130
-  orig: 152, 136
-  offset: 3, 3
+  xy: 58, 14
+  size: 10, 18
+  orig: 10, 18
+  offset: 0, 0
   index: -1
-javanese4c
+latin4
   rotate: false
-  xy: 877, 160
-  size: 42, 94
-  orig: 48, 100
-  offset: 3, 3
+  xy: 70, 14
+  size: 10, 18
+  orig: 10, 18
+  offset: 0, 0
   index: -1
-javanese5c
+latin5
   rotate: false
-  xy: 421, 104
-  size: 67, 150
-  orig: 73, 156
-  offset: 3, 3
+  xy: 82, 14
+  size: 10, 18
+  orig: 10, 18
+  offset: 0, 0
   index: -1
-javanese6c
+latin6
   rotate: false
-  xy: 622, 169
-  size: 94, 85
-  orig: 100, 91
-  offset: 3, 3
+  xy: 94, 14
+  size: 10, 18
+  orig: 10, 18
+  offset: 0, 0
   index: -1
-javanese7c
+latin7
   rotate: false
-  xy: 2, 2
-  size: 130, 59
-  orig: 136, 65
-  offset: 3, 3
+  xy: 106, 14
+  size: 10, 18
+  orig: 10, 18
+  offset: 0, 0
   index: -1
-javanese8c
+latin8
   rotate: false
-  xy: 718, 194
-  size: 103, 60
-  orig: 109, 66
-  offset: 3, 3
+  xy: 118, 14
+  size: 10, 18
+  orig: 10, 18
+  offset: 0, 0
   index: -1
-javanese9c
+latin9
   rotate: false
-  xy: 490, 194
-  size: 130, 60
-  orig: 136, 66
-  offset: 3, 3
+  xy: 130, 14
+  size: 10, 18
+  orig: 10, 18
+  offset: 0, 0
   index: -1
 niceBrownBox
   rotate: false
-  xy: 169, 81
+  xy: 348, 85
   size: 41, 41
   split: 9, 9, 9, 9
   orig: 41, 41
@@ -185,7 +171,7 @@ niceBrownBox
   index: -1
 noteBook
   rotate: false
-  xy: 150, 162
+  xy: 2, 34
   size: 157, 92
   split: 35, 21, 13, 10
   orig: 157, 92
@@ -193,7 +179,7 @@ noteBook
   index: -1
 pointBarBrownEllipse
   rotate: false
-  xy: 718, 176
+  xy: 426, 110
   size: 29, 16
   split: 7, 7, 7, 7
   pad: 1, 1, 2, 2
@@ -202,14 +188,14 @@ pointBarBrownEllipse
   index: -1
 slash
   rotate: false
-  xy: 135, 50
-  size: 32, 72
-  orig: 42, 84
-  offset: 5, 6
+  xy: 225, 14
+  size: 10, 20
+  orig: 14, 22
+  offset: 2, 0
   index: -1
 soraFcBrownBox
   rotate: false
-  xy: 150, 124
+  xy: 161, 36
   size: 80, 36
   split: 19, 17, 13, 17
   orig: 80, 36

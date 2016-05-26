@@ -57,6 +57,12 @@ public final class Layouter {
 		return aligned;
 	}
 
+	public static void layoutHorizontallyWithRelativeWidth(Rectangle parent, Padding padding, float relativeWidth,
+			Rectangle... children) {
+		float[] list = new float[children.length];
+		Arrays.fill(list, relativeWidth);
+		layoutHorizontallyWithRelativeWidth(parent, padding, list, children);
+	}
 	public static void layoutHorizontallyWithRelativeWidth(Rectangle parent, Padding padding, float[] relativeWidthList,
 			Rectangle... children) {
 		if (relativeWidthList.length != children.length)
@@ -134,6 +140,12 @@ public final class Layouter {
 		}
 	}
 
+	public static void layoutVerticallyWithRelativeHeight(Rectangle parent, Padding padding, float relativeHeight,
+			Rectangle... children) {
+		float[] list = new float[children.length];
+		Arrays.fill(list, relativeHeight);
+		layoutVerticallyWithRelativeHeight(parent, padding, list, children);
+	}
 	public static void layoutVerticallyWithRelativeHeight(Rectangle parent, Padding padding, float[] relativeHeightList,
 			Rectangle... children) {
 		if (relativeHeightList.length != children.length)

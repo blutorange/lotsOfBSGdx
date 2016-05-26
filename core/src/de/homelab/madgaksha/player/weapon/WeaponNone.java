@@ -13,12 +13,8 @@ public class WeaponNone extends AWeapon {
 	}
 
 	@Override
-	protected ETexture requestedIconSubHorizontal() {
-		return ETexture.WEAPON_NONE_ICON_SUBH;
+	protected ETexture requestedIconSub() {
+		return ETexture.WEAPON_NONE_ICON_SUB;
 	}
 
-	@Override
-	protected ETexture requestedIconSubVertical() {
-		return ETexture.WEAPON_NONE_ICON_SUBV;
-	}
 }

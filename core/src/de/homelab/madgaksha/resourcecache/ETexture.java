@@ -46,13 +46,11 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	// ===================
 	SOLDIER_RED_0("sprite/soldierRed0.png"),
 	SOLDIER_RED_0_MAIN("texture/statusicon/enemy/soldierRed-main.png"),
-	SOLDIER_RED_0_SUBH("texture/statusicon/enemy","soldierRed-h.png"),
-	SOLDIER_RED_0_SUBV("texture/statusicon/enemy","soldierRed-h.png"),
+	SOLDIER_RED_0_SUB("texture/statusicon/enemy","soldierRed-sub.png"),
 	
 	SOLDIER_GREEN_0("sprite/soldierGreen0.png"),
 	SOLDIER_GREEN_0_MAIN("texture/statusicon/enemy/soldierGreen-main.png"),
-	SOLDIER_GREEN_0_SUBH("texture/statusicon/enemy","soldierGreen-h.png"),
-	SOLDIER_GREEN_0_SUBV("texture/statusicon/enemy","soldierGreen-h.png"),
+	SOLDIER_GREEN_0_SUB("texture/statusicon/enemy","soldierGreen-sub.png"),
 
 	
 	// ===================
@@ -65,20 +63,19 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	STATUS_ICON_TOKUGI(ETextureAtlas.STATUS_SCREEN, "iconTokugiSmall"),
 	STATUS_ICON_ENEMY(ETextureAtlas.STATUS_SCREEN, "iconEnemySmall"),
 	
-	STATUS_ICON_NUMERAL_0(ETextureAtlas.STATUS_SCREEN, "javanese0c"),
-	STATUS_ICON_NUMERAL_1(ETextureAtlas.STATUS_SCREEN, "javanese1c"),
-	STATUS_ICON_NUMERAL_2(ETextureAtlas.STATUS_SCREEN, "javanese2c"),
-	STATUS_ICON_NUMERAL_3(ETextureAtlas.STATUS_SCREEN, "javanese3c"),
-	STATUS_ICON_NUMERAL_4(ETextureAtlas.STATUS_SCREEN, "javanese4c"),
-	STATUS_ICON_NUMERAL_5(ETextureAtlas.STATUS_SCREEN, "javanese5c"),
-	STATUS_ICON_NUMERAL_6(ETextureAtlas.STATUS_SCREEN, "javanese6c"),
-	STATUS_ICON_NUMERAL_7(ETextureAtlas.STATUS_SCREEN, "javanese7c"),
-	STATUS_ICON_NUMERAL_8(ETextureAtlas.STATUS_SCREEN, "javanese8c"),
-	STATUS_ICON_NUMERAL_9(ETextureAtlas.STATUS_SCREEN, "javanese9c"),
+	STATUS_ICON_NUMERAL_0(ETextureAtlas.STATUS_SCREEN, "latin0"),
+	STATUS_ICON_NUMERAL_1(ETextureAtlas.STATUS_SCREEN, "latin1"),
+	STATUS_ICON_NUMERAL_2(ETextureAtlas.STATUS_SCREEN, "latin2"),
+	STATUS_ICON_NUMERAL_3(ETextureAtlas.STATUS_SCREEN, "latin3"),
+	STATUS_ICON_NUMERAL_4(ETextureAtlas.STATUS_SCREEN, "latin4"),
+	STATUS_ICON_NUMERAL_5(ETextureAtlas.STATUS_SCREEN, "latin5"),
+	STATUS_ICON_NUMERAL_6(ETextureAtlas.STATUS_SCREEN, "latin6"),
+	STATUS_ICON_NUMERAL_7(ETextureAtlas.STATUS_SCREEN, "latin7"),
+	STATUS_ICON_NUMERAL_8(ETextureAtlas.STATUS_SCREEN, "latin8"),
+	STATUS_ICON_NUMERAL_9(ETextureAtlas.STATUS_SCREEN, "latin9"),
 	STATUS_ICON_SEPARATOR_TIME(ETextureAtlas.STATUS_SCREEN, "slash"), 
 	STATUS_ICON_NO_ENEMY_MAIN("texture/statusicon/enemy/none-main.png"),
-	STATUS_ICON_NO_ENEMY_SUBH("texture/statusicon/enemy","none-h.png"),
-	STATUS_ICON_NO_ENEMY_SUBV("texture/statusicon/enemy","none-h.png"),
+	STATUS_ICON_NO_ENEMY_SUB("texture/statusicon/enemy","none-sub.png"),
 	
 	// =========================================================================
 	//       WEAPONS
@@ -86,8 +83,7 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	// sub icons must be 2.5:1 aspect ratio (horizontally) or 1:2.5 (vertically) 
 	// =========================================================================
 	WEAPON_NONE_ICON_MAIN(ETextureAtlas.STATUS_SCREEN, "iconWeaponNoneMain"),
-	WEAPON_NONE_ICON_SUBV(ETextureAtlas.STATUS_SCREEN, "iconWeaponNoneSubv"),
-	WEAPON_NONE_ICON_SUBH("texture/statusicon/weapon","none-h.png"),
+	WEAPON_NONE_ICON_SUB("texture/statusicon/weapon","none-sub.png"),
 	
 	
 	// =========================================================================
@@ -96,16 +92,14 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	// sub icons must be 2.5:1 aspect ratio (horizontally) or 1:2.5 (vertically) 
 	// =========================================================================
 	TOKUGI_NONE_ICON_MAIN(ETextureAtlas.STATUS_SCREEN, "iconTokugiNoneMain"),
-	TOKUGI_NONE_ICON_SUBV(ETextureAtlas.STATUS_SCREEN, "iconTokugiNoneSubv"),
-	TOKUGI_NONE_ICON_SUBH("texture/statusicon/tokugi","none-h.png"),
+	TOKUGI_NONE_ICON_SUB("texture/statusicon/tokugi","none-sub.png"),
 	
 	// =========================================================================
 	//     LEVEL
 	// icons horizontal must be 3:1 aspect ratio
 	// icons vertical must be 1:3 aspect ratio
 	// =========================================================================
-	LEVEL_01_ICON_HORIZONTAL("map/level01-icon-h.png"),
-	LEVEL_01_ICON_VERTICAL("map/level01-icon-v.png"), 
+	LEVEL_01_ICON("map/level01-icon.png"),
 	
 	;
 
@@ -138,7 +132,8 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 
 	public Sprite asSprite() {
 		if (textureAtlas != null) return ResourceCache.getTextureAtlas(textureAtlas).createSprite(filename);
-		return new Sprite(ResourceCache.getTexture(this));
+		TextureRegion tr = ResourceCache.getTexture(this);
+		return tr != null ? new Sprite(tr) : null;
 	}
 
 	@Override

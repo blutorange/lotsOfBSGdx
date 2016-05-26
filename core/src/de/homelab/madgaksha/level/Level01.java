@@ -69,8 +69,8 @@ public class Level01 extends ALevel {
 	}
 	
 	@Override
-	public ETexture requestedIconHorizontal() {
-		return ETexture.LEVEL_01_ICON_HORIZONTAL;
+	public ETexture requestedIcon() {
+		return ETexture.LEVEL_01_ICON;
 	}
 	
 	// =========================
