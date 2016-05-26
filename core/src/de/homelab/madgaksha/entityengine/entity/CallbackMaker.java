@@ -60,9 +60,9 @@ public class CallbackMaker extends EntityMaker implements ITrigger, IReceive {
 	}
 
 	@Override
-	public void callbackTouched(Entity e) {
+	public void callbackTouched(Entity me, Entity you) {
 		try {
-			final CallbackComponent cc = Mapper.callbackComponent.get(e);
+			final CallbackComponent cc = Mapper.callbackComponent.get(me);
 			if (cc != null) cc.callback.invoke(level, cc.properties);
 		} catch (ReflectionException ex) {
 			LOG.error("could not invoke callback: " + this, ex);

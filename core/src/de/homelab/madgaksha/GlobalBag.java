@@ -1,7 +1,7 @@
 package de.homelab.madgaksha;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
@@ -74,7 +74,7 @@ public final class GlobalBag {
 	public static Entity playerEntity;
 		
 	/** Entity engine ASHLEY for the main game.*/
-	public static Engine gameEntityEngine;
+	public static PooledEngine gameEntityEngine;
 
 	/** The tracking component of the camera. */
 	public static ManyTrackingComponent cameraTrackingComponent;

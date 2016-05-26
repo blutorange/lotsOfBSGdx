@@ -20,6 +20,8 @@ public class ComponentUtils {
 	public static void applyComponentQueue(Entity e, ComponentQueueComponent cqc) {
 		for (Class<? extends Component> c : cqc.remove) e.remove(c);
 		for (Component c : cqc.add) e.add(c);
+		cqc.add.clear();
+		cqc.remove.clear();
 	}
 	
 	public static void applyComponentQueue(Entity e) {

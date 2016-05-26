@@ -1,5 +1,7 @@
 package de.homelab.madgaksha.entityengine.entity;
 
+import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
+
 import com.badlogic.ashley.core.Entity;
 
 import de.homelab.madgaksha.resourcecache.IResource;
@@ -17,10 +19,23 @@ public class BulletMaker extends EntityMaker {
 		super();
 	}
 	
-	@Override
-	public void setup(Entity e) {
+	public static Entity makeEntity(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory) {
+		Entity entity = gameEntityEngine.createEntity();
+		getInstance().setup(entity, bulletShape, bulletTrajectory);
+		return entity;
+	}
+	
+	/**
+	 * Adds the appropriate components to the entity so that it can be used as a bullet.
+	 * @param e Entity to setup.
+	 * @param bulletShape The bullet's shape.
+	 * @param bulletTrajectory The bullet's trajectory.
+	 */
+	public void setup(Entity e, BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory) {
 		super.setup(e);
-		// TODO Auto-generated method stub
+			
+		bulletShape.setup(e);
+		bulletTrajectory.setup(e);
 	}
 	
 	@Override

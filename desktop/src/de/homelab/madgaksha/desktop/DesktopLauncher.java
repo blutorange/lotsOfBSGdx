@@ -78,7 +78,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -222,7 +226,10 @@ public class DesktopLauncher extends JFrame {
 		} else {
 			l = Locale.getDefault();
 		}
+		Locale l2 = askUserForLanguage(l);
+		if (l2 != null) l = l2;
 		final Locale locale = l;
+		
 		LOG.config("language set to " + l.getDisplayLanguage());
 		
 		// Set window dimensions.
@@ -284,9 +291,9 @@ public class DesktopLauncher extends JFrame {
 			System.setProperty("sun.java2d.opengl", "true");
 		}
 		catch (Exception e) {
-			LOG.log(Level.INFO, "could not enable hardware acceleration", e);
+			LOG.log(Level.WARNING, "could not enable hardware acceleration", e);
 		}
-		
+				
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -299,6 +306,44 @@ public class DesktopLauncher extends JFrame {
 		});
 	}
 
+	/**
+	 * Asks the user for his preferred language.
+	 * @return The selected language, or null if none was selected.
+	 */
+	private static Locale askUserForLanguage(Locale defaultLocale) {
+		if (defaultLocale == null) defaultLocale = Locale.getDefault();
+		
+		// Acquire list of available languages and sort by name.
+		Map<String,Locale> localeMap = i18n.getAvailableLocales();
+		List<String> optionList = new ArrayList<String>(localeMap.size());
+		optionList.addAll(localeMap.keySet());
+		Collections.sort(optionList);
+		String[] optionArray = optionList.toArray(new String[localeMap.size()]);
+		int defaultOption = 0;
+		
+		// Create list of human-readable choices and select default language.
+		for (String key : optionList) {
+			if (localeMap.get(key).toLanguageTag().equalsIgnoreCase(defaultLocale.toLanguageTag())) break;
+			++defaultOption;
+		}
+		if (defaultOption >= optionArray.length) defaultOption = 0;
+		
+		// Create choice dialogue.
+		i18n.init(Locale.getDefault());
+		String choice = String.valueOf(JOptionPane.showInputDialog(null, i18n.main("desktop.startup.choose.language"),
+				i18n.main("desktop.startup.choose.language.title"),
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				optionArray,
+				optionArray[defaultOption]));
+		
+		// Evaluate user's choice and set the locale to the user's choice.
+		if (localeMap.containsKey(choice)) {
+			LOG.log(Level.INFO, "got user language of choice: " + choice);
+			return localeMap.get(choice);
+		}
+		else return null;
+	}
 	
 	private DesktopLauncher(Boolean fullscreen, Integer width, Integer height, Integer fps, Locale locale, int verbosity) {
 		// Save configuration.

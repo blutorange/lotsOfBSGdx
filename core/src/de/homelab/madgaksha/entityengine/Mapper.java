@@ -3,6 +3,7 @@ package de.homelab.madgaksha.entityengine;
 import com.badlogic.ashley.core.ComponentMapper;
 
 import de.homelab.madgaksha.entityengine.component.AngularVelocityComponent;
+import de.homelab.madgaksha.entityengine.component.BehaviourComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.CallbackComponent;
@@ -79,6 +80,8 @@ public final class Mapper {
 
 	public final static ComponentMapper<AngularVelocityComponent> angularVelocityComponent = ComponentMapper
 			.getFor(AngularVelocityComponent.class);
+	public final static ComponentMapper<BehaviourComponent> behaviourComponent = ComponentMapper
+			.getFor(BehaviourComponent.class);
 	public final static ComponentMapper<BoundingBoxComponent> boundingBoxComponent = ComponentMapper
 			.getFor(BoundingBoxComponent.class);
 	public final static ComponentMapper<BoundingSphereComponent> boundingSphereComponent = ComponentMapper

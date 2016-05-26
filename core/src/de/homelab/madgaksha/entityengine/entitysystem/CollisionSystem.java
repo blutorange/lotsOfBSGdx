@@ -216,8 +216,8 @@ public class CollisionSystem extends EntitySystem {
 					if (bbcAlice.minY + pcAlice.y < bbcBob.maxY + pcBob.y) {
 						// test exact shape if asked to
 						if (scAlice == null || scBob == null || GeoUtil.isCollision(scAlice.shape, scBob.shape, scAlice.shapeType, scBob.shapeType, pcAlice, pcBob)) {
-							ttc.triggerAcceptingObject.callbackTrigger(bob, ETrigger.TOUCH);
-							rtc.triggerReceivingObject.callbackTouched(alice);
+							ttc.triggerAcceptingObject.callbackTrigger(alice, ETrigger.TOUCH);
+							rtc.triggerReceivingObject.callbackTouched(bob, alice);
 						}
 					}
 				}

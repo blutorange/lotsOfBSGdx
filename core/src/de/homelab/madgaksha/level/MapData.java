@@ -392,8 +392,10 @@ public class MapData {
 		
 		// Get species class and its constructor with the appropriate constructor.
 		Method enemySetupMethod;
+		EnemyMaker enemyMaker;
 		try {
 			Class<? extends EnemyMaker> enemyClass = ClassReflection.forName(ENEMY_PACKAGE + species + "Maker");
+			enemyMaker = (EnemyMaker) enemyClass.getDeclaredMethod("getInstance").invoke(null);
 			enemySetupMethod = ClassReflection.getDeclaredMethod(enemyClass, "setup", Entity.class, Shape2D.class, ETrigger.class, Vector2.class, Float.class);
 		}
 		catch (Exception e) {
@@ -412,10 +414,10 @@ public class MapData {
 		}
 		
 		// Try to initialize a new enemy of the given class.
-		
 		try {
 			Entity entity = new Entity();
-			return (Entity) enemySetupMethod.invoke(entity, spawnEnum, new Vector2(initX,initY), initDir);
+			enemySetupMethod.invoke(enemyMaker, entity, shape, spawnEnum, new Vector2(initX,initY), initDir);
+			return enemyMaker.isInitializedSuccessfully() ? entity : null;
 		} catch (Exception e) {
 			LOG.error("failed to initialize enemy instance: " + species, e);
 			return null;

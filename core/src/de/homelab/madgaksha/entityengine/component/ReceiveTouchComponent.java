@@ -11,7 +11,7 @@ import de.homelab.madgaksha.entityengine.entity.IReceive;
  */
 public abstract class ReceiveTouchComponent implements Component, Poolable {
 	private final static IReceive DEFAULT_TRIGGER_RECEIVING_OBJECT = new IReceive() {		
-		@Override public void callbackTouched(Entity e) {}
+		@Override public void callbackTouched(Entity me, Entity you) {}
 	};
 	
 	public IReceive triggerReceivingObject = DEFAULT_TRIGGER_RECEIVING_OBJECT;

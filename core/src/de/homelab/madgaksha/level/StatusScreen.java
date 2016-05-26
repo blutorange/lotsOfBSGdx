@@ -191,6 +191,9 @@ public class StatusScreen {
 		textureNoEnemyMain = ETexture.STATUS_ICON_NO_ENEMY_MAIN.asSprite();
 		textureNoEnemySub = ETexture.STATUS_ICON_NO_ENEMY_SUB.asSprite();
 		
+		targetIconMain = textureNoEnemyMain; 
+		targetIconSub = textureNoEnemySub;
+		
 		spriteNumeral[0] = ETexture.STATUS_ICON_NUMERAL_0.asSprite();
 		spriteNumeral[1] = ETexture.STATUS_ICON_NUMERAL_1.asSprite();
 		spriteNumeral[2] = ETexture.STATUS_ICON_NUMERAL_2.asSprite();
@@ -379,12 +382,6 @@ public class StatusScreen {
 		spriteSeparatorTime.setBounds(uiTimeSecondMillisecondSeparator.x, uiTimeSecondMillisecondSeparator.y,
 				uiTimeSecondMillisecondSeparator.width, uiTimeSecondMillisecondSeparator.height);
 		spriteSeparatorTime.draw(batchPixel);
-
-		// TODO remove me
-		if (DebugMode.activated) { 
-			player.takeDamage(91437L * 13);
-			gameScore.increaseBy(1);
-		}
 
 		// Score.
 		for (int i = uiScoreDigits.length; i-- > 0;) {
@@ -583,8 +580,8 @@ public class StatusScreen {
 	}
 
 	private void setEnemyImageBounds() {
-		targetIconMain.setBounds(uiImageEnemyMain.x,uiImageEnemyMain.y,uiImageEnemyMain.width,uiImageEnemyMain.height);
-		if (!landscapeMode)
+		if (targetIconMain != null)	targetIconMain.setBounds(uiImageEnemyMain.x,uiImageEnemyMain.y,uiImageEnemyMain.width,uiImageEnemyMain.height);
+		if (!landscapeMode && targetIconSub != null)
 			targetIconSub.setBounds(uiImageEnemySub.x,uiImageEnemySub.y,uiImageEnemySub.width,uiImageEnemySub.height);
 	}
 	

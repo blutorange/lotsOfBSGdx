@@ -74,9 +74,19 @@ public class PositionComponent implements Component, Poolable {
 		limitToMap = DEFAULT_LIMIT_TO_MAP;
 	}
 	
+	/**
+	 * Sets this component to the given position on the xy-plane.
+	 * @param x The x-position-
+	 * @param y The y-position.
+	 */
+	public void setup(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+	
 	@Override
 	public String toString(){
-		return "(" + x + "," + y + "," + z + ")+(" + offsetX + "," + offsetY + "," + offsetZ + ");limitToMap=" + limitToMap;
+		return "PositionComponent(" + x + "," + y + "," + z + ")+(" + offsetX + "," + offsetY + "," + offsetZ + ");limitToMap=" + limitToMap;
 	}
 
 }

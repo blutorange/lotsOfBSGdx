@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="610" tilewidth="32" tileheight="32" nextobjectid="24">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="610" tilewidth="32" tileheight="32" nextobjectid="25">
  <properties>
   <property name="baseDirX" value="0"/>
   <property name="baseDirY" value="1"/>
@@ -8839,12 +8839,20 @@
     <property name="name" value="small_fire"/>
    </properties>
   </object>
-  <object id="23" name="SoldierRed" type="Enemy" x="498.335" y="18055.3" width="1275.33" height="81.3333">
+  <object id="23" name="SoldierRed" type="Enemy" x="462.335" y="18285.3" width="1275.33" height="81.3333">
    <properties>
     <property name="initDir" value="0.0"/>
     <property name="initY" value="20"/>
     <property name="spawn" value="touch"/>
     <property name="species" value="Soldier Green"/>
+   </properties>
+  </object>
+  <object id="24" name="SoldierRed" type="Enemy" x="486.335" y="18071.3" width="1275.33" height="81.3333">
+   <properties>
+    <property name="initDir" value="0.0"/>
+    <property name="initY" value="20"/>
+    <property name="spawn" value="touch"/>
+    <property name="species" value="Soldier Red"/>
    </properties>
   </object>
  </objectgroup>

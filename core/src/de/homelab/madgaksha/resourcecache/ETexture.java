@@ -100,6 +100,13 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	// icons vertical must be 1:3 aspect ratio
 	// =========================================================================
 	LEVEL_01_ICON("map/level01-icon.png"),
+
+	
+	// =========================================================================
+	//     BULLETS
+	// =========================================================================
+	BULLET_PACMAN_LIGHTYELLOW("bullets/basic/pPacman/pPacman12.png"),
+	BULLET_FLOWER_RED("bullets/basic/pFlower/pFlower1.png"),
 	
 	;
 

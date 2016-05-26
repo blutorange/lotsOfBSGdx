@@ -7,17 +7,24 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.resourcecache.ETexture;
+import de.homelab.madgaksha.util.DebugStringifier;
 
 public class SpriteComponent implements Component, Poolable {
 	
 	public Sprite sprite;
 
 	/**
+	 * Creates a new sprite component. Used mainly for pooling.
+	 */
+	public SpriteComponent() {
+	}
+	
+	/**
 	 * Loads the sprite with texture from the given sprite.
 	 * @param sprite The sprite with the texture to use.
 	 */
 	public SpriteComponent(Sprite sprite) {
-		this.sprite = sprite;
+		setup(sprite);
 	}
 	
 	/**
@@ -25,13 +32,25 @@ public class SpriteComponent implements Component, Poolable {
 	 * @param texture Texture for the sprite.
 	 */
 	public SpriteComponent(ETexture texture) {
-		sprite = texture.asSprite();
+		setup(texture);
 	}
 
 	public SpriteComponent(SpriteAnimationComponent sac) {
+		setup(sac);
+	}
+	
+	public void setup(Sprite sprite) {
+		this.sprite = sprite;
+	}
+	
+	public void setup(ETexture texture) {
+		sprite = texture.asSprite();
+	}
+	
+	public void setup(SpriteAnimationComponent sac) {
 		final TextureRegion tr = sac.animation.getKeyFrame(0.0f);
 		sprite = new Sprite(tr); // constructor calls #setOriginCenter()
-		sprite.setTexture(tr.getTexture());
+		sprite.setTexture(tr.getTexture());		
 	}
 	
 	@Override
@@ -46,5 +65,10 @@ public class SpriteComponent implements Component, Poolable {
 		sprite.setPosition(0.0f, 0.0f);
 		sprite.setRotation(0.0f);
 		sprite.setScale(1.0f);
+	}
+	
+	@Override
+	public String toString(){
+		return "SpriteComponent: " + DebugStringifier.get(sprite) + ")";
 	}
 }

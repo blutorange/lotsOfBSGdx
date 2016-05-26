@@ -34,6 +34,10 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(EnemyMaker.class);
 	
+	protected EnemyMaker() {
+		super();
+	}
+	
 	/**
 	 * Adds the appropriate components to an entity to be used as an enemy.
 	 * @param entity
@@ -90,7 +94,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		cqc.remove.add(InvisibleComponent.class);
 		cqc.remove.add(tc.getClass());
 		cqc.remove.add(PositionComponent.class);
-
+		
 		// Add components to entity.
 		entity.add(tpc);
 		entity.add(cfc);
@@ -102,12 +106,9 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		entity.add(ppc);
 		entity.add(dqc);
 		entity.add(eic);
+		entity.add(cqc);
+				
 		if (tc != null)	entity.add(tc);
-	}
-	
-	@Override
-	public void behave(Entity e) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -117,9 +118,9 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	}
 
 	@Override
-	public void callbackTouched(Entity e) {
-		sinSpawn(e);
-		spawned(e, ETrigger.TOUCH);
+	public void callbackTouched(Entity me, Entity you) {
+		sinSpawn(me);
+		spawned(me, ETrigger.TOUCH);
 	}
 
 	/**

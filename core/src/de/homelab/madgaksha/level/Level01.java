@@ -72,6 +72,23 @@ public class Level01 extends ALevel {
 	public ETexture requestedIcon() {
 		return ETexture.LEVEL_01_ICON;
 	}
+
+	@Override
+	public int getComponentPoolInitialSize() {
+		return 1000;
+	}
+	@Override
+	public int getComponentPoolMaxSize() {
+		return 10000;
+	}
+	@Override
+	public int getEntityPoolInitialSize() {
+		return 100;
+	}
+	@Override
+	public int getEntityPoolPoolMaxSize() {
+		return 1000;
+	}
 	
 	// =========================
 	//      Callback methods

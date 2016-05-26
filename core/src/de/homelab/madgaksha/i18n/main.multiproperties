@@ -29,14 +29,22 @@
     </Columns>
     <Records>
         <Property>
-            <Name>helloWorld</Name>
+            <Name>desktop.startup.choose.language</Name>
             <Disabled>false</Disabled>
             <MultiLine>false</MultiLine>
-            <DefaultValue>Hello World!</DefaultValue>
-            <Value disabled="false">Hallo Welt!</Value>
-            <Value disabled="false">Hello World!!</Value>
-            <Value disabled="true"></Value>
+            <Value disabled="false">Wählen Sie die Sprache des Spiels aus.</Value>
+            <Value disabled="false">Choose your preferred language.</Value>
+            <Value disabled="false">言語を選んでください</Value>
         </Property>
+        <Property>
+            <Name>desktop.startup.choose.language.title</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Sprachauswahl</Value>
+            <Value disabled="false">Language selection</Value>
+            <Value disabled="false">言語選択</Value>
+        </Property>
+        <Empty/>
         <Property>
             <Name>dialog.failure.resource</Name>
             <Disabled>false</Disabled>

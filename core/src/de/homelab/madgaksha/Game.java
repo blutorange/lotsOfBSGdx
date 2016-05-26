@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
@@ -168,7 +168,7 @@ public class Game implements ApplicationListener {
 		
 		
 		// Initialize the entity engine.
-		gameEntityEngine = new Engine();
+		gameEntityEngine = new PooledEngine(level.getEntityPoolInitialSize(),level.getEntityPoolPoolMaxSize(), level.getComponentPoolInitialSize(), level.getComponentPoolMaxSize());
 
 		// Initialize map and load level.
 		if (!level.initialize(batchGame)) {
@@ -417,6 +417,7 @@ public class Game implements ApplicationListener {
 		viewportPixel.apply(false);
 		batchPixel.begin();
 		debugFont.draw(batchPixel, "fps: " + (int) (1.0f / Gdx.graphics.getRawDeltaTime()), 0.0f, viewportGame.getScreenHeight());
+		debugFont.draw(batchPixel, "entities: " + gameEntityEngine.getEntities().size(), 0.0f, viewportGame.getScreenHeight()-30.0f);
 		batchPixel.end();
 	}
 

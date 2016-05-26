@@ -33,4 +33,9 @@ public class TemporalComponent implements Component, Poolable {
 		deltaTime = DEFAULT_DELTA_TIME;
 		totalTime = DEFAULT_TOTAL_TIME;
 	}
+	
+	@Override
+	public String toString(){
+		return "TemporalComponent(delta=" + deltaTime + ",total=" + totalTime + ")";
+	}
 }

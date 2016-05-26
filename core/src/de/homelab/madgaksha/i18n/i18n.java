@@ -13,6 +13,8 @@ public class i18n {
 	private static Locale locale;
 	private static boolean initiated = false;
 
+	private static Locale[] availableLocales = {Locale.GERMAN, Locale.ENGLISH, Locale.JAPANESE};
+	
 	// not instantiable
 	private i18n() {
 	};
@@ -61,8 +63,15 @@ public class i18n {
 	 * @return The short name of the current locale (eg. de, en, ja).
 	 */
 	public static String getShortName() {
-		System.out.println(locale.getLanguage());
 		return locale.getLanguage();
+	}
+	
+	public static Map<String,Locale> getAvailableLocales() {
+		Map<String,Locale> map = new HashMap<String,Locale>(availableLocales.length);
+		for (Locale l : availableLocales) {
+			map.put(l.getDisplayLanguage(l), l);
+		}
+		return map;
 	}
 
 	private static String getValue(Map<String, String> map, String key) {

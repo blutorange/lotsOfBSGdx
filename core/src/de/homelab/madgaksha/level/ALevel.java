@@ -43,6 +43,11 @@ public abstract class ALevel {
 			.tan(CAMERA_GAME_FIELD_OF_VIEW_Y * 0.5f * Math.PI / 180.0f);
 	public final static float CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF_INV = 1.0f / CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF;
 
+	private final static int DEFAULT_COMPONENT_POOL_INITAL_SIZE = 100;
+	private final static int DEFAULT_COMPONENT_POOL_MAX_SIZE = 1000;
+	private final static int DEFAULT_ENTITY_POOL_INITAL_SIZE = 100;
+	private final static int DEFAULT_ENTITY_POOL_MAX_SIZE = 1000;
+	
 	/**
 	 * The info window can work with virtual coordinates [0.0-1.0].
 	 */
@@ -300,6 +305,35 @@ public abstract class ALevel {
 
 	public Sprite getIcon() {
 		return icon;
+	}
+
+	/** Can be overwritten for other defaults
+	 * 
+	 * @return Maximum size of the component pool. Each entity gets multiple components.
+	 */
+	public int getComponentPoolMaxSize() {
+		return DEFAULT_COMPONENT_POOL_MAX_SIZE;
+	}
+	/** Can be overwritten for other defaults
+	 * 
+	 * @return Initial size of the component pool. Each entity gets multiple components.
+	 */
+	public int getComponentPoolInitialSize() {
+		return DEFAULT_COMPONENT_POOL_INITAL_SIZE;
+	}
+	/** Can be overwritten for other defaults
+	 * 
+	 * @return Initial size of the entity pool. Each entity is a bullet, enemy etc.
+	 */
+	public int getEntityPoolInitialSize() {
+		return DEFAULT_ENTITY_POOL_INITAL_SIZE;
+	}
+	/** Can be overwritten for other defaults
+	 * 
+	 * @return Maximum size of the entity pool. Each entity is a bullet, enemy etc.
+	 */
+	public int getEntityPoolPoolMaxSize() {
+		return DEFAULT_ENTITY_POOL_MAX_SIZE;
 	}
 
 }

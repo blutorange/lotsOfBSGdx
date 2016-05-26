@@ -22,14 +22,14 @@ public class PainPointsComponent implements Component, Poolable {
 	public PainPointsComponent(){
 	}
 	
-	public PainPointsComponent(long painPoints) {
-		setup(painPoints);
+	public PainPointsComponent(long maxPainPoints) {
+		setup(maxPainPoints);
 	}
 	public PainPointsComponent(long painPoints, long maxPainPoints) {
 		setup(painPoints, maxPainPoints);
 	}
-	public void setup(long painPoints) {
-		setup(painPoints, painPoints);
+	public void setup(long maxPainPoints) {
+		setup(DEFAULT_PAIN_POINTS, maxPainPoints);
 	}
 	public void setup(long painPoints, long maxPainPoints) {
 		this.painPoints = painPoints;

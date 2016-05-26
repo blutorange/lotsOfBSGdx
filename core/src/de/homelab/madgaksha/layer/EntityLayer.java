@@ -18,6 +18,7 @@ import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
 import de.homelab.madgaksha.entityengine.entity.MakerUtils;
+import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.AngularMovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CameraTracingSystem;
@@ -119,6 +120,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new PostEffectSystem());
 		gameEntityEngine.addSystem(new TemporalSystem());
 		gameEntityEngine.addSystem(new CollisionSystem());
+		gameEntityEngine.addSystem(new AiSystem());
 
 		switch (Gdx.app.getType()) {
 		case Android:
