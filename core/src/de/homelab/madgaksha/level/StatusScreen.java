@@ -17,7 +17,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import de.homelab.madgaksha.entityengine.entity.EntityEnemy;
+import de.homelab.madgaksha.DebugMode;
+import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.EnemyIconComponent;
+import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ETexture;
@@ -139,11 +142,14 @@ public class StatusScreen {
 	private Sprite textureIconTokugi;
 	private Sprite textureIconWeapon;
 	private Sprite textureNoEnemyMain;
-	private Sprite textureNoEnemy;
-	
+	private Sprite textureNoEnemySub;
+	private Sprite targetIconMain = null;
+	private Sprite targetIconSub = null;
+	private Sprite spriteSeparatorTime;	
 	private final Sprite spriteNumeral[] = new Sprite[10];
-	private Sprite spriteSeparatorTime;
 
+	private PainPointsComponent targetPainPoints = null;
+	
 	private NinePatch frameMain;
 	private NinePatch frameCell;
 	private NinePatch framePainBar;
@@ -155,9 +161,7 @@ public class StatusScreen {
 	private Mode uiImageEnemyMode;
 	
 	private Color lerpColor = new Color();
-	
-	private EntityEnemy targettedEnemy = null;
-	
+		
 	public StatusScreen(int w, int h) throws IOException {
 		computeScreenDimensions(w, h);
 		loadResources();
@@ -185,7 +189,7 @@ public class StatusScreen {
 		textureIconWeapon = ETexture.STATUS_ICON_WEAPON.asSprite();
 		
 		textureNoEnemyMain = ETexture.STATUS_ICON_NO_ENEMY_MAIN.asSprite();
-		textureNoEnemy = ETexture.STATUS_ICON_NO_ENEMY_SUB.asSprite();
+		textureNoEnemySub = ETexture.STATUS_ICON_NO_ENEMY_SUB.asSprite();
 		
 		spriteNumeral[0] = ETexture.STATUS_ICON_NUMERAL_0.asSprite();
 		spriteNumeral[1] = ETexture.STATUS_ICON_NUMERAL_1.asSprite();
@@ -212,7 +216,7 @@ public class StatusScreen {
 		
 		// TODO remove me
 		// for testing: draw rectangles
-		if (false) {
+		if (false && DebugMode.activated) {
 			NinePatch myNinePatch = ResourceCache.getNinePatch(ENinePatch.STATUS_SCREEN_HP_BAR_FILL);
 
 			myNinePatch.setColor(new Color(255, 255, 255, 0.5f));
@@ -377,8 +381,10 @@ public class StatusScreen {
 		spriteSeparatorTime.draw(batchPixel);
 
 		// TODO remove me
-		player.takeDamage(91437L * 13);
-		gameScore.increaseBy(1);
+		if (DebugMode.activated) { 
+			player.takeDamage(91437L * 13);
+			gameScore.increaseBy(1);
+		}
 
 		// Score.
 		for (int i = uiScoreDigits.length; i-- > 0;) {
@@ -408,7 +414,7 @@ public class StatusScreen {
 
 		// HP meter enemy.
 		shapeRenderer.begin(ShapeType.Filled);
-		ratio = targettedEnemy == null ? 0.0f : 1.0f-targettedEnemy.getPainPointsRatio();
+		ratio = targetPainPoints == null ? 0.0f : (1.0f - targetPainPoints.painPointsRatio);
 		if (ratio > 0.5f) {
 			lerpColor.set(level.getEnemyPainBarColorMid()).lerp(level.getEnemyPainBarColorHigh(), ratio);
 			if (landscapeMode) {
@@ -455,8 +461,7 @@ public class StatusScreen {
 		player.getTokugi().getIconMain().draw(batchPixel);
 
 		// Enemy icon.
-		if (targettedEnemy != null) targettedEnemy.getIconMain().draw(batchPixel);
-		else textureNoEnemyMain.draw(batchPixel);
+		targetIconMain.draw(batchPixel);
 
 		// Level icon.
 		level.getIcon().draw(batchPixel);
@@ -471,8 +476,7 @@ public class StatusScreen {
 			
 		// Enemy details.
 		if (uiImageEnemyMode == Mode.FULL) {
-			if (targettedEnemy != null) targettedEnemy.getIconSub().draw(batchPixel);
-			else textureNoEnemy.draw(batchPixel);
+			targetIconSub.draw(batchPixel);
 		}
 		
 		// HP bar overlay.
@@ -493,17 +497,28 @@ public class StatusScreen {
 	 * Switches target to the specified enemy and shows the enemy's info in this statusScreen.
 	 * @param enemy The enemy to target
 	 */
-	public void targetEnemy(Entity enemy) {
-		if (enemy instanceof EntityEnemy) {
-			targettedEnemy = (EntityEnemy)enemy;
-		}
-		else targettedEnemy = null;
+	public void targetEnemy(Entity e) {
+		PainPointsComponent ppc = Mapper.painPointsComponent.get(e);
+		EnemyIconComponent eic = Mapper.enemyIconComponent.get(e);
+		if (ppc != null && eic != null) targetEnemy(ppc, eic);
+	}
+	
+	/**
+	 * Switches target to the specified enemy and shows the enemy's info in this statusScreen.
+	 * @param enemy The enemy to target
+	 */
+	public void targetEnemy(PainPointsComponent painPointsComponent, EnemyIconComponent enemyIcon) {
+		targetIconMain = enemyIcon.iconMain;
+		targetIconSub = enemyIcon.iconSub;
+		targetPainPoints = painPointsComponent;
 		setEnemyImageBounds();
 	}
 	
 	/** Removes the enemy target and displays "no enemy targetted".*/
 	public void untargetEnemy() {
-		targettedEnemy = null;
+		targetIconMain = textureNoEnemyMain;
+		targetIconSub = textureNoEnemySub;
+		targetPainPoints = null;
 		setEnemyImageBounds();
 	}
 	
@@ -568,16 +583,9 @@ public class StatusScreen {
 	}
 
 	private void setEnemyImageBounds() {
-		if (targettedEnemy != null) {
-			targettedEnemy.getIconMain().setBounds(uiImageEnemyMain.x,uiImageEnemyMain.y,uiImageEnemyMain.width,uiImageEnemyMain.height);
-			if (!landscapeMode)
-				targettedEnemy.getIconSub().setBounds(uiImageEnemySub.x,uiImageEnemySub.y,uiImageEnemySub.width,uiImageEnemySub.height);
-		}
-		else {
-			textureNoEnemyMain.setBounds(uiImageEnemyMain.x,uiImageEnemyMain.y,uiImageEnemyMain.width,uiImageEnemyMain.height);
-			if (!landscapeMode)
-				textureNoEnemy.setBounds(uiImageEnemySub.x,uiImageEnemySub.y,uiImageEnemySub.width,uiImageEnemySub.height);
-		}
+		targetIconMain.setBounds(uiImageEnemyMain.x,uiImageEnemyMain.y,uiImageEnemyMain.width,uiImageEnemyMain.height);
+		if (!landscapeMode)
+			targetIconSub.setBounds(uiImageEnemySub.x,uiImageEnemySub.y,uiImageEnemySub.width,uiImageEnemySub.height);
 	}
 	
 	private void computeUILayoutPortrait() {

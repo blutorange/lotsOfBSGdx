@@ -13,7 +13,7 @@ import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
-import de.homelab.madgaksha.entityengine.entity.EntityEnemy;
+import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
@@ -22,56 +22,42 @@ import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 
 
-public class EnemySoldierGreen extends EntityEnemy {
-	private final static Logger LOG = Logger.getLogger(EnemySoldierGreen.class);
+public class SoldierRedMaker extends EnemyMaker {
+	@SuppressWarnings("unused")
+	private final static Logger LOG = Logger.getLogger(SoldierRedMaker.class);
+
+	// Singleton
+	private static class SingletonHolder {
+		private static final SoldierRedMaker INSTANCE = new SoldierRedMaker();
+	}
+	public static SoldierRedMaker getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	private SoldierRedMaker() {
+		super();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public IResource<? extends Enum<?>,?>[] requestedResources() {
 		return new IResource[]{
-			EAnimationList.SOLDIER_GREEN_0,
-			ESound.HORA_KOCCHI_DA_ZE,
+			EAnimationList.SOLDIER_RED_0,
+			ESound.HOOORGH,
 		};
 	}
 	
-	public EnemySoldierGreen(Shape2D shape, ETrigger spawn, Vector2 initialPos, Float initDir) {
-		super(shape, spawn,initialPos,initDir);
+	public void setup(Entity e, Shape2D shape, ETrigger spawn, Vector2 initialPos, Float initDir) {
+		super.setup(e, shape, spawn,initialPos,initDir);
 	
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(EAnimationList.SOLDIER_GREEN_0,
+		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(EAnimationList.SOLDIER_RED_0,
 				ESpriteDirectionStrategy.ZENITH);
 		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
 		SpriteComponent sc = new SpriteComponent(sac);
 		
-		add(sc);
-		add(sac);
-		add(sfdc);
-		add(new RotationComponent(true));
-	}
-
-	@Override
-	public void reinitializeEntity() {
-		super.reinitializeEntity();
-	}
-
-	@Override
-	protected void triggeredStartup() {
-		triggered();
-	}
-
-	@Override
-	protected void triggeredTouch(Entity e) {
-		triggered();
-	}
-
-	@Override
-	protected void triggeredScreen() {
-		triggered();
-	}
-
-	@Override
-	protected void triggeredTouched(Entity e) {
-		LOG.debug("aasdasd");
-		triggered();
+		e.add(sc);
+		e.add(sac);
+		e.add(sfdc);
+		e.add(new RotationComponent(true));
 	}
 
 	@Override
@@ -83,18 +69,19 @@ public class EnemySoldierGreen extends EntityEnemy {
 		return new Circle(0.0f,0.0f,32.0f);
 	}
 	
-	private void triggered() {
-		GlobalBag.soundPlayer.play(ESound.HORA_KOCCHI_DA_ZE); 
+	@Override
+	protected void spawned(Entity e, ETrigger t) {
+		GlobalBag.soundPlayer.play(ESound.HOOORGH); 
 	}
 
 	@Override
 	protected ETexture requestedIconMain() {
-		return ETexture.SOLDIER_GREEN_0_MAIN;
+		return ETexture.SOLDIER_RED_0_MAIN;
 	}
 
 	@Override
 	protected ETexture requestedIconSub() {
-		return ETexture.SOLDIER_GREEN_0_SUB;
+		return ETexture.SOLDIER_RED_0_SUB;
 	}
 
 

@@ -201,7 +201,7 @@ public class Game implements ApplicationListener {
 		gameClock = new Clock();
 		
 		// TODO remove me for release
-		createDebugFont();
+		if (DebugMode.activated) createDebugFont();
 
 		// Start the game.
 		running = true;
@@ -224,7 +224,7 @@ public class Game implements ApplicationListener {
 
 		//TODO remove me for release
 		// Render debug.
-		renderDebug();
+		if (DebugMode.activated) renderDebug();
 
 		// Process layer stack queue.
 		// Must be done at once after the update and

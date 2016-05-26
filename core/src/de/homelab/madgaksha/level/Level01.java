@@ -3,6 +3,8 @@ package de.homelab.madgaksha.level;
 import com.badlogic.gdx.maps.MapProperties;
 
 import de.homelab.madgaksha.GlobalBag;
+import de.homelab.madgaksha.cutscenesystem.FaceTextbox;
+import de.homelab.madgaksha.cutscenesystem.Textbox;
 import de.homelab.madgaksha.layer.TextboxLayer;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EBitmapFont;
@@ -10,9 +12,7 @@ import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ETiledMap;
-import de.homelab.madgaksha.resourcecache.IResource;
-import de.homelab.madgaksha.textboxsystem.FaceTextbox;
-import de.homelab.madgaksha.textboxsystem.Textbox;;
+import de.homelab.madgaksha.resourcecache.IResource;;
 
 /**
  * Only for testing purposes.

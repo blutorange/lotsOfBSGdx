@@ -21,13 +21,12 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
-import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.Method;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
-import de.homelab.madgaksha.entityengine.entity.EntityCallback;
-import de.homelab.madgaksha.entityengine.entity.EntityEnemy;
-import de.homelab.madgaksha.entityengine.entity.EntityParticleEffect;
+import de.homelab.madgaksha.entityengine.entity.CallbackMaker;
+import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
+import de.homelab.madgaksha.entityengine.entity.ParticleEffectMaker;
 import de.homelab.madgaksha.enums.Gravity;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
@@ -62,7 +61,7 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
  * <br>
  * Represents an enemy that can engage in combat with the player.
  * <ul>
- * <li>species: The type of a enemy. There must exist a corresponding subclass of {@link EntityEnemy} with the name <code>Enemy&lt;species&gt;</code>.</li>
+ * <li>species: The type of a enemy. There must exist a corresponding subclass of {@link EnemyMaker} with the name <code>Enemy&lt;species&gt;</code>.</li>
  * <li>spawn: How and when the enemy should spawn. Possible values are:
  *  <ul>
  *   <li>startup: When the map has finished loading.
@@ -392,10 +391,10 @@ public class MapData {
 		initY *= (int)getHeightTiles();
 		
 		// Get species class and its constructor with the appropriate constructor.
-		Constructor enemyConstructor;
+		Method enemySetupMethod;
 		try {
-			Class<? extends EntityEnemy> enemyClass = ClassReflection.forName(ENEMY_PACKAGE + "Enemy" + species);
-			enemyConstructor = ClassReflection.getConstructor(enemyClass, Shape2D.class, ETrigger.class, Vector2.class, Float.class);
+			Class<? extends EnemyMaker> enemyClass = ClassReflection.forName(ENEMY_PACKAGE + species + "Maker");
+			enemySetupMethod = ClassReflection.getDeclaredMethod(enemyClass, "setup", Entity.class, Shape2D.class, ETrigger.class, Vector2.class, Float.class);
 		}
 		catch (Exception e) {
 			LOG.error("no such enemy class with appropriate constructor: " + ENEMY_PACKAGE + "Enemy" + species, e);
@@ -413,15 +412,14 @@ public class MapData {
 		}
 		
 		// Try to initialize a new enemy of the given class.
-		Entity enemy;
+		
 		try {
-			enemy = (Entity)enemyConstructor.newInstance(shape, spawnEnum, new Vector2(initX,initY), initDir);
+			Entity entity = new Entity();
+			return (Entity) enemySetupMethod.invoke(entity, spawnEnum, new Vector2(initX,initY), initDir);
 		} catch (Exception e) {
 			LOG.error("failed to initialize enemy instance: " + species, e);
 			return null;
 		}
-		
-		return enemy;
 	}
 	
 	private Entity processObjectCallback(MapProperties props, Shape2D shape) {		
@@ -462,7 +460,9 @@ public class MapData {
 		}
 				
 		// Create new object and return it.
-		return new EntityCallback(shape, triggerEnum, method, props, loop, interval);
+		final Entity e = new Entity();
+		CallbackMaker.getInstance().setup(e, shape, triggerEnum, method, props, loop, interval);
+		return e;
 	}
 
 	private Entity processObjectParticleEffect(MapProperties props, Shape2D shape) {
@@ -480,7 +480,11 @@ public class MapData {
 			LOG.error("no such particle effect: " + name, e);
 			return null;
 		}
-		return new EntityParticleEffect(shape, particleEffect, spin);
+		
+		// Create a new entity for the particle effect.
+		final Entity entity = new Entity();
+		ParticleEffectMaker.getInstance().setup(entity, shape, particleEffect, spin);
+		return entity;
 	}
 
 	public Vector2 getBaseDirection() {

@@ -26,7 +26,8 @@ public class DefaultPriority {
 	public final static int newtonianForceSystem = 7;
 	public final static int movementSystem = 8;
 	public final static int collisionSystem = 9;
-	
+
+	public final static int damageSystem = 10;
 	public final static int postEffectSystem = 11;	
 
 	// drawing

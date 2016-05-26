@@ -63,6 +63,8 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		vc.x = (vc.x+f*v.x)*ic.frictionFactor;
 		vc.y = (vc.y+f*v.y)*ic.frictionFactor;
 		
+		// Check if we need to switch the targetted enemy and change
+		// the info displayed on the status screen.
 		if (cameraTrackingComponent.focusPoints.size() > 1) {
 			if (Gdx.input.isKeyJustPressed(ic.enemySwitcherPrev)) {
 				soundPlayer.play(ESound.ENEMY_SWITCH);

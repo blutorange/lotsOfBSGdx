@@ -2,8 +2,8 @@ package de.homelab.madgaksha.entityengine.entity;
 
 import com.badlogic.ashley.core.Entity;
 
+import de.homelab.madgaksha.entityengine.ETrigger;
+
 public interface ITrigger {
-	public void callbackStartup();
-	public void callbackTouch(Entity e);
-	public void callbackScreen();
+	public void callbackTrigger(Entity e, ETrigger t);
 }

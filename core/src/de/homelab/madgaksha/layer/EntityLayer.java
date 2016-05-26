@@ -14,6 +14,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 
+import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
 import de.homelab.madgaksha.entityengine.entity.MakerUtils;
@@ -87,6 +88,7 @@ public class EntityLayer extends ALayer {
 		// We need to remove entities while an entity system is being
 		// updated, otherwise removal won't be queued and not all
 		// entities will be processed.
+		// Call all callback entities set to callback on startup.
 		final List<Entity> myList = new ArrayList<Entity>(20);
 		@SuppressWarnings("unchecked")
 		final Family family = Family.all(TriggerStartupComponent.class).get();
@@ -95,7 +97,7 @@ public class EntityLayer extends ALayer {
 		}
 		for (Entity e : myList) {
 			TriggerStartupComponent tsc = Mapper.triggerStartupComponent.get(e);
-			tsc.triggerAcceptingObject.callbackStartup();
+			tsc.triggerAcceptingObject.callbackTrigger(e, ETrigger.STARTUP);
 			e.remove(TriggerStartupComponent.class);
 		}
 	}
@@ -147,14 +149,6 @@ public class EntityLayer extends ALayer {
 		
 		gameEntityEngine.addEntity(playerEntity);
 		gameEntityEngine.addEntity(myCamera);
-		
-//		Entity myProjectile = new Entity();
-//		myProjectile.add(new PositionComponent(1920.0f/4.0f,500.0f));
-//		myProjectile.add(new VelocityComponent(60.0f,0.0f));
-//		myProjectile.add(new TrajectoryComponent());
-//		myProjectile.add(new ForceComponent());
-//		myProjectile.add(new SpriteComponent(ETexture.TEST_PROJECTILE));
-//		gameEntityEngine.addEntity(myProjectile);
 	}
 
 	@Override

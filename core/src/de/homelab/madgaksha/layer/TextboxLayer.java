@@ -7,9 +7,9 @@ import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 import com.badlogic.gdx.math.MathUtils;
 
 import de.homelab.madgaksha.KeyMap;
+import de.homelab.madgaksha.cutscenesystem.Textbox;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ESound;
-import de.homelab.madgaksha.textboxsystem.Textbox;
 
 /**
  * Takes care of handling a sequence of textboxes. Useful for short story sequences.

@@ -25,8 +25,9 @@ public final class ResourcePool {
 	public static PooledEffect obtainParticleEffect(EParticleEffect effect) {
 		return particleEffectPool.get(effect).obtain();
 	}
-	public static void freeParticleEffect(EParticleEffect a, PooledEffect b) {
-		particleEffectPool.get(a).free(b);
+	public static void freeParticleEffect(PooledEffect pooledEffect) {
+		pooledEffect.free();
+		//particleEffectPool.get(eParticleEffect).free(pooledEffect);
 	}
 	public static void clearParticleEffect(EParticleEffect a) {
 		particleEffectPool.get(a).clear();

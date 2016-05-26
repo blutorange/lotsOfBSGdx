@@ -9,6 +9,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 
 import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
@@ -215,7 +216,7 @@ public class CollisionSystem extends EntitySystem {
 					if (bbcAlice.minY + pcAlice.y < bbcBob.maxY + pcBob.y) {
 						// test exact shape if asked to
 						if (scAlice == null || scBob == null || GeoUtil.isCollision(scAlice.shape, scBob.shape, scAlice.shapeType, scBob.shapeType, pcAlice, pcBob)) {
-							ttc.triggerAcceptingObject.callbackTouch(bob);
+							ttc.triggerAcceptingObject.callbackTrigger(bob, ETrigger.TOUCH);
 							rtc.triggerReceivingObject.callbackTouched(alice);
 						}
 					}
@@ -238,11 +239,11 @@ public class CollisionSystem extends EntitySystem {
 						//TODO
 						if (tsc.preciseCheck && sc != null) {
 							if (GeoUtil.isCollision(GlobalBag.visibleWorld, sc.shape, EShapeType.POLYGON, sc.shapeType, nullPositionComponent, pc)) {
-								tsc.triggerAcceptingObject.callbackScreen();	
+								tsc.triggerAcceptingObject.callbackTrigger(odo, ETrigger.SCREEN);	
 							}
 						}
 						else
-							tsc.triggerAcceptingObject.callbackScreen();
+							tsc.triggerAcceptingObject.callbackTrigger(odo, ETrigger.SCREEN);
 					}
 				}
 			}

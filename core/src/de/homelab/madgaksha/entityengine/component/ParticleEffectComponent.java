@@ -31,6 +31,7 @@ public class ParticleEffectComponent implements Component, Poolable {
 	
 	@Override
 	public void reset() {
+		if (particleEffect != null) ResourcePool.freeParticleEffect(particleEffect);
 		particleEffect = DEFAULT_PARTICLE_EFFECT;
 	}
 

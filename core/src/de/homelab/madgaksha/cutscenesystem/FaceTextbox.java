@@ -1,4 +1,4 @@
-package de.homelab.madgaksha.textboxsystem;
+package de.homelab.madgaksha.cutscenesystem;
 
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;

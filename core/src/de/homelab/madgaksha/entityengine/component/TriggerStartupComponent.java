@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.entity.ITrigger;
 
 /**
@@ -14,13 +15,13 @@ import de.homelab.madgaksha.entityengine.entity.ITrigger;
  */
 public class TriggerStartupComponent implements Component, Poolable {
 	private final static ITrigger DEFAULT_TRIGGER_ACCEPTING_OBJECT = new ITrigger() {
-		@Override public void callbackTouch(Entity e) {}		
-		@Override public void callbackStartup() {}
-		@Override public void callbackScreen() {}
+		@Override
+		public void callbackTrigger(Entity e, ETrigger t) {
+		}
 	};
-	
-	public ITrigger triggerAcceptingObject = DEFAULT_TRIGGER_ACCEPTING_OBJECT;
 
+	public ITrigger triggerAcceptingObject = DEFAULT_TRIGGER_ACCEPTING_OBJECT;
+	
 	public TriggerStartupComponent() {
 	}
 	

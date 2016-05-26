@@ -1,10 +1,12 @@
 package de.homelab.madgaksha.entityengine.entity;
 
+import com.badlogic.ashley.core.Entity;
+
 /** 
  * For entities that can alter their position, speed, sprite etc.
  * @author madgaksha
  *
  */
-public interface IBehaviour {
-	public void behave();
+public interface IBehaving {
+	public void behave(Entity e);
 }

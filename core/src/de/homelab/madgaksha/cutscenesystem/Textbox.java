@@ -1,7 +1,6 @@
-package de.homelab.madgaksha.textboxsystem;
+package de.homelab.madgaksha.cutscenesystem;
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
-import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
