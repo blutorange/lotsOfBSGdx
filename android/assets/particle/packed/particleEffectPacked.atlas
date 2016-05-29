@@ -1,47 +1,68 @@
 
 particleEffectPacked.png
-size: 64,64
+size: 256,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+buddhaEyesRed
+  rotate: false
+  xy: 2, 20
+  size: 99, 101
+  orig: 99, 101
+  offset: 0, 0
+  index: -1
+buddhaStarYellow
+  rotate: false
+  xy: 103, 57
+  size: 66, 64
+  orig: 66, 64
+  offset: 0, 0
+  index: -1
 greenBar
   rotate: false
-  xy: 20, 9
+  xy: 171, 73
   size: 2, 16
   orig: 2, 16
   offset: 0, 0
   index: -1
 novaBall
   rotate: false
-  xy: 34, 28
+  xy: 137, 26
   size: 28, 29
   orig: 28, 29
   offset: 0, 0
   index: -1
+simpleStar
+  rotate: false
+  xy: 103, 23
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 smallFire
   rotate: false
-  xy: 2, 9
+  xy: 2, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 testProjectile
   rotate: false
-  xy: 2, 27
+  xy: 171, 91
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 whiteBarV5
   rotate: false
-  xy: 2, 2
+  xy: 203, 116
   size: 1, 5
   orig: 1, 5
   offset: 0, 0
   index: -1
 whitePixel
   rotate: false
-  xy: 24, 24
+  xy: 103, 20
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

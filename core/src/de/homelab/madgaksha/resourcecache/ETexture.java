@@ -31,6 +31,7 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	HIT_CIRCLE_YELLOW(ETextureAtlas.MISC, "hitCircleYellow"),
 	BATTLE_STIGMA_GREEN(ETextureAtlas.MISC, "battleStigmaGreen", 0.5f),
 	TARGET_SELECT_CIRCLE_WHEEL(ETextureAtlas.MISC, "targetSelectCircleWheel"),
+	CUTIN_BATTLE_MODE_ACTIVATE("texture/battleModeActivate.png"),
 	
 	// ==================
 	//      ESTELLE
@@ -38,6 +39,7 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	ESTELLE_RUNNING("sprite/estelle00001.png"),
 	ESTELLE_STANDING("sprite/estelle00100.png"),
 	ESTELLE_SWINGING("sprite/estelle00107.png"),
+	ESTELLE_ON_KNEES("sprite/estelle00104.png"),
 	
 	FACE_ESTELLE_01("texture/face/estelle01.png"),
 

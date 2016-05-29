@@ -5,7 +5,6 @@ import java.util.EnumMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import de.homelab.madgaksha.logging.Logger;
 
@@ -21,6 +20,7 @@ public enum EMusic implements IResource<EMusic,Music> {
 	ROCK_ON_THE_ROAD("music/rockontheroad.adx"),
 	SOPHISTICATED_FIGHT("music/sophisticatedfight.adx"),
 	SILVER_WILL("music/silverwill.adx"),
+	FADING_STAR("music/fadingstar.adx"),
 	
 	// ===================
 	//       ESTELLE

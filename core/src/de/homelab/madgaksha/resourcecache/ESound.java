@@ -14,6 +14,7 @@ public enum ESound implements IResource<ESound,Sound> {
 	ENEMY_SWITCH("sound/ed6se049.wav"),
 	BATTLE_STIGMA_APPEAR("sound/ed6se543.wav"),
 	BATTLE_STIGMA_ABSORB("sound/ed6se526.wav"),
+	PLAYER_EXPLODE_ON_DEATH("sound/explodePlayer.wav"),
 	
 	// ===================
 	//        VOICE

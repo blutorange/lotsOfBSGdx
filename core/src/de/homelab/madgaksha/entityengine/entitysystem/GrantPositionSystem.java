@@ -29,6 +29,11 @@ public class GrantPositionSystem extends IteratingSystem {
 		pc.x = spc.grantStrategy.compromise(pc.x, spc.x, deltaTime);
 		pc.y = spc.grantStrategy.compromise(pc.y, spc.y, deltaTime);
 		pc.z = spc.grantStrategy.compromise(pc.z, spc.z, deltaTime);
+		if (spc.grantOffset) {
+			pc.offsetX = spc.grantStrategy.compromise(pc.offsetX, spc.offsetX, deltaTime);
+			pc.offsetY = spc.grantStrategy.compromise(pc.offsetY, spc.offsetY, deltaTime);
+			pc.offsetZ = spc.grantStrategy.compromise(pc.offsetZ, spc.offsetZ, deltaTime);
+		}
 	}
 
 }

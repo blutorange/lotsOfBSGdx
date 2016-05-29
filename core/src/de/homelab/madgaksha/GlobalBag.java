@@ -68,6 +68,7 @@ public final class GlobalBag {
 	public static Entity playerHitCircleEntity;
 	public static Entity playerBattleStigmaEntity;
 	public static Entity enemyTargetCrossEntity;
+	public static Entity cameraEntity;
 		
 	/** Entity engine ASHLEY for the main game.*/
 	public static PooledEngine gameEntityEngine;

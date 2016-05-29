@@ -21,6 +21,11 @@ public class Point implements Shape2D {
 		x = r.x + r.width * 0.5f;
 		y = r.y + r.height * 0.5f;
 	}
+	
+	public Point(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
 
 	@Override
 	public boolean contains(Vector2 point) {

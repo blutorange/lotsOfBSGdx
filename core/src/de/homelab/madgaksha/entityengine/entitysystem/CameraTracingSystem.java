@@ -57,7 +57,6 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		final ShouldRotationComponent src = Mapper.shouldRotationComponent.get(entity);
 		final ManyTrackingComponent mtc = Mapper.manyTrackingComponent.get(entity);
 		final PositionComponent playerPoint = Mapper.positionComponent.get(mtc.playerPoint);
-
 		if (playerPoint == null) return;
 
 		// Determine the direction the player
@@ -198,6 +197,5 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		// world coordinate system.
 		spc.x = base.x*cx + dir.x*cy + playerPoint.x;
 		spc.y = base.y*cx + dir.y*cy + playerPoint.y;
-
 	}
 }

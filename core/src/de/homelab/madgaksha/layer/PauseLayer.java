@@ -31,8 +31,10 @@ public class PauseLayer extends ALayer {
 	private boolean anyButtonPressed = false;
 	private boolean exitButtonJustPressed = false;
 	private float exitPressedTime = 0.0f;
+	private boolean blockUpdate;
 
-	public PauseLayer() throws IOException {
+	public PauseLayer(boolean blockUpdate) throws IOException {
+		this.blockUpdate = blockUpdate;
 		background = ResourceCache.getNinePatch(ENinePatch.PAUSE_LAYER_OVERLAY);
 		if (background == null)
 			throw new IOException("failed to load resources");
@@ -147,10 +149,14 @@ public class PauseLayer extends ALayer {
 
 	@Override
 	public boolean isBlockUpdate() {
-		return true;
+		return blockUpdate;
 	}
 	
 	public void disableInputThisFrame() {
 		allowInput = false;
+	}
+
+	public void setBlockUpdate(boolean block) {
+		this.blockUpdate = block;		
 	}
 }

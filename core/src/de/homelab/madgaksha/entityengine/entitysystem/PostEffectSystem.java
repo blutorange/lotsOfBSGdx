@@ -13,15 +13,16 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.AlphaComponent;
 import de.homelab.madgaksha.entityengine.component.ColorComponent;
 import de.homelab.madgaksha.entityengine.component.ColorFlashEffectComponent;
+import de.homelab.madgaksha.entityengine.component.FadeEffectComponent;
 import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
-import de.homelab.madgaksha.entityengine.component.StickyEffectComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.logging.Logger;
@@ -32,13 +33,13 @@ public class PostEffectSystem extends EntitySystem {
 
 	private Family familyLeanEffect;
 	private Family familyHoverEffect;
-	private Family familyStickyEffect;
 	private Family familyColorFlashEffect;
+	private Family familyFadeEffect;
 	
 	private ImmutableArray<Entity> entitiesLeanEffect;
 	private ImmutableArray<Entity> entitiesHoverEffect;
-	private ImmutableArray<Entity> entitiesStickyEffect;
 	private ImmutableArray<Entity> entitiesColorFlashEffect;
+	private ImmutableArray<Entity> entitiesFadeEffect;
 
 	private final static Color color = new Color();
 	private final Vector3 upVector;
@@ -54,8 +55,8 @@ public class PostEffectSystem extends EntitySystem {
 		this.upVector = viewportGame.getCamera().up;
 		this.familyLeanEffect = Family.all(ShouldRotationComponent.class, ShouldScaleComponent.class, LeanEffectComponent.class, VelocityComponent.class).get();
 		this.familyHoverEffect = Family.all(TemporalComponent.class, PositionComponent.class, HoverEffectComponent.class).get();
-		this.familyStickyEffect = Family.all(PositionComponent.class, StickyEffectComponent.class).exclude(InactiveComponent.class).get();
-		this.familyColorFlashEffect = Family.all(ColorComponent.class, ColorFlashEffectComponent.class).exclude(InactiveComponent.class).get();
+		this.familyColorFlashEffect = Family.all(TemporalComponent.class, ColorComponent.class, ColorFlashEffectComponent.class).exclude(InactiveComponent.class).get();
+		this.familyFadeEffect = Family.all(AlphaComponent.class, FadeEffectComponent.class,TemporalComponent.class).exclude(InactiveComponent.class).get();
 	}
 
 	@Override
@@ -96,33 +97,15 @@ public class PostEffectSystem extends EntitySystem {
 			pc.offsetY = hec.amplitude*upVector.y*a;	
 		}
 		
-		// Sticky effect.
-		for (int i = 0; i < entitiesStickyEffect.size(); ++i) {
-			final Entity entity = entitiesStickyEffect.get(i);
-			final PositionComponent pc = Mapper.positionComponent.get(entity);
-			final StickyEffectComponent sec = Mapper.stickyEffectComponent.get(entity);
-			if (sec.offsetRelativeToCamera) {
-				pc.x = sec.stickToPositionComponent.x + sec.offsetY * upVector.x + sec.offsetX * upVector.y;
-				pc.y = sec.stickToPositionComponent.y + sec.offsetY * upVector.y - sec.offsetX * upVector.x;
-			}
-			else {
-				pc.x = sec.stickToPositionComponent.x + sec.offsetX;
-				pc.y = sec.stickToPositionComponent.y + sec.offsetY;
-			}
-			if (!sec.ignoreTrackOffset) {
-				pc.offsetX = sec.stickToPositionComponent.offsetX;
-				pc.offsetY = sec.stickToPositionComponent.offsetY;
-			}
-		}
-		
 		// Color flash effect.
 		for (int i = 0; i < entitiesColorFlashEffect.size(); ++i) {
 			final Entity entity = entitiesColorFlashEffect.get(i);
-			ColorFlashEffectComponent cfec = Mapper.colorFlashEffectComponent.get(entity);
-			ColorComponent cc = Mapper.colorComponent.get(entity);
+			final TemporalComponent tc = Mapper.temporalComponent.get(entity);
+			final ColorFlashEffectComponent cfec = Mapper.colorFlashEffectComponent.get(entity);
+			final ColorComponent cc = Mapper.colorComponent.get(entity);
 			color.set(cfec.colorStart).lerp(cfec.colorEnd, cfec.interpolator.apply(cfec.directionForward ? cfec.totalTime / cfec.duration : (1.0f-cfec.totalTime/cfec.duration)));
 			cc.color.set(color);
-			cfec.totalTime += deltaTime;
+			cfec.totalTime += tc.deltaTime;
 			if (cfec.totalTime >= cfec.duration) {
 				cfec.directionForward = !cfec.directionForward;
 				++cfec.totalLoops;
@@ -134,6 +117,21 @@ public class PostEffectSystem extends EntitySystem {
 				}
 			}
 		}
+		
+		// Fade effect.
+		for (int i = 0; i < entitiesFadeEffect.size(); ++i) {
+			final Entity entity = entitiesFadeEffect.get(i);
+			final FadeEffectComponent fec = Mapper.fadeEffectComponent.get(entity);
+			final TemporalComponent tc = Mapper.temporalComponent.get(entity);
+			final AlphaComponent ac = Mapper.alphaComponent.get(entity);
+			fec.totalTime += tc.deltaTime;
+			final float ratio = MathUtils.clamp(fec.totalTime / fec.duration, 0.0f, 1.0f);
+			ac.alpha = fec.interpolation.apply(fec.start, fec.end, ratio);
+			if (fec.totalTime >= fec.duration) {
+				if (fec.callback != null) fec.callback.run(entity, fec.customData);
+				entity.remove(FadeEffectComponent.class);
+			}
+		}
 
 	}
 
@@ -141,15 +139,15 @@ public class PostEffectSystem extends EntitySystem {
 	public void addedToEngine(Engine engine) {
 		entitiesLeanEffect = engine.getEntitiesFor(familyLeanEffect);
 		entitiesHoverEffect = engine.getEntitiesFor(familyHoverEffect);
-		entitiesStickyEffect = engine.getEntitiesFor(familyStickyEffect);
 		entitiesColorFlashEffect = engine.getEntitiesFor(familyColorFlashEffect);
+		entitiesFadeEffect = engine.getEntitiesFor(familyFadeEffect);
 	}
 
 	@Override
 	public void removedFromEngine(Engine engine) {
 		entitiesLeanEffect = null;
 		entitiesHoverEffect = null;
-		entitiesStickyEffect = null;
 		entitiesColorFlashEffect = null;
+		entitiesFadeEffect = null;
 	}
 }

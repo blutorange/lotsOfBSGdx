@@ -11,27 +11,31 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  *
  */
 public class SiblingComponent implements Component, Poolable {
-	private final static Entity DEFAULT_NEXT_CHILD = null;
-	private final static Entity DEFAULT_PREV_CHILD = null;
-
-	public Entity nextChild = DEFAULT_NEXT_CHILD;
-	public Entity prevChild = DEFAULT_PREV_CHILD;
-
+	private final static SiblingComponent DEFAULT_NEXT_SIBLING_COMPONENT = null;
+	private final static SiblingComponent DEFAULT_PREV_SIBLING_COMPONENT = null;
+	private final static Entity DEFAULT_ME = null;
+	
+	public SiblingComponent nextSiblingComponent = DEFAULT_NEXT_SIBLING_COMPONENT;
+	public SiblingComponent prevSiblingComponent = DEFAULT_PREV_SIBLING_COMPONENT;
+	public Entity me = DEFAULT_ME;
+	
 	public SiblingComponent() {
 	}
 
-	public SiblingComponent(Entity prevChild, Entity nextChild) {
-		setup(prevChild, nextChild);
+	public SiblingComponent(SiblingComponent prevChild, SiblingComponent nextChild, Entity me) {
+		setup(prevChild, nextChild, me);
 	}
 
-	public void setup(Entity prevChild, Entity nextChild) {
-		this.prevChild = prevChild;
-		this.nextChild = nextChild;
+	public void setup(SiblingComponent prevSiblingComponent, SiblingComponent nextSiblingComponent, Entity me) {
+		this.prevSiblingComponent = prevSiblingComponent;
+		this.nextSiblingComponent = nextSiblingComponent;
+		this.me = me;
 	}
 
 	@Override
 	public void reset() {
-		prevChild = DEFAULT_PREV_CHILD;
-		nextChild = DEFAULT_NEXT_CHILD;
+		prevSiblingComponent = DEFAULT_PREV_SIBLING_COMPONENT;
+		nextSiblingComponent = DEFAULT_NEXT_SIBLING_COMPONENT;
+		me = DEFAULT_ME;
 	}
 }

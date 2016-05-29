@@ -40,6 +40,12 @@ public class VoicePlayer extends AAudioPlayer {
 		return true;
 	}
 
+	public void playUnconditionally(EMusic sound) {
+		if (currentClip != null) currentClip.stop();
+		currentClip = null;
+		play(sound, 1.0f, 0.0f);
+	}
+
 	public void stop() {
 		if (currentClip != null) currentClip.stop();
 	}	
@@ -52,4 +58,5 @@ public class VoicePlayer extends AAudioPlayer {
 		stop();
 		super.dispose();
 	}
+
 }

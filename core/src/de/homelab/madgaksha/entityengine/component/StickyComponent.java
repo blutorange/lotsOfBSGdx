@@ -11,7 +11,7 @@ import de.homelab.madgaksha.entityengine.Mapper;
  * @author madgaksha
  *
  */
-public class StickyEffectComponent implements Component, Poolable {
+public class StickyComponent implements Component, Poolable {
 
 	private final static float DEFAULT_OFFSET_X = 0.0f;
 	private final static float DEFAULT_OFFSET_Y = 0.0f;
@@ -27,25 +27,25 @@ public class StickyEffectComponent implements Component, Poolable {
 	public boolean offsetRelativeToCamera = DEFAULT_OFFSET_RELATIVE_TO_CAMERA;
 
 
-	public StickyEffectComponent(){
+	public StickyComponent(){
 	}
-	public StickyEffectComponent(PositionComponent pc) {
+	public StickyComponent(PositionComponent pc) {
 		setup(pc);
 	}
-	public StickyEffectComponent(PositionComponent pc, boolean ignoreOffset) {
+	public StickyComponent(PositionComponent pc, boolean ignoreOffset) {
 		setup(pc, ignoreOffset);
 	}
-	public StickyEffectComponent(Entity stickTo, float offsetX, float offsetY) {
+	public StickyComponent(Entity stickTo, float offsetX, float offsetY) {
 		setup(stickTo, offsetX, offsetY);
 	}
-	public StickyEffectComponent(Entity stickTo, float offsetX, float offsetY, boolean ignoreOffset) {
+	public StickyComponent(Entity stickTo, float offsetX, float offsetY, boolean ignoreOffset) {
 		setup(stickTo, offsetX, offsetY, ignoreOffset);
 	}
-	public StickyEffectComponent(Entity stickTo, float offsetX, float offsetY, boolean ignoreOffset, boolean offsetRelativeToCamera) {
+	public StickyComponent(Entity stickTo, float offsetX, float offsetY, boolean ignoreOffset, boolean offsetRelativeToCamera) {
 		setup(stickTo, offsetX, offsetY, ignoreOffset, offsetRelativeToCamera);
 	}
 	
-	public StickyEffectComponent(Entity stickTo) {
+	public StickyComponent(Entity stickTo) {
 		setup(stickTo);
 	}
 

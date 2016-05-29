@@ -49,6 +49,8 @@ import de.homelab.madgaksha.layer.PauseLayer;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcepool.ResourcePool;
+import de.homelab.madgaksha.shader.CustomShaderProgram;
+import de.homelab.madgaksha.shader.FragmentShader;
 import de.homelab.madgaksha.util.Clock;
 
 public class Game implements ApplicationListener {
@@ -97,6 +99,9 @@ public class Game implements ApplicationListener {
 	private TextureRegion backgroundImage = null;
 	private Rectangle backgroundImageRectangle = new Rectangle();
 
+	/** Custom shaders for the game. */
+	private CustomShaderProgram customShaderProgramBatchGame = null;
+	
 	/**
 	 * @param params
 	 *            Screen size, fps etc. that were requested.
@@ -135,7 +140,7 @@ public class Game implements ApplicationListener {
 
 		// Simple pause menu screen.
 		try {
-			pauseLayer = new PauseLayer();
+			pauseLayer = new PauseLayer(true);
 		} catch (IOException e) {
 			LOG.debug("failed to initialize pause layer", e);
 			exitRequested = true;
@@ -172,8 +177,7 @@ public class Game implements ApplicationListener {
 		// Create batches.
 		batchGame = new SpriteBatch();
 		batchPixel = new SpriteBatch();
-		shapeRenderer = new ShapeRenderer();
-		
+		shapeRenderer = new ShapeRenderer();		
 		
 		// Initialize the entity engine.
 		gameEntityEngine = new PooledEngine(level.getEntityPoolInitialSize(),level.getEntityPoolPoolMaxSize(), level.getComponentPoolInitialSize(), level.getComponentPoolMaxSize());
@@ -297,11 +301,22 @@ public class Game implements ApplicationListener {
 	@Override
 	public void pause() {
 		LOG.debug("pausing game");
+		if (running) {
+			pushLayer(pauseLayer);
+			pauseLayer.setBlockUpdate(true);
+		}
+		running = false;
+		MusicPlayer.getInstance().pause();	
+	}
+	
+	public void pause(boolean block) {
+		LOG.debug("pausing game");
+		pauseLayer.setBlockUpdate(block);
 		if (running) pushLayer(pauseLayer);
 		running = false;
 		MusicPlayer.getInstance().pause();	
 	}
-
+	
 	@Override
 	public void resume() {
 		// game should stay paused and resume only when pressing a button
@@ -370,6 +385,10 @@ public class Game implements ApplicationListener {
 		catch (GdxRuntimeException e) {
 			LOG.error("failed to empty temporary directory tempadx", e);
 		}
+		
+		// Dispose custom shaders.
+		if (customShaderProgramBatchGame != null) customShaderProgramBatchGame.dispose();
+
 	}
 
 	private void renderBackground() {
@@ -433,7 +452,7 @@ public class Game implements ApplicationListener {
 	private void renderDebug() {
 		viewportPixel.apply(false);
 		batchPixel.begin();
-		debugFont.draw(batchPixel, "fps: " + (int) (1.0f / Gdx.graphics.getRawDeltaTime()), 0.0f, viewportGame.getScreenHeight());
+		debugFont.draw(batchPixel, "fps: " + (int) (1.0f / Gdx.graphics.getDeltaTime()), 0.0f, viewportGame.getScreenHeight());
 		debugFont.draw(batchPixel, "entities: " + gameEntityEngine.getEntities().size(), 0.0f, viewportGame.getScreenHeight()-30.0f);
 		batchPixel.end();
 	}
@@ -491,6 +510,16 @@ public class Game implements ApplicationListener {
 	 */
 	public void pushLayer(ALayer layer) {
 		layerStackPushQueue.add(layer);
+	}
+
+	public void setFragmentShaderBatchGame(FragmentShader fs) {
+		if (customShaderProgramBatchGame != null) customShaderProgramBatchGame.dispose();
+		customShaderProgramBatchGame = new CustomShaderProgram(fs);
+		customShaderProgramBatchGame.apply(batchGame);
+	}
+	
+	public void setGlobalTimeScale(float ts) {
+		timeScalingFactor = Math.max(0.0f, ts);
 	}
 
 

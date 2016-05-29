@@ -20,6 +20,7 @@ public class PEstelle extends APlayer {
 	protected IResource<? extends Enum<?>,?>[] requestedRequiredResources() {
 		return new IResource[] {
 				EAnimationList.ESTELLE_STANDING,
+				ETexture.ESTELLE_ON_KNEES,
 				ETexture.OVAL_SHADOW,
 				EMusic.ESTELLE_YOSOMI_SITARA_BUTTOBASU_WAYO,
 				EMusic.ESTELLE_GYAA,
@@ -157,5 +158,10 @@ public class PEstelle extends APlayer {
 	@Override
 	protected Color requestedBattleStigmaColorWhenHit() {
 		return Color.RED;
+	}
+
+	@Override
+	protected ETexture requestedDeathSprite() {
+		return ETexture.ESTELLE_ON_KNEES;
 	}
 }

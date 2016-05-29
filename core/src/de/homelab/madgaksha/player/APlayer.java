@@ -19,6 +19,7 @@ import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
+import de.homelab.madgaksha.resourcepool.EParticleEffect;
 
 public abstract class APlayer {
 
@@ -57,6 +58,7 @@ public abstract class APlayer {
 	 */
 	private final ETexture hitCircleTexture;
 	private final ETexture battleStigmaTexture;
+	private final ETexture deathSprite;
 	
 	private final Color battleStigmaColorWhenHit;
 	
@@ -64,6 +66,8 @@ public abstract class APlayer {
 	private final EMusic voiceOnHeavyDamage;
 	private final EMusic voiceOnLightDamage;
 	private final EMusic voiceOnDeath;
+	
+	private final EParticleEffect particleEffectOnDeath;
 	
 	private final EnumSet<EWeapon> supportedWeaponSet = EnumSet.of(EWeapon.NONE); 
 	private final EnumMap<EWeapon,AWeapon> supportedWeaponMap = new EnumMap<EWeapon,AWeapon>(EWeapon.class);
@@ -104,6 +108,8 @@ public abstract class APlayer {
 		this.voiceOnHeavyDamage = requestedVoiceOnHeavyDamage();
 		this.voiceOnDeath = requestedVoiceOnDeath();
 		this.battleStigmaColorWhenHit = requestedBattleStigmaColorWhenHit();
+		this.particleEffectOnDeath = requestedParticleEffectOnDeath();
+		this.deathSprite = requestedDeathSprite();
 		
 		// Make sure subclasses cannot remove EWeapon.NONE
 		EWeapon[] ew = requestedSupportedWeapons();
@@ -199,6 +205,18 @@ public abstract class APlayer {
 	/** @return Voice played when dying. */
 	protected abstract EMusic requestedVoiceOnDeath();
 	
+	/** 
+	 * Can be overriden for custom effects.
+	 * @return The particle effect played when the player dies.
+	 */
+	protected EParticleEffect requestedParticleEffectOnDeath() {
+		return EParticleEffect.DEFAULT_PLAYER_DEATH;
+	};
+	
+	
+	/** @return Sprite when player is dead. */
+	protected abstract ETexture requestedDeathSprite();
+	
 	/**
 	 * Must return a list of all resources that the level requires. They will
 	 * then be loaded into RAM before the level is started.
@@ -210,7 +228,7 @@ public abstract class APlayer {
 	// ====================================
 	//          Implementations
 	// ====================================
-	
+		
 	public boolean loadToRam() {
 		if (!ResourceCache.loadToRam(requiredResources)) return false;
 		for (EWeapon ew : supportedWeaponSet) {
@@ -362,6 +380,16 @@ public abstract class APlayer {
 	}
 	public EMusic getVoiceOnDeath() {
 		return voiceOnDeath;
+	}
+
+
+	public EParticleEffect getParticleEffectOnDeath() {
+		return particleEffectOnDeath;
+	}
+
+
+	public ETexture getDeathSprite() {
+		return deathSprite;
 	}
 
 }

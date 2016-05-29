@@ -10,7 +10,6 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Polygon;
@@ -18,43 +17,27 @@ import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 
-import de.homelab.madgaksha.audiosystem.VoicePlayer;
 import de.homelab.madgaksha.entityengine.ETrigger;
-import de.homelab.madgaksha.entityengine.component.ABoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.AngularVelocityComponent;
-import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.CameraFocusComponent;
-import de.homelab.madgaksha.entityengine.component.ColorComponent;
-import de.homelab.madgaksha.entityengine.component.DamageQueueComponent;
-import de.homelab.madgaksha.entityengine.component.DirectionComponent;
-import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
-import de.homelab.madgaksha.entityengine.component.InputDesktopComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
-import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
-import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ReceiveTouchComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
-import de.homelab.madgaksha.entityengine.component.ShadowComponent;
-import de.homelab.madgaksha.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
-import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
-import de.homelab.madgaksha.entityengine.component.StickyEffectComponent;
+import de.homelab.madgaksha.entityengine.component.StickyComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
+import de.homelab.madgaksha.entityengine.component.TimeScaleComponent;
+import de.homelab.madgaksha.entityengine.component.TimedCallbackComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerScreenComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
-import de.homelab.madgaksha.entityengine.component.TriggerTouchComponent;
-import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.ViewportComponent;
-import de.homelab.madgaksha.entityengine.component.VoiceComponent;
 import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
 import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxMapComponent;
 import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxRenderComponent;
@@ -63,14 +46,13 @@ import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup02
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup03Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup04Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup05Component;
-import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup01Component;
+import de.homelab.madgaksha.entityengine.component.zorder.ZOrder0Component;
 import de.homelab.madgaksha.enums.ECollisionGroup;
-import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.enums.TrackingOrientationStrategy;
 import de.homelab.madgaksha.grantstrategy.ExponentialGrantStrategy;
+import de.homelab.madgaksha.grantstrategy.ImmediateGrantStrategy;
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.util.GeoUtil;
 
 public final class MakerUtils {
@@ -161,11 +143,13 @@ public final class MakerUtils {
 		PositionComponent pc = new PositionComponent();
 		RotationComponent rc = new RotationComponent();
 		SpriteComponent sc = new SpriteComponent(level.getEnemyTargetCrossTexture());
-		StickyEffectComponent sec = new StickyEffectComponent();
+		StickyComponent sec = new StickyComponent();
 		ScaleComponent slc = new ScaleComponent(0.0f, 0.0f, level.getEnemyTargetCrossTexture().getOriginalScale());
+		ShouldPositionComponent spc = new ShouldPositionComponent(new ImmediateGrantStrategy());
 		ShouldScaleComponent ssc = new ShouldScaleComponent(new ExponentialGrantStrategy(0.99f, 0.05f));
 		TemporalComponent tc = new TemporalComponent();
-
+		ZOrder0Component zoc = new ZOrder0Component();
+		
 		BoundingBoxRenderComponent bbrc = new BoundingBoxRenderComponent(sc.sprite.getX(), sc.sprite.getY(),
 				sc.sprite.getX() + sc.sprite.getWidth(), sc.sprite.getY() + sc.sprite.getHeight());
 		targetCross.add(avc);
@@ -177,165 +161,12 @@ public final class MakerUtils {
 		targetCross.add(sc);
 		targetCross.add(sec);
 		targetCross.add(slc);
+		targetCross.add(spc);
 		targetCross.add(ssc);
 		targetCross.add(tc);
+		targetCross.add(zoc);
 		
 		return targetCross; 
-	}
-
-	
-	public static Entity makePlayerBattleStigma(Entity playerE, APlayer playerA) {
-		Entity battleStigma = new Entity();
-		Rectangle bbm = playerA.getBoundingBoxMap();
-		
-		AngularVelocityComponent avc = new AngularVelocityComponent(playerA.getBattleStigmaAngularVelocity());
-		ColorComponent cc = new ColorComponent();
-		InactiveComponent iac = new InactiveComponent();
-		InvisibleComponent ivc = new InvisibleComponent();
-		PositionComponent pc = new PositionComponent(playerE);
-		RotationComponent rc = new RotationComponent();
-		SpriteComponent sc = new SpriteComponent(playerA.getBattleStigmaTexture());
-		StickyEffectComponent sec = new StickyEffectComponent(playerE, bbm.x+0.5f*bbm.width, bbm.y+0.5f*bbm.height, true, true);
-		ScaleComponent slc = new ScaleComponent(0.0f, 0.0f, playerA.getBattleStigmaTexture().getOriginalScale());
-		ShouldScaleComponent ssc = new ShouldScaleComponent(new ExponentialGrantStrategy(0.5f, 0.5f));
-		TemporalComponent tc = new TemporalComponent();
-
-		battleStigma.add(avc);
-		battleStigma.add(cc);
-		battleStigma.add(ivc);
-		battleStigma.add(iac);
-		battleStigma.add(pc);
-		battleStigma.add(rc);
-		battleStigma.add(sc);
-		battleStigma.add(sec);
-		battleStigma.add(slc);
-		battleStigma.add(ssc);
-		battleStigma.add(tc);
-		
-		
-		return battleStigma; 
-	}
-	
-	public static Entity makePlayerHitCircle(Entity playerE, APlayer playerA) {
-		Entity hitCircle = new Entity();
-		Rectangle bbc = playerA.getBoundingBoxCollision();
-		
-		PositionComponent pc = new PositionComponent(playerE);
-		SpriteComponent sc = new SpriteComponent(playerA.getHitCircleTexture());
-		StickyEffectComponent sec = new StickyEffectComponent(playerE, bbc.x+0.5f*bbc.width, bbc.y+0.5f*bbc.height);
-		InvisibleComponent ivc = new InvisibleComponent();
-		
-		if (pc == null || sc == null || sec == null || ivc == null) return null;
-		
-		hitCircle.add(pc);
-		hitCircle.add(sc);
-		hitCircle.add(sec);
-		hitCircle.add(ivc);
-		
-		return hitCircle; 
-	}
-	
-	public static Entity makePlayer(APlayer player) {
-		Entity e = new Entity();
-	
-		switch (Gdx.app.getType()) {
-		case Android:
-			//TODO
-			break;
-		case Applet:
-			//TODO
-			break;
-		case Desktop:
-			InputDesktopComponent ic = new InputDesktopComponent();
-			ic.frictionFactor = player.getMovementFrictionFactor();
-			ic.accelerationFactorLow = player.getMovementAccelerationFactorLow();
-			ic.accelerationFactorHigh = player.getMovementAccelerationFactorHigh();
-			ic.battleSpeedLow = player.getMovementBattleSpeedLow();
-			ic.battleSpeedHigh = player.getMovementBattleSpeedHigh();
-			e.add(ic);
-			break;
-		case HeadlessDesktop:
-			//TODO
-			break;
-		case WebGL:
-			//TODO
-			break;
-		case iOS:
-			//TODO
-			break;
-		default:
-			//TODO
-			break;
-		
-		}
-		
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(player.getAnimationList(),
-				ESpriteDirectionStrategy.ZENITH);
-		Shape2D exactShape = player.getExactShapeCollision();
-		ShapeComponent shc = null;
-		
-		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
-		SpriteComponent sc = new SpriteComponent(sac, player.getSpriteOrigin());
-		ShadowComponent kc = player.makeShadow();
-
-		ABoundingBoxComponent bbcc = new BoundingBoxCollisionComponent(player.getBoundingBoxCollision());
-		ABoundingBoxComponent bbrc = new BoundingBoxRenderComponent(player.getBoundingBoxRender());
-		ABoundingBoxComponent bbmc = new BoundingBoxMapComponent(player.getBoundingBoxMap());
-		BoundingSphereComponent bsc = new BoundingSphereComponent(player.getBoundingCircle());
-		if (exactShape != null) shc = new ShapeComponent(exactShape);
-
-		StatusValuesComponent svc = new StatusValuesComponent(player.getBulletAttack(), player.getBulletResistance());
-		PainPointsComponent ppc = new PainPointsComponent(player.getMaxPainPoints());
-		DamageQueueComponent dqc = new DamageQueueComponent();
-		TemporalComponent tc = new TemporalComponent();
-		
-		PositionComponent pc = new PositionComponent(level.getMapData().getPlayerInitialPosition(), true);
-		VelocityComponent vc = new VelocityComponent(0.0f, 0.0f);
-		RotationComponent rc = new RotationComponent(true);
-		DirectionComponent dc = new DirectionComponent(level.getMapData().getPlayerInitialDirection());
-		ScaleComponent slc = new ScaleComponent();
-		
-		ShouldRotationComponent src = new ShouldRotationComponent(new ExponentialGrantStrategy(0.1f));
-		ShouldScaleComponent ssc = new ShouldScaleComponent(new ExponentialGrantStrategy(0.1f));
-		
-		HoverEffectComponent hec = new HoverEffectComponent(8.0f, 1.0f);
-		LeanEffectComponent lec = new LeanEffectComponent(30.0f,0.10f,0.0001f);		
-			
-		TriggerTouchComponent ttg1c = new TriggerTouchGroup01Component();
-		
-		VoiceComponent vcc = new VoiceComponent();
-		vcc.onBattleModeStart = player.getVoiceOnBattleStart();
-		vcc.onLightDamage = player.getVoiceOnLightDamage();
-		vcc.onHeavyDamage = player.getVoiceOnHeavyDamage();
-		vcc.onDeath = player.getVoiceOnDeath();
-		vcc.voicePlayer = new VoicePlayer();
-		
-		e.add(vcc);
-		e.add(lec);
-		e.add(hec);
-		e.add(src);
-		e.add(ssc);			
-		e.add(sc);
-		e.add(sac);
-		e.add(sfdc);
-		e.add(ttg1c);
-		e.add(bsc);
-		e.add(bbcc);
-		e.add(bbmc);
-		e.add(bbrc);
-		e.add(pc);
-		e.add(vc);
-		e.add(rc);
-		e.add(slc);
-		e.add(dc);		
-		e.add(tc);
-		e.add(dqc);
-		e.add(ppc);
-		e.add(svc);
-		if (kc != null) e.add(kc);
-		if (shc != null) e.add(shc);
-		
-		return e;
 	}
 
 	/**
@@ -392,8 +223,27 @@ public final class MakerUtils {
 		myCamera.add(new ShouldRotationComponent(new ExponentialGrantStrategy(0.6f, 0.25f)));
 		myCamera.add(new ViewportComponent(viewportGame));
 		myCamera.add(new TemporalComponent());
+		myCamera.add(new TimeScaleComponent());
 		
 		return myCamera;
+	}
+
+	/** Injects an entity into the entity system that will be called after the given amount of time.
+	 * 
+	 * @param f Duration in seconds.
+	 * @param iTimedCallback Callback to call.
+	 */
+	public static void addTimedRunnable(float duration, ITimedCallback timedCallback) {
+		final Entity e = gameEntityEngine.createEntity();
+		addTimedRunnableTo(e, duration, timedCallback);
+		gameEntityEngine.addEntity(e);
+	}
+	
+	public static void addTimedRunnableTo(Entity e, float duration, ITimedCallback timedCallback) {
+		TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
+		TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);
+		tcc.setup(timedCallback, null, duration, 1);
+		e.add(tc).add(tcc);
 	}
 
 }

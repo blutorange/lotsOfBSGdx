@@ -75,6 +75,7 @@ public abstract class ALevel {
 	private final IResource<? extends Enum<?>,?>[] requiredResources;
 	private final EMusic bgm;
 	private final EMusic battleBgm;
+	private final EMusic gameOverBgm;
 	private final ETiledMap tiledMap;
 	private final String i18nNameKey;
 	private final Color enemyPainBarColorLow = new Color();
@@ -94,6 +95,7 @@ public abstract class ALevel {
 		tiledMap = requestedTiledMap();
 		i18nNameKey = requestedI18nNameKey();
 		battleBgm = requestedBattleBgm();
+		gameOverBgm = requestedGameOverBgm();
 		enemyPainBarColorLow.set(requestedEnemyPainBarColorLow());
 		enemyPainBarColorMid.set(requestedEnemyPainBarColorMid());
 		enemyPainBarColorHigh.set(requestedEnemyPainBarColorHigh());
@@ -171,6 +173,9 @@ public abstract class ALevel {
 	/** @return Music while fighting. */
 	protected abstract EMusic requestedBattleBgm();
 	
+	/** @return Music on game over. */
+	protected abstract EMusic requestedGameOverBgm();
+	
 	/**
 	 * @return The map to be loaded initially.
 	 */
@@ -228,6 +233,9 @@ public abstract class ALevel {
 	}
 	public EMusic getBattleBgm() {
 		return battleBgm;
+	}
+	public EMusic getGameOverBgm() {
+		return gameOverBgm;
 	}
 	
 	public ETiledMap getTiledMap() {

@@ -23,9 +23,15 @@ public class ParticleEffectComponent implements Component, Poolable {
 	public ParticleEffectComponent() {
 	}
 	public ParticleEffectComponent(EParticleEffect particleEffect) {
-		this.particleEffect = ResourcePool.obtainParticleEffect(particleEffect);
+		setup(particleEffect);
 	}
 	public ParticleEffectComponent(PooledEffect particleEffect) {
+		setup(particleEffect);
+	}
+	public void setup(EParticleEffect particleEffect) {
+		this.particleEffect = ResourcePool.obtainParticleEffect(particleEffect);
+	}
+	public void setup(PooledEffect particleEffect) {
 		this.particleEffect = particleEffect;
 	}
 	
@@ -34,5 +40,4 @@ public class ParticleEffectComponent implements Component, Poolable {
 		if (particleEffect != null) ResourcePool.freeParticleEffect(particleEffect);
 		particleEffect = DEFAULT_PARTICLE_EFFECT;
 	}
-
 }

@@ -45,23 +45,20 @@ public enum BulletShapeMaker {
 	 * @param e Entity to setup.
 	 */
 	public void setup(Entity e) {
-		//TODO add exact shape
-		//TODO make point shape2d class
 		SpriteComponent sc = gameEntityEngine.createComponent(SpriteComponent.class);
 		BoundingBoxCollisionComponent bbcc = gameEntityEngine.createComponent(BoundingBoxCollisionComponent.class);
 
 		sc.setup(sprite);
 		bbcc.setup(boundingBox);
-		
-		e.add(bbcc);
-		e.add(sc);
+
+		e
+			.add(bbcc)
+			.add(sc);
 		
 		if (exactShape != null) {
 			ShapeComponent spc = gameEntityEngine.createComponent(ShapeComponent.class);
 			spc.setup(exactShape);
 			e.add(spc);
 		}
-		
-		
 	}
 }

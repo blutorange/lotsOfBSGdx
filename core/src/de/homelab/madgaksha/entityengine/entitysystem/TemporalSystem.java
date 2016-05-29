@@ -3,6 +3,7 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
@@ -30,7 +31,10 @@ public class TemporalSystem extends IteratingSystem {
 		final TemporalComponent tc = Mapper.temporalComponent.get(entity);
 		final TimeScaleComponent tsfc = Mapper.timeScaleComponent.get(entity);
 		tc.deltaTime = deltaTime;
-		if (tsfc != null) tc.deltaTime *= tsfc.timeScalingFactor;
+		if (tsfc != null) {
+			tc.deltaTime = tsfc.scaleDisabled ? Gdx.graphics.getRawDeltaTime() : tc.deltaTime * tsfc.timeScalingFactor;
+		}
+		
 		tc.totalTime += tc.deltaTime;
 	}
 }

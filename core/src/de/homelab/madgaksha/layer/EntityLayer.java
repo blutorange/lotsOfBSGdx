@@ -1,12 +1,13 @@
 package de.homelab.madgaksha.layer;
 
+import static de.homelab.madgaksha.GlobalBag.cameraEntity;
 import static de.homelab.madgaksha.GlobalBag.enemyTargetCrossEntity;
-import static de.homelab.madgaksha.GlobalBag.playerBattleStigmaEntity;
-import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import static de.homelab.madgaksha.GlobalBag.level;
 import static de.homelab.madgaksha.GlobalBag.player;
+import static de.homelab.madgaksha.GlobalBag.playerBattleStigmaEntity;
 import static de.homelab.madgaksha.GlobalBag.playerEntity;
+import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
 import de.homelab.madgaksha.entityengine.entity.MakerUtils;
+import de.homelab.madgaksha.entityengine.entity.PlayerMaker;
 import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.AngularMovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
@@ -32,13 +34,16 @@ import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantRotationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantScaleSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.InputPlayerDesktopSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.LifeSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.MovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.NewtonianForceSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ParticleEffectRenderSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.PostEffectSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteAnimationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.StickySystem;
 import de.homelab.madgaksha.entityengine.entitysystem.TemporalSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.TimedCallbackSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ViewportUpdateSystem;
 import de.homelab.madgaksha.logging.Logger;
 
@@ -109,23 +114,26 @@ public class EntityLayer extends ALayer {
 	}
 
 	public boolean createEngine() {
-		gameEntityEngine.addSystem(new ParticleEffectRenderSystem());
+		gameEntityEngine.addSystem(new AiSystem());
+		gameEntityEngine.addSystem(new AngularMovementSystem());
 		gameEntityEngine.addSystem(new BirdsViewSpriteSystem());
-		gameEntityEngine.addSystem(new SpriteAnimationSystem());
-		gameEntityEngine.addSystem(new SpriteRenderSystem());
 		gameEntityEngine.addSystem(new CameraTracingSystem());
-		gameEntityEngine.addSystem(new ViewportUpdateSystem());
+		gameEntityEngine.addSystem(new CollisionSystem());
+		gameEntityEngine.addSystem(new DamageSystem());
 		gameEntityEngine.addSystem(new GrantPositionSystem());
 		gameEntityEngine.addSystem(new GrantRotationSystem());
 		gameEntityEngine.addSystem(new GrantScaleSystem());
-		gameEntityEngine.addSystem(new NewtonianForceSystem());
+		gameEntityEngine.addSystem(new LifeSystem());
 		gameEntityEngine.addSystem(new MovementSystem());
-		gameEntityEngine.addSystem(new AngularMovementSystem());
+		gameEntityEngine.addSystem(new NewtonianForceSystem());
+		gameEntityEngine.addSystem(new ParticleEffectRenderSystem());
+		gameEntityEngine.addSystem(new SpriteAnimationSystem());
+		gameEntityEngine.addSystem(new SpriteRenderSystem());
+		gameEntityEngine.addSystem(new StickySystem());
 		gameEntityEngine.addSystem(new PostEffectSystem());
+		gameEntityEngine.addSystem(new TimedCallbackSystem());
 		gameEntityEngine.addSystem(new TemporalSystem());
-		gameEntityEngine.addSystem(new CollisionSystem());
-		gameEntityEngine.addSystem(new AiSystem());
-		gameEntityEngine.addSystem(new DamageSystem());
+		gameEntityEngine.addSystem(new ViewportUpdateSystem());
 
 		switch (Gdx.app.getType()) {
 		case Android:
@@ -151,11 +159,11 @@ public class EntityLayer extends ALayer {
 			break;
 		}
 
-		Entity playerE = MakerUtils.makePlayer(player);
+		Entity playerE = PlayerMaker.getInstance().makePlayer(player);
 		if (playerE == null) return false;
 		
-		Entity hitCircle = MakerUtils.makePlayerHitCircle(playerE, player);
-		Entity battleStigma = MakerUtils.makePlayerBattleStigma(playerE, player);
+		Entity hitCircle = PlayerMaker.getInstance().makePlayerHitCircle(playerE, player);
+		Entity battleStigma = PlayerMaker.getInstance().makePlayerBattleStigma(playerE, player);
 		Entity targetCross = MakerUtils.makeEnemyTargetCross();
 		Entity myCamera = MakerUtils.makeCamera(level, playerE);
 		if (hitCircle == null || battleStigma == null || myCamera == null) return false;
@@ -170,6 +178,7 @@ public class EntityLayer extends ALayer {
 		playerHitCircleEntity = hitCircle;
 		playerEntity = playerE;
 		enemyTargetCrossEntity = targetCross;
+		cameraEntity = myCamera;
 		
 		return true;
 	}

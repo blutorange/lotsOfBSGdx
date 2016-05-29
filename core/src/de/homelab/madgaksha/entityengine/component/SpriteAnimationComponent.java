@@ -16,10 +16,18 @@ public class SpriteAnimationComponent implements Component, Poolable {
 	}
 	
 	public SpriteAnimationComponent(EAnimation ea) {
-		animation = ResourceCache.getAnimation(ea);
+		setup(ea);
 	}
 	
 	public SpriteAnimationComponent(SpriteForDirectionComponent sfdc) {
+		setup(sfdc);
+	}
+	
+	public void setup(EAnimation ea) {
+		animation = ResourceCache.getAnimation(ea);
+	}
+	
+	public void setup(SpriteForDirectionComponent sfdc) {
 		animation = sfdc.animationList[0];
 	}
 	

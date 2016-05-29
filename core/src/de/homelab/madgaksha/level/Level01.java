@@ -35,6 +35,7 @@ public class Level01 extends ALevel {
 				EMusic.ROCK_ON_THE_ROAD,
 				EMusic.SOPHISTICATED_FIGHT,
 				EMusic.SILVER_WILL,
+				EMusic.FADING_STAR,
 				ETiledMap.LEVEL_01
 		};
 	}
@@ -53,7 +54,11 @@ public class Level01 extends ALevel {
 	protected EMusic requestedBattleBgm() {
 		return EMusic.SOPHISTICATED_FIGHT;
 	}
-
+	@Override
+	protected EMusic requestedGameOverBgm() {
+		return EMusic.FADING_STAR;
+	}
+	
 	@Override
 	protected String requestedI18nNameKey() {
 		return "level.01.name";
@@ -79,7 +84,7 @@ public class Level01 extends ALevel {
 	}
 	@Override
 	public int getComponentPoolMaxSize() {
-		return 10000;
+		return 40000;
 	}
 	@Override
 	public int getEntityPoolInitialSize() {
@@ -87,7 +92,7 @@ public class Level01 extends ALevel {
 	}
 	@Override
 	public int getEntityPoolPoolMaxSize() {
-		return 1000;
+		return 10000;
 	}
 	
 	// =========================

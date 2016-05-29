@@ -1,30 +1,24 @@
 package de.homelab.madgaksha.entityengine.entity;
 
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
-import static de.homelab.madgaksha.GlobalBag.player;
-import static de.homelab.madgaksha.GlobalBag.playerBattleStigmaEntity;
-import static de.homelab.madgaksha.GlobalBag.playerEntity;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 
-import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.BulletStatusComponent;
-import de.homelab.madgaksha.entityengine.component.ColorFlashEffectComponent;
 import de.homelab.madgaksha.entityengine.component.DamageQueueComponent;
+import de.homelab.madgaksha.entityengine.component.GetHitComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
 import de.homelab.madgaksha.entityengine.component.ParentComponent;
 import de.homelab.madgaksha.entityengine.component.ReceiveTouchComponent;
+import de.homelab.madgaksha.entityengine.component.SiblingComponent;
 import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
-import de.homelab.madgaksha.entityengine.component.VoiceComponent;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01Component;
+import de.homelab.madgaksha.entityengine.component.zorder.ZOrder1Component;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.IResource;
 
 public class BulletMaker extends EntityMaker implements IReceive {
@@ -39,6 +33,9 @@ public class BulletMaker extends EntityMaker implements IReceive {
 	/** Upper range of the random damage variance, in percent. */
 	private final static long DAMAGE_UPPER_RANGE = 120L;
 	
+	private Entity parent = null;
+	private SiblingComponent sibling = null;
+	
 	// Singleton
 	private static class SingletonHolder {
 		private static final BulletMaker INSTANCE = new BulletMaker();
@@ -50,9 +47,14 @@ public class BulletMaker extends EntityMaker implements IReceive {
 		super();
 	}
 	
-	public static Entity makeEntity(Entity parent, BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory, long power) {
+	public void forEnemy(Entity parent) {
+		this.parent = parent;
+		this.sibling = Mapper.anyChildComponent.get(parent).childComponent;
+	}
+	
+	public static Entity makeEntity(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory, long power) {
 		Entity entity = gameEntityEngine.createEntity();
-		getInstance().setup(entity, parent, bulletShape, bulletTrajectory, power);
+		getInstance().setup(entity, bulletShape, bulletTrajectory, power);
 		return entity;
 	}
 	
@@ -62,25 +64,37 @@ public class BulletMaker extends EntityMaker implements IReceive {
 	 * @param bulletShape The bullet's shape.
 	 * @param bulletTrajectory The bullet's trajectory.
 	 */
-	public void setup(Entity e, Entity parent, BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory, long power) {
+	public void setup(Entity e, BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory, long power) {
 		super.setup(e);
 		
 		// Setup shape and trajectory.
 		bulletShape.setup(e);
 		bulletTrajectory.setup(e);
-		
+
 		// Setup collision detection and damage calculation.
-		ReceiveTouchComponent rtg1c = gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
-		ParentComponent pc = gameEntityEngine.createComponent(ParentComponent.class);
-		BulletStatusComponent bsc = gameEntityEngine.createComponent(BulletStatusComponent.class);
+		final ReceiveTouchComponent rtg1c = gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
+		final ParentComponent pc = gameEntityEngine.createComponent(ParentComponent.class);
+		final BulletStatusComponent bsc = gameEntityEngine.createComponent(BulletStatusComponent.class);
+		final ZOrder1Component zoc = gameEntityEngine.createComponent(ZOrder1Component.class);
+		final SiblingComponent sc = gameEntityEngine.createComponent(SiblingComponent.class);
 		
 		rtg1c.setup(this);
 		pc.setup(parent);
 		bsc.setup(power);
-		
+		sc.prevSiblingComponent = sibling;
+		if (sibling != null) {
+			sc.nextSiblingComponent = sibling.nextSiblingComponent;
+			if (sibling.nextSiblingComponent != null) sibling.nextSiblingComponent.prevSiblingComponent = sc;
+			sibling.nextSiblingComponent = sc;
+		}
+		sc.me = e;
+		Mapper.anyChildComponent.get(parent).childComponent = sc;
+
+		e.add(sc);
 		e.add(bsc);
 		e.add(rtg1c);
 		e.add(pc);
+		e.add(zoc);
 	}
 	
 	@Override
@@ -138,14 +152,9 @@ public class BulletMaker extends EntityMaker implements IReceive {
 			// Queue defender to take damage.
 			dqc.queuedDamage += MathUtils.clamp(damage, 0L, DamageSystem.MAX_PAIN_POINTS - damage);
 			
-			// Make battle stigma glow.
-			if (you == playerEntity && Mapper.colorFlashEffectComponent.get(playerBattleStigmaEntity) == null) {
-				final ColorFlashEffectComponent cfec = gameEntityEngine.createComponent(ColorFlashEffectComponent.class);
-				cfec.setup(Color.WHITE, player.getBattleStigmaColorWhenHit(), Interpolation.circle, 0.1f, 6);
-				playerBattleStigmaEntity.add(cfec);
-				VoiceComponent vc = Mapper.voiceComponent.get(playerEntity);
-				if (vc != null) SoundPlayer.getInstance().play(ESound.BATTLE_STIGMA_ABSORB,10.0f);
-			}
+			// Custom stuff on getting hit.
+			GetHitComponent ghc = Mapper.getHitComponent.get(you);
+			if (ghc != null) ghc.hittable.hitByBullet(you, me);
 		}
 	}
 }

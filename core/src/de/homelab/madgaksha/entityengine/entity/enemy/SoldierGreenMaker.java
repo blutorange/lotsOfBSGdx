@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Vector2;
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
-import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.entity.BulletMaker;
 import de.homelab.madgaksha.entityengine.entity.BulletShapeMaker;
 import de.homelab.madgaksha.entityengine.entity.NormalEnemyMaker;
@@ -97,17 +96,18 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 	
 	//TODO remove me
 	Vector2 v = new Vector2(350.0f,0.0f);
-	public void behave(Entity e) {
-		final TemporalComponent tc = Mapper.temporalComponent.get(e);
+	public void behave(Entity enemy) {
+//		final TemporalComponent tc = Mapper.temporalComponent.get(enemy);
 //		timePassed += tc.deltaTime;
 //		if (timePassed > 0.2f) {
 //			timePassed = 0.0f;
+		BulletMaker.getInstance().forEnemy(enemy);
 for (int i=0; i!=3; ++i){		
-			final PositionComponent pc = Mapper.positionComponent.get(e);
+			final PositionComponent pc = Mapper.positionComponent.get(enemy);
 			linearMotionTrajectory.position(pc.x, pc.y);
 			v.rotate(MathUtils.random(0.0f,360.0f));
 			linearMotionTrajectory.velocity(v.x,v.y);
-			Entity bullet =	BulletMaker.makeEntity(e, BulletShapeMaker.FLOWER_RED, linearMotionTrajectory, 10000000L);
+			Entity bullet =	BulletMaker.makeEntity( BulletShapeMaker.FLOWER_RED, linearMotionTrajectory, 7000000L);
 			gameEntityEngine.addEntity(bullet);
 }
 //		}

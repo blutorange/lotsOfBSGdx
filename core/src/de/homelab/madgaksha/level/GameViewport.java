@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.level;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
@@ -33,6 +34,9 @@ public class GameViewport extends Viewport {
 	private Vector2 u = new Vector2();
 	private Vector3 v;
 	
+	private float ratioScreenGameWidth;
+	private float ratioScreenGameHeight;
+	
 	@Override
 	public void apply() {
 		apply(false);
@@ -51,6 +55,10 @@ public class GameViewport extends Viewport {
 		int gameWidth = (int) screenDimensions.x;
 		int gameHeight = (int) screenDimensions.y;
 
+		// Save ratio for transforming between game and screen coordinates later.
+		ratioScreenGameWidth = ((float)Gdx.graphics.getWidth()) / ((float)gameWidth);
+		ratioScreenGameHeight = ((float)Gdx.graphics.getHeight()) / ((float)gameHeight);
+		
 		// Create a new camera.
 		Camera camera = new PerspectiveCamera(ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y, gameWidth, gameHeight);
 		perspectiveCamera = (PerspectiveCamera)camera;
@@ -89,6 +97,10 @@ public class GameViewport extends Viewport {
 		int gameWidth = (int) screenDimensions.x;
 		int gameHeight = (int) screenDimensions.y;
 
+		// Save ratio for transforming between game and screen coordinates later.
+		ratioScreenGameWidth = ((float)Gdx.graphics.getWidth()) / ((float)gameWidth);
+		ratioScreenGameHeight = ((float)Gdx.graphics.getHeight()) / ((float)gameHeight);
+		
 		// Game window goes to the bottom left.
 		setScreenBounds(0, 0, gameWidth, gameHeight);
 
@@ -151,6 +163,7 @@ public class GameViewport extends Viewport {
 				gameWidth = gameHeight * Game.VIEWPORT_GAME_AR_NUM / Game.VIEWPORT_GAME_AR_DEN;
 			}
 		}
+				
 		// Floats can store ints exactly, unless too large
 		// which screen dimensions are not. Mantissa 23 bit.
 		return new Vector2((float) gameWidth, (float) gameHeight);
@@ -185,5 +198,12 @@ public class GameViewport extends Viewport {
 	}
 	public float getRotationDirXY() {
 		return angleDirXY;
+	}
+	
+	public Vector2 project(Vector2 v) {
+		super.project(v);
+		v.x *= ratioScreenGameWidth;
+		v.y *= ratioScreenGameHeight;
+		return v;
 	}
 }

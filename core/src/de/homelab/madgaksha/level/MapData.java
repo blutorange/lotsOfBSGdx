@@ -97,6 +97,7 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
  * <ul>
  *  <li>name: Name of the particle effect. Must be defined in {@link EParticleEffect}</li>
  *  <li>speed: How fast the particle effect should rotate. Useful for flame wheels etc.</li>
+ *  <li>renderMode: Whether to draw in screen or game coordinates. Position is unaffected, but useful for rotation if particle effect should always point upwards (as seen on the screen).</li>
  * </ul>
  * 
  *  <h3>type: NPC</h3>
@@ -471,7 +472,9 @@ public class MapData {
 		// Fetch parameters.
 		String name = props.get("name", String.class).toUpperCase(Locale.ROOT);
 		Float spin = 0.0f;
+		String renderMode = "game";
 		if (props.containsKey("spin")) spin = Float.valueOf(String.valueOf(props.get("spin")));
+		if (props.containsKey("renderMode")) renderMode = String.valueOf(props.get("renderMode"));
 		
 		// Try to get the corresponding enum.
 		EParticleEffect particleEffect;
@@ -485,7 +488,12 @@ public class MapData {
 		
 		// Create a new entity for the particle effect.
 		final Entity entity = new Entity();
-		ParticleEffectMaker.getInstance().setup(entity, shape, particleEffect, spin);
+		if (renderMode.equalsIgnoreCase("screen")) {
+			ParticleEffectMaker.getInstance().setupScreen(entity, shape, particleEffect, spin);
+		}
+		else {
+			ParticleEffectMaker.getInstance().setupGame(entity, shape, particleEffect, spin);	
+		}		
 		return entity;
 	}
 

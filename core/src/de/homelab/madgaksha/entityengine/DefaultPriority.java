@@ -17,24 +17,29 @@ public class DefaultPriority {
 	public final static int temporalSystem = 0;
 	
 	// updating
-	public final static int cameraZoomingSystem = 1;
-	public final static int aiSystem = 2;
-	public final static int danmakuSystem = 3;
-	public final static int grantPositionSystem = 4;
-	public final static int grantRotationSystem = 5;
-	public final static int grantScaleSystem = 6;
-	public final static int inputPlayerDesktopSystem = 7;
-	public final static int newtonianForceSystem = 8;
-	public final static int movementSystem = 9;
-	public final static int collisionSystem = 10;
+	public final static int lifeSystem = 1;
+	public final static int cameraZoomingSystem = 2;
+	public final static int aiSystem = 3;
+	public final static int stickySystem = 4;
+	public final static int inputPlayerDesktopSystem = 5;
+	public final static int newtonianForceSystem = 6;
+	public final static int movementSystem = 7;
+	public final static int collisionSystem = 8;
 
-	public final static int damageSystem = 11;
-	public final static int postEffectSystem = 12;	
+	public final static int postEffectSystem = 9;	
+
+	public final static int grantPositionSystem = 10;
+	public final static int grantRotationSystem = 11;
+	public final static int grantScaleSystem = 12;
+	
+	public final static int damageSystem = 13;
 
 	// drawing
-	public final static int viewportUpdateSystem = 13;
-	public final static int birdsViewSpriteSystem = 14;
-	public final static int spriteAnimationSystem = 15;
-	public final static int spriteRenderSystem = 16;
-	public final static int particleEffectRenderSystem = 17;
+	public final static int viewportUpdateSystem = 14;
+	public final static int birdsViewSpriteSystem = 15;
+	public final static int spriteAnimationSystem = 16;
+	public final static int spriteRenderSystem = 17;
+	public final static int particleEffectRenderSystem = 18;
+	
+	public final static int timedCallbackSystem = 19;
 }

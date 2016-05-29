@@ -1,6 +1,8 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 import static de.homelab.madgaksha.GlobalBag.batchGame;
+import static de.homelab.madgaksha.GlobalBag.batchPixel;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
+import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -10,6 +12,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter.ScaledNumericValue;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
@@ -17,6 +20,8 @@ import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.ParticleEffectComponent;
+import de.homelab.madgaksha.entityengine.component.ParticleEffectGameComponent;
+import de.homelab.madgaksha.entityengine.component.ParticleEffectScreenComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.logging.Logger;
@@ -30,8 +35,10 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(ParticleEffectRenderSystem.class);
-	private ImmutableArray<Entity> entities;
-
+	private final static Vector2 v = new Vector2();
+	private ImmutableArray<Entity> entitiesGame;
+	private ImmutableArray<Entity> entitiesScreen;
+	
 	public ParticleEffectRenderSystem() {
 		super(DefaultPriority.particleEffectRenderSystem);
 	}
@@ -43,32 +50,60 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 
 		// Draw each particle effect.
 		batchGame.begin();
-		for (int i = 0; i < entities.size(); ++i) {
-			final Entity entity = entities.get(i);
-			final ParticleEffectComponent pec = Mapper.particleEffectComponent.get(entity);
+		for (int i = 0; i < entitiesGame.size(); ++i) {
+			final Entity entity = entitiesGame.get(i);
+			final ParticleEffectGameComponent pec = Mapper.particleEffectGameComponent.get(entity);
 			final PositionComponent pc = Mapper.positionComponent.get(entity);
 			final DirectionComponent dc = Mapper.directionComponent.get(entity);
 			deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
 			if (dc != null) setAngle(pec.particleEffect, dc.degree);
 			if (pc != null) pec.particleEffect.setPosition(pc.x, pc.y);
 			pec.particleEffect.draw(batchGame, deltaTime);
-			if (pec.particleEffect.isComplete()) entity.remove(ParticleEffectComponent.class);
+			if (pec.particleEffect.isComplete()) entity.remove(ParticleEffectGameComponent.class);
 		}
 		batchGame.end();
+		
+		// Apply projection matrix.
+		batchPixel.setProjectionMatrix(viewportPixel.getCamera().combined);
+		
+		// Draw each particle effect.
+		batchPixel.begin();
+		for (int i = 0; i < entitiesScreen.size(); ++i) {
+			final Entity entity = entitiesScreen.get(i);
+			final ParticleEffectComponent pec = Mapper.particleEffectScreenComponent.get(entity);
+			final PositionComponent pc = Mapper.positionComponent.get(entity);
+			final DirectionComponent dc = Mapper.directionComponent.get(entity);
+			deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
+			if (dc != null) setAngle(pec.particleEffect, dc.degree);
+			if (pc != null) {
+				v.set(pc.x,pc.y);
+				viewportGame.project(v);
+				pec.particleEffect.setPosition(v.x, v.y);
+			}
+			pec.particleEffect.draw(batchPixel, deltaTime);
+			if (pec.particleEffect.isComplete())
+				entity.remove(ParticleEffectScreenComponent.class);
+		}
+		batchPixel.end();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.all(
+		entitiesGame = engine.getEntitiesFor(Family.all(
 				TemporalComponent.class,
-				ParticleEffectComponent.class)
+				ParticleEffectGameComponent.class)
+				.exclude(InvisibleComponent.class, InactiveComponent.class).get());
+		entitiesScreen = engine.getEntitiesFor(Family.all(
+				TemporalComponent.class,
+				ParticleEffectScreenComponent.class)
 				.exclude(InvisibleComponent.class, InactiveComponent.class).get());
 	}
 
 	@Override
 	public void removedFromEngine(Engine engine) {
-		entities = null;
+		entitiesGame = null;
+		entitiesScreen = null;
 	}
 	
 	public void setAngle(PooledEffect pe, float angle) {

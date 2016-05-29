@@ -9,11 +9,13 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
+import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.InputDesktopComponent;
+import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
 import de.homelab.madgaksha.logging.Logger;
@@ -54,16 +56,19 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		      (Gdx.input.isKeyPressed(ic.directionUp)) ? 1.0f : (Gdx.input.isKeyPressed(ic.directionDown)) ? -1.0f : 0.0f);
 		
 		if (ic.relativeToCamera) v.rotate(-viewportGame.getRotationUpXY());
-		if (ic.orientToScreen) dc.degree = 450.0f+viewportGame.getRotationUpXY()+ic.screenOrientation;
-		else if (w.len2() > 0.5f) dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle=w.angle());
-		else dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle);
 		
 		if (battleModeActive) {
 			final float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.battleSpeedHigh : ic.battleSpeedLow;
 			vc.x = v.x*f;
 			vc.y = v.y*f;
+			final PositionComponent pcEnemy = Mapper.positionComponent.get(GlobalBag.cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
+			final PositionComponent pcPlayer = Mapper.positionComponent.get(entity);
+			dc.degree = 450.0f-w.set(pcPlayer.x-pcEnemy.x,pcPlayer.y-pcEnemy.y).angle();
 		}
 		else {
+			if (ic.orientToScreen) dc.degree = 450.0f+viewportGame.getRotationUpXY()+ic.screenOrientation;
+			else if (w.len2() > 0.5f) dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle=w.angle());
+			else dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle);
 			final float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.accelerationFactorHigh : ic.accelerationFactorLow;
 			vc.x = (vc.x+f*v.x)*ic.frictionFactor;
 			vc.y = (vc.y+f*v.y)*ic.frictionFactor;

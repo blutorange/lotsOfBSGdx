@@ -76,6 +76,9 @@ public class GeoUtil {
 		} else if (shape instanceof Circle) {
 			Circle c = (Circle) shape;
 			r = new Rectangle(c.x - c.radius, c.y - c.radius, 2.0f * c.radius, 2.0f * c.radius);
+		} else if (shape instanceof Point) {
+				Point p = (Point) shape;
+				r = new Rectangle(p.x,p.y,p.x,p.y);
 		} else if (shape instanceof Ellipse) {
 			Ellipse e = (Ellipse) shape;
 			r = new Rectangle(e.x, e.y, e.width, e.height);
