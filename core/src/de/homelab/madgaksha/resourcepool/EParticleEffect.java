@@ -13,7 +13,10 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEffect> {
 	FIRE_THROWER("particle/fireThrower.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
-	SMALL_FIRE("particle/smallFire.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20);
+	SMALL_FIRE("particle/smallFire.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
+	PLAYER_BATTLE_MODE_ENTER_BURST("particle/playerBattleModeEnterBurstYellow.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
+	
+	;
 
 	private final static Logger LOG = Logger.getLogger(EParticleEffect.class);
 

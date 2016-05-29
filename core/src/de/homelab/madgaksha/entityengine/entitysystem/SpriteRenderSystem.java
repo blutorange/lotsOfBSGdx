@@ -14,13 +14,14 @@ import com.badlogic.gdx.math.MathUtils;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
-import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
+import de.homelab.madgaksha.entityengine.component.ColorComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxRenderComponent;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.util.GeoUtil;
 
@@ -29,7 +30,9 @@ public class SpriteRenderSystem extends EntitySystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(SpriteRenderSystem.class);
 	private Family family = null;
+	private Family familyColor = null;
 	private ImmutableArray<Entity> entities;
+	private ImmutableArray<Entity> entitiesColor;
 
 	private float mapBoundaryMinX;
 	private float mapBoundaryMinY;
@@ -48,6 +51,7 @@ public class SpriteRenderSystem extends EntitySystem {
 		super(priority);
 		this.family = Family.all(SpriteComponent.class, PositionComponent.class).exclude(InvisibleComponent.class)
 				.get();
+		this.familyColor = Family.all(SpriteComponent.class, ColorComponent.class).exclude(InvisibleComponent.class).get();
 
 		mapBoundaryMinX = level.getMapXW();
 		mapBoundaryMinY = level.getMapYW();
@@ -55,13 +59,16 @@ public class SpriteRenderSystem extends EntitySystem {
 		mapBoundaryMaxY = mapBoundaryMinY + level.getMapHeightW();
 	}
 
-	public ImmutableArray<Entity> getEntities() {
-		return entities;
-	}
-
 	@Override
 	public void update(float deltaTime) {
-		// Apply projection matrix.
+		// Colorize if desired.
+		for (int i = 0; i < entitiesColor.size(); ++i) {
+			final Entity entity = entitiesColor.get(i);
+			final SpriteComponent spc = Mapper.spriteComponent.get(entity);
+			final ColorComponent cc = Mapper.colorComponent.get(entity);
+			if (cc != null) spc.sprite.setColor(cc.color);
+		}
+			// Apply projection matrix.
 		batchGame.setProjectionMatrix(viewportGame.getCamera().combined);
 
 		// Get rotation of camera relative to xy plane.
@@ -86,14 +93,15 @@ public class SpriteRenderSystem extends EntitySystem {
 			final RotationComponent rc = Mapper.rotationComponent.get(entity);
 			final ScaleComponent sc = Mapper.scaleComponent.get(entity);
 			final ShadowComponent kc = Mapper.shadowComponent.get(entity);
-			final BoundingBoxComponent bbc = Mapper.boundingBoxComponent.get(entity);
+			final BoundingBoxRenderComponent bbrc = Mapper.boundingBoxRenderComponent.get(entity);
 			
 			// Do not render if off-screen.
-			if (bbc != null && !GeoUtil.boundingBoxVisible(bbc,pc)) continue;
+			if (bbrc != null && !GeoUtil.boundingBoxVisible(bbrc,pc)) continue;
 
 			shadowRotateX = 0.0f;
 			shadowRotateY = 0.0f;
 
+			
 			// Rotate if desired.
 			if (rc != null) {
 				if (rc.inverseToCamera)
@@ -105,8 +113,8 @@ public class SpriteRenderSystem extends EntitySystem {
 			}
 			// Scale if desired.
 			if (sc != null) {
-				spc.sprite.setScale(sc.scaleX);
-				spc.sprite.setScale(sc.scaleY);
+				spc.sprite.setScale(sc.scaleX*sc.originalScale);
+				spc.sprite.setScale(sc.scaleY*sc.originalScale);
 			}
 
 			// Drop shadow if desired.
@@ -137,10 +145,12 @@ public class SpriteRenderSystem extends EntitySystem {
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(family);
+		entitiesColor = engine.getEntitiesFor(familyColor);
 	}
 
 	@Override
 	public void removedFromEngine(Engine engine) {
 		entities = null;
+		entitiesColor = null;
 	}
 }

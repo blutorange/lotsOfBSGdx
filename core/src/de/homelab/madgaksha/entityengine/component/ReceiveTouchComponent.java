@@ -21,6 +21,10 @@ public abstract class ReceiveTouchComponent implements Component, Poolable {
 		this.triggerReceivingObject = t;
 	}
 
+	public void setup(IReceive t) {
+		this.triggerReceivingObject = t;
+	}
+	
 	@Override
 	public void reset() {
 		this.triggerReceivingObject = DEFAULT_TRIGGER_RECEIVING_OBJECT;

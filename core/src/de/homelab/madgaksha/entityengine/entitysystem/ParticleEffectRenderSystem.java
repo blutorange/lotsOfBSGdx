@@ -1,5 +1,4 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
-
 import static de.homelab.madgaksha.GlobalBag.batchGame;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
@@ -53,6 +52,7 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 			if (dc != null) setAngle(pec.particleEffect, dc.degree);
 			if (pc != null) pec.particleEffect.setPosition(pc.x, pc.y);
 			pec.particleEffect.draw(batchGame, deltaTime);
+			if (pec.particleEffect.isComplete()) entity.remove(ParticleEffectComponent.class);
 		}
 		batchGame.end();
 	}
@@ -72,7 +72,6 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 	}
 	
 	public void setAngle(PooledEffect pe, float angle) {
-		float a;
 		float r = pe.getEmitters().get(0).getAngle().getLowMin();
 		for (ParticleEmitter e : pe.getEmitters()) {
 			final ScaledNumericValue snv = e.getAngle();
@@ -80,12 +79,6 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 			snv.setHighMin(snv.getHighMin()-r+angle);
 			snv.setLowMax(snv.getLowMax()-r+angle);
 			snv.setLowMin(snv.getLowMin()-r+angle);
-			//a = (snv.getHighMax()-snv.getHighMin())*0.5f;
-//			snv.setHighMax(angle+a+r);
-//			snv.setHighMin(angle-a+r);
-//			a = (snv.getLowMax()-snv.getLowMin())*0.5f;
-//			snv.setLowMax(angle+a+r);
-//			snv.setLowMin(angle-a+r);
 		}
 	}
 

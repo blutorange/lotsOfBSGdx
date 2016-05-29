@@ -7,7 +7,10 @@ import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 
+import de.homelab.madgaksha.util.Point;
+
 public enum EShapeType {
+	POINT,
 	RECTANGLE,
 	CIRCLE,
 	ELLIPSE,
@@ -17,6 +20,7 @@ public enum EShapeType {
 	public static EShapeType valueOf(Shape2D shape) {
 		if (shape instanceof Rectangle) return EShapeType.RECTANGLE;
 		else if (shape instanceof Circle) return EShapeType.CIRCLE;
+		else if (shape instanceof Point) return EShapeType.POINT;
 		else if (shape instanceof Polygon) return EShapeType.POLYGON;
 		else if (shape instanceof Polyline) return EShapeType.POLYLINE;
 		else if (shape instanceof Ellipse) return EShapeType.ELLIPSE;

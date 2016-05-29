@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 textbox-blue
   rotate: false
-  xy: 2, 2
+  xy: 2, 12
   size: 210, 113
   split: 43, 153, 65, 35
   pad: 32, 169, 73, 24
@@ -15,10 +15,18 @@ textbox-blue
   index: -1
 textbox-blue-fc
   rotate: false
-  xy: 214, 19
+  xy: 214, 29
   size: 159, 96
   split: 19, 19, 36, 19
   pad: 17, 19, 49, 19
   orig: 159, 96
+  offset: 0, 0
+  index: -1
+whiteRectangle
+  rotate: false
+  xy: 2, 2
+  size: 8, 8
+  split: 1, 1, 1, 1
+  orig: 8, 8
   offset: 0, 0
   index: -1

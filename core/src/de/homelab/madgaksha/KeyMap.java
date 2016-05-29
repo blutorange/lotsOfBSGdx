@@ -21,4 +21,12 @@ public final class KeyMap {
 	public final static boolean isPlayerMoveDownPressed() {
 		return Gdx.input.isKeyPressed(Keys.DOWN);
 	}
+
+	public static boolean isPauseButtonJustPressed() {
+		return Gdx.input.isKeyJustPressed(Keys.ESCAPE);
+	}
+	public static boolean isPauseButtonPressed() {
+		return Gdx.input.isKeyPressed(Keys.ESCAPE);
+	}
+	
 }

@@ -15,8 +15,6 @@ import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
-import de.homelab.madgaksha.resourcecache.ESound;
-import de.homelab.madgaksha.resourcecache.IResource;
 
 
 /**
@@ -32,19 +30,12 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 		super();
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public IResource<? extends Enum<?>,?>[] requestedResources() {
-		return new IResource[]{
-			EAnimationList.SOLDIER_RED_0,
-			ESound.HOOORGH,
-		};
-	}
 	
 	@Override
 	public void setup(Entity e, Shape2D shape, ETrigger spawn, Vector2 initialPos, Float initDir) {
 		super.setup(e, shape, spawn,initialPos,initDir);
 
+		
 		BehaviourComponent bc = new BehaviourComponent(this);
 		RotationComponent rc = new RotationComponent(true);
 		TemporalComponent tc = new TemporalComponent();

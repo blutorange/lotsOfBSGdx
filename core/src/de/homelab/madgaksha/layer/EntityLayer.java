@@ -1,11 +1,15 @@
 package de.homelab.madgaksha.layer;
 
+import static de.homelab.madgaksha.GlobalBag.enemyTargetCrossEntity;
+import static de.homelab.madgaksha.GlobalBag.playerBattleStigmaEntity;
+import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import static de.homelab.madgaksha.GlobalBag.level;
 import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.playerEntity;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +27,7 @@ import de.homelab.madgaksha.entityengine.entitysystem.AngularMovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CameraTracingSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.DanmakuSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantRotationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantScaleSystem;
@@ -49,21 +53,22 @@ public class EntityLayer extends ALayer {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(EntityLayer.class);
 	private boolean doUpdate;
-	
-	public EntityLayer() {
-		createEngine();
+
+	public EntityLayer() throws IOException {
+		if (!createEngine()) throw new IOException("failed to load resources");
 	}
-	
+
 	@Override
 	public void draw(float deltaTime) {
-		if (doUpdate) gameEntityEngine.update(deltaTime);
+		if (doUpdate)
+			gameEntityEngine.update(deltaTime);
 		else {
 			final SpriteRenderSystem spriteRenderSystem = gameEntityEngine.getSystem(SpriteRenderSystem.class);
 			if (spriteRenderSystem != null) {
 				viewportGame.apply();
 				spriteRenderSystem.update(deltaTime);
 			}
-			//gameEntityEngine.getSystem(Draw3dSystem.class).update(deltaTime);
+			// gameEntityEngine.getSystem(Draw3dSystem.class).update(deltaTime);
 		}
 		doUpdate = false;
 	}
@@ -73,7 +78,7 @@ public class EntityLayer extends ALayer {
 		doUpdate = true;
 
 	}
-	
+
 	@Override
 	public void removedFromStack() {
 		if (gameEntityEngine != null) {
@@ -81,7 +86,7 @@ public class EntityLayer extends ALayer {
 			for (EntitySystem es : gameEntityEngine.getSystems()) {
 				gameEntityEngine.removeSystem(es);
 			}
-		}		
+		}
 	}
 
 	@Override
@@ -102,8 +107,8 @@ public class EntityLayer extends ALayer {
 			e.remove(TriggerStartupComponent.class);
 		}
 	}
-	
-	public void createEngine() {
+
+	public boolean createEngine() {
 		gameEntityEngine.addSystem(new ParticleEffectRenderSystem());
 		gameEntityEngine.addSystem(new BirdsViewSpriteSystem());
 		gameEntityEngine.addSystem(new SpriteAnimationSystem());
@@ -116,41 +121,57 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new NewtonianForceSystem());
 		gameEntityEngine.addSystem(new MovementSystem());
 		gameEntityEngine.addSystem(new AngularMovementSystem());
-		gameEntityEngine.addSystem(new DanmakuSystem());
 		gameEntityEngine.addSystem(new PostEffectSystem());
 		gameEntityEngine.addSystem(new TemporalSystem());
 		gameEntityEngine.addSystem(new CollisionSystem());
 		gameEntityEngine.addSystem(new AiSystem());
+		gameEntityEngine.addSystem(new DamageSystem());
 
 		switch (Gdx.app.getType()) {
 		case Android:
-			//TODO
+			// TODO
 			break;
 		case Applet:
-			//TODO
+			// TODO
 			break;
 		case Desktop:
 			gameEntityEngine.addSystem(new InputPlayerDesktopSystem());
 			break;
 		case HeadlessDesktop:
-			//TODO
+			// TODO
 			break;
 		case WebGL:
-			//TODO
+			// TODO
 			break;
 		case iOS:
-			//TODO
+			// TODO
 			break;
 		default:
-			//TODO
+			// TODO
 			break;
 		}
+
+		Entity playerE = MakerUtils.makePlayer(player);
+		if (playerE == null) return false;
 		
-		playerEntity = MakerUtils.makePlayer(player);
-		Entity myCamera = MakerUtils.makeCamera(level);
+		Entity hitCircle = MakerUtils.makePlayerHitCircle(playerE, player);
+		Entity battleStigma = MakerUtils.makePlayerBattleStigma(playerE, player);
+		Entity targetCross = MakerUtils.makeEnemyTargetCross();
+		Entity myCamera = MakerUtils.makeCamera(level, playerE);
+		if (hitCircle == null || battleStigma == null || myCamera == null) return false;
 		
-		gameEntityEngine.addEntity(playerEntity);
 		gameEntityEngine.addEntity(myCamera);
+		gameEntityEngine.addEntity(battleStigma);
+		gameEntityEngine.addEntity(playerE);
+		gameEntityEngine.addEntity(hitCircle);
+		gameEntityEngine.addEntity(targetCross);
+
+		playerBattleStigmaEntity = battleStigma;
+		playerHitCircleEntity = hitCircle;
+		playerEntity = playerE;
+		enemyTargetCrossEntity = targetCross;
+		
+		return true;
 	}
 
 	@Override

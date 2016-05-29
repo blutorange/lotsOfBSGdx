@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.resourcecache.ETexture;
@@ -38,6 +39,10 @@ public class SpriteComponent implements Component, Poolable {
 	public SpriteComponent(SpriteAnimationComponent sac) {
 		setup(sac);
 	}
+
+	public SpriteComponent(SpriteAnimationComponent sac, Vector2 origin) {
+		setup(sac, origin);
+	}
 	
 	public void setup(Sprite sprite) {
 		this.sprite = sprite;
@@ -45,12 +50,21 @@ public class SpriteComponent implements Component, Poolable {
 	
 	public void setup(ETexture texture) {
 		sprite = texture.asSprite();
+		if (sprite != null) sprite.setOriginCenter();
 	}
 	
 	public void setup(SpriteAnimationComponent sac) {
 		final TextureRegion tr = sac.animation.getKeyFrame(0.0f);
-		sprite = new Sprite(tr); // constructor calls #setOriginCenter()
-		sprite.setTexture(tr.getTexture());		
+		sprite = new Sprite(tr);
+		sprite.setTexture(tr.getTexture());
+		sprite.setOriginCenter();
+	}
+	
+	public void setup(SpriteAnimationComponent sac, Vector2 origin) {
+		final TextureRegion tr = sac.animation.getKeyFrame(0.0f);
+		sprite = new Sprite(tr);
+		sprite.setTexture(tr.getTexture());
+		sprite.setOrigin(origin.x, origin.y);
 	}
 	
 	@Override

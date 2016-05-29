@@ -1,8 +1,11 @@
 package de.homelab.madgaksha.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+
+import de.homelab.madgaksha.entityengine.Mapper;
 
 /**
  * Represents the position of an object in world space.
@@ -35,27 +38,75 @@ public class PositionComponent implements Component, Poolable {
 	}
 
 	public PositionComponent(float x, float y) {
+		setup(x,y);
+	}
+	public PositionComponent(PositionComponent pc) {
+		setup(pc);
+	}
+	public PositionComponent(Entity e) {
+		setup(e);
+	}
+	public PositionComponent(float x, float y, boolean l) {
+		setup(x,y,l);
+	}
+	public PositionComponent(Vector2 v) {
+		setup(v);
+	}
+	public PositionComponent(Vector2 v, boolean l) {
+		setup(v,l);
+	}
+	
+	public PositionComponent(float x, float y, float z) {
+		setup(x,y,z);
+	}
+	public PositionComponent(float x, float y, float z, boolean l) {
+		setup(x,y,z,l);
+	}
+
+	/** 
+	 * Sets this position component to the same values as the given position component.
+	 * @param pc Position component to clone.
+	 */
+	public void setup(PositionComponent pc) {
+		this.x = pc.x;
+		this.y = pc.y;
+		this.z = pc.z;
+		this.offsetX = pc.offsetX;
+		this.offsetY = pc.offsetY;
+		this.offsetZ = pc.offsetZ;
+		this.limitToMap = pc.limitToMap;
+	}
+	public void setup(Entity e) {
+		final PositionComponent pc = Mapper.positionComponent.get(e);
+		if (pc != null) setup(pc);
+	}
+	/**
+	 * Sets this component to the given position on the xy-plane.
+	 * @param x The x-position-
+	 * @param y The y-position.
+	 */
+	public void setup(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
-	public PositionComponent(float x, float y, boolean l) {
+	public void setup(float x, float y, boolean l) {
 		this.x = x;
 		this.y = y;
 		limitToMap = l;
 	}
-	public PositionComponent(Vector2 v) {
-		this(v.x, v.y, DEFAULT_LIMIT_TO_MAP);
+	public void setup(Vector2 v) {
+		setup(v.x, v.y, DEFAULT_LIMIT_TO_MAP);
 	}
-	public PositionComponent(Vector2 v, boolean l) {
-		this(v.x, v.y, l);
+	public void setup(Vector2 v, boolean l) {
+		setup(v.x, v.y, l);
 	}
 	
-	public PositionComponent(float x, float y, float z) {
+	public void setup(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
-	public PositionComponent(float x, float y, float z, boolean l) {
+	public void setup(float x, float y, float z, boolean l) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -74,15 +125,6 @@ public class PositionComponent implements Component, Poolable {
 		limitToMap = DEFAULT_LIMIT_TO_MAP;
 	}
 	
-	/**
-	 * Sets this component to the given position on the xy-plane.
-	 * @param x The x-position-
-	 * @param y The y-position.
-	 */
-	public void setup(float x, float y) {
-		this.x = x;
-		this.y = y;
-	}
 	
 	@Override
 	public String toString(){

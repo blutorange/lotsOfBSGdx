@@ -4,10 +4,12 @@ import com.badlogic.ashley.core.ComponentMapper;
 
 import de.homelab.madgaksha.entityengine.component.AngularVelocityComponent;
 import de.homelab.madgaksha.entityengine.component.BehaviourComponent;
-import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
+import de.homelab.madgaksha.entityengine.component.BulletStatusComponent;
 import de.homelab.madgaksha.entityengine.component.CallbackComponent;
 import de.homelab.madgaksha.entityengine.component.CameraFocusComponent;
+import de.homelab.madgaksha.entityengine.component.ColorComponent;
+import de.homelab.madgaksha.entityengine.component.ColorFlashEffectComponent;
 import de.homelab.madgaksha.entityengine.component.ComponentQueueComponent;
 import de.homelab.madgaksha.entityengine.component.DamageQueueComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
@@ -21,6 +23,7 @@ import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
+import de.homelab.madgaksha.entityengine.component.ParentComponent;
 import de.homelab.madgaksha.entityengine.component.ParticleEffectComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
@@ -30,17 +33,23 @@ import de.homelab.madgaksha.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
+import de.homelab.madgaksha.entityengine.component.SiblingComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
+import de.homelab.madgaksha.entityengine.component.StickyEffectComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.TimeScaleComponent;
-import de.homelab.madgaksha.entityengine.component.TrajectoryComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerScreenComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerTouchComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.ViewportComponent;
+import de.homelab.madgaksha.entityengine.component.VoiceComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxMapComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxRenderComponent;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup02Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup03Component;
@@ -82,14 +91,26 @@ public final class Mapper {
 			.getFor(AngularVelocityComponent.class);
 	public final static ComponentMapper<BehaviourComponent> behaviourComponent = ComponentMapper
 			.getFor(BehaviourComponent.class);
-	public final static ComponentMapper<BoundingBoxComponent> boundingBoxComponent = ComponentMapper
-			.getFor(BoundingBoxComponent.class);
+	public final static ComponentMapper<BoundingBoxCollisionComponent> boundingBoxCollisionComponent = ComponentMapper
+			.getFor(BoundingBoxCollisionComponent.class);
+	public final static ComponentMapper<BoundingBoxMapComponent> boundingBoxMapComponent = ComponentMapper
+			.getFor(BoundingBoxMapComponent.class);
+	public final static ComponentMapper<BoundingBoxRenderComponent> boundingBoxRenderComponent = ComponentMapper
+			.getFor(BoundingBoxRenderComponent.class);
 	public final static ComponentMapper<BoundingSphereComponent> boundingSphereComponent = ComponentMapper
 			.getFor(BoundingSphereComponent.class);
+	public final static ComponentMapper<BulletStatusComponent> bulletStatusComponent = ComponentMapper
+			.getFor(BulletStatusComponent.class);
 	public final static ComponentMapper<CameraFocusComponent> cameraFocusComponent = ComponentMapper
 			.getFor(CameraFocusComponent.class);
 	public final static ComponentMapper<CallbackComponent> callbackComponent = ComponentMapper
 			.getFor(CallbackComponent.class);
+	public final static ComponentMapper<SiblingComponent> childComponent = ComponentMapper
+			.getFor(SiblingComponent.class);
+	public final static ComponentMapper<ColorComponent> colorComponent = ComponentMapper
+			.getFor(ColorComponent.class);
+	public final static ComponentMapper<ColorFlashEffectComponent> colorFlashEffectComponent = ComponentMapper
+			.getFor(ColorFlashEffectComponent.class);
 	public final static ComponentMapper<ComponentQueueComponent> componentQueueComponent = ComponentMapper
 			.getFor(ComponentQueueComponent.class);
 	public final static ComponentMapper<DirectionComponent> directionComponent = ComponentMapper
@@ -113,6 +134,8 @@ public final class Mapper {
 			.getFor(ManyTrackingComponent.class);
 	public final static ComponentMapper<PainPointsComponent> painPointsComponent = ComponentMapper
 			.getFor(PainPointsComponent.class);
+	public final static ComponentMapper<ParentComponent> parentComponent = ComponentMapper
+			.getFor(ParentComponent.class);
 	public final static ComponentMapper<ParticleEffectComponent> particleEffectComponent = ComponentMapper
 			.getFor(ParticleEffectComponent.class);
 	public final static ComponentMapper<PositionComponent> positionComponent = ComponentMapper
@@ -137,6 +160,10 @@ public final class Mapper {
 			.getFor(SpriteComponent.class);
 	public final static ComponentMapper<SpriteForDirectionComponent> spriteForDirectionComponent = ComponentMapper
 			.getFor(SpriteForDirectionComponent.class);
+	public final static ComponentMapper<StatusValuesComponent> statusValuesComponent = ComponentMapper
+			.getFor(StatusValuesComponent.class);
+	public final static ComponentMapper<StickyEffectComponent> stickyEffectComponent = ComponentMapper
+			.getFor(StickyEffectComponent.class);
 	public final static ComponentMapper<TemporalComponent> temporalComponent = ComponentMapper
 			.getFor(TemporalComponent.class);
 	public final static ComponentMapper<TimeScaleComponent> timeScaleComponent = ComponentMapper
@@ -147,11 +174,11 @@ public final class Mapper {
 			.getFor(TriggerStartupComponent.class);
 	public final static ComponentMapper<TriggerTouchComponent> triggerTouchComponent = ComponentMapper
 			.getFor(TriggerTouchComponent.class);
-
-	public final static ComponentMapper<TrajectoryComponent> trajectoryComponent = ComponentMapper
-			.getFor(TrajectoryComponent.class);
 	public final static ComponentMapper<VelocityComponent> velocityComponent = ComponentMapper
 			.getFor(VelocityComponent.class);
 	public final static ComponentMapper<ViewportComponent> viewportComponent = ComponentMapper
 			.getFor(ViewportComponent.class);
+	public final static ComponentMapper<VoiceComponent> voiceComponent = ComponentMapper
+			.getFor(VoiceComponent.class);
+
 }

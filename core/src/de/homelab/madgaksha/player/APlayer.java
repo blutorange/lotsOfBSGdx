@@ -5,38 +5,65 @@ import java.util.EnumSet;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Shape2D;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.component.ShadowComponent;
+import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.player.tokugi.ATokugi;
 import de.homelab.madgaksha.player.weapon.AWeapon;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
+import de.homelab.madgaksha.resourcecache.EMusic;
+import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.util.MoreMathUtils;
 
-public abstract class APlayer implements IPainBar{
+public abstract class APlayer {
 
 	private final EAnimationList animationList;
 	private final float movementAccelerationFactorLow;
 	private final float movementAccelerationFactorHigh;
 	private final float movementFrictionFactor;
+	private final float movementBattleSpeedLow;
+	private final float movementBattleSpeedHigh;
 	private final Color painBarColorLow = new Color();
 	private final Color painBarColorMid = new Color();
 	private final Color painBarColorHigh = new Color();
-	private final int[] painPointsDigits = new int[10];
-	
+		
 	/** x,y are the offset relative to the center of the sprites (bottom left). Radius is the circe's size. */
+	final private Shape2D exactShapeCollision;
 	final private Circle boundingCircle;
-	final private Rectangle boundingBox;
+	final private Rectangle boundingBoxMap;
+	final private Rectangle boundingBoxRender;
+	final private Rectangle boundingBoxCollision;
+	final private Vector2 spriteOrigin;
 	/** x,y are the offset relative to the center of the sprites (bottom left). Width and height are the dimensions. */ 
 	final private IResource<? extends Enum<?>,?>[] requiredResources;
 	
-	/** Player current pain points. */
-	private long painPoints;
 	/** Player maximum paint points. */
-	private long maxPainPoints;
-	private float painPointsRatio;
+	private final long maxPainPoints;
+	/** Bullet attack power. Default 1.0 */
+	private final float bulletAttack;
+	/** Bullet resistance. Default 1.0 */
+	private final float bulletResistance;
+	
+	private final float battleStigmaAngularVelocity;
+	
+	/** The texture used as the player's hit circle / point. 
+	 * It is placed at the center of the player's hit box.
+	 * @see #requestedBoundingBoxCollision() 
+	 */
+	private final ETexture hitCircleTexture;
+	private final ETexture battleStigmaTexture;
+	
+	private final Color battleStigmaColorWhenHit;
+	
+	private final EMusic voiceOnBattleStart;
+	private final EMusic voiceOnHeavyDamage;
+	private final EMusic voiceOnLightDamage;
+	private final EMusic voiceOnDeath;
 	
 	private final EnumSet<EWeapon> supportedWeaponSet = EnumSet.of(EWeapon.NONE); 
 	private final EnumMap<EWeapon,AWeapon> supportedWeaponMap = new EnumMap<EWeapon,AWeapon>(EWeapon.class);
@@ -54,12 +81,29 @@ public abstract class APlayer implements IPainBar{
 		this.movementAccelerationFactorLow = requestedMovementAccelerationFactorLow();
 		this.movementAccelerationFactorHigh = requestedMovementAccelerationFactorHigh();
 		this.movementFrictionFactor = requestedMovementFrictionFactor();
+		this.movementBattleSpeedLow = requestedMovementBattleSpeedLow();
+		this.movementBattleSpeedHigh = requestedMovementBattleSpeedHigh();
 		this.animationList = requestedAnimationList();
+		this.spriteOrigin = requestedSpriteOrigin();
 		this.boundingCircle = requestedBoundingCircle();
-		this.boundingBox = requestedBoundingBox();
+		this.boundingBoxMap = requestedBoundingBoxMap();
+		this.boundingBoxRender = requestedBoundingBoxRender();
+		this.boundingBoxCollision = requestedBoundingBoxCollision();
+		this.exactShapeCollision = requestedExactShapeCollision();
 		this.painBarColorLow.set(requestedPainBarColorLow());
 		this.painBarColorMid.set(requestedPainBarColorMid());
 		this.painBarColorHigh.set(requestedPainBarColorHigh());
+		this.maxPainPoints = MathUtils.clamp(requestedMaxPainPoints(),1L, DamageSystem.MAX_PAIN_POINTS);
+		this.bulletAttack = requestedBulletAttack();
+		this.bulletResistance = requestedBulletResistance();
+		this.hitCircleTexture = requestedHitCircleTexture();
+		this.battleStigmaTexture = requestedBattleStigmaTexture();
+		this.battleStigmaAngularVelocity = requestedBattleStigmaAngularVelocity();
+		this.voiceOnBattleStart = requestedVoiceOnBattleStart();
+		this.voiceOnLightDamage = requestedVoiceOnLightDamage();
+		this.voiceOnHeavyDamage = requestedVoiceOnHeavyDamage();
+		this.voiceOnDeath = requestedVoiceOnDeath();
+		this.battleStigmaColorWhenHit = requestedBattleStigmaColorWhenHit();
 		
 		// Make sure subclasses cannot remove EWeapon.NONE
 		EWeapon[] ew = requestedSupportedWeapons();
@@ -74,12 +118,11 @@ public abstract class APlayer implements IPainBar{
 				supportedTokugiSet.add(t);
 		
 		this.requiredResources = requestedRequiredResources();
-		this.maxPainPoints = requestedMaxPainPoints();
-		
-		if (this.maxPainPoints >= MoreMathUtils.pow(10L, painPointsDigits.length))
-			this.maxPainPoints = MoreMathUtils.pow(10L, painPointsDigits.length) - 1L; 
-		this.untakeDamage(this.maxPainPoints);		
 	}
+
+
+	
+
 
 	// ====================================
 	//          Abstract methods
@@ -97,19 +140,64 @@ public abstract class APlayer implements IPainBar{
 	/** @return Low acceleration of the player. */
 	protected abstract float requestedMovementAccelerationFactorLow();	
 
+	/** @return Lower battle speed while dodging bullets. */
+	protected abstract float requestedMovementBattleSpeedLow();
+	/** @return Higher battle speed while dodging bullets. */
+	protected abstract float requestedMovementBattleSpeedHigh();
+	
+	/** @return The point to be considered the sprite's origin, used for drawing. When the player's position is (0,0), this pixel will be at the world position (0,0).*/
+	protected abstract Vector2 requestedSpriteOrigin();
+	
 	/** @return Radius of the sphere bounding the player. */
 	protected abstract Circle requestedBoundingCircle();
 	
-	/** @return Radius of the sphere bounding the player. */
-	protected abstract Rectangle requestedBoundingBox();
+	/** @return Bounding box for map related checking, ie. checking for blocking tiles. */
+	protected abstract Rectangle requestedBoundingBoxMap();
+	/** @return Bounding box for collision checking (bullets, hitboxes). */
+	protected abstract Rectangle requestedBoundingBoxCollision();
+	/** @return Bounding box for render-related checking, ie. whether to draw the entity. */
+	protected abstract Rectangle requestedBoundingBoxRender();
 
 	/** @return Player maximum pain points (pp). */
 	protected abstract int requestedMaxPainPoints();
+
+	/** @return Texture used to display the hit circle / point. Placed at the center of the player's hit box. */
+	protected abstract ETexture requestedHitCircleTexture();
+	
+	/** @return The stigma appearing below the playing when in battle mode. */
+	protected abstract ETexture requestedBattleStigmaTexture();
+	
+	/** @return Color of the battle stigma when hit. It blinks several times. */
+	protected abstract Color requestedBattleStigmaColorWhenHit();
+	
+	/** @return The speed at which the battle stigma will rotate. */
+	protected abstract float requestedBattleStigmaAngularVelocity();
+	
+	/** @return Player bullet attack power. Damage is multiplied by this factor. */
+	protected abstract float requestedBulletAttack();
+	/** @return Player bullet attack power. Damage is divided by this factor. */
+	protected abstract float requestedBulletResistance();
+
 	
 	/** @return List of weapons the player can equip. May be null.*/
 	protected abstract EWeapon[] requestedSupportedWeapons();
 	/** @return List of tokugi the player can learn. May be null.*/ 
 	protected abstract ETokugi[] requestedSupportedTokugi();
+	
+	/** @return Voice played when battle starts. */
+	protected abstract EMusic requestedVoiceOnBattleStart() ;
+	/**
+	 * @see DamageSystem#THRESHOLD_LIGHT_HEAVY_DAMAGE 
+	 * @return Voice played when taking heavy damage.
+	 */
+	protected abstract EMusic requestedVoiceOnHeavyDamage();
+	/**
+	 * @see DamageSystem#THRESHOLD_LIGHT_HEAVY_DAMAGE
+	 * @return Voice played when taking light damage.
+	 */
+	protected abstract EMusic requestedVoiceOnLightDamage() ;
+	/** @return Voice played when dying. */
+	protected abstract EMusic requestedVoiceOnDeath();
 	
 	/**
 	 * Must return a list of all resources that the level requires. They will
@@ -150,29 +238,48 @@ public abstract class APlayer implements IPainBar{
 		return animationList;
 	}
 
+	public Vector2 getSpriteOrigin() {
+		return spriteOrigin;
+	}
+	
 	public Circle getBoundingCircle() {
 		return boundingCircle;
 	}
-	public Rectangle getBoundingBox() {
-		return boundingBox;
+	public Rectangle getBoundingBoxCollision() {
+		return boundingBoxCollision;
+	}
+	public Rectangle getBoundingBoxRender() {
+		return boundingBoxRender;
+	}
+	public Rectangle getBoundingBoxMap() {
+		return boundingBoxMap;
+	}	
+	public Shape2D getExactShapeCollision() {
+		return exactShapeCollision;
+	}	
+
+	public ETexture getHitCircleTexture() {
+		return hitCircleTexture;
 	}
 	
-	public float getBoundingBoxCenterX() {
-		return boundingBox.x + 0.5f*boundingBox.width;
+	public ETexture getBattleStigmaTexture() {
+		return battleStigmaTexture;
+	}
+	public Color getBattleStigmaColorWhenHit() {
+		return battleStigmaColorWhenHit;
+	}
+	public float getBattleStigmaAngularVelocity() {
+		return battleStigmaAngularVelocity;
 	}
 	
-	public float getBoundingBoxCenterY() {
-		return boundingBox.y + 0.5f*boundingBox.height;
-	}
-	
-	@Override
-	public long getPainPoints() {
-		return painPoints;
-	}
-	
-	@Override
 	public long getMaxPainPoints() {
 		return maxPainPoints;
+	}
+	public float getBulletAttack() {
+		return bulletAttack;
+	}
+	public float getBulletResistance() {
+		return bulletResistance;
 	}
 	
 	/** Can be overridden for a custom HP bar color.
@@ -197,67 +304,7 @@ public abstract class APlayer implements IPainBar{
 		return new Color(255.0f, 80.0f/255.0f, 80.0f/255.0f, 1.0f);
 	}
 	
-	
-	
-	/**
-	 * @param damage Amount of damage to take.
-	 * @return Whether the player is now dead :(
-	 */
-	@Override
-	public boolean takeDamage(long damage) {
-		painPoints += damage;
-		updatePainPoints();
-		return isDead();
-	}
-	/**
-	 * @param health 
-	 * @return Whether the player is now completely undamaged :)
-	 */
-	@Override
-	public boolean untakeDamage(long health) {
-		painPoints -= health;
-		updatePainPoints();
-		return isUndamaged();
-	}
-	@Override
-	public boolean takeDamage(int damage) {
-		return takeDamage((long)damage);
-	}
-	@Override
-	public boolean untakeDamage(int health) {
-		return untakeDamage((long)health);
-	}
-	/** @return Whether the player is dead :( */
-	@Override
-	public boolean isDead() {
-		return painPoints >= maxPainPoints;
-	}
-	/** @return Whether the player is completely healed :) */
-	public boolean isUndamaged() {
-		return painPoints <= 0;
-	}
-	/** @return The ratio currentPainPoints / maximumPaintPoints. */
-	@Override
-	public float getPainPointsRatio() {
-		return painPointsRatio;
-	}
-
-	public int getPainPointsDigit(int i) {
-		return painPointsDigits[i];
-	}	
-
-	private void updatePainPoints() {
-		if (painPoints < 0) painPoints = 0;
-		if (painPoints > maxPainPoints) painPoints = maxPainPoints;
-
-		painPointsRatio = ((float)painPoints) / ((float)maxPainPoints);
-		
-		long digit = painPoints;
-		for (int i = painPointsDigits.length; i --> 0;) {
-			painPointsDigits[i] = (int)(digit % 10L);
-			digit /= 10;
-		}
-	}
+	protected abstract Shape2D requestedExactShapeCollision();
 
 	public Color getPainBarColorLow() {
 		return painBarColorLow;
@@ -275,14 +322,18 @@ public abstract class APlayer implements IPainBar{
 	public float getMovementFrictionFactor() {
 		return movementFrictionFactor;
 	}
-
 	public float getMovementAccelerationFactorLow() {
 		return movementAccelerationFactorLow;
 	}
 	public float getMovementAccelerationFactorHigh() {
 		return movementAccelerationFactorHigh;
 	}
-
+	public float getMovementBattleSpeedLow() {
+		return movementBattleSpeedLow;
+	}
+	public float getMovementBattleSpeedHigh() {
+		return movementBattleSpeedHigh;
+	}
 
 	public void switchWeapon(EWeapon weapon) {
 		if (supportedWeaponSet.contains(weapon))
@@ -299,5 +350,18 @@ public abstract class APlayer implements IPainBar{
 	public ATokugi getTokugi() {
 		return currentTokugi;
 	}
-	
+
+	public EMusic getVoiceOnBattleStart() {
+		return voiceOnBattleStart;
+	}
+	public EMusic getVoiceOnLightDamage() {
+		return voiceOnLightDamage;
+	}
+	public EMusic getVoiceOnHeavyDamage() {
+		return voiceOnHeavyDamage;
+	}
+	public EMusic getVoiceOnDeath() {
+		return voiceOnDeath;
+	}
+
 }

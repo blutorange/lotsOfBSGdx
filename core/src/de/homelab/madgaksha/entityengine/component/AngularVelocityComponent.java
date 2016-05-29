@@ -4,12 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
- * Represents the velocity of an object in world coordinates.
- * 
- * V = (V_x, V_y, V_z).
- * 
- * Unit: m/s.
- * 
+ * Represents angular velocity. Speed in degrees/second.
  * @author mad_gaksha
  */
 public class AngularVelocityComponent implements Component, Poolable {
@@ -20,6 +15,9 @@ public class AngularVelocityComponent implements Component, Poolable {
 	public AngularVelocityComponent() {
 	}
 	public AngularVelocityComponent(float speed) {
+		setup(speed);
+	}
+	public void setup(float speed) {
 		this.speed = speed;
 	}
 	

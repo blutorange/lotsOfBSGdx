@@ -15,12 +15,21 @@ import de.homelab.madgaksha.resourcecache.EMusic;
 public class MusicPlayer extends AAudioPlayer {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(MusicPlayer.class);
+	
+	// Singleton
+	private static class SingletonHolder {
+		private static final MusicPlayer INSTANCE = new MusicPlayer();
+	}
+	public static MusicPlayer getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	private MusicPlayer() {
+		super();
+	}
+	
 	private Music currentClip = null;
 	private Music nextClip = null;
 
-	public MusicPlayer() {
-		super();
-	}
 
 	/**
 	 * Loads the next clip to be played.

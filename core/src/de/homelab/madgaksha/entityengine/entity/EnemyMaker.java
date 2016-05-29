@@ -1,6 +1,12 @@
 package de.homelab.madgaksha.entityengine.entity;
 
-import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
+import static de.homelab.madgaksha.GlobalBag.battleModeActive;
+import static de.homelab.madgaksha.GlobalBag.enemyTargetCrossEntity;
+import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
+import static de.homelab.madgaksha.GlobalBag.level;
+import static de.homelab.madgaksha.GlobalBag.playerBattleStigmaEntity;
+import static de.homelab.madgaksha.GlobalBag.playerEntity;
+import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.GlobalBag.statusScreen;
 
 import com.badlogic.ashley.core.Component;
@@ -10,8 +16,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 
+import de.homelab.madgaksha.audiosystem.MusicPlayer;
+import de.homelab.madgaksha.audiosystem.SoundPlayer;
+import de.homelab.madgaksha.audiosystem.VoicePlayer;
 import de.homelab.madgaksha.entityengine.ETrigger;
-import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
+import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.ABoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.CameraFocusComponent;
 import de.homelab.madgaksha.entityengine.component.ComponentQueueComponent;
@@ -21,13 +31,25 @@ import de.homelab.madgaksha.entityengine.component.EnemyIconComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
+import de.homelab.madgaksha.entityengine.component.ParticleEffectComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.ScaleComponent;
+import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
+import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
+import de.homelab.madgaksha.entityengine.component.StickyEffectComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
+import de.homelab.madgaksha.entityengine.component.VoiceComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxRenderComponent;
 import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.enums.ECollisionGroup;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.EMusic;
+import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
+import de.homelab.madgaksha.resourcepool.EParticleEffect;
+import de.homelab.madgaksha.resourcepool.ResourcePool;
 import de.homelab.madgaksha.util.GeoUtil;
 
 public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrigger, IReceive {
@@ -61,12 +83,14 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		// Create components to be added.
 		Component tc = MakerUtils.makeTrigger(this, this, trigger, ECollisionGroup.PLAYER_GROUP);
 		PositionComponent pcTrigger = MakerUtils.makePositionAtCenter(shape);
-		BoundingBoxComponent bbcEnemy = new BoundingBoxComponent(requestedBoundingBox());
-		BoundingBoxComponent bbcTrigger = new BoundingBoxComponent(GeoUtil.getBoundingBox(shape));
+		ABoundingBoxComponent bbcEnemyRender = new BoundingBoxRenderComponent(requestedBoundingBoxRender());
+		ABoundingBoxComponent bbcEnemyCollision = new BoundingBoxCollisionComponent(requestedBoundingBoxCollision());
+		ABoundingBoxComponent bbcTrigger = new BoundingBoxCollisionComponent(GeoUtil.getBoundingBox(shape));
 		BoundingSphereComponent bsc = new BoundingSphereComponent(requestedBoundingCircle());
 		PositionComponent pcEnemy = new PositionComponent(initialPosition.x + pcTrigger.x,
 				initialPosition.y + pcTrigger.y);
 		PainPointsComponent ppc = new PainPointsComponent(requestedMaxPainPoints());
+		StatusValuesComponent svc = new StatusValuesComponent(requestedBulletAttack(), requestedBulletResistance());
 		DamageQueueComponent dqc = new DamageQueueComponent();
 		CameraFocusComponent cfc = new CameraFocusComponent();
 		DirectionComponent dc = new DirectionComponent(initDir);
@@ -75,6 +99,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		TemporalComponent tpc = new TemporalComponent();
 		ComponentQueueComponent cqc = new ComponentQueueComponent();
 		EnemyIconComponent eic = new EnemyIconComponent(requestedIconMain().asSprite(), requestedIconSub().asSprite());
+		VoiceComponent vc = createVoiceComponent(); 
 		
 		// Initially, the bounding box is the area the player needs to
 		// touch to spawn the enemy. When the enemy spawns, the bounding box
@@ -87,9 +112,10 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		
 		// Setup components to be changed once the enemy spawns.
 		cqc.add.add(pcEnemy);
-		cqc.add.add(bbcEnemy);
+		cqc.add.add(bbcEnemyRender);
+		cqc.add.add(bbcEnemyCollision);
 		cqc.add.add(bsc);
-		cqc.remove.add(BoundingBoxComponent.class);
+		cqc.remove.add(BoundingBoxCollisionComponent.class);
 		cqc.remove.add(InactiveComponent.class);
 		cqc.remove.add(InvisibleComponent.class);
 		cqc.remove.add(tc.getClass());
@@ -107,9 +133,27 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		entity.add(dqc);
 		entity.add(eic);
 		entity.add(cqc);
+		entity.add(svc);
+		entity.add(vc);
 				
 		if (tc != null)	entity.add(tc);
 	}
+
+	private VoiceComponent createVoiceComponent() {
+		VoiceComponent vc = new VoiceComponent(new VoicePlayer());
+		vc.onSpawn = requestedVoiceOnSpawn();
+		vc.onLightDamage = requestedVoiceOnLightDamage();
+		vc.onHeavyDamage = requestedVoiceOnHeavyDamage();
+		vc.onBattleModeStart = requestedVoiceOnBattleModeStart();
+		vc.onDeath = requestedVoiceOnDeath();
+		return vc;
+	}
+
+	protected abstract EMusic requestedVoiceOnSpawn();
+	protected abstract EMusic requestedVoiceOnLightDamage();
+	protected abstract EMusic requestedVoiceOnHeavyDamage();
+	protected abstract EMusic requestedVoiceOnBattleModeStart();
+	protected abstract EMusic requestedVoiceOnDeath();
 
 	@Override
 	public void callbackTrigger(Entity e, ETrigger t) {
@@ -128,13 +172,85 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	 */
 	private void sinSpawn(Entity e) {
 		ComponentUtils.applyComponentQueue(e);
-		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size())
-			statusScreen.targetEnemy(e);
-		// no need to target the targetted enemy again...
-//		else {
-//			Entity enemy = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
-//			statusScreen.targetEnemy(enemy);
-//		}
+		VoiceComponent vc = Mapper.voiceComponent.get(e);
+		if (vc != null && vc.voicePlayer != null) vc.voicePlayer.play(vc.onSpawn);
+	}
+	
+	/** Called when we leave battle mode. */
+	public static void exitBattleMode() {
+		battleModeActive = false;
+		MusicPlayer.getInstance().loadNext(level.getBgm());
+		MusicPlayer.getInstance().setCrossFade(true);
+		MusicPlayer.getInstance().transition(2.0f);
+		playerHitCircleEntity.add(gameEntityEngine.createComponent(InvisibleComponent.class));
+		
+		// Hide player battle stigma.
+		playerBattleStigmaEntity.add(gameEntityEngine.createComponent(InvisibleComponent.class));
+		playerBattleStigmaEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
+		
+		// Hide target cross.
+		enemyTargetCrossEntity.add(gameEntityEngine.createComponent(InvisibleComponent.class));
+		enemyTargetCrossEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
+	}
+	
+	/** Called when we enter battle mode. */
+	public static void enterBattleMode(Entity enemy) {
+		battleModeActive = true;
+		MusicPlayer.getInstance().loadNext(level.getBattleBgm());
+		MusicPlayer.getInstance().setCrossFade(true);
+		MusicPlayer.getInstance().transition(2.0f);
+		
+		// Show player's hit circle.
+		playerHitCircleEntity.remove(InvisibleComponent.class);
+		
+		// Show battle stigma.
+		playerBattleStigmaEntity.remove(InactiveComponent.class);
+		playerBattleStigmaEntity.remove(InvisibleComponent.class);
+		
+		// Show target cross.
+		enemyTargetCrossEntity.remove(InactiveComponent.class);
+		enemyTargetCrossEntity.remove(InvisibleComponent.class);
+		PositionComponent pc = Mapper.positionComponent.get(enemyTargetCrossEntity);
+		if (pc != null) pc.setup(enemy);
+		
+		// Add nice particle effect to battle stigma.
+		ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectComponent.class);
+		pec.particleEffect = ResourcePool.obtainParticleEffect(EParticleEffect.PLAYER_BATTLE_MODE_ENTER_BURST);//player.getBattleStigmaStartupParticleEffect();
+		playerBattleStigmaEntity.add(pec);
+		
+		// Animate battle stigma.
+		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(playerBattleStigmaEntity);
+		ScaleComponent sc = Mapper.scaleComponent.get(playerBattleStigmaEntity);
+		if (ssc != null) ssc.setup(1.0f,1.0f);
+		if (sc != null) sc.setup(0.0f, 0.0f);	
+		
+		// Play sound effects and voices.
+		SoundPlayer.getInstance().play(ESound.BATTLE_STIGMA_APPEAR);
+		// Voice player
+		VoiceComponent vc= Mapper.voiceComponent.get(playerEntity);
+		if (vc != null && vc.voicePlayer != null) vc.voicePlayer.play(vc.onBattleModeStart);
+		// Voice enemy.
+		vc = Mapper.voiceComponent.get(enemy);
+		if (vc != null && vc.voicePlayer != null) vc.voicePlayer.play(vc.onBattleModeStart);
+	}
+
+	/** Called when the target changed and needs to be updated. */
+	public static void targetSwitched(Entity enemy) {
+		statusScreen.targetEnemy(enemy);
+		// Make target cross stick to enemy.
+		StickyEffectComponent sec = Mapper.stickyEffectComponent.get(enemyTargetCrossEntity);
+		// Scale target cross to enemy's size.
+		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(enemyTargetCrossEntity);
+		ScaleComponent sc = Mapper.scaleComponent.get(enemyTargetCrossEntity);
+		BoundingBoxCollisionComponent bbcc = Mapper.boundingBoxCollisionComponent.get(enemy);
+		BoundingBoxRenderComponent bbrc = Mapper.boundingBoxRenderComponent.get(enemyTargetCrossEntity);
+		if (sc != null) sc.setup(99.0f, 99.0f);
+		if (ssc != null && bbrc != null && bbcc != null)
+			ssc.setup(2.0f * Math.max(bbcc.maxX - bbcc.minX, bbcc.maxY - bbcc.minY)
+					/ Math.min(bbrc.maxX - bbrc.minX, bbrc.maxY - bbrc.minY));
+		if (sec != null)
+			sec.setup(enemy, (bbcc.minX + bbcc.maxX) * 0.5f, (bbcc.minY + bbcc.maxY) * 0.5f, true, true);
+
 	}
 	
 	// =====================
@@ -145,12 +261,21 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 
 	protected abstract IResource<? extends Enum<?>, ?>[] requestedResources();
 
-	protected abstract Rectangle requestedBoundingBox();
+	/** @return The bounding box used for deciding whether the entity is on-screen and needs to be rendered. */
+	protected abstract Rectangle requestedBoundingBoxRender();
+	/** @return The bounding box used for deciding whether this entity collides with another entity. */
+	protected abstract Rectangle requestedBoundingBoxCollision();
 
 	protected abstract Circle requestedBoundingCircle();
 
 	/** @return Enemy maximum pain points (pp). */
-	protected abstract int requestedMaxPainPoints();
+	protected abstract long requestedMaxPainPoints();
+
+	/** @return The enemy's bullet atack power. Damage is multiplied by this factor. */
+	protected abstract float requestedBulletAttack();
+	/** @return The enemy's bullet resistance. Damage is divided by this factor. */
+	protected abstract float requestedBulletResistance();
 	
+	/** Called when the enemy spawns. */
 	protected abstract void spawned(Entity e, ETrigger t);
 }

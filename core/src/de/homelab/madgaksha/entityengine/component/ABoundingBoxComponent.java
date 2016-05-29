@@ -4,14 +4,30 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxRenderComponent;
+
 /**
- * Represents the dimensions of an object in world space.
+ * A bounding box. Subclassed for different types of bounding boxes used for
+ * collision detection, restricting player to non-blocking tiles on the map etc. 
  * 
- * Unit: Meter.
+ * <br><br>
+ * 
+ * Bounding boxes are always relative to the position of the entity.
+ * 
+ * <br><br>
+ * 
+ * Consider the player entity to see how these bounding boxes are different:
+ * 
+ * <ul>
+ * <li>{@link BoundingBoxRenderComponent} is a rectangle enclosing all pixels of the player's sprite.</li>
+ * <li>{@link BoundingBoxCollisionComponent} is a rectangle with a width of 1 pixel at the player's center.</li>
+ * <li>{@link BoundingBoxMapComponent} is a rectangle around the shadow of the player who is floating in air.</li>
+ * </ul>
  * 
  * @author mad_gaksha
  */
-public class BoundingBoxComponent implements Component, Poolable {
+public abstract class ABoundingBoxComponent implements Component, Poolable {
 	private final static float DEFAULT_MIN_X = -0.5f;
 	private final static float DEFAULT_MIN_Y = -0.5f;
 	
@@ -23,13 +39,13 @@ public class BoundingBoxComponent implements Component, Poolable {
 	public float maxX = DEFAULT_MAX_X;
 	public float maxY = DEFAULT_MAX_Y;
 	
-	public BoundingBoxComponent() {
+	public ABoundingBoxComponent() {
 	}
 
-	public BoundingBoxComponent(Rectangle r) {
+	public ABoundingBoxComponent(Rectangle r) {
 		setup(r);
 	}
-	public BoundingBoxComponent(float minX, float minY, float maxX, float maxY) {
+	public ABoundingBoxComponent(float minX, float minY, float maxX, float maxY) {
 		setup(minX,minY,maxX,maxY);
 	}
 
@@ -43,7 +59,7 @@ public class BoundingBoxComponent implements Component, Poolable {
 		this.minX= minX;
 		this.minY= minY;
 		this.maxX = maxX;
-		this.minY = minY;
+		this.maxY = maxY;
 	}
 
 	

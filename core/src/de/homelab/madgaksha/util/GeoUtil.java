@@ -1,5 +1,7 @@
 package de.homelab.madgaksha.util;
 
+import static de.homelab.madgaksha.GlobalBag.visibleWorldBoundingBox;
+
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Frustum;
@@ -13,8 +15,8 @@ import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
-import static de.homelab.madgaksha.GlobalBag.visibleWorldBoundingBox;
-import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
+
+import de.homelab.madgaksha.entityengine.component.ABoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.enums.EShapeType;
 import de.homelab.madgaksha.logging.Logger;
@@ -126,8 +128,12 @@ public class GeoUtil {
 
 	public static boolean isCollision(Shape2D a, Shape2D b, EShapeType sa, EShapeType sb, PositionComponent pa, PositionComponent pb){
 		switch (sa) {
+		case POINT:
+			return b.contains(((Point)a).x+pa.x-pb.x,((Point)a).y+pa.y-pb.y);
 		case CIRCLE:
 			switch (sb) {
+			case POINT:
+				return a.contains(((Point)b).x+pb.x-pa.x,((Point)b).y+pb.y-pa.x);
 			case CIRCLE:
 				c1.set((Circle)a);
 				c2.set((Circle)b);
@@ -204,6 +210,8 @@ public class GeoUtil {
 			}
 		case ELLIPSE:
 			switch (sb) {
+			case POINT:
+				return a.contains(((Point)b).x+pb.x-pa.x,((Point)b).y+pb.y-pa.x);
 			case CIRCLE:
 				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case ELLIPSE:
@@ -260,6 +268,8 @@ public class GeoUtil {
 			}
 		case POLYGON:
 			switch (sb) {
+			case POINT:
+				return a.contains(((Point)b).x+pb.x-pa.x,((Point)b).y+pb.y-pa.x);
 			case CIRCLE:
 				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case ELLIPSE:
@@ -320,6 +330,8 @@ public class GeoUtil {
 			}
 		case POLYLINE:
 			switch (sb) {
+			case POINT:
+				return a.contains(((Point)b).x+pb.x-pa.x,((Point)b).y+pb.y-pa.x);
 			case CIRCLE:
 				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case ELLIPSE:
@@ -367,6 +379,8 @@ public class GeoUtil {
 			}
 		case RECTANGLE:
 			switch (sb) {
+			case POINT:
+				return a.contains(((Point)b).x+pb.x-pa.x,((Point)b).y+pb.y-pa.x);
 			case CIRCLE:
 				return GeoUtil.isCollision(b, a, sb, sa, pb, pa);
 			case ELLIPSE:
@@ -397,11 +411,11 @@ public class GeoUtil {
 		}
 	}
 
-	public static boolean boundingBoxVisible(BoundingBoxComponent bbc, PositionComponent pc) {
-		if (visibleWorldBoundingBox.x + visibleWorldBoundingBox.width > bbc.minX +pc.x) {
-			if (visibleWorldBoundingBox.x < bbc.maxX + pc.x) {
-				if (visibleWorldBoundingBox.y + visibleWorldBoundingBox.height > bbc.minY + pc.y) {
-					if (visibleWorldBoundingBox.y < bbc.maxY + pc.y) {
+	public static boolean boundingBoxVisible(ABoundingBoxComponent bbc, PositionComponent pc) {
+		if (visibleWorldBoundingBox.x + visibleWorldBoundingBox.width >= bbc.minX +pc.x) {
+			if (visibleWorldBoundingBox.x <= bbc.maxX + pc.x) {
+				if (visibleWorldBoundingBox.y + visibleWorldBoundingBox.height >= bbc.minY + pc.y) {
+					if (visibleWorldBoundingBox.y <= bbc.maxY + pc.y) {
 						return true;
 					}
 				}

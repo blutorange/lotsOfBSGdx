@@ -130,6 +130,8 @@ public class StatusScreen {
 			new Rectangle(),
 			new Rectangle(),
 			new Rectangle(),
+			new Rectangle(),
+			new Rectangle()
 	};
 	private final Rectangle uiPainBarDigitsSeparatorGM = new Rectangle();
 	private final Rectangle uiPainBarDigitsSeparatorMK = new Rectangle();
@@ -149,6 +151,7 @@ public class StatusScreen {
 	private final Sprite spriteNumeral[] = new Sprite[10];
 
 	private PainPointsComponent targetPainPoints = null;
+	private PainPointsComponent playerPainPoints = null;
 	
 	private NinePatch frameMain;
 	private NinePatch frameCell;
@@ -322,15 +325,17 @@ public class StatusScreen {
 			frameData.draw(batchPixel, uiColumnDataEnemy.x, uiColumnDataEnemy.y, uiColumnDataEnemy.width,
 					uiColumnDataEnemy.height);
 			// HP meter counter.
-			boolean activated = false;
-			int digit;
-			for (int i = 0; i!= uiPainBarDigits.length; ++i) {
-				digit = player.getPainPointsDigit(i);
-				activated = activated || digit > 0;
-				if (activated) {
-					spriteNumeral[digit].setBounds(uiPainBarDigits[i].x, uiPainBarDigits[i].y,
-							uiPainBarDigits[i].width, uiPainBarDigits[i].height);
-					spriteNumeral[digit].draw(batchPixel);
+			if (playerPainPoints != null) {
+				boolean activated = false;
+				int digit;
+				for (int i = 0; i!= uiPainBarDigits.length; ++i) {
+					digit = playerPainPoints.painPointsDigits[i];
+					activated = activated || digit > 0;
+					if (activated) {
+						spriteNumeral[digit].setBounds(uiPainBarDigits[i].x, uiPainBarDigits[i].y,
+								uiPainBarDigits[i].width, uiPainBarDigits[i].height);
+						spriteNumeral[digit].draw(batchPixel);
+					}
 				}
 			}
 		}
@@ -391,20 +396,20 @@ public class StatusScreen {
 		}
 
 		// HP meter player.
-		float ratio = player.getPainPointsRatio();
+		float ratio = playerPainPoints != null ? playerPainPoints.painPointsRatio : 0.0f;
 		if (ratio < 0.5)
 			framePainBarFill.getColor().set(player.getPainBarColorLow()).lerp(player.getPainBarColorMid(),
-					player.getPainPointsRatio() * 2.0f);
+					ratio * 2.0f);
 		else
 			framePainBarFill.getColor().set(player.getPainBarColorMid()).lerp(player.getPainBarColorHigh(),
-					(player.getPainPointsRatio() - 0.5f) * 2.0f);
+					(ratio - 0.5f) * 2.0f);
 
 		if (landscapeMode) {
 			framePainBarFill.draw(batchPixel, uiPainBarMeterFill.x, uiPainBarMeterFill.y, uiPainBarMeterFill.width,
-					uiPainBarMeterFill.height * player.getPainPointsRatio());
+					uiPainBarMeterFill.height * ratio);
 		} else {
 			framePainBarFill.draw(batchPixel, uiPainBarMeterFill.x, uiPainBarMeterFill.y,
-					uiPainBarMeterFill.width * player.getPainPointsRatio(), uiPainBarMeterFill.height);
+					uiPainBarMeterFill.width * ratio, uiPainBarMeterFill.height);
 		}
 
 		batchPixel.end();
@@ -490,6 +495,16 @@ public class StatusScreen {
 		return landscapeMode;
 	}
 	
+	public void forPlayer(Entity e) {
+		PainPointsComponent ppc = Mapper.painPointsComponent.get(e);
+		if (ppc != null) forPlayer(ppc);
+		
+	}
+	
+	private void forPlayer(PainPointsComponent ppc) {
+		playerPainPoints = ppc;		
+	}
+
 	/**
 	 * Switches target to the specified enemy and shows the enemy's info in this statusScreen.
 	 * @param enemy The enemy to target
@@ -747,18 +762,20 @@ public class StatusScreen {
 		float fontPainBarWidth = fontPainBarHeight/ spriteNumeral[0].getRegionHeight() * spriteNumeral[0].getRegionWidth();
 		Layouter.layoutHorizontallyWithAbsoluteWidth(uiPainBarCounter, PortraitLayout.paddingPainBar, 0.5f, true, fontPainBarWidth, new Rectangle[]{
 				uiPainBarDigits[0],
-				uiPainBarDigitsSeparatorGM,
 				uiPainBarDigits[1],
 				uiPainBarDigits[2],
+				uiPainBarDigitsSeparatorGM,
 				uiPainBarDigits[3],
-				uiPainBarDigitsSeparatorMK,
 				uiPainBarDigits[4],
 				uiPainBarDigits[5],
+				uiPainBarDigitsSeparatorMK,
 				uiPainBarDigits[6],
-				uiPainBarDigitsSeparatorK1,
 				uiPainBarDigits[7],
 				uiPainBarDigits[8],
-				uiPainBarDigits[9]
+				uiPainBarDigitsSeparatorK1,
+				uiPainBarDigits[9],
+				uiPainBarDigits[10],
+				uiPainBarDigits[11]
 		});
 	}
 	

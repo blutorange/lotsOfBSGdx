@@ -66,6 +66,7 @@ public abstract class ALevel {
 	 */
 	public final static float VIEWPORT_SCREEN_VIRTUAL_HEIGHT = 720.0f;
 
+	
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMap loadedTiledMap;
 	private MapData mapData;
@@ -79,6 +80,8 @@ public abstract class ALevel {
 	private final Color enemyPainBarColorLow = new Color();
 	private final Color enemyPainBarColorMid = new Color();
 	private final Color enemyPainBarColorHigh = new Color();
+	private final float enemyTargetCrossAngularVelocity;
+	private final ETexture enemyTargetCrossTexture;
 	private Sprite icon;
 	
 	// =============================
@@ -94,6 +97,8 @@ public abstract class ALevel {
 		enemyPainBarColorLow.set(requestedEnemyPainBarColorLow());
 		enemyPainBarColorMid.set(requestedEnemyPainBarColorMid());
 		enemyPainBarColorHigh.set(requestedEnemyPainBarColorHigh());
+		enemyTargetCrossAngularVelocity = requestedEnemyTargetCrossAngularVelocity();
+		enemyTargetCrossTexture = requestedEnemyTargetCrossTexture();
 	}
 
 	/** Loads all necessary resources and reads the map.
@@ -179,7 +184,13 @@ public abstract class ALevel {
 	 * Its aspect ration must be 5:1.
 	 * @return The icon for the level.
 	 */
-	public abstract ETexture requestedIcon();
+	protected abstract ETexture requestedIcon();
+	
+	/** @return Angular velocity of the target cross apearing beneath the enemy currently targetted. */
+	protected abstract float requestedEnemyTargetCrossAngularVelocity();
+	/** @return The texture to be used for the target cross apearing beneath the enemy currently targetted. */
+	protected abstract ETexture requestedEnemyTargetCrossTexture();
+
 		
 	// =============================
 	//       Implementations
@@ -230,6 +241,14 @@ public abstract class ALevel {
 	public String getName() {
 		return i18n.game(i18nNameKey);
 	}
+	
+	public float getEnemyTargetCrossAngularVelocity() {
+		return enemyTargetCrossAngularVelocity;
+	}
+	public ETexture getEnemyTargetCrossTexture() {
+		return enemyTargetCrossTexture;
+	}
+
 	
 	/**
 	 * Status screen data with pixel values etc.
@@ -335,5 +354,4 @@ public abstract class ALevel {
 	public int getEntityPoolPoolMaxSize() {
 		return DEFAULT_ENTITY_POOL_MAX_SIZE;
 	}
-
 }

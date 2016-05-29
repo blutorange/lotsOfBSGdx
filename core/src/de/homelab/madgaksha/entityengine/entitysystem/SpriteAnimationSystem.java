@@ -30,6 +30,6 @@ public class SpriteAnimationSystem extends IteratingSystem {
 		deltaTime = Mapper.temporalComponent.get(entity).totalTime;
 		final TextureRegion tr = sac.animation.getKeyFrame(deltaTime);
 		sc.sprite.setRegion(tr);
-		sc.sprite.setOriginCenter();
+		//sc.sprite.setOriginCenter();
 	}
 }

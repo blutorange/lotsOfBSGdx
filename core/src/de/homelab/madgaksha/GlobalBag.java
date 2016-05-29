@@ -8,8 +8,6 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import de.homelab.madgaksha.audiosystem.MusicPlayer;
-import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.level.GameViewport;
@@ -47,12 +45,7 @@ public final class GlobalBag {
 	
 	/** The instance of the running game. */
 	public static Game game;
-	
-	/** For playing music. Only one instance should be created. */
-	public static MusicPlayer musicPlayer = null;
-	/** For playing sound effects. Only one instance should be created. */
-	public static SoundPlayer soundPlayer = null;
-	
+		
 	/** Current level data. */
 	public static ALevel level;
 	/** Current player data. */
@@ -72,6 +65,9 @@ public final class GlobalBag {
 	
 	/** The player entity the player plays */
 	public static Entity playerEntity;
+	public static Entity playerHitCircleEntity;
+	public static Entity playerBattleStigmaEntity;
+	public static Entity enemyTargetCrossEntity;
 		
 	/** Entity engine ASHLEY for the main game.*/
 	public static PooledEngine gameEntityEngine;
@@ -81,6 +77,9 @@ public final class GlobalBag {
 	
 	public static Clock gameClock = new Clock();
 	public static Score gameScore = new Score();
+	
+	/** Whether we are in battle mode. */
+	public static boolean battleModeActive = false;
 	
 	static {
 		visibleWorld.setPosition(0.0f, 0.0f);

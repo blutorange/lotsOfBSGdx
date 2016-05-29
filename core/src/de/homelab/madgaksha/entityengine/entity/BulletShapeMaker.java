@@ -9,8 +9,9 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 
-import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
+import de.homelab.madgaksha.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
 import de.homelab.madgaksha.resourcecache.ETexture;
 
 /**
@@ -19,8 +20,8 @@ import de.homelab.madgaksha.resourcecache.ETexture;
  *
  */
 public enum BulletShapeMaker {
-	PACMAN_LIGHTYELLOW(ETexture.BULLET_PACMAN_LIGHTYELLOW, new Rectangle(0,0,0,0), new Circle(0,0,0)),
-	FLOWER_RED(ETexture.BULLET_FLOWER_RED, new Rectangle(0,0,0,0), new Circle(0,0,0)),
+	PACMAN_LIGHTYELLOW(ETexture.BULLET_PACMAN_LIGHTYELLOW, new Rectangle(0,0,0,0), null),
+	FLOWER_RED(ETexture.BULLET_FLOWER_RED, new Rectangle(-31.0f,-29.0f,62.0f,58.0f), new Circle(0.0f,0.0f,30.0f)),
 	;
 	
 	private Sprite sprite;
@@ -44,13 +45,23 @@ public enum BulletShapeMaker {
 	 * @param e Entity to setup.
 	 */
 	public void setup(Entity e) {
+		//TODO add exact shape
+		//TODO make point shape2d class
 		SpriteComponent sc = gameEntityEngine.createComponent(SpriteComponent.class);
-		BoundingBoxComponent bbc = gameEntityEngine.createComponent(BoundingBoxComponent.class);
-		
+		BoundingBoxCollisionComponent bbcc = gameEntityEngine.createComponent(BoundingBoxCollisionComponent.class);
+
 		sc.setup(sprite);
-		bbc.setup(boundingBox);
+		bbcc.setup(boundingBox);
 		
-		e.add(bbc);
+		e.add(bbcc);
 		e.add(sc);
+		
+		if (exactShape != null) {
+			ShapeComponent spc = gameEntityEngine.createComponent(ShapeComponent.class);
+			spc.setup(exactShape);
+			e.add(spc);
+		}
+		
+		
 	}
 }

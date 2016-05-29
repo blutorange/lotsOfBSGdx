@@ -1,26 +1,40 @@
 
 miscPacked.png
-size: 128,128
+size: 512,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+battleStigmaGreen
+  rotate: false
+  xy: 2, 86
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hitCircleYellow
+  rotate: false
+  xy: 66, 74
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
 ovalShadow
   rotate: false
-  xy: 66, 108
+  xy: 2, 2
   size: 33, 18
   orig: 33, 18
   offset: 0, 0
   index: -1
 targetSelectCircleWheel
   rotate: false
-  xy: 2, 64
+  xy: 2, 22
   size: 62, 62
   orig: 62, 62
   offset: 0, 0
   index: -1
 targetSelectTriangleUpDown
   rotate: false
-  xy: 2, 2
+  xy: 260, 282
   size: 62, 60
   orig: 62, 60
   offset: 0, 0

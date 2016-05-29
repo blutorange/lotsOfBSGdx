@@ -1,10 +1,7 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
-
-import static de.homelab.madgaksha.GlobalBag.statusScreen;
-
-import static de.homelab.madgaksha.GlobalBag.viewportGame;
+import static de.homelab.madgaksha.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
-import static de.homelab.madgaksha.GlobalBag.soundPlayer;
+import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -12,11 +9,13 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
+import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.InputDesktopComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
+import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ESound;
 
@@ -59,27 +58,34 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		else if (w.len2() > 0.5f) dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle=w.angle());
 		else dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle);
 		
-		float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.accelerationFactorHigh : ic.accelerationFactorLow;
-		vc.x = (vc.x+f*v.x)*ic.frictionFactor;
-		vc.y = (vc.y+f*v.y)*ic.frictionFactor;
+		if (battleModeActive) {
+			final float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.battleSpeedHigh : ic.battleSpeedLow;
+			vc.x = v.x*f;
+			vc.y = v.y*f;
+		}
+		else {
+			final float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.accelerationFactorHigh : ic.accelerationFactorLow;
+			vc.x = (vc.x+f*v.x)*ic.frictionFactor;
+			vc.y = (vc.y+f*v.y)*ic.frictionFactor;
+		}
 		
 		// Check if we need to switch the targetted enemy and change
 		// the info displayed on the status screen.
 		if (cameraTrackingComponent.focusPoints.size() > 1) {
 			if (Gdx.input.isKeyJustPressed(ic.enemySwitcherPrev)) {
-				soundPlayer.play(ESound.ENEMY_SWITCH);
+				SoundPlayer.getInstance().play(ESound.ENEMY_SWITCH);
 				cameraTrackingComponent.trackedPointIndex++;
 				if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
 					cameraTrackingComponent.trackedPointIndex = 0;
 				}
-				statusScreen.targetEnemy(cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
+				EnemyMaker.targetSwitched(cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
 			} else if (Gdx.input.isKeyJustPressed(ic.enemySwitcherNext)) {
-				soundPlayer.play(ESound.ENEMY_SWITCH);
+				SoundPlayer.getInstance().play(ESound.ENEMY_SWITCH);
 				cameraTrackingComponent.trackedPointIndex--;
 				if (cameraTrackingComponent.trackedPointIndex < 0) {
 					cameraTrackingComponent.trackedPointIndex = cameraTrackingComponent.focusPoints.size() - 1;
 				}
-				statusScreen.targetEnemy(cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
+				EnemyMaker.targetSwitched(cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
 			}
 		}
 	}

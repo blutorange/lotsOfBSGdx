@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class i18n {
 	private static Map<String, String> main;
 	private static Map<String, String> game;
@@ -84,6 +86,9 @@ public class i18n {
 
 	public static String game(String key) {
 		return getValue(game, key);
+	}
+	public static String gameE(String key) {
+		return StringEscapeUtils.unescapeJava(game(key));
 	}
 	
 	public static String font(String key) {

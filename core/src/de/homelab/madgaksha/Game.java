@@ -11,10 +11,9 @@ import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import static de.homelab.madgaksha.GlobalBag.level;
 import static de.homelab.madgaksha.GlobalBag.maxMonitorHeight;
 import static de.homelab.madgaksha.GlobalBag.maxMonitorWidth;
-import static de.homelab.madgaksha.GlobalBag.musicPlayer;
 import static de.homelab.madgaksha.GlobalBag.player;
+import static de.homelab.madgaksha.GlobalBag.playerEntity;
 import static de.homelab.madgaksha.GlobalBag.shapeRenderer;
-import static de.homelab.madgaksha.GlobalBag.soundPlayer;
 import static de.homelab.madgaksha.GlobalBag.statusScreen;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import static de.homelab.madgaksha.GlobalBag.viewportPixel;
@@ -46,6 +45,7 @@ import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.layer.ALayer;
 import de.homelab.madgaksha.layer.EntityLayer;
+import de.homelab.madgaksha.layer.PauseLayer;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcepool.ResourcePool;
@@ -86,6 +86,8 @@ public class Game implements ApplicationListener {
 	private int lastWidth;
 	private int lastHeight;
 
+	private PauseLayer pauseLayer;
+	
 	//TODO
 	// remove me, for testing only
 	private BitmapFont debugFont;
@@ -131,6 +133,16 @@ public class Game implements ApplicationListener {
 		if (bitmapFontRasterSize < 5)
 			bitmapFontRasterSize = 5;
 
+		// Simple pause menu screen.
+		try {
+			pauseLayer = new PauseLayer();
+		} catch (IOException e) {
+			LOG.debug("failed to initialize pause layer", e);
+			exitRequested = true;
+			Gdx.app.exit();
+			return;
+		}
+		
 		// Setup audio system.
 		AwesomeAudio.initialize();
 
@@ -154,12 +166,8 @@ public class Game implements ApplicationListener {
 		ResourcePool.init();
 
 		// Create music player.
-		musicPlayer = new MusicPlayer();
-		musicPlayer.loadNext(level.getBgm());
-		musicPlayer.transition(2.0f);
-
-		// Create sound player.
-		soundPlayer = new SoundPlayer();
+		MusicPlayer.getInstance().loadNext(level.getBgm());
+		MusicPlayer.getInstance().transition(2.0f);
 
 		// Create batches.
 		batchGame = new SpriteBatch();
@@ -193,7 +201,15 @@ public class Game implements ApplicationListener {
 		
 		// Initialize the layer stack.
 		// Start off with a layer stack containing only the entity engine.
-		entityLayer = new EntityLayer();
+		try {
+			entityLayer = new EntityLayer();
+		}
+		catch (IOException e) {
+			LOG.debug("could not initialize entity layer", e);
+			exitRequested = true;
+			Gdx.app.exit();
+			return;			
+		}
 		layerStack.add(entityLayer);
 		entityLayer.addedToStack();
 
@@ -203,6 +219,8 @@ public class Game implements ApplicationListener {
 		// TODO remove me for release
 		if (DebugMode.activated) createDebugFont();
 
+		statusScreen.forPlayer(playerEntity);
+		
 		// Start the game.
 		running = true;
 	}
@@ -225,25 +243,28 @@ public class Game implements ApplicationListener {
 		//TODO remove me for release
 		// Render debug.
 		if (DebugMode.activated) renderDebug();
-
+	
 		// Process layer stack queue.
 		// Must be done at once after the update and
 		// render methods, or sync becomes an issue.
 		// Adding / removing layers does not happen
 		// frequently, so we check if there is any
-		// work to be done first.
+		// work to be done first.		
 		if (layerStackPopQueue.size() > 0) {
 			layerStack.removeAll(layerStackPopQueue);
-			layerStackPopQueue.clear();
 			for (ALayer layer : layerStackPopQueue)
 				layer.removedFromStack();
+			layerStackPopQueue.clear();
 		}
 		if (layerStackPushQueue.size() > 0) {
 			layerStack.addAll(layerStackPushQueue);
-			layerStackPushQueue.clear();
 			for (ALayer layer : layerStackPushQueue)
 				layer.addedToStack();
+			layerStackPushQueue.clear();
 		}
+		
+		if (KeyMap.isPauseButtonJustPressed() && running)
+			pause();
 	}
 
 	@Override
@@ -275,34 +296,39 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void pause() {
+		LOG.debug("pausing game");
+		if (running) pushLayer(pauseLayer);
 		running = false;
-		if (musicPlayer != null)
-			musicPlayer.pause();
+		MusicPlayer.getInstance().pause();	
 	}
 
 	@Override
 	public void resume() {
-		running = true;
-		if (musicPlayer != null)
-			musicPlayer.play();
+		// game should stay paused and resume only when pressing a button
+		LOG.debug("resuming game");
+		pauseLayer.disableInputThisFrame();
 	}
 
+	public void unpause() {
+		LOG.debug("unpausing game");
+		running = true;
+		MusicPlayer.getInstance().play();
+	}
+	
 	@Override
 	public void dispose() {
 		exitRequested = true;
 
 		// Dispose music player.
 		try {
-			if (musicPlayer != null)
-				musicPlayer.dispose();
+			MusicPlayer.getInstance().dispose();
 		} catch (Exception e) {
 			LOG.error("could not dispose music player", e);
 		}
 
 		// Dispose sound player.
 		try {
-			if (soundPlayer != null)
-				soundPlayer.dispose();
+			SoundPlayer.getInstance().dispose();
 		} catch (Exception e) {
 			LOG.error("could not dispose sound player", e);
 		}
@@ -373,31 +399,22 @@ public class Game implements ApplicationListener {
 		// with the layers down on the stack only if the layers
 		// above did not stop propagation.
 		int j = 0;
-		if (running) {
-			gameClock.update(deltaTime);
-			for (int i = layerStack.size() - 1; i != -1; --i) {
-				final ALayer layer = layerStack.get(i);
-				// Save first layer that block drawing.
-				if (layer.isBlockDraw() && j != 0)
-					j = i;
-				// Update layer.
-				layer.update(deltaTime);
-				// Check if layer block updating, if so, break loop.
-				if (layer.isBlockUpdate()) {
-					// But first search for the first layer that blocks drawing.
-					while (j == 0 && ((--i) != -1))
-						if (layerStack.get(i).isBlockDraw())
-							j = i;
-					break;
-				}
+		if (running) gameClock.update(deltaTime);
+		for (int i = layerStack.size() - 1; i != -1; --i) {
+			final ALayer layer = layerStack.get(i);
+			// Save first layer that block drawing.
+			if (layer.isBlockDraw() && j != 0)
+				j = i;
+			// Update layer.
+			layer.update(deltaTime);
+			// Check if layer block updating, if so, break loop.
+			if (layer.isBlockUpdate()) {
+				// But first search for the first layer that blocks drawing.
+				while (j == 0 && ((--i) != -1))
+					if (layerStack.get(i).isBlockDraw())
+						j = i;
+				break;
 			}
-		} else {
-			// Game is paused.
-			// Still need to search for the first layer that blocks drawing.
-			int i = layerStack.size();
-			while (j == 0 && ((--i) != -1))
-				if (layerStack.get(i).isBlockDraw())
-					j = i;
 		}
 
 		// Render all layer that need to be rendered.
@@ -475,6 +492,6 @@ public class Game implements ApplicationListener {
 	public void pushLayer(ALayer layer) {
 		layerStackPushQueue.add(layer);
 	}
-	
+
 
 }

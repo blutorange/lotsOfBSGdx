@@ -1,7 +1,5 @@
 package de.homelab.madgaksha.resourcecache;
 
-import de.homelab.madgaksha.i18n.i18n;
-
 import java.io.File;
 import java.util.EnumMap;
 
@@ -13,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
+import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
@@ -27,12 +26,19 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	OVAL_SHADOW(ETextureAtlas.MISC, "ovalShadow"),
 	
 	// ==================
+	//       BATTLE
+	// ==================
+	HIT_CIRCLE_YELLOW(ETextureAtlas.MISC, "hitCircleYellow"),
+	BATTLE_STIGMA_GREEN(ETextureAtlas.MISC, "battleStigmaGreen", 0.5f),
+	TARGET_SELECT_CIRCLE_WHEEL(ETextureAtlas.MISC, "targetSelectCircleWheel"),
+	
+	// ==================
 	//      ESTELLE
 	// ==================
 	ESTELLE_RUNNING("sprite/estelle00001.png"),
 	ESTELLE_STANDING("sprite/estelle00100.png"),
 	ESTELLE_SWINGING("sprite/estelle00107.png"),
-
+	
 	FACE_ESTELLE_01("texture/face/estelle01.png"),
 
 	// ==================
@@ -116,18 +122,32 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	private String filename;
 	private String basename = null;
 	private ETextureAtlas textureAtlas = null;	
-
+	private float scale = 1.0f;
 	
 	private ETexture(String f) {
 		filename = f;
+	}
+	private ETexture(String f, float s) {
+		filename = f;
+		scale = s;
 	}
 	private ETexture(String dir, String name) {
 		filename = dir;
 		basename = name;
 	}
+	private ETexture(String dir, String name, float s) {
+		filename = dir;
+		basename = name;
+		scale = s;
+	}
 	private ETexture(ETextureAtlas ta, String f) {
 		textureAtlas = ta;
 		filename = f;
+	}
+	private ETexture(ETextureAtlas ta, String f, float s) {
+		textureAtlas = ta;
+		filename = f;
+		scale = s;
 	}
 	
 	public static void clearAll() {
@@ -138,9 +158,15 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	}
 
 	public Sprite asSprite() {
-		if (textureAtlas != null) return ResourceCache.getTextureAtlas(textureAtlas).createSprite(filename);
-		TextureRegion tr = ResourceCache.getTexture(this);
-		return tr != null ? new Sprite(tr) : null;
+		final Sprite sprite;
+		if (textureAtlas != null) sprite = ResourceCache.getTextureAtlas(textureAtlas).createSprite(filename);
+		else {
+			TextureRegion tr = ResourceCache.getTexture(this);
+			if (tr==null) return null;
+			sprite = new Sprite(tr);
+		}
+		sprite.setScale(scale);
+		return sprite;
 	}
 
 	@Override
@@ -188,5 +214,8 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	@Override
 	public EnumMap<ETexture, TextureRegion> getMap() {
 		return textureCache;
+	}
+	public float getOriginalScale() {
+		return scale;
 	}
 }

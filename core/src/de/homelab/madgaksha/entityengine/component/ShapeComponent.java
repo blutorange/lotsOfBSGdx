@@ -25,10 +25,17 @@ public class ShapeComponent implements Component, Poolable {
 	}
 
 	public ShapeComponent(Shape2D shape) {
+		setup(shape);
+	}
+	public ShapeComponent(Shape2D shape, EShapeType shapeType) {
+		setup(shape, shapeType);
+	}
+	
+	public void setup(Shape2D shape) {
 		this.shape = shape;
 		this.shapeType = EShapeType.valueOf(shape);
 	}
-	public ShapeComponent(Shape2D shape, EShapeType shapeType) {
+	public void setup(Shape2D shape, EShapeType shapeType) {
 		this.shape = shape;
 		this.shapeType = shapeType;
 	}

@@ -110,4 +110,14 @@ public class Level01 extends ALevel {
 				ENinePatch.TEXTBOX_BLUE, "Phantom Estelle", ETexture.FACE_ESTELLE_01);
 		GlobalBag.game.pushLayer(new TextboxLayer(tb,0,2));
 	}
+
+	@Override
+	protected float requestedEnemyTargetCrossAngularVelocity() {
+		return -40.0f;
+	}
+
+	@Override
+	protected ETexture requestedEnemyTargetCrossTexture() {
+		return ETexture.TARGET_SELECT_CIRCLE_WHEEL;
+	}
 }

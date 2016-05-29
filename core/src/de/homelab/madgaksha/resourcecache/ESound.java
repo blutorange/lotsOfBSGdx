@@ -12,13 +12,13 @@ import de.homelab.madgaksha.logging.Logger;
 public enum ESound implements IResource<ESound,Sound> {
 	TEXTBOX_NEXT("sound/ed6se002.wav"),
 	ENEMY_SWITCH("sound/ed6se049.wav"),
-	SORA_FC_SE093("sound/ed6se093.wav"),
+	BATTLE_STIGMA_APPEAR("sound/ed6se543.wav"),
+	BATTLE_STIGMA_ABSORB("sound/ed6se526.wav"),
 	
 	// ===================
 	//        VOICE
 	// ===================
-	HORA_KOCCHI_DA_ZE("sound/ed6t1252.wav"),
-	HOOORGH("sound/ed6t1257.wav"),
+	
 	;
 
 	private final static Logger LOG = Logger.getLogger(ESound.class);

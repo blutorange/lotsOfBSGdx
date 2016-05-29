@@ -37,6 +37,9 @@ public class InputDesktopComponent implements Component, Poolable {
 	private final static int DEFAULT_ENEMY_SWITCHER_NEXT = Keys.PAGE_DOWN;
 	private final static int DEFAULT_ENEMY_SWITCHER_PREV = Keys.FORWARD_DEL;
 	
+	private final static float DEFAULT_BATTLE_SPEED_LOW = 300.0f;
+	private final static float DEFAULT_BATTLE_SPEED_HIGH = 500.0f;
+	
 	public int left = DEFAULT_LEFT;
 	public int right = DEFAULT_RIGHT;
 	public int up = DEFAULT_UP;
@@ -59,30 +62,24 @@ public class InputDesktopComponent implements Component, Poolable {
 	public boolean relativeToCamera = DEFAULT_RELATIVE_TO_CAMERA;
 	public boolean orientToScreen = DEFAULT_ORIENT_TO_SCREEN;
 	
+	public float battleSpeedLow = DEFAULT_BATTLE_SPEED_LOW;
+	public float battleSpeedHigh = DEFAULT_BATTLE_SPEED_HIGH;
+	
 	
 	public InputDesktopComponent() {
 	}
-	public InputDesktopComponent(float accerlerationFactor) {
-		this.accelerationFactorHigh= this.accelerationFactorLow = accerlerationFactor;
+	public InputDesktopComponent(float accelerationFactor, float battleSpeed) {
+		this.accelerationFactorHigh= this.accelerationFactorLow = accelerationFactor;
+		this.battleSpeedHigh= this.battleSpeedLow = battleSpeed;
 	}
-	public InputDesktopComponent(float accelerationFactorLow, float accelerationFactorHIgh, float frictionFactor, boolean r, boolean o) {
+	public InputDesktopComponent(float accelerationFactorLow, float accelerationFactorHigh, float frictionFactor, float battleSpeedLow, float battleSpeedHigh, boolean relativeToCamera, boolean orientToScreen) {
 		this.accelerationFactorLow = accelerationFactorLow;
-		this.accelerationFactorHigh = accelerationFactorHIgh;
+		this.accelerationFactorHigh = accelerationFactorHigh;
 		this.frictionFactor = frictionFactor;
-		this.orientToScreen = o;
-		this.relativeToCamera = r;
-	}
-
-	public static InputDesktopComponent relativeToCamera(float speed, boolean b) {
-		final InputDesktopComponent ic = new InputDesktopComponent(speed);
-		ic.relativeToCamera = b;
-		return ic;
-	}
-	public static InputDesktopComponent orientToScreen(float speed, float screenOrientation, boolean b) {
-		final InputDesktopComponent ic = new InputDesktopComponent(speed);
-		ic.orientToScreen = b;
-		ic.screenOrientation = screenOrientation;
-		return ic;
+		this.battleSpeedHigh = battleSpeedHigh;
+		this.battleSpeedLow = battleSpeedLow;
+		this.orientToScreen = orientToScreen;
+		this.relativeToCamera = relativeToCamera;
 	}
 	
 	@Override

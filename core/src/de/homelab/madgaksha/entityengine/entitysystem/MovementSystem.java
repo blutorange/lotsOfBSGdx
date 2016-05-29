@@ -50,6 +50,7 @@ public class MovementSystem extends IteratingSystem {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		final VelocityComponent vc = Mapper.velocityComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
+		// TODO don't check with position but with position + BoundingBoxMapComponent.
 		if (pc.limitToMap) {
 			newx = pc.x + vc.x * deltaTime;
 			newy = pc.y + vc.y * deltaTime;

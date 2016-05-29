@@ -3,6 +3,7 @@ package de.homelab.madgaksha.audiosystem;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 
@@ -26,10 +27,17 @@ public class SoundPlayer extends AAudioPlayer {
 
 	private final Map<Long,Sound> soundMap = new HashMap<Long,Sound>();
 	
-	public SoundPlayer() {
+	// Singleton
+	private static class SingletonHolder {
+		private static final SoundPlayer INSTANCE = new SoundPlayer();
+	}
+	public static SoundPlayer getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	protected SoundPlayer() {
 		super();
 	}
-	
+
 	public long play(ESound sound) {
 		return play(sound, PlayMode.NORMAL, 1.0f, 1.0f, 0.0f);
 	}
@@ -42,13 +50,13 @@ public class SoundPlayer extends AAudioPlayer {
 	public long play(ESound sound, PlayMode mode, float volume, float pitch) {
 		return play(sound, mode, volume, pitch, 0.0f);
 	}
-	public long play(ESound sound, int volume) {
+	public long play(ESound sound, float volume) {
 		return play(sound, PlayMode.NORMAL, volume, 1.0f, 0.0f);
 	}
-	public long play(ESound sound, int volume, float pitch) {
+	public long play(ESound sound, float volume, float pitch) {
 		return play(sound, PlayMode.NORMAL, volume, pitch, 0.0f);
 	}
-	public long play(ESound sound, int volume, float pitch, float pan) {
+	public long play(ESound sound, float volume, float pitch, float pan) {
 		return play(sound, PlayMode.NORMAL, volume, pitch, pan);
 	}	
 	public long play(ESound sound, PlayMode mode, float volume, float pitch, float pan) {

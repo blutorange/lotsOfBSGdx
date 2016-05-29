@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 
-import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
@@ -20,6 +19,7 @@ import de.homelab.madgaksha.entityengine.entity.NormalEnemyMaker;
 import de.homelab.madgaksha.entityengine.entity.trajectory.LinearMotionTrajectory;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
+import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
@@ -48,8 +48,10 @@ public class SoldierRedMaker extends NormalEnemyMaker {
 	public IResource<? extends Enum<?>,?>[] requestedResources() {
 		return new IResource[]{
 			EAnimationList.SOLDIER_RED_0,
-			ESound.HOOORGH,
-			ESound.SORA_FC_SE093
+			EMusic.HOOORGH,
+			EMusic.NURRGH,
+			EMusic.UAARGH,
+			EMusic.NURUKATTA_KA,
 		};
 	}
 	
@@ -59,9 +61,15 @@ public class SoldierRedMaker extends NormalEnemyMaker {
 	}
 
 	@Override
-	protected Rectangle requestedBoundingBox() {
+	protected Rectangle requestedBoundingBoxRender() {
 		return new Rectangle(-32.0f,-32.0f,64.0f, 64.0f);
 	}
+	
+	@Override
+	protected Rectangle requestedBoundingBoxCollision() {
+		return new Rectangle(-32.0f,-32.0f,64.0f, 64.0f);
+	}
+	
 	@Override
 	protected Circle requestedBoundingCircle() {
 		return new Circle(0.0f,0.0f,32.0f);
@@ -69,7 +77,6 @@ public class SoldierRedMaker extends NormalEnemyMaker {
 	
 	@Override
 	protected void spawned(Entity e, ETrigger t) {
-		GlobalBag.soundPlayer.play(ESound.HOOORGH); 
 	}
 
 	@Override
@@ -84,8 +91,8 @@ public class SoldierRedMaker extends NormalEnemyMaker {
 
 
 	@Override
-	protected int requestedMaxPainPoints() {
-		return 10000000;
+	protected long requestedMaxPainPoints() {
+		return 10000000L;
 	}
 	
 	//TODO remove me
@@ -98,14 +105,13 @@ public class SoldierRedMaker extends NormalEnemyMaker {
 		timePassed += tc.deltaTime;
 		if (timePassed > 0.2f) {
 			timePassed = 0.0f;
-		GlobalBag.soundPlayer.play(ESound.SORA_FC_SE093);
 for (int i=0; i!=3; ++i){		
 
 			final PositionComponent pc = Mapper.positionComponent.get(e);
 			linearMotionTrajectory.position(pc.x, pc.y);
 			v.rotate(MathUtils.random(0.0f,360.0f));
 			linearMotionTrajectory.velocity(v.x,v.y);
-			Entity bullet =	BulletMaker.makeEntity(BulletShapeMaker.PACMAN_LIGHTYELLOW, linearMotionTrajectory);
+			Entity bullet =	BulletMaker.makeEntity(e, BulletShapeMaker.PACMAN_LIGHTYELLOW, linearMotionTrajectory, 1000L);
 			gameEntityEngine.addEntity(bullet);
 }
 		}
@@ -113,5 +119,34 @@ for (int i=0; i!=3; ++i){
 	@Override
 	protected EAnimationList requestedAnimationList() {
 		return EAnimationList.SOLDIER_RED_0;
+	}
+	@Override
+	protected float requestedBulletAttack() {
+		return 0.8f;
+	}
+	@Override
+	protected float requestedBulletResistance() {
+		return 1.2f;
+	}
+	
+	@Override
+	protected EMusic requestedVoiceOnSpawn() {
+		return EMusic.HOOORGH;
+	}
+	@Override
+	protected EMusic requestedVoiceOnLightDamage() {
+		return EMusic.NURRGH;
+	}
+	@Override
+	protected EMusic requestedVoiceOnHeavyDamage() {
+		return EMusic.NURUKATTA_KA;
+	}
+	@Override
+	protected EMusic requestedVoiceOnBattleModeStart() {
+		return null;
+	}
+	@Override
+	protected EMusic requestedVoiceOnDeath() {
+		return EMusic.UAARGH;
 	}
 }

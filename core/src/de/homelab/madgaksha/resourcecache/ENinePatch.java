@@ -17,7 +17,6 @@ import de.homelab.madgaksha.logging.Logger;
  *
  */
 public enum ENinePatch implements IResource<ENinePatch,NinePatch> {
-	//TEXTBOX_BLUE(ETextureAtlas.NINE_PATCHES,"textbox-blue",new Dimension(-5,36),new Dimension(10,-17), new Dimension(128,128)),
 	TEXTBOX_BLUE(ETextureAtlas.NINE_PATCHES,"textbox-blue-fc",new Dimension(-3,29),new Dimension(-128,-10), new Dimension(128,128)),
 	
 	STATUS_SCREEN_MAIN_FRAME(ETextureAtlas.STATUS_SCREEN,"soraFcBrownBox"),
@@ -25,6 +24,8 @@ public enum ENinePatch implements IResource<ENinePatch,NinePatch> {
 	STATUS_SCREEN_HP_BAR_PLAYER(ETextureAtlas.STATUS_SCREEN,"pointBarBrownEllipse"),
 	STATUS_SCREEN_HP_BAR_FILL(ETextureAtlas.STATUS_SCREEN,"hpBarFill"),
 	STATUS_SCREEN_DATA_FRAME(ETextureAtlas.STATUS_SCREEN,"bracketsLrtd"),
+	
+	PAUSE_LAYER_OVERLAY(ETextureAtlas.NINE_PATCHES,"whiteRectangle"),
 	
 	;
 

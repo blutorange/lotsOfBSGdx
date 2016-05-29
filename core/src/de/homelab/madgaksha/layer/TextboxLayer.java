@@ -1,12 +1,12 @@
 package de.homelab.madgaksha.layer;
 
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
-import static de.homelab.madgaksha.GlobalBag.soundPlayer;
 import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
 import com.badlogic.gdx.math.MathUtils;
 
 import de.homelab.madgaksha.KeyMap;
+import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.cutscenesystem.Textbox;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ESound;
@@ -73,7 +73,7 @@ public class TextboxLayer extends ALayer {
 	public void update(float deltaTime) {
 		if (KeyMap.isTextboxAdvancePressed()) {
 			if (allowInput) {
-				soundPlayer.play(ESound.TEXTBOX_NEXT);
+				SoundPlayer.getInstance().play(ESound.TEXTBOX_NEXT);
 				totalTime = 0.0f;
 				slidingDown = true;
 			}

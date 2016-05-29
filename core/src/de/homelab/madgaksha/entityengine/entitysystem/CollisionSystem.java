@@ -11,12 +11,12 @@ import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
-import de.homelab.madgaksha.entityengine.component.BoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ReceiveTouchComponent;
 import de.homelab.madgaksha.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerScreenComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerTouchComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup02Component;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup03Component;
@@ -41,12 +41,12 @@ import de.homelab.madgaksha.util.GeoUtil;
  * <tr>
  * <td>01</td>
  * <td>Player</td>
- * <td>Enemy, GeneralMapEvent</td>
+ * <td>Enemy Bullet, GeneralMapEvent</td>
  * </tr>
  * <tr>
  * <td>02</td>
- * <td></td>
- * <td></td>
+ * <td>Enemy</td>
+ * <td>Player Bullets</td>
  * </tr>
  * <tr>
  * <td>03</td>
@@ -109,25 +109,27 @@ public class CollisionSystem extends EntitySystem {
 	@SuppressWarnings("unchecked")
 	public CollisionSystem(int priority) {
 		super(priority);
-		this.familyTouch01 = Family.all(PositionComponent.class, TriggerTouchGroup01Component.class).get();
-		this.familyTouch02 = Family.all(PositionComponent.class, TriggerTouchGroup02Component.class).get();
-		this.familyTouch03 = Family.all(PositionComponent.class, TriggerTouchGroup03Component.class).get();
-		this.familyTouch04 = Family.all(PositionComponent.class, TriggerTouchGroup04Component.class).get();
-		this.familyTouch05 = Family.all(PositionComponent.class, TriggerTouchGroup05Component.class).get();
+		this.familyTouch01 = Family.all(PositionComponent.class, TriggerTouchGroup01Component.class, BoundingBoxCollisionComponent.class).get();
+		this.familyTouch02 = Family.all(PositionComponent.class, TriggerTouchGroup02Component.class, BoundingBoxCollisionComponent.class).get();
+		this.familyTouch03 = Family.all(PositionComponent.class, TriggerTouchGroup03Component.class, BoundingBoxCollisionComponent.class).get();
+		this.familyTouch04 = Family.all(PositionComponent.class, TriggerTouchGroup04Component.class, BoundingBoxCollisionComponent.class).get();
+		this.familyTouch05 = Family.all(PositionComponent.class, TriggerTouchGroup05Component.class, BoundingBoxCollisionComponent.class).get();
 
-		this.familyReceive01 = Family.all(PositionComponent.class, ReceiveTouchGroup01Component.class).get();
-		this.familyReceive02 = Family.all(PositionComponent.class, ReceiveTouchGroup02Component.class).get();
-		this.familyReceive03 = Family.all(PositionComponent.class, ReceiveTouchGroup03Component.class).get();
-		this.familyReceive04 = Family.all(PositionComponent.class, ReceiveTouchGroup04Component.class).get();
-		this.familyReceive05 = Family.all(PositionComponent.class, ReceiveTouchGroup05Component.class).get();
+		this.familyReceive01 = Family.all(PositionComponent.class, ReceiveTouchGroup01Component.class, BoundingBoxCollisionComponent.class).get();
+		this.familyReceive02 = Family.all(PositionComponent.class, ReceiveTouchGroup02Component.class, BoundingBoxCollisionComponent.class).get();
+		this.familyReceive03 = Family.all(PositionComponent.class, ReceiveTouchGroup03Component.class, BoundingBoxCollisionComponent.class).get();
+		this.familyReceive04 = Family.all(PositionComponent.class, ReceiveTouchGroup04Component.class, BoundingBoxCollisionComponent.class).get();
+		this.familyReceive05 = Family.all(PositionComponent.class, ReceiveTouchGroup05Component.class, BoundingBoxCollisionComponent.class).get();
 		
-		this.familyScreen = Family.all(TriggerScreenComponent.class,PositionComponent.class).get();
+		this.familyScreen = Family.all(TriggerScreenComponent.class,PositionComponent.class, BoundingBoxCollisionComponent.class).get();
 	}
 
 	@Override
 	public void update(float deltaTime) {
 		TriggerTouchComponent ttc;
 		ReceiveTouchComponent rtc;
+		
+		// Collide entities within the same group.
 		
 		for (Entity alice : entitiesTouch01) {
 			for (Entity bob : entitiesReceive01) {
@@ -205,15 +207,15 @@ public class CollisionSystem extends EntitySystem {
 	private void collide(Entity alice, Entity bob, TriggerTouchComponent ttc, ReceiveTouchComponent rtc) {
 		final PositionComponent pcAlice = Mapper.positionComponent.get(alice);
 		final PositionComponent pcBob = Mapper.positionComponent.get(bob);
-		final BoundingBoxComponent bbcAlice = Mapper.boundingBoxComponent.get(alice);
-		final BoundingBoxComponent bbcBob = Mapper.boundingBoxComponent.get(bob);
+		final BoundingBoxCollisionComponent bbccAlice = Mapper.boundingBoxCollisionComponent.get(alice);
+		final BoundingBoxCollisionComponent bbccBob = Mapper.boundingBoxCollisionComponent.get(bob);
 		final ShapeComponent scAlice = Mapper.shapeComponent.get(alice);
 		final ShapeComponent scBob = Mapper.shapeComponent.get(bob);
-		// TODO actual collision checking
-		if (bbcAlice.maxX + pcAlice.x > bbcBob.minX +pcBob.x) {
-			if (bbcAlice.minX + pcAlice.x < bbcBob.maxX + pcBob.x) {
-				if (bbcAlice.maxY + pcAlice.y > bbcBob.minY + pcBob.y) {
-					if (bbcAlice.minY + pcAlice.y < bbcBob.maxY + pcBob.y) {
+		// Check whether bounding boxes collide
+		if (bbccAlice.maxX + pcAlice.x > bbccBob.minX +pcBob.x) {
+			if (bbccAlice.minX + pcAlice.x < bbccBob.maxX + pcBob.x) {
+				if (bbccAlice.maxY + pcAlice.y > bbccBob.minY + pcBob.y) {
+					if (bbccAlice.minY + pcAlice.y < bbccBob.maxY + pcBob.y) {
 						// test exact shape if asked to
 						if (scAlice == null || scBob == null || GeoUtil.isCollision(scAlice.shape, scBob.shape, scAlice.shapeType, scBob.shapeType, pcAlice, pcBob)) {
 							ttc.triggerAcceptingObject.callbackTrigger(alice, ETrigger.TOUCH);
@@ -228,13 +230,13 @@ public class CollisionSystem extends EntitySystem {
 
 	private void collideScreen(Entity odo) {
 		final PositionComponent pc = Mapper.positionComponent.get(odo);
-		final BoundingBoxComponent bbc = Mapper.boundingBoxComponent.get(odo);
+		final BoundingBoxCollisionComponent bbcc = Mapper.boundingBoxCollisionComponent.get(odo);
 		final ShapeComponent sc = Mapper.shapeComponent.get(odo);
 		final TriggerScreenComponent tsc = Mapper.triggerScreenComponent.get(odo);
-		if (visibleWorldBoundingBox.x + visibleWorldBoundingBox.width > bbc.minX +pc.x) {
-			if (visibleWorldBoundingBox.x < bbc.maxX + pc.x) {
-				if (visibleWorldBoundingBox.y + visibleWorldBoundingBox.height > bbc.minY + pc.y) {
-					if (visibleWorldBoundingBox.y < bbc.maxY + pc.y) {
+		if (visibleWorldBoundingBox.x + visibleWorldBoundingBox.width > bbcc.minX +pc.x) {
+			if (visibleWorldBoundingBox.x < bbcc.maxX + pc.x) {
+				if (visibleWorldBoundingBox.y + visibleWorldBoundingBox.height > bbcc.minY + pc.y) {
+					if (visibleWorldBoundingBox.y < bbcc.maxY + pc.y) {
 						// inside screen bounding box
 						//TODO
 						if (tsc.preciseCheck && sc != null) {
