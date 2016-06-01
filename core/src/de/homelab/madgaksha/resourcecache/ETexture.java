@@ -6,13 +6,15 @@ import java.util.EnumMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
+import de.homelab.madgaksha.resourcepool.SpritePool;
 
 /**
  * For loading, caching and disposing {@link Texture} resources.
@@ -20,7 +22,7 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum ETexture implements IResource<ETexture,TextureRegion> {
+public enum ETexture implements IResource<ETexture,AtlasRegion> {
 	MAIN_BACKGROUND("texture/mainBackground.jpg"),
 	
 	OVAL_SHADOW(ETextureAtlas.MISC, "ovalShadow"),
@@ -92,6 +94,8 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	// =========================================================================
 	WEAPON_NONE_ICON_MAIN(ETextureAtlas.STATUS_SCREEN, "iconWeaponNoneMain"),
 	WEAPON_NONE_ICON_SUB("texture/statusicon/weapon","none-sub.png"),
+	WEAPON_BASIC_ICON_MAIN("texture/statusicon/weapon/basic-main.png"),
+	WEAPON_BASIC_ICON_SUB("texture/statusicon/weapon","basic-sub.png"),
 	
 	
 	// =========================================================================
@@ -119,7 +123,7 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	;
 
 	private final static Logger LOG = Logger.getLogger(ETexture.class);
-	private final static EnumMap<ETexture, TextureRegion> textureCache = new EnumMap<ETexture, TextureRegion>(ETexture.class);
+	private final static EnumMap<ETexture, AtlasRegion> textureCache = new EnumMap<ETexture, AtlasRegion>(ETexture.class);
 
 	private String filename;
 	private String basename = null;
@@ -159,20 +163,16 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 		}
 	}
 
-	public Sprite asSprite() {
-		final Sprite sprite;
-		if (textureAtlas != null) sprite = ResourceCache.getTextureAtlas(textureAtlas).createSprite(filename);
-		else {
-			TextureRegion tr = ResourceCache.getTexture(this);
-			if (tr==null) return null;
-			sprite = new Sprite(tr);
-		}
+	public PoolableAtlasSprite asSprite() {
+		final AtlasRegion ar = ResourceCache.getTexture(this);
+		if (ar == null) return null;
+		final PoolableAtlasSprite sprite = SpritePool.getInstance().obtain(ar);
 		sprite.setScale(scale);
 		return sprite;
 	}
 
 	@Override
-	public TextureRegion getObject() {
+	public AtlasRegion getObject() {
 		if (textureAtlas != null) {
 			TextureAtlas ta = ResourceCache.getTextureAtlas(textureAtlas);
 			return ta == null ? null : ta.findRegion(filename);
@@ -181,12 +181,16 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 			String path;
 			if (basename != null) {
 				// localizable images
-				path = filename + File.separator + i18n.getShortName() + File.separator + basename; 
+				path = filename + File.separator + i18n.getShortName() + File.separator + basename;
 			}
 			else path = filename;
-			final FileHandle fileHandle = Gdx.files.internal(path);
+			FileHandle fileHandle = Gdx.files.internal(path);
 			try {
-				return new TextureRegion(new Texture(fileHandle));
+				Texture t = new Texture(fileHandle);
+				TextureRegion tr = new TextureRegion(t);
+				AtlasRegion ar = new AtlasRegion(tr.getTexture(), tr.getRegionX(), tr.getRegionY(), tr.getRegionWidth(),
+						tr.getRegionHeight());
+				return ar;
 			} catch (GdxRuntimeException e) {
 				LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 				return null;
@@ -207,14 +211,14 @@ public enum ETexture implements IResource<ETexture,TextureRegion> {
 	@Override
 	public void clear() {
 		LOG.debug("disposing texture: " + String.valueOf(this));
-		final TextureRegion tr = textureCache.get(this);
-		if (tr != null)
-			tr.getTexture().dispose();
+		AtlasRegion ar = textureCache.get(this);
+		if (ar != null)
+			ar.getTexture().dispose();
 		textureCache.remove(this);
 	}
 
 	@Override
-	public EnumMap<ETexture, TextureRegion> getMap() {
+	public EnumMap<ETexture, AtlasRegion> getMap() {
 		return textureCache;
 	}
 	public float getOriginalScale() {

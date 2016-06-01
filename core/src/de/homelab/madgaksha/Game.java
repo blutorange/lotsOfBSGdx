@@ -1,6 +1,7 @@
 package de.homelab.madgaksha;
 
 import static de.homelab.madgaksha.GlobalBag.batchGame;
+import static de.homelab.madgaksha.GlobalBag.batchModel;
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
 import static de.homelab.madgaksha.GlobalBag.bitmapFontRasterSize;
 import static de.homelab.madgaksha.GlobalBag.currentMonitorHeight;
@@ -28,15 +29,14 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Graphics.Monitor;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.homelab.madgaksha.audiosystem.AwesomeAudio;
@@ -177,7 +177,8 @@ public class Game implements ApplicationListener {
 		// Create batches.
 		batchGame = new SpriteBatch();
 		batchPixel = new SpriteBatch();
-		shapeRenderer = new ShapeRenderer();		
+		batchModel = new ModelBatch();
+		shapeRenderer = new ShapeRenderer();
 		
 		// Initialize the entity engine.
 		gameEntityEngine = new PooledEngine(level.getEntityPoolInitialSize(),level.getEntityPoolPoolMaxSize(), level.getComponentPoolInitialSize(), level.getComponentPoolMaxSize());
@@ -221,7 +222,7 @@ public class Game implements ApplicationListener {
 		gameClock = new Clock();
 		
 		// TODO remove me for release
-		if (DebugMode.activated) createDebugFont();
+		if (DebugMode.activated) createDebugStuff();
 
 		statusScreen.forPlayer(playerEntity);
 		
@@ -233,7 +234,7 @@ public class Game implements ApplicationListener {
 	public void render() {
 		// Clear the screen before drawing.
 		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		// Render background first.
 		renderBackground();
@@ -377,14 +378,14 @@ public class Game implements ApplicationListener {
 		if (debugFont != null) debugFont.dispose();
 		
 		// Dispose temporary files.
-		LOG.debug("emptying temporary directory tempadx");
-		FileHandle dest = Gdx.files.local("tempadx/");
-		try {
-			dest.emptyDirectory();
-		}
-		catch (GdxRuntimeException e) {
-			LOG.error("failed to empty temporary directory tempadx", e);
-		}
+//		LOG.debug("emptying temporary directory tempadx");
+//		FileHandle dest = Gdx.files.local("tempadx/");
+//		try {
+//			dest.emptyDirectory();
+//		}
+//		catch (GdxRuntimeException e) {
+//			LOG.error("failed to empty temporary directory tempadx", e);
+//		}
 		
 		// Dispose custom shaders.
 		if (customShaderProgramBatchGame != null) customShaderProgramBatchGame.dispose();
@@ -456,11 +457,20 @@ public class Game implements ApplicationListener {
 		debugFont.draw(batchPixel, "entities: " + gameEntityEngine.getEntities().size(), 0.0f, viewportGame.getScreenHeight()-30.0f);
 		batchPixel.end();
 	}
-
+	
 	// TODO remove me for release
-	private void createDebugFont() {
+	private void createDebugStuff() {
 		debugFont = new BitmapFont(Gdx.files.internal("font/debugFont.fnt"));
 		debugFont.setColor(Color.RED);
+		
+		// 3D testing
+//		Entity myTestModel = new Entity();
+//		myTestModel.add(new PositionComponent(46*32f, 17*32f, 0.0f));
+//		myTestModel.add(new ModelComponent(EModel.ITEM_WEAPON_BASIC));
+//		myTestModel.add(new TemporalComponent());
+//		myTestModel.add(new RotationComponent(0.0f, 1.0f, 1.0f, 0.0f));
+//		myTestModel.add(new AngularVelocityComponent(45.0f));
+//		gameEntityEngine.addEntity(myTestModel);
 	}
 
 	private void readMonitorInfo() {

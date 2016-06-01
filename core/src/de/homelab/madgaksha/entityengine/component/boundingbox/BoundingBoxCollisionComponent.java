@@ -20,4 +20,14 @@ public class BoundingBoxCollisionComponent extends ABoundingBoxComponent {
 	public BoundingBoxCollisionComponent(float minX, float minY, float maxX, float maxY) {
 		super(minX, minY, maxX, maxY);
 	}
+	
+	public BoundingBoxCollisionComponent(BoundingBoxCollisionComponent bbcc) {
+		super(bbcc);
+	}
+	public BoundingBoxCollisionComponent(BoundingBoxRenderComponent bbrc) {
+		super(bbrc);
+	}
+	public BoundingBoxCollisionComponent(BoundingBoxMapComponent bbmc) {
+		super(bbmc);
+	}
 }

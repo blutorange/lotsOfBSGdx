@@ -29,6 +29,6 @@ public class SpriteAnimationSystem extends IteratingSystem {
 		final SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).totalTime;
 		final TextureRegion tr = sac.animation.getKeyFrame(deltaTime);
-		sc.sprite.setRegion(tr);
+		sc.sprite.setTextureRegion(tr);
 	}
 }

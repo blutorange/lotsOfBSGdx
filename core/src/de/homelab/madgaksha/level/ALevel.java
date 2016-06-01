@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -83,6 +85,7 @@ public abstract class ALevel {
 	private final Color enemyPainBarColorHigh = new Color();
 	private final float enemyTargetCrossAngularVelocity;
 	private final ETexture enemyTargetCrossTexture;
+	private final Environment environment;
 	private Sprite icon;
 	
 	// =============================
@@ -101,8 +104,10 @@ public abstract class ALevel {
 		enemyPainBarColorHigh.set(requestedEnemyPainBarColorHigh());
 		enemyTargetCrossAngularVelocity = requestedEnemyTargetCrossAngularVelocity();
 		enemyTargetCrossTexture = requestedEnemyTargetCrossTexture();
+		environment = new Environment();
+		setupEnvironment(environment);
 	}
-
+	
 	/** Loads all necessary resources and reads the map.
 	 * 
 	 * @param batch Sprite batch for this level.
@@ -200,6 +205,15 @@ public abstract class ALevel {
 	// =============================
 	//       Implementations
 	// =============================
+	
+	/**
+	 * May be overridden to change the environment used for 3d models, ie. lights etc.
+	 * @param environment The environment to be setup.
+	 */
+	protected void setupEnvironment(Environment environment) {
+		// Default to basic white ambient light.
+		environment.set(new ColorAttribute(ColorAttribute.AmbientLight,1f,1f,1f,1f));
+	}
 	
 	public MapData getMapData() {
 		return mapData;
@@ -334,6 +348,11 @@ public abstract class ALevel {
 		return icon;
 	}
 
+	/** @return The environment for 3D models for this level. */
+	public Environment getEnvironment() {
+		return environment;
+	}
+	
 	/** Can be overwritten for other defaults
 	 * 
 	 * @return Maximum size of the component pool. Each entity gets multiple components.

@@ -1,6 +1,7 @@
 package de.homelab.madgaksha.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
@@ -31,10 +32,18 @@ public class RotationComponent implements Component, Poolable {
 	private final static float DEFAULT_THETA_Z = 0.0f;
 	private final static float DEFAULT_CENTER_X = 0.5f;
 	private final static float DEFAULT_CENTER_Y = 0.5f;
+	private final static float DEFAULT_CENTER_Z = 0.5f;
+	private final static float DEFAULT_AXIS_X = 0.0f;
+	private final static float DEFAULT_AXIS_Y = 0.0f;
+	private final static float DEFAULT_AXIS_Z = 1.0f;
 	private final static boolean DEFAULT_INVERSE_TO_CAMERA = true;
 	
 	public float centerX = DEFAULT_CENTER_X;
 	public float centerY = DEFAULT_CENTER_Y;
+	public float centerZ = DEFAULT_CENTER_Z;
+	public float axisX = DEFAULT_AXIS_X;
+	public float axisY = DEFAULT_AXIS_Y;
+	public float axisZ = DEFAULT_AXIS_Z;
 	public float thetaZ = DEFAULT_THETA_Z;
 	public boolean inverseToCamera = DEFAULT_INVERSE_TO_CAMERA;
 
@@ -60,13 +69,44 @@ public class RotationComponent implements Component, Poolable {
 		centerY = cy;
 		inverseToCamera = ic;
 	}
+
+	public RotationComponent(float degrees, float axisX, float axisY, float axisZ) {
+		setup(degrees, axisX, axisY, axisZ);
+	}
+	public RotationComponent(float degrees, Vector3 axis) {
+		setup(degrees, axis);
+	}
+	public RotationComponent(Vector3 axis) {
+		setup(axis);
+	}
+	
+	public void setup(float degrees, float axisX, float axisY, float axisZ) {
+		this.axisX = axisX;
+		this.axisY = axisY;
+		this.axisZ = axisZ;
+		this.thetaZ = degrees;
+	}
+	public void setup(Vector3 axis) {
+		this.axisX = axis.x;
+		this.axisY = axis.y;
+		this.axisZ = axis.z;
+	}
+	public void setup(float degrees, Vector3 axis) {
+		this.axisX = axis.x;
+		this.axisY = axis.y;
+		this.axisZ = axis.z;
+		this.thetaZ = degrees;
+	}
 	
 	@Override
 	public void reset() {
 		centerX = DEFAULT_CENTER_X;
 		centerY = DEFAULT_CENTER_Y;
+		centerZ = DEFAULT_CENTER_Z;
 		thetaZ = DEFAULT_THETA_Z;
 		inverseToCamera = DEFAULT_INVERSE_TO_CAMERA;
+		axisX = DEFAULT_AXIS_X;
+		axisY= DEFAULT_AXIS_Y;
+		axisZ = DEFAULT_AXIS_Z;
 	}
-
 }

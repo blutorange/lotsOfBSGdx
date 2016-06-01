@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
-import de.homelab.madgaksha.resourcecache.EMusic;
+import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.util.Point;
@@ -22,10 +22,10 @@ public class PEstelle extends APlayer {
 				EAnimationList.ESTELLE_STANDING,
 				ETexture.ESTELLE_ON_KNEES,
 				ETexture.OVAL_SHADOW,
-				EMusic.ESTELLE_YOSOMI_SITARA_BUTTOBASU_WAYO,
-				EMusic.ESTELLE_GYAA,
-				EMusic.ESTELLE_UERRGH,
-				EMusic.ESTELLE_MINNA_GOMEN,
+				ESound.ESTELLE_YOSOMI_SITARA_BUTTOBASU_WAYO,
+				ESound.ESTELLE_GYAA,
+				ESound.ESTELLE_UERRGH,
+				ESound.ESTELLE_MINNA_GOMEN,
 				};
 	}
 	
@@ -99,6 +99,11 @@ public class PEstelle extends APlayer {
 	protected ETokugi[] requestedSupportedTokugi() {
 		return null;
 	}
+	
+	@Override
+	protected EConsumable[] requestedSupportedConsumable() {
+		return null;
+	}
 
 	@Override
 	protected float requestedBulletAttack() {
@@ -136,23 +141,23 @@ public class PEstelle extends APlayer {
 	}
 
 	@Override
-	protected EMusic requestedVoiceOnBattleStart() {
-		return EMusic.ESTELLE_YOSOMI_SITARA_BUTTOBASU_WAYO;
+	protected ESound requestedVoiceOnBattleStart() {
+		return ESound.ESTELLE_YOSOMI_SITARA_BUTTOBASU_WAYO;
 	}
 	
 	@Override
-	protected EMusic requestedVoiceOnLightDamage() {
-		return EMusic.ESTELLE_GYAA;
+	protected ESound requestedVoiceOnLightDamage() {
+		return ESound.ESTELLE_GYAA;
 	}
 	
 	@Override
-	protected EMusic requestedVoiceOnHeavyDamage() {
-		return EMusic.ESTELLE_UERRGH;
+	protected ESound requestedVoiceOnHeavyDamage() {
+		return ESound.ESTELLE_UERRGH;
 	}
 
 	@Override
-	protected EMusic requestedVoiceOnDeath() {
-		return EMusic.ESTELLE_MINNA_GOMEN;
+	protected ESound requestedVoiceOnDeath() {
+		return ESound.ESTELLE_MINNA_GOMEN;
 	}
 
 	@Override

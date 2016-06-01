@@ -1,5 +1,8 @@
 package de.homelab.madgaksha.level;
 
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.maps.MapProperties;
 
 import de.homelab.madgaksha.GlobalBag;
@@ -93,6 +96,12 @@ public class Level01 extends ALevel {
 	@Override
 	public int getEntityPoolPoolMaxSize() {
 		return 10000;
+	}
+	
+	@Override
+	public void setupEnvironment(Environment environment) {
+		environment.set(new ColorAttribute(ColorAttribute.AmbientLight,0.4f,0.4f,0.4f,1f));
+		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 0f, 0.0f, -1.0f));
 	}
 	
 	// =========================

@@ -27,6 +27,8 @@ import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup02
 import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup03Component;
 import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup04Component;
 import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup05Component;
+import de.homelab.madgaksha.entityengine.entity.CallbackMaker;
+import de.homelab.madgaksha.entityengine.entity.ItemMaker;
 import de.homelab.madgaksha.enums.EShapeType;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.util.GeoUtil;
@@ -41,7 +43,7 @@ import de.homelab.madgaksha.util.GeoUtil;
  * <tr>
  * <td>01</td>
  * <td>Player</td>
- * <td>Enemy Bullet, GeneralMapEvent</td>
+ * <td>Enemy Bullet, MapEvents ({@link CallbackMaker},  {@link ItemMaker})</td>
  * </tr>
  * <tr>
  * <td>02</td>

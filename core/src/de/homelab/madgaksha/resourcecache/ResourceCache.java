@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import de.homelab.madgaksha.logging.Logger;
@@ -18,7 +19,7 @@ public final class ResourceCache {
 	private final static Logger LOG = Logger.getLogger(ResourceCache.class);
 	
 	public final static int LIMIT_MUSIC = 100;
-	public final static int LIMIT_TEXTURE = 25;
+	public final static int LIMIT_TEXTURE = 50;
 	public final static int LIMIT_ANIMATION = 50;
 	public final static int LIMIT_ANIMATION_LIST = 50;
 	public final static int LIMIT_SOUND = 100;
@@ -26,6 +27,7 @@ public final class ResourceCache {
 	public final static int LIMIT_BITMAP_FONT = 20;
 	public final static int LIMIT_NINE_PATCH = 20;
 	public final static int LIMIT_TEXTURE_ATLAS = 20;
+	public final static int LIMIT_MODEL = 30;
 	
 	private ResourceCache() {
 	}
@@ -200,6 +202,13 @@ public final class ResourceCache {
 		for (EBitmapFont bf : set) bf.getObject();
 	}
 	
+	/**
+	 * Clears all model objects from the cache.
+	 */
+	public static void clearAllModel() {
+		EModel.clearAll();
+	}
+	
 	
 	/**
 	 * Clears all resource objects.
@@ -214,6 +223,7 @@ public final class ResourceCache {
 		clearAllTexture();
 		clearAllTextureAtlas();
 		clearAllTiledMap();
+		clearAllModel();
 	}
 
 	/**
@@ -237,11 +247,11 @@ public final class ResourceCache {
 	 *            Texture to load.
 	 * @return Loaded texture.
 	 */
-	public static TextureRegion getTexture(ETexture texture) {
-		return (TextureRegion) getResource(texture, true);
+	public static AtlasRegion getTexture(ETexture texture) {
+		return (AtlasRegion) getResource(texture, true);
 	}
-	public static TextureRegion getTexture(ETexture texture, boolean cached) {
-		return (TextureRegion) getResource(texture, cached);
+	public static AtlasRegion getTexture(ETexture texture, boolean cached) {
+		return (AtlasRegion) getResource(texture, cached);
 	}
 	
 	/**
@@ -338,7 +348,21 @@ public final class ResourceCache {
 	public static BitmapFont getBitmapFont(EBitmapFont bitmapFont) {
 		return (BitmapFont) getResource(bitmapFont, true);
 	}
-	public static BitmapFont getBitmapFont(ENinePatch bitmapFont, boolean cached) {
+	public static BitmapFont getBitmapFont(EModel bitmapFont, boolean cached) {
 		return (BitmapFont) getResource(bitmapFont, cached);
+	}
+	
+	/**
+	 * Fetches the requested model from the cache, or loads it.
+	 * 
+	 * @param model
+	 *            Model font to load.
+	 * @return Loaded model.
+	 */
+	public static Model getModel(EModel model) {
+		return (Model) getResource(model, true);
+	}
+	public static Model getModel(EModel model, boolean cached) {
+		return (Model) getResource(model, cached);
 	}
 }

@@ -20,15 +20,24 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.entity.CallbackMaker;
 import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
+import de.homelab.madgaksha.entityengine.entity.ItemMaker;
 import de.homelab.madgaksha.entityengine.entity.ParticleEffectMaker;
 import de.homelab.madgaksha.enums.Gravity;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.player.EConsumable;
+import de.homelab.madgaksha.player.ETokugi;
+import de.homelab.madgaksha.player.EWeapon;
+import de.homelab.madgaksha.player.IMapItem;
+import de.homelab.madgaksha.player.consumable.AConsumable;
+import de.homelab.madgaksha.player.tokugi.ATokugi;
+import de.homelab.madgaksha.player.weapon.AWeapon;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
 
 /**
@@ -100,7 +109,21 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
  *  <li>renderMode: Whether to draw in screen or game coordinates. Position is unaffected, but useful for rotation if particle effect should always point upwards (as seen on the screen).</li>
  * </ul>
  * 
- *  <h3>type: NPC</h3>
+ *  <h3>type: npc</h3>
+ *  
+ *  not yet available
+ *  
+ * <h3>type: Item</h3>
+ * <br>
+ * An collectable item. Items are divided into weapons, specials (special attack) and consumables (recovery).
+ *  
+ * <ul>
+ * <li>category: Category of this item. Possible values are <code>weapon</code>, <code>tokugi</code>, and <code>consumable</code></li>
+ * <li>name: Name of this item. A corresponding java class must exists for this item. For weapons, the class must be called WeaponXXX, for special attacks it must be called TokugiXXX, and for consumables it must be called ConsumableXXX.
+ * Additionally, the class must be located in the same package as {@link AWeapon}, {@link ATokugi}, and {@link AConsumable}.
+ * <li>speed: Angular velocity at which the item model should rotate, in degrees/second. Default 45.</li>
+ * <li>axisX, axisY, axisZ: Axis around which the item model should rotate. Default (1,1,0)(</li>
+ * </ul>
  * 
  * @author madgaksha
  *
@@ -321,12 +344,15 @@ public class MapData {
 			else if (type.equals("callback")) {
 				entity = processObjectCallback(props, shape);
 			}
+			else if (type.equals("item")) {
+				entity = processObjectItem(props, shape);
+			}
 			else {
 				LOG.info("unknown map object type: " + type);
 			}
 		}
 		catch (Exception e) {
-			LOG.info("failed to read map object: " + mapObject, e);
+			LOG.error("failed to read map object: " + mapObject, e);
 			return;
 		}
 		
@@ -372,7 +398,6 @@ public class MapData {
 		preferredPlayerLocation = gravity;		
 	}
 	
-	@SuppressWarnings("unchecked")
 	private Entity processObjectEnemy(MapProperties props, Shape2D shape) {
 		Integer initX = 0;
 		Integer initY = 0;
@@ -395,8 +420,10 @@ public class MapData {
 		Method enemySetupMethod;
 		EnemyMaker enemyMaker;
 		try {
+			@SuppressWarnings("unchecked")
 			Class<? extends EnemyMaker> enemyClass = ClassReflection.forName(ENEMY_PACKAGE + species + "Maker");
-			enemyMaker = (EnemyMaker) enemyClass.getDeclaredMethod("getInstance").invoke(null);
+			enemyMaker = (EnemyMaker) ClassReflection.getDeclaredMethod(enemyClass, "getInstance").invoke(null);
+			//enemyMaker = (EnemyMaker) enemyClass.getDeclaredMethod("getInstance").invoke(null);
 			enemySetupMethod = ClassReflection.getDeclaredMethod(enemyClass, "setup", Entity.class, Shape2D.class, ETrigger.class, Vector2.class, Float.class);
 		}
 		catch (Exception e) {
@@ -497,6 +524,63 @@ public class MapData {
 		return entity;
 	}
 
+	/** Reads an item object from the map. 
+	 * 
+	 * @param props Map properties for the item.
+	 * @param shape Shape of the item.
+	 * @return The entity representing the item, or null if an error occurred.
+	 */
+	private Entity processObjectItem(MapProperties props, Shape2D shape) {
+		// Fetch parameters.
+		String category = props.get("category", String.class).toLowerCase(Locale.ROOT);
+		String name = props.get("name", String.class).toUpperCase(Locale.ROOT);
+		
+		Float angularVelocity = null;
+		Vector3 axis = null;
+		Float axisX = null;
+		Float axisY = null;
+		Float axisZ = null;
+		
+		if (props.containsKey("speed")) angularVelocity = Float.valueOf(String.valueOf(props.get("speed")));
+		if (props.containsKey("axisX")) axisX = Float.valueOf(String.valueOf(props.get("axisX")));
+		if (props.containsKey("axisY")) axisY = Float.valueOf(String.valueOf(props.get("axisY")));
+		if (props.containsKey("axisZ")) axisZ = Float.valueOf(String.valueOf(props.get("axisZ")));
+		
+		if (axisX != null || axisY != null || axisZ != null)
+			axis = new Vector3(axisX == null ? 0.0f : axisX, axisY == null ? 0.0f : axisY, axisZ == null ? 0.0f : axisZ);
+
+		// Try to instantiate new item object.
+		IMapItem mapItem = null;
+		if (category.equals("weapon")) {
+			mapItem = EWeapon.valueOf(name).getWeapon();
+			if (mapItem == null) {
+				LOG.error("no such weapon: " + name);
+				return null;
+			}
+		}
+		else if (category.equals("tokugi")) {
+			mapItem = ETokugi.valueOf(name).getTokugi();
+			if (mapItem == null) {
+				LOG.error("no such tokugi: " + name);
+				return null;
+			}			
+		}
+		else if (category.equals("consumable")) {
+			mapItem = EConsumable.valueOf(name).getConsumable();
+			if (mapItem == null) {
+				LOG.error("no such consumable: " + name);
+				return null;
+			}
+		}
+		else {
+			return null;
+		}
+		
+		Entity entity = new Entity();
+		if (!ItemMaker.getInstance().setup(entity, shape, mapItem, angularVelocity, axis)) return null;
+		return entity;
+	}
+	
 	public Vector2 getBaseDirection() {
 		return baseDirection;
 	}

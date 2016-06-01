@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="610" tilewidth="32" tileheight="32" nextobjectid="25">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="610" tilewidth="32" tileheight="32" nextobjectid="30">
  <properties>
   <property name="baseDirX" value="0"/>
   <property name="baseDirY" value="1"/>
@@ -8775,7 +8775,7 @@
  </tileset>
  <layer name="GroundLayer" width="70" height="610" opacity="0.99">
   <data encoding="base64" compression="zlib">
-   eJzt3T1uE2EYRlGPiNkpq2AXNBQgxI8IqYCOZbAlSIFELEhsjcffmfEtXiSQkufOSYAEF9zsdrubjd2zv250i3S5dF3XPX4vn49vEC+XXHLJJZdchMsllzkufR/8b5elbm3e/T7KJZdcHnuuS9/oZxZNdJ/RJqLj6OcTP1dGe4guoy0yySST7ZgoLqMNtmoynXhbMTl8rhfT6RanuCz9cVnqlnS5xOfrFlzOvS27rHVbbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktl+O373/tHLc1F+Vy8dpy8bbltlzOt32pv6/W5nINbbl423JbLt623JaLty23/W9b+J5adBEuF68tF29bbjvXvzcu8Wf02l222JaLty235eJty225eNtyW6/DettyWy7ettyWi7ctt+XibcttuXjbclsu3rbclou3Lbfl4m3Lbbl423JbLt623JaLty235eJty225eNtyWy7ettyWi7ctt+XibcttuXjbclsu3rbclou3Lbfl4m3Lbbl423JbLt623JaLty235eJty225eNtyWy7ettyWi7ctt+Xibcttuazvcskll1xyyUW4XHLJJZdcchEul1xyySWX9bnc7R/+/HY//32OvlyWc/l08D4+nOF9jr65Lp/3T9/oZ1Rd1miTSy655JJLLsLlkksuueSSi3C55JJLLrnkIlwuueSSSy65CJdLLpd02erlkksuueSSi3C55JJLLrnkIlwuueSSSy65CJdLLrnkkksuwuWSSy655JKLcLnkkksuueQiXC655JJLLrkIl0suueSSSy7C5ZJLLrnkkotwueSSSy655CJcLrlc0uXVNP9GGyzh8nOaf29Am1xyySWXXHIRLpdccskll1yEyyWXXHLJZV0uH6f5d/j/NAs31+XbNP++53I1Lj+m+TfaYAmXrV4uueSy273NZZFbyuX19PSNfvZLu7ybjvv6/z1sk0suueSSSy7C5ZJLLrnkkotwueSSSy65rN/l9vcPX464uytz+Tqt9/XXJV3ub62vv57L5f7t/9yct93ajf64LnVbfrZccsklF/FyySWXXHLJRbhccsllvMsvTrv4wQ==
+   eJzt3U1OFGEYRtGuSLtTV+EunDjQGH8iMlJnLsMtKQMTIQrdqa76ThV38JpoAs+tAyrYA68Oh8PVzu7ZXze6Rbpcuq7rHr6Xz8c3iJdLLrnkkksuwuWSyxyXvg/+t8tStzXvfh/lkksuDz3X2jf6mUUT3We0ieg4+vnEz5XRHqLLaItMMslkPyaKy2iDvZpMZ95eTO4/14vpfItzXJb+uCx1S7qs8fm6B5dLb8suW92W23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27LxduW23LxtuW2XLxtuS0Xb1tuy8Xbltty8bbltly8bbktF29bbsvF25bbcvG25bZcvG25LRdvW27L5fTt21+7xO3NRblcvLZcvG25LZfLba/199XWXJ5CWy7ettyWi7ctt+Xibctt/9sWvqcWXYTLxWvLxduW2y71741L/Bm9dZc9tuXibcttuXjbclsu3rbc1uuw3rbclou3Lbfl4m3Lbbl423JbLt623JaLty235eJty225eNtyWy7ettyWi7ctt+XibcttuXjbclsu3rbclou3Lbfl4m3Lbbl423JbLt623JaLty235eJty225eNtyWy7ettyWi7ctt+XibcttuXjbclsu3rbclou3Lbfl4m3Lbbl423JbLtu7XHLJJZdcchEul1xyySWXXITLJZdccslley43x7s/vz7Of5+jL5flXD7dex8fLvA+R99cl8/Hx2/0M6ouW7TJJZdccsklF+FyySWXXHLJRbhccskll1xyES6XXHLJJZdchMsllzVd9nq55JJLLrnkIlwuueSSSy65CJdLLrnkkksuwuWSSy655JKLcLnkkksuueQiXC655JJLLrkIl0suueSSSy7C5ZJLLrnkkotwueSSSy655CJcLrnkkksuuQiXSy5rurya5t9ogyVcfk7z7w1ok0suueSSSy7C5ZJLLrnkkotwueSSSy65bMvl4zT/7v8/zcLNdfk2zb/vuTwZlx/T/BttsITLXi+XXHI5HN7mssgt5fJ6evxGP/vaLu+m077+fw/b5JJLLrnkkotwueSSSy655CJcLrnkkksu23e5/v3DlxPu5om5fJ22+/rrki63t9XXXy/lcvv2f27O2655a+yP/rgudXt+tlxyySUX8XLJJZdccslFuFxyyWW8yy8Olvf3
   </data>
  </layer>
  <layer name="OverLayer" width="70" height="610">
@@ -8795,7 +8795,7 @@
     <property name="trigger" value="startup"/>
    </properties>
   </object>
-  <object id="12" name="SoldierRed" type="Enemy" x="484" y="18496" width="1275.33" height="81.3333">
+  <object id="12" name="SoldierRed" type="Enemy" x="838" y="17152" width="482" height="81.3333">
    <properties>
     <property name="initDir" value="0.0"/>
     <property name="initY" value="20"/>
@@ -8839,7 +8839,7 @@
     <property name="name" value="small_fire"/>
    </properties>
   </object>
-  <object id="23" name="SoldierRed" type="Enemy" x="462.335" y="18285.3" width="1275.33" height="81.3333">
+  <object id="23" name="SoldierRed" type="Enemy" x="854" y="16550.3" width="898" height="252.7">
    <properties>
     <property name="initDir" value="0.0"/>
     <property name="initY" value="20"/>
@@ -8847,12 +8847,25 @@
     <property name="species" value="Soldier Green"/>
    </properties>
   </object>
-  <object id="24" name="SoldierRed" type="Enemy" x="486.335" y="18071.3" width="1275.33" height="81.3333">
+  <object id="24" name="SoldierRed" type="Enemy" x="1040" y="17013.3" width="758" height="81.3333">
    <properties>
     <property name="initDir" value="0.0"/>
     <property name="initY" value="20"/>
     <property name="spawn" value="touch"/>
     <property name="species" value="Soldier Red"/>
+   </properties>
+  </object>
+  <object id="25" name="BasicWeapon" type="Item" x="1152" y="18304" width="32.3333" height="32">
+   <properties>
+    <property name="category" value="weapon"/>
+    <property name="name" value="Basic"/>
+    <property name="speed" type="float" value="45"/>
+   </properties>
+  </object>
+  <object id="29" name="BasicSpecial" type="Item" x="1149.83" y="18139" width="32.3333" height="32">
+   <properties>
+    <property name="category" value="tokugi"/>
+    <property name="name" value="Bomb"/>
    </properties>
   </object>
  </objectgroup>

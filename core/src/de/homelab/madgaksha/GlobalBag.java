@@ -3,6 +3,7 @@ package de.homelab.madgaksha;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
@@ -59,6 +60,8 @@ public final class GlobalBag {
 	public static SpriteBatch batchGame;
 	/** For drawing the background directly to the screen. */
 	public static SpriteBatch batchPixel;
+	/** For drawing 3D models. */
+	public static ModelBatch batchModel;
 	/** For drawing shapes. */
 	public static ShapeRenderer shapeRenderer;
 	

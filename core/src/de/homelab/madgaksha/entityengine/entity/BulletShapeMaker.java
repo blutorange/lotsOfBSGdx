@@ -4,7 +4,6 @@ import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
@@ -12,7 +11,9 @@ import com.badlogic.gdx.math.Shape2D;
 import de.homelab.madgaksha.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
+import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ETexture;
+import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
 
 /**
  * Enum for the different shapes of a bullet. Each bullet shape is defined by its image and geometry.
@@ -24,7 +25,10 @@ public enum BulletShapeMaker {
 	FLOWER_RED(ETexture.BULLET_FLOWER_RED, new Rectangle(-31.0f,-29.0f,62.0f,58.0f), new Circle(0.0f,0.0f,30.0f)),
 	;
 	
-	private Sprite sprite;
+	@SuppressWarnings("unused")
+	private final static Logger LOG = Logger.getLogger(BulletShapeMaker.class);
+	
+	private PoolableAtlasSprite sprite;
 	private Rectangle boundingBox;
 	private Shape2D exactShape;
 	

@@ -28,6 +28,7 @@ import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.LifeComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
+import de.homelab.madgaksha.entityengine.component.ModelComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
 import de.homelab.madgaksha.entityengine.component.ParentComponent;
 import de.homelab.madgaksha.entityengine.component.ParticleEffectGameComponent;
@@ -167,6 +168,8 @@ public final class Mapper {
 			.getFor(LeanEffectComponent.class);
 	public final static ComponentMapper<ManyTrackingComponent> manyTrackingComponent = ComponentMapper
 			.getFor(ManyTrackingComponent.class);
+	public final static ComponentMapper<ModelComponent> modelComponent = ComponentMapper
+			.getFor(ModelComponent.class);
 	public final static ComponentMapper<PainPointsComponent> painPointsComponent = ComponentMapper
 			.getFor(PainPointsComponent.class);
 	public final static ComponentMapper<ParentComponent> parentComponent = ComponentMapper

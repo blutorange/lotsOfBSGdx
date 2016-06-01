@@ -35,6 +35,7 @@ import de.homelab.madgaksha.entityengine.entitysystem.GrantRotationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantScaleSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.InputPlayerDesktopSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.LifeSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.ModelRenderSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.MovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.NewtonianForceSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ParticleEffectRenderSystem;
@@ -68,12 +69,13 @@ public class EntityLayer extends ALayer {
 		if (doUpdate)
 			gameEntityEngine.update(deltaTime);
 		else {
+			viewportGame.apply();
 			final SpriteRenderSystem spriteRenderSystem = gameEntityEngine.getSystem(SpriteRenderSystem.class);
-			if (spriteRenderSystem != null) {
-				viewportGame.apply();
+			final ModelRenderSystem modelRenderSystem = gameEntityEngine.getSystem(ModelRenderSystem.class);
+			if (spriteRenderSystem != null)
 				spriteRenderSystem.update(deltaTime);
-			}
-			// gameEntityEngine.getSystem(Draw3dSystem.class).update(deltaTime);
+			if (modelRenderSystem != null)
+				modelRenderSystem.update(deltaTime);
 		}
 		doUpdate = false;
 	}
@@ -124,6 +126,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new GrantRotationSystem());
 		gameEntityEngine.addSystem(new GrantScaleSystem());
 		gameEntityEngine.addSystem(new LifeSystem());
+		gameEntityEngine.addSystem(new ModelRenderSystem());
 		gameEntityEngine.addSystem(new MovementSystem());
 		gameEntityEngine.addSystem(new NewtonianForceSystem());
 		gameEntityEngine.addSystem(new ParticleEffectRenderSystem());

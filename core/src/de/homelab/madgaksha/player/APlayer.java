@@ -12,10 +12,11 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
+import de.homelab.madgaksha.player.consumable.AConsumable;
 import de.homelab.madgaksha.player.tokugi.ATokugi;
 import de.homelab.madgaksha.player.weapon.AWeapon;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
-import de.homelab.madgaksha.resourcecache.EMusic;
+import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
@@ -62,10 +63,10 @@ public abstract class APlayer {
 	
 	private final Color battleStigmaColorWhenHit;
 	
-	private final EMusic voiceOnBattleStart;
-	private final EMusic voiceOnHeavyDamage;
-	private final EMusic voiceOnLightDamage;
-	private final EMusic voiceOnDeath;
+	private final ESound voiceOnBattleStart;
+	private final ESound voiceOnHeavyDamage;
+	private final ESound voiceOnLightDamage;
+	private final ESound voiceOnDeath;
 	
 	private final EParticleEffect particleEffectOnDeath;
 	
@@ -74,6 +75,9 @@ public abstract class APlayer {
 	
 	private final EnumSet<ETokugi> supportedTokugiSet = EnumSet.of(ETokugi.NONE); 
 	private final EnumMap<ETokugi,ATokugi> supportedTokugiMap = new EnumMap<ETokugi,ATokugi>(ETokugi.class);
+	
+	private final EnumSet<EConsumable> supportedConsumableSet = EnumSet.noneOf(EConsumable.class); 
+	private final EnumMap<EConsumable,AConsumable> supportedConsumableMap = new EnumMap<EConsumable,AConsumable>(EConsumable.class);
 	
 	/** Current weapon equipped. */
 	private AWeapon currentWeapon = null;
@@ -122,6 +126,11 @@ public abstract class APlayer {
 		if (et != null)
 			for (ETokugi t : et)
 				supportedTokugiSet.add(t);
+		
+		EConsumable[] ec = requestedSupportedConsumable();
+		if (ec != null)
+			for (EConsumable c : ec)
+				supportedConsumableSet.add(c);
 		
 		this.requiredResources = requestedRequiredResources();
 	}
@@ -189,21 +198,23 @@ public abstract class APlayer {
 	protected abstract EWeapon[] requestedSupportedWeapons();
 	/** @return List of tokugi the player can learn. May be null.*/ 
 	protected abstract ETokugi[] requestedSupportedTokugi();
+	/** @return List of consumable the player can use. May be null.*/ 
+	protected abstract EConsumable[] requestedSupportedConsumable();
 	
 	/** @return Voice played when battle starts. */
-	protected abstract EMusic requestedVoiceOnBattleStart() ;
+	protected abstract ESound requestedVoiceOnBattleStart() ;
 	/**
 	 * @see DamageSystem#THRESHOLD_LIGHT_HEAVY_DAMAGE 
 	 * @return Voice played when taking heavy damage.
 	 */
-	protected abstract EMusic requestedVoiceOnHeavyDamage();
+	protected abstract ESound requestedVoiceOnHeavyDamage();
 	/**
 	 * @see DamageSystem#THRESHOLD_LIGHT_HEAVY_DAMAGE
 	 * @return Voice played when taking light damage.
 	 */
-	protected abstract EMusic requestedVoiceOnLightDamage() ;
+	protected abstract ESound requestedVoiceOnLightDamage() ;
 	/** @return Voice played when dying. */
-	protected abstract EMusic requestedVoiceOnDeath();
+	protected abstract ESound requestedVoiceOnDeath();
 	
 	/** 
 	 * Can be overriden for custom effects.
@@ -240,6 +251,11 @@ public abstract class APlayer {
 			ATokugi at = et.getTokugi();
 			if (at == null) return false;
 			supportedTokugiMap.put(et,at);
+		}
+		for (EConsumable ec : supportedConsumableSet) {
+			AConsumable ac = ec.getConsumable();
+			if (ac == null) return false;
+			supportedConsumableMap.put(ec,ac);
 		}
 		
 		if (currentWeapon == null) currentWeapon = supportedWeaponMap.get(EWeapon.NONE);
@@ -353,8 +369,19 @@ public abstract class APlayer {
 		return movementBattleSpeedHigh;
 	}
 
+	public boolean supportsWeapon(EWeapon weapon) {
+		return supportedWeaponSet.contains(weapon);
+	}
+	public boolean supportsTokugi(ETokugi tokugi) {
+		return supportedTokugiSet.contains(tokugi);
+	}
+	public boolean supportsConsumable(EConsumable consumable) {
+		return supportedConsumableSet.contains(consumable);
+	}
+
+	
 	public void switchWeapon(EWeapon weapon) {
-		if (supportedWeaponSet.contains(weapon))
+		if (supportsWeapon(weapon))
 			currentWeapon = supportedWeaponMap.get(weapon);
 	}
 	public AWeapon getWeapon() {
@@ -362,23 +389,23 @@ public abstract class APlayer {
 	}
 
 	public void switchTokugi(ETokugi tokugi) {
-		if (supportedTokugiSet.contains(tokugi))
+		if (supportsTokugi(tokugi))
 			currentTokugi = supportedTokugiMap.get(tokugi);
 	}
 	public ATokugi getTokugi() {
 		return currentTokugi;
 	}
 
-	public EMusic getVoiceOnBattleStart() {
+	public ESound getVoiceOnBattleStart() {
 		return voiceOnBattleStart;
 	}
-	public EMusic getVoiceOnLightDamage() {
+	public ESound getVoiceOnLightDamage() {
 		return voiceOnLightDamage;
 	}
-	public EMusic getVoiceOnHeavyDamage() {
+	public ESound getVoiceOnHeavyDamage() {
 		return voiceOnHeavyDamage;
 	}
-	public EMusic getVoiceOnDeath() {
+	public ESound getVoiceOnDeath() {
 		return voiceOnDeath;
 	}
 

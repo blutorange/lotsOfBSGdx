@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.audiosystem.VoicePlayer;
-import de.homelab.madgaksha.resourcecache.EMusic;
+import de.homelab.madgaksha.resourcecache.ESound;
 
 /**
  * Component for entities that can speak.
@@ -12,11 +12,11 @@ import de.homelab.madgaksha.resourcecache.EMusic;
  * @author mad_gaksha
  */
 public class VoiceComponent implements Component, Poolable {
-	public EMusic onLightDamage = null;
-	public EMusic onHeavyDamage = null;
-	public EMusic onBattleModeStart = null;
-	public EMusic onSpawn = null;
-	public EMusic onDeath = null;
+	public ESound onLightDamage = null;
+	public ESound onHeavyDamage = null;
+	public ESound onBattleModeStart = null;
+	public ESound onSpawn = null;
+	public ESound onDeath = null;
 	public VoicePlayer voicePlayer = null;
 	
 	public VoiceComponent() {

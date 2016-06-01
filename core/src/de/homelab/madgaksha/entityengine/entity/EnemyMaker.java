@@ -52,7 +52,6 @@ import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.enums.ECollisionGroup;
 import de.homelab.madgaksha.layer.BattleModeActivateLayer;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
@@ -161,11 +160,11 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		return vc;
 	}
 
-	protected abstract EMusic requestedVoiceOnSpawn();
-	protected abstract EMusic requestedVoiceOnLightDamage();
-	protected abstract EMusic requestedVoiceOnHeavyDamage();
-	protected abstract EMusic requestedVoiceOnBattleModeStart();
-	protected abstract EMusic requestedVoiceOnDeath();
+	protected abstract ESound requestedVoiceOnSpawn();
+	protected abstract ESound requestedVoiceOnLightDamage();
+	protected abstract ESound requestedVoiceOnHeavyDamage();
+	protected abstract ESound requestedVoiceOnBattleModeStart();
+	protected abstract ESound requestedVoiceOnDeath();
 
 	@Override
 	public void callbackTrigger(Entity e, ETrigger t) {

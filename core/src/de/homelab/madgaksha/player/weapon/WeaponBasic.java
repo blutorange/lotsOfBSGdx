@@ -1,25 +1,26 @@
-package de.homelab.madgaksha.player.tokugi;
+package de.homelab.madgaksha.player.weapon;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EModel;
 import de.homelab.madgaksha.resourcecache.ETexture;
 
-public class TokugiNone extends ATokugi {
+public class WeaponBasic extends AWeapon {
 	@SuppressWarnings("unused")
-	private final static Logger LOG = Logger.getLogger(TokugiNone.class);
+	private final static Logger LOG = Logger.getLogger(WeaponBasic.class);
 
 	@Override
 	protected ETexture requestedIconMain() {
-		return ETexture.TOKUGI_NONE_ICON_MAIN;
+		return ETexture.WEAPON_BASIC_ICON_MAIN;
 	}
 
 	@Override
 	protected ETexture requestedIconSub() {
-		return ETexture.TOKUGI_NONE_ICON_SUB;
+		return ETexture.WEAPON_BASIC_ICON_SUB;
 	}
 
 	@Override
 	public EModel getModel() {
-		throw new UnsupportedOperationException("TokugiNone cannot be a collectable item.");
+		return EModel.ITEM_WEAPON_BASIC;
 	}
+
 }

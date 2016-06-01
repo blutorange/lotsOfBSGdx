@@ -73,7 +73,6 @@ public class ShadowComponent implements Component, Poolable {
 
 	public ShadowComponent(Sprite sprite, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY,
 			float offsetRotateX, float offsetRotateY) {
-		sprite = new Sprite();
 		this.sprite = sprite;
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;

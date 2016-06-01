@@ -1,18 +1,18 @@
 package de.homelab.madgaksha.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.resourcecache.ETexture;
+import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
+import de.homelab.madgaksha.resourcepool.SpritePool;
 import de.homelab.madgaksha.util.DebugStringifier;
 
 public class SpriteComponent implements Component, Poolable {
 	
-	public Sprite sprite;
+	public PoolableAtlasSprite sprite;
 
 	/**
 	 * Creates a new sprite component. Used mainly for pooling.
@@ -24,7 +24,7 @@ public class SpriteComponent implements Component, Poolable {
 	 * Loads the sprite with texture from the given sprite.
 	 * @param sprite The sprite with the texture to use.
 	 */
-	public SpriteComponent(Sprite sprite) {
+	public SpriteComponent(PoolableAtlasSprite sprite) {
 		setup(sprite);
 	}
 	
@@ -44,7 +44,7 @@ public class SpriteComponent implements Component, Poolable {
 		setup(sac, origin);
 	}
 	
-	public void setup(Sprite sprite) {
+	public void setup(PoolableAtlasSprite sprite) {
 		this.sprite = sprite;
 	}
 	
@@ -55,30 +55,19 @@ public class SpriteComponent implements Component, Poolable {
 	
 	public void setup(SpriteAnimationComponent sac) {
 		final TextureRegion tr = sac.animation.getKeyFrame(0.0f);
-		sprite = new Sprite(tr);
-		sprite.setTexture(tr.getTexture());
-		sprite.setOriginCenter();
+		sprite = SpritePool.getInstance().obtain(tr);
 	}
 	
 	public void setup(SpriteAnimationComponent sac, Vector2 origin) {
 		final TextureRegion tr = sac.animation.getKeyFrame(0.0f);
-		sprite = new Sprite(tr);
-		sprite.setTexture(tr.getTexture());
+		sprite = SpritePool.getInstance().obtain(tr);
 		sprite.setOrigin(origin.x, origin.y);
 	}
 	
 	@Override
 	public void reset() {
-		//TODO
-		// We can reuse the Sprite instance. ?
-		sprite = new Sprite();
-		sprite.setCenter(0.0f, 0.0f);
-		sprite.setColor(Color.WHITE);
-		sprite.setFlip(false, false);
-		sprite.setOriginCenter();
-		sprite.setPosition(0.0f, 0.0f);
-		sprite.setRotation(0.0f);
-		sprite.setScale(1.0f);
+		SpritePool.getInstance().free(sprite);
+		sprite = null;
 	}
 	
 	@Override

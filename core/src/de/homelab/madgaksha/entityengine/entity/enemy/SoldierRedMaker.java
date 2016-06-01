@@ -19,7 +19,7 @@ import de.homelab.madgaksha.entityengine.entity.NormalEnemyMaker;
 import de.homelab.madgaksha.entityengine.entity.trajectory.LinearMotionTrajectory;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
-import de.homelab.madgaksha.resourcecache.EMusic;
+import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 
@@ -47,10 +47,10 @@ public class SoldierRedMaker extends NormalEnemyMaker {
 	public IResource<? extends Enum<?>,?>[] requestedResources() {
 		return new IResource[]{
 			EAnimationList.SOLDIER_RED_0,
-			EMusic.HOOORGH,
-			EMusic.NURRGH,
-			EMusic.UAARGH,
-			EMusic.NURUKATTA_KA,
+			ESound.HOOORGH,
+			ESound.NURRGH,
+			ESound.UAARGH,
+			ESound.NURUKATTA_KA,
 		};
 	}
 	
@@ -129,23 +129,23 @@ for (int i=0; i!=3; ++i){
 	}
 	
 	@Override
-	protected EMusic requestedVoiceOnSpawn() {
-		return EMusic.HOOORGH;
+	protected ESound requestedVoiceOnSpawn() {
+		return ESound.HOOORGH;
 	}
 	@Override
-	protected EMusic requestedVoiceOnLightDamage() {
-		return EMusic.NURRGH;
+	protected ESound requestedVoiceOnLightDamage() {
+		return ESound.NURRGH;
 	}
 	@Override
-	protected EMusic requestedVoiceOnHeavyDamage() {
-		return EMusic.NURUKATTA_KA;
+	protected ESound requestedVoiceOnHeavyDamage() {
+		return ESound.NURUKATTA_KA;
 	}
 	@Override
-	protected EMusic requestedVoiceOnBattleModeStart() {
+	protected ESound requestedVoiceOnBattleModeStart() {
 		return null;
 	}
 	@Override
-	protected EMusic requestedVoiceOnDeath() {
-		return EMusic.UAARGH;
+	protected ESound requestedVoiceOnDeath() {
+		return ESound.UAARGH;
 	}
 }

@@ -27,6 +27,7 @@ public enum ETokugi {
 		ATokugi tokugi;
 		try {
 			tokugi = (ATokugi) ClassReflection.getConstructor(clazz).newInstance();
+			tokugi.setType(this);
 			return tokugi.initialize() ? tokugi : null;
 		} catch (ReflectionException e) {
 			LOG.error("could not initialize tokugi: " + this, e);

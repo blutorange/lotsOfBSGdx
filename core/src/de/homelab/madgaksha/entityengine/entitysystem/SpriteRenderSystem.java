@@ -140,10 +140,8 @@ public class SpriteRenderSystem extends EntitySystem {
 			}
 			
 			// Scale if desired.
-			if (sc != null) {
-				spc.sprite.setScale(sc.scaleX*sc.originalScale);
-				spc.sprite.setScale(sc.scaleY*sc.originalScale);
-			}
+			if (sc != null)
+				spc.sprite.setScale(sc.scaleX*sc.originalScale, sc.scaleY*sc.originalScale);
 
 			// Drop shadow if desired.
 			if (kc != null) {

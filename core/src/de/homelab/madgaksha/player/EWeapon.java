@@ -5,10 +5,12 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.weapon.AWeapon;
+import de.homelab.madgaksha.player.weapon.WeaponBasic;
 import de.homelab.madgaksha.player.weapon.WeaponNone;
 
 public enum EWeapon {
 	NONE(WeaponNone.class),
+	BASIC(WeaponBasic.class)
 	;
 
 	private final static Logger LOG = Logger.getLogger(EWeapon.class);
@@ -27,6 +29,7 @@ public enum EWeapon {
 		AWeapon weapon;
 		try {
 			weapon = (AWeapon) ClassReflection.getConstructor(clazz).newInstance();
+			weapon.setType(this);
 			return weapon.initialize() ? weapon : null;
 		} catch (ReflectionException e) {
 			LOG.error("could not initialize weapon: " + this, e);

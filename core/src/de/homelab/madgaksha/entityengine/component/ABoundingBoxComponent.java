@@ -1,10 +1,13 @@
 package de.homelab.madgaksha.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxMapComponent;
 import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxRenderComponent;
 
 /**
@@ -34,6 +37,8 @@ public abstract class ABoundingBoxComponent implements Component, Poolable {
 	private final static float DEFAULT_MAX_X = 0.5f;
 	private final static float DEFAULT_MAX_Y = 0.5f;
 	
+	private final static BoundingBox boundingBox = new BoundingBox();
+	
 	public float minX = DEFAULT_MIN_X;
 	public float minY = DEFAULT_MIN_Y;
 	public float maxX = DEFAULT_MAX_X;
@@ -49,6 +54,23 @@ public abstract class ABoundingBoxComponent implements Component, Poolable {
 		setup(minX,minY,maxX,maxY);
 	}
 
+	public ABoundingBoxComponent(ModelInstance modelInstance) {
+		setup(modelInstance);
+	}
+	public ABoundingBoxComponent(ModelComponent modelComponent) {
+		setup(modelComponent.modelInstance);
+	}
+	
+	public ABoundingBoxComponent(BoundingBoxCollisionComponent bbcc) {
+		setup(bbcc.minX, bbcc.minY, bbcc.maxX, bbcc.maxY);
+	}
+	public ABoundingBoxComponent(BoundingBoxRenderComponent bbrc) {
+		setup(bbrc.minX, bbrc.minY, bbrc.maxX, bbrc.maxY);
+	}
+	public ABoundingBoxComponent(BoundingBoxMapComponent bbmc) {
+		setup(bbmc.minX, bbmc.minY, bbmc.maxX, bbmc.maxY);
+	}
+	
 	public void setup(Rectangle r) {
 		this.minX = r.x;
 		this.minY = r.y;
@@ -62,6 +84,13 @@ public abstract class ABoundingBoxComponent implements Component, Poolable {
 		this.maxY = maxY;
 	}
 
+	public void setup(ModelInstance modelInstance) {
+		modelInstance.calculateBoundingBox(boundingBox);
+		this.minX = boundingBox.getCenterX()-0.5f*boundingBox.getWidth();
+		this.minY = boundingBox.getCenterY()-0.5f*boundingBox.getHeight();
+		this.maxX = boundingBox.getCenterX()+0.5f*boundingBox.getWidth();
+		this.maxY = boundingBox.getCenterY()+0.5f*boundingBox.getHeight();
+	}
 	
 	@Override
 	public void reset() {

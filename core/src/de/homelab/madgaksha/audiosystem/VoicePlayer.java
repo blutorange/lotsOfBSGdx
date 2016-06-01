@@ -1,9 +1,10 @@
 package de.homelab.madgaksha.audiosystem;
 
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.EMusic;
+import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 /**
@@ -16,34 +17,45 @@ public class VoicePlayer extends AAudioPlayer {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(VoicePlayer.class);
 
-	private Music currentClip;
+	private Sound currentClip;
+	private long duration;
+	private long startTime = TimeUtils.millis();
 
 	public VoicePlayer() {
 		super();
 	}
 
-	public boolean play(EMusic sound) {
-		return play(sound, 1.0f, 0.0f);
+	public boolean play(ESound sound) {
+		return play(sound, 1.0f, 0.0f, 1.0f);
 	}
-	public boolean play(EMusic sound, float volume) {
-		return play(sound, volume, 1.0f);
+	public boolean play(ESound sound, float volume) {
+		return play(sound, volume, 0.0f, 1.0f);
 	}
-	public boolean play(EMusic music, float volume, float pan) {
+	public boolean play(ESound sound, float volume, float pan) {
+		return play(sound, volume, pan);
+	}
+	public boolean play(ESound sound, float volume, float pan, float pitch) {
 		if (currentClip != null) {
-			if (currentClip.isPlaying()) return false;
+			if (isPlaying()) return false;
 			else currentClip.stop();
 		}
-		final Music m = ResourceCache.getMusic(music);
-		if (m == null) return false;
-		m.setPan(pan, volume);
-		m.play();
+		final Sound s = ResourceCache.getSound(sound);
+		if (s == null) return false;
+		currentClip = s;
+		duration = sound.getDuration();
+		startTime = TimeUtils.millis();
+		s.play(volume, pitch, pan);
 		return true;
 	}
 
-	public void playUnconditionally(EMusic sound) {
+	private boolean isPlaying() {
+		return TimeUtils.millis()-startTime < duration;
+	}
+	
+	public void playUnconditionally(ESound sound) {
 		if (currentClip != null) currentClip.stop();
 		currentClip = null;
-		play(sound, 1.0f, 0.0f);
+		play(sound, 1.0f, 0.0f, 1.0f);
 	}
 
 	public void stop() {
