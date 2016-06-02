@@ -4,7 +4,6 @@ import java.util.Set;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 public final class ResourceCache {
 
@@ -83,6 +83,7 @@ public final class ResourceCache {
 	 * @see ResourceCache#loadToRam(IResource)
 	 */
 	public static boolean loadToRam(IResource<? extends Enum<?>, ?>[] requiredResources) {
+		if (requiredResources == null) return true;
 		for (IResource<? extends Enum<?>,?> r : requiredResources) {
 			LOG.debug("fetch: " + r);
 			if (!loadToRam(r)) return false;
@@ -261,11 +262,11 @@ public final class ResourceCache {
 	 *            Animation to load.
 	 * @return Loaded animation.
 	 */
-	public static Animation getAnimation(EAnimation animation) {
-		return (Animation) getResource(animation, true);
+	public static AtlasAnimation getAnimation(EAnimation animation) {
+		return (AtlasAnimation) getResource(animation, true);
 	}
-	public static Animation getAnimation(EAnimation animation, boolean cached) {
-		return (Animation) getResource(animation, cached);
+	public static AtlasAnimation getAnimation(EAnimation animation, boolean cached) {
+		return (AtlasAnimation) getResource(animation, cached);
 	}
 	
 	/**
@@ -275,11 +276,11 @@ public final class ResourceCache {
 	 *            Animation list to load.
 	 * @return Loaded animation list.
 	 */
-	public static Animation[] getAnimationList(EAnimationList animationList) {
-		return (Animation[]) getResource(animationList, true);
+	public static AtlasAnimation[] getAnimationList(EAnimationList animationList) {
+		return (AtlasAnimation[]) getResource(animationList, true);
 	}
-	public static Animation[] getAnimationList(EAnimationList animationList, boolean cached) {
-		return (Animation[]) getResource(animationList, cached);
+	public static AtlasAnimation[] getAnimationList(EAnimationList animationList, boolean cached) {
+		return (AtlasAnimation[]) getResource(animationList, cached);
 	}
 
 	/**

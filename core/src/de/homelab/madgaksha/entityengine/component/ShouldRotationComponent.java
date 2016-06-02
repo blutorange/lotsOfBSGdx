@@ -20,6 +20,9 @@ public class ShouldRotationComponent extends RotationComponent implements Compon
 	public ShouldRotationComponent() {
 	}
 	public ShouldRotationComponent(IGrantStrategy gs) {
+		setup(gs);
+	}
+	public void setup(IGrantStrategy gs) {
 		grantStrategy = gs;
 	}
 	

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.resourcecache.ETexture;
+import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
 
 /**
  * Represents the force that is applied to objects.
@@ -32,34 +33,69 @@ public class ShadowComponent implements Component, Poolable {
 	}
 
 	public ShadowComponent(ETexture texture) {
-		this(texture, DEFAULT_OFFSET_X, DEFAULT_OFFSET_Y, DEFAULT_SCALE_FACTOR_X, DEFAULT_SCALE_FACTOR_Y,
-				DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
+		setup(texture);
 	}
 
-	public ShadowComponent(Sprite sprite) {
-		this(sprite, DEFAULT_OFFSET_X, DEFAULT_OFFSET_Y, DEFAULT_SCALE_FACTOR_X, DEFAULT_SCALE_FACTOR_Y,
-				DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
+	public ShadowComponent(PoolableAtlasSprite sprite) {
+		setup(sprite);
 	}
 
 	public ShadowComponent(ETexture texture, float offsetX, float offsetY) {
-		this(texture, offsetX, offsetY, DEFAULT_SCALE_FACTOR_X, DEFAULT_SCALE_FACTOR_Y, DEFAULT_OFFSET_ROTATE_X,
-				DEFAULT_OFFSET_ROTATE_Y);
+		setup(texture, offsetX, offsetY);
 	}
 
-	public ShadowComponent(Sprite sprite, float offsetX, float offsetY) {
-		this(sprite, offsetX, offsetY, DEFAULT_SCALE_FACTOR_X, DEFAULT_SCALE_FACTOR_Y, DEFAULT_OFFSET_ROTATE_X,
-				DEFAULT_OFFSET_ROTATE_Y);
+	public ShadowComponent(PoolableAtlasSprite sprite, float offsetX, float offsetY) {
+		setup(sprite, offsetX, offsetRotateY);
 	}
 
 	public ShadowComponent(ETexture texture, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY) {
-		this(texture, offsetX, offsetY, scaleFactorX, scaleFactorY, DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
+		setup(texture, offsetX, offsetY, scaleFactorX, scaleFactorY);
 	}
 
-	public ShadowComponent(Sprite sprite, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY) {
-		this(sprite, offsetX, offsetY, scaleFactorX, scaleFactorY, DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
+	public ShadowComponent(PoolableAtlasSprite sprite, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY) {
+		setup(sprite, offsetX, offsetY, scaleFactorX, scaleFactorY);
 	}
 
 	public ShadowComponent(ETexture texture, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY,
+			float offsetRotateX, float offsetRotateY) {
+		setup(texture, offsetX, offsetY, scaleFactorX, scaleFactorY, offsetRotateX, offsetRotateY);
+	}
+
+	public ShadowComponent(PoolableAtlasSprite sprite, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY,
+			float offsetRotateX, float offsetRotateY) {
+		setup(sprite, offsetX, offsetY, scaleFactorX, scaleFactorY, offsetRotateX, offsetRotateY);
+	}
+	
+	
+	public void setup(ETexture texture) {
+		setup(texture, DEFAULT_OFFSET_X, DEFAULT_OFFSET_Y, DEFAULT_SCALE_FACTOR_X, DEFAULT_SCALE_FACTOR_Y,
+				DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
+	}
+
+	public void setup(PoolableAtlasSprite sprite) {
+		setup(sprite, DEFAULT_OFFSET_X, DEFAULT_OFFSET_Y, DEFAULT_SCALE_FACTOR_X, DEFAULT_SCALE_FACTOR_Y,
+				DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
+	}
+
+	public void setup(ETexture texture, float offsetX, float offsetY) {
+		setup(texture, offsetX, offsetY, DEFAULT_SCALE_FACTOR_X, DEFAULT_SCALE_FACTOR_Y, DEFAULT_OFFSET_ROTATE_X,
+				DEFAULT_OFFSET_ROTATE_Y);
+	}
+
+	public void setup(PoolableAtlasSprite sprite, float offsetX, float offsetY) {
+		setup(sprite, offsetX, offsetY, DEFAULT_SCALE_FACTOR_X, DEFAULT_SCALE_FACTOR_Y, DEFAULT_OFFSET_ROTATE_X,
+				DEFAULT_OFFSET_ROTATE_Y);
+	}
+
+	public void setup(ETexture texture, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY) {
+		setup(texture, offsetX, offsetY, scaleFactorX, scaleFactorY, DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
+	}
+
+	public void setup(PoolableAtlasSprite sprite, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY) {
+		setup(sprite, offsetX, offsetY, scaleFactorX, scaleFactorY, DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
+	}
+
+	public void setup(ETexture texture, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY,
 			float offsetRotateX, float offsetRotateY) {
 		sprite = texture.asSprite();
 		this.offsetX = offsetX;
@@ -71,7 +107,7 @@ public class ShadowComponent implements Component, Poolable {
 		sprite.setOriginCenter();
 	}
 
-	public ShadowComponent(Sprite sprite, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY,
+	public void setup(PoolableAtlasSprite sprite, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY,
 			float offsetRotateX, float offsetRotateY) {
 		this.sprite = sprite;
 		this.offsetX = offsetX;
@@ -81,6 +117,10 @@ public class ShadowComponent implements Component, Poolable {
 		this.offsetRotateX = offsetRotateX;
 		this.offsetRotateY = offsetRotateY;
 	}
+
+	
+	
+	
 
 	@Override
 	public void reset() {

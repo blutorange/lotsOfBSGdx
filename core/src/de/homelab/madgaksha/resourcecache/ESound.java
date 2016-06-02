@@ -12,6 +12,11 @@ import de.homelab.madgaksha.logging.Logger;
 public enum ESound implements IResource<ESound,Sound> {
 	TEXTBOX_NEXT("sound/ed6se002.wav"),
 	ENEMY_SWITCH("sound/ed6se049.wav"),
+	EQUIP_WEAPON("sound/ed6se022.wav"),
+	EQUIP_TOKUGI("sound/ed6se155.wav"),
+	CANNOT_EQUIP("sound/ed6se003.wav"),
+	ACTIVATE_ITEM("sound/ed6se145.wav"),
+	ACQUIRE_WEAPON("sound/ed6se045.wav"),
 	BATTLE_STIGMA_APPEAR("sound/ed6se543.wav"),
 	BATTLE_STIGMA_ABSORB("sound/ed6se526.wav"),
 	PLAYER_EXPLODE_ON_DEATH("sound/explodePlayer.wav"),

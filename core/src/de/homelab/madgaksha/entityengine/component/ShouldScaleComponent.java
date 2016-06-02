@@ -20,6 +20,9 @@ public class ShouldScaleComponent extends ScaleComponent implements Component, P
 	public ShouldScaleComponent() {
 	}
 	public ShouldScaleComponent(IGrantStrategy gs) {
+		setup(gs);
+	}
+	public void setup(IGrantStrategy gs) {
 		grantStrategy = gs;
 	}
 	

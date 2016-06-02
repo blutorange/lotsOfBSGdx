@@ -51,6 +51,7 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 			ESound.NURRGH,
 			ESound.UAARGH,
 			ESound.NURUKATTA_KA,
+			BulletShapeMaker.FLOWER_RED.getResource(),
 		};
 	}
 	
@@ -101,13 +102,13 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 //		timePassed += tc.deltaTime;
 //		if (timePassed > 0.2f) {
 //			timePassed = 0.0f;
-		BulletMaker.getInstance().forEnemy(enemy);
+		BulletMaker.getInstance().forShooter(enemy);
 for (int i=0; i!=3; ++i){		
 			final PositionComponent pc = Mapper.positionComponent.get(enemy);
 			linearMotionTrajectory.position(pc.x, pc.y);
 			v.rotate(MathUtils.random(0.0f,360.0f));
 			linearMotionTrajectory.velocity(v.x,v.y);
-			Entity bullet =	BulletMaker.makeEntity( BulletShapeMaker.FLOWER_RED, linearMotionTrajectory, 7000000L);
+			Entity bullet =	BulletMaker.makeForEnemy(BulletShapeMaker.FLOWER_RED, linearMotionTrajectory, 7000000L);
 			gameEntityEngine.addEntity(bullet);
 }
 //		}

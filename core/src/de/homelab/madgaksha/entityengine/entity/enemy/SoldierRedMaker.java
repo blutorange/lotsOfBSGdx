@@ -51,6 +51,7 @@ public class SoldierRedMaker extends NormalEnemyMaker {
 			ESound.NURRGH,
 			ESound.UAARGH,
 			ESound.NURUKATTA_KA,
+			BulletShapeMaker.PACMAN_LIGHTYELLOW.getResource(),
 		};
 	}
 	
@@ -109,8 +110,8 @@ for (int i=0; i!=3; ++i){
 			linearMotionTrajectory.position(pc.x, pc.y);
 			v.rotate(MathUtils.random(0.0f,360.0f));
 			linearMotionTrajectory.velocity(v.x,v.y);
-			BulletMaker.getInstance().forEnemy(enemy);
-			Entity bullet =	BulletMaker.makeEntity(BulletShapeMaker.PACMAN_LIGHTYELLOW, linearMotionTrajectory, 1000L);
+			BulletMaker.getInstance().forShooter(enemy);
+			Entity bullet =	BulletMaker.makeForEnemy(BulletShapeMaker.PACMAN_LIGHTYELLOW, linearMotionTrajectory, 1000L);
 			gameEntityEngine.addEntity(bullet);
 }
 		}

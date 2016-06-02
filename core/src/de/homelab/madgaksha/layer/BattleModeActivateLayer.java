@@ -1,7 +1,7 @@
 package de.homelab.madgaksha.layer;
 
-import static de.homelab.madgaksha.GlobalBag.game;
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
+import static de.homelab.madgaksha.GlobalBag.game;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Interpolation;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ETexture;
+import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 /**
  * Shows the cut-in when battle mode activates.
@@ -69,13 +70,14 @@ public class BattleModeActivateLayer extends ALayer {
 
 	@Override
 	public void addedToStack() {
+		ResourceCache.loadToRam(ETexture.CUTIN_BATTLE_MODE_ACTIVATE);
 	}
 
 	@Override
 	public boolean isBlockDraw() {
 		return false;
 	}
-
+	
 	@Override
 	public boolean isBlockUpdate() {
 		return false;

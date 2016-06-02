@@ -2,20 +2,22 @@ package de.homelab.madgaksha.resourcepool;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Pool;
 
+import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 /**
- * A pool for sprites that supports {@link TextureAtlas}.
- * It uses {@link AtlasRegion}, {@link PoolableAtlasSprite}.
+ * A pool for sprites that support {@link TextureAtlas}.
+ * It uses {@link AtlasRegion}s and {@link PoolableAtlasSprite}s.
  * @author madgaksha
  *
  */
 public class SpritePool extends Pool<PoolableAtlasSprite> {
 
+	@SuppressWarnings("unused")
+	private final static Logger LOG = Logger.getLogger(SpritePool.class);
 	private final static int INITIAL_SIZE = 100;
 	private final static int MAX_SIZE = 10000;
 	
@@ -34,25 +36,14 @@ public class SpritePool extends Pool<PoolableAtlasSprite> {
 	protected PoolableAtlasSprite newObject() {
 		return new PoolableAtlasSprite();
 	}
-	
-	@Override
-	public PoolableAtlasSprite obtain () {
-		PoolableAtlasSprite sprite = super.obtain();
-		return sprite;
-	}
+		
 	public PoolableAtlasSprite obtain(ETexture texture) {
 		return obtain(ResourceCache.getTexture(texture));
 	}
-	
+
 	public PoolableAtlasSprite obtain(AtlasRegion region) {
 		PoolableAtlasSprite sprite = obtain();
 		sprite.setAtlasRegion(region);
-		return sprite;
-	}
-	
-	public PoolableAtlasSprite obtain(TextureRegion region) {
-		final PoolableAtlasSprite sprite = obtain();
-		sprite.setTextureRegion(region);
 		return sprite;
 	}
 

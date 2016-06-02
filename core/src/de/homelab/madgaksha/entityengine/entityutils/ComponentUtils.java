@@ -5,7 +5,12 @@ import com.badlogic.ashley.core.Entity;
 
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.ComponentQueueComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.EAnimationList;
 
 /**
  * Utilities for working with an entity's pain points. Usually processed by an appropriate entity system,
@@ -27,5 +32,21 @@ public class ComponentUtils {
 	public static void applyComponentQueue(Entity e) {
 		final ComponentQueueComponent cqc = Mapper.componentQueueComponent.get(e);
 		if (cqc != null) applyComponentQueue(e, cqc);
+	}
+
+	/**
+	 * Switches the animation list to the given animation list.
+	 * @param entity Entity whose sprite animation list needs to be changed.
+	 * @param animationList The new animation list.
+	 */
+	public static void switchAnimationList(Entity entity, EAnimationList animationList) {
+		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(entity);
+		SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
+		SpriteComponent sc = Mapper.spriteComponent.get(entity);
+		if (sfdc != null && sac != null && sc != null) {
+			sfdc.setup(animationList, ESpriteDirectionStrategy.ZENITH);
+			sac.setup(sfdc);
+			sc.setup(sac);
+		}
 	}
 }

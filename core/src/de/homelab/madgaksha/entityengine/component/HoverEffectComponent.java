@@ -21,6 +21,10 @@ public class HoverEffectComponent implements Component, Poolable {
 	}
 
 	public HoverEffectComponent(float amplitude, float frequency) {
+		setup(amplitude, frequency);
+	}
+	
+	public void setup(float amplitude, float frequency) {
 		this.frequency = 2.0f*MathUtils.PI/frequency;
 		this.amplitude = amplitude;
 	}

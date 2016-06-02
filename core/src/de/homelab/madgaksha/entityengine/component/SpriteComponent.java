@@ -1,7 +1,7 @@
 package de.homelab.madgaksha.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
@@ -11,6 +11,8 @@ import de.homelab.madgaksha.resourcepool.SpritePool;
 import de.homelab.madgaksha.util.DebugStringifier;
 
 public class SpriteComponent implements Component, Poolable {
+	
+	private boolean managed = false;
 	
 	public PoolableAtlasSprite sprite;
 
@@ -46,28 +48,33 @@ public class SpriteComponent implements Component, Poolable {
 	
 	public void setup(PoolableAtlasSprite sprite) {
 		this.sprite = sprite;
+		this.managed = false;
 	}
 	
 	public void setup(ETexture texture) {
 		sprite = texture.asSprite();
+		this.managed = true;
 		if (sprite != null) sprite.setOriginCenter();
 	}
 	
 	public void setup(SpriteAnimationComponent sac) {
-		final TextureRegion tr = sac.animation.getKeyFrame(0.0f);
-		sprite = SpritePool.getInstance().obtain(tr);
+		final AtlasRegion ar = sac.animation.getKeyFrame(0.0f);
+		this.managed = false;
+		sprite = SpritePool.getInstance().obtain(ar);
 	}
 	
 	public void setup(SpriteAnimationComponent sac, Vector2 origin) {
-		final TextureRegion tr = sac.animation.getKeyFrame(0.0f);
-		sprite = SpritePool.getInstance().obtain(tr);
+		final AtlasRegion ar = sac.animation.getKeyFrame(0.0f);
+		sprite = SpritePool.getInstance().obtain(ar);
+		this.managed = false;
 		sprite.setOrigin(origin.x, origin.y);
 	}
 	
 	@Override
 	public void reset() {
-		SpritePool.getInstance().free(sprite);
+		if (managed) SpritePool.getInstance().free(sprite);
 		sprite = null;
+		managed = false;
 	}
 	
 	@Override

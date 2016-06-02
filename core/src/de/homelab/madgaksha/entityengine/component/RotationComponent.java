@@ -57,7 +57,7 @@ public class RotationComponent implements Component, Poolable {
 		centerY = cy;
 	}
 	public RotationComponent(boolean ic) {
-		inverseToCamera = ic;
+		setup(ic);
 	}
 	public RotationComponent(float tz, boolean ic) {
 		thetaZ = tz;
@@ -80,6 +80,9 @@ public class RotationComponent implements Component, Poolable {
 		setup(axis);
 	}
 	
+	public void setup(boolean ic) {
+		inverseToCamera = ic;
+	}
 	public void setup(float degrees, float axisX, float axisY, float axisZ) {
 		this.axisX = axisX;
 		this.axisY = axisY;

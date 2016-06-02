@@ -1,7 +1,8 @@
 package de.homelab.madgaksha.player;
 
-import java.util.EnumMap;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
@@ -12,9 +13,11 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
-import de.homelab.madgaksha.player.consumable.AConsumable;
+import de.homelab.madgaksha.player.consumable.EConsumable;
 import de.homelab.madgaksha.player.tokugi.ATokugi;
+import de.homelab.madgaksha.player.tokugi.ETokugi;
 import de.homelab.madgaksha.player.weapon.AWeapon;
+import de.homelab.madgaksha.player.weapon.EWeapon;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
@@ -25,6 +28,7 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
 public abstract class APlayer {
 
 	private final EAnimationList animationList;
+	private final EAnimationList battleAnimationList;
 	private final float movementAccelerationFactorLow;
 	private final float movementAccelerationFactorHigh;
 	private final float movementFrictionFactor;
@@ -71,13 +75,12 @@ public abstract class APlayer {
 	private final EParticleEffect particleEffectOnDeath;
 	
 	private final EnumSet<EWeapon> supportedWeaponSet = EnumSet.of(EWeapon.NONE); 
-	private final EnumMap<EWeapon,AWeapon> supportedWeaponMap = new EnumMap<EWeapon,AWeapon>(EWeapon.class);
+	private final List<AWeapon> obtainedWeaponList = new ArrayList<AWeapon>();
 	
 	private final EnumSet<ETokugi> supportedTokugiSet = EnumSet.of(ETokugi.NONE); 
-	private final EnumMap<ETokugi,ATokugi> supportedTokugiMap = new EnumMap<ETokugi,ATokugi>(ETokugi.class);
+	private final List<ATokugi> obtainedTokugiList = new ArrayList<ATokugi>();
 	
 	private final EnumSet<EConsumable> supportedConsumableSet = EnumSet.noneOf(EConsumable.class); 
-	private final EnumMap<EConsumable,AConsumable> supportedConsumableMap = new EnumMap<EConsumable,AConsumable>(EConsumable.class);
 	
 	/** Current weapon equipped. */
 	private AWeapon currentWeapon = null;
@@ -92,6 +95,7 @@ public abstract class APlayer {
 		this.movementBattleSpeedLow = requestedMovementBattleSpeedLow();
 		this.movementBattleSpeedHigh = requestedMovementBattleSpeedHigh();
 		this.animationList = requestedAnimationList();
+		this.battleAnimationList = requestedBattleAnimationList();
 		this.spriteOrigin = requestedSpriteOrigin();
 		this.boundingCircle = requestedBoundingCircle();
 		this.boundingBoxMap = requestedBoundingBoxMap();
@@ -144,6 +148,9 @@ public abstract class APlayer {
 	// ====================================
 	/** @return The animated sprite used for the player. */
 	protected abstract EAnimationList requestedAnimationList();
+
+	/** @return The animated sprite used for the player during battle. */
+	protected abstract EAnimationList requestedBattleAnimationList();
 
 
 	/** @return Friction factor of the player. */
@@ -217,7 +224,7 @@ public abstract class APlayer {
 	protected abstract ESound requestedVoiceOnDeath();
 	
 	/** 
-	 * Can be overriden for custom effects.
+	 * Can be overridden for custom effects.
 	 * @return The particle effect played when the player dies.
 	 */
 	protected EParticleEffect requestedParticleEffectOnDeath() {
@@ -242,34 +249,24 @@ public abstract class APlayer {
 		
 	public boolean loadToRam() {
 		if (!ResourceCache.loadToRam(requiredResources)) return false;
-		for (EWeapon ew : supportedWeaponSet) {
-			AWeapon aw = ew.getWeapon();
-			if (aw == null) return false;
-			supportedWeaponMap.put(ew,aw);
-		}
-		for (ETokugi et : supportedTokugiSet) {
-			ATokugi at = et.getTokugi();
-			if (at == null) return false;
-			supportedTokugiMap.put(et,at);
-		}
-		for (EConsumable ec : supportedConsumableSet) {
-			AConsumable ac = ec.getConsumable();
-			if (ac == null) return false;
-			supportedConsumableMap.put(ec,ac);
-		}
-		
-		if (currentWeapon == null) currentWeapon = supportedWeaponMap.get(EWeapon.NONE);
-		if (currentTokugi == null) currentTokugi = supportedTokugiMap.get(ETokugi.NONE);
-		
+		// We've always got at least nothing.
+		if (currentWeapon == null) currentWeapon = EWeapon.NONE.getWeapon();
+		if (currentTokugi == null) currentTokugi = ETokugi.NONE.getTokugi();
+		obtainWeapon(currentWeapon);
+		learnTokugi(currentTokugi);
 		return true;
 	}
 	
-	public ShadowComponent makeShadow() {
-		return null; // no shadow
+	public boolean setupShadow(ShadowComponent kc) {
+		// default is no shadow
+		return false;
 	}
 	
 	public EAnimationList getAnimationList() {
 		return animationList;
+	}
+	public EAnimationList getBattleAnimationList() {
+		return battleAnimationList;
 	}
 
 	public Vector2 getSpriteOrigin() {
@@ -380,20 +377,74 @@ public abstract class APlayer {
 	}
 
 	
-	public void switchWeapon(EWeapon weapon) {
-		if (supportsWeapon(weapon))
-			currentWeapon = supportedWeaponMap.get(weapon);
+	public void obtainWeapon(AWeapon weapon) {
+		if (supportsWeapon(weapon.getType()) && !ownsWeapon(weapon)) {
+			obtainedWeaponList.add(weapon);
+			if (currentWeapon != null && currentWeapon.getType() == EWeapon.NONE)
+				equipWeapon(weapon);
+		}
 	}
-	public AWeapon getWeapon() {
+	public boolean ownsWeapon(AWeapon weapon) {
+		return obtainedWeaponList.contains(weapon);
+	}
+	public void loseWeapon(AWeapon weapon) {
+		obtainedWeaponList.remove(weapon);
+	}
+	public void equipWeapon(AWeapon weapon) {
+		if (supportsWeapon(weapon.getType()) && ownsWeapon(weapon))
+			currentWeapon = weapon;
+	}
+	public AWeapon getEquippedWeapon() {
 		return currentWeapon;
 	}
-
-	public void switchTokugi(ETokugi tokugi) {
-		if (supportsTokugi(tokugi))
-			currentTokugi = supportedTokugiMap.get(tokugi);
+	public boolean cycleWeapon(int amount) {
+		int index = obtainedWeaponList.indexOf(currentWeapon);
+		if (index >= 0 && obtainedWeaponList.size() > 1) {
+			equipWeapon(obtainedWeaponList.get(Math.floorMod(index+amount, obtainedWeaponList.size())));
+			return true;
+		}
+		return false;
 	}
-	public ATokugi getTokugi() {
+	public boolean cycleWeaponForward() {
+		return cycleWeapon(1);
+	}
+	public boolean cycleWeaponBackward() {
+		return cycleWeapon(-1);
+	}
+	
+	public void learnTokugi(ATokugi tokugi) {
+		if (supportsTokugi(tokugi.getType()) && !knowsTokugi(tokugi)) {
+			obtainedTokugiList.add(tokugi);
+			if (currentTokugi != null && currentTokugi.getType() == ETokugi.NONE)
+				equipTokugi(tokugi);
+		}
+	}
+	public boolean knowsTokugi(ATokugi tokugi) {
+		return obtainedTokugiList.contains(tokugi);
+	}
+	public void forgetTokugi(ATokugi tokugi) {
+		obtainedTokugiList.remove(tokugi);
+	}
+	public void equipTokugi(ATokugi tokugi) {
+		if (supportsTokugi(tokugi.getType()) && knowsTokugi(tokugi))
+			currentTokugi = tokugi;
+	}
+	public ATokugi getEquippedTokugi() {
 		return currentTokugi;
+	}
+	public boolean cycleTokugi(int amount) {
+		int index = obtainedTokugiList.indexOf(currentTokugi);
+		if (index >= 0 && obtainedTokugiList.size() > 1) {
+			equipTokugi(obtainedTokugiList.get(Math.floorMod(index+amount, obtainedTokugiList.size())));
+			return true;
+		}
+		return false;
+	}
+	public boolean cycleTokugiForward() {
+		return cycleTokugi(1);
+	}
+	public boolean cycleTokugiBackward() {
+		return cycleTokugi(-1);
 	}
 
 	public ESound getVoiceOnBattleStart() {
@@ -419,4 +470,10 @@ public abstract class APlayer {
 		return deathSprite;
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof APlayer)) return false;
+		final APlayer you = (APlayer)object;
+		return you.getClass().equals(getClass());
+	}
 }

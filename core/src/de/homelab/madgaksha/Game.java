@@ -42,6 +42,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.homelab.madgaksha.audiosystem.AwesomeAudio;
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
+import de.homelab.madgaksha.entityengine.entity.PlayerMaker;
 import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.layer.ALayer;
 import de.homelab.madgaksha.layer.EntityLayer;
@@ -183,6 +184,14 @@ public class Game implements ApplicationListener {
 		// Initialize the entity engine.
 		gameEntityEngine = new PooledEngine(level.getEntityPoolInitialSize(),level.getEntityPoolPoolMaxSize(), level.getComponentPoolInitialSize(), level.getComponentPoolMaxSize());
 
+		// Create the player entity.
+		playerEntity = PlayerMaker.getInstance().makePlayer(player);
+		if (playerEntity == null) {
+			exitRequested = true;
+			Gdx.app.exit();
+			return;
+		}
+		
 		// Initialize map and load level.
 		if (!level.initialize(batchGame)) {
 			exitRequested = true;
@@ -218,6 +227,9 @@ public class Game implements ApplicationListener {
 		layerStack.add(entityLayer);
 		entityLayer.addedToStack();
 
+		// Setup the player entity.
+		PlayerMaker.getInstance().setupPlayer(player);
+		
 		// Keep track of the time.
 		gameClock = new Clock();
 		
@@ -461,16 +473,7 @@ public class Game implements ApplicationListener {
 	// TODO remove me for release
 	private void createDebugStuff() {
 		debugFont = new BitmapFont(Gdx.files.internal("font/debugFont.fnt"));
-		debugFont.setColor(Color.RED);
-		
-		// 3D testing
-//		Entity myTestModel = new Entity();
-//		myTestModel.add(new PositionComponent(46*32f, 17*32f, 0.0f));
-//		myTestModel.add(new ModelComponent(EModel.ITEM_WEAPON_BASIC));
-//		myTestModel.add(new TemporalComponent());
-//		myTestModel.add(new RotationComponent(0.0f, 1.0f, 1.0f, 0.0f));
-//		myTestModel.add(new AngularVelocityComponent(45.0f));
-//		gameEntityEngine.addEntity(myTestModel);
+		debugFont.setColor(Color.RED);		
 	}
 
 	private void readMonitorInfo() {

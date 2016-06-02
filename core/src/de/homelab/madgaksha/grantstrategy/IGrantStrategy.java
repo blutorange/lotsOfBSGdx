@@ -1,5 +1,7 @@
 package de.homelab.madgaksha.grantstrategy;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * An interface for smoothly setting value to a target value.
  * 
@@ -18,4 +20,6 @@ public interface IGrantStrategy {
 	 * @return The value as close to the target value.
 	 */
 	public float compromise(float is, float should, float deltaTime);
+	
+	public Vector2 compromise2D(float isX, float isY, float shouldX, float shouldY, float deltaTime);
 }

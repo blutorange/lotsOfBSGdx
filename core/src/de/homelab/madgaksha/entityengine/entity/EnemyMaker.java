@@ -6,6 +6,7 @@ import static de.homelab.madgaksha.GlobalBag.enemyTargetCrossEntity;
 import static de.homelab.madgaksha.GlobalBag.game;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import static de.homelab.madgaksha.GlobalBag.level;
+import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.playerBattleStigmaEntity;
 import static de.homelab.madgaksha.GlobalBag.playerEntity;
 import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
@@ -36,20 +37,25 @@ import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
 import de.homelab.madgaksha.entityengine.component.ParticleEffectComponent;
-import de.homelab.madgaksha.entityengine.component.ParticleEffectScreenComponent;
+import de.homelab.madgaksha.entityengine.component.ParticleEffectGameComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
 import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.entityengine.component.StickyComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
+import de.homelab.madgaksha.entityengine.component.TriggerTouchComponent;
 import de.homelab.madgaksha.entityengine.component.VoiceComponent;
 import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
 import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxRenderComponent;
+import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup02Component;
 import de.homelab.madgaksha.entityengine.component.zorder.ZOrder2Component;
 import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
 import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.enums.ECollisionGroup;
+import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.layer.BattleModeActivateLayer;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ESound;
@@ -91,6 +97,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		AnyChildComponent acc = new AnyChildComponent();
 		Component tc = MakerUtils.makeTrigger(this, this, trigger, ECollisionGroup.PLAYER_GROUP);
 		PositionComponent pcTrigger = MakerUtils.makePositionAtCenter(shape);
+		TriggerTouchComponent ttgc = new TriggerTouchGroup02Component();
 		ABoundingBoxComponent bbcEnemyRender = new BoundingBoxRenderComponent(requestedBoundingBoxRender());
 		ABoundingBoxComponent bbcEnemyCollision = new BoundingBoxCollisionComponent(requestedBoundingBoxCollision());
 		ABoundingBoxComponent bbcTrigger = new BoundingBoxCollisionComponent(GeoUtil.getBoundingBox(shape));
@@ -131,6 +138,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		cqc.remove.add(PositionComponent.class);
 		
 		// Add components to entity.
+		entity.add(ttgc);
 		entity.add(acc);
 		entity.add(tpc);
 		entity.add(cfc);
@@ -202,6 +210,9 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		// Hide target cross.
 		enemyTargetCrossEntity.add(gameEntityEngine.createComponent(InvisibleComponent.class));
 		enemyTargetCrossEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
+		
+		// Switch player to normal mode animation.
+		ComponentUtils.switchAnimationList(playerEntity, player.getAnimationList());
 	}
 	
 	/** Called when we enter battle mode. */
@@ -214,6 +225,14 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		cameraTrackingComponent.playerPoint = enemy;
 		gameEntityEngine.getSystem(AiSystem.class).setProcessing(false);
 		playerEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
+		
+		// Switch player to battle mode animation.
+		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(playerEntity);
+		SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(playerEntity);
+		sfdc.setup(player.getBattleAnimationList(), ESpriteDirectionStrategy.ZENITH);
+		sac.setup(sfdc);
+		Mapper.spriteComponent.get(playerEntity).setup(sac);
+		
 		MakerUtils.addTimedRunnable(3.0f,new ITimedCallback() {
 			@Override
 			public void run(Entity entity, Object data) {
@@ -244,9 +263,9 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		if (pc != null) pc.setup(enemy);
 		
 		// Add nice particle effect to battle stigma.
-		ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectScreenComponent.class);
+		ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectGameComponent.class);
 		pec.particleEffect = ResourcePool.obtainParticleEffect(EParticleEffect.PLAYER_BATTLE_MODE_ENTER_BURST);//player.getBattleStigmaStartupParticleEffect();
-		playerBattleStigmaEntity.add(pec);
+		playerHitCircleEntity.add(pec);
 		
 		// Animate battle stigma.
 		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(playerBattleStigmaEntity);

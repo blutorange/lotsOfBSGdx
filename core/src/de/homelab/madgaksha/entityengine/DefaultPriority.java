@@ -21,6 +21,7 @@ public class DefaultPriority {
 	public final static int cameraZoomingSystem = 2;
 	public final static int aiSystem = 3;
 	public final static int stickySystem = 4;
+	public final static int scaleFromDistanceSystem = 4;
 	public final static int inputPlayerDesktopSystem = 5;
 	public final static int newtonianForceSystem = 6;
 	public final static int movementSystem = 7;

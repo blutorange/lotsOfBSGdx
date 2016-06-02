@@ -1,5 +1,7 @@
 package de.homelab.madgaksha.grantstrategy;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * Sets current value to the should-value exponentially. Let x_is be the current
  * value. Let x_should be the target value. <br>
@@ -21,7 +23,8 @@ public class ExponentialGrantStrategy implements IGrantStrategy {
 	private final static float DEFAULT_COMBINED_FACTOR = 1.0f / DEFAULT_TARGET_TIME;
 		
 	private float combinedFactor = DEFAULT_COMBINED_FACTOR;
-
+	private final Vector2 v = new Vector2();
+	
 	public ExponentialGrantStrategy() {
 		combinedFactor = DEFAULT_COMBINED_FACTOR;
 	}
@@ -38,5 +41,15 @@ public class ExponentialGrantStrategy implements IGrantStrategy {
 	public float compromise(float is, float should, float deltaTime) {
 		final float reductionFactor = combinedFactor * deltaTime;
 		return is + (should - is) * (reductionFactor > 1.0f ? 1.0f : reductionFactor);
+	}
+
+	@Override
+	public Vector2 compromise2D(float isX, float isY, float shouldX, float shouldY, float deltaTime) {
+		final float reductionFactor = combinedFactor * deltaTime;
+		if (reductionFactor >= 1.0f) return v.set(shouldX,shouldY);
+		v.set(shouldX-isX,shouldY-isY);
+		v.x = v.x * reductionFactor + isX;
+		v.y = v.y * reductionFactor + isY;
+		return v;
 	}
 }

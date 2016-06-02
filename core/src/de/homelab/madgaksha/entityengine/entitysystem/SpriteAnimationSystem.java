@@ -3,7 +3,7 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
@@ -28,7 +28,7 @@ public class SpriteAnimationSystem extends IteratingSystem {
 		final SpriteComponent sc = Mapper.spriteComponent.get(entity);
 		final SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).totalTime;
-		final TextureRegion tr = sac.animation.getKeyFrame(deltaTime);
-		sc.sprite.setTextureRegion(tr);
+		final AtlasRegion ar = sac.animation.getKeyFrame(deltaTime);
+		sc.sprite.setAtlasRegion(ar);
 	}
 }

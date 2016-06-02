@@ -14,9 +14,10 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
 public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEffect> {
 	FIRE_THROWER("particle/fireThrower.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
 	SMALL_FIRE("particle/smallFire.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
-	PLAYER_BATTLE_MODE_ENTER_BURST("particle/playerBattleModeEnterBurstYellow.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
+	PLAYER_BATTLE_MODE_ENTER_BURST("particle/playerBattleModeEnterBurst.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
 	BATTLE_MODE_ENTER_CUT_IN("particle/battleModeActivate.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
 	DEFAULT_PLAYER_DEATH("particle/deathEffectRed.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
+	ALL_MY_ITEM_ARE_BELONG_TO_ME("particle/itemGetFountain.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20)
 	
 	;
 
@@ -33,7 +34,8 @@ public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEff
 	 * @param fn Path to the particle effect file (*.p).
 	 * @param ta Texture atlas containing the emitter images. 
 	 * @param ap Atlas prefix. See {@link ParticleEffect#load(FileHandle, TextureAtlas, String)}. Can be null.
-	 * @param shared Whether the effect is rendered multiple times.
+	 * @param init ParticleEffectPool initial.
+	 * @param init ParticleEffectPool maximum.
 	 */
 	private EParticleEffect(String fn, ETextureAtlas ta, String ap, int init, int max) {
 		fileName = fn;

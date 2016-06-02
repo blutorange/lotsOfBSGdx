@@ -1,14 +1,13 @@
-package de.homelab.madgaksha.player;
+package de.homelab.madgaksha.player.tokugi;
 
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.player.tokugi.ATokugi;
-import de.homelab.madgaksha.player.tokugi.TokugiNone;
 
 public enum ETokugi {
 	NONE(TokugiNone.class),
+	BOMB(TokugiBomb.class),
 	;
 
 	private final static Logger LOG = Logger.getLogger(ETokugi.class);

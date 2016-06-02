@@ -1,4 +1,5 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
+import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.GlobalBag;
+import de.homelab.madgaksha.KeyMap;
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
@@ -49,6 +51,20 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		final VelocityComponent vc = Mapper.velocityComponent.get(entity);
 		final InputDesktopComponent ic = Mapper.inputDesktopComponent.get(entity);
 		final DirectionComponent dc = Mapper.directionComponent.get(entity);
+		
+		// Switch weapon
+		if (KeyMap.isWeaponSwitchJustPressed()) {
+			if (player.cycleWeaponForward()) {
+				SoundPlayer.getInstance().play(ESound.EQUIP_WEAPON);
+			}
+			else SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
+		}
+		else if (KeyMap.isTokugiSwitchJustPressed()) {
+			if (player.cycleTokugiForward()) {
+				SoundPlayer.getInstance().play(ESound.EQUIP_TOKUGI);
+			}
+			else SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
+		}
 		
 		v.set((Gdx.input.isKeyPressed(ic.right)) ? 1.0f : (Gdx.input.isKeyPressed(ic.left)) ? -1.0f : 0.0f,
 		      (Gdx.input.isKeyPressed(ic.up)) ? 1.0f : (Gdx.input.isKeyPressed(ic.down)) ? -1.0f : 0.0f);

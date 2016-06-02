@@ -31,13 +31,13 @@ import de.homelab.madgaksha.entityengine.entity.ItemMaker;
 import de.homelab.madgaksha.entityengine.entity.ParticleEffectMaker;
 import de.homelab.madgaksha.enums.Gravity;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.player.EConsumable;
-import de.homelab.madgaksha.player.ETokugi;
-import de.homelab.madgaksha.player.EWeapon;
 import de.homelab.madgaksha.player.IMapItem;
 import de.homelab.madgaksha.player.consumable.AConsumable;
+import de.homelab.madgaksha.player.consumable.EConsumable;
 import de.homelab.madgaksha.player.tokugi.ATokugi;
+import de.homelab.madgaksha.player.tokugi.ETokugi;
 import de.homelab.madgaksha.player.weapon.AWeapon;
+import de.homelab.madgaksha.player.weapon.EWeapon;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
 
 /**
@@ -577,7 +577,7 @@ public class MapData {
 		}
 		
 		Entity entity = new Entity();
-		if (!ItemMaker.getInstance().setup(entity, shape, mapItem, angularVelocity, axis)) return null;
+		if (!ItemMaker.getInstance().setup(entity, shape, props, mapItem, angularVelocity, axis)) return null;
 		return entity;
 	}
 	

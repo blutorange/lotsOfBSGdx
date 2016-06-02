@@ -4,8 +4,8 @@
   <property name="baseDirX" value="0"/>
   <property name="baseDirY" value="1"/>
   <property name="gravity" value="south"/>
-  <property name="maxElevation" value="2000"/>
-  <property name="minElevation" value="500"/>
+  <property name="maxElevation" value="2500"/>
+  <property name="minElevation" value="800"/>
   <property name="playerDir" value="180"/>
   <property name="playerX" value="45"/>
   <property name="playerY" value="19"/>
@@ -8795,10 +8795,10 @@
     <property name="trigger" value="startup"/>
    </properties>
   </object>
-  <object id="12" name="SoldierRed" type="Enemy" x="838" y="17152" width="482" height="81.3333">
+  <object id="12" name="SoldierRed" type="Enemy" x="883" y="17681" width="482" height="111">
    <properties>
     <property name="initDir" value="0.0"/>
-    <property name="initY" value="20"/>
+    <property name="initY" type="float" value="10"/>
     <property name="spawn" value="touch"/>
     <property name="species" value="Soldier Red"/>
    </properties>
@@ -8806,12 +8806,6 @@
   <object id="13" name="Fire" type="ParticleEffect" x="992" y="18240.2" width="31.25" height="31.5">
    <properties>
     <property name="name" value="small_fire"/>
-   </properties>
-  </object>
-  <object id="15" name="FireThrower" type="ParticleEffect" x="1471.38" y="18496.2" width="31.25" height="31.5">
-   <properties>
-    <property name="name" value="fire_thrower"/>
-    <property name="spin" value="80"/>
    </properties>
   </object>
   <object id="16" name="Fire" type="ParticleEffect" x="991.125" y="18303.8" width="31.25" height="31.5">
@@ -8839,7 +8833,7 @@
     <property name="name" value="small_fire"/>
    </properties>
   </object>
-  <object id="23" name="SoldierRed" type="Enemy" x="854" y="16550.3" width="898" height="252.7">
+  <object id="23" name="SoldierRed" type="Enemy" x="852" y="16526.3" width="898" height="252.7">
    <properties>
     <property name="initDir" value="0.0"/>
     <property name="initY" value="20"/>

@@ -1,0 +1,174 @@
+
+bulletsLarge.png
+size: 1024,512
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+pPlasma0
+  rotate: false
+  xy: 2, 2
+  size: 124, 124
+  orig: 128, 124
+  offset: 2, 0
+  index: -1
+pPlasma1
+  rotate: false
+  xy: 128, 2
+  size: 124, 124
+  orig: 128, 124
+  offset: 2, 0
+  index: -1
+pPlasma2
+  rotate: false
+  xy: 254, 2
+  size: 124, 124
+  orig: 128, 124
+  offset: 2, 0
+  index: -1
+pPlasma3
+  rotate: false
+  xy: 498, 168
+  size: 124, 124
+  orig: 128, 124
+  offset: 2, 0
+  index: -1
+pRay0
+  rotate: false
+  xy: 495, 402
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay1
+  rotate: false
+  xy: 495, 384
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay10
+  rotate: false
+  xy: 2, 218
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay11
+  rotate: false
+  xy: 2, 200
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay12
+  rotate: false
+  xy: 2, 182
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay13
+  rotate: false
+  xy: 2, 164
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay14
+  rotate: false
+  xy: 2, 146
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay15
+  rotate: false
+  xy: 2, 128
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay2
+  rotate: false
+  xy: 495, 366
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay3
+  rotate: false
+  xy: 495, 348
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay4
+  rotate: false
+  xy: 495, 330
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay5
+  rotate: false
+  xy: 495, 312
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay6
+  rotate: false
+  xy: 495, 294
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay7
+  rotate: false
+  xy: 2, 272
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay8
+  rotate: false
+  xy: 2, 254
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pRay9
+  rotate: false
+  xy: 2, 236
+  size: 494, 16
+  orig: 494, 32
+  offset: 0, 8
+  index: -1
+pSwallow0
+  rotate: false
+  xy: 2, 290
+  size: 491, 57
+  orig: 491, 64
+  offset: 0, 4
+  index: -1
+pSwallow1
+  rotate: false
+  xy: 495, 420
+  size: 491, 59
+  orig: 491, 64
+  offset: 0, 0
+  index: -1
+pSwallow2
+  rotate: false
+  xy: 2, 415
+  size: 491, 64
+  orig: 491, 64
+  offset: 0, 0
+  index: -1
+pSwallow3
+  rotate: false
+  xy: 2, 349
+  size: 491, 64
+  orig: 491, 64
+  offset: 0, 0
+  index: -1

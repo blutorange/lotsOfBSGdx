@@ -17,7 +17,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import de.homelab.madgaksha.DebugMode;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.EnemyIconComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
@@ -222,90 +221,90 @@ public class StatusScreen {
 		
 		// TODO remove me
 		// for testing: draw rectangles
-		if (false && DebugMode.activated) {
-			NinePatch myNinePatch = ResourceCache.getNinePatch(ENinePatch.STATUS_SCREEN_HP_BAR_FILL);
-
-			myNinePatch.setColor(new Color(255, 255, 255, 0.5f));
-			myNinePatch.draw(batchPixel, uiLevelName.x, uiLevelName.y, uiLevelName.width, uiLevelName.height);
-			myNinePatch.draw(batchPixel, uiTime.x, uiTime.y, uiTime.width, uiTime.height);
-			myNinePatch.draw(batchPixel, uiScore.x, uiScore.y, uiScore.width, uiScore.height);
-			myNinePatch.draw(batchPixel, uiPainBar.x, uiPainBar.y, uiPainBar.width, uiPainBar.height);
-			myNinePatch.draw(batchPixel, uiWeapon.x, uiWeapon.y, uiWeapon.width, uiWeapon.height);
-			myNinePatch.draw(batchPixel, uiTokugi.x, uiTokugi.y, uiTokugi.width, uiTokugi.height);
-			myNinePatch.draw(batchPixel, uiEnemy.x, uiEnemy.y, uiEnemy.width, uiEnemy.height);
-
-			myNinePatch.setColor(new Color(255, 0, 0, 0.5f));
-
-			myNinePatch.draw(batchPixel, uiPainBarMeter.x, uiPainBarMeter.y, uiPainBarMeter.width,
-					uiPainBarMeter.height);
-			myNinePatch.draw(batchPixel, uiPainBarCounter.x, uiPainBarCounter.y, uiPainBarCounter.width,
-					uiPainBarCounter.height);
-
-			myNinePatch.draw(batchPixel, uiColumnIconTime.x, uiColumnIconTime.y, uiColumnIconTime.width,
-					uiColumnIconTime.height);
-			myNinePatch.draw(batchPixel, uiColumnIconScore.x, uiColumnIconScore.y, uiColumnIconScore.width,
-					uiColumnIconScore.height);
-			myNinePatch.draw(batchPixel, uiColumnIconPainBar.x, uiColumnIconPainBar.y, uiColumnIconPainBar.width,
-					uiColumnIconPainBar.height);
-			myNinePatch.draw(batchPixel, uiColumnIconWeapon.x, uiColumnIconWeapon.y, uiColumnIconWeapon.width,
-					uiColumnIconWeapon.height);
-			myNinePatch.draw(batchPixel, uiColumnIconTokugi.x, uiColumnIconTokugi.y, uiColumnIconTokugi.width,
-					uiColumnIconTokugi.height);
-			myNinePatch.draw(batchPixel, uiColumnIconEnemy.x, uiColumnIconEnemy.y, uiColumnIconEnemy.width,
-					uiColumnIconEnemy.height);
-
-			myNinePatch.draw(batchPixel, uiColumnDataTime.x, uiColumnDataTime.y, uiColumnDataTime.width,
-					uiColumnDataTime.height);
-			myNinePatch.draw(batchPixel, uiColumnDataScore.x, uiColumnDataScore.y, uiColumnDataScore.width,
-					uiColumnDataScore.height);
-			myNinePatch.draw(batchPixel, uiColumnDataPainBar.x, uiColumnDataPainBar.y, uiColumnDataPainBar.width,
-					uiColumnDataPainBar.height);
-			myNinePatch.draw(batchPixel, uiColumnDataWeapon.x, uiColumnDataWeapon.y, uiColumnDataWeapon.width,
-					uiColumnDataWeapon.height);
-			myNinePatch.draw(batchPixel, uiColumnDataTokugi.x, uiColumnDataTokugi.y, uiColumnDataTokugi.width,
-					uiColumnDataTokugi.height);
-			myNinePatch.draw(batchPixel, uiColumnDataEnemy.x, uiColumnDataEnemy.y, uiColumnDataEnemy.width,
-					uiColumnDataEnemy.height);
-			myNinePatch.draw(batchPixel, uiImageLevelName.x, uiImageLevelName.y, uiImageLevelName.width,
-					uiImageLevelName.height);
-
-			myNinePatch.setColor(new Color(0, 255, 0, 0.5f));
-			myNinePatch.draw(batchPixel, uiIconTime.x, uiIconTime.y, uiIconTime.width, uiIconTime.height);
-			myNinePatch.draw(batchPixel, uiIconScore.x, uiIconScore.y, uiIconScore.width, uiIconScore.height);
-			myNinePatch.draw(batchPixel, uiIconPainBar.x, uiIconPainBar.y, uiIconPainBar.width, uiIconPainBar.height);
-			myNinePatch.draw(batchPixel, uiIconWeapon.x, uiIconWeapon.y, uiIconWeapon.width, uiIconWeapon.height);
-			myNinePatch.draw(batchPixel, uiIconTokugi.x, uiIconTokugi.y, uiIconTokugi.width, uiIconTokugi.height);
-			myNinePatch.draw(batchPixel, uiIconEnemy.x, uiIconEnemy.y, uiIconEnemy.width, uiIconEnemy.height);
-
-			myNinePatch.draw(batchPixel, uiImageWeaponMain.x, uiImageWeaponMain.y, uiImageWeaponMain.width,
-					uiImageWeaponMain.height);
-			myNinePatch.draw(batchPixel, uiImageTokugiMain.x, uiImageTokugiMain.y, uiImageTokugiMain.width,
-					uiImageTokugiMain.height);
-
-			if (uiImageWeaponMode == Mode.FULL)
-				myNinePatch.draw(batchPixel, uiImageWeaponSub.x, uiImageWeaponSub.y, uiImageWeaponSub.width,
-						uiImageWeaponSub.height);
-			if (uiImageTokugiMode == Mode.FULL)
-				myNinePatch.draw(batchPixel, uiImageTokugiSub.x, uiImageTokugiSub.y,
-						uiImageTokugiSub.width, uiImageTokugiSub.height);
-
-			myNinePatch.draw(batchPixel, uiCellEnemyImage.x, uiCellEnemyImage.y, uiCellEnemyImage.width,
-					uiCellEnemyImage.height);
-			myNinePatch.draw(batchPixel, uiCellEnemyPainBar.x, uiCellEnemyPainBar.y, uiCellEnemyPainBar.width,
-					uiCellEnemyPainBar.height);
-
-			myNinePatch.setColor(new Color(0, 0, 255, 0.5f));
-
-			myNinePatch.draw(batchPixel, uiImageEnemyMain.x, uiImageEnemyMain.y, uiImageEnemyMain.width,
-					uiImageEnemyMain.height);
-			if (uiImageEnemyMode == Mode.FULL)
-				myNinePatch.draw(batchPixel, uiImageEnemySub.x, uiImageEnemySub.y, uiImageEnemySub.width,
-						uiImageEnemySub.height);
-			
-			batchPixel.end();
-			
-			return;
-		}
+//		if (false && DebugMode.activated) {
+//			NinePatch myNinePatch = ResourceCache.getNinePatch(ENinePatch.STATUS_SCREEN_HP_BAR_FILL);
+//
+//			myNinePatch.setColor(new Color(255, 255, 255, 0.5f));
+//			myNinePatch.draw(batchPixel, uiLevelName.x, uiLevelName.y, uiLevelName.width, uiLevelName.height);
+//			myNinePatch.draw(batchPixel, uiTime.x, uiTime.y, uiTime.width, uiTime.height);
+//			myNinePatch.draw(batchPixel, uiScore.x, uiScore.y, uiScore.width, uiScore.height);
+//			myNinePatch.draw(batchPixel, uiPainBar.x, uiPainBar.y, uiPainBar.width, uiPainBar.height);
+//			myNinePatch.draw(batchPixel, uiWeapon.x, uiWeapon.y, uiWeapon.width, uiWeapon.height);
+//			myNinePatch.draw(batchPixel, uiTokugi.x, uiTokugi.y, uiTokugi.width, uiTokugi.height);
+//			myNinePatch.draw(batchPixel, uiEnemy.x, uiEnemy.y, uiEnemy.width, uiEnemy.height);
+//
+//			myNinePatch.setColor(new Color(255, 0, 0, 0.5f));
+//
+//			myNinePatch.draw(batchPixel, uiPainBarMeter.x, uiPainBarMeter.y, uiPainBarMeter.width,
+//					uiPainBarMeter.height);
+//			myNinePatch.draw(batchPixel, uiPainBarCounter.x, uiPainBarCounter.y, uiPainBarCounter.width,
+//					uiPainBarCounter.height);
+//
+//			myNinePatch.draw(batchPixel, uiColumnIconTime.x, uiColumnIconTime.y, uiColumnIconTime.width,
+//					uiColumnIconTime.height);
+//			myNinePatch.draw(batchPixel, uiColumnIconScore.x, uiColumnIconScore.y, uiColumnIconScore.width,
+//					uiColumnIconScore.height);
+//			myNinePatch.draw(batchPixel, uiColumnIconPainBar.x, uiColumnIconPainBar.y, uiColumnIconPainBar.width,
+//					uiColumnIconPainBar.height);
+//			myNinePatch.draw(batchPixel, uiColumnIconWeapon.x, uiColumnIconWeapon.y, uiColumnIconWeapon.width,
+//					uiColumnIconWeapon.height);
+//			myNinePatch.draw(batchPixel, uiColumnIconTokugi.x, uiColumnIconTokugi.y, uiColumnIconTokugi.width,
+//					uiColumnIconTokugi.height);
+//			myNinePatch.draw(batchPixel, uiColumnIconEnemy.x, uiColumnIconEnemy.y, uiColumnIconEnemy.width,
+//					uiColumnIconEnemy.height);
+//
+//			myNinePatch.draw(batchPixel, uiColumnDataTime.x, uiColumnDataTime.y, uiColumnDataTime.width,
+//					uiColumnDataTime.height);
+//			myNinePatch.draw(batchPixel, uiColumnDataScore.x, uiColumnDataScore.y, uiColumnDataScore.width,
+//					uiColumnDataScore.height);
+//			myNinePatch.draw(batchPixel, uiColumnDataPainBar.x, uiColumnDataPainBar.y, uiColumnDataPainBar.width,
+//					uiColumnDataPainBar.height);
+//			myNinePatch.draw(batchPixel, uiColumnDataWeapon.x, uiColumnDataWeapon.y, uiColumnDataWeapon.width,
+//					uiColumnDataWeapon.height);
+//			myNinePatch.draw(batchPixel, uiColumnDataTokugi.x, uiColumnDataTokugi.y, uiColumnDataTokugi.width,
+//					uiColumnDataTokugi.height);
+//			myNinePatch.draw(batchPixel, uiColumnDataEnemy.x, uiColumnDataEnemy.y, uiColumnDataEnemy.width,
+//					uiColumnDataEnemy.height);
+//			myNinePatch.draw(batchPixel, uiImageLevelName.x, uiImageLevelName.y, uiImageLevelName.width,
+//					uiImageLevelName.height);
+//
+//			myNinePatch.setColor(new Color(0, 255, 0, 0.5f));
+//			myNinePatch.draw(batchPixel, uiIconTime.x, uiIconTime.y, uiIconTime.width, uiIconTime.height);
+//			myNinePatch.draw(batchPixel, uiIconScore.x, uiIconScore.y, uiIconScore.width, uiIconScore.height);
+//			myNinePatch.draw(batchPixel, uiIconPainBar.x, uiIconPainBar.y, uiIconPainBar.width, uiIconPainBar.height);
+//			myNinePatch.draw(batchPixel, uiIconWeapon.x, uiIconWeapon.y, uiIconWeapon.width, uiIconWeapon.height);
+//			myNinePatch.draw(batchPixel, uiIconTokugi.x, uiIconTokugi.y, uiIconTokugi.width, uiIconTokugi.height);
+//			myNinePatch.draw(batchPixel, uiIconEnemy.x, uiIconEnemy.y, uiIconEnemy.width, uiIconEnemy.height);
+//
+//			myNinePatch.draw(batchPixel, uiImageWeaponMain.x, uiImageWeaponMain.y, uiImageWeaponMain.width,
+//					uiImageWeaponMain.height);
+//			myNinePatch.draw(batchPixel, uiImageTokugiMain.x, uiImageTokugiMain.y, uiImageTokugiMain.width,
+//					uiImageTokugiMain.height);
+//
+//			if (uiImageWeaponMode == Mode.FULL)
+//				myNinePatch.draw(batchPixel, uiImageWeaponSub.x, uiImageWeaponSub.y, uiImageWeaponSub.width,
+//						uiImageWeaponSub.height);
+//			if (uiImageTokugiMode == Mode.FULL)
+//				myNinePatch.draw(batchPixel, uiImageTokugiSub.x, uiImageTokugiSub.y,
+//						uiImageTokugiSub.width, uiImageTokugiSub.height);
+//
+//			myNinePatch.draw(batchPixel, uiCellEnemyImage.x, uiCellEnemyImage.y, uiCellEnemyImage.width,
+//					uiCellEnemyImage.height);
+//			myNinePatch.draw(batchPixel, uiCellEnemyPainBar.x, uiCellEnemyPainBar.y, uiCellEnemyPainBar.width,
+//					uiCellEnemyPainBar.height);
+//
+//			myNinePatch.setColor(new Color(0, 0, 255, 0.5f));
+//
+//			myNinePatch.draw(batchPixel, uiImageEnemyMain.x, uiImageEnemyMain.y, uiImageEnemyMain.width,
+//					uiImageEnemyMain.height);
+//			if (uiImageEnemyMode == Mode.FULL)
+//				myNinePatch.draw(batchPixel, uiImageEnemySub.x, uiImageEnemySub.y, uiImageEnemySub.width,
+//						uiImageEnemySub.height);
+//			
+//			batchPixel.end();
+//			
+//			return;
+//		}
 		
 		// Draw main frame containing all ui elements.
 		frameMain.draw(batchPixel, screenBounds.x, screenBounds.y, screenBounds.width, screenBounds.height);
@@ -457,10 +456,10 @@ public class StatusScreen {
 		// We draw them last because they use different texture files.
 		
 		// Weapon icon
-		player.getWeapon().getIconMain().draw(batchPixel);
+		player.getEquippedWeapon().getIconMain().draw(batchPixel);
 		
 		// Tokugi icon
-		player.getTokugi().getIconMain().draw(batchPixel);
+		player.getEquippedTokugi().getIconMain().draw(batchPixel);
 
 		// Enemy icon.
 		targetIconMain.draw(batchPixel);
@@ -470,11 +469,11 @@ public class StatusScreen {
 		
 		// Weapon details.
 		if (uiImageWeaponMode == Mode.FULL)
-			player.getWeapon().getIconSub().draw(batchPixel);
+			player.getEquippedWeapon().getIconSub().draw(batchPixel);
 			
 		// Tokugi details.
 		if (uiImageTokugiMode == Mode.FULL)
-			player.getTokugi().getIconSub().draw(batchPixel);
+			player.getEquippedTokugi().getIconSub().draw(batchPixel);
 			
 		// Enemy details.
 		if (uiImageEnemyMode == Mode.FULL) {
@@ -578,22 +577,26 @@ public class StatusScreen {
 		// Level
 		level.getIcon().setBounds(uiImageLevelName.x, uiImageLevelName.y, uiImageLevelName.width, uiImageLevelName.height);
 		
-		// Position for image icons level, weapon and tokugi.
-		player.getWeapon().getIconMain().setBounds(uiImageWeaponMain.x, uiImageWeaponMain.y, uiImageWeaponMain.width,
-				uiImageWeaponMain.height);
-		player.getTokugi().getIconMain().setBounds(uiImageTokugiMain.x, uiImageTokugiMain.y, uiImageTokugiMain.width,
-				uiImageTokugiMain.height);
-
-		if (uiImageWeaponMode == Mode.FULL)
-			player.getWeapon().getIconSub().setBounds(uiImageWeaponSub.x, uiImageWeaponSub.y, uiImageWeaponSub.width, uiImageWeaponSub.height);
-		// Tokugi
-		if (uiImageTokugiMode == Mode.FULL)
-			player.getTokugi().getIconSub().setBounds(uiImageTokugiSub.x, uiImageTokugiSub.y, uiImageTokugiSub.width, uiImageTokugiSub.height);
+		updateWeaponAndTokugiLayout();
 		
 		// Image icons for enemy.
 		setEnemyImageBounds();
 	}
 
+	public void updateWeaponAndTokugiLayout() {
+		// Position for image icons level, weapon and tokugi.
+		player.getEquippedWeapon().getIconMain().setBounds(uiImageWeaponMain.x, uiImageWeaponMain.y, uiImageWeaponMain.width,
+				uiImageWeaponMain.height);
+		player.getEquippedTokugi().getIconMain().setBounds(uiImageTokugiMain.x, uiImageTokugiMain.y, uiImageTokugiMain.width,
+				uiImageTokugiMain.height);
+
+		if (uiImageWeaponMode == Mode.FULL)
+			player.getEquippedWeapon().getIconSub().setBounds(uiImageWeaponSub.x, uiImageWeaponSub.y, uiImageWeaponSub.width, uiImageWeaponSub.height);
+		// Tokugi
+		if (uiImageTokugiMode == Mode.FULL)
+			player.getEquippedTokugi().getIconSub().setBounds(uiImageTokugiSub.x, uiImageTokugiSub.y, uiImageTokugiSub.width, uiImageTokugiSub.height);		
+	}
+	
 	private void setEnemyImageBounds() {
 		if (targetIconMain != null)	targetIconMain.setBounds(uiImageEnemyMain.x,uiImageEnemyMain.y,uiImageEnemyMain.width,uiImageEnemyMain.height);
 		if (!landscapeMode && targetIconSub != null)

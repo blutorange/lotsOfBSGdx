@@ -32,6 +32,10 @@ public class DirectionComponent implements Component, Poolable {
 	public DirectionComponent() {
 	}
 	public DirectionComponent(float d) {
+		setup(d);
+	}
+
+	public void setup(float d) {
 		degree = d;
 	}
 	

@@ -1,6 +1,7 @@
 package de.homelab.madgaksha.entityengine.entity;
 
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
+import static de.homelab.madgaksha.GlobalBag.playerEntity;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
@@ -16,6 +17,7 @@ import de.homelab.madgaksha.entityengine.component.SiblingComponent;
 import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01Component;
+import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup02Component;
 import de.homelab.madgaksha.entityengine.component.zorder.ZOrder1Component;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.logging.Logger;
@@ -47,14 +49,25 @@ public class BulletMaker extends EntityMaker implements IReceive {
 		super();
 	}
 	
-	public void forEnemy(Entity parent) {
+	public void forShooter(Entity parent) {
 		this.parent = parent;
 		this.sibling = Mapper.anyChildComponent.get(parent).childComponent;
 	}
 	
-	public static Entity makeEntity(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory, long power) {
-		Entity entity = gameEntityEngine.createEntity();
-		getInstance().setup(entity, bulletShape, bulletTrajectory, power);
+	
+	public static Entity makeForPlayer(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory, long power) {
+		final Entity entity = gameEntityEngine.createEntity();
+		final ReceiveTouchComponent rtc = gameEntityEngine.createComponent(ReceiveTouchGroup02Component.class);
+		SingletonHolder.INSTANCE.forShooter(playerEntity);
+		gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
+		getInstance().setup(entity, rtc, bulletShape, bulletTrajectory, power);
+		return entity;
+	}
+	
+	public static Entity makeForEnemy(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory, long power) {
+		final Entity entity = gameEntityEngine.createEntity();
+		final ReceiveTouchComponent rtc = gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
+		getInstance().setup(entity, rtc, bulletShape, bulletTrajectory, power);
 		return entity;
 	}
 	
@@ -64,7 +77,7 @@ public class BulletMaker extends EntityMaker implements IReceive {
 	 * @param bulletShape The bullet's shape.
 	 * @param bulletTrajectory The bullet's trajectory.
 	 */
-	public void setup(Entity e, BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory, long power) {
+	public void setup(Entity e, ReceiveTouchComponent rtc, BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory, long power) {
 		super.setup(e);
 		
 		// Setup shape and trajectory.
@@ -72,15 +85,16 @@ public class BulletMaker extends EntityMaker implements IReceive {
 		bulletTrajectory.setup(e);
 
 		// Setup collision detection and damage calculation.
-		final ReceiveTouchComponent rtg1c = gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
 		final ParentComponent pc = gameEntityEngine.createComponent(ParentComponent.class);
 		final BulletStatusComponent bsc = gameEntityEngine.createComponent(BulletStatusComponent.class);
 		final ZOrder1Component zoc = gameEntityEngine.createComponent(ZOrder1Component.class);
 		final SiblingComponent sc = gameEntityEngine.createComponent(SiblingComponent.class);
 		
-		rtg1c.setup(this);
+		rtc.setup(this);
 		pc.setup(parent);
 		bsc.setup(power);
+		
+		// Setup linked list of bullets belonging to this entity (enemy/player).
 		sc.prevSiblingComponent = sibling;
 		if (sibling != null) {
 			sc.nextSiblingComponent = sibling.nextSiblingComponent;
@@ -92,7 +106,7 @@ public class BulletMaker extends EntityMaker implements IReceive {
 
 		e.add(sc);
 		e.add(bsc);
-		e.add(rtg1c);
+		e.add(rtc);
 		e.add(pc);
 		e.add(zoc);
 	}

@@ -36,6 +36,7 @@ import de.homelab.madgaksha.entityengine.component.ParticleEffectScreenComponent
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
+import de.homelab.madgaksha.entityengine.component.ScaleFromDistanceComponent;
 import de.homelab.madgaksha.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
@@ -185,6 +186,7 @@ public final class Mapper {
 	public final static ComponentMapper<RotationComponent> rotationComponent = ComponentMapper
 			.getFor(RotationComponent.class);
 	public final static ComponentMapper<ScaleComponent> scaleComponent = ComponentMapper.getFor(ScaleComponent.class);
+	public final static ComponentMapper<ScaleFromDistanceComponent> scaleFromDistanceComponent = ComponentMapper.getFor(ScaleFromDistanceComponent.class);
 	public final static ComponentMapper<ShadowComponent> shadowComponent = ComponentMapper
 			.getFor(ShadowComponent.class);
 	public final static ComponentMapper<ShapeComponent> shapeComponent = ComponentMapper.getFor(ShapeComponent.class);

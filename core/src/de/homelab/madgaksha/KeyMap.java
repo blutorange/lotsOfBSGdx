@@ -28,5 +28,12 @@ public final class KeyMap {
 	public static boolean isPauseButtonPressed() {
 		return Gdx.input.isKeyPressed(Keys.ESCAPE);
 	}
+
+	public static boolean isWeaponSwitchJustPressed() {
+		return Gdx.input.isKeyJustPressed(Keys.PAGE_UP);
+	}
+	public static boolean isTokugiSwitchJustPressed() {
+		return Gdx.input.isKeyJustPressed(Keys.INSERT);
+	}
 	
 }

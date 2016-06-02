@@ -117,9 +117,9 @@ public enum ETexture implements IResource<ETexture,AtlasRegion> {
 	// =========================================================================
 	//     BULLETS
 	// =========================================================================
-	BULLET_PACMAN_LIGHTYELLOW("bullets/basic/pPacman/pPacman12.png"),
-	BULLET_FLOWER_RED("bullets/basic/pFlower/pFlower1.png"),
-	
+	BULLET_ORB_NOCOLOR(ETextureAtlas.BULLETS_BASIC, "pOrb0"),
+	BULLET_PACMAN_LIGHTYELLOW(ETextureAtlas.BULLETS_BASIC, "pPacman12"),
+	BULLET_FLOWER_RED(ETextureAtlas.BULLETS_BASIC, "pFlower1"),
 	;
 
 	private final static Logger LOG = Logger.getLogger(ETexture.class);

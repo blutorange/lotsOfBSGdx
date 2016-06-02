@@ -5,6 +5,18 @@ public class MyTexturePacker {
 	public static void main(String[] args) {
 		String inputDir, outputDir, packFileName;
 		
+		System.out.println("packing bullets basic...");
+		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/bullets/basic";
+		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/bullets/basic-packed";
+		packFileName = "bulletsBasic";
+		TexturePacker.process(inputDir, outputDir, packFileName);
+		
+		System.out.println("packing bullets large...");
+		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/bullets/large";
+		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/bullets/large-packed";
+		packFileName = "bulletsLarge";
+		TexturePacker.process(inputDir, outputDir, packFileName);
+		
 		System.out.println("packing 9 patches...");
 		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/9patch";
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/9patch/packed";

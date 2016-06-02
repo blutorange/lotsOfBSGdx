@@ -4,6 +4,13 @@ size: 256,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+borderCircle
+  rotate: false
+  xy: 103, 23
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 buddhaEyesRed
   rotate: false
   xy: 2, 20
@@ -20,23 +27,30 @@ buddhaStarYellow
   index: -1
 greenBar
   rotate: false
-  xy: 171, 73
+  xy: 167, 39
   size: 2, 16
   orig: 2, 16
   offset: 0, 0
   index: -1
 novaBall
   rotate: false
-  xy: 137, 26
+  xy: 205, 92
   size: 28, 29
   orig: 28, 29
   offset: 0, 0
   index: -1
 simpleStar
   rotate: false
-  xy: 103, 23
+  xy: 171, 89
   size: 32, 32
   orig: 32, 32
+  offset: 0, 0
+  index: -1
+simpleWhiteStar
+  rotate: false
+  xy: 137, 23
+  size: 28, 32
+  orig: 28, 32
   offset: 0, 0
   index: -1
 smallFire
@@ -48,14 +62,14 @@ smallFire
   index: -1
 testProjectile
   rotate: false
-  xy: 171, 91
+  xy: 171, 57
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 whiteBarV5
   rotate: false
-  xy: 203, 116
+  xy: 235, 116
   size: 1, 5
   orig: 1, 5
   offset: 0, 0

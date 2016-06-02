@@ -1,8 +1,11 @@
 package de.homelab.madgaksha.player.weapon;
 
+import com.badlogic.ashley.core.Entity;
+
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EModel;
 import de.homelab.madgaksha.resourcecache.ETexture;
+import de.homelab.madgaksha.resourcecache.IResource;
 
 public class WeaponNone extends AWeapon {
 	@SuppressWarnings("unused")
@@ -21,6 +24,17 @@ public class WeaponNone extends AWeapon {
 	@Override
 	public EModel getModel() {
 		throw new UnsupportedOperationException("WeaponNone cannot be a collectable item.");
+	}
+
+	@Override
+	public void fire(Entity player, float deltaTime) {
+		// No weapon can do no fire...
+	}
+
+	@Override
+	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

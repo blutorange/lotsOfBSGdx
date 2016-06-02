@@ -13,7 +13,7 @@ import de.homelab.madgaksha.entityengine.entity.ITimedCallback;
  */
 public class TimedCallbackComponent implements Component, Poolable {
 	private final static float DEFAULT_TOTAL_TIME = 0.0f;
-	private final static float DEFAULT_DURATION = 1.0f;
+	private final static float DEFAULT_DURATION = 0.0f;
 	private final static int DEFAULT_CALLBACKS_LEFT = 1;
 	private final static ITimedCallback DEFAULT_TIMED_CALLBACK = new ITimedCallback() {
 		@Override
@@ -30,6 +30,12 @@ public class TimedCallbackComponent implements Component, Poolable {
 	public TimedCallbackComponent(){
 	}
 	
+	public TimedCallbackComponent(ITimedCallback timedCallback) {
+		setup(timedCallback);
+	}
+	public TimedCallbackComponent(ITimedCallback timedCallback, Object callbackData) {
+		setup(timedCallback, callbackData);
+	}
 	public TimedCallbackComponent(ITimedCallback timedCallback, float duration) {
 		setup(timedCallback, duration);
 	}
@@ -43,6 +49,12 @@ public class TimedCallbackComponent implements Component, Poolable {
 		setup(timedCallback, callbackData, duration, numberOfCallbacks);
 	}
 	
+	public void setup(ITimedCallback timedCallback) {
+		setup(timedCallback, DEFAULT_CALLBACK_DATA, DEFAULT_DURATION, DEFAULT_CALLBACKS_LEFT);
+	}
+	public void setup(ITimedCallback timedCallback, Object callbackData) {
+		setup(timedCallback, callbackData, 0.0f, DEFAULT_CALLBACKS_LEFT);
+	}
 	public void setup(ITimedCallback timedCallback, float duration) {
 		setup(timedCallback, DEFAULT_CALLBACK_DATA, duration, DEFAULT_CALLBACKS_LEFT);
 	}

@@ -3,6 +3,7 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
@@ -26,8 +27,9 @@ public class GrantPositionSystem extends IteratingSystem {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		final ShouldPositionComponent spc = Mapper.shouldPositionComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
-		pc.x = spc.grantStrategy.compromise(pc.x, spc.x, deltaTime);
-		pc.y = spc.grantStrategy.compromise(pc.y, spc.y, deltaTime);
+		final Vector2 v = spc.grantStrategy.compromise2D(pc.x, pc.y, spc.x, spc.y, deltaTime);
+		pc.x = v.x;
+		pc.y = v.y;
 		pc.z = spc.grantStrategy.compromise(pc.z, spc.z, deltaTime);
 		if (spc.grantOffset) {
 			pc.offsetX = spc.grantStrategy.compromise(pc.offsetX, spc.offsetX, deltaTime);

@@ -40,6 +40,7 @@ import de.homelab.madgaksha.entityengine.entitysystem.MovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.NewtonianForceSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ParticleEffectRenderSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.PostEffectSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.ScaleFromDistanceSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteAnimationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.StickySystem;
@@ -130,6 +131,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new MovementSystem());
 		gameEntityEngine.addSystem(new NewtonianForceSystem());
 		gameEntityEngine.addSystem(new ParticleEffectRenderSystem());
+		gameEntityEngine.addSystem(new ScaleFromDistanceSystem());
 		gameEntityEngine.addSystem(new SpriteAnimationSystem());
 		gameEntityEngine.addSystem(new SpriteRenderSystem());
 		gameEntityEngine.addSystem(new StickySystem());
@@ -161,25 +163,21 @@ public class EntityLayer extends ALayer {
 			// TODO
 			break;
 		}
-
-		Entity playerE = PlayerMaker.getInstance().makePlayer(player);
-		if (playerE == null) return false;
 		
-		Entity hitCircle = PlayerMaker.getInstance().makePlayerHitCircle(playerE, player);
-		Entity battleStigma = PlayerMaker.getInstance().makePlayerBattleStigma(playerE, player);
+		Entity hitCircle = PlayerMaker.getInstance().makePlayerHitCircle(playerEntity, player);
+		Entity battleStigma = PlayerMaker.getInstance().makePlayerBattleStigma(playerEntity, player);
 		Entity targetCross = MakerUtils.makeEnemyTargetCross();
-		Entity myCamera = MakerUtils.makeCamera(level, playerE);
+		Entity myCamera = MakerUtils.makeCamera(level, playerEntity);
 		if (hitCircle == null || battleStigma == null || myCamera == null) return false;
 		
 		gameEntityEngine.addEntity(myCamera);
 		gameEntityEngine.addEntity(battleStigma);
-		gameEntityEngine.addEntity(playerE);
+		gameEntityEngine.addEntity(playerEntity);
 		gameEntityEngine.addEntity(hitCircle);
 		gameEntityEngine.addEntity(targetCross);
 
 		playerBattleStigmaEntity = battleStigma;
 		playerHitCircleEntity = hitCircle;
-		playerEntity = playerE;
 		enemyTargetCrossEntity = targetCross;
 		cameraEntity = myCamera;
 		

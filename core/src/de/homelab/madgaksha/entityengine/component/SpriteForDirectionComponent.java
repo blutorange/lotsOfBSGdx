@@ -1,13 +1,13 @@
 package de.homelab.madgaksha.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
+import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 /**
  * Component for sprites that are pseudo 3D, ie. with a different sprite for
@@ -35,18 +35,22 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
 public class SpriteForDirectionComponent implements Component, Poolable {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(SpriteForDirectionComponent.class);
-	private final static Animation[] DEFAULT_ANIMATION_LIST = new Animation[0];
+	private final static AtlasAnimation[] DEFAULT_ANIMATION_LIST = new AtlasAnimation[0];
 	private final static ESpriteDirectionStrategy DEFAULT_SPRITE_DIRECTION_STRATEGY = ESpriteDirectionStrategy.STATIC;
 	
 	
-	public Animation[] animationList = DEFAULT_ANIMATION_LIST;
+	public AtlasAnimation[] animationList = DEFAULT_ANIMATION_LIST;
 	public ESpriteDirectionStrategy spriteDirectionStrategy = DEFAULT_SPRITE_DIRECTION_STRATEGY;
 	
 	
-	public SpriteForDirectionComponent(Animation[] al) {
+	public SpriteForDirectionComponent() {
+		
+	}
+	
+	public SpriteForDirectionComponent(AtlasAnimation[] al) {
 		animationList = al;
 	}
-	public SpriteForDirectionComponent(Animation[] al, ESpriteDirectionStrategy estrat) {
+	public SpriteForDirectionComponent(AtlasAnimation[] al, ESpriteDirectionStrategy estrat) {
 		animationList = al;
 		spriteDirectionStrategy = DEFAULT_SPRITE_DIRECTION_STRATEGY;
 	}
@@ -54,13 +58,19 @@ public class SpriteForDirectionComponent implements Component, Poolable {
 		this(eal, DEFAULT_SPRITE_DIRECTION_STRATEGY, false);
 	}
 	public SpriteForDirectionComponent(EAnimationList eal, ESpriteDirectionStrategy estrat) {
-		this(eal, estrat, true);
+		setup(eal, estrat, true);
 	}
 	public SpriteForDirectionComponent(EAnimationList eal, ESpriteDirectionStrategy estrat, boolean cached) {
+		setup(eal, estrat, cached);
+	}
+	
+	public void setup(EAnimationList eal, ESpriteDirectionStrategy estrat) {
+		setup(eal, estrat, true);
+	}
+	public void setup(EAnimationList eal, ESpriteDirectionStrategy estrat, boolean cached) {
 		animationList = ResourceCache.getAnimationList(eal, cached);
 		spriteDirectionStrategy = estrat;
 	}
-	
 	
 	@Override
 	public void reset() {

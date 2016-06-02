@@ -33,12 +33,20 @@ public class BoundingSphereComponent implements Component, Poolable {
 	}
 
 	public BoundingSphereComponent(Circle c) {
+		setup(c);
+	}
+	
+	public BoundingSphereComponent(float r) {
+		setup(r);
+	}
+	
+	public void setup(Circle c) {
 		this.radius = c.radius;
 		this.centerX = c.x;
 		this.centerY = c.y;
 	}
 	
-	public BoundingSphereComponent(float r) {
+	public void setup(float r) {
 		this.radius = r;
 	}
 

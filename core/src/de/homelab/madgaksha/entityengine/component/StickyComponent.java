@@ -67,9 +67,7 @@ public class StickyComponent implements Component, Poolable {
 	}
 	public void setup(Entity e, float offsetX, float offsetY, boolean ignoreOffset, boolean offsetRelativeToCamera) {
 		final PositionComponent pc = Mapper.positionComponent.get(e);
-		if (pc != null) setup(pc, offsetX, offsetY);
-		this.ignoreTrackOffset =  ignoreOffset;
-		this.offsetRelativeToCamera = offsetRelativeToCamera;
+		if (pc != null) setup(pc, offsetX, offsetY, ignoreOffset, offsetRelativeToCamera);
 	}
 	public void setup(PositionComponent pc, float offsetX, float offsetY) {
 		setup(pc, offsetX, offsetY, DEFAULT_IGNORE_TRACK_OFFSET, DEFAULT_OFFSET_RELATIVE_TO_CAMERA);

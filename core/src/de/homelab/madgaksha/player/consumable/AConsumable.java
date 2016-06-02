@@ -1,12 +1,13 @@
 package de.homelab.madgaksha.player.consumable;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector3;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.APlayer;
-import de.homelab.madgaksha.player.EConsumable;
 import de.homelab.madgaksha.player.IMapItem;
+import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 public abstract class AConsumable implements IMapItem {
 	@SuppressWarnings("unused")
@@ -17,17 +18,22 @@ public abstract class AConsumable implements IMapItem {
 	public AConsumable() {
 	}
 	
-	public void setType(EConsumable type) {
+	void setType(EConsumable type) {
 		this.type = type;
-	}	
+	}
+	
+	public EConsumable getType() {
+		return type;
+	}
 
 	@Override
 	public boolean initialize() {
-		return true;
+		return ResourceCache.loadToRam(requestedRequiredResources());
+
 	}
 	
 	@Override
-	public void setup(Entity e) {			
+	public void setup(Entity e, MapProperties props) {			
 	}
 
 	/**
@@ -50,5 +56,18 @@ public abstract class AConsumable implements IMapItem {
 	@Override
 	public boolean isSupportedByPlayer(APlayer player) {
 		return type == null ? true : player.supportsConsumable(type);
+	}
+	
+	/** Can be overridden for other values.
+	 * @see IMapItem#getActivationAreaScaleFactor()
+	 */
+	@Override
+	public float getActivationAreaScaleFactor() {
+		return 3.5f;
+	}
+	
+	@Override
+	public void gotItem() {
+		
 	}
 }

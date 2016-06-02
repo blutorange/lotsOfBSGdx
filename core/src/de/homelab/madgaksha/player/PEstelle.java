@@ -7,6 +7,9 @@ import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.component.ShadowComponent;
+import de.homelab.madgaksha.player.consumable.EConsumable;
+import de.homelab.madgaksha.player.tokugi.ETokugi;
+import de.homelab.madgaksha.player.weapon.EWeapon;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
@@ -20,6 +23,7 @@ public class PEstelle extends APlayer {
 	protected IResource<? extends Enum<?>,?>[] requestedRequiredResources() {
 		return new IResource[] {
 				EAnimationList.ESTELLE_STANDING,
+				EAnimationList.ESTELLE_RUNNING,
 				ETexture.ESTELLE_ON_KNEES,
 				ETexture.OVAL_SHADOW,
 				ESound.ESTELLE_YOSOMI_SITARA_BUTTOBASU_WAYO,
@@ -32,6 +36,10 @@ public class PEstelle extends APlayer {
 	@Override
 	public EAnimationList requestedAnimationList() {
 		return EAnimationList.ESTELLE_STANDING;
+	}
+	@Override
+	public EAnimationList requestedBattleAnimationList() {
+		return EAnimationList.ESTELLE_RUNNING;
 	}
 
 	@Override
@@ -71,8 +79,9 @@ public class PEstelle extends APlayer {
 	}
 	
 	@Override
-	public ShadowComponent makeShadow() {
-		return new ShadowComponent(ETexture.OVAL_SHADOW, 0.0f,-60.0f,0.0f,-0.010f, 0.5f, 0.0f);
+	public boolean setupShadow(ShadowComponent kc) {
+		kc.setup(ETexture.OVAL_SHADOW, 0.0f,-60.0f,0.0f,-0.010f, 0.5f, 0.0f);
+		return true;
 	}
 
 	@Override
@@ -92,12 +101,12 @@ public class PEstelle extends APlayer {
 
 	@Override
 	protected EWeapon[] requestedSupportedWeapons() {
-		return null;
+		return new EWeapon[]{EWeapon.BASIC};
 	}
 
 	@Override
 	protected ETokugi[] requestedSupportedTokugi() {
-		return null;
+		return new ETokugi[]{ETokugi.BOMB};
 	}
 	
 	@Override
@@ -169,4 +178,6 @@ public class PEstelle extends APlayer {
 	protected ETexture requestedDeathSprite() {
 		return ETexture.ESTELLE_ON_KNEES;
 	}
+	
+	
 }

@@ -2,33 +2,33 @@ package de.homelab.madgaksha.resourcecache;
 
 import java.util.EnumMap;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
-public enum EAnimationList implements IResource<EAnimationList,Animation[]> {
+public enum EAnimationList implements IResource<EAnimationList,AtlasAnimation[]> {
 	// =================
 	//      ESTELLE
 	// =================
-	ESTELLE_RUNNING(ETexture.ESTELLE_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
-	ESTELLE_STANDING(ETexture.ESTELLE_STANDING, 128, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
+	ESTELLE_RUNNING(ETexture.ESTELLE_RUNNING, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
+	ESTELLE_STANDING(ETexture.ESTELLE_STANDING, 128, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
 	
 	// =================
 	//      ESTELLE
 	// =================
-	JOSHUA_RUNNING(ETexture.JOSHUA_RUNNING, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
+	JOSHUA_RUNNING(ETexture.JOSHUA_RUNNING, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
 	
 	// =================
 	//      ENEMIES
 	// =================
-	SOLDIER_RED_0(ETexture.SOLDIER_RED_0, 128, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
-	SOLDIER_GREEN_0(ETexture.SOLDIER_GREEN_0, 64, 128, 64, 0.1f, Animation.PlayMode.LOOP, 8),
+	SOLDIER_RED_0(ETexture.SOLDIER_RED_0, 128, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
+	SOLDIER_GREEN_0(ETexture.SOLDIER_GREEN_0, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
 	
 	;
 	
 	private final static Logger LOG = Logger.getLogger(EAnimationList.class);
-	private final static EnumMap<EAnimationList, Animation[]> animationListCache = new EnumMap<EAnimationList, Animation[]>(
+	private final static EnumMap<EAnimationList, AtlasAnimation[]> animationListCache = new EnumMap<EAnimationList, AtlasAnimation[]>(
 			EAnimationList.class);
 
 	
@@ -37,9 +37,9 @@ public enum EAnimationList implements IResource<EAnimationList,Animation[]> {
 	private int tileHeight;
 	private int count;
 	private float frameDuration;
-	private Animation.PlayMode playMode;
+	private AtlasAnimation.PlayMode playMode;
 	private int animationModeCount;
-	private EAnimationList(ETexture et, int tw, int th, int c, float fd,Animation.PlayMode pm, int amc) {
+	private EAnimationList(ETexture et, int tw, int th, int c, float fd,AtlasAnimation.PlayMode pm, int amc) {
 		eTexture = et;
 		tileWidth = tw;
 		tileHeight = th;
@@ -63,14 +63,14 @@ public enum EAnimationList implements IResource<EAnimationList,Animation[]> {
 		return ResourceCache.LIMIT_ANIMATION_LIST;
 	}
 	@Override
-	public Animation[] getObject() {
+	public AtlasAnimation[] getObject() {
 		// Get texture
-		final TextureRegion textureRegion = ResourceCache.getTexture(eTexture);
-		if (textureRegion == null) return null;
-		final TextureRegion[][] textureRegionArray = textureRegion.split(tileWidth, tileHeight);
-		final Animation[] animationList = new Animation[animationModeCount];
+		final AtlasRegion atlasRegion = ResourceCache.getTexture(eTexture);
+		if (atlasRegion == null) return null;
+		final AtlasRegion[][] atlasRegionArray = splitAtlasRegion(atlasRegion, tileWidth, tileHeight);
+		final AtlasAnimation[] animationList = new AtlasAnimation[animationModeCount];
 		for (int i = 0; i != animationModeCount; ++i) {
-			animationList[i] = new Animation(frameDuration, textureRegionArray[i]);
+			animationList[i] = new AtlasAnimation(frameDuration, atlasRegionArray[i]);
 			animationList[i].setPlayMode(playMode);
 		}
 		return animationList;
@@ -85,4 +85,25 @@ public enum EAnimationList implements IResource<EAnimationList,Animation[]> {
 	public EnumMap getMap() {
 		return animationListCache;
 	}		
+	
+	private AtlasRegion[][] splitAtlasRegion(AtlasRegion atlasRegion, int tileWidth, int tileHeight) {
+		int x = atlasRegion.getRegionX();
+		int y = atlasRegion.getRegionY();
+		int width = atlasRegion.getRegionWidth();
+		int height = atlasRegion.getRegionHeight();
+
+		int rows = height / tileHeight;
+		int cols = width / tileWidth;
+
+		int startX = x;
+		AtlasRegion[][] tiles = new AtlasRegion[rows][cols];
+		for (int row = 0; row < rows; row++, y += tileHeight) {
+			x = startX;
+			for (int col = 0; col < cols; col++, x += tileWidth) {
+				tiles[row][col] = new AtlasRegion(atlasRegion.getTexture(), x, y, tileWidth, tileHeight);
+			}
+		}
+
+		return tiles;
+	}
 }

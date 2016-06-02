@@ -11,6 +11,13 @@ battleStigmaGreen
   orig: 256, 256
   offset: 0, 0
   index: -1
+estelleHitCircle
+  rotate: false
+  xy: 260, 275
+  size: 5, 5
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
 hitCircleYellow
   rotate: false
   xy: 66, 74

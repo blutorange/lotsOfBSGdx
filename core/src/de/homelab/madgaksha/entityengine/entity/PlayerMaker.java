@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.entityengine.entity;
 
+import static de.homelab.madgaksha.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.GlobalBag.game;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import static de.homelab.madgaksha.GlobalBag.level;
@@ -21,6 +22,8 @@ import de.homelab.madgaksha.audiosystem.VoicePlayer;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.ABoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.AngularVelocityComponent;
+import de.homelab.madgaksha.entityengine.component.AnyChildComponent;
+import de.homelab.madgaksha.entityengine.component.BehaviourComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.ColorComponent;
 import de.homelab.madgaksha.entityengine.component.ColorFlashEffectComponent;
@@ -145,9 +148,119 @@ public final class PlayerMaker implements IHittable, IMortal {
 		return hitCircle; 
 	}
 	
+	public void setupPlayer(final APlayer player) {
+		switch (Gdx.app.getType()) {
+		case Android:
+			//TODO
+			break;
+		case Applet:
+			//TODO
+			break;
+		case Desktop:
+			InputDesktopComponent ic = Mapper.inputDesktopComponent.get(playerEntity);
+			ic.frictionFactor = player.getMovementFrictionFactor();
+			ic.accelerationFactorLow = player.getMovementAccelerationFactorLow();
+			ic.accelerationFactorHigh = player.getMovementAccelerationFactorHigh();
+			ic.battleSpeedLow = player.getMovementBattleSpeedLow();
+			ic.battleSpeedHigh = player.getMovementBattleSpeedHigh();
+			break;
+		case HeadlessDesktop:
+			//TODO
+			break;
+		case WebGL:
+			//TODO
+			break;
+		case iOS:
+			//TODO
+			break;
+		default:
+			//TODO
+			break;
+		
+		}
+		
+		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(playerEntity);
+		sfdc.setup(player.getAnimationList(),ESpriteDirectionStrategy.ZENITH);
+		
+		SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(playerEntity);
+		sac.setup(sfdc);
+
+		SpriteComponent sc = Mapper.spriteComponent.get(playerEntity);
+		sc.setup(sac, player.getSpriteOrigin());
+		
+		ShadowComponent kc = Mapper.shadowComponent.get(playerEntity);
+		if (!player.setupShadow(kc)) playerEntity.remove(ShadowComponent.class);
+
+		ABoundingBoxComponent bbcc = Mapper.boundingBoxCollisionComponent.get(playerEntity);
+		bbcc.setup(player.getBoundingBoxCollision());
+		
+		ABoundingBoxComponent bbrc = Mapper.boundingBoxRenderComponent.get(playerEntity);
+		bbrc.setup(player.getBoundingBoxRender());
+		
+		ABoundingBoxComponent bbmc = Mapper.boundingBoxMapComponent.get(playerEntity);
+		bbmc.setup(player.getBoundingBoxMap());
+		
+		BoundingSphereComponent bsc = Mapper.boundingSphereComponent.get(playerEntity);
+		bsc.setup(player.getBoundingCircle());
+		
+		Shape2D exactShape = player.getExactShapeCollision();
+		ShapeComponent shc = Mapper.shapeComponent.get(playerEntity);;
+		if (exactShape != null && shc != null) {
+			shc = Mapper.shapeComponent.get(playerEntity);
+			shc.setup(exactShape);
+		}
+
+		StatusValuesComponent svc = Mapper.statusValuesComponent.get(playerEntity);
+		svc.setup(player.getBulletAttack(), player.getBulletResistance());
+		
+		PainPointsComponent ppc = Mapper.painPointsComponent.get(playerEntity);
+		ppc.setup(player.getMaxPainPoints());
+		
+		PositionComponent pc = Mapper.positionComponent.get(playerEntity);
+		pc.setup(level.getMapData().getPlayerInitialPosition(), true);
+		
+		VelocityComponent vc = Mapper.velocityComponent.get(playerEntity);
+		vc.setup(0.0f, 0.0f);
+		
+		RotationComponent rc = Mapper.rotationComponent.get(playerEntity);
+		rc.setup(true);
+		
+		DirectionComponent dc = Mapper.directionComponent.get(playerEntity);
+		dc.setup(level.getMapData().getPlayerInitialDirection());
+				
+		ShouldRotationComponent src = Mapper.shouldRotationComponent.get(playerEntity);
+		src.setup(new ExponentialGrantStrategy(0.1f));
+		
+		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(playerEntity);
+		ssc.setup(new ExponentialGrantStrategy(0.1f));
+		
+		HoverEffectComponent hec = Mapper.hoverEffectComponent.get(playerEntity);
+		hec.setup(8.0f, 1.0f);
+		
+		LeanEffectComponent lec = Mapper.leanEffectComponent.get(playerEntity);
+		lec.setup(30.0f,0.10f,0.0001f);		
+			
+		DeathComponent dtc = Mapper.deathComponent.get(playerEntity);
+		dtc.setup(this);
+		
+		GetHitComponent ghc = Mapper.getHitComponent.get(playerEntity);
+		ghc.setup(this);
+			
+		VoiceComponent vcc = Mapper.voiceComponent.get(playerEntity);
+		vcc.onBattleModeStart = player.getVoiceOnBattleStart();
+		vcc.onLightDamage = player.getVoiceOnLightDamage();
+		vcc.onHeavyDamage = player.getVoiceOnHeavyDamage();
+		vcc.onDeath = player.getVoiceOnDeath();
+		vcc.voicePlayer = new VoicePlayer();
+		
+		BehaviourComponent bc = Mapper.behaviourComponent.get(playerEntity);
+		bc.setup(onBehave);
+	}
+	
 	public Entity makePlayer(final APlayer player) {
 		final Entity e = new Entity();
 	
+		// Use appropriate input scheme for device.
 		switch (Gdx.app.getType()) {
 		case Android:
 			//TODO
@@ -157,11 +270,6 @@ public final class PlayerMaker implements IHittable, IMortal {
 			break;
 		case Desktop:
 			InputDesktopComponent ic = new InputDesktopComponent();
-			ic.frictionFactor = player.getMovementFrictionFactor();
-			ic.accelerationFactorLow = player.getMovementAccelerationFactorLow();
-			ic.accelerationFactorHigh = player.getMovementAccelerationFactorHigh();
-			ic.battleSpeedLow = player.getMovementBattleSpeedLow();
-			ic.battleSpeedHigh = player.getMovementBattleSpeedHigh();
 			e.add(ic);
 			break;
 		case HeadlessDesktop:
@@ -179,53 +287,52 @@ public final class PlayerMaker implements IHittable, IMortal {
 		
 		}
 		
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(player.getAnimationList(),
-				ESpriteDirectionStrategy.ZENITH);
-		Shape2D exactShape = player.getExactShapeCollision();
-		ShapeComponent shc = null;
+		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent();
 		
-		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
-		SpriteComponent sc = new SpriteComponent(sac, player.getSpriteOrigin());
-		ShadowComponent kc = player.makeShadow();
+		SpriteAnimationComponent sac = new SpriteAnimationComponent();
+		SpriteComponent sc = new SpriteComponent();
+		ShadowComponent kc = new ShadowComponent();
 
-		ABoundingBoxComponent bbcc = new BoundingBoxCollisionComponent(player.getBoundingBoxCollision());
-		ABoundingBoxComponent bbrc = new BoundingBoxRenderComponent(player.getBoundingBoxRender());
-		ABoundingBoxComponent bbmc = new BoundingBoxMapComponent(player.getBoundingBoxMap());
-		BoundingSphereComponent bsc = new BoundingSphereComponent(player.getBoundingCircle());
-		if (exactShape != null) shc = new ShapeComponent(exactShape);
+		ABoundingBoxComponent bbcc = new BoundingBoxCollisionComponent();
+		ABoundingBoxComponent bbrc = new BoundingBoxRenderComponent();
+		ABoundingBoxComponent bbmc = new BoundingBoxMapComponent();
+		BoundingSphereComponent bsc = new BoundingSphereComponent();
+		ShapeComponent shc = null;
+		Shape2D exactShape = player.getExactShapeCollision();
+		if (exactShape != null) shc = new ShapeComponent();
 
-		StatusValuesComponent svc = new StatusValuesComponent(player.getBulletAttack(), player.getBulletResistance());
-		PainPointsComponent ppc = new PainPointsComponent(player.getMaxPainPoints());
+		StatusValuesComponent svc = new StatusValuesComponent();
+		PainPointsComponent ppc = new PainPointsComponent();
 		DamageQueueComponent dqc = new DamageQueueComponent();
 		TemporalComponent tc = new TemporalComponent();
 		TimeScaleComponent tsc = new TimeScaleComponent();
 
-		PositionComponent pc = new PositionComponent(level.getMapData().getPlayerInitialPosition(), true);
-		VelocityComponent vc = new VelocityComponent(0.0f, 0.0f);
-		RotationComponent rc = new RotationComponent(true);
-		DirectionComponent dc = new DirectionComponent(level.getMapData().getPlayerInitialDirection());
+		PositionComponent pc = new PositionComponent();
+		VelocityComponent vc = new VelocityComponent();
+		RotationComponent rc = new RotationComponent();
+		DirectionComponent dc = new DirectionComponent();
 		ScaleComponent slc = new ScaleComponent();
 		
-		ShouldRotationComponent src = new ShouldRotationComponent(new ExponentialGrantStrategy(0.1f));
-		ShouldScaleComponent ssc = new ShouldScaleComponent(new ExponentialGrantStrategy(0.1f));
+		ShouldRotationComponent src = new ShouldRotationComponent();
+		ShouldScaleComponent ssc = new ShouldScaleComponent();
 		
-		HoverEffectComponent hec = new HoverEffectComponent(8.0f, 1.0f);
-		LeanEffectComponent lec = new LeanEffectComponent(30.0f,0.10f,0.0001f);		
+		HoverEffectComponent hec = new HoverEffectComponent();
+		LeanEffectComponent lec = new LeanEffectComponent();		
 			
 		TriggerTouchComponent ttg1c = new TriggerTouchGroup01Component();
 		
-		DeathComponent dtc = new DeathComponent(this);
-		GetHitComponent ghc = new GetHitComponent(this);
+		AnyChildComponent acc = new AnyChildComponent();
+		BehaviourComponent bc = new BehaviourComponent();
 		
-		ZOrder2Component zoc = new ZOrder2Component();
+		DeathComponent dtc = new DeathComponent();
+		GetHitComponent ghc = new GetHitComponent();
 		
 		VoiceComponent vcc = new VoiceComponent();
-		vcc.onBattleModeStart = player.getVoiceOnBattleStart();
-		vcc.onLightDamage = player.getVoiceOnLightDamage();
-		vcc.onHeavyDamage = player.getVoiceOnHeavyDamage();
-		vcc.onDeath = player.getVoiceOnDeath();
-		vcc.voicePlayer = new VoicePlayer();
+
+		ZOrder2Component zoc = new ZOrder2Component();
 		
+		e.add(acc);
+		e.add(bc);
 		e.add(dtc);
 		e.add(ghc);
 		e.add(vcc);
@@ -343,4 +450,18 @@ public final class PlayerMaker implements IHittable, IMortal {
 		}
 	}
 
+	/**
+	 * Callback for automatic player behaviors such as firing weapons etc.
+	 */
+	private final static IBehaving onBehave;
+	static {
+		onBehave = new IBehaving() {
+			@Override
+			public void behave(Entity e) {
+				TemporalComponent tc = Mapper.temporalComponent.get(e);
+				if (battleModeActive)
+					player.getEquippedWeapon().fire(playerEntity, tc.deltaTime);
+			}
+		};
+	}
 }

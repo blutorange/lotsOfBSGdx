@@ -29,11 +29,19 @@ public class LeanEffectComponent implements Component, Poolable {
 	}
 
 	public LeanEffectComponent(float targetAngle, float targetScale) {
+		setup(targetAngle, targetScale);
+	}
+
+	public LeanEffectComponent(float targetAngle, float targetScale, float leanFactor) {
+		setup(targetAngle, targetScale, leanFactor);
+	}
+	
+	public void setup(float targetAngle, float targetScale) {
 		this.targetAngle = targetAngle;
 		this.targetScale = targetScale;
 	}
 
-	public LeanEffectComponent(float targetAngle, float targetScale, float leanFactor) {
+	public void setup(float targetAngle, float targetScale, float leanFactor) {
 		this.targetAngle = targetAngle;
 		this.targetScale = targetScale;
 		this.leanFactor = leanFactor;

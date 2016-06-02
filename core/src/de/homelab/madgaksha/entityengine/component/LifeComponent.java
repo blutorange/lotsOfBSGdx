@@ -25,6 +25,9 @@ public class LifeComponent implements Component, Poolable {
 	public LifeComponent(float remainingLife) {
 		setup(remainingLife);
 	}
+	public LifeComponent(float remainingLife, IMortal onDeath) {
+		setup(remainingLife, onDeath);
+	}
 	
 	public void setup(float remainingLife) {
 		this.remainingLife = remainingLife;

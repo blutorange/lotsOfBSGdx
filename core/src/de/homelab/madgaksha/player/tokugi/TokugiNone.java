@@ -3,6 +3,7 @@ package de.homelab.madgaksha.player.tokugi;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EModel;
 import de.homelab.madgaksha.resourcecache.ETexture;
+import de.homelab.madgaksha.resourcecache.IResource;
 
 public class TokugiNone extends ATokugi {
 	@SuppressWarnings("unused")
@@ -21,5 +22,10 @@ public class TokugiNone extends ATokugi {
 	@Override
 	public EModel getModel() {
 		throw new UnsupportedOperationException("TokugiNone cannot be a collectable item.");
+	}
+
+	@Override
+	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
+		return null;
 	}
 }
