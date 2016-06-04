@@ -43,7 +43,7 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public IResource<? extends Enum<?>,?>[] requestedResources() {
+	protected IResource<? extends Enum<?>,?>[] requestedAdditionalResources() {
 		return new IResource[]{
 			EAnimationList.SOLDIER_GREEN_0,
 			ESound.HORA_KOCCHI_DA_ZE,

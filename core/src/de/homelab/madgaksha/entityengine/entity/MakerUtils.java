@@ -25,6 +25,9 @@ import de.homelab.madgaksha.entityengine.component.DeathComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
+import de.homelab.madgaksha.entityengine.component.ParticleEffectComponent;
+import de.homelab.madgaksha.entityengine.component.ParticleEffectGameComponent;
+import de.homelab.madgaksha.entityengine.component.ParticleEffectScreenComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ReceiveTouchComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
@@ -55,6 +58,8 @@ import de.homelab.madgaksha.grantstrategy.ExponentialGrantStrategy;
 import de.homelab.madgaksha.grantstrategy.ImmediateGrantStrategy;
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcepool.EParticleEffect;
+import de.homelab.madgaksha.resourcepool.ResourcePool;
 import de.homelab.madgaksha.util.GeoUtil;
 
 public final class MakerUtils {
@@ -253,4 +258,34 @@ public final class MakerUtils {
 		e.add(tc).add(tcc);
 	}
 
+	/**
+	 * Adds a particle effect at the given position, with game coordiantes.
+	 * @param particleEffect Particle effect to add.
+	 * @param positionComponent Location where particle effect will be placed.
+	 */
+	public static void addParticleEffectGame(EParticleEffect particleEffect,PositionComponent positionComponent) {
+		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectGameComponent.class);
+		addParticleEffectGame(particleEffect, positionComponent, pec);
+	}
+	/**
+	 * Adds a particle effect at the given position, with screen coordinates.
+	 * @param particleEffect Particle effect to add.
+	 * @param positionComponent Location where particle effect will be placed.
+	 */
+	public static void addParticleEffectScreen(EParticleEffect particleEffect,PositionComponent positionComponent) {
+		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectScreenComponent.class);
+		addParticleEffectGame(particleEffect, positionComponent, pec);
+	}
+
+	private static void addParticleEffectGame(EParticleEffect particleEffect,PositionComponent positionComponent, ParticleEffectComponent pec) {
+		final Entity deathEffect = gameEntityEngine.createEntity();
+		final TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
+		pec.setup(ResourcePool.obtainParticleEffect(particleEffect));
+		deathEffect.add(tc);
+		deathEffect.add(pec);
+		deathEffect.add(positionComponent);
+		gameEntityEngine.addEntity(deathEffect);
+	}
+
+	
 }

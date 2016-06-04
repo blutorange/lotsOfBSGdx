@@ -20,6 +20,7 @@ import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.EnemyIconComponent;
 import de.homelab.madgaksha.entityengine.component.FadeEffectComponent;
 import de.homelab.madgaksha.entityengine.component.ForceComponent;
+import de.homelab.madgaksha.entityengine.component.ForceFieldComponent;
 import de.homelab.madgaksha.entityengine.component.GetHitComponent;
 import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
@@ -155,6 +156,7 @@ public final class Mapper {
 			.getFor(EnemyIconComponent.class);
 	public final static ComponentMapper<FadeEffectComponent> fadeEffectComponent = ComponentMapper.getFor(FadeEffectComponent.class);
 	public final static ComponentMapper<ForceComponent> forceComponent = ComponentMapper.getFor(ForceComponent.class);
+	public final static ComponentMapper<ForceFieldComponent> forceFieldComponent = ComponentMapper.getFor(ForceFieldComponent.class);
 	public final static ComponentMapper<GetHitComponent> getHitComponent = ComponentMapper.getFor(GetHitComponent.class);
 	public final static ComponentMapper<HoverEffectComponent> hoverEffectComponent = ComponentMapper
 			.getFor(HoverEffectComponent.class);

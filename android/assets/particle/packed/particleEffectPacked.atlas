@@ -6,49 +6,49 @@ filter: Nearest,Nearest
 repeat: none
 borderCircle
   rotate: false
-  xy: 103, 23
+  xy: 171, 93
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 buddhaEyesRed
   rotate: false
-  xy: 2, 20
+  xy: 2, 24
   size: 99, 101
   orig: 99, 101
   offset: 0, 0
   index: -1
 buddhaStarYellow
   rotate: false
-  xy: 103, 57
+  xy: 103, 61
   size: 66, 64
   orig: 66, 64
   offset: 0, 0
   index: -1
 greenBar
   rotate: false
-  xy: 167, 39
+  xy: 137, 43
   size: 2, 16
   orig: 2, 16
   offset: 0, 0
   index: -1
 novaBall
   rotate: false
-  xy: 205, 92
+  xy: 171, 62
   size: 28, 29
   orig: 28, 29
   offset: 0, 0
   index: -1
 simpleStar
   rotate: false
-  xy: 171, 89
+  xy: 103, 27
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 simpleWhiteStar
   rotate: false
-  xy: 137, 23
+  xy: 205, 93
   size: 28, 32
   orig: 28, 32
   offset: 0, 0
@@ -60,23 +60,23 @@ smallFire
   orig: 16, 16
   offset: 0, 0
   index: -1
-testProjectile
+whiteBar
   rotate: false
-  xy: 171, 57
-  size: 30, 30
-  orig: 30, 30
+  xy: 2, 20
+  size: 100, 2
+  orig: 100, 2
   offset: 0, 0
   index: -1
 whiteBarV5
   rotate: false
-  xy: 235, 116
+  xy: 235, 120
   size: 1, 5
   orig: 1, 5
   offset: 0, 0
   index: -1
 whitePixel
   rotate: false
-  xy: 103, 20
+  xy: 103, 24
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

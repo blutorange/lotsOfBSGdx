@@ -328,7 +328,7 @@ public class Game implements ApplicationListener {
 		pauseLayer.setBlockUpdate(block);
 		if (running) pushLayer(pauseLayer);
 		running = false;
-		MusicPlayer.getInstance().pause();	
+		if (block) MusicPlayer.getInstance().pause();	
 	}
 	
 	@Override

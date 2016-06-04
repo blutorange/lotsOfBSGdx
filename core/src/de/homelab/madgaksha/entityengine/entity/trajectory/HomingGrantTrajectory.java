@@ -13,14 +13,14 @@ import de.homelab.madgaksha.grantstrategy.IGrantStrategy;
 import de.homelab.madgaksha.grantstrategy.ImmediateGrantStrategy;
 import de.homelab.madgaksha.logging.Logger;
 
-public class HomingTrajectory extends BulletTrajectoryMaker {
+public class HomingGrantTrajectory extends BulletTrajectoryMaker {
 	@SuppressWarnings("unused")
-	private final static Logger LOG = Logger.getLogger(HomingTrajectory.class);
+	private final static Logger LOG = Logger.getLogger(HomingGrantTrajectory.class);
 	
 	private PositionComponent positionComponent = null;
 	private IGrantStrategy grantStrategy = new ImmediateGrantStrategy();
 	private boolean ignoreTrackOffset = false;
-	public HomingTrajectory () {
+	public HomingGrantTrajectory () {
 		super();
 	}
 	

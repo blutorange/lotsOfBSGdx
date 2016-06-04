@@ -13,6 +13,8 @@ import static de.homelab.madgaksha.GlobalBag.playerEntity;
 import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.GlobalBag.statusScreen;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Circle;
@@ -42,8 +44,6 @@ import de.homelab.madgaksha.entityengine.component.GetHitComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
-import de.homelab.madgaksha.entityengine.component.ParticleEffectComponent;
-import de.homelab.madgaksha.entityengine.component.ParticleEffectGameComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
@@ -59,9 +59,10 @@ import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollis
 import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxRenderComponent;
 import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup02Component;
 import de.homelab.madgaksha.entityengine.component.zorder.ZOrder2Component;
-import de.homelab.madgaksha.entityengine.entity.trajectory.HomingTrajectory;
+import de.homelab.madgaksha.entityengine.entity.trajectory.HomingGrantTrajectory;
 import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
 import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
+import de.homelab.madgaksha.entityengine.entityutils.SystemUtils;
 import de.homelab.madgaksha.enums.ECollisionGroup;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.grantstrategy.IGrantStrategy;
@@ -71,14 +72,13 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
-import de.homelab.madgaksha.resourcepool.ResourcePool;
+import de.homelab.madgaksha.resourcepool.EParticleEffect;
 import de.homelab.madgaksha.util.GeoUtil;
 import de.homelab.madgaksha.util.InclusiveRange;
 
 public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrigger, IReceive, IHittable, IMortal {
-	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(EnemyMaker.class);
-	private final static HomingTrajectory homingTrajectory = new HomingTrajectory();
+	private final static HomingGrantTrajectory homingTrajectory = new HomingGrantTrajectory();
 	
 	protected EnemyMaker() {
 		super();
@@ -224,17 +224,6 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		
 	}
 
-	/** Gets called when the enemy has been incapacitated. */
-	@Override
-	public void kill(Entity enemy) {
-		//TODO
-		// Simple particle effect.
-		StatusValuesComponent svc = Mapper.statusValuesComponent.get(enemy);
-		releaseBullets(enemy, true);
-		if (svc != null) gameScore.increaseBy(MathUtils.random(svc.scoreOnKill.min, svc.scoreOnKill.max));
-		gameEntityEngine.removeEntity(enemy);
-	}
-
 	/**
 	 * Removes all active bullets of the given enemy.
 	 * @param enemy Enemy whose bullets are to be removed.
@@ -247,13 +236,11 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 			IGrantStrategy gs = new SpeedIncreaseGrantStrategy(3.0f, 400.0f);
 			// Iterate over all bullets before this bullet.
 			for (SiblingComponent sibling = acc.childComponent.prevSiblingComponent; sibling != null; sibling = sibling.prevSiblingComponent) {
-				LOG.debug("bullet1 " + sibling.me);
 				if (convertScore) convertBulletToScoreBullet(sibling.me, pc, gs);
 				gameEntityEngine.removeEntity(sibling.me);
 			}
 			// Iterate over this bullet and the following bullets.
 			for (SiblingComponent sibling = acc.childComponent; sibling != null; sibling = sibling.nextSiblingComponent) {
-				LOG.debug("bullet2 " + sibling.me);
 				if (convertScore) convertBulletToScoreBullet(sibling.me, pc, gs);
 				gameEntityEngine.removeEntity(sibling.me);
 			}
@@ -278,10 +265,32 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	/**
 	 * Callback for spawning the enemy.
 	 */
-	private void sinSpawn(Entity e) {
-		ComponentUtils.applyComponentQueue(e);
-		VoiceComponent vc = Mapper.voiceComponent.get(e);
+	private void sinSpawn(Entity enemy) {
+		ComponentUtils.applyComponentQueue(enemy);
+		// Let enemy say something when he spawns.
+		VoiceComponent vc = Mapper.voiceComponent.get(enemy);
 		if (vc != null && vc.voicePlayer != null) vc.voicePlayer.play(vc.onSpawn);
+		// Let enemy appear in a flash.
+		MakerUtils.addParticleEffectGame(requestedParticleEffectOnSpawn(), Mapper.positionComponent.get(enemy));
+		SoundPlayer.getInstance().play(requestedSoundOnSpawn());
+	}
+	
+	/** Gets called when the enemy has been incapacitated. */
+	@Override
+	public void kill(Entity enemy) {
+		LOG.debug("kill enemy " + enemy);
+		
+		// Animate death and play explosion sound.
+		MakerUtils.addParticleEffectGame(requestedParticleEffectOnDeath(), Mapper.positionComponent.get(enemy));
+		SoundPlayer.getInstance().play(requestedSoundOnDeath());
+		
+		// Release active bullets.
+		releaseBullets(enemy, true);
+		
+		// Score for defeating the enemy.
+		StatusValuesComponent svc = Mapper.statusValuesComponent.get(enemy);
+		if (svc != null) gameScore.increaseBy(MathUtils.random(svc.scoreOnKill.min, svc.scoreOnKill.max));
+		gameEntityEngine.removeEntity(enemy);
 	}
 	
 	/** Called when we leave battle mode.
@@ -289,6 +298,8 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	 * or true if it was a result of the player fleeing from the enemy.  
 	 */
 	public static void exitBattleMode(boolean won) {
+		LOG.debug("exiting battle mode");
+		
 		battleModeActive = false;
 		MusicPlayer.getInstance().loadNext(level.getBgm());
 		MusicPlayer.getInstance().setCrossFade(true);
@@ -309,11 +320,9 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		ComponentUtils.switchAnimationList(playerEntity, player.getAnimationList());
 		
 		// Add particle effect to player for exiting battle mode.
-		ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectGameComponent.class);
-		pec.particleEffect = ResourcePool.obtainParticleEffect(player.getBattleModeExitParticleEffect());
-		playerEntity.add(pec);
+		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(), Mapper.positionComponent.get(playerHitCircleEntity));
 		
-		// Play player win phrase.
+		// Play player win phrase and enemy explosion.
 		VoiceComponent vc = Mapper.voiceComponent.get(playerEntity);
 		if (won && vc != null){
 			vc.voicePlayer.play(vc.onBattleModeExit);
@@ -325,10 +334,12 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 			// Battle win fanfare.
 			SoundPlayer.getInstance().play(level.getSoundOnBattleWin());
 			// Slow-motion effect.
+			SystemUtils.disableAction();
 			game.setGlobalTimeScale(0.12f);
 			MakerUtils.addTimedRunnable(level.getSoundOnBattleWin().getDurationInMilliseconds()*0.12f*0.001f, new ITimedCallback() {
 				@Override
 				public void run(Entity entity, Object data) {
+					SystemUtils.enableAction();
 					game.setGlobalTimeScale(1.0f);
 				}
 			});
@@ -341,6 +352,8 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	
 	/** Called when we enter battle mode. */
 	public static void enterBattleMode(Entity enemy) {
+		LOG.debug("entering battle mode");
+		
 		battleModeActive = true;
 		
 		// Play battle music.
@@ -379,9 +392,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		if (pc != null) pc.setup(enemy);
 		
 		// Add particle effect to player for entering battle mode.
-		ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectGameComponent.class);
-		pec.particleEffect = ResourcePool.obtainParticleEffect(player.getBattleModeEnterParticleEffect());
-		playerHitCircleEntity.add(pec);
+		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(), Mapper.positionComponent.get(playerHitCircleEntity));
 		
 		// Animate battle stigma.
 		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(playerBattleStigmaEntity);
@@ -401,6 +412,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 
 	/** Called when the target changed and needs to be updated. */
 	public static void targetSwitched(Entity enemy) {
+		LOG.debug("switch target to " + enemy);
 		statusScreen.targetEnemy(enemy);
 		// Make target cross stick to enemy.
 		StickyComponent sec = Mapper.stickyComponent.get(enemyTargetCrossEntity);
@@ -467,13 +479,51 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		}
 	}
 	
+	/**
+	 * May be overridden for other effects.
+	 *  @return Particle effect played when enemy spawns.
+	 */
+	protected EParticleEffect requestedParticleEffectOnSpawn() {
+		return EParticleEffect.ENEMY_APPEAR_FLASH;
+	}
+	
+	/**
+	 * May be overridden for other effects.
+	 *  @return Particle effect played when enemy dies.
+	 */
+	protected EParticleEffect requestedParticleEffectOnDeath() {
+		return EParticleEffect.ENEMY_DIE_SPLASH;
+	}
+	
+	/**
+	 * May be overridden for other effects.
+	 *  @return Explosion sound played when {@link #requestedParticleEffectOnDeath()} plays..
+	 */
+	protected ESound requestedSoundOnSpawn() {
+		return ESound.ENEMY_SPAWN_FLASH;
+	}
+	
+	/**
+	 * May be overridden for other effects.
+	 *  @return Explosion sound played when {@link #requestedParticleEffectOnDeath()} plays..
+	 */
+	protected ESound requestedSoundOnDeath() {
+		return ESound.ENEMY_DIE_EXPLOSION;
+	}
+	
 	// =====================
 	//   Abstract methods
 	// =====================
 	protected abstract ETexture requestedIconMain();
 	protected abstract ETexture requestedIconSub();
 
-	protected abstract IResource<? extends Enum<?>, ?>[] requestedResources();
+	protected IResource<? extends Enum<?>, ?>[] requestedResources() {
+		IResource<?,?>[] myRes = new IResource<?,?>[]{EParticleEffect.ENEMY_APPEAR_FLASH.getTextureAtlas()};
+		IResource<? extends Enum<?>,?>[] yourRes = requestedAdditionalResources();
+		return ArrayUtils.addAll(myRes, yourRes);
+	};
+	
+	protected abstract IResource<? extends Enum<?>, ?>[] requestedAdditionalResources();
 
 	/** @return The bounding box used for deciding whether the entity is on-screen and needs to be rendered. */
 	protected abstract Rectangle requestedBoundingBoxRender();

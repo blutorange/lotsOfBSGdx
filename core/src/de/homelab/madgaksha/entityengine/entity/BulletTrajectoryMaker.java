@@ -6,10 +6,12 @@ import com.badlogic.gdx.math.Interpolation;
 
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.AlphaComponent;
+import de.homelab.madgaksha.entityengine.component.AngularVelocityComponent;
 import de.homelab.madgaksha.entityengine.component.BehaviourComponent;
 import de.homelab.madgaksha.entityengine.component.FadeEffectComponent;
 import de.homelab.madgaksha.entityengine.component.LifeComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01Component;
@@ -29,6 +31,7 @@ public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
 	
 	/** Time remaining until bullet goes away. */
 	protected float lifeTime = 3.0f;
+	protected float angularSpeed = 0.0f;
 	protected TemporalComponent temporalComponent = null;
 	
 	/** Adds appropriate components for the trajectory to the entity.
@@ -56,6 +59,14 @@ public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
 			.add(tc)
 			.add(vc);
 		
+		if (angularSpeed != 0.0f) {
+			final AngularVelocityComponent avc = gameEntityEngine.createComponent(AngularVelocityComponent.class);
+			final RotationComponent rc = gameEntityEngine.createComponent(RotationComponent.class);
+			avc.setup(angularSpeed);
+			e.add(avc)
+				.add(rc);
+		}
+		
 	}
 	
 	/** Sets the initial position used for making bullets.
@@ -73,6 +84,10 @@ public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
 	 */
 	public void life(float lifeTime) {
 		this.lifeTime = lifeTime;
+	}
+	
+	public void angularSpeed(float angularSpeed) {
+		this.angularSpeed = angularSpeed;
 	}
 	
 	/** Sets the initial velocity used for making bullets.

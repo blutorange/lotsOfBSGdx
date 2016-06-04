@@ -369,6 +369,8 @@ public final class PlayerMaker implements IHittable, IMortal {
 	}
 	
 	public void kill(Entity e) {
+		EnemyMaker.exitBattleMode(false);
+		
 		// Do not allow input anymore.
 		e.remove(InputDesktopComponent.class);
 		
@@ -422,8 +424,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 		deathEffect.add(pec);
 		deathEffect.add(sec);
 		deathEffect.add(spc);
-		deathEffect.add(tc);		
-
+		deathEffect.add(tc);
 		
 		// Player death sound effect.
 		SoundPlayer.getInstance().play(ESound.PLAYER_EXPLODE_ON_DEATH);

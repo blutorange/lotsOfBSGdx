@@ -14,14 +14,21 @@ public enum ESound implements IResource<ESound,Sound> {
 	ENEMY_SWITCH("sound/ed6se049.wav"),
 	EQUIP_WEAPON("sound/ed6se022.wav"),
 	EQUIP_TOKUGI("sound/ed6se155.wav"),
+	ENEMY_SPAWN_FLASH("sound/ed6se579.wav"),
+	ENEMY_DIE_EXPLOSION("sound/ed6se556Multi+565.wav"),
 	CANNOT_EQUIP("sound/ed6se003.wav"),
 	ACTIVATE_ITEM("sound/ed6se145.wav"),
 	ACQUIRE_WEAPON("sound/ed6se045.wav"),
 	BATTLE_STIGMA_APPEAR("sound/ed6se543.wav"),
 	BATTLE_STIGMA_ABSORB("sound/ed6se526.wav"),
 	PLAYER_EXPLODE_ON_DEATH("sound/explodePlayer.wav"),
-	SCORE_BULLET_HIT("sound/ed6se020.wav"),
+	SCORE_BULLET_HIT("sound/ed6se020.wav",0.1f),
 	POSAUNEN_CHORUS("sound/ed6se152.wav", 6.966f),
+	
+	// ===================
+	//       WEAPONS
+	// ===================
+	WEAPON_BASIC_1("sound/ed6se504+504.wav"),
 	
 	// ===================
 	//        VOICE

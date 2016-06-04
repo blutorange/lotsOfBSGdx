@@ -1,6 +1,8 @@
 package de.homelab.madgaksha.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
@@ -20,11 +22,29 @@ public class ForceComponent implements Component, Poolable {
 	public float y = DEFAULT_Y;
 	public float z = DEFAULT_Z;
 
+	public ForceComponent() {
+	}
+	
+	public void setup(Vector2 force) {
+		x = force.x;
+		y = force.y;
+	}
+	public void setup(Vector3 force) {
+		x = force.x;
+		y = force.y;
+		z = force.z;
+	}
+	
 	@Override
 	public void reset() {
 		x = DEFAULT_X;
 		y = DEFAULT_Y;
 		z = DEFAULT_Z;
+	}
+	
+	@Override
+	public String toString() {
+		return "ForceComponent(" + x + "," + y + "," + z + ")";
 	}
 
 }

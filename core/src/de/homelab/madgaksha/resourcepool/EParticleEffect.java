@@ -12,13 +12,15 @@ import de.homelab.madgaksha.resourcecache.ETextureAtlas;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEffect> {
-	FIRE_THROWER("particle/fireThrower.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
-	SMALL_FIRE("particle/smallFire.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
-	PLAYER_BATTLE_MODE_ENTER_BURST("particle/playerBattleModeEnterBurst.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
-	PLAYER_BATTLE_MODE_EXIT_BURST("particle/playerBattleModeExitBurst.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
-	BATTLE_MODE_ENTER_CUT_IN("particle/battleModeActivate.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
-	DEFAULT_PLAYER_DEATH("particle/deathEffectRed.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
-	ALL_MY_ITEM_ARE_BELONG_TO_ME("particle/itemGetFountain.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20)
+	FIRE_THROWER("particle/fireThrower.p", ETextureAtlas.PARTICLE_EFFECTS),
+	SMALL_FIRE("particle/smallFire.p", ETextureAtlas.PARTICLE_EFFECTS),
+	ENEMY_APPEAR_FLASH("particle/enemyAppearFlash.p", ETextureAtlas.PARTICLE_EFFECTS),
+	ENEMY_DIE_SPLASH("particle/enemyDieSplash.p", ETextureAtlas.PARTICLE_EFFECTS),
+	PLAYER_BATTLE_MODE_ENTER_BURST("particle/playerBattleModeEnterBurst.p", ETextureAtlas.PARTICLE_EFFECTS),
+	PLAYER_BATTLE_MODE_EXIT_BURST("particle/playerBattleModeExitBurst.p", ETextureAtlas.PARTICLE_EFFECTS),
+	BATTLE_MODE_ENTER_CUT_IN("particle/battleModeActivate.p", ETextureAtlas.PARTICLE_EFFECTS),
+	DEFAULT_PLAYER_DEATH("particle/deathEffectRed.p", ETextureAtlas.PARTICLE_EFFECTS),
+	ALL_MY_ITEM_ARE_BELONG_TO_ME("particle/itemGetFountain.p", ETextureAtlas.PARTICLE_EFFECTS)
 	
 	;
 
@@ -29,7 +31,11 @@ public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEff
 	private final String atlasPrefix;
 	private final int initialCapacity;
 	private final int maximumCapacity;
-		
+
+	
+	private EParticleEffect(String fn, ETextureAtlas ta) {
+		this(fn, ta, null, 2, 20);
+	}
 	/**
 	 * 
 	 * @param fn Path to the particle effect file (*.p).
@@ -74,6 +80,10 @@ public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEff
 	@Override
 	public ParticleEffectPool getPool() {
 		return new ParticleEffectPool(getObject(), initialCapacity, maximumCapacity);
+	}
+	
+	public ETextureAtlas getTextureAtlas() {
+		return textureAtlas;
 	}
 
 }

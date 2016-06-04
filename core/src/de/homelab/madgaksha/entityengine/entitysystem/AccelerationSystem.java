@@ -10,6 +10,7 @@ import de.homelab.madgaksha.entityengine.component.ForceComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
+import de.homelab.madgaksha.logging.Logger;
 
 /**
  * Updates velocity from the force applied to a component and its mass.
@@ -17,15 +18,18 @@ import de.homelab.madgaksha.entityengine.component.VelocityComponent;
  * @author madgaksha
  *
  */
-public class NewtonianForceSystem extends IteratingSystem {
+public class AccelerationSystem extends IteratingSystem {
+	@SuppressWarnings("unused")
+	private final static Logger LOG = Logger.getLogger(AccelerationSystem.class);
 
-	public NewtonianForceSystem() {
-		this(DefaultPriority.newtonianForceSystem);
+	public AccelerationSystem() {
+		this(DefaultPriority.accelerationSystem);
 	}
 
 	@SuppressWarnings("unchecked")
-	public NewtonianForceSystem(int priority) {
-		super(Family.all(TemporalComponent.class, VelocityComponent.class, ForceComponent.class).exclude(InactiveComponent.class).get(), priority);
+	public AccelerationSystem(int priority) {
+		super(Family.all(TemporalComponent.class, VelocityComponent.class, ForceComponent.class)
+				.exclude(InactiveComponent.class).get(), priority);
 	}
 
 	@Override

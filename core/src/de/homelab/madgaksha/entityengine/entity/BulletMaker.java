@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
+import de.homelab.madgaksha.audiosystem.VoicePlayer;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.AnyChildComponent;
 import de.homelab.madgaksha.entityengine.component.BulletStatusComponent;
@@ -40,6 +41,8 @@ public class BulletMaker extends EntityMaker {
 	/** Upper range of the random damage variance, in percent. */
 	private final static long DAMAGE_UPPER_RANGE = 120L;
 
+	private VoicePlayer scoreBulletVoicePlayer = new VoicePlayer();
+	
 	// Singleton
 	private static class SingletonHolder {
 		private static final BulletMaker INSTANCE = new BulletMaker();
@@ -200,7 +203,7 @@ public class BulletMaker extends EntityMaker {
 		@Override
 		public void callbackTouched(Entity bullet, Entity player) {
 			final BulletStatusComponent bsc = Mapper.bulletStatusComponent.get(bullet);
-			SoundPlayer.getInstance().play(ESound.SCORE_BULLET_HIT);
+			SingletonHolder.INSTANCE.scoreBulletVoicePlayer.play(ESound.SCORE_BULLET_HIT, false);
 			if (bsc != null) gameScore.increaseBy(bsc.power);
 			detachBulletFromSiblings(bullet);
 			gameEntityEngine.removeEntity(bullet);

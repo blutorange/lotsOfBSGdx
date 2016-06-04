@@ -24,12 +24,14 @@ import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
 import de.homelab.madgaksha.entityengine.entity.MakerUtils;
 import de.homelab.madgaksha.entityengine.entity.PlayerMaker;
+import de.homelab.madgaksha.entityengine.entitysystem.AccelerationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.AngularMovementSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CameraTracingSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.ForceFieldSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantRotationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantScaleSystem;
@@ -37,7 +39,6 @@ import de.homelab.madgaksha.entityengine.entitysystem.InputPlayerDesktopSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.LifeSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ModelRenderSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.MovementSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.NewtonianForceSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ParticleEffectRenderSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.PostEffectSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ScaleFromDistanceSystem;
@@ -117,19 +118,20 @@ public class EntityLayer extends ALayer {
 	}
 
 	public boolean createEngine() {
+		gameEntityEngine.addSystem(new AccelerationSystem());
 		gameEntityEngine.addSystem(new AiSystem());
 		gameEntityEngine.addSystem(new AngularMovementSystem());
 		gameEntityEngine.addSystem(new BirdsViewSpriteSystem());
 		gameEntityEngine.addSystem(new CameraTracingSystem());
 		gameEntityEngine.addSystem(new CollisionSystem());
 		gameEntityEngine.addSystem(new DamageSystem());
+		gameEntityEngine.addSystem(new ForceFieldSystem());
 		gameEntityEngine.addSystem(new GrantPositionSystem());
 		gameEntityEngine.addSystem(new GrantRotationSystem());
 		gameEntityEngine.addSystem(new GrantScaleSystem());
 		gameEntityEngine.addSystem(new LifeSystem());
 		gameEntityEngine.addSystem(new ModelRenderSystem());
 		gameEntityEngine.addSystem(new MovementSystem());
-		gameEntityEngine.addSystem(new NewtonianForceSystem());
 		gameEntityEngine.addSystem(new ParticleEffectRenderSystem());
 		gameEntityEngine.addSystem(new ScaleFromDistanceSystem());
 		gameEntityEngine.addSystem(new SpriteAnimationSystem());
