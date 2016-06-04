@@ -83,6 +83,14 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	protected EnemyMaker() {
 		super();
 	}
+
+	/** Score bullets are taken randomly from this array. */
+	private final static BulletShapeMaker[] scoreBulletShapes = new BulletShapeMaker[]{
+			BulletShapeMaker.GEMLET_BLUE,
+			BulletShapeMaker.GEMLET_RED,
+			BulletShapeMaker.GEMLET_GREEN,
+			BulletShapeMaker.GEMLET_BROWN,
+	};
 	
 	/**
 	 * Adds the appropriate components to an entity to be used as an enemy.
@@ -208,11 +216,11 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	}
 	
 	/** Called when enemy gets hit by a player's bullet.
-	 * @param me The enemy that got hit.
-	 * @param you The bullet that hit the enemy.
+	 * @param enemy The enemy that got hit.
+	 * @param bullet The bullet that hit the enemy.
 	 */
 	@Override
-	public void hitByBullet(Entity me, Entity you) {
+	public void hitByBullet(Entity enemy, Entity bullet) {
 		
 	}
 
@@ -234,30 +242,25 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	 */
 	private void releaseBullets(Entity enemy, boolean convertScore) {
 		AnyChildComponent acc = Mapper.anyChildComponent.get(enemy);
-		PositionComponent pc = Mapper.positionComponent.get(playerEntity);
-		IGrantStrategy gs = new SpeedIncreaseGrantStrategy(3.0f, 400.0f);
 		if (acc != null && acc.childComponent != null) {
+			PositionComponent pc = Mapper.positionComponent.get(playerEntity);
+			IGrantStrategy gs = new SpeedIncreaseGrantStrategy(3.0f, 400.0f);
 			// Iterate over all bullets before this bullet.
 			for (SiblingComponent sibling = acc.childComponent.prevSiblingComponent; sibling != null; sibling = sibling.prevSiblingComponent) {
-				LOG.debug("bullet " + sibling.me);
+				LOG.debug("bullet1 " + sibling.me);
 				if (convertScore) convertBulletToScoreBullet(sibling.me, pc, gs);
 				gameEntityEngine.removeEntity(sibling.me);
 			}
 			// Iterate over this bullet and the following bullets.
 			for (SiblingComponent sibling = acc.childComponent; sibling != null; sibling = sibling.nextSiblingComponent) {
-				LOG.debug("bullet " + sibling.me);
+				LOG.debug("bullet2 " + sibling.me);
 				if (convertScore) convertBulletToScoreBullet(sibling.me, pc, gs);
 				gameEntityEngine.removeEntity(sibling.me);
 			}
 		}
 		if (acc != null) acc.childComponent = null;
 	}
-	private final static BulletShapeMaker[] scoreBulletShapes = new BulletShapeMaker[]{
-			BulletShapeMaker.GEMLET_BLUE,
-			BulletShapeMaker.GEMLET_RED,
-			BulletShapeMaker.GEMLET_GREEN,
-			BulletShapeMaker.GEMLET_BROWN,
-	};
+
 	private void convertBulletToScoreBullet(Entity bullet, PositionComponent playerEntityPositionComponent,
 			IGrantStrategy gs) {
 		final PositionComponent pc = Mapper.positionComponent.get(bullet);
@@ -269,8 +272,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		homingTrajectory.grant(gs);
 		
 		final BulletShapeMaker bulletShape = scoreBulletShapes[MathUtils.random(3)];
-		final Entity scoreBullet = BulletMaker.makeAsScoreBullet(bulletShape, homingTrajectory,	bsc.score);
-		gameEntityEngine.addEntity(scoreBullet);
+		BulletMaker.makeAsScoreBullet(bulletShape, homingTrajectory, bsc.score);
 	}
 	
 	/**
@@ -332,7 +334,6 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 			});
 		}
 
-		
 		// Remove target info from status screen.
 		statusScreen.untargetEnemy();
 		

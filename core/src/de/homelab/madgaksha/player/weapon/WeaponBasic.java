@@ -1,7 +1,5 @@
 package de.homelab.madgaksha.player.weapon;
 
-import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 
@@ -58,8 +56,7 @@ public class WeaponBasic extends AWeapon {
 			linearMotionTrajectory.life(BULLET_LIFE);
 			final PositionComponent pc = Mapper.positionComponent.get(player);
 			linearMotionTrajectory.position(pc.x, pc.y);
-			gameEntityEngine.addEntity(
-					BulletMaker.makeForPlayer(BulletShapeMaker.ORB_NOCOLOR, linearMotionTrajectory, BULLET_POWER));
+			BulletMaker.makeForPlayer(BulletShapeMaker.ORB_NOCOLOR, linearMotionTrajectory, BULLET_POWER);
 		}
 	}
 

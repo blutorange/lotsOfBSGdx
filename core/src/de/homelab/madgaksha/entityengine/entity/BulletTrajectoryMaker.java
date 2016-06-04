@@ -21,8 +21,9 @@ public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
 	private float initialVelocityY = 0.0f;
 	private final ITimedCallback onBulletDeath = new ITimedCallback() {
 		@Override
-		public void run(Entity entity, Object data) {
-			gameEntityEngine.removeEntity(entity);
+		public void run(Entity bullet, Object data) {
+			BulletMaker.detachBulletFromSiblings(bullet);
+			gameEntityEngine.removeEntity(bullet);
 		}
 	};
 	
@@ -97,7 +98,6 @@ public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
 	
 	@Override
 	public void kill(Entity bullet) {
-		BulletMaker.detachBulletFromSiblings(bullet);
 		FadeEffectComponent fec = gameEntityEngine.createComponent(FadeEffectComponent.class);
 		AlphaComponent ac = gameEntityEngine.createComponent(AlphaComponent.class);
 		ac.alpha = 1.0f;

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -464,9 +465,14 @@ public class Game implements ApplicationListener {
 
 	private void renderDebug() {
 		viewportPixel.apply(false);
+		int cnt = 0;
+		for (Entity e : gameEntityEngine.getEntities()) {
+			cnt += e.getComponents().size();
+		}
 		batchPixel.begin();
 		debugFont.draw(batchPixel, "fps: " + (int) (1.0f / Gdx.graphics.getDeltaTime()), 0.0f, viewportGame.getScreenHeight());
 		debugFont.draw(batchPixel, "entities: " + gameEntityEngine.getEntities().size(), 0.0f, viewportGame.getScreenHeight()-30.0f);
+		debugFont.draw(batchPixel, "components: " + cnt, 0.0f, viewportGame.getScreenHeight()-60.0f);
 		batchPixel.end();
 	}
 	

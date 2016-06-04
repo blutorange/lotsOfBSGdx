@@ -1,7 +1,5 @@
 package de.homelab.madgaksha.entityengine.entity.enemy;
 
-import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
@@ -111,8 +109,7 @@ for (int i=0; i!=3; ++i){
 			linearMotionTrajectory.position(pc.x, pc.y);
 			v.rotate(MathUtils.random(0.0f,360.0f));
 			linearMotionTrajectory.velocity(v.x,v.y);
-			Entity bullet =	BulletMaker.makeForEnemy(enemy, BulletShapeMaker.PACMAN_LIGHTYELLOW, linearMotionTrajectory, 1000L);
-			gameEntityEngine.addEntity(bullet);
+			BulletMaker.makeForEnemy(enemy, BulletShapeMaker.PACMAN_LIGHTYELLOW, linearMotionTrajectory, 1000L);
 }
 		}
 	}

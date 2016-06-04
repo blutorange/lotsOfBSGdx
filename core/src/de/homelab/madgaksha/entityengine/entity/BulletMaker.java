@@ -53,29 +53,29 @@ public class BulletMaker extends EntityMaker {
 		super();
 	}
 
-	public static Entity makeForPlayer(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory,
+	public static void makeForPlayer(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory,
 			long power) {
 		final Entity entity = gameEntityEngine.createEntity();
 		final ReceiveTouchComponent rtc = gameEntityEngine.createComponent(ReceiveTouchGroup02Component.class);
 		gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
 		SingletonHolder.INSTANCE.setup(entity, playerEntity, rtc, bulletShape, bulletTrajectory, onDamageBulletHit, power);
-		return entity;
+		gameEntityEngine.addEntity(entity);
 	}
 
-	public static Entity makeForEnemy(Entity enemy, BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory,
+	public static void makeForEnemy(Entity enemy, BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory,
 			long power) {
 		final Entity entity = gameEntityEngine.createEntity();
 		final ReceiveTouchComponent rtc = gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
 		SingletonHolder.INSTANCE.setup(entity, enemy, rtc, bulletShape, bulletTrajectory, onDamageBulletHit, power);
-		return entity;
+		gameEntityEngine.addEntity(entity);
 	}
 
-	public static Entity makeAsScoreBullet(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory,
+	public static void makeAsScoreBullet(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory,
 			long score) {
 		final Entity entity = gameEntityEngine.createEntity();
 		final ReceiveTouchComponent rtc = gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
 		SingletonHolder.INSTANCE.setup(entity, playerEntity, rtc, bulletShape, bulletTrajectory, onScoreBulletHit, score);
-		return entity;
+		gameEntityEngine.addEntity(entity);
 	}
 
 	/**
@@ -89,12 +89,12 @@ public class BulletMaker extends EntityMaker {
 	 * @param bulletTrajectory
 	 *            The bullet's trajectory.
 	 */
-	public void setup(Entity e, Entity parent, ReceiveTouchComponent rtc, BulletShapeMaker bulletShape,
+	private void setup(Entity e, Entity parent, ReceiveTouchComponent rtc, BulletShapeMaker bulletShape,
 			BulletTrajectoryMaker bulletTrajectory, IReceive hitHandler, long power) {
 		super.setup(e);
 
 		final AnyChildComponent acc = Mapper.anyChildComponent.get(parent);
-		final SiblingComponent sibling = acc.childComponent;
+		final SiblingComponent siblingEntryPoint = acc.childComponent;
 		
 		// Setup shape and trajectory.
 		bulletShape.setup(e);
@@ -111,21 +111,21 @@ public class BulletMaker extends EntityMaker {
 		bsc.setup(power, bulletShape.score);
 
 		// Setup linked list of bullets belonging to this entity (enemy/player).
-		sc.prevSiblingComponent = sibling;
-		if (sibling != null) {
-			sc.nextSiblingComponent = sibling.nextSiblingComponent;
-			if (sibling.nextSiblingComponent != null)
-				sibling.nextSiblingComponent.prevSiblingComponent = sc;
-			sibling.nextSiblingComponent = sc;
+		sc.prevSiblingComponent = siblingEntryPoint;
+		if (siblingEntryPoint != null) {
+			sc.nextSiblingComponent = siblingEntryPoint.nextSiblingComponent;
+			if (siblingEntryPoint.nextSiblingComponent != null)
+				siblingEntryPoint.nextSiblingComponent.prevSiblingComponent = sc;
+			siblingEntryPoint.nextSiblingComponent = sc;
 		}
 		sc.me = e;
 		acc.childComponent = sc;
 
-		e.add(sc);
-		e.add(bsc);
-		e.add(rtc);
-		e.add(pc);
-		e.add(zoc);
+		e.add(sc)
+			.add(bsc)
+			.add(rtc)
+			.add(pc)
+			.add(zoc);
 	}
 
 	@Override
@@ -217,14 +217,14 @@ public class BulletMaker extends EntityMaker {
 		acc.childComponent = null;
 		if (sc.prevSiblingComponent != null) {
 			sc.prevSiblingComponent.nextSiblingComponent = sc.nextSiblingComponent;
-			sc.nextSiblingComponent = null;
 			acc.childComponent = sc.prevSiblingComponent;
 		}
 		if (sc.nextSiblingComponent != null) {
 			sc.nextSiblingComponent.prevSiblingComponent = sc.prevSiblingComponent;
-			sc.prevSiblingComponent = null;
+			
 			acc.childComponent = sc.nextSiblingComponent;
 		}
+		sc.prevSiblingComponent = null;
+		sc.nextSiblingComponent = null;
 	}
-
 }
