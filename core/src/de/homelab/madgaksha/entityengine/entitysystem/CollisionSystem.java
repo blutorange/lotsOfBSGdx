@@ -42,7 +42,7 @@ import de.homelab.madgaksha.util.GeoUtil;
  * </tr>
  * <tr>
  * <td>01</td>
- * <td>Player</td>
+ * <td>Player Hit Circle Entity</td>
  * <td>Enemy Bullet, MapEvents ({@link CallbackMaker},  {@link ItemMaker})</td>
  * </tr>
  * <tr>

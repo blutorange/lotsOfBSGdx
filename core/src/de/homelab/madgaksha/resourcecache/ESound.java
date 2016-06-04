@@ -20,6 +20,8 @@ public enum ESound implements IResource<ESound,Sound> {
 	BATTLE_STIGMA_APPEAR("sound/ed6se543.wav"),
 	BATTLE_STIGMA_ABSORB("sound/ed6se526.wav"),
 	PLAYER_EXPLODE_ON_DEATH("sound/explodePlayer.wav"),
+	SCORE_BULLET_HIT("sound/ed6se020.wav"),
+	POSAUNEN_CHORUS("sound/ed6se152.wav", 6.966f),
 	
 	// ===================
 	//        VOICE
@@ -32,6 +34,9 @@ public enum ESound implements IResource<ESound,Sound> {
 	ESTELLE_GYAA("sound/ed6t1023.wav",0.421f),
 	ESTELLE_UERRGH("sound/ed6t1024.wav",0.599f),
 	ESTELLE_MINNA_GOMEN("sound/ed6t1025+1026.wav",1.463f),
+	ESTELLE_MADA_MADA_IKERU_WA("sound/ed6t1030.wav",1.230f),
+	ESTELLE_CHOU_DEKI("sound/ed6t1029.wav",1.028f),
+	ESTELLE_SAA_IKU_WAYO("sound/ed6t1032.wav",1.031f),
 	
 	// ===================
 	//       OTHER
@@ -101,7 +106,7 @@ public enum ESound implements IResource<ESound,Sound> {
 		return soundCache;
 	}
 
-	public long getDuration() {
+	public long getDurationInMilliseconds() {
 		return duration;
 	}
 

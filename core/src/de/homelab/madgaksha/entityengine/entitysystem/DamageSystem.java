@@ -12,6 +12,7 @@ import de.homelab.madgaksha.entityengine.component.DeathComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
 import de.homelab.madgaksha.entityengine.component.VoiceComponent;
+import de.homelab.madgaksha.logging.Logger;
 
 /**
  * Updates an object's position its velocity over a small time step dt.
@@ -20,6 +21,8 @@ import de.homelab.madgaksha.entityengine.component.VoiceComponent;
  */
 public class DamageSystem extends IteratingSystem {
 
+	@SuppressWarnings("unused")
+	private final static Logger LOG = Logger.getLogger(DamageQueueComponent.class);
 	public static final long MAX_PAIN_POINTS = 999999999999L; // 10^12-1
 	public static final int NUMBER_OF_DIGITS = 12;
 	/**

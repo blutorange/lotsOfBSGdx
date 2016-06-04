@@ -22,6 +22,7 @@ import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
+import de.homelab.madgaksha.util.InclusiveRange;
 
 
 public class SoldierGreenMaker extends NormalEnemyMaker {
@@ -97,18 +98,18 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 	
 	//TODO remove me
 	Vector2 v = new Vector2(350.0f,0.0f);
-	public void behave(Entity enemy) {
+	@Override
+	protected void customBehaviour(Entity enemy) {
 //		final TemporalComponent tc = Mapper.temporalComponent.get(enemy);
 //		timePassed += tc.deltaTime;
 //		if (timePassed > 0.2f) {
 //			timePassed = 0.0f;
-		BulletMaker.getInstance().forShooter(enemy);
 for (int i=0; i!=3; ++i){		
 			final PositionComponent pc = Mapper.positionComponent.get(enemy);
 			linearMotionTrajectory.position(pc.x, pc.y);
 			v.rotate(MathUtils.random(0.0f,360.0f));
 			linearMotionTrajectory.velocity(v.x,v.y);
-			Entity bullet =	BulletMaker.makeForEnemy(BulletShapeMaker.FLOWER_RED, linearMotionTrajectory, 7000000L);
+			Entity bullet =	BulletMaker.makeForEnemy(enemy, BulletShapeMaker.FLOWER_RED, linearMotionTrajectory, 7000000L);
 			gameEntityEngine.addEntity(bullet);
 }
 //		}
@@ -144,5 +145,17 @@ for (int i=0; i!=3; ++i){
 	@Override
 	protected ESound requestedVoiceOnDeath() {
 		return ESound.UAARGH;
+	}
+	@Override
+	protected InclusiveRange<Long> requestedScoreOnKill() {
+		return new InclusiveRange<Long>(2000L, 3000L);
+	}
+	@Override
+	protected float requestedBattleInDistance() {
+		return 800.0f;
+	}
+	@Override
+	protected float requestedBattleOutDistance() {
+		return 1000.0f;
 	}
 }

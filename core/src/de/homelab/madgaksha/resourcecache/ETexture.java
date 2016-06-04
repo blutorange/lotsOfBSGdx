@@ -120,6 +120,10 @@ public enum ETexture implements IResource<ETexture,AtlasRegion> {
 	BULLET_ORB_NOCOLOR(ETextureAtlas.BULLETS_BASIC, "pOrb0"),
 	BULLET_PACMAN_LIGHTYELLOW(ETextureAtlas.BULLETS_BASIC, "pPacman12"),
 	BULLET_FLOWER_RED(ETextureAtlas.BULLETS_BASIC, "pFlower1"),
+	BULLET_GEMLET_BROWN(ETextureAtlas.BULLETS_BASIC, "pGemlet0"),
+	BULLET_GEMLET_BLUE(ETextureAtlas.BULLETS_BASIC, "pGemlet1"),
+	BULLET_GEMLET_RED(ETextureAtlas.BULLETS_BASIC, "pGemlet2"),
+	BULLET_GEMLET_GREEN(ETextureAtlas.BULLETS_BASIC, "pGemlet3"),
 	;
 
 	private final static Logger LOG = Logger.getLogger(ETexture.class);

@@ -20,6 +20,5 @@ public class LinearMotionTrajectory extends BulletTrajectoryMaker {
 	
 	@Override
 	public void update(Entity e) {
-		
 	}
 }

@@ -23,8 +23,14 @@ import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
  */
 public enum BulletShapeMaker {
 	ORB_NOCOLOR(ETexture.BULLET_ORB_NOCOLOR, new Rectangle(-13.0f,-13.0f,13.0f,13.0f), null),
-	PACMAN_LIGHTYELLOW(ETexture.BULLET_PACMAN_LIGHTYELLOW, new Rectangle(-7.0f,-7.0f,14.0f,14.0f), null),
-	FLOWER_RED(ETexture.BULLET_FLOWER_RED, new Rectangle(-31.0f,-29.0f,62.0f,58.0f), new Circle(0.0f,0.0f,30.0f)),
+	PACMAN_LIGHTYELLOW(ETexture.BULLET_PACMAN_LIGHTYELLOW, new Rectangle(-7.0f,-7.0f,14.0f,14.0f), null, 150L),
+	FLOWER_RED(ETexture.BULLET_FLOWER_RED, new Rectangle(-31.0f,-29.0f,62.0f,58.0f), new Circle(0.0f,0.0f,30.0f), 500L),
+	
+	// Score bullets.
+	GEMLET_BROWN(ETexture.BULLET_GEMLET_BROWN, new Rectangle(-20.0f,-20f,40.0f,40.0f), null),
+	GEMLET_BLUE(ETexture.BULLET_GEMLET_BLUE, new Rectangle(-20.0f,-20f,40.0f,40.0f), null),
+	GEMLET_RED(ETexture.BULLET_GEMLET_RED, new Rectangle(-20.0f,-20f,40.0f,40.0f), null),
+	GEMLET_GREEN(ETexture.BULLET_GEMLET_GREEN, new Rectangle(-20.0f,-20f,40.0f,40.0f), null),
 	;
 	
 	@SuppressWarnings("unused")
@@ -34,18 +40,41 @@ public enum BulletShapeMaker {
 	private PoolableAtlasSprite sprite;
 	private Rectangle boundingBox;
 	private Shape2D exactShape;
+	public final long score;
+	
+	/**
+	 * @param texture
+	 *            The bullet's image.
+	 * @param boundingBox
+	 *            The bullet's bounding box. Position is relative to the
+	 *            texture's center.
+	 * @param exactShape
+	 *            Exact shape of the bullet. May be null if bounding box is
+	 *            sufficient. Position is relative to the texture's center.
+	 */
+	private BulletShapeMaker(ETexture texture, Rectangle boundingBox, Shape2D exactShape) {
+		this(texture, boundingBox, exactShape, 0L);
+	}
 	
 	/**
 	 * 
-	 * @param texture The bullet's image.
-	 * @param boundingBox The bullet's bounding box. Position is relative to the texture's center.
-	 * @param exactShape Exact shape of the bullet. May be null if bounding box is sufficient. Position is relative to the texture's center. 
+	 * @param texture
+	 *            The bullet's image.
+	 * @param boundingBox
+	 *            The bullet's bounding box. Position is relative to the
+	 *            texture's center.
+	 * @param exactShape
+	 *            Exact shape of the bullet. May be null if bounding box is
+	 *            sufficient. Position is relative to the texture's center.
+	 * @param score
+	 *            Score this bullet is worth.
 	 */
-	private BulletShapeMaker(ETexture texture, Rectangle boundingBox, Shape2D exactShape) {
+	private BulletShapeMaker(ETexture texture, Rectangle boundingBox, Shape2D exactShape, long score) {
 		this.resource = texture;
 		this.sprite = texture.asSprite();
 		this.boundingBox = boundingBox;
 		this.exactShape = exactShape;
+		this.score = score;
 	}
 	
 	/**

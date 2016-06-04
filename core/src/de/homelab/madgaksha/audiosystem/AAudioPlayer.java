@@ -9,6 +9,7 @@ import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.util.interpolator.AInterpolator;
 import de.homelab.madgaksha.util.interpolator.IInterpolatorCallback;
+import de.homelab.madgaksha.util.interpolator.IInterpolatorFinished;
 import de.homelab.madgaksha.util.interpolator.LinearFloatInterpolator;
 
 public abstract class AAudioPlayer {
@@ -131,8 +132,8 @@ public abstract class AAudioPlayer {
 	 * @param targetLevel
 	 *            Target volume level, between 0.0 and 1.0.
 	 */
-	protected void fade(final Music music, float time, float targetLevel) {
-		fade(music, time, targetLevel, new LinearFloatInterpolator(), null);
+	protected IInterpolatorFinished fade(final Music music, float time, float targetLevel) {
+		return fade(music, time, targetLevel, new LinearFloatInterpolator(), null);
 	}
 
 	/**
@@ -148,8 +149,8 @@ public abstract class AAudioPlayer {
 	 * @param interpolator
 	 *            Transition function.
 	 */
-	protected void fade(final Music music, float time, float targetLevel, final AInterpolator<Float> interpolator) {
-		fade(music, time, targetLevel, interpolator, null);
+	protected IInterpolatorFinished fade(final Music music, float time, float targetLevel, final AInterpolator<Float> interpolator) {
+		return fade(music, time, targetLevel, interpolator, null);
 	}
 
 	/**
@@ -165,8 +166,8 @@ public abstract class AAudioPlayer {
 	 * @param ocl
 	 *            Callback when updating the volume level.
 	 */
-	protected void fade(final Music music, float time, float targetLevel, final OnCompletionListener ocl) {
-		fade(music, time, targetLevel, new LinearFloatInterpolator(), ocl);
+	protected IInterpolatorFinished fade(final Music music, float time, float targetLevel, final OnCompletionListener ocl) {
+		return fade(music, time, targetLevel, new LinearFloatInterpolator(), ocl);
 	}
 
 	/**
@@ -184,28 +185,34 @@ public abstract class AAudioPlayer {
 	 * @param ocl
 	 *            Callback when updating the volume level.
 	 */
-	protected void fade(final Music music, float time, float targetLevel, final AInterpolator<Float> interpolator,
+	protected IInterpolatorFinished fade(final Music music, final float time, final float targetLevel, final AInterpolator<Float> interpolator,
 			final OnCompletionListener ocl) {
 		if (music == null || wasDisposed)
-			return;
+			return null;
 		final float currentLevel = music.getVolume();
 		interpolator.setRange(currentLevel, targetLevel);
-		final Timer.Task fadeTask = interpolator.run(timer, time, INTERPOLATOR_UPDATE_INTERVAL,
-				new IInterpolatorCallback<Float>() {
-					@Override
-					public void valueUpdated(Float val) {
-						music.setVolume(val);
-					}
+		final IInterpolatorCallback<Float> timerCallback = new IInterpolatorCallback<Float>() {
+			@Override
+			public void valueUpdated(Float val) {
+				music.setVolume(val);
+			}
 
-					@Override
-					public void finished(Float val) {
-						music.setVolume(val);
-						if (ocl != null)
-							ocl.onCompletion(music);
-					}
-				});
+			@Override
+			public void finished(Float val) {
+				music.setVolume(val);
+				if (ocl != null)
+					ocl.onCompletion(music);
+			}
+
+			@Override
+			public void finished() {
+				finished(targetLevel);				
+			}
+		};
+		final Timer.Task fadeTask = interpolator.run(timer, time, INTERPOLATOR_UPDATE_INTERVAL, timerCallback);
 		if (fadeTask != null)
 			fadeTask.run();
+		return (IInterpolatorFinished) timerCallback;
 	}
 
 	protected void dispose() {

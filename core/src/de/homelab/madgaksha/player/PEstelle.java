@@ -30,6 +30,9 @@ public class PEstelle extends APlayer {
 				ESound.ESTELLE_GYAA,
 				ESound.ESTELLE_UERRGH,
 				ESound.ESTELLE_MINNA_GOMEN,
+				ESound.ESTELLE_MADA_MADA_IKERU_WA,
+				ESound.ESTELLE_SAA_IKU_WAYO,
+				ESound.ESTELLE_CHOU_DEKI,
 				};
 	}
 	
@@ -150,8 +153,23 @@ public class PEstelle extends APlayer {
 	}
 
 	@Override
-	protected ESound requestedVoiceOnBattleStart() {
+	protected ESound requestedVoiceOnBattleModeStart() {
 		return ESound.ESTELLE_YOSOMI_SITARA_BUTTOBASU_WAYO;
+	}
+	
+	@Override
+	protected ESound requestedVoiceOnBattleModeEnd() {
+		return ESound.ESTELLE_MADA_MADA_IKERU_WA;
+	}
+
+	@Override
+	protected ESound requestedVoiceOnBattleModeFlee() {
+		return ESound.ESTELLE_SAA_IKU_WAYO;
+	}
+	
+	@Override
+	protected ESound requestedVoiceOnEnemyKilled() {
+		return ESound.ESTELLE_CHOU_DEKI;
 	}
 	
 	@Override
@@ -178,6 +196,6 @@ public class PEstelle extends APlayer {
 	protected ETexture requestedDeathSprite() {
 		return ETexture.ESTELLE_ON_KNEES;
 	}
-	
+
 	
 }

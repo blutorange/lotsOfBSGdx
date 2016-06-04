@@ -18,8 +18,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
+import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.AngularVelocityComponent;
 import de.homelab.madgaksha.entityengine.component.CameraFocusComponent;
+import de.homelab.madgaksha.entityengine.component.DeathComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
@@ -179,15 +181,20 @@ public final class MakerUtils {
 		@SuppressWarnings("unchecked")
 		final Family family = Family.all(PositionComponent.class,CameraFocusComponent.class).exclude(InactiveComponent.class).get();
 		gameEntityEngine.addEntityListener(family, new EntityListener() {
-			// start playing normal bgm again
 			@Override
 			public void entityRemoved(Entity entity) {
 				// Battle mode left.
 				if (cameraTrackingComponent.focusPoints.size() == 0) {
-					EnemyMaker.exitBattleMode();
+					DeathComponent dc = Mapper.deathComponent.get(entity);
+					EnemyMaker.exitBattleMode(dc != null && dc.dead);
+				}
+				int focusPointsSize = cameraTrackingComponent.focusPoints.size();
+				if (focusPointsSize > 0) {
+					int index = Math.min(cameraTrackingComponent.trackedPointIndex, focusPointsSize-1);
+					cameraTrackingComponent.trackedPointIndex = index;
+					EnemyMaker.targetSwitched(cameraTrackingComponent.focusPoints.get(index));
 				}
 			}
-			// start playing battle bgm
 			@Override
 			public void entityAdded(Entity entity) {
 				// Battle mode entered

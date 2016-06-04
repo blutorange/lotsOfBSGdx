@@ -20,6 +20,7 @@ import de.homelab.madgaksha.i18n.i18n;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.resourcecache.EMusic;
+import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ETiledMap;
 import de.homelab.madgaksha.resourcecache.IResource;
@@ -78,6 +79,7 @@ public abstract class ALevel {
 	private final EMusic bgm;
 	private final EMusic battleBgm;
 	private final EMusic gameOverBgm;
+	private final ESound soundOnBattleWin;
 	private final ETiledMap tiledMap;
 	private final String i18nNameKey;
 	private final Color enemyPainBarColorLow = new Color();
@@ -105,6 +107,7 @@ public abstract class ALevel {
 		enemyTargetCrossAngularVelocity = requestedEnemyTargetCrossAngularVelocity();
 		enemyTargetCrossTexture = requestedEnemyTargetCrossTexture();
 		environment = new Environment();
+		soundOnBattleWin = requestedSoundOnBattleWin(); 
 		setupEnvironment(environment);
 	}
 	
@@ -200,6 +203,8 @@ public abstract class ALevel {
 	protected abstract float requestedEnemyTargetCrossAngularVelocity();
 	/** @return The texture to be used for the target cross apearing beneath the enemy currently targetted. */
 	protected abstract ETexture requestedEnemyTargetCrossTexture();
+	
+	protected abstract ESound requestedSoundOnBattleWin();
 
 		
 	// =============================
@@ -271,6 +276,9 @@ public abstract class ALevel {
 		return enemyTargetCrossTexture;
 	}
 
+	public ESound getSoundOnBattleWin() {
+		return soundOnBattleWin;
+	}
 	
 	/**
 	 * Status screen data with pixel values etc.
@@ -381,4 +389,5 @@ public abstract class ALevel {
 	public int getEntityPoolPoolMaxSize() {
 		return DEFAULT_ENTITY_POOL_MAX_SIZE;
 	}
+
 }

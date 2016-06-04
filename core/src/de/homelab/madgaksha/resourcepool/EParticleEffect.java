@@ -15,6 +15,7 @@ public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEff
 	FIRE_THROWER("particle/fireThrower.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
 	SMALL_FIRE("particle/smallFire.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
 	PLAYER_BATTLE_MODE_ENTER_BURST("particle/playerBattleModeEnterBurst.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
+	PLAYER_BATTLE_MODE_EXIT_BURST("particle/playerBattleModeExitBurst.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
 	BATTLE_MODE_ENTER_CUT_IN("particle/battleModeActivate.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
 	DEFAULT_PLAYER_DEATH("particle/deathEffectRed.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20),
 	ALL_MY_ITEM_ARE_BELONG_TO_ME("particle/itemGetFountain.p", ETextureAtlas.PARTICLE_EFFECTS, null, 2, 20)

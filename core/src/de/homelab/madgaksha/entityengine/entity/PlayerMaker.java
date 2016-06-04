@@ -247,10 +247,13 @@ public final class PlayerMaker implements IHittable, IMortal {
 		ghc.setup(this);
 			
 		VoiceComponent vcc = Mapper.voiceComponent.get(playerEntity);
-		vcc.onBattleModeStart = player.getVoiceOnBattleStart();
+		vcc.onBattleModeStart = player.getVoiceOnBattleModeStart();
+		vcc.onBattleModeExit = player.getVoiceOnBattleModeEnd();
+		vcc.onBattleModeFlee = player.getVoiceOnBattleModeFlee();
 		vcc.onLightDamage = player.getVoiceOnLightDamage();
 		vcc.onHeavyDamage = player.getVoiceOnHeavyDamage();
 		vcc.onDeath = player.getVoiceOnDeath();
+		vcc.onEnemyKilled = player.getVoiceOnEnemyKilled();
 		vcc.voicePlayer = new VoicePlayer();
 		
 		BehaviourComponent bc = Mapper.behaviourComponent.get(playerEntity);

@@ -362,7 +362,7 @@ public class MapData {
 			return;
 		}
 		
-		LOG.debug("read map object to entity " + entity);
+		LOG.debug("read map object:  " + mapObject.getName());
 		
 		// Store our map object for later use.
 		gameEntityEngine.addEntity(entity);

@@ -33,7 +33,7 @@ public class SpeedIncreaseGrantStrategy implements IGrantStrategy {
 		this.increase = increase;
 		this.maxSpeed = maxSpeed;
 	}
-	
+		
 	@Override
 	public float compromise(float is, float should, float deltaTime) {
 		currentSpeed += increase*deltaTime;

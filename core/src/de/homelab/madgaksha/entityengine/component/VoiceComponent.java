@@ -15,6 +15,9 @@ public class VoiceComponent implements Component, Poolable {
 	public ESound onLightDamage = null;
 	public ESound onHeavyDamage = null;
 	public ESound onBattleModeStart = null;
+	public ESound onBattleModeExit = null;
+	public ESound onBattleModeFlee = null;
+	public ESound onEnemyKilled = null;
 	public ESound onSpawn = null;
 	public ESound onDeath = null;
 	public VoicePlayer voicePlayer = null;
@@ -31,6 +34,9 @@ public class VoiceComponent implements Component, Poolable {
 		onLightDamage = null;
 		onHeavyDamage = null;
 		onBattleModeStart = null;
+		onBattleModeExit = null;
+		onBattleModeFlee = null;
+		onEnemyKilled = null;
 		onSpawn = null;
 		onDeath = null;
 		if (voicePlayer != null) voicePlayer.dispose();

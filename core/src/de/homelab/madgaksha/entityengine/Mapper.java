@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import de.homelab.madgaksha.entityengine.component.AlphaComponent;
 import de.homelab.madgaksha.entityengine.component.AngularVelocityComponent;
 import de.homelab.madgaksha.entityengine.component.AnyChildComponent;
+import de.homelab.madgaksha.entityengine.component.BattleDistanceComponent;
 import de.homelab.madgaksha.entityengine.component.BehaviourComponent;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.BulletStatusComponent;
@@ -120,6 +121,8 @@ public final class Mapper {
 			.getFor(AngularVelocityComponent.class);
 	public final static ComponentMapper<AnyChildComponent> anyChildComponent = ComponentMapper
 			.getFor(AnyChildComponent.class);
+	public final static ComponentMapper<BattleDistanceComponent> battleDistanceComponent = ComponentMapper
+			.getFor(BattleDistanceComponent.class);
 	public final static ComponentMapper<BehaviourComponent> behaviourComponent = ComponentMapper
 			.getFor(BehaviourComponent.class);
 	public final static ComponentMapper<BoundingBoxCollisionComponent> boundingBoxCollisionComponent = ComponentMapper

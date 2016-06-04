@@ -13,6 +13,7 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EBitmapFont;
 import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
+import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ETiledMap;
 import de.homelab.madgaksha.resourcecache.IResource;;
@@ -133,5 +134,10 @@ public class Level01 extends ALevel {
 	@Override
 	protected ETexture requestedEnemyTargetCrossTexture() {
 		return ETexture.TARGET_SELECT_CIRCLE_WHEEL;
+	}
+
+	@Override
+	protected ESound requestedSoundOnBattleWin() {
+		return ESound.POSAUNEN_CHORUS;
 	}
 }

@@ -919,7 +919,7 @@ public class AdxMusic implements Music, Runnable {
 	}
 
 	@Override
-	public boolean isPlaying() {
+	public synchronized boolean isPlaying() {
 		return playing && running;
 	}
 
@@ -957,7 +957,7 @@ public class AdxMusic implements Music, Runnable {
 	}
 
 	@Override
-	public float getPosition() {
+	public synchronized float getPosition() {
 		return (float)position/((float)adxHeader.getChannelCount()*(float)position);
 	}
 

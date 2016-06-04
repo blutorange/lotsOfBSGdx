@@ -67,7 +67,10 @@ public abstract class APlayer {
 	
 	private final Color battleStigmaColorWhenHit;
 	
-	private final ESound voiceOnBattleStart;
+	private final ESound voiceOnBattleModeStart;
+	private final ESound voiceOnBattleModeEnd;
+	private final ESound voiceOnBattleModeFlee;
+	private final ESound voiceOnEnemyKilled;
 	private final ESound voiceOnHeavyDamage;
 	private final ESound voiceOnLightDamage;
 	private final ESound voiceOnDeath;
@@ -81,6 +84,9 @@ public abstract class APlayer {
 	private final List<ATokugi> obtainedTokugiList = new ArrayList<ATokugi>();
 	
 	private final EnumSet<EConsumable> supportedConsumableSet = EnumSet.noneOf(EConsumable.class); 
+	
+	private final EParticleEffect battleModeEnterParticleEffect;
+	private final EParticleEffect battleModeExitParticleEffect;
 	
 	/** Current weapon equipped. */
 	private AWeapon currentWeapon = null;
@@ -111,13 +117,18 @@ public abstract class APlayer {
 		this.hitCircleTexture = requestedHitCircleTexture();
 		this.battleStigmaTexture = requestedBattleStigmaTexture();
 		this.battleStigmaAngularVelocity = requestedBattleStigmaAngularVelocity();
-		this.voiceOnBattleStart = requestedVoiceOnBattleStart();
+		this.voiceOnBattleModeStart = requestedVoiceOnBattleModeStart();
+		this.voiceOnBattleModeEnd = requestedVoiceOnBattleModeEnd();
+		this.voiceOnBattleModeFlee = requestedVoiceOnBattleModeFlee();
+		this.voiceOnEnemyKilled = requestedVoiceOnEnemyKilled();
 		this.voiceOnLightDamage = requestedVoiceOnLightDamage();
 		this.voiceOnHeavyDamage = requestedVoiceOnHeavyDamage();
 		this.voiceOnDeath = requestedVoiceOnDeath();
 		this.battleStigmaColorWhenHit = requestedBattleStigmaColorWhenHit();
 		this.particleEffectOnDeath = requestedParticleEffectOnDeath();
 		this.deathSprite = requestedDeathSprite();
+		this.battleModeEnterParticleEffect = requestedBattleModeEnterParticleEffect();
+		this.battleModeExitParticleEffect = requestedBattleModeExitParticleEffect();
 		
 		// Make sure subclasses cannot remove EWeapon.NONE
 		EWeapon[] ew = requestedSupportedWeapons();
@@ -208,8 +219,14 @@ public abstract class APlayer {
 	/** @return List of consumable the player can use. May be null.*/ 
 	protected abstract EConsumable[] requestedSupportedConsumable();
 	
-	/** @return Voice played when battle starts. */
-	protected abstract ESound requestedVoiceOnBattleStart() ;
+	/** @return Voice played when battle mode starts. */
+	protected abstract ESound requestedVoiceOnBattleModeStart();
+	/** @return Voice played when battle mode ends. */
+	protected abstract ESound requestedVoiceOnBattleModeEnd();
+	/** @return Voice played when battle mode ends as a result of the player fleeing. */
+	protected abstract ESound requestedVoiceOnBattleModeFlee();
+	/** @return Voice played when player kills an enemy. */
+	protected abstract ESound requestedVoiceOnEnemyKilled();
 	/**
 	 * @see DamageSystem#THRESHOLD_LIGHT_HEAVY_DAMAGE 
 	 * @return Voice played when taking heavy damage.
@@ -242,6 +259,22 @@ public abstract class APlayer {
 	 * @return List of all required resources.
 	 */
 	protected abstract IResource<? extends Enum<?>,?>[] requestedRequiredResources();
+
+	/**
+	 * Can be overridden for custom effects.
+	 *  @return The particle effect over the player when battle mode activates.
+	 */
+	protected EParticleEffect requestedBattleModeEnterParticleEffect() {
+		return EParticleEffect.PLAYER_BATTLE_MODE_ENTER_BURST;
+	}
+	
+	/**
+	 * Can be overridden for custom effects.
+	 *  @return The particle effect over the player when battle mode deactivates.
+	 */
+	protected EParticleEffect requestedBattleModeExitParticleEffect() {
+		return EParticleEffect.PLAYER_BATTLE_MODE_EXIT_BURST;
+	}
 	
 	// ====================================
 	//          Implementations
@@ -301,6 +334,14 @@ public abstract class APlayer {
 	}
 	public float getBattleStigmaAngularVelocity() {
 		return battleStigmaAngularVelocity;
+	}
+	
+	public EParticleEffect getBattleModeEnterParticleEffect() {
+		return battleModeEnterParticleEffect;
+	}
+	
+	public EParticleEffect getBattleModeExitParticleEffect() {
+		return battleModeExitParticleEffect;
 	}
 	
 	public long getMaxPainPoints() {
@@ -447,8 +488,17 @@ public abstract class APlayer {
 		return cycleTokugi(-1);
 	}
 
-	public ESound getVoiceOnBattleStart() {
-		return voiceOnBattleStart;
+	public ESound getVoiceOnBattleModeStart() {
+		return voiceOnBattleModeStart;
+	}
+	public ESound getVoiceOnBattleModeEnd() {
+		return voiceOnBattleModeEnd;
+	}
+	public ESound getVoiceOnBattleModeFlee() {
+		return voiceOnBattleModeFlee;
+	}
+	public ESound getVoiceOnEnemyKilled() {
+		return voiceOnEnemyKilled;
 	}
 	public ESound getVoiceOnLightDamage() {
 		return voiceOnLightDamage;
@@ -476,4 +526,5 @@ public abstract class APlayer {
 		final APlayer you = (APlayer)object;
 		return you.getClass().equals(getClass());
 	}
+
 }

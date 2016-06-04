@@ -6,12 +6,10 @@ import com.badlogic.gdx.math.Interpolation;
 
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.AlphaComponent;
-import de.homelab.madgaksha.entityengine.component.AnyChildComponent;
 import de.homelab.madgaksha.entityengine.component.BehaviourComponent;
 import de.homelab.madgaksha.entityengine.component.FadeEffectComponent;
 import de.homelab.madgaksha.entityengine.component.LifeComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
-import de.homelab.madgaksha.entityengine.component.SiblingComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01Component;
@@ -51,8 +49,7 @@ public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
 		vc.x = initialVelocityX;
 		vc.y  = initialVelocityY;
 		
-		e
-			.add(bc)
+		e.add(bc)
 			.add(lc)
 			.add(pc)
 			.add(tc)
@@ -100,16 +97,7 @@ public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
 	
 	@Override
 	public void kill(Entity bullet) {
-		final SiblingComponent sc = Mapper.siblingComponent.get(bullet);
-		final AnyChildComponent acc = Mapper.anyChildComponent.get(Mapper.parentComponent.get(bullet).parent);
-		if (sc.prevSiblingComponent != null) {
-			sc.prevSiblingComponent.nextSiblingComponent = sc.nextSiblingComponent;
-			acc.childComponent = sc.prevSiblingComponent;
-		}
-		if (sc.nextSiblingComponent != null) {
-			sc.nextSiblingComponent.prevSiblingComponent = sc.prevSiblingComponent;
-			acc.childComponent = sc.nextSiblingComponent;
-		}
+		BulletMaker.detachBulletFromSiblings(bullet);
 		FadeEffectComponent fec = gameEntityEngine.createComponent(FadeEffectComponent.class);
 		AlphaComponent ac = gameEntityEngine.createComponent(AlphaComponent.class);
 		ac.alpha = 1.0f;

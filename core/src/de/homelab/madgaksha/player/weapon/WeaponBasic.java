@@ -17,15 +17,15 @@ import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 
 public class WeaponBasic extends AWeapon {
-	
+
 	private final LinearMotionTrajectory linearMotionTrajectory = new LinearMotionTrajectory();
 	private final Vector2 v = new Vector2();
-	private final static long BULLET_POWER = 33948L;
+	private final static long BULLET_POWER = 939480L;
 	private final static float BULLET_SPEED = 1200.0f;
 	private final static float BULLET_LIFE = 1.0f;
 	private final static float BULLET_INTERVAL = 0.4f;
 	private float remainingTime = BULLET_INTERVAL;
-	
+
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(WeaponBasic.class);
 
@@ -49,7 +49,8 @@ public class WeaponBasic extends AWeapon {
 		remainingTime -= deltaTime;
 		if (remainingTime <= 0.0f) {
 			remainingTime = BULLET_INTERVAL;
-			final Entity enemy = GlobalBag.cameraTrackingComponent.focusPoints.get(GlobalBag.cameraTrackingComponent.trackedPointIndex);
+			final Entity enemy = GlobalBag.cameraTrackingComponent.focusPoints
+					.get(GlobalBag.cameraTrackingComponent.trackedPointIndex);
 			final PositionComponent pcEnemy = Mapper.positionComponent.get(enemy);
 			final PositionComponent pcPlayer = Mapper.positionComponent.get(player);
 			v.set(pcEnemy.x - pcPlayer.x, pcEnemy.y - pcPlayer.y).nor().scl(BULLET_SPEED);
@@ -57,14 +58,13 @@ public class WeaponBasic extends AWeapon {
 			linearMotionTrajectory.life(BULLET_LIFE);
 			final PositionComponent pc = Mapper.positionComponent.get(player);
 			linearMotionTrajectory.position(pc.x, pc.y);
-			gameEntityEngine.addEntity(BulletMaker.makeForPlayer(BulletShapeMaker.ORB_NOCOLOR, linearMotionTrajectory, BULLET_POWER));
+			gameEntityEngine.addEntity(
+					BulletMaker.makeForPlayer(BulletShapeMaker.ORB_NOCOLOR, linearMotionTrajectory, BULLET_POWER));
 		}
 	}
 
 	@Override
 	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
-		return new IResource<?, ?>[]{
-			BulletShapeMaker.ORB_NOCOLOR.getResource(),
-		};
+		return new IResource<?, ?>[] { BulletShapeMaker.ORB_NOCOLOR.getResource(), };
 	}
 }

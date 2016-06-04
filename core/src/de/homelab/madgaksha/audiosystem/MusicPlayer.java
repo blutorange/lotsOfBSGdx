@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music.OnCompletionListener;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EMusic;
+import de.homelab.madgaksha.util.interpolator.IInterpolatorFinished;
 
 /**
  * Class for playing music.
@@ -30,6 +31,8 @@ public class MusicPlayer extends AAudioPlayer {
 	private Music currentClip = null;
 	private Music nextClip = null;
 
+	private IInterpolatorFinished fadeTask1;
+	private IInterpolatorFinished fadeTask2;
 
 	/**
 	 * Loads the next clip to be played.
@@ -115,22 +118,40 @@ public class MusicPlayer extends AAudioPlayer {
 	}
 
 	public void transition(final float time, final float targetLevel) {
+		// Make sure all active transitions have been stopped.
+		if (fadeTask1 != null) {
+			fadeTask1.finished();
+			fadeTask1 = null;
+		}
+		if (fadeTask2 != null) {
+			fadeTask2.finished();
+			fadeTask2 = null;
+		}
+		timer.clear();
+		// Perform new transition.
 		if (currentClip == null && nextClip != null) {
 			// fade in
 			currentClip = nextClip;
 			nextClip = null;
 			setVolume(currentClip, 0.0f);
 			play(currentClip);
-			fade(currentClip, time, targetLevel);
-		} else if (currentClip != null && nextClip == null) {
-			// fade out
-			play(currentClip);
-			fade(currentClip, time, 0.0f, new OnCompletionListener() {
+			fadeTask1 = fade(currentClip, time, targetLevel, new OnCompletionListener() {
 				@Override
 				public void onCompletion(Music music) {
-					pause(currentClip);
-					currentClip = null;
+					fadeTask1 = null;					
+				}
+			});
+		} else if (currentClip != null && nextClip == null) {
+			// fade out
+			final Music cc = currentClip;
+			currentClip = null;
+			play(cc);
+			fadeTask1 = fade(cc, time, 0.0f, new OnCompletionListener() {
+				@Override
+				public void onCompletion(Music music) {
+					pause(cc);
 					playing = false;
+					fadeTask1 = null;
 				}
 			});
 		} else if (currentClip != null && nextClip != null) {
@@ -139,32 +160,42 @@ public class MusicPlayer extends AAudioPlayer {
 			if (crossFade) {
 				final Music nc = nextClip;
 				final Music cc = currentClip;
-				play(nextClip);
-				fade(currentClip, time, 0.0f, new OnCompletionListener() {
+				currentClip = nc;
+				nextClip = null;
+				play(nc);
+				fadeTask1 = fade(cc, time, 0.0f, new OnCompletionListener() {
 					@Override
 					public void onCompletion(Music music) {
 						stop(cc);
+						fadeTask1 = null;
 					}
 				});
-				fade(nextClip, time, targetLevel, new OnCompletionListener() {
+				fadeTask2 = fade(nc, time, targetLevel, new OnCompletionListener() {
 					@Override
 					public void onCompletion(Music music) {
-						currentClip = nc;
-						nextClip = null;
+						fadeTask2 = null;
 					}
 				});
 			} else {
-				// first fade out
-				fade(currentClip, time * 0.5f, 0.0f, new OnCompletionListener() {
+				// first fade out...
+				final Music cc = currentClip;
+				final Music nc = nextClip;
+				currentClip = nextClip;
+				nextClip = null;
+				fadeTask1 = fade(cc, time * 0.5f, 0.0f, new OnCompletionListener() {
 					@Override
 					public void onCompletion(Music music) {
-						pause(currentClip);
-						currentClip = nextClip;
-						nextClip = null;
-						setVolume(currentClip, 0.0f);
-						play(currentClip);
-						// then fade in
-						fade(currentClip, time * 0.5f, targetLevel);
+						// ...then fade in
+						pause(cc);
+						setVolume(nc, 0.0f);
+						play(nc);
+						fadeTask1 = null;
+						fadeTask2 = fade(nc, time * 0.5f, targetLevel, new OnCompletionListener() {
+							@Override
+							public void onCompletion(Music music) {
+								fadeTask2 = null;
+							}
+						});
 					}
 				});
 			}

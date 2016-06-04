@@ -1404,6 +1404,34 @@ pFlower7
   orig: 64, 60
   offset: 0, 0
   index: -1
+pGemlet0
+  rotate: false
+  xy: 154, 89
+  size: 10, 11
+  orig: 10, 11
+  offset: 0, 0
+  index: -1
+pGemlet1
+  rotate: false
+  xy: 515, 601
+  size: 10, 11
+  orig: 10, 11
+  offset: 0, 0
+  index: -1
+pGemlet2
+  rotate: false
+  xy: 527, 601
+  size: 10, 11
+  orig: 10, 11
+  offset: 0, 0
+  index: -1
+pGemlet3
+  rotate: false
+  xy: 2, 6
+  size: 10, 11
+  orig: 10, 11
+  offset: 0, 0
+  index: -1
 pGhost0
   rotate: false
   xy: 2, 151
@@ -2344,42 +2372,42 @@ pPebble1
   index: -1
 pPebble10
   rotate: false
-  xy: 537, 378
+  xy: 537, 396
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble11
   rotate: false
-  xy: 537, 360
+  xy: 537, 378
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble12
   rotate: false
-  xy: 551, 432
+  xy: 537, 360
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble13
   rotate: false
-  xy: 551, 414
+  xy: 551, 432
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble14
   rotate: false
-  xy: 555, 396
+  xy: 551, 414
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble15
   rotate: false
-  xy: 555, 378
+  xy: 555, 396
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -2393,49 +2421,49 @@ pPebble2
   index: -1
 pPebble3
   rotate: false
-  xy: 535, 486
+  xy: 519, 583
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble4
   rotate: false
-  xy: 539, 468
+  xy: 535, 486
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble5
   rotate: false
-  xy: 539, 450
+  xy: 539, 468
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble6
   rotate: false
-  xy: 554, 4
+  xy: 539, 450
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble7
   rotate: false
-  xy: 533, 432
+  xy: 554, 4
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble8
   rotate: false
-  xy: 533, 414
+  xy: 533, 432
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pPebble9
   rotate: false
-  xy: 537, 396
+  xy: 533, 414
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

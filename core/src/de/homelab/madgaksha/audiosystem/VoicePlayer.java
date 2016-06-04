@@ -42,7 +42,7 @@ public class VoicePlayer extends AAudioPlayer {
 		final Sound s = ResourceCache.getSound(sound);
 		if (s == null) return false;
 		currentClip = s;
-		duration = sound.getDuration();
+		duration = sound.getDurationInMilliseconds();
 		startTime = TimeUtils.millis();
 		s.play(volume, pitch, pan);
 		return true;
