@@ -31,7 +31,6 @@ public class BattleModeActivateLayer extends ALayer {
 	public BattleModeActivateLayer(Interpolation interpolation, float duration) {
 		cutinSprite = ETexture.CUTIN_BATTLE_MODE_ACTIVATE.asSprite();
 		cutinSprite.setOriginCenter();
-		cutinSprite.setBounds(0.0f, 0.0f, viewportGame.getScreenWidth(), viewportGame.getScreenHeight());
 		this.interpolation = interpolation;
 		this.durationInverse = 1.0f/duration;
 		this.duration = duration;
@@ -81,5 +80,10 @@ public class BattleModeActivateLayer extends ALayer {
 	@Override
 	public boolean isBlockUpdate() {
 		return false;
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		cutinSprite.setBounds(0.0f, 0.0f, viewportGame.getScreenWidth(), viewportGame.getScreenHeight());
 	}
 }

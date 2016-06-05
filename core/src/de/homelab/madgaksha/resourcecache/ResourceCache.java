@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
+import de.homelab.madgaksha.cutscenesystem.textbox.FancyTextbox;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
@@ -28,6 +30,7 @@ public final class ResourceCache {
 	public final static int LIMIT_NINE_PATCH = 20;
 	public final static int LIMIT_TEXTURE_ATLAS = 20;
 	public final static int LIMIT_MODEL = 30;
+	public final static int LIMIT_FREE_TYPE_FONT_GENERATOR = 5;
 	
 	private ResourceCache() {
 	}
@@ -210,6 +213,20 @@ public final class ResourceCache {
 		EModel.clearAll();
 	}
 	
+	/**
+	 * Clears all free type font generator objects from the cache.
+	 */
+	public static void clearAllFreeTypeFontGenerator() {
+		EFreeTypeFontGenerator.clearAll();
+	}
+	
+	/**
+	 * Clears all textbox objects from the cache.
+	 */
+	public static void clearAllTextbox() {
+		ETextbox.clearAll();
+	}
+	
 	
 	/**
 	 * Clears all resource objects.
@@ -225,6 +242,8 @@ public final class ResourceCache {
 		clearAllTextureAtlas();
 		clearAllTiledMap();
 		clearAllModel();
+		clearAllFreeTypeFontGenerator();
+		clearAllTextbox();
 	}
 
 	/**
@@ -365,5 +384,33 @@ public final class ResourceCache {
 	}
 	public static Model getModel(EModel model, boolean cached) {
 		return (Model) getResource(model, cached);
+	}
+	
+	/**
+	 * Fetches the requested freeTypeFontGenerator from the cache, or loads it.
+	 * 
+	 * @param freeTypeFontGenerator
+	 *            FreeTypeFontGenerator font to load.
+	 * @return Loaded freeTypeFontGenerator.
+	 */
+	public static FreeTypeFontGenerator getFreeTypeFontGenerator(EFreeTypeFontGenerator freeTypeFontGenerator) {
+		return (FreeTypeFontGenerator) getResource(freeTypeFontGenerator, true);
+	}
+	public static FreeTypeFontGenerator getFreeTypeFontGenerator(EFreeTypeFontGenerator freeTypeFontGenerator, boolean cached) {
+		return (FreeTypeFontGenerator) getResource(freeTypeFontGenerator, cached);
+	}
+	
+	/**
+	 * Fetches the requested textbox from the cache, or loads it.
+	 * 
+	 * @param textbox
+	 *            Textbox font to load.
+	 * @return Loaded textbox.
+	 */
+	public static FancyTextbox getTextbox(ETextbox textbox) {
+		return (FancyTextbox) getResource(textbox, true);
+	}
+	public static FancyTextbox getTextbox(ETextbox textbox, boolean cached) {
+		return (FancyTextbox) getResource(textbox, cached);
 	}
 }

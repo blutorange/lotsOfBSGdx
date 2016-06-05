@@ -12,37 +12,37 @@
             <Name>de</Name>
             <Description>German</Description>
             <Width>112</Width>
-            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/font_de.properties|true|true|false|false</HandlerConfiguration>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/character_de.properties|true|true|false|false</HandlerConfiguration>
         </Column>
         <Column>
             <Name>en</Name>
             <Description>English</Description>
             <Width>377</Width>
-            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/font_en.properties|true|true|false|false</HandlerConfiguration>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/character_en.properties|true|true|false|false</HandlerConfiguration>
         </Column>
         <Column>
             <Name>ja</Name>
             <Description>Japanese</Description>
             <Width>490</Width>
-            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/font_ja.properties|true|true|false|false</HandlerConfiguration>
+            <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/character_ja.properties|true|true|false|false</HandlerConfiguration>
         </Column>
     </Columns>
     <Records>
         <Property>
-            <Name>mainFont</Name>
+            <Name>Estelle</Name>
             <Disabled>false</Disabled>
             <MultiLine>false</MultiLine>
-            <Value disabled="false">LiberationSansRegular.ttf</Value>
-            <Value disabled="false">LiberationSansRegular.ttf</Value>
-            <Value disabled="false">VLGothicRegular.ttf</Value>
+            <Value disabled="false">Estelle</Value>
+            <Value disabled="false">Estelle</Value>
+            <Value disabled="false">エステル</Value>
         </Property>
         <Property>
-            <Name>mainFontBalancingScale</Name>
+            <Name>Joshua</Name>
             <Disabled>false</Disabled>
             <MultiLine>false</MultiLine>
-            <Value disabled="false">0.14</Value>
-            <Value disabled="false">0.14</Value>
-            <Value disabled="false">0.1</Value>
+            <Value disabled="false">Joshua</Value>
+            <Value disabled="false">Joshua</Value>
+            <Value disabled="false">ヨシュア</Value>
         </Property>
     </Records>
 </MultiProperties>

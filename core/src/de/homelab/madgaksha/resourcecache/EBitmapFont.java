@@ -8,16 +8,15 @@ import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
-import de.homelab.madgaksha.i18n.i18n;
+import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
- * For loading, caching and disposing {@link Texture} resources.
+ * For loading, caching and disposing {@link BitmapFont} resources.
  * 
  * @author madgaksha
  *
@@ -45,13 +44,13 @@ public enum EBitmapFont implements IResource<EBitmapFont,BitmapFont> {
 
 	@Override
 	public BitmapFont getObject() {
-		final FileHandle fileHandle = Gdx.files.internal("font/" + i18n.font(fontname));
+		final FileHandle fileHandle = Gdx.files.internal("font/" + I18n.font(fontname));
 		FreeTypeFontGenerator g = null; 
 		try {
 			g = new FreeTypeFontGenerator(fileHandle);
 			FreeTypeFontParameter p = new FreeTypeFontParameter();
 			p.size = bitmapFontRasterSize;
-			p.characters = i18n.font(fontname + "Chars");
+			p.characters = I18n.font(fontname + "Chars");
 			p.kerning = true;
 			p.borderColor = Color.BLACK;
 			p.borderWidth = 1;

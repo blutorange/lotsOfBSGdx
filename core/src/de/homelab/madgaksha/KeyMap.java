@@ -6,8 +6,8 @@ import com.badlogic.gdx.Input.Keys;
 public final class KeyMap {
 	private KeyMap(){}
 	
-	public final static boolean isTextboxAdvancePressed() {
-		return Gdx.input.isKeyPressed(Keys.ENTER);
+	public final static boolean isTextboxAdvanceJustPressed() {
+		return Gdx.input.isKeyJustPressed(Keys.ENTER);
 	}
 	public final static boolean isPlayerMoveRightPressed() {
 		return Gdx.input.isKeyPressed(Keys.RIGHT);

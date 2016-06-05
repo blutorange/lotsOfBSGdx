@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
-import de.homelab.madgaksha.i18n.i18n;
+import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.resourcecache.EMusic;
@@ -266,7 +266,7 @@ public abstract class ALevel {
 	}
 	
 	public String getName() {
-		return i18n.game(i18nNameKey);
+		return I18n.game(i18nNameKey);
 	}
 	
 	public float getEnemyTargetCrossAngularVelocity() {

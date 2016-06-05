@@ -1,1 +1,15 @@
-{"requestedLevel":"de.homelab.madgaksha.level.Level01","requestedPlayer":"de.homelab.madgaksha.player.PEstelle","requestedLocale":{"language":"ja","country":"","variant":""},"requestedWidth":1280,"requestedHeight":720,"requestedFullscreen":false,"requestedFps":30,"requestedLogLevel":3,"requestedWindowTitle":"??level.01.name??"}
+{
+    "requestedLevel": "de.homelab.madgaksha.level.Level01",
+    "requestedPlayer": "de.homelab.madgaksha.player.PEstelle",
+    "requestedLocale": {
+        "language": "ja",
+        "country": "",
+        "variant": ""
+    },
+    "requestedWidth": 1280,
+    "requestedHeight": 720,
+    "requestedFullscreen": false,
+    "requestedFps": 30,
+    "requestedLogLevel": 3,
+    "requestedWindowTitle": "??level.01.name??"
+}

@@ -8,17 +8,18 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-public class i18n {
+public class I18n {
 	private static Map<String, String> main;
 	private static Map<String, String> game;
 	private static Map<String, String> font;
+	private static Map<String, String> character;
 	private static Locale locale;
 	private static boolean initiated = false;
 
 	private static Locale[] availableLocales = {Locale.GERMAN, Locale.ENGLISH, Locale.JAPANESE};
 	
 	// not instantiable
-	private i18n() {
+	private I18n() {
 	};
 
 	/**
@@ -35,9 +36,11 @@ public class i18n {
 		ResourceBundle rbMain = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.main", locale);
 		ResourceBundle rbGame = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.game", locale);
 		ResourceBundle rbFont = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.font", locale);
+		ResourceBundle rbCharacter = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.character", locale);
 		main = rb2Map(rbMain);
 		game = rb2Map(rbGame);
 		font = rb2Map(rbFont);
+		character = rb2Map(rbCharacter);
 		initiated = true;
 	}
 
@@ -93,5 +96,13 @@ public class i18n {
 	
 	public static String font(String key) {
 		return getValue(font, key);
+	}
+	
+	public static String character(String key) {
+		return getValue(character, key);
+	}
+	
+	public static boolean hasFontKey(String key) {
+		return font.containsKey(key);
 	}
 }

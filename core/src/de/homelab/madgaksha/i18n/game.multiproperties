@@ -59,7 +59,7 @@
             <MultiLine>false</MultiLine>
             <Value disabled="false">Halten Sie den Pausenknopf zwei Sekunden gedrückt, um das Spiel zu beenden.\nDrücken Sie einen anderen Knopf, um das Spiel fortzusetzen.</Value>
             <Value disabled="false">Hold the pause button for two seconds to exit the game, or press any other button to resume the game.</Value>
-            <Value disabled="false">ポースボタンを　にびょうかん　おしつづけると、すくわれる　であろう。\nほかのボタンで　ゲームを　さいかい　せんたくし　にも　いちり　あり。</Value>
+            <Value disabled="false">２秒間ポーズボタンを押し続けると、その魂は救われん。\nほかのボタンで苦しみ抜くこともゲームを再開することもできよう。</Value>
         </Property>
     </Records>
 </MultiProperties>

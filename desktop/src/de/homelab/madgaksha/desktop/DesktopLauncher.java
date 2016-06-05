@@ -101,7 +101,7 @@ import org.apache.commons.cli.ParseException;
 import com.badlogic.gdx.Application;
 
 import de.homelab.madgaksha.GameParameters;
-import de.homelab.madgaksha.i18n.i18n;
+import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.level.Level01;
 import de.homelab.madgaksha.logging.LoggerFactory;
@@ -314,7 +314,7 @@ public class DesktopLauncher extends JFrame {
 		if (defaultLocale == null) defaultLocale = Locale.getDefault();
 		
 		// Acquire list of available languages and sort by name.
-		Map<String,Locale> localeMap = i18n.getAvailableLocales();
+		Map<String,Locale> localeMap = I18n.getAvailableLocales();
 		List<String> optionList = new ArrayList<String>(localeMap.size());
 		optionList.addAll(localeMap.keySet());
 		Collections.sort(optionList);
@@ -329,9 +329,9 @@ public class DesktopLauncher extends JFrame {
 		if (defaultOption >= optionArray.length) defaultOption = 0;
 		
 		// Create choice dialogue.
-		i18n.init(Locale.getDefault());
-		String choice = String.valueOf(JOptionPane.showInputDialog(null, i18n.main("desktop.startup.choose.language"),
-				i18n.main("desktop.startup.choose.language.title"),
+		I18n.init(Locale.getDefault());
+		String choice = String.valueOf(JOptionPane.showInputDialog(null, I18n.main("desktop.startup.choose.language"),
+				I18n.main("desktop.startup.choose.language.title"),
 				JOptionPane.QUESTION_MESSAGE,
 				null,
 				optionArray,
@@ -359,13 +359,13 @@ public class DesktopLauncher extends JFrame {
 		JOptionPane.setDefaultLocale(locale);		
 		
 		// Load localization.
-		i18n.init(locale);
+		I18n.init(locale);
 		
 		// Handle closing etc.
 		setupWindowEvents();
 		
 		// Set our title.
-		this.setTitle(i18n.main("desktop.launcher.title"));
+		this.setTitle(I18n.main("desktop.launcher.title"));
 		
 		// Render the main launcher screen.
 		renderLauncher();
@@ -402,7 +402,7 @@ public class DesktopLauncher extends JFrame {
 			public void windowClosing(WindowEvent arg0) {
 				if (mainPanel != null) mainPanel.writeConfig();
 				if (gameProcess != null) {
-					DesktopLauncher.alert(i18n.main("desktop.running.no.close"));
+					DesktopLauncher.alert(I18n.main("desktop.running.no.close"));
 					instance.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 				}
 				else {
@@ -442,12 +442,12 @@ public class DesktopLauncher extends JFrame {
 				if (gameProcess == null) {
 					disableUI();
 					if (!launchGame()) {
-						DesktopLauncher.alert(i18n.main("desktop.launch.failed"));
+						DesktopLauncher.alert(I18n.main("desktop.launch.failed"));
 					}
 				}
 				else {
 					LOG.info("cannot launch another game, still one active");
-					DesktopLauncher.alert(i18n.main("desktop.running.no.start"));
+					DesktopLauncher.alert(I18n.main("desktop.running.no.start"));
 				}
 			}
 		});
@@ -498,7 +498,7 @@ public class DesktopLauncher extends JFrame {
 							final int exitValue = gameProcess.exitValue();
 							if (exitValue != 0) {
 								LOG.warning("game exit value is " + String.valueOf(exitValue));
-								DesktopLauncher.alert(i18n.main("desktop.launch.failed"));
+								DesktopLauncher.alert(I18n.main("desktop.launch.failed"));
 							}
 						} catch (InterruptedException e) {
 							LOG.log(Level.SEVERE, "game process was interrupted", e);

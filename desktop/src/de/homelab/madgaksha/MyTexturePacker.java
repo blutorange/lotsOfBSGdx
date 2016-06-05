@@ -35,6 +35,12 @@ public class MyTexturePacker {
 		packFileName = "miscPacked";
 		TexturePacker.process(inputDir, outputDir, packFileName);
 		
+		System.out.println("packing face textures...");
+		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/texture/face/estelle";
+		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/texture/face-packed";
+		packFileName = "estellePacked";
+		TexturePacker.process(inputDir, outputDir, packFileName);
+		
 		System.out.println("packing status screen textures...");
 		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/statusscreen";
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/statusscreen/packed";

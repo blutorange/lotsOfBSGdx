@@ -1,0 +1,76 @@
+
+estellePacked.png
+size: 1024,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+estelle01
+  rotate: false
+  xy: 2, 2
+  size: 96, 112
+  orig: 128, 128
+  offset: 16, 0
+  index: -1
+estelle02
+  rotate: false
+  xy: 100, 2
+  size: 96, 112
+  orig: 128, 128
+  offset: 16, 0
+  index: -1
+estelle03
+  rotate: false
+  xy: 198, 2
+  size: 96, 112
+  orig: 128, 128
+  offset: 16, 0
+  index: -1
+estelle04
+  rotate: false
+  xy: 296, 2
+  size: 96, 112
+  orig: 128, 128
+  offset: 16, 0
+  index: -1
+estelle05
+  rotate: false
+  xy: 394, 2
+  size: 96, 112
+  orig: 128, 128
+  offset: 16, 0
+  index: -1
+estelle06
+  rotate: false
+  xy: 492, 2
+  size: 96, 112
+  orig: 128, 128
+  offset: 16, 0
+  index: -1
+estelle07
+  rotate: false
+  xy: 590, 2
+  size: 96, 112
+  orig: 128, 128
+  offset: 16, 0
+  index: -1
+estelle08
+  rotate: false
+  xy: 688, 2
+  size: 96, 112
+  orig: 128, 128
+  offset: 16, 0
+  index: -1
+estelle09
+  rotate: false
+  xy: 786, 2
+  size: 96, 112
+  orig: 128, 128
+  offset: 16, 0
+  index: -1
+estelle10
+  rotate: false
+  xy: 884, 2
+  size: 96, 112
+  orig: 128, 128
+  offset: 16, 0
+  index: -1

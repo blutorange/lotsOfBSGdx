@@ -195,4 +195,8 @@ public class EntityLayer extends ALayer {
 	public boolean isBlockUpdate() {
 		return false;
 	}
+
+	@Override
+	public void resize(int width, int height) {
+	}
 }

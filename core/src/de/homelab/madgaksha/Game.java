@@ -44,7 +44,7 @@ import de.homelab.madgaksha.audiosystem.AwesomeAudio;
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.entityengine.entity.PlayerMaker;
-import de.homelab.madgaksha.i18n.i18n;
+import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.layer.ALayer;
 import de.homelab.madgaksha.layer.EntityLayer;
 import de.homelab.madgaksha.layer.PauseLayer;
@@ -115,11 +115,11 @@ public class Game implements ApplicationListener {
 		level = params.requestedLevel;
 
 		// Set locale if it has not been set yet.
-		if (!i18n.isInitiated()) {
+		if (!I18n.isInitiated()) {
 			if (params.requestedLocale != null)
-				i18n.init(params.requestedLocale);
+				I18n.init(params.requestedLocale);
 			else
-				i18n.init(Locale.getDefault());
+				I18n.init(Locale.getDefault());
 		}
 
 		game = this;
@@ -276,8 +276,10 @@ public class Game implements ApplicationListener {
 		}
 		if (layerStackPushQueue.size() > 0) {
 			layerStack.addAll(layerStackPushQueue);
-			for (ALayer layer : layerStackPushQueue)
+			for (ALayer layer : layerStackPushQueue) {
 				layer.addedToStack();
+				layer.resize(currentMonitorWidth, currentMonitorHeight);
+			}
 			layerStackPushQueue.clear();
 		}
 		
@@ -309,6 +311,10 @@ public class Game implements ApplicationListener {
 			// Store old monitor resolution.
 			lastWidth = Gdx.graphics.getWidth();
 			lastHeight = Gdx.graphics.getHeight();
+			
+			// Resize all layers.			
+			for (ALayer layer : layerStack)
+				layer.resize(width, height);
 		}
 	}
 

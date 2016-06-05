@@ -46,7 +46,7 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.commons.io.IOUtils;
 
-import de.homelab.madgaksha.i18n.i18n;
+import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.LoggerFactory;
 import de.homelab.madgaksha.resources.Resource.EIcon;
 import de.homelab.madgaksha.resources.ResourceLoader;
@@ -167,7 +167,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 
 		panel.add(Box.createHorizontalGlue());
 
-		btnStart = new JButton(i18n.main("desktop.game.start"));
+		btnStart = new JButton(I18n.main("desktop.game.start"));
 		panel.add(btnStart);
 
 		btnDebug = new JButton("debug button");
@@ -176,7 +176,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 		panel.add(Box.createHorizontalGlue());
 
 		final OptionsFrame frmOptions = new OptionsFrame(launchConfig);
-		btnOptions = new JButton(i18n.main("desktop.options"));
+		btnOptions = new JButton(I18n.main("desktop.options"));
 		btnOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
@@ -316,7 +316,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 		
 		public OptionsFrame(LaunchConfig c) {
 			JFrame frmOptions = this;
-			frmOptions.setTitle(i18n.main("desktop.options.title"));
+			frmOptions.setTitle(I18n.main("desktop.options.title"));
 
 			JPanel pnlContent = new JPanel();
 			pnlContent.setLayout(new BoxLayout(pnlContent, BoxLayout.Y_AXIS));
@@ -326,7 +326,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 			JPanel pnlKeyVal = new JPanel(new SpringLayout());
 
 			// Fps
-			JLabel lblFps = new JLabel(i18n.main("desktop.options.fps"));
+			JLabel lblFps = new JLabel(I18n.main("desktop.options.fps"));
 			spnFps = new JSpinner(new SpinnerNumberModel(30, 10, 120, 5));
 			spnFps.addChangeListener(new ChangeListener() {
 				@Override
@@ -343,7 +343,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 			pnlKeyVal.add(spnFps);
 			
 			// Width
-			JLabel lblWidth = new JLabel(i18n.main("desktop.options.width"));
+			JLabel lblWidth = new JLabel(I18n.main("desktop.options.width"));
 			spnWidth = new JSpinner(new SpinnerNumberModel(100, 100, 9999, 10));
 			spnWidth.addChangeListener(new ChangeListener() {
 				@Override
@@ -361,7 +361,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 			
 
 			// Height
-			JLabel lblHeight = new JLabel(i18n.main("desktop.options.height"));
+			JLabel lblHeight = new JLabel(I18n.main("desktop.options.height"));
 			spnHeight = new JSpinner(new SpinnerNumberModel(100, 100, 9999, 10));
 			spnHeight.addKeyListener(new KeyAdapter(){
 				@Override
@@ -389,7 +389,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 			pnlKeyVal.add(spnHeight);
 
 			// Fullscreen?
-			JLabel lblFullscreen = new JLabel(i18n.main("desktop.options.fullscreen"));
+			JLabel lblFullscreen = new JLabel(I18n.main("desktop.options.fullscreen"));
 			cbFullscreen = new JCheckBox();
 			cbFullscreen.addItemListener(new ItemListener() {
 				@Override
@@ -435,7 +435,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 			cons.weightx = 1;
 			cons.gridwidth = 1;
 			cons.gridheight = 2;
-			JButton btnClose = new JButton(i18n.main("desktop.options.close"));
+			JButton btnClose = new JButton(I18n.main("desktop.options.close"));
 			btnClose.setAlignmentX(CENTER_ALIGNMENT);
 			btnClose.setContentAreaFilled(true);
 			btnClose.addActionListener(new ActionListener() {
@@ -446,7 +446,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 				}
 			});
 			// Default button
-			JButton btnDefault = new JButton(i18n.main("desktop.options.default"));
+			JButton btnDefault = new JButton(I18n.main("desktop.options.default"));
 			btnDefault.setAlignmentX(CENTER_ALIGNMENT);
 			btnDefault.addActionListener(new ActionListener() {
 				@Override

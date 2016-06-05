@@ -12,12 +12,14 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.Align;
 
 import de.homelab.madgaksha.KeyMap;
-import de.homelab.madgaksha.i18n.i18n;
+import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.EBitmapFont;
+import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
@@ -25,8 +27,11 @@ public class PauseLayer extends ALayer {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(PauseLayer.class);
 	private final static float THRESHOLD_FOR_EXIT = 2.0f; //seconds
+	private final static float PAUSE_MESSAGE_FONT_SIZE = 0.03f;
+	
 	private final NinePatch background;
 	private final String pauseMessage;
+	private BitmapFont bitmapFont = null;
 	private boolean allowInput = false;
 	private boolean anyButtonPressed = false;
 	private boolean exitButtonJustPressed = false;
@@ -39,13 +44,14 @@ public class PauseLayer extends ALayer {
 		if (background == null)
 			throw new IOException("failed to load resources");
 		background.setColor(new Color(0.0f, 0.0f, 0.0f, 0.5f));
-		pauseMessage = i18n.gameE("screen.pause.message");
+		pauseMessage = I18n.gameE("screen.pause.message");
 	}
 
 	@Override
 	public void removedFromStack() {
 		game.unpause();
 		Gdx.input.setInputProcessor(null);
+		if (bitmapFont != null) bitmapFont.dispose();
 	}
 
 	@Override
@@ -118,11 +124,7 @@ public class PauseLayer extends ALayer {
 		float w = viewportGame.getScreenWidth();
 		float h = viewportGame.getScreenHeight();
 		background.draw(batchPixel, 0.0f, 0.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		BitmapFont bitmapFont = ResourceCache.getBitmapFont(EBitmapFont.MAIN_FONT);
-		bitmapFont.setColor(Color.WHITE);
-		bitmapFont.draw(batchPixel, pauseMessage, w*0.1f, h * 0.5f, w*0.8f,
-				Align.center, true);
-
+		bitmapFont.draw(batchPixel, pauseMessage, w*0.1f, h * 0.5f, w*0.8f,	Align.center, true);
 		batchPixel.end();
 	}
 
@@ -158,5 +160,17 @@ public class PauseLayer extends ALayer {
 
 	public void setBlockUpdate(boolean block) {
 		this.blockUpdate = block;		
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		FreeTypeFontGenerator g = ResourceCache.getFreeTypeFontGenerator(EFreeTypeFontGenerator.MAIN_FONT);
+		FreeTypeFontParameter p = new FreeTypeFontParameter();
+		p.size = Math.max(5, (int)(viewportGame.getScreenHeight() * PAUSE_MESSAGE_FONT_SIZE));
+		p.color = Color.WHITE;
+		p.borderWidth = 2;
+		p.borderColor = Color.BLACK;
+		p.characters = EFreeTypeFontGenerator.getRequiredCharacters(pauseMessage);
+		bitmapFont = g.generateFont(p);
 	}
 }

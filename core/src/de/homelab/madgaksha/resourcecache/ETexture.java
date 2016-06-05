@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import de.homelab.madgaksha.i18n.i18n;
+import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
 import de.homelab.madgaksha.resourcepool.SpritePool;
@@ -43,7 +43,16 @@ public enum ETexture implements IResource<ETexture,AtlasRegion> {
 	ESTELLE_SWINGING("sprite/estelle00107.png"),
 	ESTELLE_ON_KNEES("sprite/estelle00104.png"),
 	
-	FACE_ESTELLE_01("texture/face/estelle01.png"),
+	FACE_ESTELLE_01(ETextureAtlas.FACES_ESTELLE,"estelle01"),
+	FACE_ESTELLE_02(ETextureAtlas.FACES_ESTELLE,"estelle02"),
+	FACE_ESTELLE_03(ETextureAtlas.FACES_ESTELLE,"estelle03"),
+	FACE_ESTELLE_04(ETextureAtlas.FACES_ESTELLE,"estelle04"),
+	FACE_ESTELLE_05(ETextureAtlas.FACES_ESTELLE,"estelle05"),
+	FACE_ESTELLE_06(ETextureAtlas.FACES_ESTELLE,"estelle06"),
+	FACE_ESTELLE_07(ETextureAtlas.FACES_ESTELLE,"estelle07"),
+	FACE_ESTELLE_08(ETextureAtlas.FACES_ESTELLE,"estelle08"),
+	FACE_ESTELLE_09(ETextureAtlas.FACES_ESTELLE,"estelle09"),
+	FACE_ESTELLE_10(ETextureAtlas.FACES_ESTELLE,"estelle10"),
 
 	// ==================
 	//      JOSHUA
@@ -179,13 +188,16 @@ public enum ETexture implements IResource<ETexture,AtlasRegion> {
 	public AtlasRegion getObject() {
 		if (textureAtlas != null) {
 			TextureAtlas ta = ResourceCache.getTextureAtlas(textureAtlas);
-			return ta == null ? null : ta.findRegion(filename);
+			if (ta == null) return null;
+			AtlasRegion ar = ta.findRegion(filename);
+			if (ar == null) LOG.error("could not locate or open resource: " + String.valueOf(this));
+			return ar;
 		}
 		else {
 			String path;
 			if (basename != null) {
 				// localizable images
-				path = filename + File.separator + i18n.getShortName() + File.separator + basename;
+				path = filename + File.separator + I18n.getShortName() + File.separator + basename;
 			}
 			else path = filename;
 			FileHandle fileHandle = Gdx.files.internal(path);

@@ -1,22 +1,28 @@
 package de.homelab.madgaksha.level;
 
+import static de.homelab.madgaksha.GlobalBag.game;
+
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.maps.MapProperties;
 
-import de.homelab.madgaksha.GlobalBag;
-import de.homelab.madgaksha.cutscenesystem.FaceTextbox;
-import de.homelab.madgaksha.cutscenesystem.Textbox;
-import de.homelab.madgaksha.layer.TextboxLayer;
+import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
+import de.homelab.madgaksha.cutscenesystem.CutsceneEventProvider;
+import de.homelab.madgaksha.cutscenesystem.event.EventTextbox;
+import de.homelab.madgaksha.cutscenesystem.textbox.EFaceVariation;
+import de.homelab.madgaksha.enums.ESpeaker;
+import de.homelab.madgaksha.layer.CutsceneLayer;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.EBitmapFont;
+import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
 import de.homelab.madgaksha.resourcecache.EMusic;
-import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ESound;
+import de.homelab.madgaksha.resourcecache.ETextbox;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ETiledMap;
-import de.homelab.madgaksha.resourcecache.IResource;;
+import de.homelab.madgaksha.resourcecache.IResource;
+import de.homelab.madgaksha.resourcepool.EventTextboxPool;;
 
 /**
  * Only for testing purposes.
@@ -110,20 +116,34 @@ public class Level01 extends ALevel {
 	// =========================
 	
 	public void initialDialog(MapProperties properties) {
-		//TODO
-		//add some cutscene maker util
-		//add some callback
-		//InputVelocitySystem ivc = GlobalBag.gameEntityEngine.getSystem(InputVelocitySystem.class);
-		//if (ivc != null) ivc.setProcessing(false);
 		LOG.debug("initialDialog triggered");
-		Textbox[] tb = TextboxLayer.POOL;
-		tb[0] = new FaceTextbox("I was just taking a casual stroll, relaxing from work.\nWhere is this? And why am I floating in air?\nCome to think of it, the tomatoes I ate looked kind of\nbad... But this still can't be real!",
-				EBitmapFont.MAIN_FONT,
-				ENinePatch.TEXTBOX_BLUE, "Phantom Joshua", ETexture.FACE_ESTELLE_01);
-		tb[1] = new FaceTextbox("I must have got out of band the wrong... let's do this!",
-				EBitmapFont.MAIN_FONT,
-				ENinePatch.TEXTBOX_BLUE, "Phantom Estelle", ETexture.FACE_ESTELLE_01);
-		GlobalBag.game.pushLayer(new TextboxLayer(tb,0,2));
+		game.pushLayer(new CutsceneLayer(new CutsceneEventProvider() {
+			private EventTextbox event;
+			public void initialize() {
+				event = EventTextboxPool.getInstance().obtain();
+				event.setTextbox(ETextbox.FC_BLUE);
+				event.setTextColor(Color.WHITE);
+				event.setFont(EFreeTypeFontGenerator.MAIN_FONT);
+			}
+			
+			@Override
+			public ACutsceneEvent nextCutsceneEvent(int i) {
+				switch (i) {
+				case 0:
+					event.setLines("ただの散歩のつもりだったけど、ここはどこ？\nそれで空に浮いているってどういうこと？？\nもう、わけ分かんない！");
+					event.setSpeaker(ESpeaker.ESTELLE);
+					event.setFaceVariation(EFaceVariation.ANGRY);
+					break;
+				case 1:
+					event.setLines("とりあえず、もやもやするよりこの辺りでヒント探しにでも行こう。。。！");
+					event.setFaceVariation(EFaceVariation.SHOU_GA_NAI);
+					break;
+				default:
+					return null;
+				}
+				return event;
+			}
+		}));
 	}
 
 	@Override

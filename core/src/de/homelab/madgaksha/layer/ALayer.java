@@ -33,6 +33,13 @@ public abstract class ALayer {
 	 * operations from propagating down the stack. */
 	public abstract boolean isBlockUpdate();
 	
+	/**
+	 * Called when game window resizes.
+	 * @param width New width in pixels.
+	 * @param height New height in pixels.
+	 */
+	public abstract void resize(int width, int height);
+	
 	protected void removeSelf() {
 		game.popLayer(this);
 	}
