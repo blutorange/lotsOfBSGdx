@@ -9,6 +9,9 @@ public final class KeyMap {
 	public final static boolean isTextboxAdvanceJustPressed() {
 		return Gdx.input.isKeyJustPressed(Keys.ENTER);
 	}
+	public final static boolean isTextboxAdvancePressed() {
+		return Gdx.input.isKeyPressed(Keys.ENTER);
+	}
 	public final static boolean isPlayerMoveRightPressed() {
 		return Gdx.input.isKeyPressed(Keys.RIGHT);
 	}

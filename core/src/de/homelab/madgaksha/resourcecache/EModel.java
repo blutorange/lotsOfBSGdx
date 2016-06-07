@@ -85,4 +85,9 @@ public enum EModel implements IResource<EModel,Model> {
 		if (modelInstance == null) if(ResourceCache.getModel(this) == null) return null;
 		return modelInstance;
 	}
+	
+	@Override
+	public void clearAllOfThisKind() {
+		EModel.clearAll();
+	}
 }

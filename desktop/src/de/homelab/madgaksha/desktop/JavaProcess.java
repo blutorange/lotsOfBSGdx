@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.ProcessBuilder.Redirect;
 
-import org.apache.commons.io.IOUtils;
-
 /**
  * Launches a class's main method as a new process.
  * http://stackoverflow.com/a/723914/3925216

@@ -110,5 +110,10 @@ public enum EAnimation implements IResource<EAnimation,AtlasAnimation> {
 		}
 		return tiles;
 	}
+
+	@Override
+	public void clearAllOfThisKind() {
+		EAnimation.clearAll();
+	}
 	
 }

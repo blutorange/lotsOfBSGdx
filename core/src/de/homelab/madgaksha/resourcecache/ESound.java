@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.homelab.madgaksha.logging.Logger;
 
 public enum ESound implements IResource<ESound,Sound> {
-	TEXTBOX_NEXT("sound/ed6se002.wav"),
 	ENEMY_SWITCH("sound/ed6se049.wav"),
 	EQUIP_WEAPON("sound/ed6se022.wav"),
 	EQUIP_TOKUGI("sound/ed6se155.wav"),
@@ -24,6 +23,9 @@ public enum ESound implements IResource<ESound,Sound> {
 	PLAYER_EXPLODE_ON_DEATH("sound/explodePlayer.wav"),
 	SCORE_BULLET_HIT("sound/ed6se020.wav",0.1f),
 	POSAUNEN_CHORUS("sound/ed6se152.wav", 6.966f),
+	
+	TEXTBOX_ADVANCE("sound/ed6se002.wav", 0.552f),
+	TEXT_ADVANCE("sound/ed6se005.wav", 0.033f),
 	
 	// ===================
 	//       WEAPONS
@@ -115,6 +117,13 @@ public enum ESound implements IResource<ESound,Sound> {
 
 	public long getDurationInMilliseconds() {
 		return duration;
+	}
+	public float getDuration() {
+		return duration/1000.0f;
+	}
+	@Override
+	public void clearAllOfThisKind() {
+		ESound.clearAll();
 	}
 
 }

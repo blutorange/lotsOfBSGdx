@@ -106,4 +106,9 @@ public enum EAnimationList implements IResource<EAnimationList,AtlasAnimation[]>
 
 		return tiles;
 	}
+	
+	@Override
+	public void clearAllOfThisKind() {
+		EAnimationList.clearAll();
+	}
 }

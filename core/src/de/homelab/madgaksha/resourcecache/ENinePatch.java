@@ -119,5 +119,10 @@ public enum ENinePatch implements IResource<ENinePatch,NinePatch> {
 	public EnumMap<ENinePatch, NinePatch> getMap() {
 		return ninePatchCache;
 	}
+	
+	@Override
+	public void clearAllOfThisKind() {
+		ENinePatch.clearAll();
+	}
 
 }

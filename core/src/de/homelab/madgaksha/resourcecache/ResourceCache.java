@@ -21,7 +21,7 @@ public final class ResourceCache {
 	private final static Logger LOG = Logger.getLogger(ResourceCache.class);
 	
 	public final static int LIMIT_MUSIC = 100;
-	public final static int LIMIT_TEXTURE = 50;
+	public final static int LIMIT_TEXTURE = 100;
 	public final static int LIMIT_ANIMATION = 50;
 	public final static int LIMIT_ANIMATION_LIST = 50;
 	public final static int LIMIT_SOUND = 100;
@@ -60,8 +60,9 @@ public final class ResourceCache {
 		} else {
 			// Load the object from disk.
 			if (res.getMap().size() > res.getLimit()) {
-				LOG.error("cannot load any more resources of type " + String.valueOf(res));
-				return null;
+				LOG.error("cannot load any more resources of type " + String.valueOf(res.getEnum().getClass()));
+				LOG.error("clearing cache");
+				res.clearAllOfThisKind();
 			}
 			final Object r = res.getObject();
 			if (r != null && cached)

@@ -26,6 +26,9 @@ public interface IResource<K extends Enum<K>,V> {
 	 * Disposes the object and removes from the cache. Blocks until done.
 	 */
 	public void clear();
+	
+	/** Clears all resources of this type. */
+	public void clearAllOfThisKind();
 
 	/**
 	 * The map used to cache the objects.

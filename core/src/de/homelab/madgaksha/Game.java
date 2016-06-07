@@ -30,6 +30,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Graphics.Monitor;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -38,6 +39,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.homelab.madgaksha.audiosystem.AwesomeAudio;
@@ -97,7 +99,7 @@ public class Game implements ApplicationListener {
 	private BitmapFont debugFont;
 	// testing end
 
-	private final GameParameters params;
+	public final GameParameters params;
 	private TextureRegion backgroundImage = null;
 	private Rectangle backgroundImageRectangle = new Rectangle();
 
@@ -382,8 +384,9 @@ public class Game implements ApplicationListener {
 			batchPixel.dispose();
 
 		// Remove all entities and systems to trigger cleanup.
-		for (ALayer layer : layerStack) {
-			layer.removedFromStack();
+		// Observe the proper order, begin with topmost layer.
+		for (int i = layerStack.size() ; i --> 0 ; ) {
+			layerStack.get(i).removedFromStack();
 		}
 		layerStack.clear();
 		layerStackPopQueue.clear();
@@ -397,14 +400,14 @@ public class Game implements ApplicationListener {
 		if (debugFont != null) debugFont.dispose();
 		
 		// Dispose temporary files.
-//		LOG.debug("emptying temporary directory tempadx");
-//		FileHandle dest = Gdx.files.local("tempadx/");
-//		try {
-//			dest.emptyDirectory();
-//		}
-//		catch (GdxRuntimeException e) {
-//			LOG.error("failed to empty temporary directory tempadx", e);
-//		}
+		LOG.debug("emptying temporary directory tempadx");
+		FileHandle dest = Gdx.files.local("tempadx/");
+		try {
+			dest.emptyDirectory();
+		}
+		catch (GdxRuntimeException e) {
+			LOG.error("failed to empty temporary directory tempadx", e);
+		}
 		
 		// Dispose custom shaders.
 		if (customShaderProgramBatchGame != null) customShaderProgramBatchGame.dispose();

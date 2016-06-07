@@ -6,6 +6,7 @@ import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 
 import de.homelab.madgaksha.enums.ESpeaker;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.ETextbox;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 /**
@@ -24,16 +26,22 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
 public class FancyTextbox extends PlainTextbox {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(FancyTextbox.class);
+		
+	private final static float DEFAULT_FACE_HEIGHT_RATIO = 0.18f;
 	
 	/** Speaker with an optional name and/or face. */
 	private ESpeaker speaker = null;
 	/** Variation of the speaker face to use. */
 	private EFaceVariation faceVariation = null;
-
+	/** Ratio of face height to game screen height. */
+	private float faceHeightRatio = DEFAULT_FACE_HEIGHT_RATIO;
+	
 	private boolean requestedFullHeight = false;
 	private boolean hasSpeakerName = false;
 	private boolean hasFaceVariation = false;
 
+	/** Nine patch for the text area when there is only text. */
+	private final NinePatch ninePatchAllBox;
 	/** Nine patch for the text area when there is only a speaker. */
 	private final NinePatch ninePatchBottomBox;
 	/** Nine patch for the speaker area. */
@@ -46,6 +54,9 @@ public class FancyTextbox extends PlainTextbox {
 	private final NinePatch ninePatchLeftBox;
 	/** Nine patch for the face when there is no speaker. */
 	private final NinePatch ninePatchRightBox;
+	
+	/** A separate the bitmap font cache for the speaker's name. */ 
+	private BitmapFontCache bitmapFontCacheSpeaker;
 	
 	/** Texture with the face of the character speaking. */
 	private AtlasRegion faceTexture;
@@ -60,10 +71,13 @@ public class FancyTextbox extends PlainTextbox {
 	private final Rectangle faceBoxFrame = new Rectangle();
 	private final Rectangle faceBoxContent = new Rectangle();
 	
+	private final ETextbox type;
+	
 	public FancyTextbox(NinePatch ninePatchAllBox, NinePatch ninePatchBottomBox, NinePatch ninePatchTopBox,
 			NinePatch ninePatchLeftBox, NinePatch ninePatchRightBox, NinePatch ninePatchBottomLeftBox,
-			NinePatch ninePatchBottomRightBox) {
-		super(ninePatchAllBox);
+			NinePatch ninePatchBottomRightBox, ETextbox type) {
+		super();
+		this.ninePatchAllBox = ninePatchAllBox;
 		
 		this.ninePatchBottomBox = ninePatchBottomBox;
 		this.ninePatchTopBox = ninePatchTopBox;
@@ -74,14 +88,19 @@ public class FancyTextbox extends PlainTextbox {
 		this.ninePatchBottomLeftBox = ninePatchBottomLeftBox;
 		this.ninePatchBottomRightBox = ninePatchBottomRightBox;
 		
+		this.type = type;
+		
 		initialize();
 	}
 	
 	private final void initialize() {
+		ninePatchAllBox.setColor(Color.WHITE);
 		ninePatchBottomBox.setColor(Color.WHITE);
 		ninePatchTopBox.setColor(Color.WHITE);
 		ninePatchBottomLeftBox.setColor(Color.WHITE);
 		ninePatchBottomRightBox.setColor(Color.WHITE);
+		ninePatchLeftBox.setColor(Color.WHITE);
+		ninePatchRightBox.setColor(Color.WHITE);
 	}
 
 	public void setSpeaker(ESpeaker speaker) {
@@ -97,12 +116,23 @@ public class FancyTextbox extends PlainTextbox {
 		hasFaceVariation = faceVariation != null;
 		this.faceVariation = faceVariation;
 	}
+	
+	/** Ratio of the face height and game screen height.
+	 * You might want to change this together with {@link PlainTextbox#setTextHeightRatio(float)}
+	 */
+	public void setFaceHeightRatio(float faceHeightRatio) {
+		if (this.faceHeightRatio != faceHeightRatio) dirty = true;
+		this.faceHeightRatio = faceHeightRatio;
+		if (this.faceHeightRatio <= 0.0f) this.faceHeightRatio = DEFAULT_FACE_HEIGHT_RATIO;
+	}
 
 	@Override
 	public void setBoxColor(Color boxColor) {
-		super.setBoxColor(boxColor);
+		ninePatchAllBox.setColor(boxColor);
 		ninePatchBottomBox.setColor(boxColor);
 		ninePatchTopBox.setColor(boxColor);
+		ninePatchBottomLeftBox.setColor(boxColor);
+		ninePatchBottomRightBox.setColor(boxColor);
 		ninePatchBottomLeftBox.setColor(boxColor);
 		ninePatchBottomRightBox.setColor(boxColor);
 	}
@@ -115,12 +145,18 @@ public class FancyTextbox extends PlainTextbox {
 
 	@Override
 	protected void updateBox() {
+		// Convert ttf font to a bitmap font.
 		rasterizeFont();
+		
+		bitmapFontCacheSpeaker = new BitmapFontCache(bitmapFont);
+		
 		// Apply original value for fullHeight property. Need to switch to full
 		// height when there is a face.
 		setFullHeight(requestedFullHeight);
+		
 		// Check if a texture exists for this face variation.
 		hasFaceVariation = speaker != null && hasFaceVariation && speaker.hasFaceVariation(faceVariation);
+		
 		// Try to load the face texture.
 		faceTexture = null;
 		if (hasFaceVariation) {
@@ -132,10 +168,10 @@ public class FancyTextbox extends PlainTextbox {
 			// speaker name and face
 			setFullHeight(true);
 			layoutMainBox(1.0f, ninePatchBottomLeftBox);
-			layoutFaceBox(mainBoxFrame.height, mainBoxFrame.height + speakerBoxFrame.height, ninePatchBottomRightBox);
+			layoutSpeakerBox(mainBoxFrame.height, ninePatchTopBox);
+			layoutFaceBox(mainBoxFrame.height, ninePatchBottomRightBox);
 			layoutMainBox(1.0f - ((float)faceBoxFrame.width) / ((float) viewportGame.getScreenWidth()),
 					ninePatchBottomLeftBox);
-			layoutSpeakerBox(mainBoxFrame.height, ninePatchTopBox);
 			ninePatchText = ninePatchBottomLeftBox;
 			ninePatchFace = ninePatchBottomRightBox;
 			ninePatchSpeaker = ninePatchTopBox;
@@ -149,10 +185,9 @@ public class FancyTextbox extends PlainTextbox {
 			// face only
 			setFullHeight(true);
 			layoutMainBox(1.0f, ninePatchLeftBox);
-			layoutFaceBox(mainBoxFrame.height, mainBoxFrame.height, ninePatchRightBox);
+			layoutFaceBox(mainBoxFrame.height, ninePatchRightBox);
 			layoutMainBox(1.0f - ((float)faceBoxFrame.width) / ((float) viewportGame.getScreenWidth()),
 					ninePatchLeftBox);
-			layoutSpeakerBox(mainBoxFrame.height, ninePatchTopBox);
 			ninePatchText = ninePatchLeftBox;
 			ninePatchFace = ninePatchRightBox;
 		} else {
@@ -160,25 +195,37 @@ public class FancyTextbox extends PlainTextbox {
 			layoutMainBox(1.0f, ninePatchAllBox);
 			ninePatchText = ninePatchAllBox;
 		}
-	}
-
-	@Override
-	public void mainRender() {
-		renderTextArea(ninePatchText);
 		
+		finishTexboxFontLayout();
+
+		
+		// Compute layout for speaker name.
 		if (hasSpeakerName) {
-			ninePatchSpeaker.draw(batchPixel, speakerBoxFrame.x, speakerBoxFrame.y, speakerBoxFrame.width,
-					speakerBoxFrame.height);
-			bitmapFont.setColor(speaker.getColor());
-			bitmapFont.draw(batchPixel, speaker.getName(), speakerBoxContent.x,
+			bitmapFontCacheSpeaker.clear();
+			bitmapFontCacheSpeaker.setColor(speaker.getColor());
+			bitmapFontCacheSpeaker.addText(speaker.getName(), speakerBoxContent.x,
 					speakerBoxContent.y + speakerBoxContent.height, 0, speaker.getName().length(),
 					speakerBoxContent.width, Align.topLeft, false, StringUtils.EMPTY);
 		}
 		
+		dirty = false;
+	}
+
+	@Override
+	public void mainRender() {
+		// Draw background first.
+		ninePatchText.draw(batchPixel, mainBoxFrame.x, mainBoxFrame.y, mainBoxFrame.width, mainBoxFrame.height);		
+		if (hasSpeakerName) {
+			ninePatchSpeaker.draw(batchPixel, speakerBoxFrame.x, speakerBoxFrame.y, speakerBoxFrame.width,
+					speakerBoxFrame.height);
+		}
 		if (hasFaceVariation) {
 			ninePatchFace.draw(batchPixel, faceBoxFrame.x, faceBoxFrame.y, faceBoxFrame.width, faceBoxFrame.height);
 			batchPixel.draw(faceTexture, faceBoxContent.x, faceBoxContent.y, faceBoxContent.width, faceBoxContent.height);
 		}
+		// Draw text last.
+		renderTextboxText();
+		bitmapFontCacheSpeaker.draw(batchPixel);
 	}
 	
 	@Override
@@ -196,10 +243,10 @@ public class FancyTextbox extends PlainTextbox {
 		layoutTextArea(1.0f, mainBoxFrame.height, ninePatch, speakerBoxFrame, speakerBoxContent, 1, 1);
 	}
 	
-	private void layoutFaceBox(float height, float faceHeight, NinePatch ninePatch) {
+	private void layoutFaceBox(float height, NinePatch ninePatch) {
 		faceBoxFrame.height = height;
 		
-		faceBoxContent.height = faceHeight - ninePatch.getPadBottom() - ninePatch.getPadTop();		
+		faceBoxContent.height = faceHeightRatio * viewportGame.getScreenHeight();
 		faceBoxContent.width = faceBoxContent.height * faceTexture.getRegionWidth() / faceTexture.getRegionHeight();
 
 		faceBoxFrame.width = faceBoxContent.width + ninePatch.getPadLeft() + ninePatch.getPadRight();
@@ -214,10 +261,12 @@ public class FancyTextbox extends PlainTextbox {
 	@Override
 	public void dispose() {
 		super.dispose();
+		bitmapFontCacheSpeaker.clear();
 		faceTexture = null;
 		ninePatchFace = null;
 		ninePatchSpeaker = null;
 		ninePatchText = null;
+		bitmapFontCacheSpeaker = null;
 	}
 
 	@Override
@@ -225,5 +274,17 @@ public class FancyTextbox extends PlainTextbox {
 		super.reset();
 		setSpeaker(null);
 		setFaceVariation(null);
+		setFaceHeightRatio(DEFAULT_FACE_HEIGHT_RATIO);
+		bitmapFontCacheSpeaker.clear();
+	}
+
+	@Override
+	public boolean isSimiliar(Object o) {
+		if (o instanceof FancyTextbox) {
+			FancyTextbox fb = (FancyTextbox) o;			
+			return hasSpeakerName == fb.hasSpeakerName && hasFaceVariation == fb.hasFaceVariation && speaker == fb.speaker && type == fb.type;
+		}
+		return false;
+			
 	}
 }

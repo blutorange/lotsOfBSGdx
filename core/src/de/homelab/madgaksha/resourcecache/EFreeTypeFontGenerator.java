@@ -33,23 +33,9 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 	 * <code>balancingScale * (fontSize - 20)</code>
 	 * This is far from optimal, but works well enough to prevent the text from overflowing.
 	 */
-	private float balancingScale;
 	
 	private EFreeTypeFontGenerator(String fontName) {
-		this.fontName = fontName;
-		if (I18n.hasFontKey(fontName + "BalancingScale")) {
-			try {
-				this.balancingScale = Float.valueOf(I18n.font(fontName + "BalancingScale"));
-			}
-			catch (NumberFormatException e) {
-				Logger.getLogger(EFreeTypeFontGenerator.class).error(
-						"unable to read balancing scale for locale " + I18n.getShortName() + " and font " + fontName,
-						e);
-				this.balancingScale = 0.0f;
-			}
-		}
-		else this.balancingScale = 0.0f;
-		
+		this.fontName = fontName;		
 	}
 
 	public static void clearAll() {
@@ -98,10 +84,6 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 		return freeTypeFontGeneratorCache;
 	}
 	
-	public float getBalancingScale() {
-		return balancingScale;
-	}
-	
 	/**
 	 * Determines characters required for the current text, ie. the set of unique characters in {@link PlainTextbox#lineList}.
 	 * @param lineList Array of lines.
@@ -137,5 +119,10 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 		for (Character c : charset)
 			stringBuilder.append(c);
 		return stringBuilder.toString();
+	}
+	
+	@Override
+	public void clearAllOfThisKind() {
+		EFreeTypeFontGenerator.clearAll();
 	}
 }

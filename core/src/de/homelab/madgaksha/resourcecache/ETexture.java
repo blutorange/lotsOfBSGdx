@@ -240,4 +240,9 @@ public enum ETexture implements IResource<ETexture,AtlasRegion> {
 	public float getOriginalScale() {
 		return scale;
 	}
+	
+	@Override
+	public void clearAllOfThisKind() {
+		ETextbox.clearAll();
+	}
 }

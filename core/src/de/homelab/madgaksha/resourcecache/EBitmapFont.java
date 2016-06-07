@@ -92,4 +92,9 @@ public enum EBitmapFont implements IResource<EBitmapFont,BitmapFont> {
 	public EnumMap<EBitmapFont, BitmapFont> getMap() {
 		return bitmapFontCache;
 	}
+	
+	@Override
+	public void clearAllOfThisKind() {
+		EBitmapFont.clearAll();
+	}
 }

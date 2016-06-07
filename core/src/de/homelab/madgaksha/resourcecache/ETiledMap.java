@@ -75,4 +75,9 @@ public enum ETiledMap implements IResource<ETiledMap,TiledMap> {
 	public EnumMap<ETiledMap, TiledMap> getMap() {
 		return tiledMapCache;
 	}
+	
+	@Override
+	public void clearAllOfThisKind() {
+		ETiledMap.clearAll();
+	}
 }

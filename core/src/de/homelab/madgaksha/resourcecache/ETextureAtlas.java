@@ -73,4 +73,9 @@ public enum ETextureAtlas implements IResource<ETextureAtlas,TextureAtlas> {
 	public EnumMap<ETextureAtlas, TextureAtlas> getMap() {
 		return textureAtlasCache;
 	}
+	
+	@Override
+	public void clearAllOfThisKind() {
+		ETextureAtlas.clearAll();
+	}
 }

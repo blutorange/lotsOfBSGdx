@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.CutsceneEventProvider;
 import de.homelab.madgaksha.cutscenesystem.event.EventTextbox;
+import de.homelab.madgaksha.cutscenesystem.event.EventWait;
 import de.homelab.madgaksha.cutscenesystem.textbox.EFaceVariation;
 import de.homelab.madgaksha.enums.ESpeaker;
 import de.homelab.madgaksha.layer.CutsceneLayer;
@@ -130,12 +131,19 @@ public class Level01 extends ALevel {
 			public ACutsceneEvent nextCutsceneEvent(int i) {
 				switch (i) {
 				case 0:
+					return new EventWait(2.5f);
+				case 1:
 					event.setLines("ただの散歩のつもりだったけど、ここはどこ？\nそれで空に浮いているってどういうこと？？\nもう、わけ分かんない！");
 					event.setSpeaker(ESpeaker.ESTELLE);
 					event.setFaceVariation(EFaceVariation.ANGRY);
 					break;
-				case 1:
-					event.setLines("とりあえず、もやもやするよりこの辺りでヒント探しにでも行こう。。。！");
+				case 2:
+					event.setLines("ボーズでヨシュアとブレイザーらしく\n行動するのに一所懸命に頑張ってたけど、\n町をでた途端こんなことに。。。");
+					event.setSpeaker(ESpeaker.ESTELLE);
+					event.setFaceVariation(EFaceVariation.EVASIVE);
+					break;
+				case 3:
+					event.setLines("とりあえず、もやもやするよりこの辺りで\nヒント探しにでも行こうかな。。。！");
 					event.setFaceVariation(EFaceVariation.SHOU_GA_NAI);
 					break;
 				default:

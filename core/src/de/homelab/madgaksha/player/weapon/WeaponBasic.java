@@ -3,6 +3,7 @@ package de.homelab.madgaksha.player.weapon;
 import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.GlobalBag;
@@ -25,7 +26,8 @@ public class WeaponBasic extends AWeapon {
 	private final static long BULLET_POWER = 9394L;
 	private final static float BULLET_INITIAL_SPEED = 800.0f;
 	private final static float BULLET_LIFE = 3.0f;
-	private final static float BULLET_INTERVAL = 3.4f;
+	private final static float BULLET_INTERVAL_MIN = 0.2f;
+	private final static float BULLET_INTERVAL_MAX = 5.8f;
 	private final static float BULLET_ANGULAR_SPEED = 900.0f;
 	private final static float BULLET_ATTRACTION = 1.8f;
 	private final static float BULLET_FRICTION = 0.2f;
@@ -57,7 +59,7 @@ public class WeaponBasic extends AWeapon {
 	public void fire(Entity player, float deltaTime) {
 		remainingTime -= deltaTime;
 		if (remainingTime <= 0.0f) {
-			remainingTime = BULLET_INTERVAL;
+			remainingTime = MathUtils.random(BULLET_INTERVAL_MIN, BULLET_INTERVAL_MAX);
 
 			if (cameraTrackingComponent.focusPoints.size() < 1) return;
 			

@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 import java.util.Locale;
 
 import com.badlogic.gdx.Application;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
@@ -30,6 +31,7 @@ public class GameParameters implements Serializable {
 	public ALevel requestedLevel;
 	public APlayer requestedPlayer;
 	public String requestedWindowTitle;
+	public float requestedTextboxSpeed;
 	private boolean deserializedSuccessfully = false;
 
 	@Override
@@ -43,11 +45,13 @@ public class GameParameters implements Serializable {
 		json.writeValue("requestedFps", requestedFps);
 		json.writeValue("requestedLogLevel", requestedLogLevel);
 		json.writeValue("requestedWindowTitle", requestedWindowTitle);
+		json.writeValue("requestedTextboxSpeed", requestedTextboxSpeed);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void read(Json json, JsonValue jsonData) {
+		deserializedSuccessfully = false;
 		String levelClass = jsonData.get("requestedLevel").asString();
 		String playerClass = jsonData.get("requestedPlayer").asString();
 		try {
@@ -69,6 +73,7 @@ public class GameParameters implements Serializable {
 		requestedFullscreen = jsonData.get("requestedFullscreen").asBoolean();
 		requestedLogLevel = jsonData.get("requestedLogLevel").asInt();
 		requestedWindowTitle = jsonData.get("requestedWindowTitle").asString();
+		requestedTextboxSpeed = jsonData.get("requestedTextboxSpeed").asFloat();
 		deserializedSuccessfully = true;
 	}
 
@@ -90,7 +95,8 @@ public class GameParameters implements Serializable {
 		private int requestedFps = 30;
 		private int requestedLogLevel = Application.LOG_ERROR;
 		private String requestedWindowTitle = "";
-		private final APlayer requestedPlayer; 
+		private float requestedTextboxSpeed = 10.0f;
+		private final APlayer requestedPlayer;
 		private final ALevel requestedLevel;
 		
 		public Builder(ALevel level, APlayer player) {
@@ -137,6 +143,11 @@ public class GameParameters implements Serializable {
 			return this;
 		}
 		
+		public Builder requestedTextboxSpeed(float x) {
+			requestedTextboxSpeed = MathUtils.clamp(x,0.01f,999.0f);
+			return this;
+		}
+		
 		// TODO
 		// !!!Change the read/write methods when changing this!!!
 		public GameParameters build() {
@@ -152,6 +163,7 @@ public class GameParameters implements Serializable {
 			params.requestedWidth = this.requestedWidth;
 			params.requestedWindowTitle = this.requestedWindowTitle;
 			params.requestedPlayer = this.requestedPlayer;
+			params.requestedTextboxSpeed = this.requestedTextboxSpeed;
 			return params;
 		}
 	}

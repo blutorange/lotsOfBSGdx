@@ -74,7 +74,7 @@ public enum ETextbox implements IResource<ETextbox, PlainTextbox> {
 			if (all == null || bottom == null || top == null || bottomLeft == null || bottomRight == null
 					|| left == null || right == null)
 				return null;
-			return new FancyTextbox(all, bottom, top, left, right, bottomLeft, bottomRight);			
+			return new FancyTextbox(all, bottom, top, left, right, bottomLeft, bottomRight, this);			
 		} catch (GdxRuntimeException e) {
 			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 			return null;
@@ -103,5 +103,10 @@ public enum ETextbox implements IResource<ETextbox, PlainTextbox> {
 	@Override
 	public EnumMap<ETextbox, PlainTextbox> getMap() {
 		return textboxCache;
+	}
+	
+	@Override
+	public void clearAllOfThisKind() {
+		ETextbox.clearAll();
 	}
 }

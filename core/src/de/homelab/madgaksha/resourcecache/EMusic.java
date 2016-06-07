@@ -74,4 +74,9 @@ public enum EMusic implements IResource<EMusic,Music> {
 	public EnumMap<EMusic, Music> getMap() {
 		return musicCache;
 	}
+	
+	@Override
+	public void clearAllOfThisKind() {
+		EMusic.clearAll();
+	}
 }

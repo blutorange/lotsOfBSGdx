@@ -1,7 +1,6 @@
 
 package de.homelab.madgaksha.desktop;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
@@ -102,8 +101,8 @@ public class ProcessLauncher {
 
 		// Sanitize dimensions and fps.
 		if (config.width < 1) config.width = 320;
-		if (config.height < 1) config.width = 240;
-		if (config.foregroundFPS < 1) config.width = 30;
+		if (config.height < 1) config.height = 240;
+		if (config.foregroundFPS < 1) config.foregroundFPS = 30;
 
 		// Set sane values or otherwise 100% CPU is used for the ADX
 		// audio decoding thread when calling
@@ -120,7 +119,7 @@ public class ProcessLauncher {
 		// and the file will not contain more than 2 channels.
 		config.audioDeviceBufferSize = 2048;
 		config.audioDeviceBufferCount = 9;
-		
+
 		return config;
 	}
 

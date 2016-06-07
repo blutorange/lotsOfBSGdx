@@ -6,7 +6,7 @@
     <Handler>Java Properties Handler</Handler>
     <Columns>
         <Key>
-            <Width>108</Width>
+            <Width>334</Width>
         </Key>
         <Column>
             <Name>de</Name>
@@ -60,6 +60,14 @@
             <Value disabled="false">Ruhe</Value>
             <Value disabled="false">The Calmlands</Value>
             <Value disabled="true"></Value>
+        </Property>
+        <Property>
+            <Name>desktop.launcher.score</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Highscore</Value>
+            <Value disabled="false">Best score</Value>
+            <Value disabled="false">ハイスコア</Value>
         </Property>
         <Property>
             <Name>desktop.game.title</Name>
@@ -126,12 +134,20 @@
             <Value disabled="false">フレームレート</Value>
         </Property>
         <Property>
+            <Name>desktop.options.textboxSpeed</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Texgeschwindigkeit</Value>
+            <Value disabled="false">Text speed</Value>
+            <Value disabled="false">文字速度</Value>
+        </Property>
+        <Property>
             <Name>desktop.options.width</Name>
             <Disabled>false</Disabled>
             <MultiLine>false</MultiLine>
             <Value disabled="false">Breite</Value>
             <Value disabled="false">Width</Value>
-            <Value disabled="false"></Value>
+            <Value disabled="false">幅</Value>
         </Property>
         <Property>
             <Name>desktop.options.height</Name>
@@ -155,7 +171,7 @@
             <MultiLine>false</MultiLine>
             <Value disabled="false">Standardeinstellungen</Value>
             <Value disabled="false">Default settings</Value>
-            <Value disabled="false"></Value>
+            <Value disabled="false">初期設定へ戻す</Value>
         </Property>
         <Property>
             <Name>desktop.options.close</Name>
@@ -163,7 +179,7 @@
             <MultiLine>false</MultiLine>
             <Value disabled="false">Schließen</Value>
             <Value disabled="false">Close</Value>
-            <Value disabled="false"></Value>
+            <Value disabled="false">閉じる</Value>
         </Property>
         <Property>
             <Name>desktop.options.title</Name>
@@ -174,13 +190,5 @@
             <Value disabled="false">設定</Value>
         </Property>
         <Empty/>
-        <Property>
-            <Name>desktop.options.key.right</Name>
-            <Disabled>false</Disabled>
-            <MultiLine>false</MultiLine>
-            <Value disabled="false">Rechts</Value>
-            <Value disabled="false">Right</Value>
-            <Value disabled="false">右</Value>
-        </Property>
     </Records>
 </MultiProperties>

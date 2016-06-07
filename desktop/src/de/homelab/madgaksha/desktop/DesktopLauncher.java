@@ -120,6 +120,7 @@ public class DesktopLauncher extends JFrame {
 	private Locale locale = Locale.getDefault();
 	private Integer fps = null;
 	private Boolean fullscreen = null;
+	private Float textboxSpeed = null;
 	private Integer width = null;
 	private Integer height = null;
 	private int verbosity = Application.LOG_ERROR;
@@ -154,13 +155,14 @@ public class DesktopLauncher extends JFrame {
 		
 		System.out.println("The following command line options are available:");
 		System.out.println("");
-		System.out.println("-dw [--width]        Sets the width of the window.");
-		System.out.println("-dh [--height]       Sets the height of the window.");
-		System.out.println("-f  [--fps]          Sets the framerate in frames per second.");
-		System.out.println("-fs [--fullscreen]   Activates fullscreen mode.");
-		System.out.println("-h  [--help]         Shows this help.");
-		System.out.println("-l  [--language]     Sets the language for the program.");
-		System.out.println("-v  [--verbosity]    Sets the logging level. 0=none, 1=info, 2=error, 3=debug.");
+		System.out.println("-dw [--width]         Sets the width of the window.");
+		System.out.println("-dh [--height]        Sets the height of the window.");
+		System.out.println("-f  [--fps]           Sets the framerate in frames per second.");
+		System.out.println("-fs [--fullscreen]    Activates fullscreen mode.");
+		System.out.println("-h  [--help]          Shows this help.");
+		System.out.println("-l  [--language]      Sets the language for the program.");
+		System.out.println("-ts [--textbox-speed] Sets the textbox speed in characters per second.");
+		System.out.println("-v  [--verbosity]     Sets the logging level. 0=none, 1=info, 2=error, 3=debug.");
 	}
 	
 	/**
@@ -178,6 +180,7 @@ public class DesktopLauncher extends JFrame {
 		o.addOption("l", "language", true, "Sets the language for the program.");
 		o.addOption("h", "help", false, "Show help.");
 		o.addOption("fs", "fullscreen", true, "Activates fullscreen mode.");
+		o.addOption("ts", "textbox-speed", true, "Set textbox speed in Hz.");
 		o.addOption("f", "fps", true, "Framerate in frames per second.");
 		o.addOption("dw", "width", true, "Window width.");
 		o.addOption("dh", "height", true, "Window height");
@@ -218,6 +221,16 @@ public class DesktopLauncher extends JFrame {
 			s.close();
 		}
 		else fps = null;
+		
+		// Set the textbox speed
+		final Float textboxSpeed;
+		if (line.hasOption("textbox-speed")) {
+			final Scanner s = new Scanner(line.getOptionValue("textbox-speed"));
+			if (s.hasNextFloat()) textboxSpeed = s.nextFloat();
+			else textboxSpeed = null;
+			s.close();
+		}
+		else textboxSpeed = null;
 		
 		// Set the language.
 		Locale l;
@@ -297,7 +310,7 @@ public class DesktopLauncher extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DesktopLauncher.instance = new DesktopLauncher(fullscreen, width, height, fps, locale, verbosity);
+					DesktopLauncher.instance = new DesktopLauncher(fullscreen, width, height, fps, textboxSpeed, locale, verbosity);
 					DesktopLauncher.instance.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -345,12 +358,13 @@ public class DesktopLauncher extends JFrame {
 		else return null;
 	}
 	
-	private DesktopLauncher(Boolean fullscreen, Integer width, Integer height, Integer fps, Locale locale, int verbosity) {
+	private DesktopLauncher(Boolean fullscreen, Integer width, Integer height, Integer fps, Float textboxSpeed, Locale locale, int verbosity) {
 		// Save configuration.
 		this.fullscreen = fullscreen;
 		this.width = width;
 		this.height = height;
 		this.fps = fps;
+		this.textboxSpeed = textboxSpeed;
 		this.locale = locale;
 		this.verbosity = verbosity;
 		
@@ -428,7 +442,7 @@ public class DesktopLauncher extends JFrame {
 	// just a simple button for testing now.
 	private void renderLauncher() {
 		
-		mainPanel = new MainPanel(width, height, fps, fullscreen);
+		mainPanel = new MainPanel(width, height, fps, fullscreen, textboxSpeed);
 
 		final JButton startButton = mainPanel.getStartButton();
 		final JButton buttonForceQuit = mainPanel.getDebugButton();
@@ -472,6 +486,7 @@ public class DesktopLauncher extends JFrame {
 		height = mainPanel.getConfigHeight();
 		fps = mainPanel.getConfigFps();
 		fullscreen = mainPanel.getConfigFullscreen();
+		textboxSpeed = mainPanel.getTextboxSpeed();
 		ALevel level = new Level01();
 		APlayer player = new PEstelle();
 		final GameParameters params = new GameParameters.Builder(level, player)
@@ -480,6 +495,7 @@ public class DesktopLauncher extends JFrame {
 				.requestedHeight(height)
 				.requestedFullscreen(fullscreen)
 				.requestedFps(fps)
+				.requestedTextboxSpeed(textboxSpeed)
 				.requestedLogLevel(verbosity)
 				.requestedWindowTitle(level.getName())
 				.build();
