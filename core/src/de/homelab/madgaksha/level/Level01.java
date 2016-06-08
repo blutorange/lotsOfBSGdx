@@ -2,28 +2,21 @@ package de.homelab.madgaksha.level;
 
 import static de.homelab.madgaksha.GlobalBag.game;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.maps.MapProperties;
 
-import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
-import de.homelab.madgaksha.cutscenesystem.CutsceneEventProvider;
-import de.homelab.madgaksha.cutscenesystem.event.EventTextbox;
-import de.homelab.madgaksha.cutscenesystem.event.EventWait;
-import de.homelab.madgaksha.cutscenesystem.textbox.EFaceVariation;
-import de.homelab.madgaksha.enums.ESpeaker;
+import de.homelab.madgaksha.cutscenesystem.provider.CutsceneEventProvider;
+import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.layer.CutsceneLayer;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
 import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ESound;
-import de.homelab.madgaksha.resourcecache.ETextbox;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ETiledMap;
-import de.homelab.madgaksha.resourcecache.IResource;
-import de.homelab.madgaksha.resourcepool.EventTextboxPool;;
+import de.homelab.madgaksha.resourcecache.IResource;;
 
 /**
  * Only for testing purposes.
@@ -118,40 +111,8 @@ public class Level01 extends ALevel {
 	
 	public void initialDialog(MapProperties properties) {
 		LOG.debug("initialDialog triggered");
-		game.pushLayer(new CutsceneLayer(new CutsceneEventProvider() {
-			private EventTextbox event;
-			public void initialize() {
-				event = EventTextboxPool.getInstance().obtain();
-				event.setTextbox(ETextbox.FC_BLUE);
-				event.setTextColor(Color.WHITE);
-				event.setFont(EFreeTypeFontGenerator.MAIN_FONT);
-			}
-			
-			@Override
-			public ACutsceneEvent nextCutsceneEvent(int i) {
-				switch (i) {
-				case 0:
-					return new EventWait(2.5f);
-				case 1:
-					event.setLines("ただの散歩のつもりだったけど、ここはどこ？\nそれで空に浮いているってどういうこと？？\nもう、わけ分かんない！");
-					event.setSpeaker(ESpeaker.ESTELLE);
-					event.setFaceVariation(EFaceVariation.ANGRY);
-					break;
-				case 2:
-					event.setLines("ボーズでヨシュアとブレイザーらしく\n行動するのに一所懸命に頑張ってたけど、\n町をでた途端こんなことに。。。");
-					event.setSpeaker(ESpeaker.ESTELLE);
-					event.setFaceVariation(EFaceVariation.EVASIVE);
-					break;
-				case 3:
-					event.setLines("とりあえず、もやもやするよりこの辺りで\nヒント探しにでも行こうかな。。。！");
-					event.setFaceVariation(EFaceVariation.SHOU_GA_NAI);
-					break;
-				default:
-					return null;
-				}
-				return event;
-			}
-		}));
+		CutsceneEventProvider provider = new FileCutsceneProvider(Gdx.files.internal("cutscene/level01.initialDialog"));
+		game.pushLayer(new CutsceneLayer(provider));
 	}
 
 	@Override

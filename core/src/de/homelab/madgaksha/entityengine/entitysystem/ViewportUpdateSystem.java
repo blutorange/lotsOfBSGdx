@@ -43,9 +43,9 @@ public class ViewportUpdateSystem extends IteratingSystem {
 		final PerspectiveCamera psc = vc.viewport.getPerspectiveCamera();
 		
 		// Set camera position.
-		psc.position.x = pc.x;
-		psc.position.y = pc.y;
-		psc.position.z = pc.z;
+		psc.position.x = pc.x + pc.offsetX;
+		psc.position.y = pc.y + pc.offsetY;
+		psc.position.z = pc.z + pc.offsetZ;
 		
 		// Set rotation.
 		vc.viewport.setRotation(rc.thetaZ);

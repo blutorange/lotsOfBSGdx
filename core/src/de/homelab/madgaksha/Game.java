@@ -38,6 +38,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -73,7 +74,8 @@ public class Game implements ApplicationListener {
 	 * This will cause slowdown on slow devices, but game logic would get messed
 	 * up for high dt.
 	 */
-	public final static float MAX_DELTA_TIME = 0.1f;
+	public final static float MAX_DELTA_TIME = 0.2f;
+	public final static float MIN_DELTA_TIME = 0.005f;
 
 	private final List<ALayer> layerStack = new ArrayList<ALayer>(10);
 	private final List<ALayer> layerStackPopQueue = new ArrayList<ALayer>(10);
@@ -285,7 +287,7 @@ public class Game implements ApplicationListener {
 			layerStackPushQueue.clear();
 		}
 		
-		if (KeyMap.isPauseButtonJustPressed() && running)
+		if (KeyMapDesktop.isPauseButtonJustPressed() && running)
 			pause();
 	}
 
@@ -435,7 +437,7 @@ public class Game implements ApplicationListener {
 		Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
 
 		// Update and render the game.
-		final float deltaTime = timeScalingFactor * Math.min(Gdx.graphics.getRawDeltaTime(), MAX_DELTA_TIME);
+		final float deltaTime = timeScalingFactor * MathUtils.clamp(Gdx.graphics.getRawDeltaTime(), MIN_DELTA_TIME, MAX_DELTA_TIME);
 
 		// Start with the topmost item on the layer stack and proceed
 		// with the layers down on the stack only if the layers
@@ -472,7 +474,7 @@ public class Game implements ApplicationListener {
 		statusScreen.render();
 	}
 
-	private void renderDebug() {
+	private void renderDebug() {	
 		viewportPixel.apply(false);
 		int cnt = 0;
 		for (Entity e : gameEntityEngine.getEntities()) {

@@ -21,6 +21,7 @@ import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.QuakeEffectComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
@@ -35,12 +36,14 @@ public class PostEffectSystem extends EntitySystem {
 	private Family familyHoverEffect;
 	private Family familyColorFlashEffect;
 	private Family familyFadeEffect;
+	private Family familyQuakeEffect;
 	
 	private ImmutableArray<Entity> entitiesLeanEffect;
 	private ImmutableArray<Entity> entitiesHoverEffect;
 	private ImmutableArray<Entity> entitiesColorFlashEffect;
 	private ImmutableArray<Entity> entitiesFadeEffect;
-
+	private ImmutableArray<Entity> entitiesQuakeEffect;
+	
 	private final static Color color = new Color();
 	private final Vector3 upVector;
 	private float a, b;
@@ -57,6 +60,7 @@ public class PostEffectSystem extends EntitySystem {
 		this.familyHoverEffect = Family.all(TemporalComponent.class, PositionComponent.class, HoverEffectComponent.class).get();
 		this.familyColorFlashEffect = Family.all(TemporalComponent.class, ColorComponent.class, ColorFlashEffectComponent.class).exclude(InactiveComponent.class).get();
 		this.familyFadeEffect = Family.all(AlphaComponent.class, FadeEffectComponent.class,TemporalComponent.class).exclude(InactiveComponent.class).get();
+		this.familyQuakeEffect = Family.all(QuakeEffectComponent.class, PositionComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get();
 	}
 
 	@Override
@@ -133,6 +137,22 @@ public class PostEffectSystem extends EntitySystem {
 			}
 		}
 
+		// Quake effect.
+		for (int i = 0; i < entitiesQuakeEffect.size(); ++i) {
+			final Entity entity = entitiesQuakeEffect.get(i);
+			final QuakeEffectComponent qec = Mapper.quakeEffectComponent.get(entity);
+			final TemporalComponent tc = Mapper.temporalComponent.get(entity);
+			final PositionComponent pc = Mapper.positionComponent.get(entity);
+			qec.minusT -= tc.deltaTime * qec.frequency;
+			if (qec.minusT <= 0.0f) {
+				qec.minusT = 1.0f;
+				qec.angle = (qec.angle + MathUtils.random(qec.minAdvanceAngle,qec.maxAdvanceAngle)) % 360.0f;
+				float amplitude = MathUtils.random(qec.minAmplitudeRatio*qec.amplitude, qec.amplitude);
+				pc.offsetX = amplitude * MathUtils.sinDeg(qec.angle);
+				pc.offsetY = amplitude * MathUtils.cosDeg(qec.angle);
+			}
+		}
+		
 	}
 
 	@Override
@@ -141,6 +161,7 @@ public class PostEffectSystem extends EntitySystem {
 		entitiesHoverEffect = engine.getEntitiesFor(familyHoverEffect);
 		entitiesColorFlashEffect = engine.getEntitiesFor(familyColorFlashEffect);
 		entitiesFadeEffect = engine.getEntitiesFor(familyFadeEffect);
+		entitiesQuakeEffect = engine.getEntitiesFor(familyQuakeEffect);
 	}
 
 	@Override
@@ -149,5 +170,6 @@ public class PostEffectSystem extends EntitySystem {
 		entitiesHoverEffect = null;
 		entitiesColorFlashEffect = null;
 		entitiesFadeEffect = null;
+		entitiesQuakeEffect = null;
 	}
 }

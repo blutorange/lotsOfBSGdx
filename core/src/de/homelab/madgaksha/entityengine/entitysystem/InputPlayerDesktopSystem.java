@@ -11,7 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.GlobalBag;
-import de.homelab.madgaksha.KeyMap;
+import de.homelab.madgaksha.KeyMapDesktop;
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.Mapper;
@@ -53,13 +53,13 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		final DirectionComponent dc = Mapper.directionComponent.get(entity);
 		
 		// Switch weapon
-		if (KeyMap.isWeaponSwitchJustPressed()) {
+		if (KeyMapDesktop.isWeaponSwitchJustPressed()) {
 			if (player.cycleWeaponForward()) {
 				SoundPlayer.getInstance().play(ESound.EQUIP_WEAPON);
 			}
 			else SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
 		}
-		else if (KeyMap.isTokugiSwitchJustPressed()) {
+		else if (KeyMapDesktop.isTokugiSwitchJustPressed()) {
 			if (player.cycleTokugiForward()) {
 				SoundPlayer.getInstance().play(ESound.EQUIP_TOKUGI);
 			}

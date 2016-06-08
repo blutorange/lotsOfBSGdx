@@ -3,8 +3,8 @@ package de.homelab.madgaksha;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
-public final class KeyMap {
-	private KeyMap(){}
+public final class KeyMapDesktop {
+	private KeyMapDesktop(){}
 	
 	public final static boolean isTextboxAdvanceJustPressed() {
 		return Gdx.input.isKeyJustPressed(Keys.ENTER);

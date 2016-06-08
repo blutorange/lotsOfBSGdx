@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.Align;
 
-import de.homelab.madgaksha.KeyMap;
+import de.homelab.madgaksha.KeyMapDesktop;
 import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
@@ -78,7 +78,7 @@ public class PauseLayer extends ALayer {
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 				anyButtonPressed = true;
-				exitButtonJustPressed = KeyMap.isPauseButtonPressed();
+				exitButtonJustPressed = KeyMapDesktop.isPauseButtonPressed();
 				return true;
 			}
 
@@ -110,7 +110,7 @@ public class PauseLayer extends ALayer {
 			@Override
 			public boolean keyDown(int keycode) {
 				anyButtonPressed = true;
-				exitButtonJustPressed = KeyMap.isPauseButtonPressed();
+				exitButtonJustPressed = KeyMapDesktop.isPauseButtonPressed();
 				return true;
 			}
 		});
@@ -131,7 +131,7 @@ public class PauseLayer extends ALayer {
 	@Override
 	public void update(float deltaTime) {
 		if (exitButtonJustPressed) {
-			if (KeyMap.isPauseButtonPressed()) {
+			if (KeyMapDesktop.isPauseButtonPressed()) {
 				exitPressedTime += deltaTime;
 				if (allowInput && exitPressedTime > THRESHOLD_FOR_EXIT) Gdx.app.exit();
 			}

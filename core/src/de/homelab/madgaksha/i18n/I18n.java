@@ -105,4 +105,8 @@ public class I18n {
 	public static boolean hasFontKey(String key) {
 		return font.containsKey(key);
 	}
+
+	public static boolean hasGameKey(String key) {
+		return game.containsKey(key);
+	}
 }

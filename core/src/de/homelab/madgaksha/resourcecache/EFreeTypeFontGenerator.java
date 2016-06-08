@@ -2,6 +2,7 @@ package de.homelab.madgaksha.resourcecache;
 
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import de.homelab.madgaksha.cutscenesystem.textbox.PlainTextbox;
+import de.homelab.madgaksha.enums.VerticalAlignPosition;
 import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
 
@@ -26,16 +28,32 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 	private final static EnumMap<EFreeTypeFontGenerator, FreeTypeFontGenerator> freeTypeFontGeneratorCache =
 			new EnumMap<EFreeTypeFontGenerator, FreeTypeFontGenerator>(EFreeTypeFontGenerator.class);
 
-	private String fontName;
-	/** Font needs to be rasterized at different sizes. We want to maintain the same relative size.
-	 * The font size and the space a string takes do not scale linearly.
-	 * To remedy this, we scale the font with a factor depending on the current font size:
-	 * <code>balancingScale * (fontSize - 20)</code>
-	 * This is far from optimal, but works well enough to prevent the text from overflowing.
+	private final String fontName;
+
+	/**
+	 * The reference line used for centering text vertically. For Latin, between base line and
+	 * x height works well. For Japanese/Chinese, between base line and cap height works well.
 	 */
+	private final VerticalAlignPosition verticalAlignPosition;
 	
 	private EFreeTypeFontGenerator(String fontName) {
-		this.fontName = fontName;		
+		this.fontName = fontName;
+		String vertAlignKey = fontName + "VerticalAlign";
+		VerticalAlignPosition vertAlign = VerticalAlignPosition.BETWEEN_BASE_LINE_AND_X_HEIGHT;
+		try {
+			if (I18n.isInitiated() && I18n.hasFontKey(vertAlignKey)) {
+				vertAlign = VerticalAlignPosition.valueOf(I18n.font(vertAlignKey).toUpperCase(Locale.ROOT));
+			}
+			else {
+				throw new IllegalArgumentException("i18n key does not exist");
+			}
+		}
+		catch (IllegalArgumentException e) {
+			Logger logger = Logger.getLogger(EFreeTypeFontGenerator.class);
+			logger.error("could not read vertical align position for language " + I18n.getShortName() + " and font " + this, e);
+			logger.error("assure a proper value has been set for the key " + vertAlignKey);
+		}
+		this.verticalAlignPosition = vertAlign;
 	}
 
 	public static void clearAll() {
@@ -124,5 +142,9 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 	@Override
 	public void clearAllOfThisKind() {
 		EFreeTypeFontGenerator.clearAll();
+	}
+	
+	public VerticalAlignPosition getVerticalAlignPosition() {
+		return verticalAlignPosition;
 	}
 }

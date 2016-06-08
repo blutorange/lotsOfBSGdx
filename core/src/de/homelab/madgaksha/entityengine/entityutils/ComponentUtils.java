@@ -1,14 +1,19 @@
 package de.homelab.madgaksha.entityengine.entityutils;
 
+import static de.homelab.madgaksha.GlobalBag.cameraEntity;
+import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.ComponentQueueComponent;
+import de.homelab.madgaksha.entityengine.component.QuakeEffectComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
+import de.homelab.madgaksha.enums.RichterScale;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 
@@ -48,5 +53,19 @@ public class ComponentUtils {
 			sac.setup(sfdc);
 			sc.setup(sac);
 		}
+	}
+	
+	public static void enableScreenQuake(float amplitude, float frequency) {
+		final QuakeEffectComponent qec = gameEntityEngine.createComponent(QuakeEffectComponent.class);
+		qec.setup(amplitude, frequency);
+		cameraEntity.add(qec);
+	}
+	
+	public static void enableScreenQuake(RichterScale quake) {
+		enableScreenQuake(quake.amplitude, quake.frequency);
+	}
+	
+	public static void disableScreenQuake() {
+		cameraEntity.remove(QuakeEffectComponent.class);
 	}
 }

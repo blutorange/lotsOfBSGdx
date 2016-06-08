@@ -24,7 +24,7 @@ public enum ESound implements IResource<ESound,Sound> {
 	SCORE_BULLET_HIT("sound/ed6se020.wav",0.1f),
 	POSAUNEN_CHORUS("sound/ed6se152.wav", 6.966f),
 	
-	TEXTBOX_ADVANCE("sound/ed6se002.wav", 0.552f),
+	TEXTBOX_ADVANCE("sound/ed6se002.wav", 0.200f),
 	TEXT_ADVANCE("sound/ed6se005.wav", 0.033f),
 	
 	// ===================

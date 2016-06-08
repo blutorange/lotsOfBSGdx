@@ -61,6 +61,15 @@ public class FancyTextbox extends PlainTextbox {
 	/** Texture with the face of the character speaking. */
 	private AtlasRegion faceTexture;
 
+	/** Offset for slide animation. */
+	private float currentOffsetY = 0.0f;
+	private float animationFactor = 1.0f;
+	
+	/** When {@link PlainTextbox#USE_INTEGER_POSITIONS} is <code>true</code>, float translations cannot be performed
+	 * exactly. We need to store the difference between the actual and should translation.
+	 */
+	private float leftoverVerticalTranslation = 0.0f;
+	
 	private NinePatch ninePatchText;
 	private NinePatch ninePatchSpeaker;
 	private NinePatch ninePatchFace;
@@ -71,12 +80,10 @@ public class FancyTextbox extends PlainTextbox {
 	private final Rectangle faceBoxFrame = new Rectangle();
 	private final Rectangle faceBoxContent = new Rectangle();
 	
-	private final ETextbox type;
-	
 	public FancyTextbox(NinePatch ninePatchAllBox, NinePatch ninePatchBottomBox, NinePatch ninePatchTopBox,
 			NinePatch ninePatchLeftBox, NinePatch ninePatchRightBox, NinePatch ninePatchBottomLeftBox,
 			NinePatch ninePatchBottomRightBox, ETextbox type) {
-		super();
+		super(type);
 		this.ninePatchAllBox = ninePatchAllBox;
 		
 		this.ninePatchBottomBox = ninePatchBottomBox;
@@ -87,8 +94,6 @@ public class FancyTextbox extends PlainTextbox {
 		
 		this.ninePatchBottomLeftBox = ninePatchBottomLeftBox;
 		this.ninePatchBottomRightBox = ninePatchBottomRightBox;
-		
-		this.type = type;
 		
 		initialize();
 	}
@@ -128,13 +133,15 @@ public class FancyTextbox extends PlainTextbox {
 
 	@Override
 	public void setBoxColor(Color boxColor) {
-		ninePatchAllBox.setColor(boxColor);
-		ninePatchBottomBox.setColor(boxColor);
-		ninePatchTopBox.setColor(boxColor);
-		ninePatchBottomLeftBox.setColor(boxColor);
-		ninePatchBottomRightBox.setColor(boxColor);
-		ninePatchBottomLeftBox.setColor(boxColor);
-		ninePatchBottomRightBox.setColor(boxColor);
+		if (boxColor != null) {
+			ninePatchAllBox.setColor(boxColor);
+			ninePatchBottomBox.setColor(boxColor);
+			ninePatchTopBox.setColor(boxColor);
+			ninePatchBottomLeftBox.setColor(boxColor);
+			ninePatchBottomRightBox.setColor(boxColor);
+			ninePatchBottomLeftBox.setColor(boxColor);
+			ninePatchBottomRightBox.setColor(boxColor);
+		}
 	}
 
 	@Override
@@ -144,12 +151,12 @@ public class FancyTextbox extends PlainTextbox {
 	}
 
 	@Override
-	protected void updateBox() {
+	protected void updateBox() {	
 		// Convert ttf font to a bitmap font.
-		rasterizeFont();
-		
-		bitmapFontCacheSpeaker = new BitmapFontCache(bitmapFont);
-		
+		beginTexboxFontLayout();
+
+		bitmapFontCacheSpeaker = new BitmapFontCache(bitmapFont, USE_INTEGER_POSITIONS);
+
 		// Apply original value for fullHeight property. Need to switch to full
 		// height when there is a face.
 		setFullHeight(requestedFullHeight);
@@ -179,6 +186,7 @@ public class FancyTextbox extends PlainTextbox {
 			// speaker name only
 			layoutMainBox(1.0f, ninePatchBottomBox);
 			layoutSpeakerBox(mainBoxFrame.height, ninePatchTopBox);
+			faceBoxFrame.set(0,0,0,0);
 			ninePatchText = ninePatchBottomBox;
 			ninePatchSpeaker = ninePatchTopBox;
 		} else if (hasFaceVariation) {
@@ -188,40 +196,51 @@ public class FancyTextbox extends PlainTextbox {
 			layoutFaceBox(mainBoxFrame.height, ninePatchRightBox);
 			layoutMainBox(1.0f - ((float)faceBoxFrame.width) / ((float) viewportGame.getScreenWidth()),
 					ninePatchLeftBox);
+			speakerBoxFrame.set(0,0,0,0);
 			ninePatchText = ninePatchLeftBox;
 			ninePatchFace = ninePatchRightBox;
 		} else {
 			// plain text box
 			layoutMainBox(1.0f, ninePatchAllBox);
+			speakerBoxFrame.set(0,0,0,0);
+			faceBoxFrame.set(0,0,0,0);
 			ninePatchText = ninePatchAllBox;
 		}
 		
 		finishTexboxFontLayout();
-
 		
 		// Compute layout for speaker name.
 		if (hasSpeakerName) {
+			float verticalPosition = fontType.getVerticalAlignPosition().positionForCentered(speakerBoxContent,
+					bitmapFont);
+
 			bitmapFontCacheSpeaker.clear();
 			bitmapFontCacheSpeaker.setColor(speaker.getColor());
 			bitmapFontCacheSpeaker.addText(speaker.getName(), speakerBoxContent.x,
-					speakerBoxContent.y + speakerBoxContent.height, 0, speaker.getName().length(),
-					speakerBoxContent.width, Align.topLeft, false, StringUtils.EMPTY);
+					verticalPosition, 0, speaker.getName().length(),
+					speakerBoxContent.width, Align.bottomLeft, false, StringUtils.EMPTY);			
 		}
-		
+
+		// Restore current animation state.
+		currentOffsetY = 0.0f;
+		leftoverVerticalTranslation = 0.0f;
+		applySlideEffect();
+
+		// Done updating.
 		dirty = false;
 	}
 
 	@Override
 	public void mainRender() {
 		// Draw background first.
-		ninePatchText.draw(batchPixel, mainBoxFrame.x, mainBoxFrame.y, mainBoxFrame.width, mainBoxFrame.height);		
+		ninePatchText.draw(batchPixel, mainBoxFrame.x, mainBoxFrame.y + currentOffsetY, mainBoxFrame.width, mainBoxFrame.height);		
 		if (hasSpeakerName) {
-			ninePatchSpeaker.draw(batchPixel, speakerBoxFrame.x, speakerBoxFrame.y, speakerBoxFrame.width,
+			ninePatchSpeaker.draw(batchPixel, speakerBoxFrame.x, speakerBoxFrame.y + currentOffsetY, speakerBoxFrame.width,
 					speakerBoxFrame.height);
 		}
 		if (hasFaceVariation) {
-			ninePatchFace.draw(batchPixel, faceBoxFrame.x, faceBoxFrame.y, faceBoxFrame.width, faceBoxFrame.height);
-			batchPixel.draw(faceTexture, faceBoxContent.x, faceBoxContent.y, faceBoxContent.width, faceBoxContent.height);
+			ninePatchFace.draw(batchPixel, faceBoxFrame.x, faceBoxFrame.y + currentOffsetY, faceBoxFrame.width, faceBoxFrame.height);
+			batchPixel.draw(faceTexture, faceBoxContent.x, faceBoxContent.y + currentOffsetY, faceBoxContent.width, faceBoxContent.height);
 		}
 		// Draw text last.
 		renderTextboxText();
@@ -240,7 +259,7 @@ public class FancyTextbox extends PlainTextbox {
 	 * @param NinePatch The nine patch to be used.
 	 */
 	private void layoutSpeakerBox(float startY, NinePatch ninePatch) {
-		layoutTextArea(1.0f, mainBoxFrame.height, ninePatch, speakerBoxFrame, speakerBoxContent, 1, 1);
+		layoutTextArea(1.0f, startY, ninePatch, speakerBoxFrame, speakerBoxContent, 1, 1);
 	}
 	
 	private void layoutFaceBox(float height, NinePatch ninePatch) {
@@ -261,7 +280,7 @@ public class FancyTextbox extends PlainTextbox {
 	@Override
 	public void dispose() {
 		super.dispose();
-		bitmapFontCacheSpeaker.clear();
+		if (bitmapFontCacheSpeaker != null) bitmapFontCacheSpeaker.clear();
 		faceTexture = null;
 		ninePatchFace = null;
 		ninePatchSpeaker = null;
@@ -272,19 +291,37 @@ public class FancyTextbox extends PlainTextbox {
 	@Override
 	public void reset() {
 		super.reset();
+		if (bitmapFontCacheSpeaker != null) bitmapFontCacheSpeaker.clear();
 		setSpeaker(null);
 		setFaceVariation(null);
 		setFaceHeightRatio(DEFAULT_FACE_HEIGHT_RATIO);
-		bitmapFontCacheSpeaker.clear();
+		setSlideEffect(1.0f);
 	}
 
-	@Override
-	public boolean isSimiliar(Object o) {
-		if (o instanceof FancyTextbox) {
-			FancyTextbox fb = (FancyTextbox) o;			
-			return hasSpeakerName == fb.hasSpeakerName && hasFaceVariation == fb.hasFaceVariation && speaker == fb.speaker && type == fb.type;
+	public void translateTextVertically(float dy) {
+		if (USE_INTEGER_POSITIONS) {
+			leftoverVerticalTranslation += dy;
+			dy = Math.round(leftoverVerticalTranslation);
+			leftoverVerticalTranslation -= dy;
 		}
-		return false;
-			
+		// Translate main font.
+		bitmapFont.getCache().translate(0, dy);
+		// Translate speaker.
+		bitmapFontCacheSpeaker.translate(0, dy);
 	}
+	
+	
+	public void setSlideEffect(float animationFactor) {
+		this.animationFactor = animationFactor;
+	}
+	
+	@Override
+	protected void applySlideEffect() {
+		float targetOffsetY = (animationFactor-1.0f) * (mainBoxFrame.height + speakerBoxFrame.height);
+		if (targetOffsetY != currentOffsetY) {
+			translateTextVertically(targetOffsetY - currentOffsetY);
+			currentOffsetY = targetOffsetY;
+		}		
+	}
+
 }

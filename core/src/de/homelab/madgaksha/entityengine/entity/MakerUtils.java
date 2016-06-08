@@ -236,7 +236,6 @@ public final class MakerUtils {
 		myCamera.add(new ViewportComponent(viewportGame));
 		myCamera.add(new TemporalComponent());
 		myCamera.add(new TimeScaleComponent());
-		
 		return myCamera;
 	}
 

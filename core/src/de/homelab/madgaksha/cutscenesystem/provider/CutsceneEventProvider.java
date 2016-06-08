@@ -1,5 +1,6 @@
-package de.homelab.madgaksha.cutscenesystem;
+package de.homelab.madgaksha.cutscenesystem.provider;
 
+import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.layer.CutsceneLayer;
 
 /**
@@ -19,4 +20,6 @@ public interface CutsceneEventProvider {
 	public ACutsceneEvent nextCutsceneEvent(int i);
 	
 	public void initialize();
+	
+	public void end();
 }

@@ -36,6 +36,7 @@ import de.homelab.madgaksha.entityengine.component.ParentComponent;
 import de.homelab.madgaksha.entityengine.component.ParticleEffectGameComponent;
 import de.homelab.madgaksha.entityengine.component.ParticleEffectScreenComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.QuakeEffectComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleFromDistanceComponent;
@@ -148,6 +149,8 @@ public final class Mapper {
 			.getFor(ColorFlashEffectComponent.class);
 	public final static ComponentMapper<ComponentQueueComponent> componentQueueComponent = ComponentMapper
 			.getFor(ComponentQueueComponent.class);
+	public final static ComponentMapper<DamageQueueComponent> damageQueueComponent = ComponentMapper
+			.getFor(DamageQueueComponent.class);
 	public final static ComponentMapper<DeathComponent> deathComponent = ComponentMapper
 			.getFor(DeathComponent.class);
 	public final static ComponentMapper<DirectionComponent> directionComponent = ComponentMapper
@@ -186,8 +189,7 @@ public final class Mapper {
 			.getFor(ParticleEffectGameComponent.class);
 	public final static ComponentMapper<PositionComponent> positionComponent = ComponentMapper
 			.getFor(PositionComponent.class);
-	public final static ComponentMapper<DamageQueueComponent> damageQueueComponent = ComponentMapper
-			.getFor(DamageQueueComponent.class);
+	public final static ComponentMapper<QuakeEffectComponent> quakeEffectComponent = ComponentMapper.getFor(QuakeEffectComponent.class);
 	public final static ComponentMapper<RotationComponent> rotationComponent = ComponentMapper
 			.getFor(RotationComponent.class);
 	public final static ComponentMapper<ScaleComponent> scaleComponent = ComponentMapper.getFor(ScaleComponent.class);

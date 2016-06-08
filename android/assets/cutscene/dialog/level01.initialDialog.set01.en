@@ -1,0 +1,25 @@
+>>EventTextbox
+  Speaker ESTELLE
+  Face ANGRY
+  Text EOF
+Blah blah blah
+blah blah
+blah blah blah blah
+blah.
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face EVASIVE
+  Text EOF
+42 42 42
+42 24 42
+42 42 42
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face SHOU_GA_NAI
+  Text EOF
+Dum. dum Dum. Dum dum Dum.
+EOF

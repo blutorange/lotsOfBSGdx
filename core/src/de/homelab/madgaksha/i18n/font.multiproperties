@@ -37,12 +37,12 @@
             <Value disabled="false">VLGothicRegular.ttf</Value>
         </Property>
         <Property>
-            <Name>mainFontBalancingScale</Name>
+            <Name>mainFontVerticalAlign</Name>
             <Disabled>false</Disabled>
             <MultiLine>false</MultiLine>
-            <Value disabled="false">0.14</Value>
-            <Value disabled="false">0.14</Value>
-            <Value disabled="false">0.1</Value>
+            <Value disabled="false">BETWEEN_BASE_LINE_AND_X_HEIGHT</Value>
+            <Value disabled="false">BETWEEN_BASE_LINE_AND_X_HEIGHT</Value>
+            <Value disabled="false">BETWEEN_BASE_LINE_AND_CAP_HEIGHT</Value>
         </Property>
     </Records>
 </MultiProperties>

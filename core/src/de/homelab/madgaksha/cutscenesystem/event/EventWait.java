@@ -1,6 +1,9 @@
 package de.homelab.madgaksha.cutscenesystem.event;
 
+import java.util.Scanner;
+
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
+import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 
 public class EventWait extends ACutsceneEvent {
@@ -8,7 +11,7 @@ public class EventWait extends ACutsceneEvent {
 	private final static Logger LOG = Logger.getLogger(EventWait.class);
 
 	private float remainingWaitTime;
-	private final float timeToWait;
+	private float timeToWait;
 	
 	/**
 	 * An event that simply wait for some time and then proceeds to the next event.
@@ -48,5 +51,16 @@ public class EventWait extends ACutsceneEvent {
 	
 	public void cancelTimer() {
 		remainingWaitTime = 0.0f;
+	}
+
+	@Override
+	public void reset() {
+		this.timeToWait = 0.0f;
+	}
+
+	public static ACutsceneEvent readNextObject(Scanner s) {
+		Float number = FileCutsceneProvider.nextNumber(s);
+		if (number == null) return null;
+		return new EventWait(number);
 	}
 }

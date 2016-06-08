@@ -1,0 +1,26 @@
+>>EventTextbox
+  Speaker ESTELLE
+  Face ANGRY
+  Text EOF
+ただの散歩のつもりだったけど、ここはどこ？
+それで空に浮いているってどういうこと？？
+もう、わけ分かんない！
+最期のセリフ、ここでいいのかな？
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face EVASIVE
+  Text EOF
+ボーズでヨシュアとブレイザーらしく
+行動するのに一所懸命に頑張ってたけど、
+町をでた途端こんなことに。。。
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face SHOU_GA_NAI
+  Text EOF
+とりあえず、もやもやするよりこの辺りで
+ヒント探しにでも行こうかな。。。！
+EOF

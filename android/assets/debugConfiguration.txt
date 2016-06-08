@@ -11,6 +11,6 @@
     "requestedFullscreen": false,
     "requestedFps": 30,
     "requestedLogLevel": 3,
-    "requestedWindowTitle": "??level.01.name??",
+    "requestedWindowTitle": "Get up and running",
     "requestedTextboxSpeed": 15 
 }

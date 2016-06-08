@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
+import de.homelab.madgaksha.resourcecache.ETextbox;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 /**
@@ -36,21 +37,24 @@ public abstract class PlainTextbox implements Disposable {
 	 */
 	private final static int MAX_LINE_COUNT = 4;
 	
-	private final static float DEFAULT_TEXT_HEIGHT_RATIO = 0.025f;
+	public final static float DEFAULT_TEXT_HEIGHT_RATIO = 0.025f;
+	
+	/** @see BitmapFont#usesIntegerPositions() */
+	protected final static boolean USE_INTEGER_POSITIONS = true;
 	
 	/**
 	 * Each text is rendered once at the reference font size and once at the 
 	 * target font size. This is used to determine a scaling factor so that
 	 * the width of the resulting font will be the same for all screen resolutions.
 	 */
-	private final static int REFERENCE_FONT_SIZE = 20;
+	private final static int REFERENCE_FONT_SIZE = 12;
 	
 	// Parameters that can be changed.
 	// One additonal entry for the speaker.
 	/** Array of text lines to draw. */
 	private final CharSequence[] lineList = new CharSequence[MAX_LINE_COUNT+1];
 	/** Text color. Default is {@link Color#WHITE}. */
-	private Color textColor = Color.WHITE;
+	private Color textColor = new Color(Color.WHITE);
 	/** Relative height of the text of one line in percent relative to the game viewport height. */
 	private float textHeightRatio = DEFAULT_TEXT_HEIGHT_RATIO;
 	/** Space between two lines, relative to the line height. */
@@ -59,12 +63,15 @@ public abstract class PlainTextbox implements Disposable {
 	private boolean fullHeight = true;
 	/** Number of glyphs that will be drawn. */
 	private int renderedGlyphCount = 0;
+	/** If enabled, renders the text again a {@link #REFERENCE_FONT_SIZE} and scales the text so that its width will be the same for all screen resolutions. */
+	private boolean scaleToReference = true;
 
 	// Main text font.
 	/** Storing font parameters. */
 	private final FreeTypeFontParameter freeTypeFontParameter = new FreeTypeFontParameter();
+	private final FreeTypeFontParameter freeTypeFontParameterReference = new FreeTypeFontParameter();
 	/** Font to use for rendering text. */
-	private FreeTypeFontGenerator freeTypeFontGenerator = null;
+	protected FreeTypeFontGenerator freeTypeFontGenerator = null;
 	/** Free type font converted to bitmap font. */
 	protected BitmapFont bitmapFont = null;
 	/** Converted bitmap font used as a reference to determine the scaling factor. */
@@ -84,16 +91,19 @@ public abstract class PlainTextbox implements Disposable {
 	/** Layout coordinates for the main text box content area. */
 	protected Rectangle mainBoxContent = new Rectangle();
 	
+	protected final ETextbox type;
+	protected EFreeTypeFontGenerator fontType;
 	
 	/** Distance between one line and the next, includes the line spacing. */
 	private float lineDistance;
-	
+		
 	/**
 	 * Creates a new textbox with default options.
 	 * Use {@link #setLines(String)} etc. to setup the textbox.
 	 */
-	public PlainTextbox() {
+	public PlainTextbox(ETextbox type) {
 		initialize();
+		this.type = type;
 		dirty = true;
 	}
 	
@@ -110,6 +120,12 @@ public abstract class PlainTextbox implements Disposable {
 		freeTypeFontParameter.shadowColor = new Color(0f,0f,0f,1.0f);
 		freeTypeFontParameter.genMipMaps = false;
 		freeTypeFontParameter.incremental = false;
+		
+		freeTypeFontParameterReference.kerning = true;
+		freeTypeFontParameterReference.color = Color.WHITE;
+		freeTypeFontParameterReference.genMipMaps = false;
+		freeTypeFontParameterReference.incremental = false;
+		freeTypeFontParameterReference.size = REFERENCE_FONT_SIZE;
 	}
 	
 	// Setters for parameters that can be changed.
@@ -144,7 +160,7 @@ public abstract class PlainTextbox implements Disposable {
 	}
 	
 	public void setTextColor(Color textColor) {
-		this.textColor = textColor;
+		if (textColor != null) this.textColor.set(textColor);
 	}
 	
 	public void setFont(EFreeTypeFontGenerator freeTypeFontGenerator) {
@@ -152,6 +168,7 @@ public abstract class PlainTextbox implements Disposable {
 		if (newGenerator != this.freeTypeFontGenerator) {
 			dirty = true;
 		}
+		this.fontType = freeTypeFontGenerator;
 		this.freeTypeFontGenerator = newGenerator;
 	}
 	
@@ -169,6 +186,7 @@ public abstract class PlainTextbox implements Disposable {
 	 * @param frame Rectangle which will be filled with the layoutted dimensions for the text content.
 	 * @param numberOfLines How many lines the text contains.
 	 * @param reservedNumberOfLines How much space to reserve. Must not be smaller than numberOfLines.
+	 * @return The distance of one line to the next, including any additional line spacing.
 	 */
 	protected float layoutTextArea(float widthRatio, float startHeight, NinePatch ninePatch, Rectangle frame,
 			Rectangle content, int numberOfLines, int reservedNumberOfLines) {
@@ -192,7 +210,7 @@ public abstract class PlainTextbox implements Disposable {
 		return lineDistance;
 	}
 	
-	private float getLineHeight() {
+	protected float getLineHeight() {
 		// We only ever scale proportionally, thus scaleX==scaleY.
 		return bitmapFont.getData().scaleX * bitmapFont.getLineHeight();
 	}
@@ -206,7 +224,7 @@ public abstract class PlainTextbox implements Disposable {
 		lineDistance = layoutTextArea(widthRatio, 0.0f, ninePatch, mainBoxFrame, mainBoxContent, getEffectiveLineCount(), lineCount);
 	}
 
-	protected void rasterizeFont() {
+	protected void beginTexboxFontLayout() {
 		// Dispose old rendered font.
 		if (bitmapFont != null) bitmapFont.dispose();
 		if (bitmapFontReference != null) bitmapFontReference.dispose();
@@ -217,36 +235,45 @@ public abstract class PlainTextbox implements Disposable {
 		float targetFontSize = textHeightRatio * (float)viewportGame.getScreenHeight();
 		
 		// Setup font parameters.
+		freeTypeFontParameter.size = fontSize;
 		freeTypeFontParameter.characters = requiredCharacters;
-		
-		// Create bitmap font used as a reference for scaling.
-		freeTypeFontParameter.size = REFERENCE_FONT_SIZE;
-		bitmapFontReference = freeTypeFontGenerator.generateFont(freeTypeFontParameter);
-		bitmapFontReference.setUseIntegerPositions(false);
+		freeTypeFontParameterReference.characters = requiredCharacters;
 		
 		// Create main bitmap font.
-		freeTypeFontParameter.size = fontSize;
+		LOG.debug(requiredCharacters);
 		bitmapFont = freeTypeFontGenerator.generateFont(freeTypeFontParameter);
-		bitmapFont.setUseIntegerPositions(false);
+		bitmapFont.setUseIntegerPositions(USE_INTEGER_POSITIONS);
 		
-		// Scale text so that it will always be the same width irrespective of the font size and screen resolution.
-		if (lineList.length > 0) {
-			float referenceWidth = calucateTextWidth(bitmapFontReference, 0.0f, 0.0f, 0.0f, viewportGame.getScreenWidth(), null);
-			float currentWidth = calucateTextWidth(bitmapFont, 0.0f, 0.0f, 0.0f, viewportGame.getScreenWidth(), null);
-			float scale;
-			if (currentWidth < 1.0f)
-				scale = 1.0f;
-			else {
-				float targetWidth = referenceWidth * targetFontSize / (float)REFERENCE_FONT_SIZE;
-				scale = targetWidth / currentWidth;
+		if (scaleToReference) {
+			// Create bitmap font used as a reference for scaling.
+			bitmapFontReference = freeTypeFontGenerator.generateFont(freeTypeFontParameterReference);
+			bitmapFontReference.setUseIntegerPositions(USE_INTEGER_POSITIONS);
+
+			// Scale text so that it will always be the same width irrespective of the font size and screen resolution.
+			if (lineList.length > 0) {
+				float referenceWidth = calucateTextWidth(bitmapFontReference, 0.0f, 0.0f, 0.0f, viewportGame.getScreenWidth(), null);
+				float currentWidth = calucateTextWidth(bitmapFont, 0.0f, 0.0f, 0.0f, viewportGame.getScreenWidth(), null);
+				float scale;
+				if (currentWidth < 1.0f)
+					scale = 1.0f;
+				else {
+					float targetWidth = referenceWidth * targetFontSize / (float)REFERENCE_FONT_SIZE;
+					scale = targetWidth / currentWidth;
+				}
+				bitmapFont.getData().setScale(scale);
 			}
-			bitmapFont.getData().setScale(scale);
 		}
 	}
 
-	/*
+	/**
 	 * Computes the layout for the main text and stores the result in the bitmapFont's bitmapFontCache.
 	 * @param bitmapFont Bitmap font to use.
+	 * @param initialY Initial y-coordinate for the first line of text.
+	 * @param advanceY Height added to the initial y-coordinate to obtain the y-coordinate of the next lines of text.
+	 * @param positionX x coordinate of the leftmost part of the text.
+	 * @param targetWidth Maximum width the rendered text may occupy, used for wrapping and truncating.
+	 * @param truncate See parameter truncate in {@link BitmapFontCache#addText(CharSequence, float, float, int, int, float, int, boolean, String)}
+	 * @return The width of the rendered text, and the maximum glyph
 	 * */
 	private float calucateTextWidth(BitmapFont bitmapFont, float initialY, float advanceY, float positionX, float targetWidth, String truncate) {
 		final BitmapFontCache bitmapFontCache = bitmapFont.getCache();
@@ -270,20 +297,14 @@ public abstract class PlainTextbox implements Disposable {
 	 * Compute final position for each glyph. Needs to be done after layout of textbox nine patches is done.
 	 */
 	protected void finishTexboxFontLayout() {
+		float positionY = fontType.getVerticalAlignPosition().positionForCentered(mainBoxContent, bitmapFont, getEffectiveLineCount());
 		bitmapFont.getCache().clear();
 		bitmapFont.getCache().setColor(textColor);
-		calucateTextWidth(bitmapFont, mainBoxContent.y + mainBoxContent.height, -lineDistance, mainBoxContent.x, mainBoxContent.width, StringUtils.EMPTY);
+		calucateTextWidth(bitmapFont, positionY, -lineDistance, mainBoxContent.x, mainBoxContent.width, StringUtils.EMPTY);
 	}
-	
-	protected boolean prepareRender() {
-		// Check if textbox has been set up completely.
-		if (freeTypeFontGenerator == null) return false;
-		if (dirty) updateBox();
-		return true;
-	}
-	
+		
 	/**
-	 * Draws the main area with the text to the screen.
+	 * Draws the main area text to the screen.
 	 */
 	protected void renderTextboxText() {		
 		// Draw the text.
@@ -309,12 +330,17 @@ public abstract class PlainTextbox implements Disposable {
 	}
 		
 	public final void render() {
-		// Check if textbox has been set up completely.
-		if (freeTypeFontGenerator == null) return;
-		if (dirty) updateBox();
+		// Cannot to anything when no font has been provided yet.
+		if (freeTypeFontGenerator == null)	return;
+		// Check if box needs to be updated.
+		if (dirty) {
+			LOG.debug("updating textbox layout");
+			updateBox();
+		}
+		applySlideEffect();
 		mainRender();
 	};
-	
+		
 	protected int getEffectiveLineCount() {
 		return  fullHeight ? MAX_LINE_COUNT : lineCount;
 	}
@@ -337,6 +363,14 @@ public abstract class PlainTextbox implements Disposable {
 		this.renderedGlyphCount = renderedGlyphCount > glyphCount ? glyphCount : renderedGlyphCount;
 	}
 
+	/** 
+	 * @param scaleToReference Whether to scale to the reference font.
+	 * @see #scaleToReference 
+	 */
+	public void setScaleToReference(boolean scaleToReference) {
+		this.scaleToReference = scaleToReference;
+	}
+	
 	/**
 	 * Gets the number of glyphs that should be rendered, starting from the first glyph. 
 	 * @return Number of glyphs to draw.
@@ -355,18 +389,14 @@ public abstract class PlainTextbox implements Disposable {
 		setTextHeightRatio(DEFAULT_TEXT_HEIGHT_RATIO);
 	}
 	
-	/** Used for determining if textbox needs to move down and back again,
-	 * or if it is sufficient to leave the textbox on screen and simply replace
-	 * the text when transitioning to the next textbox.
-	 * @param o The other object to compare this textbox to.
-	 */
-	public abstract boolean isSimiliar(Object o);
 	/** @return The name of the speaker of this box, empty string if none. */
 	protected abstract String getSpeakerName();
 	/** Main render method rendering the actual textbox. */
 	protected abstract void mainRender();
 	/** Called when box layout needs to be updated, eg. after resize or when parameters or text changes. */ 
 	protected abstract void updateBox();
+	/** Applies the slide effect and translates text etc. */
+	protected abstract void applySlideEffect();
 	/** 
 	 * Sets the color (tint) for the background of this textbox. Default is WHITE, ie. the color of the nine patch.
 	 * @param color Color for this textbox.
