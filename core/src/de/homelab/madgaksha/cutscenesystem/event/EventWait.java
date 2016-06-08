@@ -58,6 +58,10 @@ public class EventWait extends ACutsceneEvent {
 		this.timeToWait = 0.0f;
 	}
 
+	@Override
+	public void end() {
+	}
+	
 	public static ACutsceneEvent readNextObject(Scanner s) {
 		Float number = FileCutsceneProvider.nextNumber(s);
 		if (number == null) return null;

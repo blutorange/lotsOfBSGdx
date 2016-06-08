@@ -74,6 +74,7 @@ public class CutsceneLayer extends ALayer {
 	
 	public boolean proceedToNextEvent() {
 		do {
+			if (currentCutsceneEvent != null) cutsceneEventProvider.eventDone(currentCutsceneEvent);
 			currentCutsceneEvent = cutsceneEventProvider.nextCutsceneEvent(++cutsceneCount);
 			if (currentCutsceneEvent == null) {
 				removeSelf();

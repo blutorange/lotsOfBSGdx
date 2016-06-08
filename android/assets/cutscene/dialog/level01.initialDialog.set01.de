@@ -1,25 +1,27 @@
 >>EventTextbox
   Speaker ESTELLE
   Face ANGRY
+  TransitionIn
   Text EOF
-Blah blah blah
-blah blah
-blah blah blah blah
-blah.
+I just wanted to take a simple walk, so where did I end up?
+And come to think of it, why am I floating in the air?
+This isn't making any sense!
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face EVASIVE
   Text EOF
-42 42 42
-42 24 42
-42 42 42
+And where's Joshua? We were working hard as
+a good Bracer should...
+As soon as I left the city, this happened!
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face SHOU_GA_NAI
+  TransitionOut
   Text EOF
-Dum. dum Dum. Dum dum Dum.
+Oh well, I might as well go and look for some hints
+for what is going on here. Not much else I can do...
 EOF

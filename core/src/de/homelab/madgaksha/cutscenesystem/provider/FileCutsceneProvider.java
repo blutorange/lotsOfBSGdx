@@ -2,16 +2,19 @@ package de.homelab.madgaksha.cutscenesystem.provider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 import de.homelab.madgaksha.GameParameters;
@@ -97,15 +100,16 @@ import de.homelab.madgaksha.resourcecache.ETextbox;
  *   Box &lt;{@link ETextbox}&gt;
  *   Font &lt;{@link EFreeTypeFontGenerator}&gt;
  *   Size &lt;POSITIVE_NUMBER&gt;  
+ *   LineSpacing &lt;POSITIVE_NUMBER&gt;
  *   Speaker &lt;{@link ESpeaker}&gt;
  *   Face &lt;{@link EFaceVariation}&gt;
  *   Speed IMMEDIATE | &lt;POSITIVE_NUMBER&gt;
  *   Color {@link Color} | &lt;R=0..255&gt; &lt;G=0..255&gt; &lt;B=0..255&gt; &lt;A=0..1&gt;
  *   BoxColor {@link Color} | &lt;R=0..255&gt; &lt;G=0..255&gt; &lt;B=0..255&gt; &lt;A=0..1&gt;
- *   TransitionIn NONE | (&lt;POSITIVE_NUMBER&gt; {@link Interpolation})
- *   TransitionOut NONE | (&lt;POSITIVE_NUMBER&gt; {@link Interpolation})
- *   SoundTextbox &lt;{@link ESound}&gt;
- *   SoundText &lt;{@link ESound}&gt;
+ *   TransitionIn STANDARD | (&lt;POSITIVE_NUMBER&gt; [={@link Interpolation}=])
+ *   TransitionOut STANDARD | ([&lt;POSITIVE_NUMBER&gt; [={@link Interpolation}=])
+ *   SoundTextbox NONE | &lt;{@link ESound}&gt;
+ *   SoundText NONE | &lt;{@link ESound}&gt;
  *   Text &lt;EOF&gt;
  *   ...
  *   &lt;EOF&gt;
@@ -119,6 +123,9 @@ import de.homelab.madgaksha.resourcecache.ETextbox;
  * Font size is relative to to the game screen height. At a game screen height of 720 pixels,
  * the font size is the number of pixels. At a game screen height of 360 pixels, specifying
  * a font size of 18 results in 9 pixels on-screen.
+ * <br><br>
+ * Line spacing is relative to the current line height (font size). A line spacing of 0.5f
+ * will result in half the height of one line of text between two consecutive lines of text.
  * <br><br>
  * Box color is the tint that will be applied to the original color of the nine patch. The
  * default color is white, which means the original colors of the nine patch will be used.
@@ -306,6 +313,12 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		return eventPosition < eventList.size() ? eventList.get(eventPosition) : null;  
 	}
 
+	/**
+	 * Returns the next number as a float.
+	 * Does not advance the scanner if there is no valid number next.
+	 * @param s The scanner to use.
+	 * @return The next number, or null if there is none.
+	 */
 	public static Float nextNumber(Scanner s) {
 		if (s.hasNextFloat()) return s.nextFloat();
 		if (s.hasNextInt(10)) return (float)s.nextInt(10);
@@ -317,6 +330,79 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 
 	public static boolean hasNextCommand(Scanner s) {
 		return s.hasNext(tokenCommand);
+	}
+
+	private static Color getColorForName(String name) {
+		try {
+			Field f = ClassReflection.getField(Color.class, name.toUpperCase(Locale.ROOT));
+			Object o = f.get(null);
+			if (o instanceof Color) return (Color)o;
+			return null;
+		} catch (ReflectionException e) {
+			LOG.error("no such color: " + name);
+			return null;
+		}
+	}
+	
+	public static Interpolation readNextInterpolation(Scanner s) {
+		if (s.hasNext("=.+=")) {
+			String param = s.next("=.+=");
+			String name = WordUtils.uncapitalize(param.substring(1, param.length() - 1));
+			try {
+				Field f = ClassReflection.getField(Interpolation.class, name);
+				Object o = f.get(null);
+				if (o instanceof Interpolation) {
+					return (Interpolation)o;
+				}
+				else {
+					LOG.error("not an interpolation class:  " + name);
+				}
+			}
+			catch (ReflectionException e) {
+				LOG.error("no such interpolation: " + name, e);
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Reads a color from the scanner and returns it.
+	 * Can be either 3 or 4 number representing rgb(a) values, or a color name as defined in {@link Color}.
+	 * r, g, and b are given between 0..255, a is given between 0..1. An alpha value of 1 is opaque.
+	 * @param s The scanner to read from.
+	 * @return The color, or null if none could be read.
+	 */
+	public static Color readNextColor(Scanner s) {
+		Float r = FileCutsceneProvider.nextNumber(s);
+		if (r == null) {
+			if (s.hasNext()) {
+				Color color = FileCutsceneProvider.getColorForName(s.next());
+				if (color != null) return color;
+			}
+			LOG.error("expected color value or name");
+			s.nextLine();
+			return null;
+		}
+		Float g = FileCutsceneProvider.nextNumber(s);
+		if (g == null) {
+			LOG.error("expected color value");
+			s.nextLine();
+			return null;
+		}
+		Float b = FileCutsceneProvider.nextNumber(s);
+		if (b == null) {
+			LOG.error("expected color value");
+			s.nextLine();
+			return null;
+		}
+		Float a = FileCutsceneProvider.nextNumber(s);
+		if (a == null) a = 1.0f;
+		return new Color(r/255.0f,g/255.0f,b/255.0f,a);
+	}
+
+	@Override
+	public void eventDone(ACutsceneEvent currentCutsceneEvent) {
+		currentCutsceneEvent.end();		
 	}
 
 }

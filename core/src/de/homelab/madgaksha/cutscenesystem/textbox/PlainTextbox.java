@@ -159,6 +159,11 @@ public abstract class PlainTextbox implements Disposable {
 		dirty = true;
 	}
 	
+	public void setTextLineSpacing(float textLineSpacing) {
+		this.textLineSpacing = textLineSpacing;
+		dirty = true;
+	}
+	
 	public void setTextColor(Color textColor) {
 		if (textColor != null) this.textColor.set(textColor);
 	}
@@ -192,21 +197,26 @@ public abstract class PlainTextbox implements Disposable {
 			Rectangle content, int numberOfLines, int reservedNumberOfLines) {
 		if (reservedNumberOfLines < numberOfLines) reservedNumberOfLines = numberOfLines;
 
-		float boxHeight = getLineHeight() * (numberOfLines + textLineSpacing * (numberOfLines - 1));
+		// Height and width, and difference between the actual number of lines and the reserved number of lines.
+		float boxHeight = getLineHeight() * (numberOfLines + textLineSpacing * (numberOfLines - 1.0f));
 		float boxWidth = widthRatio * (float)viewportGame.getScreenWidth();
-		float textHeightDifference = boxHeight - (getLineHeight() * (reservedNumberOfLines + textLineSpacing * (lineCount-1)));
+		float textHeightDifference = boxHeight - (getLineHeight() * (reservedNumberOfLines + textLineSpacing * (reservedNumberOfLines-1)));
 			
+		// Distance between two lines, including additional line spacing.
 		float lineDistance = getLineHeight() * (textLineSpacing +  1.0f);
 
+		// Dimensions of the content within the nine patch.
 		content.x = ninePatch.getPadLeft();
 		content.y = ninePatch.getPadBottom() + textHeightDifference + startHeight;
 		content.width = boxWidth - ninePatch.getPadLeft() - ninePatch.getPadRight();
 		content.height = boxHeight - textHeightDifference;
 
+		// Dimensions of the surrounding nine patch.
 		frame.x = 0;
 		frame.y = startHeight;
 		frame.width = boxWidth; 
 		frame.height = boxHeight + ninePatch.getPadTop() + ninePatch.getPadBottom();
+		
 		return lineDistance;
 	}
 	
@@ -240,7 +250,6 @@ public abstract class PlainTextbox implements Disposable {
 		freeTypeFontParameterReference.characters = requiredCharacters;
 		
 		// Create main bitmap font.
-		LOG.debug(requiredCharacters);
 		bitmapFont = freeTypeFontGenerator.generateFont(freeTypeFontParameter);
 		bitmapFont.setUseIntegerPositions(USE_INTEGER_POSITIONS);
 		
@@ -297,7 +306,8 @@ public abstract class PlainTextbox implements Disposable {
 	 * Compute final position for each glyph. Needs to be done after layout of textbox nine patches is done.
 	 */
 	protected void finishTexboxFontLayout() {
-		float positionY = fontType.getVerticalAlignPosition().positionForCentered(mainBoxContent, bitmapFont, getEffectiveLineCount());
+		float positionY = fontType.getVerticalAlignPosition().positionForCentered(mainBoxContent, bitmapFont,
+				getEffectiveLineCount(), getLineHeight() * textLineSpacing);
 		bitmapFont.getCache().clear();
 		bitmapFont.getCache().setColor(textColor);
 		calucateTextWidth(bitmapFont, positionY, -lineDistance, mainBoxContent.x, mainBoxContent.width, StringUtils.EMPTY);

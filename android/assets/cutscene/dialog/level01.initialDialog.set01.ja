@@ -1,6 +1,7 @@
 >>EventTextbox
   Speaker ESTELLE
   Face ANGRY
+  TransitionIn
   Text EOF
 ただの散歩のつもりだったけど、ここはどこ？
 それで空に浮いているってどういうこと？？
@@ -20,6 +21,7 @@ EOF
 >>EventTextbox
   Speaker ESTELLE
   Face SHOU_GA_NAI
+  TransitionOut
   Text EOF
 とりあえず、もやもやするよりこの辺りで
 ヒント探しにでも行こうかな。。。！
