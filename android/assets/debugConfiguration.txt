@@ -6,9 +6,9 @@
         "country": "",
         "variant": ""
     },
-    "requestedWidth": 1920,
-    "requestedHeight": 1080,
-    "requestedFullscreen": true,
+    "requestedWidth": 1280,
+    "requestedHeight": 720,
+    "requestedFullscreen": false,
     "requestedFps": 30,
     "requestedLogLevel": 3,
     "requestedWindowTitle": "Get up and running",

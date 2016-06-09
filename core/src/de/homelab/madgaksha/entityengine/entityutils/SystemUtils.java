@@ -4,10 +4,12 @@ import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 
 import com.badlogic.ashley.core.EntitySystem;
 
+import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.InputPlayerDesktopSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.LifeSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.MovementSystem;
 import de.homelab.madgaksha.logging.Logger;
 
@@ -26,6 +28,7 @@ public class SystemUtils {
 		gameEntityEngine.getSystem(MovementSystem.class).setProcessing(false);
 		gameEntityEngine.getSystem(GrantPositionSystem.class).setProcessing(false);
 		gameEntityEngine.getSystem(DamageSystem.class).setProcessing(false);
+		gameEntityEngine.getSystem(LifeSystem.class).setProcessing(false);
 		final EntitySystem inputDesktop = gameEntityEngine.getSystem(InputPlayerDesktopSystem.class);
 		if (inputDesktop != null) inputDesktop.setProcessing(false);
 	}
@@ -34,7 +37,18 @@ public class SystemUtils {
 		gameEntityEngine.getSystem(MovementSystem.class).setProcessing(true);
 		gameEntityEngine.getSystem(GrantPositionSystem.class).setProcessing(true);
 		gameEntityEngine.getSystem(DamageSystem.class).setProcessing(true);
+		gameEntityEngine.getSystem(LifeSystem.class).setProcessing(true);
 		final EntitySystem inputDesktop = gameEntityEngine.getSystem(InputPlayerDesktopSystem.class);
 		if (inputDesktop != null) inputDesktop.setProcessing(true);
+		GlobalBag.forceCameraUpdate = false;
+	}
+	public static void disableActionExceptCamera() {
+		disableAction();
+		GlobalBag.forceCameraUpdate = true;
+	}
+	public static void disableActionExceptGrantPosition() {
+		disableAction();
+		gameEntityEngine.getSystem(GrantPositionSystem.class).setProcessing(true);
+		
 	}
 }

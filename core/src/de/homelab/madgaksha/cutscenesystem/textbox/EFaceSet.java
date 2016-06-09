@@ -25,7 +25,13 @@ public enum EFaceSet {
 		protected void fillMap() {
 			
 		}
-	};
+	},
+	EMPTY() {
+		@Override
+		protected void fillMap() {
+		}
+	}
+	;
 	
 	protected EnumMap<EFaceVariation,ETexture> faceMap;
 	protected abstract void fillMap();

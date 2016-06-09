@@ -11,7 +11,9 @@ import de.homelab.madgaksha.resourcecache.ETexture;
 
 public enum ESpeaker {
 	JOSHUA("Joshua", Color.BLUE, EFaceSet.JOSHUA),
-	ESTELLE("Estelle", Color.ORANGE, EFaceSet.ESTELLE);
+	ESTELLE("Estelle", Color.ORANGE, EFaceSet.ESTELLE),
+	VIRTUAL_WALKER("Virtual_Walker", Color.BROWN, EFaceSet.EMPTY),
+	;
 	
 	private String name;
 	private Color color;

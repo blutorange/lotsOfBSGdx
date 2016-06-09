@@ -84,6 +84,8 @@ public final class GlobalBag {
 	
 	/** Whether we are in battle mode. */
 	public static boolean battleModeActive = false;
+
+	public static boolean forceCameraUpdate = false;
 	
 	static {
 		visibleWorld.setPosition(0.0f, 0.0f);

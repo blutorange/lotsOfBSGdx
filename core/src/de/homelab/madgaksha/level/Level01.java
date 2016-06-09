@@ -1,16 +1,14 @@
 package de.homelab.madgaksha.level;
 
-import static de.homelab.madgaksha.GlobalBag.game;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.maps.MapProperties;
 
-import de.homelab.madgaksha.cutscenesystem.provider.CutsceneEventProvider;
-import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
-import de.homelab.madgaksha.layer.CutsceneLayer;
+import de.homelab.madgaksha.GlobalBag;
+import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ESound;
@@ -24,6 +22,7 @@ import de.homelab.madgaksha.resourcecache.IResource;;
  * @author madgaksha
  */
 public class Level01 extends ALevel {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(Level01.class);
 	
 	@Override
@@ -31,6 +30,8 @@ public class Level01 extends ALevel {
 		return ETexture.MAIN_BACKGROUND;
 	}
 
+	private int counterDangerNorth = 0;
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected IResource<? extends Enum<?>,?>[] requestedRequiredResources() {
@@ -105,16 +106,6 @@ public class Level01 extends ALevel {
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 0f, 0.0f, -1.0f));
 	}
 	
-	// =========================
-	//      Callback methods
-	// =========================
-	
-	public void initialDialog(MapProperties properties) {
-		LOG.debug("initialDialog triggered");
-		CutsceneEventProvider provider = new FileCutsceneProvider(Gdx.files.internal("cutscene/level01.initialDialog"));
-		game.pushLayer(new CutsceneLayer(provider));
-	}
-
 	@Override
 	protected float requestedEnemyTargetCrossAngularVelocity() {
 		return -40.0f;
@@ -129,4 +120,48 @@ public class Level01 extends ALevel {
 	protected ESound requestedSoundOnBattleWin() {
 		return ESound.POSAUNEN_CHORUS;
 	}
+	
+	// =========================
+	//      Callback methods
+	// =========================
+	
+	public void initialDialog(MapProperties properties) {
+		pushCutsceneLayer("cutscene/level01.initialDialog");
+	}
+	
+	public void signKikiRight(MapProperties properties) {
+		pushCutsceneLayer("cutscene/level01.signKikiRight");
+	}
+	
+	public void signRiverFloat(MapProperties properties) {
+		pushCutsceneLayer("cutscene/level01.signRiverFloat");
+	}
+	
+	public void signPoisonFlower(MapProperties properties) {
+		pushCutsceneLayer("cutscene/level01.signPoisonFlower");
+	}
+	
+	public void signIsekaiGate(MapProperties properties) {
+		pushCutsceneLayer("cutscene/level01.signIsekaiGate");
+	}
+	
+	public void signDangerNorth(MapProperties properties) {
+		++counterDangerNorth;
+		if (counterDangerNorth == 1) pushCutsceneLayer("cutscene/level01.signDangerNorth");
+		else pushCutsceneLayer("cutscene/level01.signDangerNorth2");
+	}
+	
+	public void monologueForSign(MapProperties properties) {
+		pushCutsceneLayer("cutscene/level01.monologueForSign");
+	}
+	
+	public void turnBackJoshua(MapProperties properties) {
+		pushCutsceneLayer("cutscene/level01.turnBackJoshua");
+		PositionComponent pc = Mapper.positionComponent.get(GlobalBag.playerEntity);
+		VelocityComponent vc = Mapper.velocityComponent.get(GlobalBag.playerEntity);
+		pc.x = 36*32;
+		pc.y = 41*32;
+		vc.x = vc.y = 0;
+	}
+	
 }

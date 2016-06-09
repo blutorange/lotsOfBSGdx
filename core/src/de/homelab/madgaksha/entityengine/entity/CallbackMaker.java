@@ -11,7 +11,14 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.ABoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.CallbackComponent;
+import de.homelab.madgaksha.entityengine.component.ComponentQueueComponent;
+import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.TemporalComponent;
+import de.homelab.madgaksha.entityengine.component.TimedCallbackComponent;
+import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
+import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.enums.ECollisionGroup;
 import de.homelab.madgaksha.level.ALevel;
 import de.homelab.madgaksha.logging.Logger;
@@ -41,32 +48,37 @@ public class CallbackMaker extends EntityMaker implements ITrigger, IReceive {
 	 * @param loop How many times the callback should loop (be triggered).
 	 * @param interval Interval between loops in seconds.
 	 */
-	public void setup(Entity entity, Shape2D shape, ETrigger trigger, Method callback, MapProperties properties, int loop, float interval) {
+	public void setup(Entity entity, Shape2D shape, ETrigger trigger, Method callback, MapProperties properties, int loops, float duration) {
 		super.setup(entity);
 		final CallbackComponent cc = new CallbackComponent(callback, properties);
+		final PositionComponent pc = new PositionComponent(MakerUtils.makePositionAtCenter(shape));
+		final TemporalComponent tec = new TemporalComponent();
+		final TimedCallbackComponent tcc = new TimedCallbackComponent(LOOP_CALLBACK, duration, loops+1);
 		final Component tc = MakerUtils.makeTrigger(this, this, trigger, ECollisionGroup.PLAYER_GROUP);
+
+		final ABoundingBoxComponent bbcCollision = new BoundingBoxCollisionComponent(
+				MakerUtils.makeBoundingBoxCollision(shape, pc));
+		final ComponentQueueComponent cqc = new ComponentQueueComponent();
+
+		tcc.totalTime = duration + duration; 
+		cqc.add.add(tcc);
+
+		entity.add(bbcCollision);
 		entity.add(cc);
+		entity.add(cqc);
+		entity.add(pc);
 		entity.add(tc);
+		entity.add(tec);
 	}
 
 	@Override
-	public void callbackTrigger(Entity e, ETrigger t) {
-		try {
-			final CallbackComponent cc = Mapper.callbackComponent.get(e);
-			if (cc != null) cc.callback.invoke(level, cc.properties);
-		} catch (ReflectionException ex) {
-			LOG.error("could not invoke callback: " + this, ex);
-		}
+	public void callbackTrigger(Entity me, ETrigger trigger) {
+		ComponentUtils.applyComponentQueue(me);
 	}
 
 	@Override
 	public void callbackTouched(Entity me, Entity you) {
-		try {
-			final CallbackComponent cc = Mapper.callbackComponent.get(me);
-			if (cc != null) cc.callback.invoke(level, cc.properties);
-		} catch (ReflectionException ex) {
-			LOG.error("could not invoke callback: " + this, ex);
-		}
+		ComponentUtils.applyComponentQueue(me);
 	}
 
 	@Override
@@ -74,4 +86,15 @@ public class CallbackMaker extends EntityMaker implements ITrigger, IReceive {
 		return null;
 	}
 	
+	private final static ITimedCallback LOOP_CALLBACK = new ITimedCallback() {
+		@Override
+		public void run(Entity entity, Object data) {
+			try {
+				final CallbackComponent cc = Mapper.callbackComponent.get(entity);
+				if (cc != null) cc.callback.invoke(level, cc.properties);
+			} catch (ReflectionException ex) {
+				LOG.error("could not invoke callback: " + this, ex);
+			}			
+		}
+	};	
 }

@@ -1,8 +1,11 @@
 package de.homelab.madgaksha.level;
 
+import static de.homelab.madgaksha.GlobalBag.game;
+
 import java.io.IOException;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -15,8 +18,11 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.homelab.madgaksha.cutscenesystem.provider.CutsceneEventProvider;
+import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.i18n.I18n;
+import de.homelab.madgaksha.layer.CutsceneLayer;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.resourcecache.EMusic;
@@ -388,6 +394,17 @@ public abstract class ALevel {
 	 */
 	public int getEntityPoolPoolMaxSize() {
 		return DEFAULT_ENTITY_POOL_MAX_SIZE;
+	}
+	
+	protected final void pushCutsceneLayer(String filename) {
+		LOG.debug("pushing dialog: " + filename);
+		try {
+			CutsceneEventProvider provider = new FileCutsceneProvider(Gdx.files.internal(filename));
+			game.pushLayer(new CutsceneLayer(provider));
+		}
+		catch (Exception e) {
+			LOG.error("could not push cutscene layer", e);
+		}
 	}
 
 }

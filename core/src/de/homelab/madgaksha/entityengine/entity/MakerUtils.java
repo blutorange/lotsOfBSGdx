@@ -76,6 +76,24 @@ public final class MakerUtils {
 	public static BoundingBoxCollisionComponent makeBoundingBoxCollision(Shape2D shape) {
 		return new BoundingBoxCollisionComponent(GeoUtil.getBoundingBox(shape));
 	}
+	/** 
+	 * Makes a bounding box for the shape relative to the given center.
+	 * @param shape The shape.
+	 * @param center The center.
+	 * @return A bounding box relative to the given center.
+	 */
+	public static BoundingBoxCollisionComponent makeBoundingBoxCollision(Shape2D shape, PositionComponent center) {
+		BoundingBoxCollisionComponent bbc = makeBoundingBoxCollision(shape);
+		bbc.minX -= center.x;
+		bbc.minY -= center.y;
+		bbc.maxX -= center.x;
+		bbc.maxY -= center.y;
+		return bbc;
+	}
+	public static BoundingBoxCollisionComponent makeBoundingBoxCollisionRelativeToCenter(Shape2D shape) {
+		PositionComponent center = makePositionAtCenter(shape);
+		return makeBoundingBoxCollision(shape, center);
+	}
 	
 	public static PositionComponent makePositionAtCenter(Shape2D shape) {
 		final PositionComponent pc = new PositionComponent();

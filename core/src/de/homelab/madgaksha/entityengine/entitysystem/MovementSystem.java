@@ -46,7 +46,7 @@ public class MovementSystem extends IteratingSystem {
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	public void processEntity(Entity entity, float deltaTime) {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		final VelocityComponent vc = Mapper.velocityComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;

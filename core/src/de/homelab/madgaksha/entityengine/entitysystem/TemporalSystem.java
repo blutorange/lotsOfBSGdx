@@ -27,7 +27,7 @@ public class TemporalSystem extends IteratingSystem {
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	public void processEntity(Entity entity, float deltaTime) {
 		final TemporalComponent tc = Mapper.temporalComponent.get(entity);
 		final TimeScaleComponent tsfc = Mapper.timeScaleComponent.get(entity);
 		tc.deltaTime = deltaTime;

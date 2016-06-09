@@ -141,7 +141,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new TimedCallbackSystem());
 		gameEntityEngine.addSystem(new TemporalSystem());
 		gameEntityEngine.addSystem(new ViewportUpdateSystem());
-
+		
 		switch (Gdx.app.getType()) {
 		case Android:
 			// TODO

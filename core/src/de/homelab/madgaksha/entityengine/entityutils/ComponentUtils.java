@@ -34,6 +34,7 @@ public class ComponentUtils {
 		cqc.remove.clear();
 	}
 	
+	/** Applied the component queue of the entity, if it exists.*/
 	public static void applyComponentQueue(Entity e) {
 		final ComponentQueueComponent cqc = Mapper.componentQueueComponent.get(e);
 		if (cqc != null) applyComponentQueue(e, cqc);

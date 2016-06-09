@@ -44,5 +44,13 @@
             <Value disabled="false">Joshua</Value>
             <Value disabled="false">ヨシュア</Value>
         </Property>
+        <Property>
+            <Name>Virtual_Walker</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Virtueller Wanderer</Value>
+            <Value disabled="false">Virtual Walker</Value>
+            <Value disabled="false">異世界探検者</Value>
+        </Property>
     </Records>
 </MultiProperties>

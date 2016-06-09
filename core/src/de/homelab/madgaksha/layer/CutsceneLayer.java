@@ -1,13 +1,8 @@
 package de.homelab.madgaksha.layer;
 
-import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
-
-import com.badlogic.ashley.core.EntitySystem;
-
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.provider.CutsceneEventProvider;
-import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.InputPlayerDesktopSystem;
+import de.homelab.madgaksha.entityengine.entityutils.SystemUtils;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
@@ -55,19 +50,14 @@ public class CutsceneLayer extends ALayer {
 	
 	@Override
 	public void removedFromStack() {
-		gameEntityEngine.getSystem(AiSystem.class).setProcessing(true);
-		final EntitySystem inputDesktop = gameEntityEngine.getSystem(InputPlayerDesktopSystem.class);
-		if (inputDesktop != null) inputDesktop.setProcessing(true);
+		SystemUtils.enableAction();
 		currentCutsceneEvent = null;		
 		cutsceneEventProvider.end();
 	}
 
 	@Override
 	public void addedToStack() {
-		gameEntityEngine.getSystem(AiSystem.class).setProcessing(false);
-		final EntitySystem inputDesktop = gameEntityEngine.getSystem(InputPlayerDesktopSystem.class);
-		if (inputDesktop != null) inputDesktop.setProcessing(false);
-		
+		SystemUtils.disableActionExceptGrantPosition();		
 		cutsceneEventProvider.initialize();
 		proceedToNextEvent();
 	}
