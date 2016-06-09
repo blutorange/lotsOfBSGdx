@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
@@ -147,7 +149,12 @@ public abstract class APlayer {
 			for (EConsumable c : ec)
 				supportedConsumableSet.add(c);
 		
-		this.requiredResources = requestedRequiredResources();
+		IResource<?,?> customResources[] = requestedRequiredResources();
+		IResource<?,?> additionalResources[] = new IResource<?,?>[] {
+			EParticleEffect.DEFAULT_PLAYER_DEATH.getTextureAtlas(),
+			EParticleEffect.ALL_MY_ITEM_ARE_BELONG_TO_ME.getTextureAtlas()
+		};
+		this.requiredResources = ArrayUtils.addAll(customResources, additionalResources);
 	}
 
 

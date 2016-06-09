@@ -410,21 +410,36 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		if (vc != null && vc.voicePlayer != null) vc.voicePlayer.play(vc.onBattleModeStart);
 	}
 
-	/** Called when the target changed and needs to be updated. */
-	public static void targetSwitched(Entity enemy) {
+	/**
+	 * Called when the target changed and needs to be updated.
+	 * @param enemy Enemy to target.
+	 * @param lazySwitch If true, checks whether the enemy is targetted currently and does not switch if it is. 
+	 */
+	public static void targetSwitched(Entity enemy, boolean lazySwitch) {	
+		// Check if target did actually change. 
+		StickyComponent sec = Mapper.stickyComponent.get(enemyTargetCrossEntity);		
+		if (lazySwitch && sec.stickToPositionComponent == Mapper.positionComponent.get(enemy)) return;
+
 		LOG.debug("switch target to " + enemy);
+		
+		// Apply changes to status screen.
 		statusScreen.targetEnemy(enemy);
-		// Make target cross stick to enemy.
-		StickyComponent sec = Mapper.stickyComponent.get(enemyTargetCrossEntity);
+		
 		// Scale target cross to enemy's size.
 		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(enemyTargetCrossEntity);
 		ScaleComponent sc = Mapper.scaleComponent.get(enemyTargetCrossEntity);
 		BoundingBoxCollisionComponent bbcc = Mapper.boundingBoxCollisionComponent.get(enemy);
 		BoundingBoxRenderComponent bbrc = Mapper.boundingBoxRenderComponent.get(enemyTargetCrossEntity);
+		
+		// Start out with large target cross.
 		if (sc != null) sc.setup(99.0f, 99.0f);
+		
+		// And let it get smaller.
 		if (ssc != null && bbrc != null && bbcc != null)
 			ssc.setup(2.0f * Math.max(bbcc.maxX - bbcc.minX, bbcc.maxY - bbcc.minY)
 					/ Math.min(bbrc.maxX - bbrc.minX, bbrc.maxY - bbrc.minY));
+		
+		// Make target cross stick to enemy
 		if (sec != null)
 			sec.setup(enemy, (bbcc.minX + bbcc.maxX) * 0.5f, (bbcc.minY + bbcc.maxY) * 0.5f, true, true);
 	}
@@ -433,8 +448,11 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	private final static ITimedCallback onBattleStigmaVanished = new ITimedCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
-			playerBattleStigmaEntity.add(gameEntityEngine.createComponent(InvisibleComponent.class));
-			playerBattleStigmaEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
+			// Check player did not enter battle mode again.
+			if (!battleModeActive) {
+				playerBattleStigmaEntity.add(gameEntityEngine.createComponent(InvisibleComponent.class));
+				playerBattleStigmaEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
+			}
 		}
 	};
 	
@@ -442,8 +460,11 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	private final static ITimedCallback onTargetCrossVanished = new ITimedCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
-			enemyTargetCrossEntity.add(gameEntityEngine.createComponent(InvisibleComponent.class));
-			enemyTargetCrossEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
+			// Check player did not enter battle mode again.
+			if (!battleModeActive) {
+				enemyTargetCrossEntity.add(gameEntityEngine.createComponent(InvisibleComponent.class));
+				enemyTargetCrossEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
+			}
 		}
 	};
 	

@@ -17,10 +17,10 @@ public enum EMusic implements IResource<EMusic,Music> {
 	// ==================
 	//         BGM
 	// ==================
-	ROCK_ON_THE_ROAD("music/rockontheroad.adx"),
-	SOPHISTICATED_FIGHT("music/sophisticatedfight.adx"),
-	SILVER_WILL("music/silverwill.adx"),
-	FADING_STAR("music/fadingstar.adx"),
+	ROCK_ON_THE_ROAD("music/rockontheroad.adx", 0.5f),
+	SOPHISTICATED_FIGHT("music/sophisticatedfight.adx", 0.5f),
+	SILVER_WILL("music/silverwill.adx", 0.5f),
+	FADING_STAR("music/fadingstar.adx", 0.7f),
 	
 	;
 
@@ -28,9 +28,14 @@ public enum EMusic implements IResource<EMusic,Music> {
 	private final static EnumMap<EMusic, Music> musicCache = new EnumMap<EMusic, Music>(EMusic.class);
 
 	private String filename;
-
+	public final float defaultVolume;
+	
 	private EMusic(String f) {
+		this(f, 1.0f);
+	}
+	private EMusic(String f, float v) {
 		filename = f;
+		defaultVolume = v;
 	}
 
 	public static void clearAll() {

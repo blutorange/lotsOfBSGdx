@@ -193,11 +193,12 @@ public final class MakerUtils {
 					DeathComponent dc = Mapper.deathComponent.get(entity);
 					EnemyMaker.exitBattleMode(dc != null && dc.dead);
 				}
+				// Switch target cross to a valid target.
 				int focusPointsSize = cameraTrackingComponent.focusPoints.size();
 				if (focusPointsSize > 0) {
 					int index = Math.min(cameraTrackingComponent.trackedPointIndex, focusPointsSize-1);
 					cameraTrackingComponent.trackedPointIndex = index;
-					EnemyMaker.targetSwitched(cameraTrackingComponent.focusPoints.get(index));
+					EnemyMaker.targetSwitched(cameraTrackingComponent.focusPoints.get(index), focusPointsSize != 1);
 				}
 			}
 			@Override
@@ -205,7 +206,7 @@ public final class MakerUtils {
 				// Battle mode entered
 				if (!battleModeActive) {
 					EnemyMaker.enterBattleMode(entity);
-					EnemyMaker.targetSwitched(entity);
+					EnemyMaker.targetSwitched(entity, false);
 				}
 			}
 		});

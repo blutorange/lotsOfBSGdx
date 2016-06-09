@@ -58,7 +58,7 @@ public class MusicPlayer extends AAudioPlayer {
 	 * @return Whether the file was loaded successfully.
 	 */
 	public boolean loadNext(EMusic music) {
-		return loadNext(music, 1.0f);
+		return loadNext(music, music.defaultVolume);
 	}
 
 	/**

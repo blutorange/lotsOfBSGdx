@@ -1,4 +1,5 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
+
 import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
@@ -36,14 +37,15 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 	private static Vector2 v = new Vector2();
 	private static Vector2 w = new Vector2();
 	private float lastAngle = 180.0f;
-	
+
 	public InputPlayerDesktopSystem() {
 		this(DefaultPriority.inputPlayerDesktopSystem);
 	}
 
 	@SuppressWarnings("unchecked")
 	public InputPlayerDesktopSystem(int priority) {
-		super(Family.all(VelocityComponent.class, InputDesktopComponent.class,DirectionComponent.class).get(), priority);
+		super(Family.all(VelocityComponent.class, InputDesktopComponent.class, DirectionComponent.class).get(),
+				priority);
 	}
 
 	@Override
@@ -51,45 +53,51 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		final VelocityComponent vc = Mapper.velocityComponent.get(entity);
 		final InputDesktopComponent ic = Mapper.inputDesktopComponent.get(entity);
 		final DirectionComponent dc = Mapper.directionComponent.get(entity);
-		
+
 		// Switch weapon
 		if (KeyMapDesktop.isWeaponSwitchJustPressed()) {
 			if (player.cycleWeaponForward()) {
 				SoundPlayer.getInstance().play(ESound.EQUIP_WEAPON);
-			}
-			else SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
-		}
-		else if (KeyMapDesktop.isTokugiSwitchJustPressed()) {
+			} else
+				SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
+		} else if (KeyMapDesktop.isTokugiSwitchJustPressed()) {
 			if (player.cycleTokugiForward()) {
 				SoundPlayer.getInstance().play(ESound.EQUIP_TOKUGI);
-			}
-			else SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
+			} else
+				SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
 		}
-		
+
 		v.set((Gdx.input.isKeyPressed(ic.right)) ? 1.0f : (Gdx.input.isKeyPressed(ic.left)) ? -1.0f : 0.0f,
-		      (Gdx.input.isKeyPressed(ic.up)) ? 1.0f : (Gdx.input.isKeyPressed(ic.down)) ? -1.0f : 0.0f);
-		w.set((Gdx.input.isKeyPressed(ic.directionLeft)) ? 1.0f : (Gdx.input.isKeyPressed(ic.directionRight)) ? -1.0f : 0.0f,
-		      (Gdx.input.isKeyPressed(ic.directionUp)) ? 1.0f : (Gdx.input.isKeyPressed(ic.directionDown)) ? -1.0f : 0.0f);
-		
-		if (ic.relativeToCamera) v.rotate(-viewportGame.getRotationUpXY());
-		
+				(Gdx.input.isKeyPressed(ic.up)) ? 1.0f : (Gdx.input.isKeyPressed(ic.down)) ? -1.0f : 0.0f);
+		w.set((Gdx.input.isKeyPressed(ic.directionLeft)) ? 1.0f
+				: (Gdx.input.isKeyPressed(ic.directionRight)) ? -1.0f : 0.0f,
+				(Gdx.input.isKeyPressed(ic.directionUp)) ? 1.0f
+						: (Gdx.input.isKeyPressed(ic.directionDown)) ? -1.0f : 0.0f);
+
+		if (ic.relativeToCamera)
+			v.rotate(-viewportGame.getRotationUpXY());
+
 		if (battleModeActive) {
 			final float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.battleSpeedHigh : ic.battleSpeedLow;
-			vc.x = v.x*f;
-			vc.y = v.y*f;
-			final PositionComponent pcEnemy = Mapper.positionComponent.get(GlobalBag.cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
+			vc.x = v.x * f;
+			vc.y = v.y * f;
+			final PositionComponent pcEnemy = Mapper.positionComponent
+					.get(GlobalBag.cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
 			final PositionComponent pcPlayer = Mapper.positionComponent.get(entity);
-			dc.degree = 450.0f-w.set(pcPlayer.x-pcEnemy.x,pcPlayer.y-pcEnemy.y).angle();
+			dc.degree = 450.0f - w.set(pcPlayer.x - pcEnemy.x, pcPlayer.y - pcEnemy.y).angle();
+		} else {
+			if (ic.orientToScreen)
+				dc.degree = 450.0f + viewportGame.getRotationUpXY() + ic.screenOrientation;
+			else if (w.len2() > 0.5f)
+				dc.degree = 450.0f + viewportGame.getRotationUpXY() + (lastAngle = w.angle());
+			else
+				dc.degree = 450.0f + viewportGame.getRotationUpXY() + (lastAngle);
+			final float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.accelerationFactorHigh
+					: ic.accelerationFactorLow;
+			vc.x = (vc.x + f * v.x) * ic.frictionFactor;
+			vc.y = (vc.y + f * v.y) * ic.frictionFactor;
 		}
-		else {
-			if (ic.orientToScreen) dc.degree = 450.0f+viewportGame.getRotationUpXY()+ic.screenOrientation;
-			else if (w.len2() > 0.5f) dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle=w.angle());
-			else dc.degree = 450.0f+viewportGame.getRotationUpXY()+(lastAngle);
-			final float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.accelerationFactorHigh : ic.accelerationFactorLow;
-			vc.x = (vc.x+f*v.x)*ic.frictionFactor;
-			vc.y = (vc.y+f*v.y)*ic.frictionFactor;
-		}
-		
+
 		// Check if we need to switch the targetted enemy and change
 		// the info displayed on the status screen.
 		if (cameraTrackingComponent.focusPoints.size() > 1) {
@@ -99,14 +107,16 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 				if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
 					cameraTrackingComponent.trackedPointIndex = 0;
 				}
-				EnemyMaker.targetSwitched(cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
+				EnemyMaker.targetSwitched(
+						cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex), true);
 			} else if (Gdx.input.isKeyJustPressed(ic.enemySwitcherNext)) {
 				SoundPlayer.getInstance().play(ESound.ENEMY_SWITCH);
 				cameraTrackingComponent.trackedPointIndex--;
 				if (cameraTrackingComponent.trackedPointIndex < 0) {
 					cameraTrackingComponent.trackedPointIndex = cameraTrackingComponent.focusPoints.size() - 1;
 				}
-				EnemyMaker.targetSwitched(cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex));
+				EnemyMaker.targetSwitched(
+						cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex), true);
 			}
 		}
 	}
