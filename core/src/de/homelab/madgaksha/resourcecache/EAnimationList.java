@@ -15,9 +15,9 @@ public enum EAnimationList implements IResource<EAnimationList,AtlasAnimation[]>
 	ESTELLE_STANDING(ETexture.ESTELLE_STANDING, 128, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
 	
 	// =================
-	//      ESTELLE
+	//      JOSHUA
 	// =================
-	JOSHUA_RUNNING(ETexture.JOSHUA_RUNNING, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
+	JOSHUA_STANDING(ETexture.JOSHUA_STANDING, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
 	
 	// =================
 	//      ENEMIES

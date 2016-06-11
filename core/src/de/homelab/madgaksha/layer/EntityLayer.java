@@ -3,6 +3,7 @@ package de.homelab.madgaksha.layer;
 import static de.homelab.madgaksha.GlobalBag.cameraEntity;
 import static de.homelab.madgaksha.GlobalBag.enemyTargetCrossEntity;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
+import static de.homelab.madgaksha.GlobalBag.idEntityMap;
 import static de.homelab.madgaksha.GlobalBag.level;
 import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.playerBattleStigmaEntity;
@@ -15,12 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.IdComponent;
 import de.homelab.madgaksha.entityengine.component.TriggerStartupComponent;
 import de.homelab.madgaksha.entityengine.entity.MakerUtils;
 import de.homelab.madgaksha.entityengine.entity.PlayerMaker;
@@ -118,6 +121,12 @@ public class EntityLayer extends ALayer {
 	}
 
 	public boolean createEngine() {
+		addSystems();
+		if (!addMainEntites()) return false;
+		return true;
+	}
+
+	private void addSystems() {
 		gameEntityEngine.addSystem(new AccelerationSystem());
 		gameEntityEngine.addSystem(new AiSystem());
 		gameEntityEngine.addSystem(new AngularMovementSystem());
@@ -165,7 +174,9 @@ public class EntityLayer extends ALayer {
 			// TODO
 			break;
 		}
-		
+	}
+	
+	private boolean addMainEntites() {
 		Entity hitCircle = PlayerMaker.getInstance().makePlayerHitCircle(playerEntity, player);
 		Entity battleStigma = PlayerMaker.getInstance().makePlayerBattleStigma(playerEntity, player);
 		Entity targetCross = MakerUtils.makeEnemyTargetCross();
@@ -185,7 +196,7 @@ public class EntityLayer extends ALayer {
 		
 		return true;
 	}
-
+	
 	@Override
 	public boolean isBlockDraw() {
 		return false;
@@ -198,5 +209,31 @@ public class EntityLayer extends ALayer {
 
 	@Override
 	public void resize(int width, int height) {
+	}
+
+	public static void addEntityListeners() {
+		addIdListener();
+	}
+
+	@SuppressWarnings("unchecked")
+	private static void addIdListener() {
+		// Add entity to idEntityMap when an IdComponent is added or removed.
+		gameEntityEngine.addEntityListener(Family.all(IdComponent.class).get(), new EntityListener() {
+			@Override
+			public void entityAdded(Entity entity) {
+				final IdComponent ic = Mapper.idComponent.get(entity);
+				if (ic != null) idEntityMap.put(ic.getId(), entity);
+			}
+			@Override
+			public void entityRemoved(Entity entity) {
+				String id = idEntityMap.inverse().get(entity);
+				if (id != null) idEntityMap.remove(id);
+			}				
+		});		
+	}
+
+	public static void addMainEntitiesToMap() {
+		idEntityMap.put("player", playerEntity);
+		idEntityMap.put("camera", cameraEntity);
 	}
 }

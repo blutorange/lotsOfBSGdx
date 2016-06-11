@@ -57,7 +57,7 @@ public enum ETexture implements IResource<ETexture,AtlasRegion> {
 	// ==================
 	//      JOSHUA
 	// ==================
-	JOSHUA_RUNNING("sprite/joshua00011.png"),
+	JOSHUA_STANDING("sprite/joshua00010.png"),
 	
 	
 	// ===================

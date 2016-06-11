@@ -1,0 +1,28 @@
+>>EventTextbox
+  TransitionIn
+  Text EOF
+最近行方不明者が相次いているため、
+ここから南東の深淵は近づかないように願っている次第です。
+　
+―――微妙にワケあり異世界探検者（ヴァーチャルハイカー）―――
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face Suprised
+  Text EOF
+ゆくえふめーしゃー？
+なんだ、あたしにかかりゃ楽勝じゃない！
+なにが起こっているかのヒントが出るかも
+いちど南東へまわっていこうかな？
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face Serious
+  TransitionOut
+  Text EOF
+でも本当に危なかったらどうしよう？
+一人じゃ心細いし、今は寄り道するより
+ヨシュアをさがさないと。。。！
+EOF

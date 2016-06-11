@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.level.ALevel;
@@ -85,7 +87,9 @@ public final class GlobalBag {
 	/** Whether we are in battle mode. */
 	public static boolean battleModeActive = false;
 
-	public static boolean forceCameraUpdate = false;
+	/** Hash map containing the mapping between entity names and the entity. Used by cutscene scripts and callback functions. */
+	//public static BidiMap<String, Entity> idEntityMap = new DualHashBidiMap<String, Entity>();
+	public static BiMap<String, Entity> idEntityMap = HashBiMap.create();
 	
 	static {
 		visibleWorld.setPosition(0.0f, 0.0f);

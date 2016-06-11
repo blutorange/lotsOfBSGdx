@@ -1,7 +1,10 @@
 package de.homelab.madgaksha.layer;
 
+import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.provider.CutsceneEventProvider;
+import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.entityutils.SystemUtils;
 import de.homelab.madgaksha.logging.Logger;
 
@@ -57,11 +60,17 @@ public class CutsceneLayer extends ALayer {
 
 	@Override
 	public void addedToStack() {
-		SystemUtils.disableActionExceptGrantPosition();		
+		SystemUtils.disableActionExceptGrantPosition();
+		stopPlayerMovement();
 		cutsceneEventProvider.initialize();
 		proceedToNextEvent();
 	}
 	
+	private void stopPlayerMovement() {
+		VelocityComponent vc = Mapper.velocityComponent.get(GlobalBag.playerEntity);
+		vc.x = vc.y = 0;
+	}
+
 	public boolean proceedToNextEvent() {
 		do {
 			if (currentCutsceneEvent != null) cutsceneEventProvider.eventDone(currentCutsceneEvent);

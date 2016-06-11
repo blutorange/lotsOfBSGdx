@@ -22,12 +22,14 @@ import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.event.EventTextbox;
 import de.homelab.madgaksha.cutscenesystem.textbox.EFaceVariation;
 import de.homelab.madgaksha.cutscenesystem.textbox.PlainTextbox;
+import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.enums.ESpeaker;
 import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETextbox;
+import path.EPath;
 
 /**
  * Reads cutscene events from a configuration file<br>
@@ -80,7 +82,8 @@ import de.homelab.madgaksha.resourcecache.ETextbox;
  * 
  * <pre>&lt;KEY&gt; &lt;VALUE&gt; {&lt;VALUE&gt;} &lt;NEWLINE&gt;</pre>
  * 
- * <br><br>
+ * 
+ * <h2> Wait event </h2>
  * 
  * The wait event only specifies a wait time:
  * 
@@ -88,8 +91,38 @@ import de.homelab.madgaksha.resourcecache.ETextbox;
  * 
  * For example:
  * <pre> EventWait 2.5</pre>
- *   
- * <br><br>
+ *
+ * 
+ * <h2> Move event </h2>
+ * 
+ * The move event specifies details on which entity to move and how:
+ * 
+ * <pre>&lt;EventParametersMove&gt; := &lt;GUID&gt;
+ *{&lt;{@link EPath} &lt;POSITIVE_NUMBER&gt; [R|A] &lt;PathParameters&gt;}
+ * </pre>
+ * 
+ * The number after the path specifies the time in seconds for that path. If a tile is blocking, the entity will not move there, unless {@link PositionComponent#limitToMap} is set to false. All coordinates specified in tiles.
+ * 
+ * <br>
+ * 
+ * For example:
+ * 
+ * <code>
+ * &gt;&gt;EventMove player
+ * Line 1.0 R 0 -20
+ * Line 1.0 R 20 0
+ * </code>
+ * 
+ * This would move the player 
+ * Path Parameters are as follows:
+ * 
+ * <h3>PATH_LINE</h3>
+ * 
+ * 
+ * 
+ * <code>&lt;PathParameters&gt; := &lt;END_POINT_X&gt; &lt;END_POINT_Y&gt;</code>
+ * 
+ * <h2> Textbox event </h2>
  * 
  * Textbox events require more parameters. Each parameters must be on a separate line.
  * The order in which they appear is not important. If any are missing, defaults are used.

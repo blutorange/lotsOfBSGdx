@@ -18,7 +18,7 @@ public enum EAnimation implements IResource<EAnimation,AtlasAnimation> {
 	// =================
 	//      JOSHUA
 	// =================
-	JOSHUA_RUNNING(ETexture.JOSHUA_RUNNING, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP);
+	JOSHUA_STANDING(ETexture.JOSHUA_STANDING, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP),
 
 	// =================
 	//      ENEMIES

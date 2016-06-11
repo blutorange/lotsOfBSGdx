@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttypes>
+ <objecttype name="NPC" color="#55ff00">
+  <property name="animation" type="string"/>
+  <property name="animationList" type="string"/>
+  <property name="guid" type="string"/>
+  <property name="initDir" type="float"/>
+  <property name="initX" type="float"/>
+  <property name="initY" type="float"/>
+  <property name="species" type="string"/>
+  <property name="startup" type="string" default="visible"/>
+ </objecttype>
+ <objecttype name="Enemy" color="#ff0000">
+  <property name="guid" type="string"/>
+  <property name="initX" type="float"/>
+  <property name="initY" type="float"/>
+  <property name="spawn" type="string" default="screen"/>
+  <property name="species" type="string"/>
+ </objecttype>
+ <objecttype name="Callback" color="#ffff00">
+  <property name="guid" type="string"/>
+  <property name="interval" type="float"/>
+  <property name="loop" type="int"/>
+  <property name="name" type="string"/>
+  <property name="trigger" type="string" default="touch"/>
+ </objecttype>
+ <objecttype name="Item" color="#00ffff">
+  <property name="axisX" type="float" default="1"/>
+  <property name="axisY" type="float" default="1"/>
+  <property name="axisZ" type="float"/>
+  <property name="category" type="string"/>
+  <property name="guid" type="string"/>
+  <property name="name" type="string"/>
+  <property name="speed" type="float" default="45"/>
+ </objecttype>
+</objecttypes>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="180" height="610" tilewidth="32" tileheight="32" nextobjectid="40">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="180" height="610" tilewidth="32" tileheight="32" nextobjectid="58">
  <properties>
   <property name="baseDirX" value="0"/>
   <property name="baseDirY" value="1"/>
@@ -8785,16 +8785,10 @@
  </layer>
  <layer name="OverLayer2" width="180" height="610">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <objectgroup name="MyObjects">
-  <object id="8" name="InitialDialog" type="Callback" x="1313" y="18917" width="276" height="83">
-   <properties>
-    <property name="name" value="initialDialog"/>
-    <property name="trigger" value="startup"/>
-   </properties>
-  </object>
   <object id="12" name="SoldierRed" type="Enemy" x="835" y="16158.3" width="482" height="111">
    <properties>
     <property name="initDir" value="0.0"/>
@@ -8905,10 +8899,24 @@
     <property name="trigger" value="touch"/>
    </properties>
   </object>
-  <object id="39" name="turnBackJoshua" type="Callback" x="547.833" y="17906.9" width="1333.5" height="75.5">
+  <object id="39" name="turnBackJoshua" type="Callback" x="477.818" y="17678.2" width="1475.76" height="75.5">
    <properties>
+    <property name="loop" type="int" value="-1"/>
     <property name="name" value="turnBackJoshua"/>
     <property name="trigger" value="touch"/>
+   </properties>
+  </object>
+  <object id="40" name="Joshua 1" type="NPC" x="1416" y="18754.3" width="66" height="57.5">
+   <properties>
+    <property name="animationList" value="Joshua Standing"/>
+    <property name="guid" value="Joshua1"/>
+    <property name="species" value="joshua"/>
+   </properties>
+  </object>
+  <object id="57" name="InitialDialog" type="Callback" x="1338" y="18914.5" width="276" height="83">
+   <properties>
+    <property name="name" value="initialDialog"/>
+    <property name="trigger" value="startup"/>
    </properties>
   </object>
  </objectgroup>

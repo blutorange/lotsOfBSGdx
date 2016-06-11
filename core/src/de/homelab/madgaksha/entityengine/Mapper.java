@@ -23,9 +23,9 @@ import de.homelab.madgaksha.entityengine.component.ForceComponent;
 import de.homelab.madgaksha.entityengine.component.ForceFieldComponent;
 import de.homelab.madgaksha.entityengine.component.GetHitComponent;
 import de.homelab.madgaksha.entityengine.component.HoverEffectComponent;
+import de.homelab.madgaksha.entityengine.component.IdComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.InputDesktopComponent;
-import de.homelab.madgaksha.entityengine.component.InverseMassComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.LifeComponent;
@@ -116,9 +116,7 @@ public final class Mapper {
 	public final static ComponentMapper<ZOrder4Component> zOrder4Component = ComponentMapper
 			.getFor(ZOrder4Component.class);
 
-	
-	public final static ComponentMapper<AlphaComponent> alphaComponent = ComponentMapper
-			.getFor(AlphaComponent.class);
+	public final static ComponentMapper<AlphaComponent> alphaComponent = ComponentMapper.getFor(AlphaComponent.class);
 	public final static ComponentMapper<AngularVelocityComponent> angularVelocityComponent = ComponentMapper
 			.getFor(AngularVelocityComponent.class);
 	public final static ComponentMapper<AnyChildComponent> anyChildComponent = ComponentMapper
@@ -143,42 +141,40 @@ public final class Mapper {
 			.getFor(CallbackComponent.class);
 	public final static ComponentMapper<SiblingComponent> siblingComponent = ComponentMapper
 			.getFor(SiblingComponent.class);
-	public final static ComponentMapper<ColorComponent> colorComponent = ComponentMapper
-			.getFor(ColorComponent.class);
+	public final static ComponentMapper<ColorComponent> colorComponent = ComponentMapper.getFor(ColorComponent.class);
 	public final static ComponentMapper<ColorFlashEffectComponent> colorFlashEffectComponent = ComponentMapper
 			.getFor(ColorFlashEffectComponent.class);
 	public final static ComponentMapper<ComponentQueueComponent> componentQueueComponent = ComponentMapper
 			.getFor(ComponentQueueComponent.class);
 	public final static ComponentMapper<DamageQueueComponent> damageQueueComponent = ComponentMapper
 			.getFor(DamageQueueComponent.class);
-	public final static ComponentMapper<DeathComponent> deathComponent = ComponentMapper
-			.getFor(DeathComponent.class);
+	public final static ComponentMapper<DeathComponent> deathComponent = ComponentMapper.getFor(DeathComponent.class);
 	public final static ComponentMapper<DirectionComponent> directionComponent = ComponentMapper
 			.getFor(DirectionComponent.class);
 	public final static ComponentMapper<EnemyIconComponent> enemyIconComponent = ComponentMapper
 			.getFor(EnemyIconComponent.class);
-	public final static ComponentMapper<FadeEffectComponent> fadeEffectComponent = ComponentMapper.getFor(FadeEffectComponent.class);
+	public final static ComponentMapper<FadeEffectComponent> fadeEffectComponent = ComponentMapper
+			.getFor(FadeEffectComponent.class);
 	public final static ComponentMapper<ForceComponent> forceComponent = ComponentMapper.getFor(ForceComponent.class);
-	public final static ComponentMapper<ForceFieldComponent> forceFieldComponent = ComponentMapper.getFor(ForceFieldComponent.class);
-	public final static ComponentMapper<GetHitComponent> getHitComponent = ComponentMapper.getFor(GetHitComponent.class);
+	public final static ComponentMapper<ForceFieldComponent> forceFieldComponent = ComponentMapper
+			.getFor(ForceFieldComponent.class);
+	public final static ComponentMapper<GetHitComponent> getHitComponent = ComponentMapper
+			.getFor(GetHitComponent.class);
 	public final static ComponentMapper<HoverEffectComponent> hoverEffectComponent = ComponentMapper
 			.getFor(HoverEffectComponent.class);
+	public final static ComponentMapper<IdComponent> idComponent = ComponentMapper.getFor(IdComponent.class);
 	public final static ComponentMapper<InactiveComponent> inactiveComponent = ComponentMapper
 			.getFor(InactiveComponent.class);
 	public final static ComponentMapper<InputDesktopComponent> inputDesktopComponent = ComponentMapper
 			.getFor(InputDesktopComponent.class);
-	public final static ComponentMapper<InverseMassComponent> inverseMassComponent = ComponentMapper
-			.getFor(InverseMassComponent.class);
 	public final static ComponentMapper<InvisibleComponent> invisibleComponent = ComponentMapper
 			.getFor(InvisibleComponent.class);
-	public final static ComponentMapper<LifeComponent> lifeComponent = ComponentMapper
-			.getFor(LifeComponent.class);
+	public final static ComponentMapper<LifeComponent> lifeComponent = ComponentMapper.getFor(LifeComponent.class);
 	public final static ComponentMapper<LeanEffectComponent> leanEffectComponent = ComponentMapper
 			.getFor(LeanEffectComponent.class);
 	public final static ComponentMapper<ManyTrackingComponent> manyTrackingComponent = ComponentMapper
 			.getFor(ManyTrackingComponent.class);
-	public final static ComponentMapper<ModelComponent> modelComponent = ComponentMapper
-			.getFor(ModelComponent.class);
+	public final static ComponentMapper<ModelComponent> modelComponent = ComponentMapper.getFor(ModelComponent.class);
 	public final static ComponentMapper<PainPointsComponent> painPointsComponent = ComponentMapper
 			.getFor(PainPointsComponent.class);
 	public final static ComponentMapper<ParentComponent> parentComponent = ComponentMapper
@@ -189,11 +185,13 @@ public final class Mapper {
 			.getFor(ParticleEffectGameComponent.class);
 	public final static ComponentMapper<PositionComponent> positionComponent = ComponentMapper
 			.getFor(PositionComponent.class);
-	public final static ComponentMapper<QuakeEffectComponent> quakeEffectComponent = ComponentMapper.getFor(QuakeEffectComponent.class);
+	public final static ComponentMapper<QuakeEffectComponent> quakeEffectComponent = ComponentMapper
+			.getFor(QuakeEffectComponent.class);
 	public final static ComponentMapper<RotationComponent> rotationComponent = ComponentMapper
 			.getFor(RotationComponent.class);
 	public final static ComponentMapper<ScaleComponent> scaleComponent = ComponentMapper.getFor(ScaleComponent.class);
-	public final static ComponentMapper<ScaleFromDistanceComponent> scaleFromDistanceComponent = ComponentMapper.getFor(ScaleFromDistanceComponent.class);
+	public final static ComponentMapper<ScaleFromDistanceComponent> scaleFromDistanceComponent = ComponentMapper
+			.getFor(ScaleFromDistanceComponent.class);
 	public final static ComponentMapper<ShadowComponent> shadowComponent = ComponentMapper
 			.getFor(ShadowComponent.class);
 	public final static ComponentMapper<ShapeComponent> shapeComponent = ComponentMapper.getFor(ShapeComponent.class);
@@ -229,6 +227,5 @@ public final class Mapper {
 			.getFor(VelocityComponent.class);
 	public final static ComponentMapper<ViewportComponent> viewportComponent = ComponentMapper
 			.getFor(ViewportComponent.class);
-	public final static ComponentMapper<VoiceComponent> voiceComponent = ComponentMapper
-			.getFor(VoiceComponent.class);
+	public final static ComponentMapper<VoiceComponent> voiceComponent = ComponentMapper.getFor(VoiceComponent.class);
 }

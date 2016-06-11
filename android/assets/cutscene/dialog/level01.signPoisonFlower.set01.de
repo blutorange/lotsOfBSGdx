@@ -1,0 +1,36 @@
+>>EventTextbox
+  TransitionIn
+  TransitionOut
+  Text EOF
+毒華（どくば）の花は上空にその臭気を噴射し、獲物を刈り取る。
+歩くよし、浮くあし。
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face SULLEN
+  TransitionIn
+  TransitionOut
+  Text EOF
+そんな都合いいな理由、だれが納得できるかよ！
+まるであたしがこんなことになって分かってて、
+屁理屈でもなんでも構わない態度で
+通過できないようにしたかっただけじゃない！
+EOF
+
+>>EventTextbox
+  Speaker Virtual_Walker
+  TransitionIn
+  TransitionOut
+  Text EOF
+はたしそれはどうかね？
+EOF
+
+>>EventTextbox
+　TransitionIn
+　TransitionOut
+  Speaker Estelle
+  Face SUPRISED
+  Text EOF
+？？？
+EOF

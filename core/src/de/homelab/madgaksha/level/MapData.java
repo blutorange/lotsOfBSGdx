@@ -18,16 +18,23 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 
+import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.ETrigger;
+import de.homelab.madgaksha.entityengine.component.IdComponent;
 import de.homelab.madgaksha.entityengine.entity.CallbackMaker;
 import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
 import de.homelab.madgaksha.entityengine.entity.ItemMaker;
+import de.homelab.madgaksha.entityengine.entity.NpcMaker;
 import de.homelab.madgaksha.entityengine.entity.ParticleEffectMaker;
 import de.homelab.madgaksha.enums.Gravity;
 import de.homelab.madgaksha.logging.Logger;
@@ -38,7 +45,10 @@ import de.homelab.madgaksha.player.tokugi.ATokugi;
 import de.homelab.madgaksha.player.tokugi.ETokugi;
 import de.homelab.madgaksha.player.weapon.AWeapon;
 import de.homelab.madgaksha.player.weapon.EWeapon;
+import de.homelab.madgaksha.resourcecache.EAnimation;
+import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
+import de.homelab.madgaksha.util.GeoUtil;
 
 /**
  * Reads a tiled map and extracts properties for later use. Objects can be added directly via the map editor. 
@@ -62,6 +72,9 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
  * 
  * <ul>
  *   <li>type : Object type set in tiled map editor on the top right panel. Case insensitive.</li>
+ *   <li>guid: An id used to refer to objects in cutscene scripts etc. Should be unique.
+ *   Undefined behaviour when not unique. Case-insensitive. Must not contain any characters
+ *   other than letters and number (a-z, A-Z, 0-9). See also {@link IdComponent}.
  * </ul>
  * 
  * The following types and properties are supported: 
@@ -70,15 +83,21 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
  * <br>
  * Represents an enemy that can engage in combat with the player.
  * <ul>
- * <li>species: The type of a enemy. There must exist a corresponding subclass of {@link EnemyMaker} with the name <code>Enemy&lt;species&gt;</code>.</li>
+ * <li>species: The type of a enemy. There must exist a corresponding subclass of {@link EnemyMaker} with the
+ * name <code>Enemy&lt;species&gt;</code>.</li>
  * <li>spawn: How and when the enemy should spawn. Possible values are:
  *  <ul>
  *   <li>startup: When the map has finished loading.
  *   <li>screen: When the enemy becomes visible on screen.</li>
- *   <li>manual: Can only be triggered via a backing java function from a class of type {@link ALevel}. See type <code>callback</code>.</li>
+ *   <li>manual: Can only be triggered via a backing java function from a class of type {@link ALevel}.
+ *   See type <code>callback</code>.</li>
+ *   <li>touch: When the bounding box of the enemy is touched.</li>
  *  </ul>
- * <li> initX: (optional) Displacement of the initial position in x-direction in tiles. If 0, the enemy is placed at the center of the bounding box of the object's shape.</li>
- * <li> initY: (optional) Displacement of the initial position in y-direction in tiles. If 0, the enemy is placed at the center of the bounding box of the object's shape.</li>  
+ * <li>initX: (optional) Displacement of the initial position in x-direction in tiles. If 0, the enemy is placed
+ * at the center of the bounding box of the object's shape.</li>
+ * <li>initY: (optional) Displacement of the initial position in y-direction in tiles. If 0, the enemy is placed
+ * at the center of the bounding box of the object's shape.</li>
+ * <li>initDir: (optional) Initial looking direction in degrees. 0 is down, 90 is to the right. Default 0.</li>
  * </ul>
  *  
  * <h3>type: Callback</h3>
@@ -96,7 +115,9 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
  *   <li>screen: When the event shape becomes visible on screen.</li>
  *   <li>touch: Triggers only when the player touches the even shape.</li>
  *  </ul> 
- * <li> loop: Number of times the event should repeat after it was first triggered. Use 0 for no loop, -1 for infinite loop.</li>
+ * <li> loop: Number of times the event should repeat after it was first triggered. Use 0 for no loop. Use -1 to
+ * keep triggering the event on the specified condition. Make sure the callback moves the player or it keeps
+ * triggering every frame.</li>
  * <li> interval: Time in seconds between two loops, see the <code>loop</code> property.
  * </ul>
  * 
@@ -106,23 +127,39 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
  * <ul>
  *  <li>name: Name of the particle effect. Must be defined in {@link EParticleEffect}</li>
  *  <li>speed: How fast the particle effect should rotate. Useful for flame wheels etc.</li>
- *  <li>renderMode: Whether to draw in screen or game coordinates. Position is unaffected, but useful for rotation if particle effect should always point upwards (as seen on the screen).</li>
+ *  <li>renderMode: Whether to draw in screen or game coordinates. Position is unaffected, but useful for rotation
+ *  if particle effect should always point upwards (as seen on the screen).</li>
  * </ul>
  * 
- *  <h3>type: npc</h3>
+ *  <h3>type: NPC </h3>
  *  
- *  not yet available
+ *  <ul>
+ *  <li>animation: The NPC's {@link EAnimation}.</li>
+ *  <li>animationList: The NPC's {@link EAnimationList}. Takes priority if animation is given as well.</li>
+ *  <li>startup: (optional) Whether the NPC should be visible or invisible when the game starts. Possible values are
+ *  "visible" and "invisible". Default visible.</li>
+ *  <li>initX: (optional) Displacement of the initial position in x-direction in tiles. If 0, the enemy is placed at
+ *  the center of the bounding box of the object's shape.</li>
+ *  <li>initY: (optional) Displacement of the initial position in y-direction in tiles. If 0, the enemy is placed at
+ *  the center of the bounding box of the object's shape.</li>
+ *  <li>initDir: (optional) Initial looking direction in degrees. 0 is down, 90 is to the right. Default 0.</li>
+ *  </ul>
  *  
  * <h3>type: Item</h3>
  * <br>
- * An collectable item. Items are divided into weapons, specials (special attack) and consumables (recovery).
+ * An collectible item. Items are divided into weapons, specials (special attack) and consumables (recovery).
  *  
  * <ul>
- * <li>category: Category of this item. Possible values are <code>weapon</code>, <code>tokugi</code>, and <code>consumable</code></li>
- * <li>name: Name of this item. A corresponding java class must exists for this item. For weapons, the class must be called WeaponXXX, for special attacks it must be called TokugiXXX, and for consumables it must be called ConsumableXXX.
- * Additionally, the class must be located in the same package as {@link AWeapon}, {@link ATokugi}, and {@link AConsumable}.
+ * <li>category: Category of this item. Possible values are <code>weapon</code>, <code>tokugi</code>, 
+ * and <code>consumable</code></li>
+ * <li>name: Name of this item. A corresponding java class must exists for this item. For weapons, the class
+ * must be called WeaponXXX, for special attacks it must be called TokugiXXX, and for consumables it must be
+ *  called ConsumableXXX.
+ * Additionally, the class must be located in the same package as {@link AWeapon}, {@link ATokugi},
+ * and {@link AConsumable}.
  * <li>speed: Angular velocity at which the item model should rotate, in degrees/second. Default 45.</li>
- * <li>axisX, axisY, axisZ: Axis around which the item model should rotate. Default (1,1,0)(</li>
+ * <li>axisX, axisY, axisZ: (optional) Axis around which the item model should rotate. Does not need be
+ * normed. Default (1,1,0)(</li>
  * </ul>
  * 
  * @author madgaksha
@@ -132,6 +169,8 @@ public class MapData {
 
 	private final static Logger LOG = Logger.getLogger(MapData.class);
 	private final static String  ENEMY_PACKAGE = "de.homelab.madgaksha.entityengine.entity.enemy.";
+	
+	private final static Vector2 v1 = new Vector2();
 	
 	/**
 	 * 0 b 00000000 00000000 00000000 00000000 
@@ -293,81 +332,137 @@ public class MapData {
 		if (!mapObject.isVisible()) return;
 		
 		// Get shape of the object.
-		Shape2D shape = null;
-		try {
-			if (mapObject instanceof CircleMapObject) {
-				shape = ((CircleMapObject)mapObject).getCircle();
-			}
-			else if (mapObject instanceof EllipseMapObject) {
-				shape = ((EllipseMapObject)mapObject).getEllipse();
-			}
-			else if (mapObject instanceof RectangleMapObject) {
-				shape = ((RectangleMapObject)mapObject).getRectangle();
-			}
-			else if (mapObject instanceof PolylineMapObject) {
-				shape = ((PolygonMapObject)mapObject).getPolygon();
-			}
-			else if (mapObject instanceof PolygonMapObject) {
-				shape = ((PolygonMapObject)mapObject).getPolygon();
-			}
-		}
-		catch (Exception e) {
-			LOG.error("failed to read shape of map object", e);
-			return;
-		}
-		
+		Shape2D shape = getMapObjectShape(mapObject);		
 		// Unknown shape.
-		if (shape == null) {
-			LOG.error("map object with unknown shape");
-			return;
-		}
+		if (shape == null) return;
 		
-		// Get properties and check if it has got a type.
+		// Read properties
 		MapProperties props = mapObject.getProperties();
-		if (!props.containsKey("type")) {
-			LOG.error("map object does not specify a type");
-			return;
-		}
-
-		// Try and create a new map object of the specified type.
-		Entity entity = null;
-		try {
-			String type = props.get("type", String.class);
-			if (type == null) return;
-			type = type.toLowerCase(Locale.ROOT);
-			if (type.equals("enemy")) {
-				entity = processObjectEnemy(props, shape);
-			}
-			else if (type.equals("particleeffect")) {
-				entity = processObjectParticleEffect(props, shape);
-			}
-			else if (type.equals("callback")) {
-				entity = processObjectCallback(props, shape);
-			}
-			else if (type.equals("item")) {
-				entity = processObjectItem(props, shape);
-			}
-			else {
-				LOG.info("unknown map object type: " + type);
-			}
-		}
-		catch (Exception e) {
-			LOG.error("failed to read map object: " + mapObject, e);
+		if (props == null) {
+			LOG.error("object does not specify map properties");
 			return;
 		}
 		
+		// Try and create a new map object of the specified type.
+		Entity entity = createEntityForMapObject(mapObject, props, shape);
 		// Unknown or invalid object.
 		if (entity == null) {
 			LOG.error("failed to read object");
 			return;
 		}
 		
-		LOG.debug("read map object:  " + mapObject.getName());
+		// Read ID, if available, add to hash map and add id to entity.
+		processMapObjectId(props, entity);
 		
 		// Store our map object for later use.
 		gameEntityEngine.addEntity(entity);
+		
+		LOG.debug("read map object:  " + mapObject.getName());
 	}
 
+	private Entity createEntityForMapObject(MapObject mapObject, MapProperties props, Shape2D shape) {
+		Entity entity = null;
+		try {
+			if (!props.containsKey("type")) {
+				LOG.error("no type has been set for map object");	
+			}
+			else {
+				String type = String.valueOf(props.get("type"));
+				type = type.toLowerCase(Locale.ROOT);
+				if (type.equals("enemy")) {
+					entity = processObjectEnemy(props, shape);
+				}
+				else if (type.equals("particleeffect")) {
+					entity = processObjectParticleEffect(props, shape);
+				}
+				else if (type.equals("callback")) {
+					entity = processObjectCallback(props, shape);
+				}
+				else if (type.equals("item")) {
+					entity = processObjectItem(props, shape);
+				}
+				else if (type.equals("npc")) {
+					entity = processObjectNpc(props, shape);
+				}
+				else {
+					LOG.info("unknown map object type: " + type);
+				}
+			}
+		}
+		catch (Exception e) {
+			LOG.error("failed to read map object: " + mapObject, e);
+		}
+		return entity;
+	}
+
+	private Shape2D getMapObjectShape(MapObject mapObject) {
+		Shape2D shape = null;
+		Float rotation = null;
+		
+		if (mapObject.getProperties().containsKey("rotation")) {
+			float r = mapObject.getProperties().get("rotation", Float.class);
+			// shift to positive values
+			if (r < 0.0f)
+				r -= 360.0f * (int)(r/360.0f-1.0f);
+			// reduce to 0..360
+			r = r % 360.0f;
+			// discard small angles
+			if (r > 0.01f) rotation = r;
+		}
+		
+		if (mapObject instanceof CircleMapObject) {
+			shape = ((CircleMapObject) mapObject).getCircle();
+		} else if (mapObject instanceof EllipseMapObject) {
+			Ellipse ellipse;
+			ellipse = ((EllipseMapObject) mapObject).getEllipse();
+			// Convert to circle if it is one.
+			if (Math.abs(ellipse.width-ellipse.height) < 1E-3 * Math.max(ellipse.height, ellipse.width)) {
+				shape = new Circle(ellipse.x, ellipse.y, 0.5f * (ellipse.height+ellipse.width));
+			}
+			else { 
+				//TODO rotation
+				shape = ellipse;
+			}
+		} else if (mapObject instanceof RectangleMapObject) {
+			Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
+			shape = rotation == null ? rect : GeoUtil.getRotatedRectangle(rect, rotation);			
+		} else if (mapObject instanceof PolylineMapObject) {
+			Polygon poly = ((PolygonMapObject) mapObject).getPolygon();
+			GeoUtil.boundingBoxCenter(shape, v1);
+			if (rotation != null) GeoUtil.rotatePolygon(poly, v1, rotation);
+			shape = poly;
+		} else if (mapObject instanceof PolygonMapObject) {
+			Polygon poly = ((PolygonMapObject) mapObject).getPolygon();
+			GeoUtil.boundingBoxCenter(poly, v1);
+			if (rotation != null) GeoUtil.rotatePolygon(poly, v1, rotation);
+			shape = poly;
+		} else {
+			LOG.error("unknown shape for map objects");
+		}
+		
+		return shape;
+	}
+
+	/**
+	 * Read the id (name) of the map object and adds it to the
+	 * {@link GlobalBag#idEntityMap} map. Also adds an appropritate
+	 * {@link IdComponent} to the entity.
+	 * 
+	 * @param props
+	 *            MapProperties for this map object.
+	 * @param entity
+	 *            Entity created for this map object.
+	 */
+	private void processMapObjectId(MapProperties props, Entity entity) {
+		if (props.containsKey("guid")) {
+			String id = String.valueOf(props.get("guid"));
+			// Add to entity.
+			IdComponent ic = new IdComponent(id);
+			// This will add the entity to the idEntityMap automatically.
+			entity.add(ic);
+		}
+	}
+	
 	private void processMapProperties(MapProperties props) {
 		// Default data.
 		Integer playerX = 0;
@@ -393,28 +488,28 @@ public class MapData {
 		minimumCameraElevation = minElevation;
 		maximumCameraElevation = maxElevation;
 		baseDirection = new Vector2(baseDirX,baseDirY);
-		playerInitialPosition = new Vector2(playerX*widthTiles,playerY*heightTiles);
+		playerInitialPosition = new Vector2(playerX*widthTiles, playerY*heightTiles);
 		playerInitialDirection = playerDir;
 		preferredPlayerLocation = gravity;		
 	}
 	
 	private Entity processObjectEnemy(MapProperties props, Shape2D shape) {
-		Integer initX = 0;
-		Integer initY = 0;
+		Float initX = 0f;
+		Float initY = 0f;
 		Float initDir = 0.0f;
 		
 		// Fetch parameters.
 		String species = WordUtils.capitalizeFully(props.get("species", String.class)).replace(" ", "");
 		
 		String spawn = props.get("spawn", String.class).toUpperCase(Locale.ROOT);
-		if (props.containsKey("initX")) initX = Integer.valueOf(String.valueOf(props.get("initX")));
-		if (props.containsKey("initY")) initY = Integer.valueOf(String.valueOf(props.get("initY")));
+		if (props.containsKey("initX")) initX = Float.valueOf(String.valueOf(props.get("initX")));
+		if (props.containsKey("initY")) initY = Float.valueOf(String.valueOf(props.get("initY")));
 		if (props.containsKey("initDir")) initDir = Float.valueOf(String.valueOf(props.get("initDir")));
 		
 		
 		// Convert position in tiles to world units (=1 pixel).
-		initX *= (int)getWidthTiles();
-		initY *= (int)getHeightTiles();
+		initX *= getWidthTiles();
+		initY *= getHeightTiles();
 		
 		// Get species class and its constructor with the appropriate constructor.
 		Method enemySetupMethod;
@@ -579,6 +674,63 @@ public class MapData {
 		Entity entity = new Entity();
 		if (!ItemMaker.getInstance().setup(entity, shape, props, mapItem, angularVelocity, axis)) return null;
 		return entity;
+	}
+	
+	private Entity processObjectNpc(MapProperties props, Shape2D shape) {
+		// Defaults
+		Float initX = 0.0f;
+		Float initY = 0.0f;
+		Float initDir = 0.0f;
+		String animation = null;
+		String animationList = null;
+		
+		String startup = "visible";
+
+		// Fetch parameters.
+		if (props.containsKey("animation")) animation = String.valueOf(props.get("animation"));
+		if (props.containsKey("animationList")) animationList = String.valueOf(props.get("animationList"));
+		if (props.containsKey("startup")) startup = String.valueOf(props.get("startup"));
+		if (props.containsKey("initX")) initX = Float.valueOf(String.valueOf(props.get("initX")));
+		if (props.containsKey("initY")) initY = Float.valueOf(String.valueOf(props.get("initY")));
+		if (props.containsKey("initDir")) initDir = Float.valueOf(String.valueOf(props.get("initDir")));
+		
+		// Tiled map editor does not support deleting declared properties...
+		if (animation != null && animation.isEmpty()) animation = null;
+		if (animationList != null && animationList.isEmpty()) animationList = null;
+		
+		// Get animation and instantiate entity.
+		if (animationList != null) {
+			try {
+				animationList = animationList.toUpperCase(Locale.ROOT).replaceAll(" +", "_");
+				EAnimationList eal = EAnimationList.valueOf(animationList);
+				Entity entity = new Entity();
+				NpcMaker.getInstance().setup(entity, shape, eal, startup.equalsIgnoreCase("invisible"),
+						new Vector2(initX, initY), initDir);
+				return entity;
+			}
+			catch (IllegalArgumentException e) {
+				LOG.error("no such animationList: " + animationList, e);
+				return null;
+			}
+		}
+		else if (animation != null) {
+			try {
+				animation = animation.toUpperCase(Locale.ROOT).replaceAll(" +", "_");
+				EAnimation ea = EAnimation.valueOf(animation);
+				Entity entity = new Entity();
+				NpcMaker.getInstance().setup(entity, shape, ea, startup.equalsIgnoreCase("invisible"),
+						new Vector2(initX, initY), initDir);
+				return entity;
+			}
+			catch (IllegalArgumentException e) {
+				LOG.error("no such animation: " + animation, e);
+				return null;
+			}
+		}
+		else {
+			LOG.error("either animationList or animation property must be specified for npc: " + props.get("id"));
+			return null;
+		}
 	}
 	
 	public Vector2 getBaseDirection() {

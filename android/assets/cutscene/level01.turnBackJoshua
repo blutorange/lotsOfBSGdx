@@ -1,0 +1,4 @@
+>>IncludeI18n dialog/level01.turnBackJoshua.set01
+
+>>EventMove Player
+Line 0.8 R 0 -5

@@ -1,0 +1,20 @@
+>>EventTextbox
+  Speaker Estelle
+  Face CONFIDENT
+  TransitionIn
+  Text EOF
+あら、あそこに未知標（みちしるべ）が見える！
+道を教えるついでに、いいアドバイスがえられる、
+旅の途中であたし達をなんでも助かったという
+実績もある懐かしいお仲間。
+暇があったら読んでみよう。
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face NORMAL
+  TransitionOut
+  Text EOF
+今まで不思議に思うには思ったが、
+だれが何の目的で作くったのかな？
+EOF

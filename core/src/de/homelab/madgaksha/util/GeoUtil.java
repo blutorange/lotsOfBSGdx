@@ -426,4 +426,88 @@ public class GeoUtil {
 		}
 		return false;
 	}
+
+	public static void rotatePoint(Vector2 point, Vector2 center, float degrees) {
+		point.sub(center).rotate(degrees).add(center);
+	}
+	
+	/**
+	 * Rotates the rectangle and returns a polygon representing the rotated rectangle.
+	 * The center of the rotation is the center of the shape's bounding box.
+	 * @param rect The rectangle to be rotated.
+	 * @param degrees Angle of rotation.
+	 * @return The polygon representing the rotated rectangle. Vertices are counter-clockwise.
+	 */
+	public static Polygon getRotatedRectangle(Rectangle rect, float degrees) {
+		float vertices[] = new float[8];
+		w1.set(rect.x + 0.5f*rect.width, rect.y + 0.5f*rect.height);
+		
+		w2.set(rect.x, rect.y);
+		rotatePoint(w2, w1, degrees);
+		vertices[0] = w2.x;
+		vertices[1] = w2.y;
+
+		w2.set(rect.x + rect.width, rect.y);
+		rotatePoint(w2, w1, degrees);
+		vertices[2] = w2.x;
+		vertices[3] = w2.y;
+
+		w2.set(rect.x + rect.width, rect.y +rect.height);
+		rotatePoint(w2, w1, degrees);
+		vertices[4] = w2.x;
+		vertices[5] = w2.y;
+
+		w2.set(rect.x, rect.y + rect.height);
+		rotatePoint(w2, w1, degrees);
+		vertices[6] = w2.x;
+		vertices[7] = w2.y;
+		
+		return new Polygon(vertices);
+	}
+
+	/**
+	 * Rotates the polygon's vertices by the given amount. Modifies provided polygon.
+	 * Unlike the rotate method of {@link Polygon}, this modifies the polygon's local vertices themselves.
+	 * @param p Polygon to rotate.
+	 * @param degrees Angle of rotation.
+	 */
+	public static void rotatePolygon(Polygon p, Vector2 center, float degrees) {
+		float v[] = p.getVertices();
+		for (int i = 0; i < v.length; i += 2) {
+			w1.set(v[i], v[i+1]);
+			rotatePoint(w1, center, degrees);
+			v[i] = w1.x;
+			v[i+1] = w1.y;
+		}
+	}
+
+	public static void boundingBoxCenter(Shape2D shape, Vector2 center) {
+		if (shape instanceof Rectangle) {
+			Rectangle r = (Rectangle)shape;
+			center.x = r.x + 0.5f * r.width;
+			center.y = r.y + 0.5f * r.height;
+		}
+		else if (shape instanceof Circle) {
+			center.x = ((Circle)shape).x;
+			center.y = ((Circle)shape).y;
+		}
+		else if (shape instanceof Ellipse) {
+			Ellipse e = (Ellipse)shape;
+			center.x = e.x + 0.5f * e.width;
+			center.y = e.y + 0.5f * e.height;
+		}
+		else if (shape instanceof Polygon) {
+			Polygon p = (Polygon)shape;
+			Rectangle r = p.getBoundingRectangle();
+			center.x = r.x + 0.5f * r.width;
+			center.y = r.y + 0.5f * r.height;
+		}
+		else if (shape instanceof Polyline) {
+			Polyline pl = (Polyline)shape;
+			Polygon pp = new Polygon(pl.getVertices());
+			Rectangle r = pp.getBoundingRectangle();
+			center.x = r.x + 0.5f * r.width;
+			center.y = r.y + 0.5f * r.height;
+		}
+	}
 }

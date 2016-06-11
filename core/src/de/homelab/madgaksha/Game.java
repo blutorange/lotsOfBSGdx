@@ -188,7 +188,8 @@ public class Game implements ApplicationListener {
 		
 		// Initialize the entity engine.
 		gameEntityEngine = new PooledEngine(level.getEntityPoolInitialSize(),level.getEntityPoolPoolMaxSize(), level.getComponentPoolInitialSize(), level.getComponentPoolMaxSize());
-
+		EntityLayer.addEntityListeners();
+		
 		// Create the player entity.
 		playerEntity = PlayerMaker.getInstance().makePlayer(player);
 		if (playerEntity == null) {
@@ -242,6 +243,8 @@ public class Game implements ApplicationListener {
 		if (DebugMode.activated) createDebugStuff();
 
 		statusScreen.forPlayer(playerEntity);
+		
+		EntityLayer.addMainEntitiesToMap();
 		
 		// Start the game.
 		running = true;

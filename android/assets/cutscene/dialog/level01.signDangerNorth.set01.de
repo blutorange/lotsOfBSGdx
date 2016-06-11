@@ -1,0 +1,28 @@
+>>EventTextbox
+  TransitionIn
+  Text EOF
+きた、きき。
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face NORMAL
+  Text EOF
+裏にもなにか書いてある。
+なになに。。。
+EOF
+
+>>EventTextbox
+  TransitionIn
+  Text EOF
+北！
+
+危機！
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face EVASIVE
+  Text EOF
+はいわかりました。ヨシュアを探しに行こう。。。
+EOF

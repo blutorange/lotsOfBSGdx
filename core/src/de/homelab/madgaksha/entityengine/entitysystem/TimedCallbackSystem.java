@@ -12,7 +12,7 @@ import de.homelab.madgaksha.entityengine.component.TimedCallbackComponent;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
- * Updates an object's position its velocity over a small time step dt.
+ * Calls a callback after a given time, and keeps calling it a certain number of times again.
  * 
  * @author madgaksha
  */

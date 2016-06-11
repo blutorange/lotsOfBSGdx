@@ -492,11 +492,12 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		if (dr > bdc.battleOutSquared) {
 			if (Mapper.cameraFocusComponent.get(enemy) != null)
 				enemy.remove(CameraFocusComponent.class);
+			return;
 		}
-		else if (dr < bdc.battleInSquared) {
+		customBehaviour(enemy);
+		if (dr < bdc.battleInSquared) {
 			if (Mapper.cameraFocusComponent.get(enemy) == null)
 				enemy.add(gameEntityEngine.createComponent(CameraFocusComponent.class));
-			customBehaviour(enemy);
 		}
 	}
 	

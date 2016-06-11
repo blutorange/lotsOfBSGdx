@@ -10,12 +10,8 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Ellipse;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Polyline;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
@@ -97,33 +93,10 @@ public final class MakerUtils {
 	
 	public static PositionComponent makePositionAtCenter(Shape2D shape) {
 		final PositionComponent pc = new PositionComponent();
-		if (shape instanceof Rectangle) {
-			Rectangle r = (Rectangle)shape;
-			pc.x = r.x + 0.5f * r.width;
-			pc.y = r.y + 0.5f * r.height;
-		}
-		else if (shape instanceof Circle) {
-			pc.x = ((Circle)shape).x;
-			pc.y = ((Circle)shape).y;
-		}
-		else if (shape instanceof Ellipse) {
-			Ellipse e = (Ellipse)shape;
-			pc.x = e.x + 0.5f * e.width;
-			pc.y = e.y + 0.5f * e.height;
-		}
-		else if (shape instanceof Polygon) {
-			Polygon p = (Polygon)shape;
-			Rectangle r = p.getBoundingRectangle();
-			pc.x = r.x + 0.5f * r.width;
-			pc.y = r.y + 0.5f * r.height;
-		}
-		else if (shape instanceof Polyline) {
-			Polyline pl = (Polyline)shape;
-			Polygon pp = new Polygon(pl.getVertices());
-			Rectangle r = pp.getBoundingRectangle();
-			pc.x = r.x + 0.5f * r.width;
-			pc.y = r.y + 0.5f * r.height;
-		}
+		Vector2 center = new Vector2();
+		GeoUtil.boundingBoxCenter(shape, center);
+		pc.x = center.x;
+		pc.y = center.y;
 		return pc;
 	}
 

@@ -4,7 +4,6 @@ import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 
 import com.badlogic.ashley.core.EntitySystem;
 
-import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
@@ -40,11 +39,9 @@ public class SystemUtils {
 		gameEntityEngine.getSystem(LifeSystem.class).setProcessing(true);
 		final EntitySystem inputDesktop = gameEntityEngine.getSystem(InputPlayerDesktopSystem.class);
 		if (inputDesktop != null) inputDesktop.setProcessing(true);
-		GlobalBag.forceCameraUpdate = false;
 	}
 	public static void disableActionExceptCamera() {
 		disableAction();
-		GlobalBag.forceCameraUpdate = true;
 	}
 	public static void disableActionExceptGrantPosition() {
 		disableAction();

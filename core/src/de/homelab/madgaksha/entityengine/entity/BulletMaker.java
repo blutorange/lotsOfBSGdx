@@ -7,7 +7,6 @@ import static de.homelab.madgaksha.GlobalBag.playerEntity;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 
-import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.audiosystem.VoicePlayer;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.AnyChildComponent;

@@ -11,7 +11,6 @@ import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
-import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
@@ -34,18 +33,17 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 	@Override
 	public void setup(Entity e, Shape2D shape, ETrigger spawn, Vector2 initialPos, Float initDir) {
 		super.setup(e, shape, spawn,initialPos,initDir);
-
 		
 		BehaviourComponent bc = new BehaviourComponent(this);
 		RotationComponent rc = new RotationComponent(true);
-		TemporalComponent tc = new TemporalComponent();
+		//TemporalComponent tc = new TemporalComponent();
 		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(requestedAnimationList(),
 				ESpriteDirectionStrategy.ZENITH);
 		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
 		SpriteComponent sc = new SpriteComponent(sac);
 
 		e.add(bc);
-		e.add(tc);
+		//e.add(tc);
 		e.add(sc);
 		e.add(sac);
 		e.add(sfdc);

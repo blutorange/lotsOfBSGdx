@@ -5,10 +5,6 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.maps.MapProperties;
 
-import de.homelab.madgaksha.GlobalBag;
-import de.homelab.madgaksha.entityengine.Mapper;
-import de.homelab.madgaksha.entityengine.component.PositionComponent;
-import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ESound;
@@ -36,7 +32,6 @@ public class Level01 extends ALevel {
 	@Override
 	protected IResource<? extends Enum<?>,?>[] requestedRequiredResources() {
 		return new IResource[] {
-				ETexture.JOSHUA_RUNNING,
 				EMusic.ROCK_ON_THE_ROAD,
 				EMusic.SOPHISTICATED_FIGHT,
 				EMusic.SILVER_WILL,
@@ -72,7 +67,7 @@ public class Level01 extends ALevel {
 	@Override
 	protected void setupInitialGameViewport(GameViewport viewport) {
 		viewport.getCamera().position.x = getMapData().getPlayerInitialPosition().x;
-		viewport.getCamera().position.y = -50.0f*32.0f;
+		viewport.getCamera().position.y = -50.0f*getMapData().getHeightTiles();
 		viewport.getCamera().position.z = 1000.0f;
 		viewport.getCamera().up.x = 0;
 		viewport.getCamera().up.y = 1;
@@ -157,11 +152,5 @@ public class Level01 extends ALevel {
 	
 	public void turnBackJoshua(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.turnBackJoshua");
-		PositionComponent pc = Mapper.positionComponent.get(GlobalBag.playerEntity);
-		VelocityComponent vc = Mapper.velocityComponent.get(GlobalBag.playerEntity);
-		pc.x = 36*32;
-		pc.y = 41*32;
-		vc.x = vc.y = 0;
-	}
-	
+	}	
 }

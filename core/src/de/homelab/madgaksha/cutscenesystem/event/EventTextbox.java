@@ -570,8 +570,9 @@ public class EventTextbox extends ACutsceneEvent {
 				textAdvance = textbox.getGlyphCount();
 			}
 			textbox.setRenderedGlyphCount((int) textAdvance);
-			if (textbox.getRenderedGlyphCount() != oldTextAdvance && voicePlayer != null)
+			if (textbox.getRenderedGlyphCount() != oldTextAdvance && voicePlayer != null) {
 				voicePlayer.play(soundOnTextAdvance);
+			}
 			break;
 		case IDLE:
 			// Allow next textbox / event.
@@ -614,7 +615,6 @@ public class EventTextbox extends ACutsceneEvent {
 	@Override
 	public void reset() {
 		this.textbox = null;
-		this.voicePlayer = null;
 		this.soundOnTextAdvance = ESound.TEXT_ADVANCE;
 		this.soundOnTextboxAdvance = ESound.TEXTBOX_ADVANCE;
 		this.textboxDone = true;

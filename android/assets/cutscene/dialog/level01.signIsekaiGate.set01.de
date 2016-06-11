@@ -1,0 +1,36 @@
+>>EventTextbox
+  TransitionIn
+  Text EOF
+性別も種別も、やがて世界すら超えて
+この地に平和をもたらした英雄、
+故郷まで帰って永遠のねむりについた。
+EOF
+
+>>EventTextbox
+  TransitionOut
+  Text EOF
+英雄トリキシアの名はよく知られているにも関わらず、
+もっとも気になる、精界書（せいかいのふみ）・二巻に書かれた異界譚
+については詳細は一切わかっていない。
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face NORMAL
+  TransitionIn
+  Text EOF
+英雄トリキシア、か。。。
+その名前、どこかで聞いたような、聞かなかったような。。。
+まあ、ここはあたし達のもといた世界じゃないし、
+知らなくてとーぜんだ！
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face LAUGHING
+  TransitionOut
+  Text EOF
+異界譚なんか、ここからつくればいい！
+というか、もう作ったんじゃない。色々あって、
+クロスベルまで来て活躍に活躍を重ねてさ。。。
+EOF
