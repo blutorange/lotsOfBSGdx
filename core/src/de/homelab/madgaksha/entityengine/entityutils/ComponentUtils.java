@@ -5,9 +5,12 @@ import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.ComponentQueueComponent;
+import de.homelab.madgaksha.entityengine.component.DirectionComponent;
+import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.QuakeEffectComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
@@ -26,6 +29,7 @@ import de.homelab.madgaksha.resourcecache.EAnimationList;
 public class ComponentUtils {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(ComponentUtils.class);
+	private final static Vector2 v1 = new Vector2();
 	
 	public static void applyComponentQueue(Entity e, ComponentQueueComponent cqc) {
 		for (Class<? extends Component> c : cqc.remove) e.remove(c);
@@ -68,5 +72,13 @@ public class ComponentUtils {
 	
 	public static void disableScreenQuake() {
 		cameraEntity.remove(QuakeEffectComponent.class);
+	}
+	
+	public static void lookIntoDirection(Entity who, Entity atWhom) {
+		final PositionComponent pcWho = Mapper.positionComponent.get(who);
+		final PositionComponent pcAtWhom = Mapper.positionComponent.get(atWhom);
+		final DirectionComponent dc = Mapper.directionComponent.get(who); 
+		v1.set(pcAtWhom.x-pcWho.x,pcAtWhom.y-pcWho.y);
+		dc.degree =  630.0f-v1.angle();
 	}
 }

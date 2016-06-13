@@ -1,4 +1,7 @@
 >>IncludeI18n dialog/level01.turnBackJoshua.set01
 
 >>EventMove Player
-Line 0.8 R 0 -5
+Line 0.8 A 36 47
+Collision False
+
+>>EventReactivate turnBackJoshua 

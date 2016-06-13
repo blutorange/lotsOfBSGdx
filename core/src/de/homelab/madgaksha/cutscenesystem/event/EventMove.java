@@ -1,11 +1,11 @@
 package de.homelab.madgaksha.cutscenesystem.event;
 
-import static de.homelab.madgaksha.GlobalBag.level;
+import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import static de.homelab.madgaksha.GlobalBag.idEntityMap;
+import static de.homelab.madgaksha.GlobalBag.level;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 import com.badlogic.ashley.core.Entity;
@@ -15,6 +15,7 @@ import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
 import de.homelab.madgaksha.logging.Logger;
 import path.APath;
 import path.EPath;
@@ -26,6 +27,7 @@ public class EventMove extends ACutsceneEvent {
 	
 	private float totalTime = 0.0f;
 	private boolean movementDone = false;
+	private boolean collision = false;
 	
 	private APath[] pathList = EMPTY_PATH_ARRAY;
 	private Entity entityToMove = EMPTY_ENTITY;
@@ -38,19 +40,21 @@ public class EventMove extends ACutsceneEvent {
 		
 	}
 	
-	public EventMove(Entity entity, APath pathList[]) {
+	public EventMove(Entity entity, APath pathList[], boolean collision) {
 		if (pathList != null) this.pathList = (APath[])pathList;
 		if (entity != null) this.entityToMove = entity;
+		this.collision = collision;
 	}
 	
-	public EventMove(Entity entity, List<APath> pathList) {
-		this(entity, pathList.toArray(EMPTY_PATH_ARRAY));
+	public EventMove(Entity entity, List<APath> pathList, boolean collision) {
+		this(entity, pathList.toArray(EMPTY_PATH_ARRAY), collision);
 	}
 	
 	@Override
 	public void reset() {
 		pathList = EMPTY_PATH_ARRAY;
 		entityToMove = EMPTY_ENTITY;
+		collision = false;
 	}
 
 	@Override
@@ -81,7 +85,7 @@ public class EventMove extends ACutsceneEvent {
 			}
 			pathList[currentPathIndex].setOrigin(pc.x, pc.y);
 		}
-		if (!pc.limitToMap || !level.getMapData().isTileBlocking(vector.x, vector.y)) {
+		if (!collision || (!pc.limitToMap || !level.getMapData().isTileBlocking(vector.x, vector.y))) {
 			pc.x = vector.x;
 			pc.y = vector.y;
 		}
@@ -101,21 +105,22 @@ public class EventMove extends ACutsceneEvent {
 			return false;
 		}
 		if (pathList.length > 0) pathList[0].setOrigin(pc.x, pc.y);
+		gameEntityEngine.getSystem(CollisionSystem.class).setProcessing(false);
 		return true;
 	}
 
 	@Override
 	public void end() {
+		gameEntityEngine.getSystem(CollisionSystem.class).setProcessing(true);
 	}
 	
 	public static ACutsceneEvent readNextObject(Scanner s) {
-		if (!s.hasNextLine()) {
+		// Read entity name
+		String guid = FileCutsceneProvider.readNextGuid(s);
+		if (guid == null) {
 			LOG.error("expected entity name");
 			return null;
-		}
-		
-		// Read entity name
-		String guid = s.nextLine().toLowerCase(Locale.ROOT).trim().replace(" +", "_");
+		}		
 		Entity entity = idEntityMap.get(guid);
 
 		if (entity == null) {
@@ -125,32 +130,45 @@ public class EventMove extends ACutsceneEvent {
 				
 		// Read list of paths entity should be moved along.
 		List<APath> pathList = new ArrayList<APath>(10);
+		boolean collision = true;
 		while (s.hasNext()) {
 			// Read path type, animation time and relative flag.
-			String pathType = "PATH_" + s.next().toUpperCase();
-			Float tmax = FileCutsceneProvider.nextNumber(s);
-			if (tmax == null) {
-				LOG.error("expected time value");
-				return null;
+			String next = s.next();
+			if (next.equalsIgnoreCase("Collision")) {
+				if (s.hasNextBoolean()) {
+					collision = s.nextBoolean();
+				}
+				else {
+					LOG.error("expected boolean after Collision");
+					return null;
+				}
 			}
-			if (!s.hasNext()) {
-				LOG.error("expected absolute/relative flag");
-				return null;
-			}
-			boolean relative = s.next().equalsIgnoreCase("R");
-			// Try and instantiate path.
-			try {
-			      EPath path = EPath.valueOf(pathType);
-			      APath newPath = path.readNextObject(tmax, relative, s);
-			      if (newPath == null) return null;
-			     pathList.add(newPath);			      
-			}
-			catch (IllegalArgumentException ex) {
-				LOG.error("no such path: " + pathType);
-				return null;
+			else {
+				String pathType = "PATH_" + next.toUpperCase();
+				Float tmax = FileCutsceneProvider.nextNumber(s);
+				if (tmax == null) {
+					LOG.error("expected time value");
+					return null;
+				}
+				if (!s.hasNext()) {
+					LOG.error("expected absolute/relative flag");
+					return null;
+				}
+				boolean relative = s.next().equalsIgnoreCase("R");
+				// Try and instantiate path.
+				try {
+				      EPath path = EPath.valueOf(pathType);
+				      APath newPath = path.readNextObject(tmax, relative, s);
+				      if (newPath == null) return null;
+				     pathList.add(newPath);			      
+				}
+				catch (IllegalArgumentException ex) {
+					LOG.error("no such path: " + pathType);
+					return null;
+				}
 			}
 		}
 		
-		return new EventMove(entity, pathList);
+		return new EventMove(entity, pathList, collision);
 	}
 }

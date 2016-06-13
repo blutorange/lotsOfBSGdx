@@ -21,6 +21,7 @@ public enum ETextureAtlas implements IResource<ETextureAtlas,TextureAtlas> {
 	STATUS_SCREEN("statusscreen/packed/statusScreenPacked.atlas"),
 	BULLETS_BASIC("bullets/basic-packed/bulletsBasic.atlas"),
 	FACES_ESTELLE("texture/face-packed/estellePacked.atlas"),
+	FACES_JOSHUA("texture/face-packed/joshuaPacked.atlas"),
 	MISC("texture/misc/packed/miscPacked.atlas");
 
 	private final static Logger LOG = Logger.getLogger(ETextureAtlas.class);

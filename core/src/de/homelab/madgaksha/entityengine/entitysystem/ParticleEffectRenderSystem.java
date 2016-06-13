@@ -59,7 +59,12 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 			if (dc != null) setAngle(pec.particleEffect, dc.degree);
 			if (pc != null) pec.particleEffect.setPosition(pc.x, pc.y);
 			pec.particleEffect.draw(batchGame, deltaTime);
-			if (pec.particleEffect.isComplete()) entity.remove(ParticleEffectGameComponent.class);
+			// Remove particle effect when done.
+			if (pec.particleEffect.isComplete()) {
+				if (pec.callback != null)
+					pec.callback.run(entity, pec.data);
+				entity.remove(ParticleEffectGameComponent.class);
+			}
 		}
 		batchGame.end();
 		
@@ -81,8 +86,12 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 				pec.particleEffect.setPosition(v.x, v.y);
 			}
 			pec.particleEffect.draw(batchPixel, deltaTime);
-			if (pec.particleEffect.isComplete())
+			// Remove particle effect when done.
+			if (pec.particleEffect.isComplete()) {
+				if (pec.callback != null) pec.callback.run(entity, pec.data);
 				entity.remove(ParticleEffectScreenComponent.class);
+			}
+				
 		}
 		batchPixel.end();
 	}

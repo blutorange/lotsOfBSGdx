@@ -177,20 +177,18 @@ public class EntityLayer extends ALayer {
 	}
 	
 	private boolean addMainEntites() {
-		Entity hitCircle = PlayerMaker.getInstance().makePlayerHitCircle(playerEntity, player);
 		Entity battleStigma = PlayerMaker.getInstance().makePlayerBattleStigma(playerEntity, player);
 		Entity targetCross = MakerUtils.makeEnemyTargetCross();
 		Entity myCamera = MakerUtils.makeCamera(level, playerEntity);
-		if (hitCircle == null || battleStigma == null || myCamera == null) return false;
+		if (battleStigma == null || myCamera == null) return false;
 		
 		gameEntityEngine.addEntity(myCamera);
 		gameEntityEngine.addEntity(battleStigma);
 		gameEntityEngine.addEntity(playerEntity);
-		gameEntityEngine.addEntity(hitCircle);
+		gameEntityEngine.addEntity(playerHitCircleEntity);
 		gameEntityEngine.addEntity(targetCross);
 
 		playerBattleStigmaEntity = battleStigma;
-		playerHitCircleEntity = hitCircle;
 		enemyTargetCrossEntity = targetCross;
 		cameraEntity = myCamera;
 		

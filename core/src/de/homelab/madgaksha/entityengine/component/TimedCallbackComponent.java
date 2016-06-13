@@ -22,9 +22,18 @@ public class TimedCallbackComponent implements Component, Poolable {
 	private final static Object DEFAULT_CALLBACK_DATA = null;
 	
 	public ITimedCallback timedCallback = DEFAULT_TIMED_CALLBACK;
+	
+	/** Internal use. */
 	public float totalTime = DEFAULT_TOTAL_TIME;
+	
+	/** Duration between callback in seconds. */
 	public float duration = DEFAULT_DURATION;
+	/**
+	 * Number of times callbacks will be triggered.
+ 	 * If negative, callback will be triggered indefinitely.
+	 */
 	public int callbacksLeft = DEFAULT_CALLBACKS_LEFT;
+	/** Data that should be passed to the callback method. */
 	public Object callbackData = DEFAULT_CALLBACK_DATA;
 	
 	public TimedCallbackComponent(){

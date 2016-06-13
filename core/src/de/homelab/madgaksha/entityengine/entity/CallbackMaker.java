@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.entityengine.entity;
 
+import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import static de.homelab.madgaksha.GlobalBag.level;
 
 import com.badlogic.ashley.core.Component;
@@ -14,6 +15,7 @@ import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.ABoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.CallbackComponent;
 import de.homelab.madgaksha.entityengine.component.ComponentQueueComponent;
+import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.TimedCallbackComponent;
@@ -53,15 +55,25 @@ public class CallbackMaker extends EntityMaker implements ITrigger, IReceive {
 		final CallbackComponent cc = new CallbackComponent(callback, properties);
 		final PositionComponent pc = new PositionComponent(MakerUtils.makePositionAtCenter(shape));
 		final TemporalComponent tec = new TemporalComponent();
-		final TimedCallbackComponent tcc = new TimedCallbackComponent(LOOP_CALLBACK, duration, loops+1);
+		
 		final Component tc = MakerUtils.makeTrigger(this, this, trigger, ECollisionGroup.PLAYER_GROUP);
 
 		final ABoundingBoxComponent bbcCollision = new BoundingBoxCollisionComponent(
 				MakerUtils.makeBoundingBoxCollision(shape, pc));
 		final ComponentQueueComponent cqc = new ComponentQueueComponent();
 
-		tcc.totalTime = duration + duration; 
-		cqc.add.add(tcc);
+		if (loops < 0) {
+			cqc.remove.add(InactiveComponent.class);
+			entity.add(new InactiveComponent());
+			entity.add(new TimedCallbackComponent(LOOP_CALLBACK_ONCE, 0, -1));
+		}
+		else {
+			final TimedCallbackComponent tcc = new TimedCallbackComponent(LOOP_CALLBACK, duration, loops+1);
+			// First activation should occur immediately.
+			tcc.totalTime = duration + duration;
+			cqc.add.add(tcc);
+			cqc.remove.add(tc.getClass());
+		}
 
 		entity.add(bbcCollision);
 		entity.add(cc);
@@ -97,4 +109,12 @@ public class CallbackMaker extends EntityMaker implements ITrigger, IReceive {
 			}			
 		}
 	};	
+	
+	public final static ITimedCallback LOOP_CALLBACK_ONCE = new ITimedCallback() {
+		@Override
+		public void run(Entity entity, Object data) {
+			LOOP_CALLBACK.run(entity, data);
+			entity.add(gameEntityEngine.createComponent(InactiveComponent.class));
+		}
+	};
 }

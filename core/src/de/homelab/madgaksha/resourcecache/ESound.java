@@ -13,11 +13,11 @@ public enum ESound implements IResource<ESound,Sound> {
 	ENEMY_SWITCH("sound/ed6se049.wav"),
 	EQUIP_WEAPON("sound/ed6se022.wav"),
 	EQUIP_TOKUGI("sound/ed6se155.wav"),
-	ENEMY_SPAWN_FLASH("sound/ed6se579.wav"),
+	ENEMY_SPAWN_FLASH("sound/ed6se579.wav",1.470f),
 	ENEMY_DIE_EXPLOSION("sound/ed6se556Multi+565.wav"),
 	CANNOT_EQUIP("sound/ed6se003.wav"),
 	ACTIVATE_ITEM("sound/ed6se145.wav"),
-	ACQUIRE_WEAPON("sound/ed6se045.wav"),
+	ACQUIRE_WEAPON("sound/ed6se045.wav",1.706f),
 	BATTLE_STIGMA_APPEAR("sound/ed6se543.wav"),
 	BATTLE_STIGMA_ABSORB("sound/ed6se526.wav"),
 	PLAYER_EXPLODE_ON_DEATH("sound/explodePlayer.wav"),
@@ -46,6 +46,12 @@ public enum ESound implements IResource<ESound,Sound> {
 	ESTELLE_MADA_MADA_IKERU_WA("sound/ed6t1030.wav",1.230f),
 	ESTELLE_CHOU_DEKI("sound/ed6t1029.wav",1.028f),
 	ESTELLE_SAA_IKU_WAYO("sound/ed6t1032.wav",1.031f),
+
+	// ===================
+	//       JOSHUA
+	// ===================
+	JOSHUA_IKU_YO("sound/ed6t1064.wav",0.535f),
+
 	
 	// ===================
 	//       OTHER

@@ -256,26 +256,36 @@ public final class MakerUtils {
 	 */
 	public static void addParticleEffectGame(EParticleEffect particleEffect,PositionComponent positionComponent) {
 		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectGameComponent.class);
-		addParticleEffectGame(particleEffect, positionComponent, pec);
+		addParticleEffect(particleEffect, positionComponent, pec, null);
+	}
+	public static void addParticleEffectGame(EParticleEffect particleEffect,PositionComponent positionComponent, ITimedCallback callback) {
+		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectGameComponent.class);
+		addParticleEffect(particleEffect, positionComponent, pec, callback);
 	}
 	/**
 	 * Adds a particle effect at the given position, with screen coordinates.
 	 * @param particleEffect Particle effect to add.
 	 * @param positionComponent Location where particle effect will be placed.
+	 * @return The newly created particle effect component.
 	 */
 	public static void addParticleEffectScreen(EParticleEffect particleEffect,PositionComponent positionComponent) {
 		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectScreenComponent.class);
-		addParticleEffectGame(particleEffect, positionComponent, pec);
+		addParticleEffect(particleEffect, positionComponent, pec, null);
+	}
+	public static void addParticleEffectScreen(EParticleEffect particleEffect,PositionComponent positionComponent, ITimedCallback callback) {
+		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectScreenComponent.class);
+		addParticleEffect(particleEffect, positionComponent, pec, callback);
 	}
 
-	private static void addParticleEffectGame(EParticleEffect particleEffect,PositionComponent positionComponent, ParticleEffectComponent pec) {
-		final Entity deathEffect = gameEntityEngine.createEntity();
+	private static void addParticleEffect(EParticleEffect particleEffect,PositionComponent positionComponent, ParticleEffectComponent pec, ITimedCallback callback) {
+		final Entity entity = gameEntityEngine.createEntity();
 		final TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
 		pec.setup(ResourcePool.obtainParticleEffect(particleEffect));
-		deathEffect.add(tc);
-		deathEffect.add(pec);
-		deathEffect.add(positionComponent);
-		gameEntityEngine.addEntity(deathEffect);
+		pec.callback = callback;
+		entity.add(tc);
+		entity.add(pec);
+		entity.add(positionComponent);
+		gameEntityEngine.addEntity(entity);
 	}
 
 	

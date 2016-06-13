@@ -1,0 +1,7 @@
+>>IncludeI18n dialog/level01.demoNotEnd.set01
+
+>>EventMove Player
+Line 0.4 A 26 202
+Collision False
+
+>>EventReactivate demoEnd 

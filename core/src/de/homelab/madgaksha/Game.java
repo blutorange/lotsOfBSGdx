@@ -1,5 +1,6 @@
 package de.homelab.madgaksha;
 
+import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.GlobalBag.batchGame;
 import static de.homelab.madgaksha.GlobalBag.batchModel;
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
@@ -192,7 +193,8 @@ public class Game implements ApplicationListener {
 		
 		// Create the player entity.
 		playerEntity = PlayerMaker.getInstance().makePlayer(player);
-		if (playerEntity == null) {
+		playerHitCircleEntity = PlayerMaker.getInstance().makePlayerHitCircle(player);
+		if (playerEntity == null || playerHitCircleEntity == null) {
 			exitRequested = true;
 			Gdx.app.exit();
 			return;
@@ -235,6 +237,7 @@ public class Game implements ApplicationListener {
 
 		// Setup the player entity.
 		PlayerMaker.getInstance().setupPlayer(player);
+		PlayerMaker.getInstance().setupPlayerHitCircle(player);
 		
 		// Keep track of the time.
 		gameClock = new Clock();
@@ -242,7 +245,7 @@ public class Game implements ApplicationListener {
 		// TODO remove me for release
 		if (DebugMode.activated) createDebugStuff();
 
-		statusScreen.forPlayer(playerEntity);
+		statusScreen.forPlayer(playerHitCircleEntity);
 		
 		EntityLayer.addMainEntitiesToMap();
 		
@@ -553,6 +556,11 @@ public class Game implements ApplicationListener {
 	
 	public void setGlobalTimeScale(float ts) {
 		timeScalingFactor = Math.max(0.0f, ts);
+	}
+
+	public void gameover() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

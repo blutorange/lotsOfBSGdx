@@ -30,7 +30,8 @@ public class AiSystem extends IteratingSystem {
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
-		Mapper.behaviourComponent.get(entity).brain.behave(entity);
+		final BehaviourComponent bc = Mapper.behaviourComponent.get(entity);
+		if (bc.brain.behave(entity) && bc.cortex != null) bc.cortex.behave(entity);;
 	}
 
 }

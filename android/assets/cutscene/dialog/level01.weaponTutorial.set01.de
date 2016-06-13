@@ -1,0 +1,20 @@
+>>EventTextbox
+  Speaker ESTELLE
+  Face ANGRY
+  TransitionIn
+  TransitionOut
+  Text EOF
+ヨシュアがいった弾装キューブだ！
+よし、さっそく入手して向こうの
+あいつらをやっつけちゃう！
+EOF
+
+>>EventTextbox
+  TransitionIn
+  TransitionOut
+  Text EOF
+弾装キューブとほかのアイテムは、近づくと
+体中のエネルギーに反応して吸収すること出来る。
+吸収した弾装は戦闘が始まると自ずと発動し、
+敵を狙う。とりあえず回避することに専念しよう！
+EOF

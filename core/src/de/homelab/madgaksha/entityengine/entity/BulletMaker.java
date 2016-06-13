@@ -2,7 +2,7 @@ package de.homelab.madgaksha.entityengine.entity;
 
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import static de.homelab.madgaksha.GlobalBag.gameScore;
-import static de.homelab.madgaksha.GlobalBag.playerEntity;
+import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
@@ -60,7 +60,8 @@ public class BulletMaker extends EntityMaker {
 		final Entity entity = gameEntityEngine.createEntity();
 		final ReceiveTouchComponent rtc = gameEntityEngine.createComponent(ReceiveTouchGroup02Component.class);
 		gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
-		SingletonHolder.INSTANCE.setup(entity, playerEntity, rtc, bulletShape, bulletTrajectory, onDamageBulletHit, power);
+		//SingletonHolder.INSTANCE.setup(entity, playerEntity, rtc, bulletShape, bulletTrajectory, onDamageBulletHit, power);
+		SingletonHolder.INSTANCE.setup(entity, playerHitCircleEntity, rtc, bulletShape, bulletTrajectory, onDamageBulletHit, power);
 		gameEntityEngine.addEntity(entity);
 	}
 
@@ -76,7 +77,7 @@ public class BulletMaker extends EntityMaker {
 			long score) {
 		final Entity entity = gameEntityEngine.createEntity();
 		final ReceiveTouchComponent rtc = gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
-		SingletonHolder.INSTANCE.setup(entity, playerEntity, rtc, bulletShape, bulletTrajectory, onScoreBulletHit, score);
+		SingletonHolder.INSTANCE.setup(entity, playerHitCircleEntity, rtc, bulletShape, bulletTrajectory, onScoreBulletHit, score);
 		gameEntityEngine.addEntity(entity);
 	}
 

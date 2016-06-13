@@ -1,0 +1,283 @@
+>>EventTextbox
+  TransitionIn
+  TransitionOut
+  Speaker Estelle
+  Face Surprised
+  Text EOF
+あ、ヨシュアみっけ。
+EOF
+
+>>EventTextbox
+  TransitionIn
+  TransitionOut
+  Speaker Joshua
+  Face Smiling
+  Text EOF
+エステル！君とまたあえて嬉しいいんです。
+EOF
+
+>>EventTextbox
+  TransitionIn
+  Speaker Estelle
+  Face EMBARRASED
+  Text EOF
+そんな。。。
+
+あたしも嬉しいけど。。。
+EOF
+
+>>EventTextbox
+  TransitionOut
+  Speaker Estelle
+  Face Angry
+  Text EOF
+っていうか、そんなこといってる場合か！
+ね、ヨシュア、ここはどこ？
+みたことのないこの風景はなんだ？
+EOF
+
+
+>>EventTextbox
+  TransitionIn
+  TransitionOut
+  Speaker Joshua
+  Face Serious
+  Text EOF
+来てからちょっとだけ調べてみたが、今のところは
+分かりません。ただ、常ならぬ力が働いているのは確かです。
+EOF
+
+>>EventTextbox
+  TransitionIn
+  TransitionOut
+  Speaker Estelle
+  Face EVASIVE
+  Text EOF
+この泉も他と違うし、何かわけありの場所みたいけど。。。
+EOF
+
+>>EventTextbox
+  TransitionIn
+  Speaker Joshua
+  Face Serious
+  Text EOF
+僕もそう思っている。川の近くにあった未知標によると、
+そこの泉は無明界（むみょうかい）にあるそうです。
+無明とは、前を照らす光がない、迷っていること。
+それとも、来たものを惑わす世界、という意味でしょうか。
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face Serious
+  TransitionOut
+  Text EOF
+床にある星印も気にかかります。中の団子みたいな形を
+した丸に立っていると、変な力を感じます。
+導力にはない、まるで吸い込まれてしまいそうな感じ。。。
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face SURPRISED
+  TransitionIn
+  TransitionOut
+  Text EOF
+ヨシュア？　ヨシュアってば！
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face Empty
+  TransitionIn
+  TransitionOut
+  Text EOF
+。。。　。。。　。。。
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face ANGRY
+  TransitionIn
+  TransitionOut
+  Text EOF
+しっかりしろ、ヨシュア！
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face Empty
+  TransitionIn
+  TransitionOut
+  Text EOF
+。。。エステル。。。
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face CONTEMPLATING
+  TransitionIn
+  Text EOF
+もう大丈夫です。心配かけてすみません。
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face Normal
+  TransitionOut
+  Text EOF
+ということで、それは何の力か、
+この場所とどう関係しているのか、
+まだ分からないことばかりです。
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face Shou_Ga_Nai
+  TransitionIn
+  TransitionOut
+  Text EOF
+ヨシュアも分からないなら今はどうしようもないね。
+ついでに聞くけど、ヨシュアはどうして浮いてない？
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face SURPRISED
+  TransitionIn
+  TransitionOut
+  Text EOF
+は？　浮遊、ですか？　
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face Serious
+  TransitionIn
+  TransitionOut
+  Text EOF
+ほら、あたし空中に浮いてるなじゃない！
+ヨシュアと離れて、町を出て、気を失って、
+また目覚めてからずっとこうだ。
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face EVASIVE
+  TransitionIn
+  TransitionOut
+  Text EOF
+言われてみれば、確かに浮いているんですね。
+まだダイエット中？　
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face ANGRY
+  TransitionIn
+  TransitionOut
+  Text EOF
+違う。そうじゃない。
+こう見えても、あたし、食欲のある青年だ。
+ほら、前へ歩こう、と思えば勝手に体が前
+へ動く。浮いているままで。
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face Normal
+  TransitionIn
+  Text EOF
+これもしっくりと調べないとわかりません。
+後でゆっくりと考えましょう。
+浮いているなら、足で行かない場所もあるでしょう。　
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face SMILING
+  TransitionOut
+  Text EOF
+それでは、僕はこれで。あとで合流しましょう。　
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face Surprised
+  TransitionIn
+  TransitionOut
+  Text EOF
+へえ、ヨシュアと一緒に行かないの？
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face CONTEMPLATING
+  TransitionIn
+  Text EOF
+いや、ふた手にわけたほうが有利だ。
+それほど危険な敵はないし、エステル一人でも
+大丈夫です。確かにテントがあった場所からちょっと
+道を北へ進むと弾装キューブがあったはずだ。
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face Happy
+  TransitionOut
+  Text EOF
+それを装備すると、この辺の敵は速やかに倒せます。
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face LAUGHING
+  TransitionIn
+  TransitionOut
+  Text EOF
+ざんねん。。。まあ、ヨシュアがそういってくれるなら、
+あたしも頑張らないと！　敵一匹か二匹、楽勝、楽勝！
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face SHOU_GA_NAI
+  TransitionIn
+  TransitionOut
+  Text EOF
+エステル、油断は禁物ですよ。
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face CONFIDENT
+  TransitionIn
+  TransitionOut
+  Text EOF
+はい、はい。それじゃ、あとでな、ヨシュア。
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face SMILING
+  TransitionIn
+  Text EOF
+エステルもお元気で。
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face Serious
+  Text EOF
+あっ、最後にもうひとつ。
+泉の後ろにある断崖の近くにも敵が潜めているから、
+弾装を手に入れたまでは近寄らないようにね。
+EOF
+
+>>EventTextbox
+  Speaker Joshua
+  Face SMILING
+  TransitionOut
+  Text EOF
+では、行くよ。
+EOF

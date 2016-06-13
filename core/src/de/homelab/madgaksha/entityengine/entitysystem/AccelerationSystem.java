@@ -39,7 +39,6 @@ public class AccelerationSystem extends IteratingSystem {
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
 		v.x += f.x * deltaTime;
 		v.y += f.y * deltaTime;
-		v.y += f.y * deltaTime;
 	}
 
 }

@@ -552,7 +552,7 @@ public class EventTextbox extends ACutsceneEvent {
 		case TRANSITION_IN:
 			// Animate textbox appearing.
 			animationFactor += transitionInSpeed * deltaTime;
-			if (animationFactor >= 1.0f) {
+			if (animationFactor >= 1.0f || KeyMapDesktop.isSpeedupPressed()) {
 				animationFactor = 1.0f;
 				mode = Mode.TEXT_APPEARING;
 			}
@@ -565,7 +565,7 @@ public class EventTextbox extends ACutsceneEvent {
 			if (textAdvance >= textbox.getGlyphCount()) {
 				mode = Mode.IDLE;
 				textAdvance = textbox.getGlyphCount();
-			} else if (KeyMapDesktop.isTextboxAdvanceJustPressed()) {
+			} else if (KeyMapDesktop.isTextboxAdvanceJustPressed() || KeyMapDesktop.isSpeedupPressed()) {
 				// Fast-forwarding text.
 				textAdvance = textbox.getGlyphCount();
 			}
@@ -576,7 +576,7 @@ public class EventTextbox extends ACutsceneEvent {
 			break;
 		case IDLE:
 			// Allow next textbox / event.
-			if (KeyMapDesktop.isTextboxAdvanceJustPressed()) {
+			if (KeyMapDesktop.isTextboxAdvanceJustPressed() || KeyMapDesktop.isSpeedupPressed()) {
 				if (voicePlayer != null && soundOnTextboxAdvance != null) {
 					voicePlayer.playUnconditionally(soundOnTextboxAdvance);
 				}
@@ -592,7 +592,7 @@ public class EventTextbox extends ACutsceneEvent {
 		case TRANSITION_OUT:
 			// Animate textbox disappearing.
 			animationFactor -= transitionOutSpeed * deltaTime;
-			if (animationFactor <= 0.0f) {
+			if (animationFactor <= 0.0f || KeyMapDesktop.isSpeedupPressed()) {
 				animationFactor = 0.0f;
 				textboxDone = true;
 			}

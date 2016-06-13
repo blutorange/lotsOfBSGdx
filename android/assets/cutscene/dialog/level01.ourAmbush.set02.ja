@@ -1,0 +1,16 @@
+>>EventTextbox
+  Speaker ESTELLE
+  Face Surprised
+  TransitionIn
+  Text EOF
+やばっ！囲まれちゃった！！ 
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Serious
+  TransitionOut
+  Text EOF
+これはやるしかない！かかってきな！
+全員纏めて相手にして遣るよ！
+EOF

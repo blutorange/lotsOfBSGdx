@@ -36,7 +36,7 @@ public class IdComponent implements Component  {
 	
 	public IdComponent(String id) {
 		if (id == null) id = StringUtils.EMPTY;
-		else id = id.toLowerCase(Locale.ROOT);
+		else id = id.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]", "");
 		this.id = id;
 	}
 	

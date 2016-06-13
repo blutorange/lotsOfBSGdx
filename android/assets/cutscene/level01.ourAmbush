@@ -1,0 +1,13 @@
+>>IncludeI18n dialog/level01.ourAmbush.set01
+
+>>EventMove player
+Line 10.0 A 28 203
+Collision False
+
+>>IncludeI18n dialog/level01.ourAmbush.set02
+
+EventWait 1.0
+
+>>EventMove player
+Line 5.0 A 28 193
+Collision False

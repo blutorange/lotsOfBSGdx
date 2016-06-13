@@ -17,9 +17,9 @@ public enum EMusic implements IResource<EMusic,Music> {
 	// ==================
 	//         BGM
 	// ==================
-	ROCK_ON_THE_ROAD("music/rockontheroad.adx", 0.3f),
+	ROCK_ON_THE_ROAD("music/rockontheroad.adx", 0.2f),
 	SOPHISTICATED_FIGHT("music/sophisticatedfight.adx", 0.5f),
-	SILVER_WILL("music/silverwill.adx", 0.5f),
+	SILVER_WILL("music/silverwill.adx", 1.0f),
 	FADING_STAR("music/fadingstar.adx", 0.7f),
 	
 	;

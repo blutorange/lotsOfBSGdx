@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import de.homelab.madgaksha.entityengine.entity.ITimedCallback;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
 import de.homelab.madgaksha.resourcepool.ResourcePool;
 
@@ -19,6 +20,8 @@ public class ParticleEffectComponent implements Component, Poolable {
 	private final static PooledEffect DEFAULT_PARTICLE_EFFECT = null;
 	
 	public PooledEffect particleEffect = DEFAULT_PARTICLE_EFFECT;
+	public ITimedCallback callback = null;
+	public Object data = null;
 	
 	public ParticleEffectComponent() {
 	}
@@ -39,5 +42,7 @@ public class ParticleEffectComponent implements Component, Poolable {
 	public void reset() {
 		if (particleEffect != null) ResourcePool.freeParticleEffect(particleEffect);
 		particleEffect = DEFAULT_PARTICLE_EFFECT;
+		callback = null;
+		data = null;
 	}
 }

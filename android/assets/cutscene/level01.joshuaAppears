@@ -1,0 +1,5 @@
+>>IncludeI18n dialog/level01.joshuaAppears.set01
+
+>>EventStage npcJoshua1 exit
+EffectAfter NPC_DISAPPEAR
+SoundAfter1 JOSHUA_IKU_YO

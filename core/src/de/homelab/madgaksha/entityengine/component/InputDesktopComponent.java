@@ -19,10 +19,10 @@ public class InputDesktopComponent implements Component, Poolable {
 	private final static int DEFAULT_DOWN = Keys.DOWN;
 	private final static int DEFAULT_UP = Keys.UP;
 	
-	private final static int DEFAULT_DIRECTION_UP = Keys.W;
-	private final static int DEFAULT_DIRECTION_DOWN = Keys.S;
-	private final static int DEFAULT_DIRECTION_RIGHT = Keys.D;
-	private final static int DEFAULT_DIRECTION_LEFT = Keys.A;
+//	private final static int DEFAULT_DIRECTION_UP = Keys.W;
+//	private final static int DEFAULT_DIRECTION_DOWN = Keys.S;
+//	private final static int DEFAULT_DIRECTION_RIGHT = Keys.D;
+//	private final static int DEFAULT_DIRECTION_LEFT = Keys.A;
 	
 	private final static int DEFAULT_SPEED_TRIGGER = Keys.SHIFT_LEFT; 
 	
@@ -45,10 +45,10 @@ public class InputDesktopComponent implements Component, Poolable {
 	public int up = DEFAULT_UP;
 	public int down = DEFAULT_DOWN;
 	
-	public int directionUp = DEFAULT_DIRECTION_UP;
-	public int directionDown = DEFAULT_DIRECTION_DOWN;
-	public int directionLeft = DEFAULT_DIRECTION_LEFT;
-	public int directionRight = DEFAULT_DIRECTION_RIGHT;
+//	public int directionUp = DEFAULT_DIRECTION_UP;
+//	public int directionDown = DEFAULT_DIRECTION_DOWN;
+//	public int directionLeft = DEFAULT_DIRECTION_LEFT;
+//	public int directionRight = DEFAULT_DIRECTION_RIGHT;
 	
 	public int speedTrigger = DEFAULT_SPEED_TRIGGER;
 	public int enemySwitcherPrev = DEFAULT_ENEMY_SWITCHER_PREV;
@@ -89,10 +89,10 @@ public class InputDesktopComponent implements Component, Poolable {
 		right = DEFAULT_RIGHT;
 		left = DEFAULT_LEFT;
 		
-		directionUp = DEFAULT_DIRECTION_UP;
-		directionDown = DEFAULT_DIRECTION_DOWN;
-		directionLeft = DEFAULT_DIRECTION_LEFT;
-		directionRight = DEFAULT_DIRECTION_RIGHT;
+//		directionUp = DEFAULT_DIRECTION_UP;
+//		directionDown = DEFAULT_DIRECTION_DOWN;
+//		directionLeft = DEFAULT_DIRECTION_LEFT;
+//		directionRight = DEFAULT_DIRECTION_RIGHT;
 		
 		speedTrigger = DEFAULT_SPEED_TRIGGER;
 		

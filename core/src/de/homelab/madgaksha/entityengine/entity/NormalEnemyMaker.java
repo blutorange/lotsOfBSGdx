@@ -1,12 +1,19 @@
 package de.homelab.madgaksha.entityengine.entity;
 
 
+import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
+
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
+import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.BattleDistanceComponent;
 import de.homelab.madgaksha.entityengine.component.BehaviourComponent;
+import de.homelab.madgaksha.entityengine.component.CameraFocusComponent;
+import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
@@ -31,24 +38,52 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 	
 	
 	@Override
-	public void setup(Entity e, Shape2D shape, ETrigger spawn, Vector2 initialPos, Float initDir) {
-		super.setup(e, shape, spawn,initialPos,initDir);
+	public void setup(Entity e, Shape2D shape, MapProperties props, ETrigger spawn, Vector2 initialPos, Float initDir, Float tileRadius) {
+		super.setup(e, shape, props, spawn,initialPos,initDir,tileRadius);
 		
-		BehaviourComponent bc = new BehaviourComponent(this);
+		BehaviourComponent bc = new BehaviourComponent(BEHAVIOUR_BASICS);
 		RotationComponent rc = new RotationComponent(true);
-		//TemporalComponent tc = new TemporalComponent();
 		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(requestedAnimationList(),
 				ESpriteDirectionStrategy.ZENITH);
 		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
 		SpriteComponent sc = new SpriteComponent(sac);
 
+		bc.cortex = getBehaviour(null);
+		
 		e.add(bc);
-		//e.add(tc);
 		e.add(sc);
 		e.add(sac);
 		e.add(sfdc);
 		e.add(rc);
 	}
 		
+	protected abstract IBehaving getBehaviour(MapProperties props);
 	protected abstract EAnimationList requestedAnimationList();
+	
+	private final static IBehaving BEHAVIOUR_BASICS = new IBehaving() {
+		@Override
+		/** 
+		 * Callback for enemy behaviour. Aka the update method.
+		 * Check if enemy is within the battle distance and deactivate enemy if it is not.
+		 */
+		public boolean behave(Entity enemy) {
+			BattleDistanceComponent bdc = Mapper.battleDistanceComponent.get(enemy);
+			PositionComponent pcEnemy = Mapper.positionComponent.get(enemy);
+			PositionComponent pcOther = Mapper.positionComponent.get(bdc.relativeToEntity);
+			float dr = (pcEnemy.x-pcOther.x)*(pcEnemy.x-pcOther.x)+(pcEnemy.y-pcOther.y)*(pcEnemy.y-pcOther.y);
+			if (dr > bdc.battleOutSquared) {
+				if (Mapper.cameraFocusComponent.get(enemy) != null)
+					enemy.remove(CameraFocusComponent.class);
+				return false;
+			}
+			final CameraFocusComponent cfc = Mapper.cameraFocusComponent.get(enemy);
+			if (cfc != null) return true;
+			else if (dr < bdc.battleInSquared) {
+				enemy.add(gameEntityEngine.createComponent(CameraFocusComponent.class));
+				return true;
+			}
+			return false;
+		}
+	}; 
+	
 }

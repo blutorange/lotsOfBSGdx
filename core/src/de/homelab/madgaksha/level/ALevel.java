@@ -83,7 +83,7 @@ public abstract class ALevel {
 	private final ETexture backgroundImage;
 	private final IResource<? extends Enum<?>,?>[] requiredResources;
 	private final EMusic bgm;
-	private final EMusic battleBgm;
+	private EMusic battleBgm;
 	private final EMusic gameOverBgm;
 	private final ESound soundOnBattleWin;
 	private final ETiledMap tiledMap;
@@ -405,6 +405,10 @@ public abstract class ALevel {
 		catch (Exception e) {
 			LOG.error("could not push cutscene layer", e);
 		}
+	}
+	
+	protected final void switchBattleBgm(EMusic bgm) {
+		if (bgm != null) this.battleBgm = bgm;
 	}
 
 }

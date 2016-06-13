@@ -49,7 +49,7 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		super(Family.all(ManyTrackingComponent.class, ShouldPositionComponent.class, ShouldRotationComponent.class)
 				.get(), updateInterval, priority);
 	}
-
+	
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	protected void processEntity(Entity entity) {
@@ -65,19 +65,23 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		if (mtc.focusPoints.size() > 0 && mtc.trackingOrientationStrategy == TrackingOrientationStrategy.RELATIVE) {
 			if (mtc.trackedPointIndex >= mtc.focusPoints.size()) mtc.trackedPointIndex = mtc.focusPoints.size()-1;
 			final PositionComponent pc = Mapper.positionComponent.get(mtc.focusPoints.get(mtc.trackedPointIndex));
-			dir.set(pc.x, pc.y).sub(playerPoint.x, playerPoint.y);			
+			dir.set(pc.x, pc.y).sub(playerPoint.x, playerPoint.y);
+			
+			// Check whether the direction is (almost) zero.
+			// If it is use, the last known direction.
+			// This helps to prevent the camera from
+			// rotating all around when the player is near
+			// the enemy.
+			if (dir.len2() < mtc.playerBossThreshold) {
+				dir.set(lastDirAboveThreshold);
+			} else
+				lastDirAboveThreshold.set(dir);
 		}
-		else dir.set(mtc.baseDirection.x, mtc.baseDirection.y);
+		else {
+			lastDirAboveThreshold.set(mtc.baseDirection);
+			dir.set(mtc.baseDirection.x, mtc.baseDirection.y);
+		}
 		
-		// Check whether the direction is (almost) zero.
-		// If it is use, the last known direction.
-		// This helps to prevent the camera from
-		// rotating all around when the player is near
-		// the enemy.
-		if (dir.len2() < mtc.playerBossThreshold) {
-			dir.set(lastDirAboveThreshold);
-		} else
-			lastDirAboveThreshold.set(dir);
 		// Apply desired gravity.
 		switch (mtc.gravity) {
 		case NORTH:
@@ -101,6 +105,7 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		// direction. We use it to create
 		// a rotated coordinate system.
 		Vector2 base = dir.cpy().rotate90(-1);
+
 		// Project all focusPoints to new coordinate system
 		// and get min / max coordinates to determine
 		// the bounding rectangle.

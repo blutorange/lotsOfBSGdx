@@ -2,7 +2,7 @@ package de.homelab.madgaksha.entityengine.entity;
 
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import static de.homelab.madgaksha.GlobalBag.player;
-import static de.homelab.madgaksha.GlobalBag.playerEntity;
+import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
@@ -129,12 +129,12 @@ public class ItemMaker extends EntityMaker {
 		ComponentQueueComponent cqcAcquire = new ComponentQueueComponent();
 		ReceiveTouchComponent rtcAcquire = new ReceiveTouchGroup01Component(onAcquire); 
 		ScaleComponent scc = new ScaleComponent();
-		ScaleFromDistanceComponent sfdc = new ScaleFromDistanceComponent(playerEntity, 0.0f, 1.0f, 0.0f,
+		ScaleFromDistanceComponent sfdc = new ScaleFromDistanceComponent(playerHitCircleEntity, 0.0f, 1.0f, 0.0f,
 				0.9f * mapItem.getActivationAreaScaleFactor()
 						* (float) Math.sqrt(halfWidth * halfWidth + halfHeight * halfHeight));
 		ShouldPositionComponent spc = new ShouldPositionComponent(new SpeedIncreaseGrantStrategy(10.0f,250.0f));
 		ShouldScaleComponent ssc = new ShouldScaleComponent(new ImmediateGrantStrategy());
-		StickyComponent sc = new StickyComponent(playerEntity);
+		StickyComponent sc = new StickyComponent(playerHitCircleEntity);
 
 		// Change bounding box once the item activates.
 		cqcCollect.remove.add(BoundingBoxCollisionComponent.class);

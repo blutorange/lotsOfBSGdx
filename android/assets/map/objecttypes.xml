@@ -11,7 +11,10 @@
   <property name="startup" type="string" default="visible"/>
  </objecttype>
  <objecttype name="Enemy" color="#ff0000">
+  <property name="battleIn" type="float" default="35"/>
+  <property name="battleOut" type="float" default="45"/>
   <property name="guid" type="string"/>
+  <property name="initDir" type="float"/>
   <property name="initX" type="float"/>
   <property name="initY" type="float"/>
   <property name="spawn" type="string" default="screen"/>

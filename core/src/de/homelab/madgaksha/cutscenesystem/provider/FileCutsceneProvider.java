@@ -29,6 +29,7 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETextbox;
+import de.homelab.madgaksha.resourcepool.EParticleEffect;
 import path.EPath;
 
 /**
@@ -107,13 +108,13 @@ import path.EPath;
  * 
  * For example:
  * 
- * <code>
+ * <pre>
  * &gt;&gt;EventMove player
- * Line 1.0 R 0 -20
- * Line 1.0 R 20 0
- * </code>
+ *   Line 1.0 R 0 -20
+ *   Line 1.0 R 20 0
+ * </pre>
  * 
- * This would move the player 
+ * This would move the player -20 tiles up, then 20 tiles to the right. 
  * Path Parameters are as follows:
  * 
  * <h3>PATH_LINE</h3>
@@ -121,6 +122,33 @@ import path.EPath;
  * 
  * 
  * <code>&lt;PathParameters&gt; := &lt;END_POINT_X&gt; &lt;END_POINT_Y&gt;</code>
+ * 
+ * <h2> Stage event </h2>
+ * 
+ * For entering or exiting NPCs.
+ * 
+ * <pre>&lt;EventParametersMove&gt; := &lt;GUID&gt; (ENTER|EXIT)
+ * [EffectBefore &lt;{@link EParticleEffect}&gt;]
+ * [EffectAfter &lt;{@link EParticleEffect}&gt;]
+ * [SoundBefore1 &lt;{@link ESound}&gt;]
+ * [SoundBefore2 &lt;{@link ESound}&gt;]
+ * [SoundAfter1 &lt;{@link ESound}&gt;]
+ * [SoundAfter2 &lt;{@link ESound}&gt;]
+ * </pre>
+ * 
+ * SoundBefore1 and SoundAfter1 is played before the particle effect starts.
+ * SoundBefore1 and SoundBefore2 is played after the particle effect ends. 
+ * 
+ * <br>
+ * 
+ * For example:
+ * 
+ * <pre>
+ * &gt;&gt;EventStage joshua1 enter
+ *   SoundAfter1 josshua_iku_yo
+ *   EffectAfter npc_exit
+ * </pre>
+ * 
  * 
  * <h2> Textbox event </h2>
  * 
@@ -436,6 +464,48 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 	@Override
 	public void eventDone(ACutsceneEvent currentCutsceneEvent) {
 		currentCutsceneEvent.end();		
+	}
+
+	/** @return The remaining of the line, with trailing and leading white spaces removed.*/
+	public static String readRemainingOfLine(Scanner s) {
+		if (!s.hasNextLine()) return null;
+		return s.nextLine().trim();
+	}
+
+	public static String readNextGuid(Scanner s) {
+		if (!s.hasNext()) return null;
+		return s.next().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]", "");
+	}
+
+	public static EParticleEffect nextParticleEffect(Scanner s) {
+		if (!s.hasNext()) return null;
+		String pe = s.next().toUpperCase(Locale.ROOT);
+		try {
+			return EParticleEffect.valueOf(pe);
+		}
+		catch (IllegalArgumentException e) {
+			LOG.error("no such particle effect: " + pe);
+			return null;
+		}		
+	}
+
+	public static ESound nextSound(Scanner s) {
+		if (!s.hasNext()) return null;
+		String se = s.next().toUpperCase(Locale.ROOT);
+		try {
+			return ESound.valueOf(se);
+		}
+		catch (IllegalArgumentException e) {
+			LOG.error("no such sound effect: " + se);
+			return null;
+		}
+	}
+
+	public static Long nextLong(Scanner s) {
+		if (s.hasNextLong(10)) return s.nextLong(10);
+		if (s.hasNextInt(10)) return (long)s.nextInt(10);
+		if (s.hasNextShort(10)) return (long)s.nextShort(10);
+		return null;
 	}
 
 }

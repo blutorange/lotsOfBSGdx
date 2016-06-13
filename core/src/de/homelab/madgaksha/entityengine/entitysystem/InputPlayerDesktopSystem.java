@@ -1,8 +1,8 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
-import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
+import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
@@ -36,7 +36,6 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 	private final static Logger LOG = Logger.getLogger(InputPlayerDesktopSystem.class);
 	private static Vector2 v = new Vector2();
 	private static Vector2 w = new Vector2();
-	private float lastAngle = 180.0f;
 
 	public InputPlayerDesktopSystem() {
 		this(DefaultPriority.inputPlayerDesktopSystem);
@@ -69,10 +68,6 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 
 		v.set((Gdx.input.isKeyPressed(ic.right)) ? 1.0f : (Gdx.input.isKeyPressed(ic.left)) ? -1.0f : 0.0f,
 				(Gdx.input.isKeyPressed(ic.up)) ? 1.0f : (Gdx.input.isKeyPressed(ic.down)) ? -1.0f : 0.0f);
-		w.set((Gdx.input.isKeyPressed(ic.directionLeft)) ? 1.0f
-				: (Gdx.input.isKeyPressed(ic.directionRight)) ? -1.0f : 0.0f,
-				(Gdx.input.isKeyPressed(ic.directionUp)) ? 1.0f
-						: (Gdx.input.isKeyPressed(ic.directionDown)) ? -1.0f : 0.0f);
 
 		if (ic.relativeToCamera)
 			v.rotate(-viewportGame.getRotationUpXY());
@@ -86,16 +81,11 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 			final PositionComponent pcPlayer = Mapper.positionComponent.get(entity);
 			dc.degree = 450.0f - w.set(pcPlayer.x - pcEnemy.x, pcPlayer.y - pcEnemy.y).angle();
 		} else {
-			if (ic.orientToScreen)
-				dc.degree = 450.0f + viewportGame.getRotationUpXY() + ic.screenOrientation;
-			else if (w.len2() > 0.5f)
-				dc.degree = 450.0f + viewportGame.getRotationUpXY() + (lastAngle = w.angle());
-			else
-				dc.degree = 450.0f + viewportGame.getRotationUpXY() + (lastAngle);
 			final float f = Gdx.input.isKeyPressed(ic.speedTrigger) ? ic.accelerationFactorHigh
 					: ic.accelerationFactorLow;
 			vc.x = (vc.x + f * v.x) * ic.frictionFactor;
 			vc.y = (vc.y + f * v.y) * ic.frictionFactor;
+			if (v.x*v.y != 0.0f) dc.degree = 630.0f-w.set(vc.x,vc.y).angle();
 		}
 
 		// Check if we need to switch the targetted enemy and change

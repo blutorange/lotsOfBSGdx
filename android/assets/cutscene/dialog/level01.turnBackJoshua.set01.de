@@ -1,0 +1,19 @@
+>>EventTextbox
+  TransitionIn
+  Speaker Estelle
+  Face Serious
+  Text EOF
+あまり都市から離れると色々危険すぎるんだ。か弱い乙女
+のあたしひとりじゃむり無理。武器ももってないし、
+これは町の近くで探すしかない。
+EOF
+
+>>EventTextbox
+  Speaker Estelle
+  Face SHOU_GA_NAI
+  TransitionOut
+  Text EOF
+概要から東へ通る道があったんじゃいないか？
+ヨシュアもそこでいるかもしれないし、
+まずはあそこへいってみよ。
+EOF

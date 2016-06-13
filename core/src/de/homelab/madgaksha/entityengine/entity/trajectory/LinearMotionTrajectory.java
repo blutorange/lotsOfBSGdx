@@ -3,6 +3,7 @@ package de.homelab.madgaksha.entityengine.entity.trajectory;
 import com.badlogic.ashley.core.Entity;
 
 import de.homelab.madgaksha.entityengine.entity.BulletTrajectoryMaker;
+import de.homelab.madgaksha.entityengine.entity.IBehaving;
 import de.homelab.madgaksha.logging.Logger;
 
 public class LinearMotionTrajectory extends BulletTrajectoryMaker {
@@ -17,8 +18,9 @@ public class LinearMotionTrajectory extends BulletTrajectoryMaker {
 	protected void setup(Entity e) {
 		super.setup(e);
 	}
-	
+
 	@Override
-	public void update(Entity e) {
+	protected IBehaving getBehaviour() {
+		return null;
 	}
 }

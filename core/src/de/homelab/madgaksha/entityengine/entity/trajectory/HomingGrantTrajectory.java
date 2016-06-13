@@ -9,6 +9,7 @@ import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.entityengine.component.StickyComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.entity.BulletTrajectoryMaker;
+import de.homelab.madgaksha.entityengine.entity.IBehaving;
 import de.homelab.madgaksha.grantstrategy.IGrantStrategy;
 import de.homelab.madgaksha.grantstrategy.ImmediateGrantStrategy;
 import de.homelab.madgaksha.logging.Logger;
@@ -48,8 +49,10 @@ public class HomingGrantTrajectory extends BulletTrajectoryMaker {
 		
 		e.add(spc).add(sc);
 	}
-	
+
 	@Override
-	public void update(Entity e) {
+	protected IBehaving getBehaviour() {
+		return null;
 	}
+	
 }

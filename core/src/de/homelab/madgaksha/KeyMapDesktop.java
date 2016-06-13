@@ -39,4 +39,8 @@ public final class KeyMapDesktop {
 		return Gdx.input.isKeyJustPressed(Keys.INSERT);
 	}
 	
+	public static boolean isSpeedupPressed() {
+		return Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT);
+	}
+	
 }

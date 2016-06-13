@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.entityengine.entity;
 
+import static de.homelab.madgaksha.GlobalBag.enemyKillCount;
 import static de.homelab.madgaksha.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
 import static de.homelab.madgaksha.GlobalBag.enemyTargetCrossEntity;
@@ -17,6 +18,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
@@ -76,7 +78,7 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
 import de.homelab.madgaksha.util.GeoUtil;
 import de.homelab.madgaksha.util.InclusiveRange;
 
-public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrigger, IReceive, IHittable, IMortal {
+public abstract class EnemyMaker extends EntityMaker implements ITrigger, IReceive, IHittable, IMortal {
 	private final static Logger LOG = Logger.getLogger(EnemyMaker.class);
 	private final static HomingGrantTrajectory homingTrajectory = new HomingGrantTrajectory();
 	
@@ -109,8 +111,28 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	 * @param initDir
 	 *            Initial looking direction.
 	 */
-	public void setup(Entity entity, Shape2D shape, ETrigger trigger, Vector2 initialPosition, Float initDir) {
+	public void setup(Entity entity, Shape2D shape, MapProperties props, ETrigger trigger, Vector2 initialPosition, Float initDir, Float tileRadius) {
 		super.setup(entity);
+
+		Float battleInDistance = null;
+		Float battleOutDistance = null;
+		if (props.containsKey("battleIn")) {
+			try {
+				battleInDistance = Float.valueOf(String.valueOf(props.get("battleIn")));
+			}
+			catch (NumberFormatException e) {
+				LOG.error("could not read battleIn distance");
+			}
+		}
+		if (props.containsKey("battleOut")) {
+			try {
+				battleOutDistance = Float.valueOf(String.valueOf(props.get("battleOut")));
+			}
+			catch (NumberFormatException e) {
+				LOG.error("could not read battleIn distance");
+			}
+		}
+
 		
 		// Create components to be added.
 		AnyChildComponent acc = new AnyChildComponent();
@@ -120,8 +142,8 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		ABoundingBoxComponent bbcEnemyRender = new BoundingBoxRenderComponent(requestedBoundingBoxRender());
 		ABoundingBoxComponent bbcEnemyCollision = new BoundingBoxCollisionComponent(requestedBoundingBoxCollision());
 		ABoundingBoxComponent bbcTrigger = new BoundingBoxCollisionComponent(GeoUtil.getBoundingBox(shape));
-		BattleDistanceComponent bdc = new BattleDistanceComponent(playerEntity, requestedBattleInDistance(),
-				requestedBattleOutDistance());
+		BattleDistanceComponent bdc = new BattleDistanceComponent(playerEntity, tileRadius * requestedBattleInDistance(battleInDistance),
+				tileRadius * requestedBattleOutDistance(battleOutDistance));
 		BoundingSphereComponent bsc = new BoundingSphereComponent(requestedBoundingCircle());
 		PositionComponent pcEnemy = new PositionComponent(initialPosition.x + pcTrigger.x,
 				initialPosition.y + pcTrigger.y);
@@ -140,6 +162,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		ZOrder2Component zoc = new ZOrder2Component();
 		GetHitComponent ghc = new GetHitComponent(this);
 		DeathComponent dtc = new DeathComponent(this);	
+		
 		
 		// Initially, the bounding box is the area the player needs to
 		// touch to spawn the enemy. When the enemy spawns, the bounding box
@@ -232,7 +255,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	private void releaseBullets(Entity enemy, boolean convertScore) {
 		AnyChildComponent acc = Mapper.anyChildComponent.get(enemy);
 		if (acc != null && acc.childComponent != null) {
-			PositionComponent pc = Mapper.positionComponent.get(playerEntity);
+			PositionComponent pc = Mapper.positionComponent.get(playerHitCircleEntity);
 			IGrantStrategy gs = new SpeedIncreaseGrantStrategy(3.0f, 400.0f);
 			// Iterate over all bullets before this bullet.
 			for (SiblingComponent sibling = acc.childComponent.prevSiblingComponent; sibling != null; sibling = sibling.prevSiblingComponent) {
@@ -277,9 +300,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	
 	/** Gets called when the enemy has been incapacitated. */
 	@Override
-	public void kill(Entity enemy) {
-		LOG.debug("kill enemy " + enemy);
-		
+	public void kill(Entity enemy) {	
 		// Animate death and play explosion sound.
 		MakerUtils.addParticleEffectGame(requestedParticleEffectOnDeath(), Mapper.positionComponent.get(enemy));
 		SoundPlayer.getInstance().play(requestedSoundOnDeath());
@@ -291,6 +312,9 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		StatusValuesComponent svc = Mapper.statusValuesComponent.get(enemy);
 		if (svc != null) gameScore.increaseBy(MathUtils.random(svc.scoreOnKill.min, svc.scoreOnKill.max));
 		gameEntityEngine.removeEntity(enemy);
+		
+		// Increase count.
+		++enemyKillCount;
 	}
 	
 	/** Called when we leave battle mode.
@@ -320,10 +344,10 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		ComponentUtils.switchAnimationList(playerEntity, player.getAnimationList());
 		
 		// Add particle effect to player for exiting battle mode.
-		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(), Mapper.positionComponent.get(playerHitCircleEntity));
+		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(), Mapper.positionComponent.get(playerEntity));
 		
 		// Play player win phrase and enemy explosion.
-		VoiceComponent vc = Mapper.voiceComponent.get(playerEntity);
+		VoiceComponent vc = Mapper.voiceComponent.get(playerHitCircleEntity);
 		if (won && vc != null){
 			vc.voicePlayer.play(vc.onBattleModeExit);
 		}
@@ -346,8 +370,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		}
 
 		// Remove target info from status screen.
-		statusScreen.untargetEnemy();
-		
+		statusScreen.untargetEnemy();		
 	}
 	
 	/** Called when we enter battle mode. */
@@ -392,7 +415,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		if (pc != null) pc.setup(enemy);
 		
 		// Add particle effect to player for entering battle mode.
-		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(), Mapper.positionComponent.get(playerHitCircleEntity));
+		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(), Mapper.positionComponent.get(playerEntity));
 		
 		// Animate battle stigma.
 		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(playerBattleStigmaEntity);
@@ -403,7 +426,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		// Play sound effects and voices.
 		SoundPlayer.getInstance().play(ESound.BATTLE_STIGMA_APPEAR);
 		// Voice player
-		VoiceComponent vc= Mapper.voiceComponent.get(playerEntity);
+		VoiceComponent vc= Mapper.voiceComponent.get(playerHitCircleEntity);
 		if (vc != null && vc.voicePlayer != null) vc.voicePlayer.play(vc.onBattleModeStart);
 		// Voice enemy.
 		vc = Mapper.voiceComponent.get(enemy);
@@ -482,24 +505,6 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 		}
 	};
 	
-	/** Callback for enemy behaviour. Aka the update method. */
-	@Override
-	public void behave(Entity enemy) {
-		BattleDistanceComponent bdc = Mapper.battleDistanceComponent.get(enemy);
-		PositionComponent pcEnemy = Mapper.positionComponent.get(enemy);
-		PositionComponent pcOther = Mapper.positionComponent.get(bdc.relativeToEntity);
-		float dr = (pcEnemy.x-pcOther.x)*(pcEnemy.x-pcOther.x)+(pcEnemy.y-pcOther.y)*(pcEnemy.y-pcOther.y);
-		if (dr > bdc.battleOutSquared) {
-			if (Mapper.cameraFocusComponent.get(enemy) != null)
-				enemy.remove(CameraFocusComponent.class);
-			return;
-		}
-		customBehaviour(enemy);
-		if (dr < bdc.battleInSquared) {
-			if (Mapper.cameraFocusComponent.get(enemy) == null)
-				enemy.add(gameEntityEngine.createComponent(CameraFocusComponent.class));
-		}
-	}
 	
 	/**
 	 * May be overridden for other effects.
@@ -557,7 +562,7 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	/** @return Enemy maximum pain points (pp). */
 	protected abstract long requestedMaxPainPoints();
 
-	/** @return The enemy's bullet atack power. Damage is multiplied by this factor. */
+	/** @return The enemy's bullet attack power. Damage is multiplied by this factor. */
 	protected abstract float requestedBulletAttack();
 	/** @return The enemy's bullet resistance. Damage is divided by this factor. */
 	protected abstract float requestedBulletResistance();
@@ -568,11 +573,20 @@ public abstract class EnemyMaker extends EntityMaker implements IBehaving, ITrig
 	/** Called when the enemy spawns. */
 	protected abstract void spawned(Entity e, ETrigger t);
 	
-	/** @return When the player is closer this enemy than the distance, this enemy will start fighting. */ 
-	protected abstract float requestedBattleInDistance();
-	/** @return When the player is further away from this enemy, this enemy will stop fighting. */
-	protected abstract float requestedBattleOutDistance();
-	
-	/** Callback for enemy behaviour. Aka the update method. */
-	protected abstract void customBehaviour(Entity enemy);
+	/**
+	 * May be overridden for custom values. 
+	 * @param The value for the battle in distance as specified on the map, or null if not specified. 
+	 * @return When the player is closer this enemy than the distance, this enemy will start fighting.
+	 */ 
+	protected float requestedBattleInDistance(Float valueFromMap) {
+		return valueFromMap == null ? 35.0f : valueFromMap;
+	}
+	/**
+	 * May be overridden for custom values. 
+	 * @param The value for the battle out distance as specified on the map, or null if not specified. 
+	 * @return When the player is further away from this enemy, this enemy will stop fighting.
+	 */
+	protected float requestedBattleOutDistance(Float valueFromMap) {
+		return valueFromMap == null ? 45.0f : valueFromMap;
+	};	
 }

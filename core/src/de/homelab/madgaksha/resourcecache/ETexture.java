@@ -58,8 +58,18 @@ public enum ETexture implements IResource<ETexture,AtlasRegion> {
 	//      JOSHUA
 	// ==================
 	JOSHUA_STANDING("sprite/joshua00010.png"),
-	
-	
+	FACE_JOSHUA_01(ETextureAtlas.FACES_JOSHUA,"joshua01"),
+	FACE_JOSHUA_02(ETextureAtlas.FACES_JOSHUA,"joshua02"),
+	FACE_JOSHUA_03(ETextureAtlas.FACES_JOSHUA,"joshua03"),
+	FACE_JOSHUA_04(ETextureAtlas.FACES_JOSHUA,"joshua04"),
+	FACE_JOSHUA_05(ETextureAtlas.FACES_JOSHUA,"joshua05"),
+	FACE_JOSHUA_06(ETextureAtlas.FACES_JOSHUA,"joshua06"),
+	FACE_JOSHUA_07(ETextureAtlas.FACES_JOSHUA,"joshua07"),
+	FACE_JOSHUA_08(ETextureAtlas.FACES_JOSHUA,"joshua08"),
+	FACE_JOSHUA_09(ETextureAtlas.FACES_JOSHUA,"joshua09"),
+	FACE_JOSHUA_10(ETextureAtlas.FACES_JOSHUA,"joshua10"),
+	FACE_JOSHUA_11(ETextureAtlas.FACES_JOSHUA,"joshua11"),
+
 	// ===================
 	//      ENEMIES
 	// ===================
@@ -127,8 +137,33 @@ public enum ETexture implements IResource<ETexture,AtlasRegion> {
 	//     BULLETS
 	// =========================================================================
 	BULLET_ORB_NOCOLOR(ETextureAtlas.BULLETS_BASIC, "pOrb0"),
+	
+	BULLET_PACMAN_BLACK(ETextureAtlas.BULLETS_BASIC, "pPacman0"),
+	BULLET_PACMAN_RED(ETextureAtlas.BULLETS_BASIC, "pPacman1"),
+	BULLET_PACMAN_LIGHTRED(ETextureAtlas.BULLETS_BASIC, "pPacman2"),
+	BULLET_PACMAN_PINK(ETextureAtlas.BULLETS_BASIC, "pPacman3"),
+	BULLET_PACMAN_LIGHTPINK(ETextureAtlas.BULLETS_BASIC, "pPacman4"),
+	BULLET_PACMAN_BLUE(ETextureAtlas.BULLETS_BASIC, "pPacman5"),
+	BULLET_PACMAN_LIGHTBLUE(ETextureAtlas.BULLETS_BASIC, "pPacman6"),
+	BULLET_PACMAN_CYAN(ETextureAtlas.BULLETS_BASIC, "pPacman7"),
+	BULLET_PACMAN_LIGHTCYAN(ETextureAtlas.BULLETS_BASIC, "pPacman8"),
+	BULLET_PACMAN_GREEN(ETextureAtlas.BULLETS_BASIC, "pPacman9"),
+	BULLET_PACMAN_LIGHTGREEN(ETextureAtlas.BULLETS_BASIC, "pPacman10"),
+	BULLET_PACMAN_YELLOW(ETextureAtlas.BULLETS_BASIC, "pPacman11"),
 	BULLET_PACMAN_LIGHTYELLOW(ETextureAtlas.BULLETS_BASIC, "pPacman12"),
+	BULLET_PACMAN_ORANGE(ETextureAtlas.BULLETS_BASIC, "pPacman13"),
+	BULLET_PACMAN_LIGHTORANGE(ETextureAtlas.BULLETS_BASIC, "pPacman14"),
+	BULLET_PACMAN_WHITE(ETextureAtlas.BULLETS_BASIC, "pPacman15"),
+	
+	BULLET_FLOWER_BLACK(ETextureAtlas.BULLETS_BASIC, "pFlower0"),
 	BULLET_FLOWER_RED(ETextureAtlas.BULLETS_BASIC, "pFlower1"),
+	BULLET_FLOWER_PINK(ETextureAtlas.BULLETS_BASIC, "pFlower2"),
+	BULLET_FLOWER_BLUE(ETextureAtlas.BULLETS_BASIC, "pFlower3"),
+	BULLET_FLOWER_CYAN(ETextureAtlas.BULLETS_BASIC, "pFlower4"),
+	BULLET_FLOWER_GREEN(ETextureAtlas.BULLETS_BASIC, "pFlower5"),
+	BULLET_FLOWER_YELLOW(ETextureAtlas.BULLETS_BASIC, "pFlower6"),
+	BULLET_FLOWER_WHITE(ETextureAtlas.BULLETS_BASIC, "pFlower7"),
+	
 	BULLET_GEMLET_BROWN(ETextureAtlas.BULLETS_BASIC, "pGemlet0"),
 	BULLET_GEMLET_BLUE(ETextureAtlas.BULLETS_BASIC, "pGemlet1"),
 	BULLET_GEMLET_RED(ETextureAtlas.BULLETS_BASIC, "pGemlet2"),

@@ -213,6 +213,11 @@ public class CollisionSystem extends EntitySystem {
 		final BoundingBoxCollisionComponent bbccBob = Mapper.boundingBoxCollisionComponent.get(bob);
 		final ShapeComponent scAlice = Mapper.shapeComponent.get(alice);
 		final ShapeComponent scBob = Mapper.shapeComponent.get(bob);
+		// Apply offset
+		pcAlice.x += pcAlice.offsetX;
+		pcAlice.y += pcAlice.offsetY;
+		pcBob.x += pcBob.offsetX;
+		pcBob.y += pcBob.offsetY;
 		// Check whether bounding boxes collide
 		if (bbccAlice.maxX + pcAlice.x > bbccBob.minX +pcBob.x) {
 			if (bbccAlice.minX + pcAlice.x < bbccBob.maxX + pcBob.x) {
@@ -220,13 +225,29 @@ public class CollisionSystem extends EntitySystem {
 					if (bbccAlice.minY + pcAlice.y < bbccBob.maxY + pcBob.y) {
 						// test exact shape if asked to
 						if (scAlice == null || scBob == null || GeoUtil.isCollision(scAlice.shape, scBob.shape, scAlice.shapeType, scBob.shapeType, pcAlice, pcBob)) {
+							// Remove offset
+							pcAlice.x -= pcAlice.offsetX;
+							pcAlice.y -= pcAlice.offsetY;
+							pcBob.x -= pcBob.offsetX;
+							pcBob.y -= pcBob.offsetY;
+							// Call callback.
 							ttc.triggerAcceptingObject.callbackTrigger(alice, ETrigger.TOUCH);
 							rtc.triggerReceivingObject.callbackTouched(bob, alice);
+							// Apply offset (collisions are rare).
+							pcAlice.x += pcAlice.offsetX;
+							pcAlice.y += pcAlice.offsetY;
+							pcBob.x += pcBob.offsetX;
+							pcBob.y += pcBob.offsetY;
 						}
 					}
 				}
 			}
 		}
+		// Remove offset
+		pcAlice.x -= pcAlice.offsetX;
+		pcAlice.y -= pcAlice.offsetY;
+		pcBob.x -= pcBob.offsetX;
+		pcBob.y -= pcBob.offsetY;
 	}
 	
 
@@ -235,13 +256,16 @@ public class CollisionSystem extends EntitySystem {
 		final BoundingBoxCollisionComponent bbcc = Mapper.boundingBoxCollisionComponent.get(odo);
 		final ShapeComponent sc = Mapper.shapeComponent.get(odo);
 		final TriggerScreenComponent tsc = Mapper.triggerScreenComponent.get(odo);
+		// Apply offset
+		pc.x += pc.offsetX;
+		pc.y += pc.offsetY;
+		// Check bounding box
 		if (visibleWorldBoundingBox.x + visibleWorldBoundingBox.width > bbcc.minX +pc.x) {
 			if (visibleWorldBoundingBox.x < bbcc.maxX + pc.x) {
 				if (visibleWorldBoundingBox.y + visibleWorldBoundingBox.height > bbcc.minY + pc.y) {
 					if (visibleWorldBoundingBox.y < bbcc.maxY + pc.y) {
-						// inside screen bounding box
-						//TODO
 						if (tsc.preciseCheck && sc != null) {
+							// Check exact shape.
 							if (GeoUtil.isCollision(GlobalBag.visibleWorld, sc.shape, EShapeType.POLYGON, sc.shapeType, nullPositionComponent, pc)) {
 								tsc.triggerAcceptingObject.callbackTrigger(odo, ETrigger.SCREEN);	
 							}
@@ -251,7 +275,10 @@ public class CollisionSystem extends EntitySystem {
 					}
 				}
 			}
-		}			
+		}
+		// Remove offset
+		pc.x -= pc.offsetX;
+		pc.y -= pc.offsetY;
 	}
 
 }

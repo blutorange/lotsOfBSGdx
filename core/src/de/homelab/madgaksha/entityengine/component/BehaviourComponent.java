@@ -15,12 +15,13 @@ public class BehaviourComponent implements Component, Poolable {
 
 	private final static IBehaving DEFAULT_BRAIN = new IBehaving() {		
 		@Override
-		public void behave(Entity e) {
+		public boolean behave(Entity e) {
+			return false;
 		}
 	}; 
 	
 	public IBehaving brain = DEFAULT_BRAIN;
-
+	public IBehaving cortex = DEFAULT_BRAIN;
 	
 	public BehaviourComponent(){
 	}
@@ -36,5 +37,6 @@ public class BehaviourComponent implements Component, Poolable {
 	@Override
 	public void reset() {
 		brain = DEFAULT_BRAIN;
+		cortex = DEFAULT_BRAIN;
 	}
 }

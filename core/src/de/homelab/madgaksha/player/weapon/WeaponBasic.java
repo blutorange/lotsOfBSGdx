@@ -23,7 +23,7 @@ import de.homelab.madgaksha.resourcecache.IResource;
 
 public class WeaponBasic extends AWeapon {
 
-	private final static long BULLET_POWER = 9394L;
+	private final static long BULLET_POWER = 16394L;
 	private final static float BULLET_INITIAL_SPEED = 800.0f;
 	private final static float BULLET_LIFE = 3.0f;
 	private final static float BULLET_INTERVAL_MIN = 0.2f;

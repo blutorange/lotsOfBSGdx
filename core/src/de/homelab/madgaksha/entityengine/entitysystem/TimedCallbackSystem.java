@@ -36,7 +36,7 @@ public class TimedCallbackSystem extends IteratingSystem {
 		if (tcc.totalTime >= tcc.duration) {
 			tcc.timedCallback.run(entity, tcc.callbackData);
 			--tcc.callbacksLeft;
-			if (--tcc.callbacksLeft <= 0) {
+			if (tcc.callbacksLeft >= 0 && --tcc.callbacksLeft <= 0) {
 				// everything done
 				entity.remove(TimedCallbackComponent.class);
 			}

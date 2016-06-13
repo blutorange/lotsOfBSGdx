@@ -10,7 +10,7 @@ import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.resourcecache.ETexture;
 
 public enum ESpeaker {
-	JOSHUA("Joshua", Color.BLUE, EFaceSet.JOSHUA),
+	JOSHUA("Joshua", new Color(51f/255f, 204f/255f, 255f/255f, 1.0f), EFaceSet.JOSHUA),
 	ESTELLE("Estelle", Color.ORANGE, EFaceSet.ESTELLE),
 	VIRTUAL_WALKER("Virtual_Walker", Color.BROWN, EFaceSet.EMPTY),
 	;

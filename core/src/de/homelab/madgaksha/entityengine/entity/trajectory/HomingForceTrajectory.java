@@ -11,6 +11,7 @@ import de.homelab.madgaksha.entityengine.component.ForceFieldComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.entity.BulletTrajectoryMaker;
+import de.homelab.madgaksha.entityengine.entity.IBehaving;
 import de.homelab.madgaksha.forcefield.HomingForceField;
 import de.homelab.madgaksha.logging.Logger;
 
@@ -61,27 +62,33 @@ public class HomingForceTrajectory extends BulletTrajectoryMaker {
 	}
 	
 	@Override
-	public void update(Entity bullet) {
-		final PositionComponent pcBullet = Mapper.positionComponent.get(bullet);
-		final VelocityComponent vc = Mapper.velocityComponent.get(bullet);
-		final ForceFieldComponent ffc = Mapper.forceFieldComponent.get(bullet);
-		final HomingForceField hfc = (HomingForceField) ffc.field;
-		// Get velocity component orthogonal to the bullet-target vector. 
-		v.set(pcBullet.x-hfc.target.x, pcBullet.y-hfc.target.y);
-		final float len2 = v.len2();
-		if (v.len2() < absorptionRadiusSquared) {
-			bullet.remove(ForceComponent.class);
-			vc.x = -v.x;
-			vc.y = -v.y;
-		}
-		else {
-			v.scl(1.0f/(float)Math.sqrt(len2));
-			w.set(vc.x,vc.y);
-			v.scl(w.dot(v));
-			w.sub(v);
-			// Apply friction.
-			vc.x -= friction*w.x;
-			vc.y -= friction*w.y;
-		}
+	public IBehaving getBehaviour() {
+		return new IBehaving() {
+			@Override
+			public boolean behave(Entity bullet) {
+				final PositionComponent pcBullet = Mapper.positionComponent.get(bullet);
+				final VelocityComponent vc = Mapper.velocityComponent.get(bullet);
+				final ForceFieldComponent ffc = Mapper.forceFieldComponent.get(bullet);
+				final HomingForceField hfc = (HomingForceField) ffc.field;
+				// Get velocity component orthogonal to the bullet-target vector. 
+				v.set(pcBullet.x-hfc.target.x, pcBullet.y-hfc.target.y);
+				final float len2 = v.len2();
+				if (v.len2() < absorptionRadiusSquared) {
+					bullet.remove(ForceComponent.class);
+					vc.x = -v.x;
+					vc.y = -v.y;
+				}
+				else {
+					v.scl(1.0f/(float)Math.sqrt(len2));
+					w.set(vc.x,vc.y);
+					v.scl(w.dot(v));
+					w.sub(v);
+					// Apply friction.
+					vc.x -= friction*w.x;
+					vc.y -= friction*w.y;
+				}
+				return true;
+			}
+		};
 	}
 }

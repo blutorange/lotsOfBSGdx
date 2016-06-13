@@ -1,0 +1,93 @@
+>>EventTextbox
+  Speaker ESTELLE
+  Face Normal
+  TransitionIn
+  Text EOF
+テントか。。。火も盛んに燃えている
+なのに誰も見当たらない。
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Normal
+  Text EOF
+普通う考えればありえないことだが、
+これでも空中にういているし、
+ここへ来てから不可能と可能の
+限界は薄くなっている感じがする。
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Shou_Ga_Nai
+  TransitionOut
+  Text EOF
+いつまでここで止まるわけにもいかなし、
+いこっか。
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Surprised
+  TransitionIn
+  Text EOF
+。。。？
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Serious
+  Text EOF
+テントに、何かが。。。
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Normal
+  TransitionOut
+  Text EOF
+誰かが残したノートだ。どれどれ
+EOF
+
+>>EventTextbox
+  TransitionIn
+  Text EOF
+ここで見張りをしているレオナードだ。とんでもないこと
+になったな、これ。最初は一緒に見張りをした僕の親友も
+いたけど、あいつにやられた。今は安全そうで、たとえ俺
+の身にがあったら、せめて記録だけは残しておきたい。
+EOF
+
+>>EventTextbox
+  Text EOF
+３日前のことだった。リベール王国のとある場所で見張りを
+した俺達は、雷撃のような音を聞いた。するとあの方向から
+太陽に匹敵するほどに眩しい一閃が俺達を包んだ。それで目
+の前は暗くなった。まだ目を覚ましたときはここでいた。
+EOF
+
+>>EventTextbox
+  TransitionOut
+  Text EOF
+何ががなだか、と考える暇もなく、俺達はあいつらに襲われて
+いた。動くことすら出来ないのに、どうやったかは知らんが、
+ここへ来たのだ。血のような紅き外殻は眠りについても忘れ
+やしない。。。まって。外で何かの音が聞こえたような。。
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Shou_Ga_Nai
+  TransitionIn
+  Text EOF
+とおりでページに血がついているわけか。。。
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Serious
+  TransitionIn
+  Text EOF
+あたし達がこうならないように、はやくここから脱出するため
+のヒントをさがさないと。。。！
+EOF

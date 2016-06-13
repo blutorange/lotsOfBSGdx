@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.level;
 
+import static de.homelab.madgaksha.GlobalBag.idEntityMap;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 
 import java.util.Locale;
@@ -36,6 +37,7 @@ import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
 import de.homelab.madgaksha.entityengine.entity.ItemMaker;
 import de.homelab.madgaksha.entityengine.entity.NpcMaker;
 import de.homelab.madgaksha.entityengine.entity.ParticleEffectMaker;
+import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.enums.Gravity;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.IMapItem;
@@ -74,8 +76,20 @@ import de.homelab.madgaksha.util.GeoUtil;
  *   <li>type : Object type set in tiled map editor on the top right panel. Case insensitive.</li>
  *   <li>guid: An id used to refer to objects in cutscene scripts etc. Should be unique.
  *   Undefined behaviour when not unique. Case-insensitive. Must not contain any characters
- *   other than letters and number (a-z, A-Z, 0-9). See also {@link IdComponent}.
+ *   other than letters and number (a-z, A-Z, 0-9). See also {@link IdComponent}. 
+ *   </li>
  * </ul>
+ * 
+ * For convenience, if an event specifies a name (eg. Callback) and there is no event with that GUID,
+ * one event with that name is added to the GUID list with its name.
+ * <br>
+ * Therefore, do not use this if there is more than one event with the same name. In that case, give
+ * the events a unique GUID.
+ * <br>
+ * For example, when you've got excactly one callback with the name "turnbackPlayer" you do not need to
+ * specify a GUID separately.
+ * 
+ * <br><br>
  * 
  * The following types and properties are supported: 
  * 
@@ -93,6 +107,8 @@ import de.homelab.madgaksha.util.GeoUtil;
  *   See type <code>callback</code>.</li>
  *   <li>touch: When the bounding box of the enemy is touched.</li>
  *  </ul>
+ * <li>battleIn: (optional) Distance when enemy starts battling, in tiles (longer side). Default 35</li>
+ * <li>battleOut: (optional) Distance when enemy stops battling, in tiles (longer side). Default 45</li>
  * <li>initX: (optional) Displacement of the initial position in x-direction in tiles. If 0, the enemy is placed
  * at the center of the bounding box of the object's shape.</li>
  * <li>initY: (optional) Displacement of the initial position in y-direction in tiles. If 0, the enemy is placed
@@ -116,8 +132,8 @@ import de.homelab.madgaksha.util.GeoUtil;
  *   <li>touch: Triggers only when the player touches the even shape.</li>
  *  </ul> 
  * <li> loop: Number of times the event should repeat after it was first triggered. Use 0 for no loop. Use -1 to
- * keep triggering the event on the specified condition. Make sure the callback moves the player or it keeps
- * triggering every frame.</li>
+ * keep the event ready to be triggered. Use {@link ComponentUtils#reactivateCallback(String name)} to reactivate
+ * the callback.</li>
  * <li> interval: Time in seconds between two loops, see the <code>loop</code> property.
  * </ul>
  * 
@@ -253,6 +269,13 @@ public class MapData {
 		return isTileBlocking(x < 0 ? 0 : x >= width ? width - 1 : x, y < 0 ? 0 : y >= height ? height - 1 : y);
 	}
 	
+	public int getTileX(float w) {
+		return (int) (w * widthTilesInverse);
+	}
+	
+	public int getTileY(float h) {
+		return (int) (h * heightTilesInverse);
+	}
 
 	/**
 	 * This will not perform sanity checks.
@@ -265,6 +288,33 @@ public class MapData {
 	 */
 	public boolean isTileBlocking(int x, int y) {
 		return (tileFlags[x][y] & 1) != 0;
+	}
+	
+	/**
+	 * @param y Tile y
+	 * @param xMin Range lower.
+	 * @param xMax Range upper.
+	 * @return True iff any tile within the range (xMin..xMax,y) is blocking.
+	 */
+	public boolean isTileRangeXAnyBlocking(int y, int xMin, int xMax) {
+		for (int x = xMin; x <= xMax; ++x) if ((tileFlags[x][y] & 1) != 0) return true;
+		return false;
+	}
+	
+	/**
+	 * @param x Tile x.
+	 * @param yMin Range lower.
+	 * @param yMax Range upper.
+	 * @return True iff any tile within the range (x,yMin..yMax) is blocking.
+	 */
+	public boolean isTileRangeYAnyBlocking(int x, int yMin, int yMax) {
+		for (int y = yMin; y <= yMax; ++y) if ((tileFlags[x][y] & 1) != 0) return true;
+		return false;
+	}
+	
+	public boolean isTileAreaAnyBlocking(int xMin, int xMax, int yMin, int yMax) {
+		for (int x = xMin; x <= xMax; ++x) for (int y = yMin; y <= yMax; ++y) if ((tileFlags[x][y] & 1) != 0) return true;
+		return false;
 	}
 	
 	public MapData(TiledMap map, Class<? extends ALevel> levelClass) {
@@ -305,8 +355,8 @@ public class MapData {
 				heightTiles = Math.max(heightTiles, tmtl.getTileHeight());
 			}
 		}
-		widthTilesInverse = 1.0f / widthTiles;
-		heightTilesInverse = 1.0f / heightTiles;
+		widthTilesInverse = 1.0f / (float)widthTiles;
+		heightTilesInverse = 1.0f / (float)heightTiles;
 		widthPixel = (int) (width * widthTiles);
 		heightPixel = (int) (height * heightTiles);
 	}
@@ -352,7 +402,7 @@ public class MapData {
 		}
 		
 		// Read ID, if available, add to hash map and add id to entity.
-		processMapObjectId(props, entity);
+		processMapObjectGuid(props, entity);
 		
 		// Store our map object for later use.
 		gameEntityEngine.addEntity(entity);
@@ -453,13 +503,22 @@ public class MapData {
 	 * @param entity
 	 *            Entity created for this map object.
 	 */
-	private void processMapObjectId(MapProperties props, Entity entity) {
-		if (props.containsKey("guid")) {
-			String id = String.valueOf(props.get("guid"));
-			// Add to entity.
-			IdComponent ic = new IdComponent(id);
-			// This will add the entity to the idEntityMap automatically.
-			entity.add(ic);
+	private void processMapObjectGuid(MapProperties props, Entity entity) {
+		String id = String.valueOf(props.get("guid"));
+		if (props.containsKey("guid") && !id.isEmpty()) {
+			final IdComponent ic = new IdComponent(id);
+			if (!ic.getId().isEmpty()) {
+				// This will add the entity to the idEntityMap automatically.
+				entity.add(ic);
+			}
+		}
+		else if (props.containsKey("name")) {
+			String name = String.valueOf(props.get("name"));
+			final IdComponent ic = new IdComponent(name);
+			if (!name.isEmpty() && !idEntityMap.containsKey(ic.getId())) {
+				// This will add the entity to the idEntityMap automatically.
+				entity.add(ic);
+			}
 		}
 	}
 	
@@ -518,8 +577,8 @@ public class MapData {
 			@SuppressWarnings("unchecked")
 			Class<? extends EnemyMaker> enemyClass = ClassReflection.forName(ENEMY_PACKAGE + species + "Maker");
 			enemyMaker = (EnemyMaker) ClassReflection.getDeclaredMethod(enemyClass, "getInstance").invoke(null);
-			//enemyMaker = (EnemyMaker) enemyClass.getDeclaredMethod("getInstance").invoke(null);
-			enemySetupMethod = ClassReflection.getDeclaredMethod(enemyClass, "setup", Entity.class, Shape2D.class, ETrigger.class, Vector2.class, Float.class);
+			enemySetupMethod = ClassReflection.getDeclaredMethod(enemyClass, "setup", Entity.class, Shape2D.class,
+					MapProperties.class, ETrigger.class, Vector2.class, Float.class, Float.class);
 		}
 		catch (Exception e) {
 			LOG.error("no such enemy class with appropriate constructor: " + ENEMY_PACKAGE + "Enemy" + species, e);
@@ -539,7 +598,8 @@ public class MapData {
 		// Try to initialize a new enemy of the given class.
 		try {
 			Entity entity = new Entity();
-			enemySetupMethod.invoke(enemyMaker, entity, shape, spawnEnum, new Vector2(initX,initY), initDir);
+			float tileRadius = Math.max(widthTiles, heightTiles);
+			enemySetupMethod.invoke(enemyMaker, entity, shape, props, spawnEnum, new Vector2(initX,initY), initDir, tileRadius);
 			return enemyMaker.isInitializedSuccessfully() ? entity : null;
 		} catch (Exception e) {
 			LOG.error("failed to initialize enemy instance: " + species, e);

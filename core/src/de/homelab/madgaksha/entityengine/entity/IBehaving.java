@@ -8,5 +8,5 @@ import com.badlogic.ashley.core.Entity;
  *
  */
 public interface IBehaving {
-	public void behave(Entity e);
+	public boolean behave(Entity e);
 }

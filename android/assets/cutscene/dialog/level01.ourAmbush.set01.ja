@@ -1,0 +1,17 @@
+>>EventTextbox
+  Speaker ESTELLE
+  Face Laughing
+  TransitionIn
+  Text EOF
+元兵士ってわりにはちょっと弱すぎっぽいじゃない？
+あたしにかかっちゃ楽勝、らくしょう！
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Laughing
+  TransitionOut
+  Text EOF
+あそこはなにが見える。
+ちょっといってくるか
+EOF

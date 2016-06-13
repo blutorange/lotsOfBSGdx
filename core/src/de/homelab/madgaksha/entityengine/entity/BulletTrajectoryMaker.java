@@ -4,7 +4,7 @@ import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Interpolation;
 
-import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.audiosystem.VoicePlayer;
 import de.homelab.madgaksha.entityengine.component.AlphaComponent;
 import de.homelab.madgaksha.entityengine.component.AngularVelocityComponent;
 import de.homelab.madgaksha.entityengine.component.BehaviourComponent;
@@ -16,11 +16,13 @@ import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01Component;
 
-public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
+public abstract class BulletTrajectoryMaker implements IMortal{
 	private float initialPositionX = 0.0f;
 	private float initialPositionY = 0.0f;
 	private float initialVelocityX = 0.0f;
 	private float initialVelocityY = 0.0f;
+	private float rotationDegree = 0.0f;
+	protected VoicePlayer voicePlayer;
 	private final ITimedCallback onBulletDeath = new ITimedCallback() {
 		@Override
 		public void run(Entity bullet, Object data) {
@@ -45,13 +47,22 @@ public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
 		final BehaviourComponent bc = gameEntityEngine.createComponent(BehaviourComponent.class);
 		final LifeComponent lc = gameEntityEngine.createComponent(LifeComponent.class);
 		
+		final IBehaving brain = getBehaviour();
+		
 		lc.onDeath = this;
-		lc.remainingLife = lifeTime;
-		bc.brain = this;
+		lc.remainingLife = lifeTime;		
+		if (brain != null) bc.brain = brain;
 		pc.x = initialPositionX;
 		pc.y = initialPositionY;
 		vc.x = initialVelocityX;
 		vc.y  = initialVelocityY;
+		
+		if (rotationDegree != 0.0f) {
+			RotationComponent rc = gameEntityEngine.createComponent(RotationComponent.class);
+			AngularVelocityComponent avc = gameEntityEngine.createComponent(AngularVelocityComponent.class);
+			avc.speed = rotationDegree;
+			e.add(rc).add(avc);
+		}
 		
 		e.add(bc)
 			.add(lc)
@@ -69,6 +80,8 @@ public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
 		
 	}
 	
+	protected abstract IBehaving getBehaviour();
+
 	/** Sets the initial position used for making bullets.
 	 * 
 	 * @param x x-position.
@@ -100,16 +113,13 @@ public abstract class BulletTrajectoryMaker implements IBehaving, IMortal{
 		initialVelocityY = vy;
 	}
 	
-	/** 
-	 * Updates the entity's position for the next frame. 
-	 * @param e Entity to update.
-	 */
-	public void behave(Entity entity) {
-		temporalComponent = Mapper.temporalComponent.get(entity);
-		update(entity);		
+	public void rotation(float degree) {
+		rotationDegree = degree;
 	}
 	
-	protected abstract void update(Entity e);
+	public void voicePlayer(VoicePlayer vp) {
+		this.voicePlayer = vp;
+	}
 	
 	@Override
 	public void kill(Entity bullet) {

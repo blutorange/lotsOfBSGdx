@@ -90,6 +90,8 @@ public final class GlobalBag {
 	/** Hash map containing the mapping between entity names and the entity. Used by cutscene scripts and callback functions. */
 	//public static BidiMap<String, Entity> idEntityMap = new DualHashBidiMap<String, Entity>();
 	public static BiMap<String, Entity> idEntityMap = HashBiMap.create();
+
+	public static int enemyKillCount = 0;
 	
 	static {
 		visibleWorld.setPosition(0.0f, 0.0f);
