@@ -61,5 +61,21 @@
             <Value disabled="false">Hold the pause button for two seconds to exit the game, or press any other button to resume the game.</Value>
             <Value disabled="false">２秒間ポーズボタンを押し続けると、その魂は救われん。\nほかのボタンで苦しみ抜くこともゲームを再開することもできよう。</Value>
         </Property>
+        <Property>
+            <Name>level.01.name</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Unbekanntes Urwaldgestrüpp</Value>
+            <Value disabled="false">Unfamiliar Underwood</Value>
+            <Value disabled="false">無限と無縁の荒野</Value>
+        </Property>
+        <Property>
+            <Name>level.01.description</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false"></Value>
+            <Value disabled="false">After a day's hard work for the Bracer's guild, Estelle just wanted to take a stroll outside the city. What awaited her there she could not have imagined even in her dreams.</Value>
+            <Value disabled="false">遊撃士協会に与えられたいくつかの超難しい依頼を達成して報告しおたエステルはただの散歩のつもりで町を出たが、辿りついたそこに待ち受けたのは…！？</Value>
+        </Property>
     </Records>
 </MultiProperties>

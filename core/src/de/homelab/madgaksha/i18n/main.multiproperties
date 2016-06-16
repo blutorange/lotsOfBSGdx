@@ -6,12 +6,12 @@
     <Handler>Java Properties Handler</Handler>
     <Columns>
         <Key>
-            <Width>334</Width>
+            <Width>221</Width>
         </Key>
         <Column>
             <Name>de</Name>
             <Description>German</Description>
-            <Width>112</Width>
+            <Width>224</Width>
             <HandlerConfiguration>/lotsOfBS-core/src/de/homelab/madgaksha/i18n/main_de.properties|true|true|false|false</HandlerConfiguration>
         </Column>
         <Column>
@@ -59,7 +59,7 @@
             <MultiLine>false</MultiLine>
             <Value disabled="false">Ruhe</Value>
             <Value disabled="false">The Calmlands</Value>
-            <Value disabled="true"></Value>
+            <Value disabled="false">長野</Value>
         </Property>
         <Property>
             <Name>desktop.launcher.score</Name>
@@ -75,7 +75,7 @@
             <MultiLine>false</MultiLine>
             <Value disabled="false">Sturm und Drang</Value>
             <Value disabled="false">The Wildlands</Value>
-            <Value disabled="true"></Value>
+            <Value disabled="false">荒野</Value>
         </Property>
         <Property>
             <Name>desktop.game.running</Name>
@@ -107,15 +107,23 @@
             <MultiLine>false</MultiLine>
             <Value disabled="false">Es gabe leider einen Fehler beim Starten des Spiels. Versuche es bitte erneut oder kontaktiert mich unter s3002591@rz.ba-dresden.de. Ich werde vielleicht auch antworten(?)</Value>
             <Value disabled="false">An unexpected error occured while launching the game. Please try again or contact me: s3002591@rz.ba-dresden.de. I might just answer (?)</Value>
-            <Value disabled="true"></Value>
+            <Value disabled="false">原因不明のエラーが起こりました。申し訳ありませんが、もう一度やり直してください。</Value>
         </Property>
         <Property>
             <Name>desktop.game.start</Name>
             <Disabled>false</Disabled>
             <MultiLine>false</MultiLine>
-            <Value disabled="false">Starten</Value>
-            <Value disabled="false">Start</Value>
+            <Value disabled="false">Spiel starten</Value>
+            <Value disabled="false">Start game</Value>
             <Value disabled="false">開始</Value>
+        </Property>
+        <Property>
+            <Name>desktop.game.exit</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Spielfenster sofort schließen</Value>
+            <Value disabled="false">Close game window immediately</Value>
+            <Value disabled="false">強制終了</Value>
         </Property>
         <Property>
             <Name>desktop.options</Name>
@@ -147,7 +155,7 @@
             <MultiLine>false</MultiLine>
             <Value disabled="false">Breite</Value>
             <Value disabled="false">Width</Value>
-            <Value disabled="false">幅</Value>
+            <Value disabled="false">横</Value>
         </Property>
         <Property>
             <Name>desktop.options.height</Name>
@@ -155,7 +163,7 @@
             <MultiLine>false</MultiLine>
             <Value disabled="false">Höhe</Value>
             <Value disabled="false">Height</Value>
-            <Value disabled="false"></Value>
+            <Value disabled="false">縦</Value>
         </Property>
         <Property>
             <Name>desktop.options.fullscreen</Name>
@@ -190,5 +198,13 @@
             <Value disabled="false">設定</Value>
         </Property>
         <Empty/>
+        <Property>
+            <Name>only.one.level</Name>
+            <Disabled>false</Disabled>
+            <MultiLine>false</MultiLine>
+            <Value disabled="false">Es gibt derzeit leider nur ein Level. Ich arbeite an weiteren!</Value>
+            <Value disabled="false">There is only one level for now. I'm working on it!</Value>
+            <Value disabled="false">レベルはまだ一つしかありません。時間があればもっと作りたいと思います。</Value>
+        </Property>
     </Records>
 </MultiProperties>

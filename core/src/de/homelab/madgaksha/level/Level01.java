@@ -63,6 +63,11 @@ public class Level01 extends ALevel {
 	}
 
 	@Override
+	protected String requestedI18nDescriptionKey() {
+		return "level.01.description";
+	}
+
+	@Override
 	protected void setupInitialGameViewport(GameViewport viewport) {
 		viewport.getCamera().position.x = getMapData().getPlayerInitialPosition().x;
 		viewport.getCamera().position.y = -50.0f * getMapData().getHeightTiles();

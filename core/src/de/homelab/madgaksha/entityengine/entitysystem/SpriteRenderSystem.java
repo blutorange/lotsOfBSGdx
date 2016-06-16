@@ -124,7 +124,7 @@ public class SpriteRenderSystem extends EntitySystem {
 
 			shadowRotateX = 0.0f;
 			shadowRotateY = 0.0f;
-			
+		
 			// Colorize if desired.
 			spc.sprite.setColor(cc != null ? cc.color : Color.WHITE);
 			spc.sprite.setAlpha(ac != null ? ac.alpha : 1.0f);
@@ -151,13 +151,19 @@ public class SpriteRenderSystem extends EntitySystem {
 				shadowRotateX = shadowRotateX * kc.offsetRotateX + kc.offsetX;
 				shadowRotateY = shadowRotateY * kc.offsetRotateY + kc.offsetY;
 				kc.sprite.setScale(1.0f + pc.offsetX * kc.scaleFactorX + pc.offsetY * kc.scaleFactorY);
-				kc.sprite.setCenter(
-						pc.x + shadowRotateY * viewportGame.getCamera().up.x
-								+ shadowRotateX * viewportGame.getCamera().up.y,
-						pc.y + shadowRotateY * viewportGame.getCamera().up.y
-								- shadowRotateX * viewportGame.getCamera().up.x);
+				if (kc.relativeToCamera) {
+					kc.sprite.setCenter(
+							pc.x + shadowRotateY * viewportGame.getCamera().up.x
+									+ shadowRotateX * viewportGame.getCamera().up.y,
+							pc.y + shadowRotateY * viewportGame.getCamera().up.y
+									- shadowRotateX * viewportGame.getCamera().up.x);
+				}
+				else {
+					kc.sprite.setCenter(
+							pc.x + shadowRotateX,
+							pc.y + shadowRotateY);
+				}
 				kc.sprite.setRotation(-viewportGame.getRotationUpXY());
-
 				kc.sprite.draw(batchGame);
 			}
 

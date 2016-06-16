@@ -16,7 +16,7 @@ public class Resource {
 	
 	public enum EIcon implements IResource {
 		DIALOG_CLOSE("iconConfirmClose.gif"),
-		LEVEL_FOO("foolevel.jpg");
+		LEVEL_01("level01.jpg");
 		private final static int LIMIT = 20;
 		private final URL url;
 		private EIcon(String file) {

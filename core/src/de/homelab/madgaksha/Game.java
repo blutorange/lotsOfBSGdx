@@ -1,6 +1,5 @@
 package de.homelab.madgaksha;
 
-import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.GlobalBag.batchGame;
 import static de.homelab.madgaksha.GlobalBag.batchModel;
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
@@ -10,20 +9,26 @@ import static de.homelab.madgaksha.GlobalBag.currentMonitorWidth;
 import static de.homelab.madgaksha.GlobalBag.game;
 import static de.homelab.madgaksha.GlobalBag.gameClock;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
+import static de.homelab.madgaksha.GlobalBag.gameScore;
 import static de.homelab.madgaksha.GlobalBag.level;
 import static de.homelab.madgaksha.GlobalBag.maxMonitorHeight;
 import static de.homelab.madgaksha.GlobalBag.maxMonitorWidth;
 import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.playerEntity;
+import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.GlobalBag.shapeRenderer;
 import static de.homelab.madgaksha.GlobalBag.statusScreen;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import org.apache.commons.io.IOUtils;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -71,13 +76,16 @@ public class Game implements ApplicationListener {
 	public final static float VIEWPORT_GAME_AR = (float) VIEWPORT_GAME_AR_NUM / (float) VIEWPORT_GAME_AR_DEN;
 	/** 9/8 */
 	public final static float VIEWPORT_GAME_AR_INV = (float) VIEWPORT_GAME_AR_DEN / (float) VIEWPORT_GAME_AR_NUM;
+	
+	private final static String highScoreFile = "./toku.ten";
+	
 	/**
 	 * This will cause slowdown on slow devices, but game logic would get messed
 	 * up for high dt.
 	 */
 	public final static float MAX_DELTA_TIME = 0.2f;
 	public final static float MIN_DELTA_TIME = 0.005f;
-
+	
 	private final List<ALayer> layerStack = new ArrayList<ALayer>(10);
 	private final List<ALayer> layerStackPopQueue = new ArrayList<ALayer>(10);
 	private final List<ALayer> layerStackPushQueue = new ArrayList<ALayer>(10);
@@ -90,7 +98,7 @@ public class Game implements ApplicationListener {
 	private boolean running = false;
 	/** Whether the application was requested to exit. */
 	private boolean exitRequested = false;
-
+	
 	/** Screen resolution before the latest resize. */
 	private int lastWidth;
 	private int lastHeight;
@@ -558,10 +566,30 @@ public class Game implements ApplicationListener {
 		timeScalingFactor = Math.max(0.0f, ts);
 	}
 
+	/**
+	 * Called when a level has been completed successfully. Write the highscore
+	 * and exit the game.
+	 */
 	public void gameover() {
-		// TODO Auto-generated method stub
-		
+		FileHandle handle = Gdx.files.local(highScoreFile);
+		InputStream is = null;
+		OutputStream os = null;
+		try {
+			is = handle.read(1024);
+		}
+		catch (GdxRuntimeException e) {
+			LOG.error("could not open score file", e);			
+		}
+		try {
+			os = Gdx.files.local(highScoreFile).write(false, 1024);
+			gameScore.writeScore(is, os);
+		}
+		finally {
+			if (os != null) IOUtils.closeQuietly(os);
+		}
+		if (is != null) IOUtils.closeQuietly(is);
+		this.exitRequested = true;
+		Gdx.app.exit();
 	}
-
 
 }

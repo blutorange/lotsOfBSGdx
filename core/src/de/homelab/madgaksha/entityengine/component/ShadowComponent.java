@@ -20,7 +20,8 @@ public class ShadowComponent implements Component, Poolable {
 	private final static float DEFAULT_SCALE_FACTOR_Y = -0.025f;
 	private final static float DEFAULT_OFFSET_ROTATE_X = 1.0f;
 	private final static float DEFAULT_OFFSET_ROTATE_Y = 0.0f;
-
+	private final static boolean DEFAULT_RELATIVE_TO_CAMERA = true;
+	
 	public Sprite sprite;
 	public float offsetX = DEFAULT_OFFSET_X;
 	public float offsetY = DEFAULT_OFFSET_Y;
@@ -28,6 +29,7 @@ public class ShadowComponent implements Component, Poolable {
 	public float scaleFactorY = DEFAULT_SCALE_FACTOR_Y;
 	public float offsetRotateX = DEFAULT_OFFSET_ROTATE_X;
 	public float offsetRotateY = DEFAULT_OFFSET_ROTATE_Y;
+	public boolean relativeToCamera = DEFAULT_RELATIVE_TO_CAMERA;
 
 	public ShadowComponent() {
 	}
@@ -131,6 +133,7 @@ public class ShadowComponent implements Component, Poolable {
 		scaleFactorY = DEFAULT_SCALE_FACTOR_Y;
 		offsetRotateX = DEFAULT_OFFSET_ROTATE_X;
 		offsetRotateY = DEFAULT_OFFSET_ROTATE_Y;
+		this.relativeToCamera = DEFAULT_RELATIVE_TO_CAMERA;
 	}
 
 }

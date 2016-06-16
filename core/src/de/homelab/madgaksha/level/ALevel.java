@@ -88,6 +88,7 @@ public abstract class ALevel {
 	private final ESound soundOnBattleWin;
 	private final ETiledMap tiledMap;
 	private final String i18nNameKey;
+	private final String i18nDescriptionKey;
 	private final Color enemyPainBarColorLow = new Color();
 	private final Color enemyPainBarColorMid = new Color();
 	private final Color enemyPainBarColorHigh = new Color();
@@ -105,6 +106,7 @@ public abstract class ALevel {
 		bgm = requestedBgm();
 		tiledMap = requestedTiledMap();
 		i18nNameKey = requestedI18nNameKey();
+		i18nDescriptionKey = requestedI18nDescriptionKey();
 		battleBgm = requestedBattleBgm();
 		gameOverBgm = requestedGameOverBgm();
 		enemyPainBarColorLow.set(requestedEnemyPainBarColorLow());
@@ -197,7 +199,7 @@ public abstract class ALevel {
 		
 	/** Name of the level. */
 	protected abstract String requestedI18nNameKey();
-	
+	protected abstract String requestedI18nDescriptionKey();	
 
 	/** A small icon for the level which may contain its name or an illustration.
 	 * Its aspect ration must be 5:1.
@@ -273,6 +275,14 @@ public abstract class ALevel {
 	
 	public String getName() {
 		return I18n.game(i18nNameKey);
+	}
+	
+	public String getDescription() {
+		return I18n.game(i18nDescriptionKey);
+	}
+	
+	public String getLauncherIcon() {
+		return "LEVEL_01";
 	}
 	
 	public float getEnemyTargetCrossAngularVelocity() {

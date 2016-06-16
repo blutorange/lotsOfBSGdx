@@ -4,27 +4,71 @@ size: 512,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-textbox-blue
+textbox-blue-fc-all
   rotate: false
-  xy: 2, 12
-  size: 210, 113
-  split: 43, 153, 65, 35
-  pad: 32, 169, 73, 24
-  orig: 210, 113
+  xy: 2, 38
+  size: 159, 81
+  split: 19, 19, 21, 19
+  pad: 24, 26, 21, 19
+  orig: 159, 81
   offset: 0, 0
   index: -1
-textbox-blue-fc
+textbox-blue-fc-bottom
   rotate: false
-  xy: 214, 29
-  size: 159, 96
-  split: 19, 19, 36, 19
-  pad: 17, 19, 49, 19
-  orig: 159, 96
+  xy: 163, 59
+  size: 159, 60
+  split: 19, 19, 0, 19
+  pad: 17, 19, 13, 19
+  orig: 159, 60
+  offset: 0, 0
+  index: -1
+textbox-blue-fc-bottom-left
+  rotate: false
+  xy: 421, 59
+  size: 24, 60
+  split: 19, 0, 0, 19
+  pad: 19, 0, 11, 19
+  orig: 24, 60
+  offset: 0, 0
+  index: -1
+textbox-blue-fc-bottom-right
+  rotate: false
+  xy: 393, 59
+  size: 26, 60
+  split: 0, 19, 0, 19
+  pad: 0, 19, 0, 8
+  orig: 26, 60
+  offset: 0, 0
+  index: -1
+textbox-blue-fc-left
+  rotate: false
+  xy: 324, 38
+  size: 39, 81
+  split: 19, 0, 20, 19
+  orig: 39, 81
+  offset: 0, 0
+  index: -1
+textbox-blue-fc-right
+  rotate: false
+  xy: 365, 38
+  size: 26, 81
+  split: 0, 19, 20, 19
+  pad: 0, 19, 6, 8
+  orig: 26, 81
+  offset: 0, 0
+  index: -1
+textbox-blue-fc-top
+  rotate: false
+  xy: 2, 2
+  size: 159, 34
+  split: 19, 19, 20, 6
+  pad: 17, 19, 20, 6
+  orig: 159, 34
   offset: 0, 0
   index: -1
 whiteRectangle
   rotate: false
-  xy: 2, 2
+  xy: 163, 49
   size: 8, 8
   split: 1, 1, 1, 1
   orig: 8, 8

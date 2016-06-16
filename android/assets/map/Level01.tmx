@@ -2,7 +2,7 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="180" height="610" tilewidth="32" tileheight="32" nextobjectid="115">
  <properties>
   <property name="baseDirX" value="0"/>
-  <property name="baseDirY" value="-1"/>
+  <property name="baseDirY" value="1"/>
   <property name="gravity" value="south"/>
   <property name="maxElevation" value="2500"/>
   <property name="minElevation" value="800"/>
@@ -3654,7 +3654,7 @@
   </tile>
   <tile id="728">
    <properties>
-    <property name="blocking" type="bool" value="true"/>
+    <property name="blocking" type="bool" value="false"/>
    </properties>
   </tile>
   <tile id="729">
@@ -8921,7 +8921,7 @@
     <property name="trigger" value="touch"/>
    </properties>
   </object>
-  <object id="59" name="turnBackJoshua" type="Callback" x="1087.64" y="17801.5" width="806.609" height="75.5">
+  <object id="59" name="turnBackJoshua" type="Callback" x="512" y="17801.5" width="1382.25" height="75.5">
    <properties>
     <property name="guid" value=""/>
     <property name="loop" type="int" value="-1"/>
@@ -9111,7 +9111,7 @@
     <property name="species" value="Soldier Red"/>
    </properties>
   </object>
-  <object id="99" name="demoEnd" type="Callback" x="740.47" y="12700.9" width="214" height="72.0168">
+  <object id="99" name="demoEnd" type="Callback" x="733.97" y="12704.6" width="214" height="72.0168">
    <properties>
     <property name="guid" value=""/>
     <property name="loop" type="int" value="-1"/>
@@ -9236,7 +9236,7 @@
     <property name="species" value="Soldier Red"/>
    </properties>
   </object>
-  <object id="113" name="SoldierGreen" type="Enemy" x="515.5" y="15589" width="150.167" height="48.1667">
+  <object id="113" name="SoldierGreen" type="Enemy" x="515.5" y="15522" width="150.167" height="115.167">
    <properties>
     <property name="battleIn" type="float" value="45"/>
     <property name="battleOut" type="float" value="60"/>

@@ -522,6 +522,7 @@ public class DesktopLauncher extends JFrame {
 						finally {
 							enableUI();
 						}
+						mainPanel.updateScore();
 					}
 				}).start();
 				return true;

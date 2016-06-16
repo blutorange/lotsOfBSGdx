@@ -83,9 +83,8 @@ public class PEstelle extends APlayer {
 	}
 	
 	@Override
-	public boolean setupShadow(ShadowComponent kc) {
+	public void setupShadow(ShadowComponent kc) {
 		kc.setup(ETexture.OVAL_SHADOW, 0.0f,-60.0f,0.0f,-0.010f, 0.5f, 0.0f);
-		return true;
 	}
 
 	@Override

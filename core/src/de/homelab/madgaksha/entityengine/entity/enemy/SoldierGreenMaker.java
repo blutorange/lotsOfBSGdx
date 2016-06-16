@@ -120,7 +120,7 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 
 	@Override
 	protected long requestedMaxPainPoints() {
-		return 100000000L;
+		return 100000000L/3L;
 	}
 	
 	@Override
@@ -170,7 +170,7 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 					fadeInAimTrajectory.waveAmplitude(45.0f);
 					fadeInAimTrajectory.position(pcEnemy.x,pcEnemy.y);
 					fadeInAimTrajectory.aim(playerEntity);
-					BulletMaker.makeForEnemy(enemy, shapes2[MathUtils.random(shapes2.length-1)], fadeInAimTrajectory, 5000000L);
+					BulletMaker.makeForEnemy(enemy, shapes2[MathUtils.random(shapes2.length-1)], fadeInAimTrajectory, 500000L);
 				}
 				return true;
 			}

@@ -171,7 +171,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 		Rectangle bbc = player.getBoundingBoxCollision();
 		StickyComponent sec = Mapper.stickyComponent.get(playerHitCircleEntity);
 		sec.setup(playerEntity, bbc.x+0.5f*bbc.width, bbc.y+0.5f*bbc.height);
-		sec.offsetRelativeToCamera = true;
+		sec.offsetRelativeToCamera = false;
 		sec.ignoreTrackOffset = true;
 		
 		SpriteComponent spc = Mapper.spriteComponent.get(playerHitCircleEntity);
@@ -250,7 +250,8 @@ public final class PlayerMaker implements IHittable, IMortal {
 		sc.setup(sac, player.getSpriteOrigin());
 		
 		ShadowComponent kc = Mapper.shadowComponent.get(playerEntity);
-		if (!player.setupShadow(kc)) playerEntity.remove(ShadowComponent.class);
+		player.setupShadow(kc);
+		kc.relativeToCamera = false;
 		
 		ABoundingBoxComponent bbrc = Mapper.boundingBoxRenderComponent.get(playerEntity);
 		bbrc.setup(player.getBoundingBoxRender());
@@ -268,7 +269,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 		vc.setup(0.0f, 0.0f);
 		
 		RotationComponent rc = Mapper.rotationComponent.get(playerEntity);
-		rc.setup(true);
+		rc.setup(false);
 		
 		DirectionComponent dc = Mapper.directionComponent.get(playerEntity);
 		dc.setup(level.getMapData().getPlayerInitialDirection());
@@ -368,9 +369,8 @@ public final class PlayerMaker implements IHittable, IMortal {
 		.add(slc)
 		.add(dc)		
 		.add(tc)
-		.add(zoc);
-		
-		if (kc != null) e.add(kc);
+		.add(zoc)
+		.add(kc);
 		
 		return e;
 	}

@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.logging;
 
+import java.io.PrintStream;
 import java.util.Date;
 
 import com.badlogic.gdx.Application;
@@ -23,26 +24,42 @@ public class Logger {
 		switch (level) {
 		case Application.LOG_INFO:
 			s = String.format(format, "INFO", date, loggerClassName);
-			if (error == null)
+			if (Gdx.app == null) logViaSystemOut(s, msg, error);
+			else if (error == null)
 				Gdx.app.log(s, msg);
 			else
 				Gdx.app.log(s, msg, error);
 			break;
 		case Application.LOG_ERROR:
 			s = String.format(format, "ERROR", date, loggerClassName);
-			if (error == null)
+			if (Gdx.app == null) logViaSystemErr(s, msg, error);
+			else if (error == null)
 				Gdx.app.error(s, msg);
 			else
 				Gdx.app.error(s, msg, error);
 			break;
 		case Application.LOG_DEBUG:
 			s = String.format(format, "DEBUG", date, loggerClassName);
-			if (error == null)
+			if (Gdx.app == null) logViaSystemOut(s, msg, error);
+			else if (error == null)
 				Gdx.app.debug(s, msg);
 			else
 				Gdx.app.debug(s, msg, error);
 			break;
 		}
+	}
+
+	private void logViaSystem(PrintStream ps, String s, String msg, Throwable error) {
+		ps.println(s + ": " + msg);
+		if (error != null) {
+			error.printStackTrace(ps);
+		}
+	}
+	private void logViaSystemOut(String s, String msg, Throwable error) {
+		logViaSystem(System.out, s, msg, error);
+	}
+	private void logViaSystemErr(String s, String msg, Throwable error) {
+		logViaSystem(System.err, s, msg, error);
 	}
 
 	public static void setDefaultLevel(int logLevel) {

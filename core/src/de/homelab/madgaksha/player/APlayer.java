@@ -297,10 +297,7 @@ public abstract class APlayer {
 		return true;
 	}
 	
-	public boolean setupShadow(ShadowComponent kc) {
-		// default is no shadow
-		return false;
-	}
+	public abstract void setupShadow(ShadowComponent kc);
 	
 	public EAnimationList getAnimationList() {
 		return animationList;
