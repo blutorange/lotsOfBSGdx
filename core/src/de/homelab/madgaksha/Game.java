@@ -422,12 +422,12 @@ public class Game implements ApplicationListener {
 
 		// Dispose temporary files.
 		LOG.debug("emptying temporary directory tempadx");
-		FileHandle dest = Gdx.files.local("tempadx/");
-		try {
-			dest.emptyDirectory();
-		} catch (GdxRuntimeException e) {
-			LOG.error("failed to empty temporary directory tempadx", e);
-		}
+//		FileHandle dest = Gdx.files.local("tempadx/");
+//		try {
+//			dest.emptyDirectory();
+//		} catch (GdxRuntimeException e) {
+//			LOG.error("failed to empty temporary directory tempadx", e);
+//		}
 
 		// Dispose custom shaders.
 		if (customShaderProgramBatchGame != null)

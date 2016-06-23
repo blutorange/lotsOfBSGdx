@@ -7,7 +7,6 @@ import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 
 public class EventWait extends ACutsceneEvent {
-	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(EventWait.class);
 
 	private float remainingWaitTime;
@@ -67,8 +66,10 @@ public class EventWait extends ACutsceneEvent {
 
 	public static ACutsceneEvent readNextObject(Scanner s) {
 		Float number = FileCutsceneProvider.nextNumber(s);
-		if (number == null)
+		if (number == null) {
+			LOG.error("expected wait time");
 			return null;
+		}
 		return new EventWait(number);
 	}
 }
