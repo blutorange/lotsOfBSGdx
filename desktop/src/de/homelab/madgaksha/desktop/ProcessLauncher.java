@@ -49,19 +49,12 @@ public class ProcessLauncher {
 			final Game game = new Game(params);
 			final LwjglApplication lwjglApplication = new LwjglApplication(game, config);
 			lwjglApplication.addLifecycleListener(new LifecycleListener() {
-
 				@Override
 				public void resume() {
-					// TODO Auto-generated method stub
-
 				}
-
 				@Override
 				public void pause() {
-					// TODO Auto-generated method stub
-
 				}
-
 				@Override
 				public void dispose() {
 					// Let the libGdx thread awaken this thread again.
