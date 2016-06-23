@@ -21,7 +21,7 @@ public class ShadowComponent implements Component, Poolable {
 	private final static float DEFAULT_OFFSET_ROTATE_X = 1.0f;
 	private final static float DEFAULT_OFFSET_ROTATE_Y = 0.0f;
 	private final static boolean DEFAULT_RELATIVE_TO_CAMERA = true;
-	
+
 	public Sprite sprite;
 	public float offsetX = DEFAULT_OFFSET_X;
 	public float offsetY = DEFAULT_OFFSET_Y;
@@ -54,7 +54,8 @@ public class ShadowComponent implements Component, Poolable {
 		setup(texture, offsetX, offsetY, scaleFactorX, scaleFactorY);
 	}
 
-	public ShadowComponent(PoolableAtlasSprite sprite, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY) {
+	public ShadowComponent(PoolableAtlasSprite sprite, float offsetX, float offsetY, float scaleFactorX,
+			float scaleFactorY) {
 		setup(sprite, offsetX, offsetY, scaleFactorX, scaleFactorY);
 	}
 
@@ -63,12 +64,11 @@ public class ShadowComponent implements Component, Poolable {
 		setup(texture, offsetX, offsetY, scaleFactorX, scaleFactorY, offsetRotateX, offsetRotateY);
 	}
 
-	public ShadowComponent(PoolableAtlasSprite sprite, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY,
-			float offsetRotateX, float offsetRotateY) {
+	public ShadowComponent(PoolableAtlasSprite sprite, float offsetX, float offsetY, float scaleFactorX,
+			float scaleFactorY, float offsetRotateX, float offsetRotateY) {
 		setup(sprite, offsetX, offsetY, scaleFactorX, scaleFactorY, offsetRotateX, offsetRotateY);
 	}
-	
-	
+
 	public void setup(ETexture texture) {
 		setup(texture, DEFAULT_OFFSET_X, DEFAULT_OFFSET_Y, DEFAULT_SCALE_FACTOR_X, DEFAULT_SCALE_FACTOR_Y,
 				DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
@@ -93,7 +93,8 @@ public class ShadowComponent implements Component, Poolable {
 		setup(texture, offsetX, offsetY, scaleFactorX, scaleFactorY, DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
 	}
 
-	public void setup(PoolableAtlasSprite sprite, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY) {
+	public void setup(PoolableAtlasSprite sprite, float offsetX, float offsetY, float scaleFactorX,
+			float scaleFactorY) {
 		setup(sprite, offsetX, offsetY, scaleFactorX, scaleFactorY, DEFAULT_OFFSET_ROTATE_X, DEFAULT_OFFSET_ROTATE_Y);
 	}
 
@@ -119,10 +120,6 @@ public class ShadowComponent implements Component, Poolable {
 		this.offsetRotateX = offsetRotateX;
 		this.offsetRotateY = offsetRotateY;
 	}
-
-	
-	
-	
 
 	@Override
 	public void reset() {

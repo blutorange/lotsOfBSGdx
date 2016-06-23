@@ -13,15 +13,15 @@ import de.homelab.madgaksha.logging.Logger;
  * 
  * @author madgaksha
  */
-public enum EMusic implements IResource<EMusic,Music> {
+public enum EMusic implements IResource<EMusic, Music> {
 	// ==================
-	//         BGM
+	// BGM
 	// ==================
 	ROCK_ON_THE_ROAD("music/rockontheroad.adx", 0.2f),
 	SOPHISTICATED_FIGHT("music/sophisticatedfight.adx", 0.5f),
 	SILVER_WILL("music/silverwill.adx", 1.0f),
 	FADING_STAR("music/fadingstar.adx", 0.7f),
-	
+
 	;
 
 	private final static Logger LOG = Logger.getLogger(EMusic.class);
@@ -29,10 +29,11 @@ public enum EMusic implements IResource<EMusic,Music> {
 
 	private String filename;
 	public final float defaultVolume;
-	
+
 	private EMusic(String f) {
 		this(f, 1.0f);
 	}
+
 	private EMusic(String f, float v) {
 		filename = f;
 		defaultVolume = v;
@@ -79,7 +80,7 @@ public enum EMusic implements IResource<EMusic,Music> {
 	public EnumMap<EMusic, Music> getMap() {
 		return musicCache;
 	}
-	
+
 	@Override
 	public void clearAllOfThisKind() {
 		EMusic.clearAll();

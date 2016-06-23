@@ -5,7 +5,7 @@ public class LinearDoubleInterpolator extends AInterpolator<Double> {
 	public LinearDoubleInterpolator() {
 		super();
 	}
-	
+
 	public LinearDoubleInterpolator(Double a, Double b, Object o) {
 		super(a, b, o);
 	}
@@ -16,12 +16,12 @@ public class LinearDoubleInterpolator extends AInterpolator<Double> {
 	@Override
 	protected void doSetup(Object options) {
 		n = start;
-		m = end-start;
+		m = end - start;
 	}
-	
+
 	@Override
 	protected Double doInterpolate(double x) {
-		return n+x*m;
+		return n + x * m;
 	}
 
 	@Override

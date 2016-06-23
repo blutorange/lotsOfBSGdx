@@ -39,70 +39,101 @@ import path.EPath;
  * Encoding must be UTF-8.
  * 
  * 
- * <br><br>
+ * <br>
+ * <br>
  * 
  * The general structure is an array of commands:
  * 
- * <pre>&lt;CutsceneArray&gt; := {&lt;Command&gt;}</pre>
+ * <pre>
+ * &lt;CutsceneArray&gt; := {&lt;Command&gt;}
+ * </pre>
  * 
- * <br><br>
+ * <br>
+ * <br>
  * 
  * A command is either an include statement or a cutscene event with parameters:
  * 
- * <pre>&lt;Command&gt; := &lt;CutsceneEvent&gt; | &lt;IncludeStatement&gt;</pre>
+ * <pre>
+ * &lt;Command&gt; := &lt;CutsceneEvent&gt; | &lt;IncludeStatement&gt;
+ * </pre>
  * 
- * <br><br>
+ * <br>
+ * <br>
  * 
- * An include statement includes the provided cutscene event configuration file and adds the events.
+ * An include statement includes the provided cutscene event configuration file
+ * and adds the events.
  * 
- * <pre>&lt;IncludeStatement&gt; := (Include | IncludeI18n) "i18nGameKey"</pre>
+ * <pre>
+ * &lt;IncludeStatement&gt; := (Include | IncludeI18n) "i18nGameKey"
+ * </pre>
  * 
- * The path is relative to the file containing the include statement.
- * When IncludeI18n is specified, the file path is suffixed with <code>.&lt;SHORT_LOCALE_NAME&gt;</code>
+ * The path is relative to the file containing the include statement. When
+ * IncludeI18n is specified, the file path is suffixed with
+ * <code>.&lt;SHORT_LOCALE_NAME&gt;</code>
  * 
- * <br><br>
+ * <br>
+ * <br>
  * 
  * A cutscene event consists of a class and parameters:
  * 
- * <pre>&lt;CutsceneEvent&gt; := &lt;EventClass&gt; &lt;EventParameters&gt;</pre>
+ * <pre>
+ * &lt;CutsceneEvent&gt; := &lt;EventClass&gt; &lt;EventParameters&gt;
+ * </pre>
  * 
- * <br><br>
+ * <br>
+ * <br>
  * 
- * An event class is a class extending {@link ACutsceneEvent}.
- * It must be in the package {@link de.homelab.madgaksha.cutscenesystem.event}.
+ * An event class is a class extending {@link ACutsceneEvent}. It must be in the
+ * package {@link de.homelab.madgaksha.cutscenesystem.event}.
  * 
- * <pre>&lt;EventClass&gt; := EventTextbox | EventWait | ... </pre>
+ * <pre>
+ * &lt;EventClass&gt; := EventTextbox | EventWait | ...
+ * </pre>
  * 
- * <br><br>
+ * <br>
+ * <br>
  * 
- * Event parameters are different for each cutscene event. 
+ * Event parameters are different for each cutscene event.
  * 
- * <pre>&lt;EventParameters&gt; := &lt;EventParametersWait&gt; | &lt;EventParametersTextbox&gt; | ...</pre>
+ * <pre>
+ * &lt;EventParameters&gt; := &lt;EventParametersWait&gt; | &lt;EventParametersTextbox&gt; | ...
+ * </pre>
  * 
  * That said, most parameters are key-value pairs:
  * 
- * <pre>&lt;KEY&gt; &lt;VALUE&gt; {&lt;VALUE&gt;} &lt;NEWLINE&gt;</pre>
+ * <pre>
+ * &lt;KEY&gt; &lt;VALUE&gt; {&lt;VALUE&gt;} &lt;NEWLINE&gt;
+ * </pre>
  * 
  * 
- * <h2> Wait event </h2>
+ * <h2>Wait event</h2>
  * 
  * The wait event only specifies a wait time:
  * 
- * <pre>&lt;EventParametersWait&gt; := &lt;NUMBER&gt;</pre>
+ * <pre>
+ * &lt;EventParametersWait&gt; := &lt;NUMBER&gt;
+ * </pre>
  * 
  * For example:
- * <pre> EventWait 2.5</pre>
+ * 
+ * <pre>
+ *  EventWait 2.5
+ * </pre>
  *
  * 
- * <h2> Move event </h2>
+ * <h2>Move event</h2>
  * 
  * The move event specifies details on which entity to move and how:
  * 
- * <pre>&lt;EventParametersMove&gt; := &lt;GUID&gt;
+ * <pre>
+ * &lt;EventParametersMove&gt; := &lt;GUID&gt;
  *{&lt;{@link EPath} &lt;POSITIVE_NUMBER&gt; [R|A] &lt;PathParameters&gt;}
  * </pre>
  * 
- * The number after the path specifies the time in seconds for that path. If a tile is blocking, the entity will not move there, unless {@link PositionComponent#limitToMap} is set to false. All coordinates specified in tiles.
+ * The number after the path specifies the time in seconds for that path. If a
+ * tile is blocking, the entity will not move there, unless
+ * {@link PositionComponent#limitToMap} is set to false. All coordinates
+ * specified in tiles.
  * 
  * <br>
  * 
@@ -114,8 +145,8 @@ import path.EPath;
  *   Line 1.0 R 20 0
  * </pre>
  * 
- * This would move the player -20 tiles up, then 20 tiles to the right. 
- * Path Parameters are as follows:
+ * This would move the player -20 tiles up, then 20 tiles to the right. Path
+ * Parameters are as follows:
  * 
  * <h3>PATH_LINE</h3>
  * 
@@ -123,11 +154,12 @@ import path.EPath;
  * 
  * <code>&lt;PathParameters&gt; := &lt;END_POINT_X&gt; &lt;END_POINT_Y&gt;</code>
  * 
- * <h2> Stage event </h2>
+ * <h2>Stage event</h2>
  * 
  * For entering or exiting NPCs.
  * 
- * <pre>&lt;EventParametersMove&gt; := &lt;GUID&gt; (ENTER|EXIT)
+ * <pre>
+ * &lt;EventParametersMove&gt; := &lt;GUID&gt; (ENTER|EXIT)
  * [EffectBefore &lt;{@link EParticleEffect}&gt;]
  * [EffectAfter &lt;{@link EParticleEffect}&gt;]
  * [SoundBefore1 &lt;{@link ESound}&gt;]
@@ -137,7 +169,7 @@ import path.EPath;
  * </pre>
  * 
  * SoundBefore1 and SoundAfter1 is played before the particle effect starts.
- * SoundBefore1 and SoundBefore2 is played after the particle effect ends. 
+ * SoundBefore1 and SoundBefore2 is played after the particle effect ends.
  * 
  * <br>
  * 
@@ -150,11 +182,11 @@ import path.EPath;
  * </pre>
  * 
  * 
- * <h2> Textbox event </h2>
+ * <h2>Textbox event</h2>
  * 
- * Textbox events require more parameters. Each parameters must be on a separate line.
- * The order in which they appear is not important. If any are missing, defaults are used.
- * The only mandatory parameter is <code>Text</code>. 
+ * Textbox events require more parameters. Each parameters must be on a separate
+ * line. The order in which they appear is not important. If any are missing,
+ * defaults are used. The only mandatory parameter is <code>Text</code>.
  * 
  * <pre>
  * &lt;EventParametersTextbox&gt; :=
@@ -176,26 +208,32 @@ import path.EPath;
  *   &lt;EOF&gt;
  * </pre>
  * 
- * &lt;EOF&gt; is any arbitrary string marking the end of the text. It must not occur at the beginning
- * of any line in-between.
- * <br><br>
+ * &lt;EOF&gt; is any arbitrary string marking the end of the text. It must not
+ * occur at the beginning of any line in-between. <br>
+ * <br>
  * If speaker and face are omitted, the textbox will not have a speaker or face.
- * <br><br>
- * Font size is relative to to the game screen height. At a game screen height of 720 pixels,
- * the font size is the number of pixels. At a game screen height of 360 pixels, specifying
- * a font size of 18 results in 9 pixels on-screen.
- * <br><br>
- * Line spacing is relative to the current line height (font size). A line spacing of 0.5f
- * will result in half the height of one line of text between two consecutive lines of text.
- * <br><br>
- * Box color is the tint that will be applied to the original color of the nine patch. The
- * default color is white, which means the original colors of the nine patch will be used.
- * <br><br>
- * Color can be the name of a constant defined in {@link Color}, or a quadruple of rgba values.
- * <br><br>
- * TransitionIn and transitionOut 
+ * <br>
+ * <br>
+ * Font size is relative to to the game screen height. At a game screen height
+ * of 720 pixels, the font size is the number of pixels. At a game screen height
+ * of 360 pixels, specifying a font size of 18 results in 9 pixels on-screen.
+ * <br>
+ * <br>
+ * Line spacing is relative to the current line height (font size). A line
+ * spacing of 0.5f will result in half the height of one line of text between
+ * two consecutive lines of text. <br>
+ * <br>
+ * Box color is the tint that will be applied to the original color of the nine
+ * patch. The default color is white, which means the original colors of the
+ * nine patch will be used. <br>
+ * <br>
+ * Color can be the name of a constant defined in {@link Color}, or a quadruple
+ * of rgba values. <br>
+ * <br>
+ * TransitionIn and transitionOut
  * 
  * An example with the the default parameters:
+ * 
  * <pre>
  * EventTextbox
  *   Box FC_BLUE
@@ -213,17 +251,18 @@ import path.EPath;
  * This is great.
  * EOF
  * </pre>
+ * 
  * @author madgaksha
  *
  */
 public class FileCutsceneProvider implements CutsceneEventProvider {
 	private final static Logger LOG = Logger.getLogger(FileCutsceneProvider.class);
-	
+
 	private final static String CutsceneEventClassPackage = "de.homelab.madgaksha.cutscenesystem.event.";
 
 	private final static Pattern tokenComment = Pattern.compile("//|$");
 	private final static Pattern tokenCommand = Pattern.compile(">>.+");
-	
+
 	private Class<? extends ACutsceneEvent> nextCutsceneClass;
 	private String nextCommandIdentifier;
 	private Command nextCommand;
@@ -231,65 +270,77 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 
 	private int eventPosition = -1;
 	private final List<ACutsceneEvent> eventList = new ArrayList<ACutsceneEvent>();
-	
-	public FileCutsceneProvider(FileHandle fileHandle) {		
+
+	public FileCutsceneProvider(FileHandle fileHandle) {
 		Scanner s = null;
 		inputFile = fileHandle;
 		try {
 			String content = fileHandle.readString("UTF-8");
 			s = new Scanner(content);
 			readCutsceneEventArray(s, eventList);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LOG.error("could not read cutscene array for " + fileHandle, e);
-		}
-		finally {
-			if (s != null) IOUtils.closeQuietly(s);
+		} finally {
+			if (s != null)
+				IOUtils.closeQuietly(s);
 		}
 		s = null;
 		nextCutsceneClass = null;
 		nextCommand = null;
 		inputFile = null;
 	}
-	
+
+	/**
+	 * Reads every cutscene event entry and fill the given array with the
+	 * events.
+	 * 
+	 * @param s
+	 *            Scanner to read from.
+	 * @param eventList
+	 *            List of events to fill.
+	 */
 	private void readCutsceneEventArray(Scanner s, List<ACutsceneEvent> eventList) {
 		while (s.hasNext()) {
 			FileCutsceneProvider.skipComments(s);
 			if (readNextCommand(s))
 				nextCommand.process(s, eventList);
-		} 
+		}
 	}
-	
+
 	private static class Command {
 		private final int mode;
 		private Class<? extends ACutsceneEvent> commandCutsceneClass;
 		private FileHandle commandFileHandle;
+
 		// CutsceneEvent
 		public Command(Class<? extends ACutsceneEvent> cutsceneClass) {
 			mode = 1;
 			this.commandCutsceneClass = cutsceneClass;
 		}
+
 		// Include
 		public Command(FileHandle fileHandle) {
 			mode = 2;
 			LOG.debug("processing Include " + fileHandle);
 			this.commandFileHandle = fileHandle;
 		}
-		
+
 		public void process(Scanner s, List<ACutsceneEvent> eventList) {
 			switch (mode) {
 			case 1:
 				ACutsceneEvent event = null;
 				StringBuilder sb = new StringBuilder();
-				while (s.hasNext() && !FileCutsceneProvider.hasNextCommand(s)) sb.append(s.nextLine()).append(StringUtils.LF);
+				while (s.hasNext() && !FileCutsceneProvider.hasNextCommand(s))
+					sb.append(s.nextLine()).append(StringUtils.LF);
+				LOG.debug(sb.toString());
 				Scanner settingScanner = new Scanner(sb.toString());
 				try {
 					event = ACutsceneEvent.readNextObject(settingScanner, commandCutsceneClass);
-				}
-				finally {
+				} finally {
 					IOUtils.closeQuietly(settingScanner);
 				}
-				if (event != null) eventList.add(event);
+				if (event != null)
+					eventList.add(event);
 				break;
 			case 2:
 				FileCutsceneProvider provider = new FileCutsceneProvider(this.commandFileHandle);
@@ -302,15 +353,15 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 	}
 
 	private boolean readNextCommandIdentifier(Scanner s) {
-		while (s.hasNext() && !FileCutsceneProvider.hasNextCommand(s)) s.nextLine(); 
+		while (s.hasNext() && !FileCutsceneProvider.hasNextCommand(s))
+			s.nextLine();
 		if (s.hasNext(tokenCommand)) {
 			nextCommandIdentifier = s.next(tokenCommand).substring(2);
 			return true;
 		}
 		return false;
 	}
-		
-	
+
 	private boolean readNextCommand(Scanner s) {
 		if (!readNextCommandIdentifier(s)) {
 			return false;
@@ -321,71 +372,80 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 				LOG.error("expected file path after IncludeI18n statement");
 				return false;
 			}
-			String relativeFilePath = s.next() + "." + I18n.getShortName();			
+			String relativeFilePath = s.next() + "." + I18n.getShortName();
 			FileHandle fileHandle = inputFile.parent().child(relativeFilePath);
 			nextCommand = new Command(fileHandle);
-		}
-		else if (nextCommandIdentifier.equalsIgnoreCase("include")) {
-			if (!s.hasNext()) return false;
-			String relativeFilePath = nextCommandIdentifier; 
+		} else if (nextCommandIdentifier.equalsIgnoreCase("include")) {
+			if (!s.hasNext())
+				return false;
+			String relativeFilePath = nextCommandIdentifier;
 			FileHandle fileHandle = inputFile.child(relativeFilePath);
 			nextCommand = new Command(fileHandle);
-		}
-		else {
-			if (!getEventClass(nextCommandIdentifier)) return false;
+		} else {
+			if (!getEventClass(nextCommandIdentifier))
+				return false;
 			nextCommand = new Command(nextCutsceneClass);
 		}
 		return true;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private boolean getEventClass(String className) {
 		String fullClassName = CutsceneEventClassPackage + className;
 		try {
-			nextCutsceneClass = (Class<? extends ACutsceneEvent>)ClassReflection.forName(fullClassName);
+			nextCutsceneClass = (Class<? extends ACutsceneEvent>) ClassReflection.forName(fullClassName);
 			if (!ClassReflection.isAssignableFrom(ACutsceneEvent.class, nextCutsceneClass)) {
 				LOG.error("not a cutscene event: " + nextCutsceneClass);
 				return false;
-			};
+			}
+			;
 		} catch (ReflectionException e) {
 			LOG.error("no such cutscene event class: " + fullClassName);
 			return false;
 		}
 		return true;
 	}
-	
+
 	public static void skipComments(Scanner s) {
-		while (s.hasNext(tokenComment)) s.nextLine();
+		while (s.hasNext(tokenComment))
+			s.nextLine();
 	}
-	
+
 	@Override
 	public void initialize() {
 		eventPosition = -1;
 	}
-	
+
 	@Override
 	public void end() {
 		eventList.clear();
 	}
-	
+
 	@Override
 	public ACutsceneEvent nextCutsceneEvent(int i) {
 		eventPosition += 1;
-		return eventPosition < eventList.size() ? eventList.get(eventPosition) : null;  
+		return eventPosition < eventList.size() ? eventList.get(eventPosition) : null;
 	}
 
 	/**
-	 * Returns the next number as a float.
-	 * Does not advance the scanner if there is no valid number next.
-	 * @param s The scanner to use.
+	 * Returns the next number as a float. Does not advance the scanner if there
+	 * is no valid number next.
+	 * 
+	 * @param s
+	 *            The scanner to use.
 	 * @return The next number, or null if there is none.
 	 */
 	public static Float nextNumber(Scanner s) {
-		if (s.hasNextFloat()) return s.nextFloat();
-		if (s.hasNextInt(10)) return (float)s.nextInt(10);
-		if (s.hasNextDouble()) return (float)s.nextDouble();
-		if (s.hasNextLong(10)) return (float)s.nextLong(10);
-		if (s.hasNextShort(10)) return (float)s.nextShort(10);
+		if (s.hasNextFloat())
+			return s.nextFloat();
+		if (s.hasNextInt(10))
+			return (float) s.nextInt(10);
+		if (s.hasNextDouble())
+			return (float) s.nextDouble();
+		if (s.hasNextLong(10))
+			return (float) s.nextLong(10);
+		if (s.hasNextShort(10))
+			return (float) s.nextShort(10);
 		return null;
 	}
 
@@ -397,14 +457,15 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		try {
 			Field f = ClassReflection.getField(Color.class, name.toUpperCase(Locale.ROOT));
 			Object o = f.get(null);
-			if (o instanceof Color) return (Color)o;
+			if (o instanceof Color)
+				return (Color) o;
 			return null;
 		} catch (ReflectionException e) {
 			LOG.error("no such color: " + name);
 			return null;
 		}
 	}
-	
+
 	public static Interpolation readNextInterpolation(Scanner s) {
 		if (s.hasNext("=.+=")) {
 			String param = s.next("=.+=");
@@ -413,24 +474,25 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 				Field f = ClassReflection.getField(Interpolation.class, name);
 				Object o = f.get(null);
 				if (o instanceof Interpolation) {
-					return (Interpolation)o;
-				}
-				else {
+					return (Interpolation) o;
+				} else {
 					LOG.error("not an interpolation class:  " + name);
 				}
-			}
-			catch (ReflectionException e) {
+			} catch (ReflectionException e) {
 				LOG.error("no such interpolation: " + name, e);
 			}
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Reads a color from the scanner and returns it.
-	 * Can be either 3 or 4 number representing rgb(a) values, or a color name as defined in {@link Color}.
-	 * r, g, and b are given between 0..255, a is given between 0..1. An alpha value of 1 is opaque.
-	 * @param s The scanner to read from.
+	 * Reads a color from the scanner and returns it. Can be either 3 or 4
+	 * number representing rgb(a) values, or a color name as defined in
+	 * {@link Color}. r, g, and b are given between 0..255, a is given between
+	 * 0..1. An alpha value of 1 is opaque.
+	 * 
+	 * @param s
+	 *            The scanner to read from.
 	 * @return The color, or null if none could be read.
 	 */
 	public static Color readNextColor(Scanner s) {
@@ -438,7 +500,8 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		if (r == null) {
 			if (s.hasNext()) {
 				Color color = FileCutsceneProvider.getColorForName(s.next());
-				if (color != null) return color;
+				if (color != null)
+					return color;
 			}
 			LOG.error("expected color value or name");
 			s.nextLine();
@@ -457,54 +520,63 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			return null;
 		}
 		Float a = FileCutsceneProvider.nextNumber(s);
-		if (a == null) a = 1.0f;
-		return new Color(r/255.0f,g/255.0f,b/255.0f,a);
+		if (a == null)
+			a = 1.0f;
+		return new Color(r / 255.0f, g / 255.0f, b / 255.0f, a);
 	}
 
 	@Override
 	public void eventDone(ACutsceneEvent currentCutsceneEvent) {
-		currentCutsceneEvent.end();		
+		currentCutsceneEvent.end();
 	}
 
-	/** @return The remaining of the line, with trailing and leading white spaces removed.*/
+	/**
+	 * @return The remaining of the line, with trailing and leading white spaces
+	 *         removed.
+	 */
 	public static String readRemainingOfLine(Scanner s) {
-		if (!s.hasNextLine()) return null;
+		if (!s.hasNextLine())
+			return null;
 		return s.nextLine().trim();
 	}
 
 	public static String readNextGuid(Scanner s) {
-		if (!s.hasNext()) return null;
+		if (!s.hasNext())
+			return null;
 		return s.next().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]", "");
 	}
 
 	public static EParticleEffect nextParticleEffect(Scanner s) {
-		if (!s.hasNext()) return null;
+		if (!s.hasNext())
+			return null;
 		String pe = s.next().toUpperCase(Locale.ROOT);
 		try {
 			return EParticleEffect.valueOf(pe);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			LOG.error("no such particle effect: " + pe);
 			return null;
-		}		
+		}
 	}
 
 	public static ESound nextSound(Scanner s) {
-		if (!s.hasNext()) return null;
+		if (!s.hasNext())
+			return null;
 		String se = s.next().toUpperCase(Locale.ROOT);
 		try {
 			return ESound.valueOf(se);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			LOG.error("no such sound effect: " + se);
 			return null;
 		}
 	}
 
 	public static Long nextLong(Scanner s) {
-		if (s.hasNextLong(10)) return s.nextLong(10);
-		if (s.hasNextInt(10)) return (long)s.nextInt(10);
-		if (s.hasNextShort(10)) return (long)s.nextShort(10);
+		if (s.hasNextLong(10))
+			return s.nextLong(10);
+		if (s.hasNextInt(10))
+			return (long) s.nextInt(10);
+		if (s.hasNextShort(10))
+			return (long) s.nextShort(10);
 		return null;
 	}
 

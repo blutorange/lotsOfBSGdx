@@ -62,16 +62,16 @@ public class SpriteRenderSystem extends EntitySystem {
 	@SuppressWarnings("unchecked")
 	public SpriteRenderSystem(int priority) {
 		super(priority);
-		this.familyZ0 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder0Component.class).exclude(InvisibleComponent.class)
-				.get();
-		this.familyZ1 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder1Component.class).exclude(InvisibleComponent.class)
-				.get();
-		this.familyZ2 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder2Component.class).exclude(InvisibleComponent.class)
-				.get();
-		this.familyZ3 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder3Component.class).exclude(InvisibleComponent.class)
-				.get();
-		this.familyZ4 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder4Component.class).exclude(InvisibleComponent.class)
-				.get();
+		this.familyZ0 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder0Component.class)
+				.exclude(InvisibleComponent.class).get();
+		this.familyZ1 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder1Component.class)
+				.exclude(InvisibleComponent.class).get();
+		this.familyZ2 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder2Component.class)
+				.exclude(InvisibleComponent.class).get();
+		this.familyZ3 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder3Component.class)
+				.exclude(InvisibleComponent.class).get();
+		this.familyZ4 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder4Component.class)
+				.exclude(InvisibleComponent.class).get();
 
 		mapBoundaryMinX = level.getMapXW();
 		mapBoundaryMinY = level.getMapYW();
@@ -118,17 +118,18 @@ public class SpriteRenderSystem extends EntitySystem {
 			final BoundingBoxRenderComponent bbrc = Mapper.boundingBoxRenderComponent.get(entity);
 			final ColorComponent cc = Mapper.colorComponent.get(entity);
 			final AlphaComponent ac = Mapper.alphaComponent.get(entity);
-			
+
 			// Do not render if off-screen.
-			if (bbrc != null && !GeoUtil.boundingBoxVisible(bbrc,pc)) continue;
+			if (bbrc != null && !GeoUtil.boundingBoxVisible(bbrc, pc))
+				continue;
 
 			shadowRotateX = 0.0f;
 			shadowRotateY = 0.0f;
-		
+
 			// Colorize if desired.
 			spc.sprite.setColor(cc != null ? cc.color : Color.WHITE);
 			spc.sprite.setAlpha(ac != null ? ac.alpha : 1.0f);
-			
+
 			// Rotate if desired.
 			if (rc != null) {
 				if (rc.inverseToCamera)
@@ -138,10 +139,10 @@ public class SpriteRenderSystem extends EntitySystem {
 				shadowRotateX = rc.thetaZ;
 				shadowRotateY = rc.thetaZ;
 			}
-			
+
 			// Scale if desired.
 			if (sc != null)
-				spc.sprite.setScale(sc.scaleX*sc.originalScale, sc.scaleY*sc.originalScale);
+				spc.sprite.setScale(sc.scaleX * sc.originalScale, sc.scaleY * sc.originalScale);
 
 			// Drop shadow if desired.
 			if (kc != null) {
@@ -157,11 +158,8 @@ public class SpriteRenderSystem extends EntitySystem {
 									+ shadowRotateX * viewportGame.getCamera().up.y,
 							pc.y + shadowRotateY * viewportGame.getCamera().up.y
 									- shadowRotateX * viewportGame.getCamera().up.x);
-				}
-				else {
-					kc.sprite.setCenter(
-							pc.x + shadowRotateX,
-							pc.y + shadowRotateY);
+				} else {
+					kc.sprite.setCenter(pc.x + shadowRotateX, pc.y + shadowRotateY);
 				}
 				kc.sprite.setRotation(-viewportGame.getRotationUpXY());
 				kc.sprite.draw(batchGame);
@@ -172,7 +170,7 @@ public class SpriteRenderSystem extends EntitySystem {
 			spc.sprite.draw(batchGame);
 		}
 	}
-	
+
 	@Override
 	public void addedToEngine(Engine engine) {
 		entitiesZ0 = engine.getEntitiesFor(familyZ0);

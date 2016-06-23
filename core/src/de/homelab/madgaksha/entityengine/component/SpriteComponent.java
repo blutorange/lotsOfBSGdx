@@ -11,9 +11,9 @@ import de.homelab.madgaksha.resourcepool.SpritePool;
 import de.homelab.madgaksha.util.DebugStringifier;
 
 public class SpriteComponent implements Component, Poolable {
-	
+
 	private boolean managed = false;
-	
+
 	public PoolableAtlasSprite sprite;
 
 	/**
@@ -21,18 +21,22 @@ public class SpriteComponent implements Component, Poolable {
 	 */
 	public SpriteComponent() {
 	}
-	
+
 	/**
 	 * Loads the sprite with texture from the given sprite.
-	 * @param sprite The sprite with the texture to use.
+	 * 
+	 * @param sprite
+	 *            The sprite with the texture to use.
 	 */
 	public SpriteComponent(PoolableAtlasSprite sprite) {
 		setup(sprite);
 	}
-	
+
 	/**
-	 * Loads the sprite with the given texture.  
-	 * @param texture Texture for the sprite.
+	 * Loads the sprite with the given texture.
+	 * 
+	 * @param texture
+	 *            Texture for the sprite.
 	 */
 	public SpriteComponent(ETexture texture) {
 		setup(texture);
@@ -45,40 +49,42 @@ public class SpriteComponent implements Component, Poolable {
 	public SpriteComponent(SpriteAnimationComponent sac, Vector2 origin) {
 		setup(sac, origin);
 	}
-	
+
 	public void setup(PoolableAtlasSprite sprite) {
 		this.sprite = sprite;
 		this.managed = false;
 	}
-	
+
 	public void setup(ETexture texture) {
 		sprite = texture.asSprite();
 		this.managed = true;
-		if (sprite != null) sprite.setOriginCenter();
+		if (sprite != null)
+			sprite.setOriginCenter();
 	}
-	
+
 	public void setup(SpriteAnimationComponent sac) {
 		final AtlasRegion ar = sac.animation.getKeyFrame(0.0f);
 		this.managed = false;
 		sprite = SpritePool.getInstance().obtain(ar);
 	}
-	
+
 	public void setup(SpriteAnimationComponent sac, Vector2 origin) {
 		final AtlasRegion ar = sac.animation.getKeyFrame(0.0f);
 		sprite = SpritePool.getInstance().obtain(ar);
 		this.managed = false;
 		sprite.setOrigin(origin.x, origin.y);
 	}
-	
+
 	@Override
 	public void reset() {
-		if (managed) SpritePool.getInstance().free(sprite);
+		if (managed)
+			SpritePool.getInstance().free(sprite);
 		sprite = null;
 		managed = false;
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		return "SpriteComponent: " + DebugStringifier.get(sprite) + ")";
 	}
 }

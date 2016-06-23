@@ -4,10 +4,11 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
- * Represents the direction an object is looking at. The sprite may
- * change depending on the direction.
+ * Represents the direction an object is looking at. The sprite may change
+ * depending on the direction.
  * 
  * Unit: Degree
+ * 
  * <pre>
  * 
  *          90°
@@ -21,6 +22,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  *          270°
  * 
  * </pre>
+ * 
  * @see RotationComponent
  * @author madgaksha
  *
@@ -31,6 +33,7 @@ public class DirectionComponent implements Component, Poolable {
 
 	public DirectionComponent() {
 	}
+
 	public DirectionComponent(float d) {
 		setup(d);
 	}
@@ -38,9 +41,9 @@ public class DirectionComponent implements Component, Poolable {
 	public void setup(float d) {
 		degree = d;
 	}
-	
+
 	@Override
 	public void reset() {
-		degree = DEFAULT_DEGREE;		
+		degree = DEFAULT_DEGREE;
 	}
 }

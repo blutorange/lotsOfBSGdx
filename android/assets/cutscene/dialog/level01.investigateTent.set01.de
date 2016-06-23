@@ -3,18 +3,18 @@
   Face Normal
   TransitionIn
   Text EOF
-テントか。。。火も盛んに燃えている
-なのに誰も見当たらない。
+Ein Zelt... die Lagerfeuer sind auch noch nicht ausgebrannt.
+Und dennoch ist weit und breit niemand zu sehen.
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face Normal
   Text EOF
-普通う考えればありえないことだが、
-これでも空中にういているし、
-ここへ来てから不可能と可能の
-限界は薄くなっている感じがする。
+Normalerweise kann das gar nicht sein...
+Aber Schweben auch nicht...
+In dieser Welt scheinen die Grenzen zwischen
+dem Möglichen und Unmöglichen verwaschen zu sein.
 EOF
 
 >>EventTextbox
@@ -22,8 +22,7 @@ EOF
   Face Shou_Ga_Nai
   TransitionOut
   Text EOF
-いつまでここで止まるわけにもいかなし、
-いこっか。
+Nun gut, ich kann mich nicht ewig hier aufhalten.
 EOF
 
 >>EventTextbox
@@ -31,14 +30,14 @@ EOF
   Face Surprised
   TransitionIn
   Text EOF
-。。。？
+......?
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face Serious
   Text EOF
-テントに、何かが。。。
+Irgendwas ist am Zelt...
 EOF
 
 >>EventTextbox
@@ -46,33 +45,46 @@ EOF
   Face Normal
   TransitionOut
   Text EOF
-誰かが残したノートだ。どれどれ
+Eine Aufzeichnung, die jemand hinterlassen hat.
+Mal schauen...
 EOF
 
 >>EventTextbox
   TransitionIn
   Text EOF
-ここで見張りをしているレオナードだ。とんでもないこと
-になったな、これ。最初は一緒に見張りをした僕の親友も
-いたけど、あいつにやられた。今は安全そうで、たとえ俺
-の身にがあったら、せめて記録だけは残しておきたい。
+Ich bin Leonard. Wir schieben gemeinsam Wache. Wer hätte gedacht,
+das so etwas passieren könnte? Zuerst war mein Kumpel, mit dem ich
+gemeinsam Wache halte, noch bei mir. Doch ihn hat es erwischt.
+Derzeit scheint alles friedlich zu sein, also lasst mich berichten.
 EOF
 
 >>EventTextbox
   Text EOF
-３日前のことだった。リベール王国のとある場所で見張りを
-した俺達は、雷撃のような音を聞いた。するとあの方向から
-太陽に匹敵するほどに眩しい一閃が俺達を包んだ。それで目
-の前は暗くなった。まだ目を覚ましたときはここでいた。
+Falls mir auch etwas zustoßen sollte, will ich wenigstens
+niederschreiben, was hier passiert ist. Sollte jemand
+diese Nachricht lesen, denkt bitte an uns.
+EOF
+
+>>EventTextbox
+  Text EOF
+Es geschah vor drei Tagen. Wir hielten Wache an unserem gewohnten
+Ort in Libel, als plötzlich ein gleißender Blitzt erstrahlte.
+Er hüllte uns ein und bevor wir uns versahen, waren wir hier
+an diesem Ort oder dieser Welt gelandet.
+EOF
+
+>>EventTextbox
+  Text EOF
+Bevor wir einen klaren Gedanken fassen konnten, griffen uns diese
+roten, was auch immer, an. Obwohl sie sich nicht vom Fleck rühren
+konnten, kamen sie zu uns. Keine Ahnung wie das geht. Dieses Rot,
+blutrote Rot, und der purpurne äußere Panzer, das vergesse ich nie.
 EOF
 
 >>EventTextbox
   TransitionOut
   Text EOF
-何ががなだか、と考える暇もなく、俺達はあいつらに襲われて
-いた。動くことすら出来ないのに、どうやったかは知らんが、
-ここへ来たのだ。血のような紅き外殻は眠りについても忘れ
-やしない。。。まって。外で何かの音が聞こえたような。。
+Moment. War das draußen nicht eben irgendein Geräusch...?
 EOF
 
 >>EventTextbox
@@ -80,7 +92,8 @@ EOF
   Face Shou_Ga_Nai
   TransitionIn
   Text EOF
-とおりでページに血がついているわけか。。。
+Und das wäre die Erklärung, warum die letzte
+Seite mit Blut beschmiert ist...
 EOF
 
 >>EventTextbox
@@ -88,6 +101,6 @@ EOF
   Face Serious
   TransitionIn
   Text EOF
-あたし達がこうならないように、はやくここから脱出するため
-のヒントをさがさないと。。。！
+Damit wir nicht auch so enden, sollte ich besser
+schnell Joshua und einen Weg aus dieser Welt finden...!
 EOF

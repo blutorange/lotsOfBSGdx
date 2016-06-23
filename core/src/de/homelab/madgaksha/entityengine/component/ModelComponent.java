@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import de.homelab.madgaksha.resourcecache.EModel;
 
 public class ModelComponent implements Component, Poolable {
-	
+
 	public ModelInstance modelInstance;
 
 	/**
@@ -15,32 +15,35 @@ public class ModelComponent implements Component, Poolable {
 	 */
 	public ModelComponent() {
 	}
-	
+
 	/**
 	 * Loads the sprite with texture from the given sprite.
-	 * @param sprite The sprite with the texture to use.
+	 * 
+	 * @param sprite
+	 *            The sprite with the texture to use.
 	 */
 	public ModelComponent(ModelInstance modelInstance) {
 		setup(modelInstance);
 	}
-	
+
 	/**
-	 * Loads the sprite with the given texture.  
-	 * @param texture Texture for the sprite.
+	 * Loads the sprite with the given texture.
+	 * 
+	 * @param texture
+	 *            Texture for the sprite.
 	 */
 	public ModelComponent(EModel model) {
 		setup(model);
 	}
 
-	
 	public void setup(ModelInstance modelInstance) {
 		this.modelInstance = modelInstance;
 	}
-	
+
 	public void setup(EModel model) {
 		modelInstance = model.asModelInstance();
 	}
-		
+
 	@Override
 	public void reset() {
 		modelInstance = null;

@@ -25,14 +25,14 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
 
 public class EventStage extends ACutsceneEvent {
 	private final static Logger LOG = Logger.getLogger(EventStage.class);
-	
-	private State state = State.STARTED;	
+
+	private State state = State.STARTED;
 	private String guid = StringUtils.EMPTY;
 	private Entity entity = null;
 	private boolean isAppearing = true;
-	private final EParticleEffect[] particleEffectList = new EParticleEffect[]{null,null};
-	private final ESound[] soundList = new ESound[]{null,null,null,null};
-	
+	private final EParticleEffect[] particleEffectList = new EParticleEffect[] { null, null };
+	private final ESound[] soundList = new ESound[] { null, null, null, null };
+
 	private static enum State {
 		STARTED,
 		SWITCH_STAGE,
@@ -41,20 +41,23 @@ public class EventStage extends ACutsceneEvent {
 		DONE,
 		EFFECT_PLAYING;
 	}
-	
+
 	public EventStage() {
 	}
-	
+
 	/**
 	 * Creates a new event for making an NPC appear.
-	 * @param guid Entity that should appear.
-	 * @param pec Particle effect to play. Null for none.
+	 * 
+	 * @param guid
+	 *            Entity that should appear.
+	 * @param pec
+	 *            Particle effect to play. Null for none.
 	 */
 	public EventStage(String guid, boolean isAppearing) {
 		this.guid = guid;
 		this.isAppearing = isAppearing;
 	}
-	
+
 	@Override
 	public void reset() {
 		state = State.STARTED;
@@ -84,16 +87,15 @@ public class EventStage extends ACutsceneEvent {
 			if (pc != null && particleEffectList[0] != null) {
 				MakerUtils.addParticleEffectGame(particleEffectList[0], pc, ON_PARTICLE_EFFECT_BEFORE_DONE);
 				state = State.EFFECT_PLAYING;
-			}
-			else state = State.SWITCH_STAGE;
+			} else
+				state = State.SWITCH_STAGE;
 			break;
 		case SWITCH_STAGE:
 			SoundPlayer.getInstance().play(soundList[1]);
 			if (isAppearing) {
 				entity.remove(InactiveComponent.class);
 				entity.remove(InvisibleComponent.class);
-			}
-			else {
+			} else {
 				entity.add(gameEntityEngine.createComponent(InactiveComponent.class));
 				entity.add(gameEntityEngine.createComponent(InvisibleComponent.class));
 			}
@@ -103,10 +105,10 @@ public class EventStage extends ACutsceneEvent {
 			SoundPlayer.getInstance().play(soundList[2]);
 			pc = Mapper.positionComponent.get(entity);
 			if (pc != null && particleEffectList[1] != null) {
-				MakerUtils.addParticleEffectGame(particleEffectList[1], pc,ON_PARTICLE_EFFECT_AFTER_DONE);
+				MakerUtils.addParticleEffectGame(particleEffectList[1], pc, ON_PARTICLE_EFFECT_AFTER_DONE);
 				state = State.EFFECT_PLAYING;
-			}
-			else state = State.FINISH;
+			} else
+				state = State.FINISH;
 			break;
 		case FINISH:
 			SoundPlayer.getInstance().play(soundList[3]);
@@ -126,14 +128,15 @@ public class EventStage extends ACutsceneEvent {
 	@Override
 	public boolean begin() {
 		entity = idEntityMap.get(guid);
-		if (entity == null) LOG.error("cannot begin EventAppear, no such entity: " + guid);
+		if (entity == null)
+			LOG.error("cannot begin EventAppear, no such entity: " + guid);
 		return entity != null;
 	}
 
 	@Override
 	public void end() {
 	}
-	
+
 	private final ITimedCallback ON_PARTICLE_EFFECT_BEFORE_DONE = new ITimedCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
@@ -146,21 +149,21 @@ public class EventStage extends ACutsceneEvent {
 			state = State.FINISH;
 		}
 	};
-	
+
 	private static enum Command {
 		SOUNDBEFORE1 {
 			@Override
 			public void setup(Scanner s, EventStage e) {
 				final ESound sound = FileCutsceneProvider.nextSound(s);
 				e.soundList[0] = sound;
-			}			
+			}
 		},
 		SOUNDBEFORE2 {
 			@Override
 			public void setup(Scanner s, EventStage e) {
 				final ESound sound = FileCutsceneProvider.nextSound(s);
 				e.soundList[1] = sound;
-			}			
+			}
 
 		},
 		SOUNDAFTER1 {
@@ -168,7 +171,7 @@ public class EventStage extends ACutsceneEvent {
 			public void setup(Scanner s, EventStage e) {
 				final ESound sound = FileCutsceneProvider.nextSound(s);
 				e.soundList[2] = sound;
-			}			
+			}
 
 		},
 		SOUNDAFTER2 {
@@ -176,26 +179,26 @@ public class EventStage extends ACutsceneEvent {
 			public void setup(Scanner s, EventStage e) {
 				final ESound sound = FileCutsceneProvider.nextSound(s);
 				e.soundList[3] = sound;
-			}			
+			}
 
 		},
 		EFFECTBEFORE {
 			@Override
 			public void setup(Scanner s, EventStage e) {
 				final EParticleEffect pec = FileCutsceneProvider.nextParticleEffect(s);
-				e.particleEffectList[0] = pec;							
-			}			
+				e.particleEffectList[0] = pec;
+			}
 		},
 		EFFECTAFTER {
 			@Override
 			public void setup(Scanner s, EventStage e) {
 				final EParticleEffect pec = FileCutsceneProvider.nextParticleEffect(s);
 				e.particleEffectList[1] = pec;
-			}			
+			}
 		};
 		public abstract void setup(Scanner s, EventStage e);
 	}
-	
+
 	public static ACutsceneEvent readNextObject(Scanner s) {
 		// Read entity name
 		String guid = FileCutsceneProvider.readNextGuid(s);
@@ -203,22 +206,21 @@ public class EventStage extends ACutsceneEvent {
 			LOG.error("expected entity name");
 			return null;
 		}
-		
+
 		if (!s.hasNext()) {
 			LOG.error("expected appear/disappear flag");
 			return null;
 		}
-		
+
 		boolean isAppearing = !s.next().equalsIgnoreCase("exit");
-		
+
 		EventStage event = new EventStage(guid, isAppearing);
 		// Set particle effect when given.
 		while (s.hasNext()) {
 			try {
 				Command c = Command.valueOf(s.next().toUpperCase(Locale.ROOT));
 				c.setup(s, event);
-			}
-			catch (IllegalArgumentException e) {
+			} catch (IllegalArgumentException e) {
 				LOG.error("unknown command for event stage");
 				return null;
 			}

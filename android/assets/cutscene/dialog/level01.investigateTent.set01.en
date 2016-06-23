@@ -3,18 +3,16 @@
   Face Normal
   TransitionIn
   Text EOF
-テントか。。。火も盛んに燃えている
-なのに誰も見当たらない。
+A tent... and the fire is still burning...
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face Normal
   Text EOF
-普通う考えればありえないことだが、
-これでも空中にういているし、
-ここへ来てから不可能と可能の
-限界は薄くなっている感じがする。
+Normally this shouldn't happen, but since
+I came here, you can't really think about
+this world in normal terms, anyway...
 EOF
 
 >>EventTextbox
@@ -22,8 +20,7 @@ EOF
   Face Shou_Ga_Nai
   TransitionOut
   Text EOF
-いつまでここで止まるわけにもいかなし、
-いこっか。
+Well, can't stay here forever, so let's go!
 EOF
 
 >>EventTextbox
@@ -31,14 +28,14 @@ EOF
   Face Surprised
   TransitionIn
   Text EOF
-。。。？
+...?
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face Serious
   Text EOF
-テントに、何かが。。。
+Something on the back of this tent...
 EOF
 
 >>EventTextbox
@@ -46,33 +43,33 @@ EOF
   Face Normal
   TransitionOut
   Text EOF
-誰かが残したノートだ。どれどれ
+A note somebody left behind... let's see.
 EOF
 
 >>EventTextbox
   TransitionIn
   Text EOF
-ここで見張りをしているレオナードだ。とんでもないこと
-になったな、これ。最初は一緒に見張りをした僕の親友も
-いたけど、あいつにやられた。今は安全そうで、たとえ俺
-の身にがあったら、せめて記録だけは残しておきたい。
+I'm Leonard, a guard. Things went from terrible to
+horrible these last days. I was on duty with my friend
+at our usual place in Libel. Then we saw a flash of light
+that enveloped us and suddenly, we ended up here.
 EOF
 
 >>EventTextbox
   Text EOF
-３日前のことだった。リベール王国のとある場所で見張りを
-した俺達は、雷撃のような音を聞いた。するとあの方向から
-太陽に匹敵するほどに眩しい一閃が俺達を包んだ。それで目
-の前は暗くなった。まだ目を覚ましたときはここでいた。
+But now my friend is gone. They got him. 3 days
+ago, when the flash of light had sent us here, it
+happened. We barely got here and before we had any
+time to think, we already had to act.
 EOF
 
 >>EventTextbox
   TransitionOut
   Text EOF
-何ががなだか、と考える暇もなく、俺達はあいつらに襲われて
-いた。動くことすら出来ないのに、どうやったかは知らんが、
-ここへ来たのだ。血のような紅き外殻は眠りについても忘れ
-やしない。。。まって。外で何かの音が聞こえたような。。
+They attacked us. Even though they can't even move the
+slightest bit, they came closer. Those red eyes, bloody
+red eyes. And their crimson outer shell, I shall not forget.
+Wait, didn't I hear something out there? Anybody there...?
 EOF
 
 >>EventTextbox
@@ -80,7 +77,7 @@ EOF
   Face Shou_Ga_Nai
   TransitionIn
   Text EOF
-とおりでページに血がついているわけか。。。
+Well, that's explains the blood stains on the last page...
 EOF
 
 >>EventTextbox
@@ -88,6 +85,7 @@ EOF
   Face Serious
   TransitionIn
   Text EOF
-あたし達がこうならないように、はやくここから脱出するため
-のヒントをさがさないと。。。！
+Let's be careful and look for a way out of here so
+we don't end up like these poor guys! First I should
+look for Joshua.
 EOF

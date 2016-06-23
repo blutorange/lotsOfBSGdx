@@ -1,4 +1,5 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
+
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
@@ -29,7 +30,7 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(CameraTracingSystem.class);
-	
+
 	/** In seconds. */
 	private final static float DEFAULT_UPDATE_INTERVAL = 0.05f;
 
@@ -41,15 +42,15 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 	}
 
 	public CameraTracingSystem(int priority) {
-		this( DEFAULT_UPDATE_INTERVAL, priority);
+		this(DEFAULT_UPDATE_INTERVAL, priority);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public CameraTracingSystem(float updateInterval, int priority) {
 		super(Family.all(ManyTrackingComponent.class, ShouldPositionComponent.class, ShouldRotationComponent.class)
 				.get(), updateInterval, priority);
 	}
-	
+
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	protected void processEntity(Entity entity) {
@@ -57,16 +58,18 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		final ShouldRotationComponent src = Mapper.shouldRotationComponent.get(entity);
 		final ManyTrackingComponent mtc = Mapper.manyTrackingComponent.get(entity);
 		final PositionComponent playerPoint = Mapper.positionComponent.get(mtc.playerPoint);
-		if (playerPoint == null) return;
+		if (playerPoint == null)
+			return;
 
 		// Determine the direction the player
 		// should be looking in.
 		Vector2 dir = new Vector2();
 		if (mtc.focusPoints.size() > 0 && mtc.trackingOrientationStrategy == TrackingOrientationStrategy.RELATIVE) {
-			if (mtc.trackedPointIndex >= mtc.focusPoints.size()) mtc.trackedPointIndex = mtc.focusPoints.size()-1;
+			if (mtc.trackedPointIndex >= mtc.focusPoints.size())
+				mtc.trackedPointIndex = mtc.focusPoints.size() - 1;
 			final PositionComponent pc = Mapper.positionComponent.get(mtc.focusPoints.get(mtc.trackedPointIndex));
 			dir.set(pc.x, pc.y).sub(playerPoint.x, playerPoint.y);
-			
+
 			// Check whether the direction is (almost) zero.
 			// If it is use, the last known direction.
 			// This helps to prevent the camera from
@@ -76,12 +79,11 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 				dir.set(lastDirAboveThreshold);
 			} else
 				lastDirAboveThreshold.set(dir);
-		}
-		else {
+		} else {
 			lastDirAboveThreshold.set(mtc.baseDirection);
 			dir.set(mtc.baseDirection.x, mtc.baseDirection.y);
 		}
-		
+
 		// Apply desired gravity.
 		switch (mtc.gravity) {
 		case NORTH:
@@ -90,11 +92,12 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		case WEST:
 			dir.rotate(180.0f);
 			break;
-		/*case EAST:
-			dir.rotate(0.0f);
-			break;*/
+		/*
+		 * case EAST: dir.rotate(0.0f); break;
+		 */
 		case SOUTH:
-			dir.rotate(90.0f); break;
+			dir.rotate(90.0f);
+			break;
 		}
 		// Normalize, we need a unit vector
 		// for the coordinate system.
@@ -119,9 +122,10 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 		for (Entity e : mtc.focusPoints) {
 			final PositionComponent vpc = Mapper.positionComponent.get(e);
 			final BoundingSphereComponent bsc = Mapper.boundingSphereComponent.get(e);
-			v.set(vpc.x-playerPoint.x, vpc.y-playerPoint.y);
+			v.set(vpc.x - playerPoint.x, vpc.y - playerPoint.y);
 			// Move to logical center of the sprite.
-			if (bsc != null) v.add(bsc.centerX,bsc.centerY);
+			if (bsc != null)
+				v.add(bsc.centerX, bsc.centerY);
 			// Get rotated and translated coordinate system with the
 			// ordinate in the looking direction.
 			vDir = v.dot(dir);
@@ -145,7 +149,7 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 			miny = mtc.adjustmentPointBottom;
 		else if (mtc.adjustmentPointTop > maxy)
 			maxy = mtc.adjustmentPointTop;
-		
+
 		// Get the center of the rectangle
 		float cx = (maxx + minx) * 0.5f; // center base coordinate
 		float cy = (maxy + miny) * 0.5f; // center dir coordinate
@@ -164,7 +168,7 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 			hw = hh * Game.VIEWPORT_GAME_AR;
 		}
 		// Compute the rotation angle of this rectangle.
-		src.thetaZ = 360.0f-base.angle();
+		src.thetaZ = 360.0f - base.angle();
 
 		// Compute the height the camera needs to be located
 		// at.
@@ -189,18 +193,19 @@ public class CameraTracingSystem extends IntervalIteratingSystem {
 			spc.z = hh * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF_INV;
 		}
 		// Apply minimum elevation.
-		if (spc.z < mtc.minimumElevation) spc.z = mtc.minimumElevation;
+		if (spc.z < mtc.minimumElevation)
+			spc.z = mtc.minimumElevation;
 		// Apply maximum elevation
 		else if (spc.z > mtc.maximumElevation) {
 			spc.z = mtc.maximumElevation;
-			float ratio = spc.z*ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF/hh;
+			float ratio = spc.z * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF / hh;
 			cy *= ratio;
 			cx *= ratio;
 		}
 		// Compute the position the camera should be located
 		// at. We need to convert the coordinates back to the
 		// world coordinate system.
-		spc.x = base.x*cx + dir.x*cy + playerPoint.x;
-		spc.y = base.y*cx + dir.y*cy + playerPoint.y;
+		spc.x = base.x * cx + dir.x * cy + playerPoint.x;
+		spc.y = base.y * cx + dir.y * cy + playerPoint.y;
 	}
 }

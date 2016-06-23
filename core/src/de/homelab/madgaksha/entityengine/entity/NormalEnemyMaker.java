@@ -1,6 +1,5 @@
 package de.homelab.madgaksha.entityengine.entity;
 
-
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 
 import com.badlogic.ashley.core.Entity;
@@ -22,9 +21,10 @@ import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 
-
 /**
- * Maker for most enemies with normal and common properties sprites, direction, movement etc.
+ * Maker for most enemies with normal and common properties sprites, direction,
+ * movement etc.
+ * 
  * @author madgaksha
  *
  */
@@ -35,12 +35,12 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 	protected NormalEnemyMaker() {
 		super();
 	}
-	
-	
+
 	@Override
-	public void setup(Entity e, Shape2D shape, MapProperties props, ETrigger spawn, Vector2 initialPos, Float initDir, Float tileRadius) {
-		super.setup(e, shape, props, spawn,initialPos,initDir,tileRadius);
-		
+	public void setup(Entity e, Shape2D shape, MapProperties props, ETrigger spawn, Vector2 initialPos, Float initDir,
+			Float tileRadius) {
+		super.setup(e, shape, props, spawn, initialPos, initDir, tileRadius);
+
 		BehaviourComponent bc = new BehaviourComponent(BEHAVIOUR_BASICS);
 		RotationComponent rc = new RotationComponent(true);
 		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(requestedAnimationList(),
@@ -49,41 +49,44 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 		SpriteComponent sc = new SpriteComponent(sac);
 
 		bc.cortex = getBehaviour(null);
-		
+
 		e.add(bc);
 		e.add(sc);
 		e.add(sac);
 		e.add(sfdc);
 		e.add(rc);
 	}
-		
+
 	protected abstract IBehaving getBehaviour(MapProperties props);
+
 	protected abstract EAnimationList requestedAnimationList();
-	
+
 	private final static IBehaving BEHAVIOUR_BASICS = new IBehaving() {
 		@Override
-		/** 
-		 * Callback for enemy behaviour. Aka the update method.
-		 * Check if enemy is within the battle distance and deactivate enemy if it is not.
+		/**
+		 * Callback for enemy behaviour. Aka the update method. Check if enemy
+		 * is within the battle distance and deactivate enemy if it is not.
 		 */
 		public boolean behave(Entity enemy) {
 			BattleDistanceComponent bdc = Mapper.battleDistanceComponent.get(enemy);
 			PositionComponent pcEnemy = Mapper.positionComponent.get(enemy);
 			PositionComponent pcOther = Mapper.positionComponent.get(bdc.relativeToEntity);
-			float dr = (pcEnemy.x-pcOther.x)*(pcEnemy.x-pcOther.x)+(pcEnemy.y-pcOther.y)*(pcEnemy.y-pcOther.y);
+			float dr = (pcEnemy.x - pcOther.x) * (pcEnemy.x - pcOther.x)
+					+ (pcEnemy.y - pcOther.y) * (pcEnemy.y - pcOther.y);
 			if (dr > bdc.battleOutSquared) {
 				if (Mapper.cameraFocusComponent.get(enemy) != null)
 					enemy.remove(CameraFocusComponent.class);
 				return false;
 			}
 			final CameraFocusComponent cfc = Mapper.cameraFocusComponent.get(enemy);
-			if (cfc != null) return true;
+			if (cfc != null)
+				return true;
 			else if (dr < bdc.battleInSquared) {
 				enemy.add(gameEntityEngine.createComponent(CameraFocusComponent.class));
 				return true;
 			}
 			return false;
 		}
-	}; 
-	
+	};
+
 }

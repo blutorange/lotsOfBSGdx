@@ -28,7 +28,8 @@ public enum ETextbox implements IResource<ETextbox, PlainTextbox> {
 			ENinePatch.TEXTBOX_BLUE_BOTTOM_RIGHT);
 
 	private final static Logger LOG = Logger.getLogger(ETextbox.class);
-	private final static EnumMap<ETextbox, PlainTextbox> textboxCache =	new EnumMap<ETextbox, PlainTextbox>(ETextbox.class);
+	private final static EnumMap<ETextbox, PlainTextbox> textboxCache = new EnumMap<ETextbox, PlainTextbox>(
+			ETextbox.class);
 
 	private final ENinePatch ninePatchAll;
 	private final ENinePatch ninePatchBottom;
@@ -37,7 +38,7 @@ public enum ETextbox implements IResource<ETextbox, PlainTextbox> {
 	private final ENinePatch ninePatchRight;
 	private final ENinePatch ninePatchBottomLeft;
 	private final ENinePatch ninePatchBottomRight;
-	
+
 	private ETextbox(ENinePatch ninePatchAll, ENinePatch ninePatchBottom, ENinePatch ninePatchTop,
 			ENinePatch ninePatchLeft, ENinePatch ninePatchRight, ENinePatch ninePatchBottomLeft,
 			ENinePatch ninePatchBottomRight) {
@@ -74,7 +75,7 @@ public enum ETextbox implements IResource<ETextbox, PlainTextbox> {
 			if (all == null || bottom == null || top == null || bottomLeft == null || bottomRight == null
 					|| left == null || right == null)
 				return null;
-			return new FancyTextbox(all, bottom, top, left, right, bottomLeft, bottomRight, this);			
+			return new FancyTextbox(all, bottom, top, left, right, bottomLeft, bottomRight, this);
 		} catch (GdxRuntimeException e) {
 			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 			return null;
@@ -104,7 +105,7 @@ public enum ETextbox implements IResource<ETextbox, PlainTextbox> {
 	public EnumMap<ETextbox, PlainTextbox> getMap() {
 		return textboxCache;
 	}
-	
+
 	@Override
 	public void clearAllOfThisKind() {
 		ETextbox.clearAll();

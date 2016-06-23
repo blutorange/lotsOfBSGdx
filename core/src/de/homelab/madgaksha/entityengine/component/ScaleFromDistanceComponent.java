@@ -19,27 +19,29 @@ public class ScaleFromDistanceComponent implements Component, Poolable {
 	private final static float DEFAULT_MAX_SCALE = 0.0f;
 	private final static float DEFAULT_MIN_DISTANCE = 0.0f;
 	private final static float DEFAULT_MAX_DISTANCE = 1.0f;
-	
+
 	public PositionComponent positionComponent = null;
 	public float minScale = DEFAULT_MIN_SCALE;
 	public float maxScale = DEFAULT_MAX_SCALE;
 	public float minDistance = DEFAULT_MIN_DISTANCE;
 	public float maxDistance = DEFAULT_MAX_DISTANCE;
-	
+
 	public ScaleFromDistanceComponent() {
 	}
 
-	public ScaleFromDistanceComponent(PositionComponent pc, float minScale, float maxScale, float minDistance, float maxDistance) {
+	public ScaleFromDistanceComponent(PositionComponent pc, float minScale, float maxScale, float minDistance,
+			float maxDistance) {
 		setup(pc, minScale, maxScale, minDistance, maxDistance);
 	}
+
 	public ScaleFromDistanceComponent(Entity e, float minScale, float maxScale, float minDistance, float maxDistance) {
 		setup(e, minScale, maxScale, minDistance, maxDistance);
 	}
-	
+
 	public void setup(Entity e, float minScale, float maxScale, float minDistance, float maxDistance) {
 		setup(Mapper.positionComponent.get(e), minScale, maxScale, minDistance, maxDistance);
 	}
-	
+
 	public void setup(PositionComponent pc, float minScale, float maxScale, float minDistance, float maxDistance) {
 		this.positionComponent = pc;
 		this.minScale = minScale;
@@ -47,7 +49,7 @@ public class ScaleFromDistanceComponent implements Component, Poolable {
 		this.minDistance = minDistance;
 		this.maxDistance = maxDistance;
 	}
-	
+
 	@Override
 	public void reset() {
 		positionComponent = null;

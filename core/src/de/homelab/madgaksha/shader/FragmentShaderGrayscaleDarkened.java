@@ -3,8 +3,7 @@ package de.homelab.madgaksha.shader;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class FragmentShaderGrayscaleDarkened extends FragmentShader {
-	private final static String program =  
-			"#ifdef GL_ES\n" //
+	private final static String program = "#ifdef GL_ES\n" //
 			+ "#define LOWP lowp\n" //
 			+ "precision mediump float;\n" //
 			+ "#else\n" //
@@ -23,26 +22,26 @@ public class FragmentShaderGrayscaleDarkened extends FragmentShader {
 			+ "  gl_FragColor.g = gl_FragColor.g + 0.2f*(gray - gl_FragColor.g) -0.1f;\n" //
 			+ "  gl_FragColor.b = gl_FragColor.b + 0.2f*(gray - gl_FragColor.b) -0.1f;\n" //
 			+ "}";
-//	private final float ratioStart;
-//	private final float mRatio;
-//	private ShaderProgram shaderProgram;
-//	private float totalTime = 0.0f;
-
+	// private final float ratioStart;
+	// private final float mRatio;
+	// private ShaderProgram shaderProgram;
+	// private float totalTime = 0.0f;
 
 	public FragmentShaderGrayscaleDarkened(float ratioStart, float ratioEnd, float duration) {
 		super(program);
-//		this.ratioStart = ratioStart;
-//		this.mRatio = (ratioEnd-ratioStart)/duration;
+		// this.ratioStart = ratioStart;
+		// this.mRatio = (ratioEnd-ratioStart)/duration;
 	}
+
 	@Override
 	public void forShaderProgram(ShaderProgram sp) {
-	//	shaderProgram = sp;
+		// shaderProgram = sp;
 	}
-//	@Override
-//	public void update(float deltaTime) {
-//		totalTime += 0.02f;
-//		float cur = ratioStart + totalTime * mRatio;
-//		int locRatio = shaderProgram.fetchUniformLocation("ratio", true);
-//		Gdx.gl20.glUniform1f(locRatio, MathUtils.clamp(cur, 0.0f, 1.0f));
-//	}
+	// @Override
+	// public void update(float deltaTime) {
+	// totalTime += 0.02f;
+	// float cur = ratioStart + totalTime * mRatio;
+	// int locRatio = shaderProgram.fetchUniformLocation("ratio", true);
+	// Gdx.gl20.glUniform1f(locRatio, MathUtils.clamp(cur, 0.0f, 1.0f));
+	// }
 }

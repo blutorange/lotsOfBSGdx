@@ -57,7 +57,7 @@ public class OptionsFrame extends JFrame implements WindowListener {
 			launchConfig.fullscreen = fullscreen;
 		}
 	};
-	
+
 	public OptionsFrame(LaunchConfig c) {
 		JFrame frmOptions = this;
 		frmOptions.setTitle(I18n.main("desktop.options.title"));
@@ -65,17 +65,17 @@ public class OptionsFrame extends JFrame implements WindowListener {
 		JPanel pnlContent = new JPanel();
 		pnlContent.setLayout(new BoxLayout(pnlContent, BoxLayout.Y_AXIS));
 		pnlContent.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
+
 		// Options
 		JPanel pnlKeyVal = new JPanel(new SpringLayout());
 
 		// Fps
-		spnFps = FormComponentUtils.createNumberSpinner("desktop.options.fps", listenerFps, pnlKeyVal, 30, 10, 120,
-				5, true);
+		spnFps = FormComponentUtils.createNumberSpinner("desktop.options.fps", listenerFps, pnlKeyVal, 30, 10, 120, 5,
+				true);
 
 		// Width
-		spnWidth = FormComponentUtils.createNumberSpinner("desktop.options.width", listenerWidth, pnlKeyVal, 640,
-				100, 9999, 10, true);
+		spnWidth = FormComponentUtils.createNumberSpinner("desktop.options.width", listenerWidth, pnlKeyVal, 640, 100,
+				9999, 10, true);
 
 		// Height
 		spnHeight = FormComponentUtils.createNumberSpinner("desktop.options.height", listenerHeight, pnlKeyVal, 640,
@@ -86,19 +86,19 @@ public class OptionsFrame extends JFrame implements WindowListener {
 				pnlKeyVal, false);
 
 		// Textbox speed
-		spnTextboxSpeed = FormComponentUtils.createNumberSpinner("desktop.options.textboxSpeed",
-				listenerTextboxSpeed, pnlKeyVal, 10.0f, 2f, 100.0f, 0.5f, false);
-		
+		spnTextboxSpeed = FormComponentUtils.createNumberSpinner("desktop.options.textboxSpeed", listenerTextboxSpeed,
+				pnlKeyVal, 10.0f, 2f, 100.0f, 0.5f, false);
+
 		// =====================
-		//     INTPUT KEYS
+		// INTPUT KEYS
 		// =====================
-		
+
 		// Set key-value input fields.
 		SpringUtilities.makeCompactGrid(pnlKeyVal, 5, 2, 3, 3, 3, 3);
 		pnlContent.add(pnlKeyVal);
-		
+
 		// Close button
-		JPanel pnlButtons= new JPanel();
+		JPanel pnlButtons = new JPanel();
 		pnlButtons.setLayout(new GridBagLayout());
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.fill = GridBagConstraints.HORIZONTAL;
@@ -116,7 +116,7 @@ public class OptionsFrame extends JFrame implements WindowListener {
 				launchConfig.writeConfig();
 			}
 		});
-		
+
 		// Default button
 		JButton btnDefault = new JButton(I18n.main("desktop.options.default"));
 		btnDefault.setAlignmentX(CENTER_ALIGNMENT);
@@ -125,28 +125,28 @@ public class OptionsFrame extends JFrame implements WindowListener {
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				launchConfig.setDefaults();
 				launchConfig.writeConfig();
-				applyConfig();					
+				applyConfig();
 			}
 		});
 
-		pnlButtons.add(btnDefault,cons);
-		pnlButtons.add(btnClose,cons);
+		pnlButtons.add(btnDefault, cons);
+		pnlButtons.add(btnClose, cons);
 		pnlContent.add(pnlButtons);
-		
+
 		frmOptions.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmOptions.setContentPane(pnlContent);
 		frmOptions.pack();
-		
+
 		addWindowListener(this);
-		
+
 		launchConfig = c;
 		applyConfig();
 	}
-	
+
 	public void centerFrame(int parentWidth, int parentHeight) {
-		setBounds(parentWidth/2 - getWidth()/2, parentHeight/2 - getHeight()/2, getWidth(), getHeight());
+		setBounds(parentWidth / 2 - getWidth() / 2, parentHeight / 2 - getHeight() / 2, getWidth(), getHeight());
 	}
-	
+
 	public void applyConfig() {
 		spnFps.setValue(launchConfig.fps);
 		spnWidth.setValue(launchConfig.width);
@@ -158,13 +158,13 @@ public class OptionsFrame extends JFrame implements WindowListener {
 	@Override
 	public void windowActivated(WindowEvent paramWindowEvent) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowClosed(WindowEvent paramWindowEvent) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -175,24 +175,24 @@ public class OptionsFrame extends JFrame implements WindowListener {
 	@Override
 	public void windowDeactivated(WindowEvent paramWindowEvent) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent paramWindowEvent) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowIconified(WindowEvent paramWindowEvent) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowOpened(WindowEvent paramWindowEvent) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -9,12 +9,12 @@ import java.util.logging.Logger;
 import com.badlogic.gdx.utils.StreamUtils;
 
 public class LoggerFactory {
-	
+
 	private final static String LOGGING_PROPERTIES = "de/homelab/madgaksha/logging/logging.properties";
-	
+
 	private LoggerFactory() {
 	}
-	
+
 	/**
 	 * Load and read the logging.properties.
 	 */
@@ -22,20 +22,24 @@ public class LoggerFactory {
 		InputStream is = null;
 		try {
 			is = LoggerFactory.class.getClassLoader().getResourceAsStream(LOGGING_PROPERTIES);
-			if (is == null) throw new IOException("could not acquire resource as stream");
+			if (is == null)
+				throw new IOException("could not acquire resource as stream");
 			LogManager.getLogManager().readConfiguration(is);
 		} catch (IOException e) {
 			System.err.println("unable to read logging.properties");
 			e.printStackTrace(System.err);
 			System.exit(-1);
 		} finally {
-			if (is != null) StreamUtils.closeQuietly(is);
+			if (is != null)
+				StreamUtils.closeQuietly(is);
 		}
 	}
 
 	/**
 	 * Get a logger for the provided class.
-	 * @param c The class for which to log.
+	 * 
+	 * @param c
+	 *            The class for which to log.
 	 * @return The logger for the class.
 	 */
 	public static Logger getLogger(Class<?> c) {

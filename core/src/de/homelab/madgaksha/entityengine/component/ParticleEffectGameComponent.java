@@ -15,9 +15,11 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
 public class ParticleEffectGameComponent extends ParticleEffectComponent {
 	public ParticleEffectGameComponent() {
 	}
+
 	public ParticleEffectGameComponent(EParticleEffect particleEffect) {
 		setup(particleEffect);
 	}
+
 	public ParticleEffectGameComponent(PooledEffect particleEffect) {
 		setup(particleEffect);
 	}

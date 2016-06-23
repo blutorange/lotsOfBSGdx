@@ -9,7 +9,8 @@ import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 
 /**
- * Extending ImmutableArray with two methods to use it with miniball. 
+ * Extending ImmutableArray with two methods to use it with miniball.
+ * 
  * @author madgaksha
  *
  */

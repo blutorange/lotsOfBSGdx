@@ -6,8 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasSprite;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
- * Makes minor change to {@link AtlasSprite} to make them poolable. Namely, adding
- * a no-arg constructor and allowing for the atlasRegion to be set later.
+ * Makes minor change to {@link AtlasSprite} to make them poolable. Namely,
+ * adding a no-arg constructor and allowing for the atlasRegion to be set later.
+ * 
  * @author madgaksha
  *
  */
@@ -20,16 +21,16 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 		originalOffsetY = 0;
 		reset();
 	}
-	
+
 	public void reset() {
 		this.originalOffsetX = this.originalOffsetY = 0.0f;
-		setColor(1f,1f,1f,1f);
+		setColor(1f, 1f, 1f, 1f);
 		setTexture(null);
 		region = null;
 		setScale(1f);
 	}
-	
-	public PoolableAtlasSprite (AtlasRegion region) {
+
+	public PoolableAtlasSprite(AtlasRegion region) {
 		setAtlasRegion(region);
 	}
 
@@ -48,24 +49,24 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 			super.setBounds(region.offsetX, region.offsetY, width, height);
 		setColor(1, 1, 1, 1);
 	}
-	
+
 	@Override
-	public void setPosition (float x, float y) {
+	public void setPosition(float x, float y) {
 		super.setPosition(x + region.offsetX, y + region.offsetY);
 	}
 
 	@Override
-	public void setX (float x) {
+	public void setX(float x) {
 		super.setX(x + region.offsetX);
 	}
 
 	@Override
-	public void setY (float y) {
+	public void setY(float y) {
 		super.setY(y + region.offsetY);
 	}
 
 	@Override
-	public void setBounds (float x, float y, float width, float height) {
+	public void setBounds(float x, float y, float width, float height) {
 		float widthRatio = width / region.originalWidth;
 		float heightRatio = height / region.originalHeight;
 		region.offsetX = originalOffsetX * widthRatio;
@@ -76,22 +77,22 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 	}
 
 	@Override
-	public void setSize (float width, float height) {
+	public void setSize(float width, float height) {
 		setBounds(getX(), getY(), width, height);
 	}
 
 	@Override
-	public void setOrigin (float originX, float originY) {
+	public void setOrigin(float originX, float originY) {
 		super.setOrigin(originX - region.offsetX, originY - region.offsetY);
 	}
 
 	@Override
-	public void setOriginCenter () {
+	public void setOriginCenter() {
 		super.setOrigin(getWidth() / 2 - region.offsetX, getHeight() / 2 - region.offsetY);
 	}
 
 	@Override
-	public void flip (boolean x, boolean y) {
+	public void flip(boolean x, boolean y) {
 		// Flip texture.
 		if (region.rotate)
 			super.flip(y, x);
@@ -120,7 +121,7 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 	}
 
 	@Override
-	public void rotate90 (boolean clockwise) {
+	public void rotate90(boolean clockwise) {
 		// Rotate texture.
 		super.rotate90(clockwise);
 
@@ -146,48 +147,48 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 	}
 
 	@Override
-	public float getX () {
+	public float getX() {
 		return super.getX() - region.offsetX;
 	}
 
 	@Override
-	public float getY () {
+	public float getY() {
 		return super.getY() - region.offsetY;
 	}
 
 	@Override
-	public float getOriginX () {
+	public float getOriginX() {
 		return super.getOriginX() + region.offsetX;
 	}
 
 	@Override
-	public float getOriginY () {
+	public float getOriginY() {
 		return super.getOriginY() + region.offsetY;
 	}
 
 	@Override
-	public float getWidth () {
+	public float getWidth() {
 		return super.getWidth() / region.getRotatedPackedWidth() * region.originalWidth;
 	}
 
 	@Override
-	public float getHeight () {
+	public float getHeight() {
 		return super.getHeight() / region.getRotatedPackedHeight() * region.originalHeight;
 	}
 
-	public float getWidthRatio () {
+	public float getWidthRatio() {
 		return super.getWidth() / region.getRotatedPackedWidth();
 	}
 
-	public float getHeightRatio () {
+	public float getHeightRatio() {
 		return super.getHeight() / region.getRotatedPackedHeight();
 	}
 
-	public AtlasRegion getAtlasRegion () {
+	public AtlasRegion getAtlasRegion() {
 		return region;
 	}
 
-	public String toString () {
+	public String toString() {
 		return region.toString();
 	}
 }

@@ -10,14 +10,16 @@ public enum EConsumable {
 
 	private final static Logger LOG = Logger.getLogger(EConsumable.class);
 	private final Class<? extends AConsumable> clazz;
-		
+
 	private EConsumable(Class<? extends AConsumable> clazz) {
 		this.clazz = clazz;
 	}
-	
+
 	/**
 	 * Gets the weapon object for this consumable type.
-	 * @return The consumable object for this consumable type. Null if it could not be loaded.
+	 * 
+	 * @return The consumable object for this consumable type. Null if it could
+	 *         not be loaded.
 	 */
 	public AConsumable getConsumable() {
 		AConsumable consumable;

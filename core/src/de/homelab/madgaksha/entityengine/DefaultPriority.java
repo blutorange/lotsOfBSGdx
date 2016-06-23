@@ -13,9 +13,9 @@ package de.homelab.madgaksha.entityengine;
 public class DefaultPriority {
 	private DefaultPriority() {
 	}
-	
+
 	public final static int temporalSystem = 0;
-	
+
 	// updating
 	public final static int lifeSystem = 1;
 	public final static int cameraZoomingSystem = 2;
@@ -28,12 +28,12 @@ public class DefaultPriority {
 	public final static int movementSystem = 8;
 	public final static int collisionSystem = 9;
 
-	public final static int postEffectSystem = 10;	
+	public final static int postEffectSystem = 10;
 
 	public final static int grantPositionSystem = 11;
 	public final static int grantRotationSystem = 12;
 	public final static int grantScaleSystem = 13;
-	
+
 	public final static int damageSystem = 14;
 
 	// drawing
@@ -43,6 +43,6 @@ public class DefaultPriority {
 	public final static int spriteRenderSystem = 18;
 	public final static int modelRenderSystem = 19;
 	public final static int particleEffectRenderSystem = 20;
-	
+
 	public final static int timedCallbackSystem = 21;
 }

@@ -1,17 +1,18 @@
 >>EventTextbox
   TransitionIn
   Text EOF
-性別も種別も、やがて世界すら超えて
-この地に平和をもたらした英雄、
-故郷まで帰って永遠のねむりについた。
+Overcoming the boundaries between the sexes, the races,
+and eventually even the worlds. After she had given peace
+to this world, she returned to her town of birth and fell
+to her well-deserved slumber.
 EOF
 
 >>EventTextbox
   TransitionOut
   Text EOF
-英雄トリキシアの名はよく知られているにも関わらず、
-もっとも気になる、精界書（せいかいのふみ）・二巻に書かれた異界譚
-については詳細は一切わかっていない。
+The heroin Trixia. Her name is widely known, yet we do
+not know much about the the Otherworldy Adventure
+mentioned in the second volume of the Spirit World Scroll.
 EOF
 
 >>EventTextbox
@@ -19,10 +20,10 @@ EOF
   Face NORMAL
   TransitionIn
   Text EOF
-英雄トリキシア、か。。。
-その名前、どこかで聞いたような、聞かなかったような。。。
-まあ、ここはあたし達のもといた世界じゃないし、
-知らなくてとーぜんだ！
+The heroin Trixia, huh...
+Didn't I hear that name somewhere...?
+Oh well, this isn't our world anyway, so
+it's no wonder I don't know her name...
 EOF
 
 >>EventTextbox
@@ -30,7 +31,7 @@ EOF
   Face LAUGHING
   TransitionOut
   Text EOF
-異界譚なんか、ここからつくればいい！
-というか、もう作ったんじゃない。色々あって、
-クロスベルまで来て活躍に活躍を重ねてさ。。。
+Other world adventures I can make myself right now!
+That is, we did do that already!
+Going all the way to Crossbell and helping out there...
 EOF

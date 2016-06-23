@@ -21,8 +21,7 @@ public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEff
 	BATTLE_MODE_ENTER_CUT_IN("particle/battleModeActivate.p", ETextureAtlas.PARTICLE_EFFECTS),
 	DEFAULT_PLAYER_DEATH("particle/deathEffectRed.p", ETextureAtlas.PARTICLE_EFFECTS),
 	ALL_MY_ITEM_ARE_BELONG_TO_ME("particle/itemGetFountain.p", ETextureAtlas.PARTICLE_EFFECTS),
-	NPC_DISAPPEAR("particle/npcDisappear.p", ETextureAtlas.PARTICLE_EFFECTS),
-	;
+	NPC_DISAPPEAR("particle/npcDisappear.p", ETextureAtlas.PARTICLE_EFFECTS),;
 
 	private final static Logger LOG = Logger.getLogger(EParticleEffect.class);
 
@@ -32,17 +31,24 @@ public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEff
 	private final int initialCapacity;
 	private final int maximumCapacity;
 
-	
 	private EParticleEffect(String fn, ETextureAtlas ta) {
 		this(fn, ta, null, 2, 20);
 	}
+
 	/**
 	 * 
-	 * @param fn Path to the particle effect file (*.p).
-	 * @param ta Texture atlas containing the emitter images. 
-	 * @param ap Atlas prefix. See {@link ParticleEffect#load(FileHandle, TextureAtlas, String)}. Can be null.
-	 * @param init ParticleEffectPool initial.
-	 * @param init ParticleEffectPool maximum.
+	 * @param fn
+	 *            Path to the particle effect file (*.p).
+	 * @param ta
+	 *            Texture atlas containing the emitter images.
+	 * @param ap
+	 *            Atlas prefix. See
+	 *            {@link ParticleEffect#load(FileHandle, TextureAtlas, String)}.
+	 *            Can be null.
+	 * @param init
+	 *            ParticleEffectPool initial.
+	 * @param init
+	 *            ParticleEffectPool maximum.
 	 */
 	private EParticleEffect(String fn, ETextureAtlas ta, String ap, int init, int max) {
 		fileName = fn;
@@ -56,7 +62,8 @@ public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEff
 	public ParticleEffect getObject() {
 		final FileHandle handle = Gdx.files.internal(fileName);
 		final TextureAtlas atlas = ResourceCache.getTextureAtlas(textureAtlas);
-		if (atlas == null) return null;
+		if (atlas == null)
+			return null;
 		try {
 			final ParticleEffect particleEffect = new ParticleEffect();
 			particleEffect.load(handle, atlas, atlasPrefix);
@@ -81,7 +88,7 @@ public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEff
 	public ParticleEffectPool getPool() {
 		return new ParticleEffectPool(getObject(), initialCapacity, maximumCapacity);
 	}
-	
+
 	public ETextureAtlas getTextureAtlas() {
 		return textureAtlas;
 	}

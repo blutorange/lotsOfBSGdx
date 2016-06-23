@@ -3,11 +3,10 @@
   Face CONFIDENT
   TransitionIn
   Text EOF
-あら、あそこに未知標（みちしるべ）が見える！
-道を教えるついでに、いいアドバイスがえられる、
-旅の途中であたし達をなんでも助かったという
-実績もある懐かしいお仲間。
-暇があったら読んでみよう。
+Oh, that's a sign post over there!
+How many times it helped us on our adventure
+with its astonishing advice! Whenever there's
+time, I've got to check them out!
 EOF
 
 >>EventTextbox
@@ -15,6 +14,6 @@ EOF
   Face NORMAL
   TransitionOut
   Text EOF
-今まで不思議に思うには思ったが、
-だれが何の目的で作くったのかな？
+I've been wondering about this all the time,
+but just who created them?
 EOF

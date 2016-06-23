@@ -19,20 +19,19 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum EModel implements IResource<EModel,Model> {
-	ITEM_WEAPON_BASIC("model/itemBasicWeapon.g3db"),	
-	;
+public enum EModel implements IResource<EModel, Model> {
+	ITEM_WEAPON_BASIC("model/itemBasicWeapon.g3db"),;
 
 	private final static Logger LOG = Logger.getLogger(EModel.class);
 	private final static EnumMap<EModel, Model> modelCache = new EnumMap<EModel, Model>(EModel.class);
 
 	private String filename;
 	private ModelInstance modelInstance = null;
-	
+
 	private EModel(String f) {
 		filename = f;
 	}
-	
+
 	public static void clearAll() {
 		LOG.debug("clearing all models");
 		for (EModel mdl : modelCache.keySet()) {
@@ -42,17 +41,17 @@ public enum EModel implements IResource<EModel,Model> {
 
 	@Override
 	public Model getObject() {
-			try {
-				FileHandle fileHandle = Gdx.files.internal(filename);
-				BaseJsonReader reader = new UBJsonReader();
-				G3dModelLoader loader = new G3dModelLoader(reader);
-				Model model = loader.loadModel(fileHandle);
-				modelInstance = new ModelInstance(model);
-				return model;
-			} catch (GdxRuntimeException e) {
-				LOG.error("could not locate or open resource: " + String.valueOf(this), e);
-				return null;
-			}
+		try {
+			FileHandle fileHandle = Gdx.files.internal(filename);
+			BaseJsonReader reader = new UBJsonReader();
+			G3dModelLoader loader = new G3dModelLoader(reader);
+			Model model = loader.loadModel(fileHandle);
+			modelInstance = new ModelInstance(model);
+			return model;
+		} catch (GdxRuntimeException e) {
+			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
+			return null;
+		}
 	}
 
 	@Override
@@ -79,13 +78,15 @@ public enum EModel implements IResource<EModel,Model> {
 	public EnumMap<EModel, Model> getMap() {
 		return modelCache;
 	}
-	
+
 	public ModelInstance asModelInstance() {
 		// Reload model if it has been cleared.
-		if (modelInstance == null) if(ResourceCache.getModel(this) == null) return null;
+		if (modelInstance == null)
+			if (ResourceCache.getModel(this) == null)
+				return null;
 		return modelInstance;
 	}
-	
+
 	@Override
 	public void clearAllOfThisKind() {
 		EModel.clearAll();

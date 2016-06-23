@@ -15,6 +15,5 @@ public enum EFaceVariation {
 	CONTEMPLATING,
 	HAPPY,
 	SMILING,
-	EMPTY,
-	;
+	EMPTY,;
 }

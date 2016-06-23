@@ -1,4 +1,5 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
+
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
@@ -28,7 +29,7 @@ public class BirdsViewSpriteSystem extends IteratingSystem {
 	public BirdsViewSpriteSystem() {
 		this(DefaultPriority.birdsViewSpriteSystem);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public BirdsViewSpriteSystem(int priority) {
 		super(Family.all(SpriteForDirectionComponent.class, SpriteAnimationComponent.class, DirectionComponent.class)
@@ -40,26 +41,30 @@ public class BirdsViewSpriteSystem extends IteratingSystem {
 		final SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(entity);
 		final SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
 		final DirectionComponent dc = Mapper.directionComponent.get(entity);
-		
+
 		switch (sfdc.spriteDirectionStrategy) {
 		case ZENITH:
-			sac.animation = sfdc.animationList[((int)(((dc.degree-viewportGame.getRotationUpXY() - 90 + 360) + 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f))
-			               					% sfdc.animationList.length];			
+			sac.animation = sfdc.animationList[((int) (((dc.degree - viewportGame.getRotationUpXY() - 90 + 360)
+					+ 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f))
+					% sfdc.animationList.length];
 			break;
 		case SIDEWAYS:
-			//TODO
+			// TODO
 			// Project direction vector of the camera to the x-y-plane.
 			// Compute angle of this vector to the vector (0,1,0).
 			// Use this angle as above.
-			sac.animation = sfdc.animationList[((int)(((dc.degree+viewportGame.getRotationDirXY() - 90 + 360) + 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f))
-				               					% sfdc.animationList.length];
+			sac.animation = sfdc.animationList[((int) (((dc.degree + viewportGame.getRotationDirXY() - 90 + 360)
+					+ 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f))
+					% sfdc.animationList.length];
 			break;
 		case STATIC:
 			// eg. ((358+45)/360 % 4) = 0 => first sprite corresponding to
 			// looking left
-			//LOG.debug((int)((dc.degree + 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f));
-			sac.animation = sfdc.animationList[((int)((dc.degree + 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f))
-					% sfdc.animationList.length];
+			// LOG.debug((int)((dc.degree + 360.0f / (2.0f *
+			// sfdc.animationList.length)) * sfdc.animationList.length /
+			// 360.0f));
+			sac.animation = sfdc.animationList[((int) ((dc.degree + 360.0f / (2.0f * sfdc.animationList.length))
+					* sfdc.animationList.length / 360.0f)) % sfdc.animationList.length];
 			break;
 		}
 	}

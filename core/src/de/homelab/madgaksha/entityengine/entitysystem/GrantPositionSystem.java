@@ -20,8 +20,10 @@ public class GrantPositionSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public GrantPositionSystem(int priority) {
-		super(Family.all(TemporalComponent.class, PositionComponent.class, ShouldPositionComponent.class).exclude(InactiveComponent.class).get(), priority);
+		super(Family.all(TemporalComponent.class, PositionComponent.class, ShouldPositionComponent.class)
+				.exclude(InactiveComponent.class).get(), priority);
 	}
+
 	@Override
 	public void processEntity(Entity entity, float deltaTime) {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);

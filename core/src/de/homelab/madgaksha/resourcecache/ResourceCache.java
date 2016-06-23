@@ -19,7 +19,7 @@ import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 public final class ResourceCache {
 
 	private final static Logger LOG = Logger.getLogger(ResourceCache.class);
-	
+
 	public final static int LIMIT_MUSIC = 100;
 	public final static int LIMIT_TEXTURE = 100;
 	public final static int LIMIT_ANIMATION = 50;
@@ -31,7 +31,7 @@ public final class ResourceCache {
 	public final static int LIMIT_TEXTURE_ATLAS = 20;
 	public final static int LIMIT_MODEL = 30;
 	public final static int LIMIT_FREE_TYPE_FONT_GENERATOR = 5;
-	
+
 	private ResourceCache() {
 	}
 
@@ -45,13 +45,14 @@ public final class ResourceCache {
 	 * @param res
 	 *            The resource to load. An Enum implementing the
 	 *            {@link IResource} interface.
-	 * @param cached When false, does not look up the object in the cache and loads
-	 *               it again.
+	 * @param cached
+	 *            When false, does not look up the object in the cache and loads
+	 *            it again.
 	 * @return An object representing the resource <code>res</code>. Must be
 	 *         typecast to the correct type.
 	 */
 	@SuppressWarnings("unchecked")
-	private static Object getResource(IResource<? extends Enum<?>,?> res, boolean cached) {
+	private static Object getResource(IResource<? extends Enum<?>, ?> res, boolean cached) {
 		if (res == null)
 			return null;
 		if (cached && res.getMap().containsKey(res)) {
@@ -70,27 +71,33 @@ public final class ResourceCache {
 			return r;
 		}
 	}
-	
+
 	/**
 	 * Fetches the resources and puts it in the cache for later use.
-	 * @param res Resource to pre-load.
+	 * 
+	 * @param res
+	 *            Resource to pre-load.
 	 * @return Whether it was loaded sucessfully.
 	 */
-	public static boolean loadToRam(IResource<? extends Enum<?>,?> res) {
+	public static boolean loadToRam(IResource<? extends Enum<?>, ?> res) {
 		return getResource(res, true) != null;
 	}
-	
-	/** Loads all resources to ram.
+
+	/**
+	 * Loads all resources to ram.
 	 * 
-	 * @param requiredResources Resources to load to RAM.
+	 * @param requiredResources
+	 *            Resources to load to RAM.
 	 * @return Whether all resources could be loaded successfully.
 	 * @see ResourceCache#loadToRam(IResource)
 	 */
 	public static boolean loadToRam(IResource<? extends Enum<?>, ?>[] requiredResources) {
-		if (requiredResources == null) return true;
-		for (IResource<? extends Enum<?>,?> r : requiredResources) {
+		if (requiredResources == null)
+			return true;
+		for (IResource<? extends Enum<?>, ?> r : requiredResources) {
 			LOG.debug("fetch: " + r);
-			if (!loadToRam(r)) return false;
+			if (!loadToRam(r))
+				return false;
 		}
 		return true;
 	}
@@ -114,7 +121,7 @@ public final class ResourceCache {
 	public static void clearTexture(ETexture texture) {
 		texture.clear();
 	}
-	
+
 	/**
 	 * Clears the given texture object from the cache.
 	 * 
@@ -124,7 +131,7 @@ public final class ResourceCache {
 	public static void clearAnimation(EAnimation texture) {
 		texture.clear();
 	}
-	
+
 	/**
 	 * Clears the given texture object from the cache.
 	 * 
@@ -155,84 +162,84 @@ public final class ResourceCache {
 	public static void clearAllAnimation() {
 		EAnimation.clearAll();
 	}
-	
+
 	/**
 	 * Clears all sound objects from the cache.
 	 */
 	public static void clearAllSound() {
 		ESound.clearAll();
 	}
-	
+
 	/**
 	 * Clears all sound objects from the cache.
 	 */
 	public static void clearAllTiledMap() {
 		ETiledMap.clearAll();
 	}
-	
+
 	/**
 	 * Clears all animation objects from the cache.
 	 */
 	public static void clearAllAnimationLists() {
 		EAnimationList.clearAll();
 	}
-	
+
 	/**
 	 * Clears all texture atlas objects from the cache.
 	 */
 	public static void clearAllTextureAtlas() {
 		ETextureAtlas.clearAll();
 	}
-	
+
 	/**
 	 * Clears all animation objects from the cache.
 	 */
 	public static void clearAllNinePatch() {
 		ENinePatch.clearAll();
 	}
-	
+
 	/**
 	 * Clears all bitmap font objects from the cache.
 	 */
 	public static void clearAllBitmapFont() {
 		EBitmapFont.clearAll();
 	}
+
 	/**
-	 * Reloads all bitmap fonts. Happens when the game window
-	 * resizes.
+	 * Reloads all bitmap fonts. Happens when the game window resizes.
 	 */
 	public static void reloadAllBitmapFont() {
 		Set<EBitmapFont> set = EBitmapFont.getMapKeys();
 		clearAllBitmapFont();
-		for (EBitmapFont bf : set) bf.getObject();
+		for (EBitmapFont bf : set)
+			bf.getObject();
 	}
-	
+
 	/**
 	 * Clears all model objects from the cache.
 	 */
 	public static void clearAllModel() {
 		EModel.clearAll();
 	}
-	
+
 	/**
 	 * Clears all free type font generator objects from the cache.
 	 */
 	public static void clearAllFreeTypeFontGenerator() {
 		EFreeTypeFontGenerator.clearAll();
 	}
-	
+
 	/**
 	 * Clears all textbox objects from the cache.
 	 */
 	public static void clearAllTextbox() {
 		ETextbox.clearAll();
 	}
-	
-	
+
 	/**
 	 * Clears all resource objects.
 	 */
-	public static void clearAll() {		
+	public static void clearAll() {
 		clearAllAnimation();
 		clearAllAnimationLists();
 		clearAllBitmapFont();
@@ -257,6 +264,7 @@ public final class ResourceCache {
 	public static Music getMusic(EMusic bgm) {
 		return (Music) getResource(bgm, true);
 	}
+
 	public static Music getMusic(EMusic bgm, boolean cached) {
 		return (Music) getResource(bgm, cached);
 	}
@@ -271,10 +279,11 @@ public final class ResourceCache {
 	public static AtlasRegion getTexture(ETexture texture) {
 		return (AtlasRegion) getResource(texture, true);
 	}
+
 	public static AtlasRegion getTexture(ETexture texture, boolean cached) {
 		return (AtlasRegion) getResource(texture, cached);
 	}
-	
+
 	/**
 	 * Fetches the requested animation from the cache, or loads it.
 	 * 
@@ -285,10 +294,11 @@ public final class ResourceCache {
 	public static AtlasAnimation getAnimation(EAnimation animation) {
 		return (AtlasAnimation) getResource(animation, true);
 	}
+
 	public static AtlasAnimation getAnimation(EAnimation animation, boolean cached) {
 		return (AtlasAnimation) getResource(animation, cached);
 	}
-	
+
 	/**
 	 * Fetches the requested animation list from the cache, or loads it.
 	 * 
@@ -299,6 +309,7 @@ public final class ResourceCache {
 	public static AtlasAnimation[] getAnimationList(EAnimationList animationList) {
 		return (AtlasAnimation[]) getResource(animationList, true);
 	}
+
 	public static AtlasAnimation[] getAnimationList(EAnimationList animationList, boolean cached) {
 		return (AtlasAnimation[]) getResource(animationList, cached);
 	}
@@ -313,6 +324,7 @@ public final class ResourceCache {
 	public static Sound getSound(ESound sound) {
 		return (Sound) getResource(sound, true);
 	}
+
 	public static Sound getSound(ESound sound, boolean cached) {
 		return (Sound) getResource(sound, cached);
 	}
@@ -327,10 +339,11 @@ public final class ResourceCache {
 	public static TiledMap getTiledMap(ETiledMap tiledMap) {
 		return (TiledMap) getResource(tiledMap, true);
 	}
+
 	public static TiledMap getTiledMap(ETiledMap tiledMap, boolean cached) {
 		return (TiledMap) getResource(tiledMap, cached);
 	}
-	
+
 	/**
 	 * Fetches the requested texture atlas from the cache, or loads it.
 	 * 
@@ -341,10 +354,11 @@ public final class ResourceCache {
 	public static TextureAtlas getTextureAtlas(ETextureAtlas textureAtlas) {
 		return (TextureAtlas) getResource(textureAtlas, true);
 	}
+
 	public static TextureAtlas getTextureAtlas(ETextureAtlas textureAtlas, boolean cached) {
 		return (TextureAtlas) getResource(textureAtlas, cached);
 	}
-	
+
 	/**
 	 * Fetches the requested nine patch from the cache, or loads it.
 	 * 
@@ -355,10 +369,11 @@ public final class ResourceCache {
 	public static NinePatch getNinePatch(ENinePatch ninePatch) {
 		return (NinePatch) getResource(ninePatch, true);
 	}
+
 	public static NinePatch getNinePatch(ENinePatch ninePatch, boolean cached) {
 		return (NinePatch) getResource(ninePatch, cached);
 	}
-	
+
 	/**
 	 * Fetches the requested bitmap font from the cache, or loads it.
 	 * 
@@ -369,10 +384,11 @@ public final class ResourceCache {
 	public static BitmapFont getBitmapFont(EBitmapFont bitmapFont) {
 		return (BitmapFont) getResource(bitmapFont, true);
 	}
+
 	public static BitmapFont getBitmapFont(EModel bitmapFont, boolean cached) {
 		return (BitmapFont) getResource(bitmapFont, cached);
 	}
-	
+
 	/**
 	 * Fetches the requested model from the cache, or loads it.
 	 * 
@@ -383,10 +399,11 @@ public final class ResourceCache {
 	public static Model getModel(EModel model) {
 		return (Model) getResource(model, true);
 	}
+
 	public static Model getModel(EModel model, boolean cached) {
 		return (Model) getResource(model, cached);
 	}
-	
+
 	/**
 	 * Fetches the requested freeTypeFontGenerator from the cache, or loads it.
 	 * 
@@ -397,10 +414,12 @@ public final class ResourceCache {
 	public static FreeTypeFontGenerator getFreeTypeFontGenerator(EFreeTypeFontGenerator freeTypeFontGenerator) {
 		return (FreeTypeFontGenerator) getResource(freeTypeFontGenerator, true);
 	}
-	public static FreeTypeFontGenerator getFreeTypeFontGenerator(EFreeTypeFontGenerator freeTypeFontGenerator, boolean cached) {
+
+	public static FreeTypeFontGenerator getFreeTypeFontGenerator(EFreeTypeFontGenerator freeTypeFontGenerator,
+			boolean cached) {
 		return (FreeTypeFontGenerator) getResource(freeTypeFontGenerator, cached);
 	}
-	
+
 	/**
 	 * Fetches the requested textbox from the cache, or loads it.
 	 * 
@@ -411,6 +430,7 @@ public final class ResourceCache {
 	public static FancyTextbox getTextbox(ETextbox textbox) {
 		return (FancyTextbox) getResource(textbox, true);
 	}
+
 	public static FancyTextbox getTextbox(ETextbox textbox, boolean cached) {
 		return (FancyTextbox) getResource(textbox, cached);
 	}

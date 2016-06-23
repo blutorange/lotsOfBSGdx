@@ -16,22 +16,26 @@ import de.homelab.madgaksha.grantstrategy.IGrantStrategy;
 public class ShouldPositionComponent extends PositionComponent implements Component, Poolable {
 	private final static IGrantStrategy DEFAULT_GRANT_STRATEGY = new ExponentialGrantStrategy();
 	private final static boolean DEFAULT_GRANT_OFFSET = false;
-	
+
 	public IGrantStrategy grantStrategy = DEFAULT_GRANT_STRATEGY;
 	public boolean grantOffset = DEFAULT_GRANT_OFFSET;
+
 	public ShouldPositionComponent() {
-		
+
 	}
+
 	public ShouldPositionComponent(IGrantStrategy grantStrategy) {
 		setup(grantStrategy);
 	}
+
 	public ShouldPositionComponent(IGrantStrategy grantStrategy, boolean grantOffset) {
 		setup(grantStrategy, grantOffset);
 	}
-	
+
 	public void setup(IGrantStrategy gs) {
 		grantStrategy = gs;
 	}
+
 	public void setup(IGrantStrategy grantStrategy, boolean grantOffset) {
 		this.grantStrategy = grantStrategy;
 		this.grantOffset = grantOffset;

@@ -149,7 +149,8 @@ public abstract class AAudioPlayer {
 	 * @param interpolator
 	 *            Transition function.
 	 */
-	protected IInterpolatorFinished fade(final Music music, float time, float targetLevel, final AInterpolator<Float> interpolator) {
+	protected IInterpolatorFinished fade(final Music music, float time, float targetLevel,
+			final AInterpolator<Float> interpolator) {
 		return fade(music, time, targetLevel, interpolator, null);
 	}
 
@@ -166,7 +167,8 @@ public abstract class AAudioPlayer {
 	 * @param ocl
 	 *            Callback when updating the volume level.
 	 */
-	protected IInterpolatorFinished fade(final Music music, float time, float targetLevel, final OnCompletionListener ocl) {
+	protected IInterpolatorFinished fade(final Music music, float time, float targetLevel,
+			final OnCompletionListener ocl) {
 		return fade(music, time, targetLevel, new LinearFloatInterpolator(), ocl);
 	}
 
@@ -185,8 +187,8 @@ public abstract class AAudioPlayer {
 	 * @param ocl
 	 *            Callback when updating the volume level.
 	 */
-	protected IInterpolatorFinished fade(final Music music, final float time, final float targetLevel, final AInterpolator<Float> interpolator,
-			final OnCompletionListener ocl) {
+	protected IInterpolatorFinished fade(final Music music, final float time, final float targetLevel,
+			final AInterpolator<Float> interpolator, final OnCompletionListener ocl) {
 		if (music == null || wasDisposed)
 			return null;
 		final float currentLevel = music.getVolume();
@@ -206,7 +208,7 @@ public abstract class AAudioPlayer {
 
 			@Override
 			public void finished() {
-				finished(targetLevel);				
+				finished(targetLevel);
 			}
 		};
 		final Timer.Task fadeTask = interpolator.run(timer, time, INTERPOLATOR_UPDATE_INTERVAL, timerCallback);

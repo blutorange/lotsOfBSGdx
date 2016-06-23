@@ -20,14 +20,15 @@ import de.homelab.madgaksha.logging.Logger;
 public class ForceFieldSystem extends IteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(ForceFieldSystem.class);
-	
+
 	public ForceFieldSystem() {
 		this(DefaultPriority.forceFieldSystem);
 	}
 
 	@SuppressWarnings("unchecked")
 	public ForceFieldSystem(int priority) {
-		super(Family.all(ForceComponent.class, ForceFieldComponent.class).exclude(InactiveComponent.class).get(), priority);
+		super(Family.all(ForceComponent.class, ForceFieldComponent.class).exclude(InactiveComponent.class).get(),
+				priority);
 	}
 
 	@Override

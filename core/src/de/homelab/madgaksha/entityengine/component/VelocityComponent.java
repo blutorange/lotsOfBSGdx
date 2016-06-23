@@ -23,35 +23,38 @@ public class VelocityComponent implements Component, Poolable {
 
 	public VelocityComponent() {
 	}
+
 	public VelocityComponent(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
+
 	public VelocityComponent(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
-	
+
 	public void setup(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
+
 	public void setup(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
-	
+
 	@Override
 	public void reset() {
 		x = DEFAULT_X;
 		y = DEFAULT_Y;
 		z = DEFAULT_Z;
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		return "VelocityComponent(" + x + "," + y + "," + z + ")";
 	}
 }

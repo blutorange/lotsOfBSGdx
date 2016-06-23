@@ -4,17 +4,17 @@
   TransitionIn
   TransitionOut
   Text EOF
-ヨシュアがいった弾装キューブだ！
-よし、さっそく入手して向こうの
-あいつらをやっつけちゃう！
+Oh, the Combat Cube Joshua was talking about!
+Alright, let's get it and take care of the 
+enemies over there.
 EOF
 
 >>EventTextbox
   TransitionIn
   TransitionOut
   Text EOF
-弾装キューブとほかのアイテムは、近づくと
-体中のエネルギーに反応して吸収すること出来る。
-吸収した弾装は戦闘が始まると自ずと発動し、
-敵を狙う。とりあえず回避することに専念しよう！
+Combat cubes and other items will come to you
+on their own once you get close enough to them.
+As soon as battle begins, normal weapons activate
+automatically. Let's concentrate on dodging for now!
 EOF

@@ -43,44 +43,44 @@ import de.homelab.madgaksha.util.Score;
 
 public class MainPanel extends JPanel implements ComponentListener {
 	private static final long serialVersionUID = 1L;
-	
+
 	private final static Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);
-	
+
 	private final static String highScoreFile = "./toku.ten";
-	
+
 	private final ActionListener onlyOneLevel = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JOptionPane.showMessageDialog(null, I18n.main("only.one.level"));
 		}
 	};
-	
+
 	private JPanel contentPane;
 	private JPanel pnlCenter;
 	private JLabel lblLevelImage;
 	private JButton btnStart;
 	private JButton btnDebug;
-	private JButton btnOptions; 
+	private JButton btnOptions;
 	private JLabel lblTitle;
 	private JLabel lblDescription;
 	private JLabel lblScore;
 	private LaunchConfig launchConfig;
 	private int levelIconWidth, levelIconHeight;
-	
+
 	private int currentLevelIndex = 0;
 	private Map<Class<? extends ALevel>, Long> scoreMap;
 	private final static List<ALevel> levelList = new ArrayList<ALevel>();
 	static {
 		levelList.add(new Level01());
 	}
-	
+
 	/**
 	 * Create the frame.
 	 */
 	public MainPanel(Integer width, Integer height, Integer fps, Boolean fullscreen, Float textboxSpeed) {
 
 		launchConfig = new LaunchConfig(width, height, fps, fullscreen, textboxSpeed);
-		
+
 		contentPane = this;
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(20, 20));
@@ -93,14 +93,14 @@ public class MainPanel extends JPanel implements ComponentListener {
 		JLabel txtpnScore = new JLabel();
 		txtpnScore.setText(I18n.main("desktop.launcher.score"));
 		panel.add(txtpnScore);
-		
+
 		panel.add(Box.createRigidArea(new Dimension(5, 0)));
-		
+
 		// Score number
 		lblScore = new JLabel();
 		lblScore.setText("0");
 		panel.add(lblScore);
-		
+
 		panel.add(Box.createHorizontalGlue());
 
 		// Start button
@@ -108,11 +108,11 @@ public class MainPanel extends JPanel implements ComponentListener {
 		panel.add(btnStart);
 
 		panel.add(Box.createRigidArea(new Dimension(5, 0)));
-		
+
 		// Quit game button
 		btnDebug = new JButton(I18n.main("desktop.game.exit"));
 		panel.add(btnDebug);
-		
+
 		panel.add(Box.createHorizontalGlue());
 
 		final OptionsFrame frmOptions = new OptionsFrame(launchConfig);
@@ -122,21 +122,21 @@ public class MainPanel extends JPanel implements ComponentListener {
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				frmOptions.centerFrame(getWidth(), getHeight());
 				frmOptions.applyConfig();
-				frmOptions.setVisible(true);				
+				frmOptions.setVisible(true);
 			}
 		});
 		panel.add(btnOptions);
 
 		// Left and right button.
 		JButton buttonNext = new JButton(">>");
-		contentPane.add(buttonNext, BorderLayout.EAST);	
+		contentPane.add(buttonNext, BorderLayout.EAST);
 
 		JButton buttonLast = new JButton("<<");
 		contentPane.add(buttonLast, BorderLayout.WEST);
 
 		buttonNext.addActionListener(onlyOneLevel);
 		buttonLast.addActionListener(onlyOneLevel);
-		
+
 		// Title and description.
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
@@ -150,24 +150,24 @@ public class MainPanel extends JPanel implements ComponentListener {
 		lblTitle = new JLabel();
 		lblTitle.setText("Title");
 		lblTitle.setFont(lblTitle.getFont().deriveFont(25.0f).deriveFont(Font.BOLD));
-		
+
 		lblDescription = new JLabel();
 		lblDescription.setText("Description");
-		
+
 		JPanel panel_3 = new JPanel();
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.X_AXIS));
 		panel_3.add(Box.createHorizontalGlue());
 		panel_3.add(lblTitle);
 		panel_3.add(Box.createHorizontalGlue());
 		panel_2.add(panel_3);
-				
+
 		JPanel panel_4 = new JPanel();
 		panel_4.setLayout(new BoxLayout(panel_4, BoxLayout.X_AXIS));
 		panel_4.add(Box.createHorizontalGlue());
 		panel_4.add(lblDescription);
-		panel_4.add(Box.createHorizontalGlue());		
+		panel_4.add(Box.createHorizontalGlue());
 		panel_2.add(panel_4);
-		
+
 		panel_1.add(Box.createHorizontalGlue());
 
 		pnlCenter = new JPanel();
@@ -181,7 +181,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 
 		addComponentListener(this);
 		setPreferredSize(new Dimension(1280, 720));
-		
+
 		// Read high score file.
 		updateScore();
 	}
@@ -192,15 +192,15 @@ public class MainPanel extends JPanel implements ComponentListener {
 		if (hsf.exists()) {
 			try {
 				bis = new BufferedInputStream(new FileInputStream(highScoreFile));
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				LOG.log(Level.WARNING, "could not read score file", e);
 			}
 		}
 		scoreMap = Score.readScore(bis);
-		if (bis != null) IOUtils.closeQuietly(bis);
+		if (bis != null)
+			IOUtils.closeQuietly(bis);
 	}
-	
+
 	public void updateScore() {
 		loadScore();
 		setLevel(currentLevelIndex);
@@ -248,11 +248,11 @@ public class MainPanel extends JPanel implements ComponentListener {
 	public JButton getStartButton() {
 		return btnStart;
 	}
-	
+
 	public JButton getOptionsButton() {
 		return btnOptions;
 	}
-	
+
 	public JButton getDebugButton() {
 		return btnDebug;
 	}
@@ -279,9 +279,11 @@ public class MainPanel extends JPanel implements ComponentListener {
 			g.drawImage(image, 0, 0, levelIconWidth, levelIconHeight, null);
 		}
 	}
-	
-	public void setLevel(int idx) {//ImageIcon icon, ALevel level, long score) {
-		if (idx >= levelList.size()) idx = 0;
+
+	public void setLevel(int idx) {// ImageIcon icon, ALevel level, long score)
+									// {
+		if (idx >= levelList.size())
+			idx = 0;
 		ALevel level = levelList.get(idx);
 
 		// Load level icon.
@@ -290,30 +292,29 @@ public class MainPanel extends JPanel implements ComponentListener {
 			String iconString = level.getLauncherIcon();
 			EIcon iconEnum = EIcon.valueOf(iconString);
 			icon = ResourceLoader.icon(iconEnum);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			LOG.log(Level.WARNING, "no such level icon", e);
 			return;
 		}
-		
+
 		// Get score, default to 0.
 		long score;
 		if (scoreMap.containsKey(level.getClass())) {
 			score = scoreMap.get(level.getClass());
-		}
-		else score = 0L;
-		
+		} else
+			score = 0L;
+
 		// Set title, description, score.
 		lblTitle.setText(level.getName());
 		lblDescription.setText(level.getDescription());
 		lblScore.setText(String.valueOf(score));
-		
+
 		// Set level icon.
 		lblLevelImage.setIcon(icon);
 	}
-	
+
 	public void writeConfig() {
-		launchConfig.writeConfig();		
+		launchConfig.writeConfig();
 	}
 
 	public int getConfigWidth() {

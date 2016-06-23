@@ -14,11 +14,11 @@ public class SiblingComponent implements Component, Poolable {
 	private final static SiblingComponent DEFAULT_NEXT_SIBLING_COMPONENT = null;
 	private final static SiblingComponent DEFAULT_PREV_SIBLING_COMPONENT = null;
 	private final static Entity DEFAULT_ME = null;
-	
+
 	public SiblingComponent nextSiblingComponent = DEFAULT_NEXT_SIBLING_COMPONENT;
 	public SiblingComponent prevSiblingComponent = DEFAULT_PREV_SIBLING_COMPONENT;
 	public Entity me = DEFAULT_ME;
-	
+
 	public SiblingComponent() {
 	}
 

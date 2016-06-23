@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
  * Represents angular velocity. Speed in degrees/second.
+ * 
  * @author mad_gaksha
  */
 public class AngularVelocityComponent implements Component, Poolable {
@@ -14,13 +15,15 @@ public class AngularVelocityComponent implements Component, Poolable {
 
 	public AngularVelocityComponent() {
 	}
+
 	public AngularVelocityComponent(float speed) {
 		setup(speed);
 	}
+
 	public void setup(float speed) {
 		this.speed = speed;
 	}
-	
+
 	@Override
 	public void reset() {
 		speed = DEFAULT_SPEED;

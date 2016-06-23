@@ -21,10 +21,10 @@ public class VoiceComponent implements Component, Poolable {
 	public ESound onSpawn = null;
 	public ESound onDeath = null;
 	public VoicePlayer voicePlayer = null;
-	
+
 	public VoiceComponent() {
 	}
-	
+
 	public VoiceComponent(VoicePlayer voicePlayer) {
 		this.voicePlayer = voicePlayer;
 	}
@@ -39,7 +39,8 @@ public class VoiceComponent implements Component, Poolable {
 		onEnemyKilled = null;
 		onSpawn = null;
 		onDeath = null;
-		if (voicePlayer != null) voicePlayer.dispose();
+		if (voicePlayer != null)
+			voicePlayer.dispose();
 		voicePlayer = null;
 	}
 

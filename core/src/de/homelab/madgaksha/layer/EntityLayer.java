@@ -66,7 +66,8 @@ public class EntityLayer extends ALayer {
 	private boolean doUpdate;
 
 	public EntityLayer() throws IOException {
-		if (!createEngine()) throw new IOException("failed to load resources");
+		if (!createEngine())
+			throw new IOException("failed to load resources");
 	}
 
 	@Override
@@ -122,7 +123,8 @@ public class EntityLayer extends ALayer {
 
 	public boolean createEngine() {
 		addSystems();
-		if (!addMainEntites()) return false;
+		if (!addMainEntites())
+			return false;
 		return true;
 	}
 
@@ -150,7 +152,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new TimedCallbackSystem());
 		gameEntityEngine.addSystem(new TemporalSystem());
 		gameEntityEngine.addSystem(new ViewportUpdateSystem());
-		
+
 		switch (Gdx.app.getType()) {
 		case Android:
 			// TODO
@@ -175,13 +177,14 @@ public class EntityLayer extends ALayer {
 			break;
 		}
 	}
-	
+
 	private boolean addMainEntites() {
 		Entity battleStigma = PlayerMaker.getInstance().makePlayerBattleStigma(playerEntity, player);
 		Entity targetCross = MakerUtils.makeEnemyTargetCross();
 		Entity myCamera = MakerUtils.makeCamera(level, playerEntity);
-		if (battleStigma == null || myCamera == null) return false;
-		
+		if (battleStigma == null || myCamera == null)
+			return false;
+
 		gameEntityEngine.addEntity(myCamera);
 		gameEntityEngine.addEntity(battleStigma);
 		gameEntityEngine.addEntity(playerEntity);
@@ -191,10 +194,10 @@ public class EntityLayer extends ALayer {
 		playerBattleStigmaEntity = battleStigma;
 		enemyTargetCrossEntity = targetCross;
 		cameraEntity = myCamera;
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public boolean isBlockDraw() {
 		return false;
@@ -220,14 +223,17 @@ public class EntityLayer extends ALayer {
 			@Override
 			public void entityAdded(Entity entity) {
 				final IdComponent ic = Mapper.idComponent.get(entity);
-				if (ic != null) idEntityMap.put(ic.getId(), entity);
+				if (ic != null)
+					idEntityMap.put(ic.getId(), entity);
 			}
+
 			@Override
 			public void entityRemoved(Entity entity) {
 				String id = idEntityMap.inverse().get(entity);
-				if (id != null) idEntityMap.remove(id);
-			}				
-		});		
+				if (id != null)
+					idEntityMap.remove(id);
+			}
+		});
 	}
 
 	public static void addMainEntitiesToMap() {

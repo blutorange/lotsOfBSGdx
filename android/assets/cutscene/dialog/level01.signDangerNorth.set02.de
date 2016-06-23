@@ -1,30 +1,31 @@
 >>EventTextbox
   TransitionIn
   Text EOF
-きた、きき。
+Oben, fahren. Partizip.
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face SERIOUS
   Text EOF
-前に同じ未知標があったような。。。
-裏にもなにか書いてある。
-なになに。。。
+Habe ich nich so einen Wegweise schon einmal gesehen?
+Auf der Rückseite steht auch etwas.
+Mal schauen...
 EOF
 
 >>EventTextbox
   TransitionIn
   Text EOF
-来た！どうして？
-聞き！耳をすまして？
-北！近寄るな？
-危機！迫り来るか？
+Gekommen! Warum bist du es?
+Höre! Sperr die Ohren auf?
+Norden! Fahr nicht dort hin?
+Gefahr! Sie lauert dort?
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face ANGRY
   Text EOF
-なー？頭来た！北へ来る！どうなっても知らないから！
+Bitte was? Das reicht!!
+Jetzt geh ich dorthin, komme, was wolle!!!
 EOF

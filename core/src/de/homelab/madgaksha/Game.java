@@ -76,16 +76,16 @@ public class Game implements ApplicationListener {
 	public final static float VIEWPORT_GAME_AR = (float) VIEWPORT_GAME_AR_NUM / (float) VIEWPORT_GAME_AR_DEN;
 	/** 9/8 */
 	public final static float VIEWPORT_GAME_AR_INV = (float) VIEWPORT_GAME_AR_DEN / (float) VIEWPORT_GAME_AR_NUM;
-	
+
 	private final static String highScoreFile = "./toku.ten";
-	
+
 	/**
 	 * This will cause slowdown on slow devices, but game logic would get messed
 	 * up for high dt.
 	 */
 	public final static float MAX_DELTA_TIME = 0.2f;
 	public final static float MIN_DELTA_TIME = 0.005f;
-	
+
 	private final List<ALayer> layerStack = new ArrayList<ALayer>(10);
 	private final List<ALayer> layerStackPopQueue = new ArrayList<ALayer>(10);
 	private final List<ALayer> layerStackPushQueue = new ArrayList<ALayer>(10);
@@ -98,14 +98,14 @@ public class Game implements ApplicationListener {
 	private boolean running = false;
 	/** Whether the application was requested to exit. */
 	private boolean exitRequested = false;
-	
+
 	/** Screen resolution before the latest resize. */
 	private int lastWidth;
 	private int lastHeight;
 
 	private PauseLayer pauseLayer;
-	
-	//TODO
+
+	// TODO
 	// remove me, for testing only
 	private BitmapFont debugFont;
 	// testing end
@@ -116,7 +116,7 @@ public class Game implements ApplicationListener {
 
 	/** Custom shaders for the game. */
 	private CustomShaderProgram customShaderProgramBatchGame = null;
-	
+
 	/**
 	 * @param params
 	 *            Screen size, fps etc. that were requested.
@@ -162,7 +162,7 @@ public class Game implements ApplicationListener {
 			Gdx.app.exit();
 			return;
 		}
-		
+
 		// Setup audio system.
 		AwesomeAudio.initialize();
 
@@ -173,7 +173,7 @@ public class Game implements ApplicationListener {
 			Gdx.app.exit();
 			return;
 		}
-		
+
 		// Load background image for weird aspect ratios.
 		if ((backgroundImage = level.getBackgroundImage()) == null) {
 			LOG.error("failed to load background image");
@@ -181,7 +181,7 @@ public class Game implements ApplicationListener {
 			Gdx.app.exit();
 			return;
 		}
-		
+
 		// Initialize resource pool.
 		ResourcePool.init();
 
@@ -194,11 +194,12 @@ public class Game implements ApplicationListener {
 		batchPixel = new SpriteBatch();
 		batchModel = new ModelBatch();
 		shapeRenderer = new ShapeRenderer();
-		
+
 		// Initialize the entity engine.
-		gameEntityEngine = new PooledEngine(level.getEntityPoolInitialSize(),level.getEntityPoolPoolMaxSize(), level.getComponentPoolInitialSize(), level.getComponentPoolMaxSize());
+		gameEntityEngine = new PooledEngine(level.getEntityPoolInitialSize(), level.getEntityPoolPoolMaxSize(),
+				level.getComponentPoolInitialSize(), level.getComponentPoolMaxSize());
 		EntityLayer.addEntityListeners();
-		
+
 		// Create the player entity.
 		playerEntity = PlayerMaker.getInstance().makePlayer(player);
 		playerHitCircleEntity = PlayerMaker.getInstance().makePlayerHitCircle(player);
@@ -207,7 +208,7 @@ public class Game implements ApplicationListener {
 			Gdx.app.exit();
 			return;
 		}
-		
+
 		// Initialize map and load level.
 		if (!level.initialize(batchGame)) {
 			exitRequested = true;
@@ -228,17 +229,16 @@ public class Game implements ApplicationListener {
 		viewportPixel = new ScreenViewport();
 		viewportPixel.update(currentMonitorWidth, currentMonitorHeight, true);
 		computeBackgroundImageRectangle(currentMonitorWidth, currentMonitorHeight);
-		
+
 		// Initialize the layer stack.
 		// Start off with a layer stack containing only the entity engine.
 		try {
 			entityLayer = new EntityLayer();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			LOG.debug("could not initialize entity layer", e);
 			exitRequested = true;
 			Gdx.app.exit();
-			return;			
+			return;
 		}
 		layerStack.add(entityLayer);
 		entityLayer.addedToStack();
@@ -246,17 +246,18 @@ public class Game implements ApplicationListener {
 		// Setup the player entity.
 		PlayerMaker.getInstance().setupPlayer(player);
 		PlayerMaker.getInstance().setupPlayerHitCircle(player);
-		
+
 		// Keep track of the time.
 		gameClock = new Clock();
-		
+
 		// TODO remove me for release
-		if (DebugMode.activated) createDebugStuff();
+		if (DebugMode.activated)
+			createDebugStuff();
 
 		statusScreen.forPlayer(playerHitCircleEntity);
-		
+
 		EntityLayer.addMainEntitiesToMap();
-		
+
 		// Start the game.
 		running = true;
 	}
@@ -276,16 +277,17 @@ public class Game implements ApplicationListener {
 		// Render info window last.
 		renderStatusScreen();
 
-		//TODO remove me for release
+		// TODO remove me for release
 		// Render debug.
-		if (DebugMode.activated) renderDebug();
-	
+		if (DebugMode.activated)
+			renderDebug();
+
 		// Process layer stack queue.
 		// Must be done at once after the update and
 		// render methods, or sync becomes an issue.
 		// Adding / removing layers does not happen
 		// frequently, so we check if there is any
-		// work to be done first.		
+		// work to be done first.
 		if (layerStackPopQueue.size() > 0) {
 			layerStack.removeAll(layerStackPopQueue);
 			for (ALayer layer : layerStackPopQueue)
@@ -300,7 +302,7 @@ public class Game implements ApplicationListener {
 			}
 			layerStackPushQueue.clear();
 		}
-		
+
 		if (KeyMapDesktop.isPauseButtonJustPressed() && running)
 			pause();
 	}
@@ -309,12 +311,12 @@ public class Game implements ApplicationListener {
 	public void resize(int width, int height) {
 		if (!exitRequested) {
 			computeBackgroundImageRectangle(width, height);
-			
+
 			// Update our viewports.
 			viewportGame.update(width, height, false);
 			viewportPixel.update(width, height, true);
 			statusScreen.update(width, height);
-			
+
 			// Save current resolution.
 			currentMonitorWidth = width;
 			currentMonitorHeight = height;
@@ -329,8 +331,8 @@ public class Game implements ApplicationListener {
 			// Store old monitor resolution.
 			lastWidth = Gdx.graphics.getWidth();
 			lastHeight = Gdx.graphics.getHeight();
-			
-			// Resize all layers.			
+
+			// Resize all layers.
 			for (ALayer layer : layerStack)
 				layer.resize(width, height);
 		}
@@ -344,17 +346,19 @@ public class Game implements ApplicationListener {
 			pauseLayer.setBlockUpdate(true);
 		}
 		running = false;
-		MusicPlayer.getInstance().pause();	
+		MusicPlayer.getInstance().pause();
 	}
-	
+
 	public void pause(boolean block) {
 		LOG.debug("pausing game");
 		pauseLayer.setBlockUpdate(block);
-		if (running) pushLayer(pauseLayer);
+		if (running)
+			pushLayer(pauseLayer);
 		running = false;
-		if (block) MusicPlayer.getInstance().pause();	
+		if (block)
+			MusicPlayer.getInstance().pause();
 	}
-	
+
 	@Override
 	public void resume() {
 		// game should stay paused and resume only when pressing a button
@@ -367,7 +371,7 @@ public class Game implements ApplicationListener {
 		running = true;
 		MusicPlayer.getInstance().play();
 	}
-	
+
 	@Override
 	public void dispose() {
 		exitRequested = true;
@@ -401,7 +405,7 @@ public class Game implements ApplicationListener {
 
 		// Remove all entities and systems to trigger cleanup.
 		// Observe the proper order, begin with topmost layer.
-		for (int i = layerStack.size() ; i --> 0 ; ) {
+		for (int i = layerStack.size(); i-- > 0;) {
 			layerStack.get(i).removedFromStack();
 		}
 		layerStack.clear();
@@ -413,20 +417,21 @@ public class Game implements ApplicationListener {
 			backgroundImage.getTexture().dispose();
 
 		// TODO remove me
-		if (debugFont != null) debugFont.dispose();
-		
+		if (debugFont != null)
+			debugFont.dispose();
+
 		// Dispose temporary files.
 		LOG.debug("emptying temporary directory tempadx");
 		FileHandle dest = Gdx.files.local("tempadx/");
 		try {
 			dest.emptyDirectory();
-		}
-		catch (GdxRuntimeException e) {
+		} catch (GdxRuntimeException e) {
 			LOG.error("failed to empty temporary directory tempadx", e);
 		}
-		
+
 		// Dispose custom shaders.
-		if (customShaderProgramBatchGame != null) customShaderProgramBatchGame.dispose();
+		if (customShaderProgramBatchGame != null)
+			customShaderProgramBatchGame.dispose();
 
 	}
 
@@ -451,13 +456,15 @@ public class Game implements ApplicationListener {
 		Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
 
 		// Update and render the game.
-		final float deltaTime = timeScalingFactor * MathUtils.clamp(Gdx.graphics.getRawDeltaTime(), MIN_DELTA_TIME, MAX_DELTA_TIME);
+		final float deltaTime = timeScalingFactor
+				* MathUtils.clamp(Gdx.graphics.getRawDeltaTime(), MIN_DELTA_TIME, MAX_DELTA_TIME);
 
 		// Start with the topmost item on the layer stack and proceed
 		// with the layers down on the stack only if the layers
 		// above did not stop propagation.
 		int j = 0;
-		if (running) gameClock.update(deltaTime);
+		if (running)
+			gameClock.update(deltaTime);
 		for (int i = layerStack.size() - 1; i != -1; --i) {
 			final ALayer layer = layerStack.get(i);
 			// Save first layer that block drawing.
@@ -488,23 +495,25 @@ public class Game implements ApplicationListener {
 		statusScreen.render();
 	}
 
-	private void renderDebug() {	
+	private void renderDebug() {
 		viewportPixel.apply(false);
 		int cnt = 0;
 		for (Entity e : gameEntityEngine.getEntities()) {
 			cnt += e.getComponents().size();
 		}
 		batchPixel.begin();
-		debugFont.draw(batchPixel, "fps: " + (int) (1.0f / Gdx.graphics.getDeltaTime()), 0.0f, viewportGame.getScreenHeight());
-		debugFont.draw(batchPixel, "entities: " + gameEntityEngine.getEntities().size(), 0.0f, viewportGame.getScreenHeight()-30.0f);
-		debugFont.draw(batchPixel, "components: " + cnt, 0.0f, viewportGame.getScreenHeight()-60.0f);
+		debugFont.draw(batchPixel, "fps: " + (int) (1.0f / Gdx.graphics.getDeltaTime()), 0.0f,
+				viewportGame.getScreenHeight());
+		debugFont.draw(batchPixel, "entities: " + gameEntityEngine.getEntities().size(), 0.0f,
+				viewportGame.getScreenHeight() - 30.0f);
+		debugFont.draw(batchPixel, "components: " + cnt, 0.0f, viewportGame.getScreenHeight() - 60.0f);
 		batchPixel.end();
 	}
-	
+
 	// TODO remove me for release
 	private void createDebugStuff() {
 		debugFont = new BitmapFont(Gdx.files.internal("font/debugFont.fnt"));
-		debugFont.setColor(Color.RED);		
+		debugFont.setColor(Color.RED);
 	}
 
 	private void readMonitorInfo() {
@@ -523,17 +532,17 @@ public class Game implements ApplicationListener {
 	}
 
 	private void computeBackgroundImageRectangle(int width, int height) {
-		float cx = width*0.5f;
-		float cy = height*0.5f;
+		float cx = width * 0.5f;
+		float cy = height * 0.5f;
 		float hw = backgroundImage.getRegionWidth();
 		float hh = backgroundImage.getRegionHeight();
-		float scale = cx/hw;
-		scale = Math.max(scale, cy/hh);
+		float scale = cx / hw;
+		scale = Math.max(scale, cy / hh);
 		hw *= scale;
 		hh *= scale;
-		backgroundImageRectangle.set(cx-hw, cy-hh, hw+hw, hh+hh);
+		backgroundImageRectangle.set(cx - hw, cy - hh, hw + hw, hh + hh);
 	}
-	
+
 	/**
 	 * Requests the layer to be remove from the layer stack. It is removed at
 	 * the end of the update/render loop.
@@ -557,11 +566,12 @@ public class Game implements ApplicationListener {
 	}
 
 	public void setFragmentShaderBatchGame(FragmentShader fs) {
-		if (customShaderProgramBatchGame != null) customShaderProgramBatchGame.dispose();
+		if (customShaderProgramBatchGame != null)
+			customShaderProgramBatchGame.dispose();
 		customShaderProgramBatchGame = new CustomShaderProgram(fs);
 		customShaderProgramBatchGame.apply(batchGame);
 	}
-	
+
 	public void setGlobalTimeScale(float ts) {
 		timeScalingFactor = Math.max(0.0f, ts);
 	}
@@ -576,18 +586,18 @@ public class Game implements ApplicationListener {
 		OutputStream os = null;
 		try {
 			is = handle.read(1024);
-		}
-		catch (GdxRuntimeException e) {
-			LOG.error("could not open score file", e);			
+		} catch (GdxRuntimeException e) {
+			LOG.error("could not open score file", e);
 		}
 		try {
 			os = Gdx.files.local(highScoreFile).write(false, 1024);
 			gameScore.writeScore(is, os);
+		} finally {
+			if (os != null)
+				IOUtils.closeQuietly(os);
 		}
-		finally {
-			if (os != null) IOUtils.closeQuietly(os);
-		}
-		if (is != null) IOUtils.closeQuietly(is);
+		if (is != null)
+			IOUtils.closeQuietly(is);
 		this.exitRequested = true;
 		Gdx.app.exit();
 	}

@@ -16,18 +16,20 @@ import de.homelab.madgaksha.util.interpolator.IInterpolatorFinished;
 public class MusicPlayer extends AAudioPlayer {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(MusicPlayer.class);
-	
+
 	// Singleton
 	private static class SingletonHolder {
 		private static final MusicPlayer INSTANCE = new MusicPlayer();
 	}
+
 	public static MusicPlayer getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
+
 	private MusicPlayer() {
 		super();
 	}
-	
+
 	private Music currentClip = null;
 	private Music nextClip = null;
 
@@ -138,7 +140,7 @@ public class MusicPlayer extends AAudioPlayer {
 			fadeTask1 = fade(currentClip, time, targetLevel, new OnCompletionListener() {
 				@Override
 				public void onCompletion(Music music) {
-					fadeTask1 = null;					
+					fadeTask1 = null;
 				}
 			});
 		} else if (currentClip != null && nextClip == null) {

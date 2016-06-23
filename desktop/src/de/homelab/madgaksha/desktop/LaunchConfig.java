@@ -26,65 +26,77 @@ public class LaunchConfig {
 	private final static int DEFAULT_FPS = 30;
 	private final static float DEFAULT_TEXTBOX_SPEED = 15.0f;
 	private final static boolean DEFAULT_FULLSCREEN = false;
+
 	public LaunchConfig(Integer w, Integer h, Integer f, Boolean fs, Float ts) {
-		Properties props = new Properties();		
+		Properties props = new Properties();
 		InputStream is = null;
 		try {
 			is = new FileInputStream(new File(configFile));
 			props.load(is);
+		} catch (Exception e) { // keep default configuration
+		} finally {
+			if (is != null)
+				IOUtils.closeQuietly(is);
 		}
-		catch (Exception e) { // keep default configuration
-		}
-		finally {
-			if (is != null) IOUtils.closeQuietly(is);
-		}
-		
+
 		// Read from config file and merge with cli params.
 		textboxSpeed = ts;
 		fullscreen = fs;
 		fps = f;
 		width = w;
-		height = h;		
-		if (fps == null) fps = parseInt(props.getProperty("fps"), DEFAULT_FPS);
-		if (width == null) width = parseInt(props.getProperty("width"), DEFAULT_WIDTH);
-		if (height == null) height = parseInt(props.getProperty("height"), DEFAULT_HEIGHT);
-		if (fullscreen == null) fullscreen = parseBoolean(props.getProperty("fullscreen"), DEFAULT_FULLSCREEN);
-		if (textboxSpeed == null) textboxSpeed = parseFloat(props.getProperty("textboxSpeed"), DEFAULT_TEXTBOX_SPEED);
+		height = h;
+		if (fps == null)
+			fps = parseInt(props.getProperty("fps"), DEFAULT_FPS);
+		if (width == null)
+			width = parseInt(props.getProperty("width"), DEFAULT_WIDTH);
+		if (height == null)
+			height = parseInt(props.getProperty("height"), DEFAULT_HEIGHT);
+		if (fullscreen == null)
+			fullscreen = parseBoolean(props.getProperty("fullscreen"), DEFAULT_FULLSCREEN);
+		if (textboxSpeed == null)
+			textboxSpeed = parseFloat(props.getProperty("textboxSpeed"), DEFAULT_TEXTBOX_SPEED);
 		writeConfig();
 	}
+
 	private Integer parseInt(String number, Integer defaultNumber) {
-		if (number == null) return defaultNumber;
+		if (number == null)
+			return defaultNumber;
 		final Scanner s = new Scanner(number);
 		Integer x;
 		if (s.hasNextInt(10)) {
 			x = s.nextInt(10);
-		}
-		else x = defaultNumber;
+		} else
+			x = defaultNumber;
 		s.close();
 		return x;
 	}
+
 	private Float parseFloat(String number, Float defaultNumber) {
-		if (number == null) return defaultNumber;
+		if (number == null)
+			return defaultNumber;
 		final Scanner s = new Scanner(number);
 		Float x;
 		if (s.hasNextFloat()) {
 			x = s.nextFloat();
-		}
-		else x = defaultNumber;
+		} else
+			x = defaultNumber;
 		s.close();
 		return x;
 	}
+
 	private Boolean parseBoolean(String bool, Boolean defaultBoolean) {
-		if (bool == null) return defaultBoolean;
+		if (bool == null)
+			return defaultBoolean;
 		final Scanner s = new Scanner(bool);
 		Boolean b;
 		if (s.hasNextBoolean()) {
 			b = s.nextBoolean();
-		}
-		else b = defaultBoolean;
+		} else
+			b = defaultBoolean;
 		s.close();
 		return b;
-	}		
+	}
+
 	public void writeConfig() {
 		Properties props = new Properties();
 		props.setProperty("width", String.valueOf(width));
@@ -99,11 +111,12 @@ public class LaunchConfig {
 			props.store(os, "main configuration");
 		} catch (Exception e) {
 			LOG.log(Level.SEVERE, "could not write configuration file", e);
-		}
-		finally {
-			if (os != null) IOUtils.closeQuietly(os);
+		} finally {
+			if (os != null)
+				IOUtils.closeQuietly(os);
 		}
 	}
+
 	public void setDefaults() {
 		fps = DEFAULT_FPS;
 		width = DEFAULT_WIDTH;

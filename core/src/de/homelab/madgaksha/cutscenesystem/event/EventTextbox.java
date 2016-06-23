@@ -77,8 +77,8 @@ public class EventTextbox extends ACutsceneEvent {
 	 * Whether this textbox is currently active, ie. rendered on-screen.
 	 * Modifications via set methods are allowed only when it is not active,
 	 * otherwise an {@link IllegalStateException} is thrown, unless
-	 * {@link #strictMode} is deactivated. 
-	 * <br><br>
+	 * {@link #strictMode} is deactivated. <br>
+	 * <br>
 	 * This textbox becomes active when {@link #begin()} is called and ends once
 	 * the user presses the textbox advance button and this textbox has finished
 	 * its out-transition.
@@ -911,7 +911,7 @@ public class EventTextbox extends ACutsceneEvent {
 
 		public void setLines(String lines) {
 			enforceNotFrozen();
-			if (lines == null || lines.isEmpty() || lines.length() > 200)
+			if (lines == null || lines.isEmpty())
 				return;
 			this.lines = lines;
 		}
@@ -1038,7 +1038,8 @@ public class EventTextbox extends ACutsceneEvent {
 				ConfigReader.valueOf(key).readSetting(s, builder);
 			} catch (IllegalArgumentException e) {
 				LOG.error("no such setting for an event textbox: " + key);
-				s.nextLine();
+				if (s.hasNextLine())
+					s.nextLine();
 			}
 		}
 

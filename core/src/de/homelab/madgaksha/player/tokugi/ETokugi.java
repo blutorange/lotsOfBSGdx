@@ -7,20 +7,21 @@ import de.homelab.madgaksha.logging.Logger;
 
 public enum ETokugi {
 	NONE(TokugiNone.class),
-	BOMB(TokugiBomb.class),
-	;
+	BOMB(TokugiBomb.class),;
 
 	private final static Logger LOG = Logger.getLogger(ETokugi.class);
-	
+
 	private final Class<? extends ATokugi> clazz;
-	
+
 	private ETokugi(Class<? extends ATokugi> clazz) {
 		this.clazz = clazz;
 	}
-	
+
 	/**
 	 * Gets the weapon object for this weapon type.
-	 * @return The weapon object for this weapon type. Null if it could not be loaded.
+	 * 
+	 * @return The weapon object for this weapon type. Null if it could not be
+	 *         loaded.
 	 */
 	public ATokugi getTokugi() {
 		ATokugi tokugi;

@@ -14,15 +14,18 @@ public class EventScore extends ACutsceneEvent {
 
 	private long score = 0L;
 	private boolean eventDone = false;
-	
+
 	/**
-	 * An event that simply wait for some time and then proceeds to the next event.
-	 * @param timeToWait Waiting time in seconds.
+	 * An event that simply wait for some time and then proceeds to the next
+	 * event.
+	 * 
+	 * @param timeToWait
+	 *            Waiting time in seconds.
 	 */
 	public EventScore(long score) {
 		this.score = score;
 	}
-	
+
 	@Override
 	public boolean isFinished() {
 		return eventDone;
@@ -47,11 +50,11 @@ public class EventScore extends ACutsceneEvent {
 	public boolean begin() {
 		return true;
 	}
-	
+
 	@Override
 	public void end() {
 	}
-	
+
 	public static ACutsceneEvent readNextObject(Scanner s) {
 		Long score = FileCutsceneProvider.nextLong(s);
 		if (score == null) {

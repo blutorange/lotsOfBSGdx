@@ -61,7 +61,7 @@ public class MovementSystem extends IteratingSystem {
 			pc.x += bbmc.minX + hw;
 			pc.y += bbmc.minY + hh;
 			// Move on the map, respecting blocking tiles
-			//mapMovement(pc, vc.x * deltaTime, vc.y * deltaTime, hh, hw);
+			// mapMovement(pc, vc.x * deltaTime, vc.y * deltaTime, hh, hw);
 			mapMovement(pc, vc, deltaTime);
 			// Move position component back to its original position.
 			pc.x -= bbmc.minX + hw;

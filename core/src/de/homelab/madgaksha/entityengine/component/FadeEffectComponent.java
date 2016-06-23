@@ -27,7 +27,7 @@ public class FadeEffectComponent implements Component, Poolable {
 	public Interpolation interpolation = DEFAULT_INTERPOLATION;
 	public ITimedCallback callback = null;
 	public Object customData = DEFAULT_CUSTOM_DATA;
-	
+
 	public FadeEffectComponent() {
 	}
 

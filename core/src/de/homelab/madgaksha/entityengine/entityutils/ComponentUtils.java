@@ -21,8 +21,9 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 
 /**
- * Utilities for working with an entity's pain points. Usually processed by an appropriate entity system,
- * this should be used sparingly.
+ * Utilities for working with an entity's pain points. Usually processed by an
+ * appropriate entity system, this should be used sparingly.
+ * 
  * @author madgaksha
  *
  */
@@ -30,24 +31,30 @@ public class ComponentUtils {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(ComponentUtils.class);
 	private final static Vector2 v1 = new Vector2();
-	
+
 	public static void applyComponentQueue(Entity e, ComponentQueueComponent cqc) {
-		for (Class<? extends Component> c : cqc.remove) e.remove(c);
-		for (Component c : cqc.add) e.add(c);
+		for (Class<? extends Component> c : cqc.remove)
+			e.remove(c);
+		for (Component c : cqc.add)
+			e.add(c);
 		cqc.add.clear();
 		cqc.remove.clear();
 	}
-	
-	/** Applied the component queue of the entity, if it exists.*/
+
+	/** Applied the component queue of the entity, if it exists. */
 	public static void applyComponentQueue(Entity e) {
 		final ComponentQueueComponent cqc = Mapper.componentQueueComponent.get(e);
-		if (cqc != null) applyComponentQueue(e, cqc);
+		if (cqc != null)
+			applyComponentQueue(e, cqc);
 	}
 
 	/**
 	 * Switches the animation list to the given animation list.
-	 * @param entity Entity whose sprite animation list needs to be changed.
-	 * @param animationList The new animation list.
+	 * 
+	 * @param entity
+	 *            Entity whose sprite animation list needs to be changed.
+	 * @param animationList
+	 *            The new animation list.
 	 */
 	public static void switchAnimationList(Entity entity, EAnimationList animationList) {
 		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(entity);
@@ -59,26 +66,26 @@ public class ComponentUtils {
 			sc.setup(sac);
 		}
 	}
-	
+
 	public static void enableScreenQuake(float amplitude, float frequency) {
 		final QuakeEffectComponent qec = gameEntityEngine.createComponent(QuakeEffectComponent.class);
 		qec.setup(amplitude, frequency);
 		cameraEntity.add(qec);
 	}
-	
+
 	public static void enableScreenQuake(RichterScale quake) {
 		enableScreenQuake(quake.amplitude, quake.frequency);
 	}
-	
+
 	public static void disableScreenQuake() {
 		cameraEntity.remove(QuakeEffectComponent.class);
 	}
-	
+
 	public static void lookIntoDirection(Entity who, Entity atWhom) {
 		final PositionComponent pcWho = Mapper.positionComponent.get(who);
 		final PositionComponent pcAtWhom = Mapper.positionComponent.get(atWhom);
-		final DirectionComponent dc = Mapper.directionComponent.get(who); 
-		v1.set(pcAtWhom.x-pcWho.x,pcAtWhom.y-pcWho.y);
-		dc.degree =  630.0f-v1.angle();
+		final DirectionComponent dc = Mapper.directionComponent.get(who);
+		v1.set(pcAtWhom.x - pcWho.x, pcAtWhom.y - pcWho.y);
+		dc.degree = 630.0f - v1.angle();
 	}
 }

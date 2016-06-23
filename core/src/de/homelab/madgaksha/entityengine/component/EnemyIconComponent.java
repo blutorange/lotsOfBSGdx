@@ -18,11 +18,12 @@ public class EnemyIconComponent implements Component, Poolable {
 
 	public EnemyIconComponent() {
 	}
+
 	public EnemyIconComponent(Sprite main, Sprite sub) {
 		this.iconMain = main;
 		this.iconSub = sub;
 	}
-	
+
 	@Override
 	public void reset() {
 		iconMain = DEFAULT_ICON_MAIN;

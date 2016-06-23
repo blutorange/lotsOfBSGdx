@@ -2,8 +2,9 @@
   TransitionIn
   TransitionOut
   Text EOF
-毒華（どくば）の花は上空にその臭気を噴射し、獲物を刈り取る。
-歩くよし、浮くあし。
+The flower by the name of Toxiwer, it emits its poisonous
+fumes into the air and hunts down its prey.
+Remember: Walking works, hovering hurts.
 EOF
 
 >>EventTextbox
@@ -12,10 +13,9 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-そんな都合いいな理由、だれが納得できるかよ！
-まるであたしがこんなことになって分かってて、
-屁理屈でもなんでも構わない態度で
-通過できないようにしたかっただけじゃない！
+Like I'm going to accept that kind of reasoning!
+That sounds like somebody just made that up for
+me, so that I couldn't go any further!
 EOF
 
 >>EventTextbox
@@ -23,7 +23,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-はたしそれはどうかね？
+Would the truth really be like that?
 EOF
 
 >>EventTextbox
@@ -32,5 +32,5 @@ EOF
   Speaker Estelle
   Face SURPRISED
   Text EOF
-？？？
+???
 EOF

@@ -21,18 +21,18 @@ import com.badlogic.gdx.math.Vector2;
 public class ExponentialGrantStrategy implements IGrantStrategy {
 	private final static float DEFAULT_TARGET_TIME = 0.033f;
 	private final static float DEFAULT_COMBINED_FACTOR = 1.0f / DEFAULT_TARGET_TIME;
-		
+
 	private float combinedFactor = DEFAULT_COMBINED_FACTOR;
 	private final Vector2 v = new Vector2();
-	
+
 	public ExponentialGrantStrategy() {
 		combinedFactor = DEFAULT_COMBINED_FACTOR;
 	}
 
 	public ExponentialGrantStrategy(float reductionFactor) {
 		this.combinedFactor = reductionFactor / DEFAULT_TARGET_TIME;
-	}	
-	
+	}
+
 	public ExponentialGrantStrategy(float reductionFactor, float targetTime) {
 		this.combinedFactor = reductionFactor / targetTime;
 	}
@@ -46,8 +46,9 @@ public class ExponentialGrantStrategy implements IGrantStrategy {
 	@Override
 	public Vector2 compromise2D(float isX, float isY, float shouldX, float shouldY, float deltaTime) {
 		final float reductionFactor = combinedFactor * deltaTime;
-		if (reductionFactor >= 1.0f) return v.set(shouldX,shouldY);
-		v.set(shouldX-isX,shouldY-isY);
+		if (reductionFactor >= 1.0f)
+			return v.set(shouldX, shouldY);
+		v.set(shouldX - isX, shouldY - isY);
 		v.x = v.x * reductionFactor + isX;
 		v.y = v.y * reductionFactor + isY;
 		return v;

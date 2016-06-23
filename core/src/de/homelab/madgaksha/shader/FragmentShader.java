@@ -20,16 +20,24 @@ public class FragmentShader {
 				+ "}";
 	}
 	private final static FragmentShader DEFAULT = new FragmentShader(DEFAULT_PROGRAM);
+
 	public static FragmentShader getDefault() {
 		return DEFAULT;
 	}
+
 	private final String program;
+
 	public FragmentShader(String program) {
 		this.program = program;
 	}
+
 	public String getProgram() {
 		return program;
 	}
-	public void update(float deltaTime){};
-	public void forShaderProgram(ShaderProgram sp){};
+
+	public void update(float deltaTime) {
+	};
+
+	public void forShaderProgram(ShaderProgram sp) {
+	};
 }

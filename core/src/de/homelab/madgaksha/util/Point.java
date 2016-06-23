@@ -12,16 +12,18 @@ public class Point implements Shape2D {
 
 	public float x = 0.0f;
 	public float y = 0.0f;
-	
+
 	/**
 	 * Constructs a new point at the center of the rectangle.
-	 * @param r Rectangle at whose center this point will lie.
+	 * 
+	 * @param r
+	 *            Rectangle at whose center this point will lie.
 	 */
 	public Point(Rectangle r) {
 		x = r.x + r.width * 0.5f;
 		y = r.y + r.height * 0.5f;
 	}
-	
+
 	public Point(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -36,7 +38,7 @@ public class Point implements Shape2D {
 	public boolean contains(float x, float y) {
 		return this.x == x && this.y == y;
 	}
-	
+
 	public boolean inside(Shape2D shape) {
 		return shape.contains(x, y);
 	}

@@ -7,25 +7,25 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
-public enum EAnimation implements IResource<EAnimation,AtlasAnimation> {
+public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 	// =================
-	//      ESTELLE
+	// ESTELLE
 	// =================
 	ESTELLE_RUNNING(ETexture.ESTELLE_RUNNING, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP),
 	ESTELLE_STANDING(ETexture.ESTELLE_STANDING, 128, 128, 40, 0.2f, AtlasAnimation.PlayMode.LOOP),
 	ESTELLE_SWINGING(ETexture.ESTELLE_SWINGING, 128, 128, 20, 0.1f, AtlasAnimation.PlayMode.LOOP),
 
 	// =================
-	//      JOSHUA
+	// JOSHUA
 	// =================
 	JOSHUA_STANDING(ETexture.JOSHUA_STANDING, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP),
 
 	// =================
-	//      ENEMIES
+	// ENEMIES
 	// =================
-	
+
 	;
-	
+
 	private final static Logger LOG = Logger.getLogger(EAnimation.class);
 	private final static EnumMap<EAnimation, AtlasAnimation> animationCache = new EnumMap<EAnimation, AtlasAnimation>(
 			EAnimation.class);
@@ -98,7 +98,7 @@ public enum EAnimation implements IResource<EAnimation,AtlasAnimation> {
 		AtlasRegion[] tiles = new AtlasRegion[count];
 		int col = 0;
 		for (int i = 0; i != count; ++i) {
-			
+
 			tiles[i] = new AtlasRegion(atlasRegion.getTexture(), x, y, tileWidth, tileHeight);
 			++col;
 			x += tileWidth;
@@ -115,5 +115,5 @@ public enum EAnimation implements IResource<EAnimation,AtlasAnimation> {
 	public void clearAllOfThisKind() {
 		EAnimation.clearAll();
 	}
-	
+
 }

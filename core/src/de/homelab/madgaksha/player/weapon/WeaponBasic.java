@@ -27,14 +27,15 @@ public class WeaponBasic extends AWeapon {
 	private final static float BULLET_INITIAL_SPEED = 800.0f;
 	private final static float BULLET_LIFE = 3.0f;
 	private final static float BULLET_INTERVAL_MIN = 0.2f;
-	private final static float BULLET_INTERVAL_MAX = 0.8f;//5.8f;
+	private final static float BULLET_INTERVAL_MAX = 0.8f;// 5.8f;
 	private final static float BULLET_ANGULAR_SPEED = 900.0f;
 	private final static float BULLET_ATTRACTION = 1.8f;
 	private final static float BULLET_FRICTION = 0.2f;
-	
-	//private final LinearMotionTrajectory linearMotionTrajectory = new LinearMotionTrajectory();
+
+	// private final LinearMotionTrajectory linearMotionTrajectory = new
+	// LinearMotionTrajectory();
 	private final HomingForceTrajectory homingForceTrajectory = new HomingForceTrajectory();
-	private final Vector2 v = new Vector2();			
+	private final Vector2 v = new Vector2();
 	private float remainingTime = 0.0f;
 
 	@SuppressWarnings("unused")
@@ -61,17 +62,18 @@ public class WeaponBasic extends AWeapon {
 		if (remainingTime <= 0.0f) {
 			remainingTime = MathUtils.random(BULLET_INTERVAL_MIN, BULLET_INTERVAL_MAX);
 
-			if (cameraTrackingComponent.focusPoints.size() < 1) return;
-			
+			if (cameraTrackingComponent.focusPoints.size() < 1)
+				return;
+
 			final Entity enemy = GlobalBag.cameraTrackingComponent.focusPoints
 					.get(GlobalBag.cameraTrackingComponent.trackedPointIndex);
 			final PositionComponent pcEnemy = Mapper.positionComponent.get(enemy);
 			final PositionComponent pcPlayer = Mapper.positionComponent.get(player);
-			final VelocityComponent vcPlayer = Mapper.velocityComponent.get(player);		
+			final VelocityComponent vcPlayer = Mapper.velocityComponent.get(player);
 			final BoundingBoxCollisionComponent bbcc = Mapper.boundingBoxCollisionComponent.get(enemy);
-			
+
 			v.set(pcEnemy.y - pcPlayer.y, pcPlayer.x - pcEnemy.x).nor().scl(BULLET_INITIAL_SPEED);
-			
+
 			homingForceTrajectory.angularSpeed(BULLET_ANGULAR_SPEED);
 			homingForceTrajectory.velocity(vcPlayer.y + v.x, vcPlayer.y + v.y);
 			homingForceTrajectory.life(BULLET_LIFE);
@@ -79,13 +81,13 @@ public class WeaponBasic extends AWeapon {
 			homingForceTrajectory.position(pcPlayer.x, pcPlayer.y);
 			homingForceTrajectory.attraction(BULLET_ATTRACTION);
 			homingForceTrajectory.friction(BULLET_FRICTION);
-			homingForceTrajectory.absorptionRadius(0.5f * Math.min(bbcc.maxX-bbcc.minX,bbcc.maxY-bbcc.minY));
-			
+			homingForceTrajectory.absorptionRadius(0.5f * Math.min(bbcc.maxX - bbcc.minX, bbcc.maxY - bbcc.minY));
+
 			// Create left and right bullet.
 			BulletMaker.makeForPlayer(BulletShapeMaker.ORB_NOCOLOR, homingForceTrajectory, BULLET_POWER);
-			homingForceTrajectory.velocity(vcPlayer.x -v.x, vcPlayer.y - v.y);
+			homingForceTrajectory.velocity(vcPlayer.x - v.x, vcPlayer.y - v.y);
 			BulletMaker.makeForPlayer(BulletShapeMaker.ORB_NOCOLOR, homingForceTrajectory, BULLET_POWER);
-			
+
 			// Play sound
 			SoundPlayer.getInstance().play(ESound.WEAPON_BASIC_1);
 		}
@@ -93,9 +95,6 @@ public class WeaponBasic extends AWeapon {
 
 	@Override
 	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
-		return new IResource<?, ?>[] {
-			BulletShapeMaker.ORB_NOCOLOR.getResource(),
-			ESound.WEAPON_BASIC_1,
-			};
+		return new IResource<?, ?>[] { BulletShapeMaker.ORB_NOCOLOR.getResource(), ESound.WEAPON_BASIC_1, };
 	}
 }

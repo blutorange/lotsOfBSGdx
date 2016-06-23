@@ -1,28 +1,29 @@
 >>EventTextbox
   TransitionIn
   Text EOF
-きた、きき。
+Oben, fahren. Partizip.
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face NORMAL
   Text EOF
-裏にもなにか書いてある。
-なになに。。。
+Auf der Rückseite scheint auch etwas zu stehen.
+Mal schauen...
 EOF
 
 >>EventTextbox
   TransitionIn
   Text EOF
-北！
+NORDEN!
 
-危機！
+GE-FAHR!
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face EVASIVE
   Text EOF
-はいわかりました。ヨシュアを探しに行こう。。。
+Ja, ja, schon verstanden.
+Suchen wir Joshua...
 EOF

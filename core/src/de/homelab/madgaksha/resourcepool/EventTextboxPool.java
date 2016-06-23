@@ -11,22 +11,25 @@ public class EventTextboxPool extends Pool<EventTextbox> {
 
 	private final static int INITIAL_SIZE = 10;
 	private final static int MAX_SIZE = 200;
-	
+
 	// Singleton
 	private static class SingletonHolder {
 		private static final EventTextboxPool INSTANCE = new EventTextboxPool();
 	}
+
 	public static EventTextboxPool getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
+
 	private EventTextboxPool() {
 		super(INITIAL_SIZE, MAX_SIZE);
 	}
-	
+
 	@Override
 	protected EventTextbox newObject() {
 		return new EventTextbox();
 	}
+
 	// Enforce reset gets called.
 	@Override
 	protected void reset(EventTextbox box) {

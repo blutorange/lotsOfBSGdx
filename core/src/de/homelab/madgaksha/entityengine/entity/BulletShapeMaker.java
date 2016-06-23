@@ -17,13 +17,15 @@ import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
 
 /**
- * Enum for the different shapes of a bullet. Each bullet shape is defined by its image and geometry.
+ * Enum for the different shapes of a bullet. Each bullet shape is defined by
+ * its image and geometry.
+ * 
  * @author madgaksha
  *
  */
 public enum BulletShapeMaker {
-	ORB_NOCOLOR(ETexture.BULLET_ORB_NOCOLOR, new Rectangle(-13.0f,-13.0f,13.0f,13.0f), null),
-	
+	ORB_NOCOLOR(ETexture.BULLET_ORB_NOCOLOR, new Rectangle(-13.0f, -13.0f, 13.0f, 13.0f), null),
+
 	PACMAN_BLACK(ETexture.BULLET_PACMAN_BLACK, Box.PACMAN, null, 150L),
 	PACMAN_RED(ETexture.BULLET_PACMAN_RED, Box.PACMAN, null, 150L),
 	PACMAN_LIGHTRED(ETexture.BULLET_PACMAN_LIGHTRED, Box.PACMAN, null, 150L),
@@ -49,23 +51,22 @@ public enum BulletShapeMaker {
 	FLOWER_GREEN(ETexture.BULLET_FLOWER_GREEN, Box.FLOWER, null, 500L),
 	FLOWER_YELLOW(ETexture.BULLET_FLOWER_YELLOW, Box.FLOWER, null, 500L),
 	FLOWER_WHITE(ETexture.BULLET_FLOWER_WHITE, Box.FLOWER, null, 500L),
-	
+
 	// Score bullets.
 	GEMLET_BROWN(ETexture.BULLET_GEMLET_BROWN, Box.GEMLET, null),
 	GEMLET_BLUE(ETexture.BULLET_GEMLET_BLUE, Box.GEMLET, null),
 	GEMLET_RED(ETexture.BULLET_GEMLET_RED, Box.GEMLET, null),
-	GEMLET_GREEN(ETexture.BULLET_GEMLET_GREEN, Box.GEMLET, null),
-	;
-		
+	GEMLET_GREEN(ETexture.BULLET_GEMLET_GREEN, Box.GEMLET, null),;
+
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(BulletShapeMaker.class);
-	
+
 	private ETexture resource;
 	private PoolableAtlasSprite sprite;
 	private Rectangle boundingBox;
 	private Shape2D exactShape;
 	public final long score;
-	
+
 	/**
 	 * @param texture
 	 *            The bullet's image.
@@ -79,7 +80,7 @@ public enum BulletShapeMaker {
 	private BulletShapeMaker(ETexture texture, Rectangle boundingBox, Shape2D exactShape) {
 		this(texture, boundingBox, exactShape, 0L);
 	}
-	
+
 	/**
 	 * 
 	 * @param texture
@@ -100,10 +101,13 @@ public enum BulletShapeMaker {
 		this.exactShape = exactShape;
 		this.score = score;
 	}
-	
+
 	/**
-	 * Adds the appropriate {@link Component}s for this bullet shape to the entity.
-	 * @param e Entity to setup.
+	 * Adds the appropriate {@link Component}s for this bullet shape to the
+	 * entity.
+	 * 
+	 * @param e
+	 *            Entity to setup.
 	 */
 	public void setup(Entity e) {
 		SpriteComponent sc = gameEntityEngine.createComponent(SpriteComponent.class);
@@ -112,26 +116,26 @@ public enum BulletShapeMaker {
 		sc.setup(sprite);
 		bbcc.setup(boundingBox);
 
-		e.add(bbcc)
-			.add(sc);
-		
+		e.add(bbcc).add(sc);
+
 		if (exactShape != null) {
 			ShapeComponent spc = gameEntityEngine.createComponent(ShapeComponent.class);
 			spc.setup(exactShape);
 			e.add(spc);
 		}
 	}
-	
-	public IResource<? extends Enum<?>,?> getResource() {
+
+	public IResource<? extends Enum<?>, ?> getResource() {
 		return resource;
 	}
-	
+
 	private final static class Box {
-		private final static Rectangle PACMAN = new Rectangle(-7.0f,-7.0f,14.0f,14.0f);
-		private final static Rectangle GEMLET = new Rectangle(-20.0f,-20f,40.0f,40.0f);
-		private final static Rectangle FLOWER = new Rectangle(-31.0f,-29.0f,62.0f,58.0f);
+		private final static Rectangle PACMAN = new Rectangle(-7.0f, -7.0f, 14.0f, 14.0f);
+		private final static Rectangle GEMLET = new Rectangle(-20.0f, -20f, 40.0f, 40.0f);
+		private final static Rectangle FLOWER = new Rectangle(-31.0f, -29.0f, 62.0f, 58.0f);
 	}
+
 	private final static class Shape {
-		private final static Shape2D FLOWER = new Circle(0.0f,0.0f,30.0f);
+		private final static Shape2D FLOWER = new Circle(0.0f, 0.0f, 30.0f);
 	}
 }

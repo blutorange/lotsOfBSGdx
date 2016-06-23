@@ -33,29 +33,41 @@ public class CallbackMaker extends EntityMaker implements ITrigger, IReceive {
 	private static class SingletonHolder {
 		private static final CallbackMaker INSTANCE = new CallbackMaker();
 	}
+
 	public static CallbackMaker getInstance() {
 		return SingletonHolder.INSTANCE;
-	}	
-	private CallbackMaker () {
+	}
+
+	private CallbackMaker() {
 		super();
 	}
-	
+
 	/**
 	 * 
-	 * @param entity Entity to setup.
-	 * @param shape Shape of the callback entity.
-	 * @param trigger Type of trigger for the callback.
-	 * @param callback Callback to be called. Its signature must be <code>void myCallback(MapProperties)</code> and it must be declared for a subclass of {@link ALevel}.
-	 * @param properties Map properties passed to the callback function.
-	 * @param loop How many times the callback should loop (be triggered).
-	 * @param interval Interval between loops in seconds.
+	 * @param entity
+	 *            Entity to setup.
+	 * @param shape
+	 *            Shape of the callback entity.
+	 * @param trigger
+	 *            Type of trigger for the callback.
+	 * @param callback
+	 *            Callback to be called. Its signature must be
+	 *            <code>void myCallback(MapProperties)</code> and it must be
+	 *            declared for a subclass of {@link ALevel}.
+	 * @param properties
+	 *            Map properties passed to the callback function.
+	 * @param loop
+	 *            How many times the callback should loop (be triggered).
+	 * @param interval
+	 *            Interval between loops in seconds.
 	 */
-	public void setup(Entity entity, Shape2D shape, ETrigger trigger, Method callback, MapProperties properties, int loops, float duration) {
+	public void setup(Entity entity, Shape2D shape, ETrigger trigger, Method callback, MapProperties properties,
+			int loops, float duration) {
 		super.setup(entity);
 		final CallbackComponent cc = new CallbackComponent(callback, properties);
 		final PositionComponent pc = new PositionComponent(MakerUtils.makePositionAtCenter(shape));
 		final TemporalComponent tec = new TemporalComponent();
-		
+
 		final Component tc = MakerUtils.makeTrigger(this, this, trigger, ECollisionGroup.PLAYER_GROUP);
 
 		final ABoundingBoxComponent bbcCollision = new BoundingBoxCollisionComponent(
@@ -66,9 +78,8 @@ public class CallbackMaker extends EntityMaker implements ITrigger, IReceive {
 			cqc.remove.add(InactiveComponent.class);
 			entity.add(new InactiveComponent());
 			entity.add(new TimedCallbackComponent(LOOP_CALLBACK_ONCE, 0, -1));
-		}
-		else {
-			final TimedCallbackComponent tcc = new TimedCallbackComponent(LOOP_CALLBACK, duration, loops+1);
+		} else {
+			final TimedCallbackComponent tcc = new TimedCallbackComponent(LOOP_CALLBACK, duration, loops + 1);
 			// First activation should occur immediately.
 			tcc.totalTime = duration + duration;
 			cqc.add.add(tcc);
@@ -97,19 +108,20 @@ public class CallbackMaker extends EntityMaker implements ITrigger, IReceive {
 	protected IResource<? extends Enum<?>, ?>[] requestedResources() {
 		return null;
 	}
-	
+
 	private final static ITimedCallback LOOP_CALLBACK = new ITimedCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
 			try {
 				final CallbackComponent cc = Mapper.callbackComponent.get(entity);
-				if (cc != null) cc.callback.invoke(level, cc.properties);
+				if (cc != null)
+					cc.callback.invoke(level, cc.properties);
 			} catch (ReflectionException ex) {
 				LOG.error("could not invoke callback: " + this, ex);
-			}			
+			}
 		}
-	};	
-	
+	};
+
 	public final static ITimedCallback LOOP_CALLBACK_ONCE = new ITimedCallback() {
 		@Override
 		public void run(Entity entity, Object data) {

@@ -24,14 +24,13 @@ public class ForceFieldComponent implements Component, Poolable {
 			return new Vector2();
 		}
 	};
-	
+
 	public IForceField field;
 	public boolean ignoreOffset = DEFAULT_IGNORE_OFFSET;
 
 	public ForceFieldComponent() {
 	}
-	
-	
+
 	@Override
 	public void reset() {
 		field = DEFAULT_FIELD;

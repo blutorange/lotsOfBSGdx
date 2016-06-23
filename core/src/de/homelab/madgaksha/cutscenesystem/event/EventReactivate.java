@@ -25,15 +25,18 @@ public class EventReactivate extends ACutsceneEvent {
 	private String guid = StringUtils.EMPTY;
 	private Entity entity = null;
 	private boolean eventDone = false;
-	
+
 	/**
-	 * An event that simply wait for some time and then proceeds to the next event.
-	 * @param timeToWait Waiting time in seconds.
+	 * An event that simply wait for some time and then proceeds to the next
+	 * event.
+	 * 
+	 * @param timeToWait
+	 *            Waiting time in seconds.
 	 */
 	public EventReactivate(String guid) {
 		this.guid = guid;
 	}
-	
+
 	@Override
 	public boolean isFinished() {
 		return eventDone;
@@ -48,13 +51,13 @@ public class EventReactivate extends ACutsceneEvent {
 		if (!eventDone) {
 			final TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);
 			final ComponentQueueComponent cqc = gameEntityEngine.createComponent(ComponentQueueComponent.class);
-			
+
 			tcc.setup(CallbackMaker.LOOP_CALLBACK_ONCE, 0, -1);
 			cqc.remove.add(InactiveComponent.class);
-			
+
 			entity.add(tcc);
 			entity.add(cqc);
-			
+
 			eventDone = true;
 		}
 	}
@@ -75,7 +78,6 @@ public class EventReactivate extends ACutsceneEvent {
 		}
 		return entity != null;
 	}
-	
 
 	@Override
 	public void reset() {
@@ -86,7 +88,7 @@ public class EventReactivate extends ACutsceneEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	public static ACutsceneEvent readNextObject(Scanner s) {
 		String guid = FileCutsceneProvider.readNextGuid(s);
 		if (guid == null) {

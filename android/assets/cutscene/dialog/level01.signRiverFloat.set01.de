@@ -2,10 +2,9 @@
   TransitionIn
   TransitionOut
   Text EOF
-無明界（むみょうかい）より出で、
-六処界（ろくしょかい）へ流るる河源は東（あずま）。
-水、鈴引きて、濁り江が如く濁り音色聞こえり。
-いかにも「ベル江（え）」の名を冠するに相応し。
+Er entspringt der Luxisenzwelt und mündet in der Sexalokwelt.
+Die Quelle ist im Osten. Wasser, es läutet die Glocke. Ein
+Ton wie trübes Wasser. Seinen Namen Bellue hat er verdient.
 EOF
 
 >>EventTextbox
@@ -13,9 +12,10 @@ EOF
   Face SULLEN
   TransitionIn
   Text EOF
-つまりここがムミョウ界ってこと？
-あーもう、意味わからないじゃない。
-ヨシュアなら説明してくれたのに。。。
+Das heißt, ich bin in der Luxisenzwelt??
+Wer soll diesen Kauderwelsch bitte kapieren?
+Wenn nur Joshua bei mir wäre, er könnte es sicher
+erklären...
 EOF
 
 >>EventTextbox
@@ -23,18 +23,18 @@ EOF
   Face NORMAL
   TransitionOut
   Text EOF
-それに、どう頑張っても川が亘れないみたい。
-浮いてるのにどうして？
-よし、もうやってみようか。。。
+Und warum kann ich eigentlich nicht den
+Fluß überqueren, obwohl ich schwebe?
+Okay, versuche ich es nochmal!
 EOF
 
 >>EventTextbox
   TransitionIn
   TransitionOut
   Text EOF
-【付】
-河源千里以内の水瘴気濃度凄まじ。
-生命に危険が及ぶ可能性高し。
+[Postscript]
+Miasmadichte in Tausendmeilenradius hoch.
+Gefahrenpotential für Leib und Leiben auch.
 EOF
 
 >>EventTextbox
@@ -44,6 +44,5 @@ EOF
   Face SHOU_GA_NAI
   TransitionOut
   Text EOF
-。。。ということで、橋がいかにありがたい
-存在であるか改めて思い知らせた。
+...wie dankbar wir doch für Brücken sein sollten...
 EOF

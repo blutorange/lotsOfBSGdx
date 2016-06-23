@@ -81,21 +81,18 @@ import de.homelab.madgaksha.util.InclusiveRange;
 public abstract class EnemyMaker extends EntityMaker implements ITrigger, IReceive, IHittable, IMortal {
 	private final static Logger LOG = Logger.getLogger(EnemyMaker.class);
 	private final static HomingGrantTrajectory homingTrajectory = new HomingGrantTrajectory();
-	
+
 	protected EnemyMaker() {
 		super();
 	}
 
 	/** Score bullets are taken randomly from this array. */
-	private final static BulletShapeMaker[] scoreBulletShapes = new BulletShapeMaker[]{
-			BulletShapeMaker.GEMLET_BLUE,
-			BulletShapeMaker.GEMLET_RED,
-			BulletShapeMaker.GEMLET_GREEN,
-			BulletShapeMaker.GEMLET_BROWN,
-	};
-	
+	private final static BulletShapeMaker[] scoreBulletShapes = new BulletShapeMaker[] { BulletShapeMaker.GEMLET_BLUE,
+			BulletShapeMaker.GEMLET_RED, BulletShapeMaker.GEMLET_GREEN, BulletShapeMaker.GEMLET_BROWN, };
+
 	/**
 	 * Adds the appropriate components to an entity to be used as an enemy.
+	 * 
 	 * @param entity
 	 *            Entity to setup.
 	 * @param shape
@@ -111,7 +108,8 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 	 * @param initDir
 	 *            Initial looking direction.
 	 */
-	public void setup(Entity entity, Shape2D shape, MapProperties props, ETrigger trigger, Vector2 initialPosition, Float initDir, Float tileRadius) {
+	public void setup(Entity entity, Shape2D shape, MapProperties props, ETrigger trigger, Vector2 initialPosition,
+			Float initDir, Float tileRadius) {
 		super.setup(entity);
 
 		Float battleInDistance = null;
@@ -119,21 +117,18 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		if (props.containsKey("battleIn")) {
 			try {
 				battleInDistance = Float.valueOf(String.valueOf(props.get("battleIn")));
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				LOG.error("could not read battleIn distance");
 			}
 		}
 		if (props.containsKey("battleOut")) {
 			try {
 				battleOutDistance = Float.valueOf(String.valueOf(props.get("battleOut")));
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				LOG.error("could not read battleIn distance");
 			}
 		}
 
-		
 		// Create components to be added.
 		AnyChildComponent acc = new AnyChildComponent();
 		Component tc = MakerUtils.makeTrigger(this, this, trigger, ECollisionGroup.PLAYER_GROUP);
@@ -142,7 +137,8 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		ABoundingBoxComponent bbcEnemyRender = new BoundingBoxRenderComponent(requestedBoundingBoxRender());
 		ABoundingBoxComponent bbcEnemyCollision = new BoundingBoxCollisionComponent(requestedBoundingBoxCollision());
 		ABoundingBoxComponent bbcTrigger = new BoundingBoxCollisionComponent(GeoUtil.getBoundingBox(shape));
-		BattleDistanceComponent bdc = new BattleDistanceComponent(playerEntity, tileRadius * requestedBattleInDistance(battleInDistance),
+		BattleDistanceComponent bdc = new BattleDistanceComponent(playerEntity,
+				tileRadius * requestedBattleInDistance(battleInDistance),
 				tileRadius * requestedBattleOutDistance(battleOutDistance));
 		BoundingSphereComponent bsc = new BoundingSphereComponent(requestedBoundingCircle());
 		PositionComponent pcEnemy = new PositionComponent(initialPosition.x + pcTrigger.x,
@@ -154,16 +150,15 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		CameraFocusComponent cfc = new CameraFocusComponent();
 		DirectionComponent dc = new DirectionComponent(initDir);
 		InactiveComponent iac = new InactiveComponent();
-		InvisibleComponent ivc = new InvisibleComponent();		
+		InvisibleComponent ivc = new InvisibleComponent();
 		TemporalComponent tpc = new TemporalComponent();
 		ComponentQueueComponent cqc = new ComponentQueueComponent();
 		EnemyIconComponent eic = new EnemyIconComponent(requestedIconMain().asSprite(), requestedIconSub().asSprite());
-		VoiceComponent vc = createVoiceComponent(); 
+		VoiceComponent vc = createVoiceComponent();
 		ZOrder2Component zoc = new ZOrder2Component();
 		GetHitComponent ghc = new GetHitComponent(this);
-		DeathComponent dtc = new DeathComponent(this);	
-		
-		
+		DeathComponent dtc = new DeathComponent(this);
+
 		// Initially, the bounding box is the area the player needs to
 		// touch to spawn the enemy. When the enemy spawns, the bounding box
 		// must be set to the actual bounding box of the enemy.
@@ -172,7 +167,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		bbcTrigger.minY -= pcTrigger.y;
 		bbcTrigger.maxX -= pcTrigger.x;
 		bbcTrigger.maxY -= pcTrigger.y;
-		
+
 		// Setup components to be changed once the enemy spawns.
 		cqc.add.add(pcEnemy);
 		cqc.add.add(bbcEnemyRender);
@@ -186,7 +181,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		cqc.remove.add(InvisibleComponent.class);
 		cqc.remove.add(tc.getClass());
 		cqc.remove.add(PositionComponent.class);
-		
+
 		// Add components to entity.
 		entity.add(dtc);
 		entity.add(ttgc);
@@ -204,8 +199,9 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		entity.add(svc);
 		entity.add(vc);
 		entity.add(zoc);
-				
-		if (tc != null)	entity.add(tc);
+
+		if (tc != null)
+			entity.add(tc);
 	}
 
 	private VoiceComponent createVoiceComponent() {
@@ -219,9 +215,13 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 	}
 
 	protected abstract ESound requestedVoiceOnSpawn();
+
 	protected abstract ESound requestedVoiceOnLightDamage();
+
 	protected abstract ESound requestedVoiceOnHeavyDamage();
+
 	protected abstract ESound requestedVoiceOnBattleModeStart();
+
 	protected abstract ESound requestedVoiceOnDeath();
 
 	/** Called when player makes contact with enemy. */
@@ -237,20 +237,28 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		sinSpawn(me);
 		spawned(me, ETrigger.TOUCH);
 	}
-	
-	/** Called when enemy gets hit by a player's bullet.
-	 * @param enemy The enemy that got hit.
-	 * @param bullet The bullet that hit the enemy.
+
+	/**
+	 * Called when enemy gets hit by a player's bullet.
+	 * 
+	 * @param enemy
+	 *            The enemy that got hit.
+	 * @param bullet
+	 *            The bullet that hit the enemy.
 	 */
 	@Override
 	public void hitByBullet(Entity enemy, Entity bullet) {
-		
+
 	}
 
 	/**
 	 * Removes all active bullets of the given enemy.
-	 * @param enemy Enemy whose bullets are to be removed.
-	 * @param convertToScore Whether the bullets should be converted to homing score bullets.
+	 * 
+	 * @param enemy
+	 *            Enemy whose bullets are to be removed.
+	 * @param convertToScore
+	 *            Whether the bullets should be converted to homing score
+	 *            bullets.
 	 */
 	private void releaseBullets(Entity enemy, boolean convertScore) {
 		AnyChildComponent acc = Mapper.anyChildComponent.get(enemy);
@@ -259,32 +267,36 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 			IGrantStrategy gs = new SpeedIncreaseGrantStrategy(3.0f, 400.0f);
 			// Iterate over all bullets before this bullet.
 			for (SiblingComponent sibling = acc.childComponent.prevSiblingComponent; sibling != null; sibling = sibling.prevSiblingComponent) {
-				if (convertScore) convertBulletToScoreBullet(sibling.me, pc, gs);
+				if (convertScore)
+					convertBulletToScoreBullet(sibling.me, pc, gs);
 				gameEntityEngine.removeEntity(sibling.me);
 			}
 			// Iterate over this bullet and the following bullets.
 			for (SiblingComponent sibling = acc.childComponent; sibling != null; sibling = sibling.nextSiblingComponent) {
-				if (convertScore) convertBulletToScoreBullet(sibling.me, pc, gs);
+				if (convertScore)
+					convertBulletToScoreBullet(sibling.me, pc, gs);
 				gameEntityEngine.removeEntity(sibling.me);
 			}
 		}
-		if (acc != null) acc.childComponent = null;
+		if (acc != null)
+			acc.childComponent = null;
 	}
 
 	private void convertBulletToScoreBullet(Entity bullet, PositionComponent playerEntityPositionComponent,
 			IGrantStrategy gs) {
 		final PositionComponent pc = Mapper.positionComponent.get(bullet);
 		final BulletStatusComponent bsc = Mapper.bulletStatusComponent.get(bullet);
-		if (pc == null || bsc == null) return;
+		if (pc == null || bsc == null)
+			return;
 		homingTrajectory.position(pc.x, pc.y);
 		homingTrajectory.lifeTime = 10.0f;
 		homingTrajectory.target(playerEntityPositionComponent);
 		homingTrajectory.grant(gs);
-		
+
 		final BulletShapeMaker bulletShape = scoreBulletShapes[MathUtils.random(3)];
 		BulletMaker.makeAsScoreBullet(bulletShape, homingTrajectory, bsc.score);
 	}
-	
+
 	/**
 	 * Callback for spawning the enemy.
 	 */
@@ -292,67 +304,76 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		ComponentUtils.applyComponentQueue(enemy);
 		// Let enemy say something when he spawns.
 		VoiceComponent vc = Mapper.voiceComponent.get(enemy);
-		if (vc != null && vc.voicePlayer != null) vc.voicePlayer.play(vc.onSpawn);
+		if (vc != null && vc.voicePlayer != null)
+			vc.voicePlayer.play(vc.onSpawn);
 		// Let enemy appear in a flash.
 		MakerUtils.addParticleEffectGame(requestedParticleEffectOnSpawn(), Mapper.positionComponent.get(enemy));
 		SoundPlayer.getInstance().play(requestedSoundOnSpawn());
 	}
-	
+
 	/** Gets called when the enemy has been incapacitated. */
 	@Override
-	public void kill(Entity enemy) {	
+	public void kill(Entity enemy) {
 		// Animate death and play explosion sound.
 		MakerUtils.addParticleEffectGame(requestedParticleEffectOnDeath(), Mapper.positionComponent.get(enemy));
 		SoundPlayer.getInstance().play(requestedSoundOnDeath());
-		
+
 		// Release active bullets.
 		releaseBullets(enemy, true);
-		
+
 		// Score for defeating the enemy.
 		StatusValuesComponent svc = Mapper.statusValuesComponent.get(enemy);
-		if (svc != null) gameScore.increaseBy(MathUtils.random(svc.scoreOnKill.min, svc.scoreOnKill.max));
+		if (svc != null)
+			gameScore.increaseBy(MathUtils.random(svc.scoreOnKill.min, svc.scoreOnKill.max));
 		gameEntityEngine.removeEntity(enemy);
-		
+
 		// Increase count.
 		++enemyKillCount;
 	}
-	
-	/** Called when we leave battle mode.
-	 * @param won True if battle mode ended as a result of the player defeating an enemy,
-	 * or true if it was a result of the player fleeing from the enemy.  
+
+	/**
+	 * Called when we leave battle mode.
+	 * 
+	 * @param won
+	 *            True if battle mode ended as a result of the player defeating
+	 *            an enemy, or true if it was a result of the player fleeing
+	 *            from the enemy.
 	 */
 	public static void exitBattleMode(boolean won) {
 		LOG.debug("exiting battle mode");
-		
+
 		battleModeActive = false;
 		MusicPlayer.getInstance().loadNext(level.getBgm());
 		MusicPlayer.getInstance().setCrossFade(true);
 		MusicPlayer.getInstance().transition(4.0f);
 		playerHitCircleEntity.add(gameEntityEngine.createComponent(InvisibleComponent.class));
-		
+
 		// Animate fading of battle stigma.
 		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(playerBattleStigmaEntity);
-		if (ssc != null) ssc.setup(0.0f,0.0f);
+		if (ssc != null)
+			ssc.setup(0.0f, 0.0f);
 		MakerUtils.addTimedRunnable(3.0f, onBattleStigmaVanished);
-		
+
 		// Animate fading of target cross.
 		ssc = Mapper.shouldScaleComponent.get(enemyTargetCrossEntity);
-		if (ssc != null) ssc.setup(0.0f,0.0f);
+		if (ssc != null)
+			ssc.setup(0.0f, 0.0f);
 		MakerUtils.addTimedRunnable(3.0f, onTargetCrossVanished);
-		
+
 		// Switch player to normal mode animation.
 		ComponentUtils.switchAnimationList(playerEntity, player.getAnimationList());
-		
+
 		// Add particle effect to player for exiting battle mode.
-		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(), Mapper.positionComponent.get(playerEntity));
-		
+		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(),
+				Mapper.positionComponent.get(playerEntity));
+
 		// Play player win phrase and enemy explosion.
 		VoiceComponent vc = Mapper.voiceComponent.get(playerHitCircleEntity);
-		if (won && vc != null){
+		if (won && vc != null) {
 			vc.voicePlayer.play(vc.onBattleModeExit);
-		}
-		else vc.voicePlayer.play(vc.onBattleModeFlee);
-		
+		} else
+			vc.voicePlayer.play(vc.onBattleModeFlee);
+
 		// Add slow-motion effect and battle fanfare.
 		if (won && level.getSoundOnBattleWin() != null) {
 			// Battle win fanfare.
@@ -360,113 +381,126 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 			// Slow-motion effect.
 			SystemUtils.disableAction();
 			game.setGlobalTimeScale(0.12f);
-			MakerUtils.addTimedRunnable(level.getSoundOnBattleWin().getDurationInMilliseconds()*0.12f*0.001f, new ITimedCallback() {
-				@Override
-				public void run(Entity entity, Object data) {
-					SystemUtils.enableAction();
-					game.setGlobalTimeScale(1.0f);
-				}
-			});
+			MakerUtils.addTimedRunnable(level.getSoundOnBattleWin().getDurationInMilliseconds() * 0.12f * 0.001f,
+					new ITimedCallback() {
+						@Override
+						public void run(Entity entity, Object data) {
+							SystemUtils.enableAction();
+							game.setGlobalTimeScale(1.0f);
+						}
+					});
 		}
 
 		// Remove target info from status screen.
-		statusScreen.untargetEnemy();		
+		statusScreen.untargetEnemy();
 	}
-	
+
 	/** Called when we enter battle mode. */
 	public static void enterBattleMode(Entity enemy) {
 		LOG.debug("entering battle mode");
-		
+
 		battleModeActive = true;
-		
+
 		// Play battle music.
 		MusicPlayer.getInstance().loadNext(level.getBattleBgm());
 		MusicPlayer.getInstance().setCrossFade(true);
 		MusicPlayer.getInstance().transition(2.0f);
-		
+
 		cameraTrackingComponent.playerPoint = enemy;
 		gameEntityEngine.getSystem(AiSystem.class).setProcessing(false);
 		playerEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
-		
+
 		// Switch player to battle mode animation.
 		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(playerEntity);
 		SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(playerEntity);
 		sfdc.setup(player.getBattleAnimationList(), ESpriteDirectionStrategy.ZENITH);
 		sac.setup(sfdc);
 		Mapper.spriteComponent.get(playerEntity).setup(sac);
-		
+
 		// Scroll camera back to the player after enemy preview finishes.
 		MakerUtils.addTimedRunnable(3.0f, onEnemyPreviewFinish);
-		
+
 		// Show battle slogan.
 		game.pushLayer(new BattleModeActivateLayer(Interpolation.elastic, 3.0f));
-		
+
 		// Show player's hit circle.
 		playerHitCircleEntity.remove(InvisibleComponent.class);
-		
+
 		// Show battle stigma.
 		playerBattleStigmaEntity.remove(InactiveComponent.class);
 		playerBattleStigmaEntity.remove(InvisibleComponent.class);
-		
+
 		// Show target cross.
 		enemyTargetCrossEntity.remove(InactiveComponent.class);
 		enemyTargetCrossEntity.remove(InvisibleComponent.class);
 		PositionComponent pc = Mapper.positionComponent.get(enemyTargetCrossEntity);
-		if (pc != null) pc.setup(enemy);
-		
+		if (pc != null)
+			pc.setup(enemy);
+
 		// Add particle effect to player for entering battle mode.
-		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(), Mapper.positionComponent.get(playerEntity));
-		
+		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(),
+				Mapper.positionComponent.get(playerEntity));
+
 		// Animate battle stigma.
 		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(playerBattleStigmaEntity);
 		ScaleComponent sc = Mapper.scaleComponent.get(playerBattleStigmaEntity);
-		if (ssc != null) ssc.setup(1.0f,1.0f);
-		if (sc != null) sc.setup(0.0f, 0.0f);	
-		
+		if (ssc != null)
+			ssc.setup(1.0f, 1.0f);
+		if (sc != null)
+			sc.setup(0.0f, 0.0f);
+
 		// Play sound effects and voices.
 		SoundPlayer.getInstance().play(ESound.BATTLE_STIGMA_APPEAR);
 		// Voice player
-		VoiceComponent vc= Mapper.voiceComponent.get(playerHitCircleEntity);
-		if (vc != null && vc.voicePlayer != null) vc.voicePlayer.play(vc.onBattleModeStart);
+		VoiceComponent vc = Mapper.voiceComponent.get(playerHitCircleEntity);
+		if (vc != null && vc.voicePlayer != null)
+			vc.voicePlayer.play(vc.onBattleModeStart);
 		// Voice enemy.
 		vc = Mapper.voiceComponent.get(enemy);
-		if (vc != null && vc.voicePlayer != null) vc.voicePlayer.play(vc.onBattleModeStart);
+		if (vc != null && vc.voicePlayer != null)
+			vc.voicePlayer.play(vc.onBattleModeStart);
 	}
 
 	/**
 	 * Called when the target changed and needs to be updated.
-	 * @param enemy Enemy to target.
-	 * @param lazySwitch If true, checks whether the enemy is targetted currently and does not switch if it is. 
+	 * 
+	 * @param enemy
+	 *            Enemy to target.
+	 * @param lazySwitch
+	 *            If true, checks whether the enemy is targetted currently and
+	 *            does not switch if it is.
 	 */
-	public static void targetSwitched(Entity enemy, boolean lazySwitch) {	
-		// Check if target did actually change. 
-		StickyComponent sec = Mapper.stickyComponent.get(enemyTargetCrossEntity);		
-		if (lazySwitch && sec.stickToPositionComponent == Mapper.positionComponent.get(enemy)) return;
+	public static void targetSwitched(Entity enemy, boolean lazySwitch) {
+		// Check if target did actually change.
+		StickyComponent sec = Mapper.stickyComponent.get(enemyTargetCrossEntity);
+		if (lazySwitch && sec.stickToPositionComponent == Mapper.positionComponent.get(enemy))
+			return;
 
 		LOG.debug("switch target to " + enemy);
-		
+
 		// Apply changes to status screen.
 		statusScreen.targetEnemy(enemy);
-		
+
 		// Scale target cross to enemy's size.
 		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(enemyTargetCrossEntity);
 		ScaleComponent sc = Mapper.scaleComponent.get(enemyTargetCrossEntity);
 		BoundingBoxCollisionComponent bbcc = Mapper.boundingBoxCollisionComponent.get(enemy);
 		BoundingBoxRenderComponent bbrc = Mapper.boundingBoxRenderComponent.get(enemyTargetCrossEntity);
-		
+
 		// Start out with large target cross.
-		if (sc != null) sc.setup(99.0f, 99.0f);
-		
+		if (sc != null)
+			sc.setup(99.0f, 99.0f);
+
 		// And let it get smaller.
 		if (ssc != null && bbrc != null && bbcc != null)
 			ssc.setup(2.0f * Math.max(bbcc.maxX - bbcc.minX, bbcc.maxY - bbcc.minY)
 					/ Math.min(bbrc.maxX - bbrc.minX, bbrc.maxY - bbrc.minY));
-		
+
 		// Make target cross stick to enemy
 		if (sec != null)
 			sec.setup(enemy, (bbcc.minX + bbcc.maxX) * 0.5f, (bbcc.minY + bbcc.maxY) * 0.5f, true, true);
 	}
-	
+
 	/** Called on battle mode exit, after the battle stigma has gone. */
 	private final static ITimedCallback onBattleStigmaVanished = new ITimedCallback() {
 		@Override
@@ -478,7 +512,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 			}
 		}
 	};
-	
+
 	/** Called on battle mode exit, after the target cross has gone. */
 	private final static ITimedCallback onTargetCrossVanished = new ITimedCallback() {
 		@Override
@@ -490,71 +524,84 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 			}
 		}
 	};
-	
+
 	private final static ITimedCallback onEnemyPreviewFinish = new ITimedCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
 			cameraTrackingComponent.playerPoint = playerEntity;
-			MakerUtils.addTimedRunnable(0.3f, new ITimedCallback() {					
+			MakerUtils.addTimedRunnable(0.3f, new ITimedCallback() {
 				@Override
 				public void run(Entity entity, Object data) {
 					gameEntityEngine.getSystem(AiSystem.class).setProcessing(true);
-					playerEntity.remove(InactiveComponent.class);						
+					playerEntity.remove(InactiveComponent.class);
 				}
 			});
 		}
 	};
-	
-	
+
 	/**
 	 * May be overridden for other effects.
-	 *  @return Particle effect played when enemy spawns.
+	 * 
+	 * @return Particle effect played when enemy spawns.
 	 */
 	protected EParticleEffect requestedParticleEffectOnSpawn() {
 		return EParticleEffect.ENEMY_APPEAR_FLASH;
 	}
-	
+
 	/**
 	 * May be overridden for other effects.
-	 *  @return Particle effect played when enemy dies.
+	 * 
+	 * @return Particle effect played when enemy dies.
 	 */
 	protected EParticleEffect requestedParticleEffectOnDeath() {
 		return EParticleEffect.ENEMY_DIE_SPLASH;
 	}
-	
+
 	/**
 	 * May be overridden for other effects.
-	 *  @return Explosion sound played when {@link #requestedParticleEffectOnDeath()} plays..
+	 * 
+	 * @return Explosion sound played when
+	 *         {@link #requestedParticleEffectOnDeath()} plays..
 	 */
 	protected ESound requestedSoundOnSpawn() {
 		return ESound.ENEMY_SPAWN_FLASH;
 	}
-	
+
 	/**
 	 * May be overridden for other effects.
-	 *  @return Explosion sound played when {@link #requestedParticleEffectOnDeath()} plays..
+	 * 
+	 * @return Explosion sound played when
+	 *         {@link #requestedParticleEffectOnDeath()} plays..
 	 */
 	protected ESound requestedSoundOnDeath() {
 		return ESound.ENEMY_DIE_EXPLOSION;
 	}
-	
+
 	// =====================
-	//   Abstract methods
+	// Abstract methods
 	// =====================
 	protected abstract ETexture requestedIconMain();
+
 	protected abstract ETexture requestedIconSub();
 
 	protected IResource<? extends Enum<?>, ?>[] requestedResources() {
-		IResource<?,?>[] myRes = new IResource<?,?>[]{EParticleEffect.ENEMY_APPEAR_FLASH.getTextureAtlas()};
-		IResource<? extends Enum<?>,?>[] yourRes = requestedAdditionalResources();
+		IResource<?, ?>[] myRes = new IResource<?, ?>[] { EParticleEffect.ENEMY_APPEAR_FLASH.getTextureAtlas() };
+		IResource<? extends Enum<?>, ?>[] yourRes = requestedAdditionalResources();
 		return ArrayUtils.addAll(myRes, yourRes);
 	};
-	
+
 	protected abstract IResource<? extends Enum<?>, ?>[] requestedAdditionalResources();
 
-	/** @return The bounding box used for deciding whether the entity is on-screen and needs to be rendered. */
+	/**
+	 * @return The bounding box used for deciding whether the entity is
+	 *         on-screen and needs to be rendered.
+	 */
 	protected abstract Rectangle requestedBoundingBoxRender();
-	/** @return The bounding box used for deciding whether this entity collides with another entity. */
+
+	/**
+	 * @return The bounding box used for deciding whether this entity collides
+	 *         with another entity.
+	 */
 	protected abstract Rectangle requestedBoundingBoxCollision();
 
 	protected abstract Circle requestedBoundingCircle();
@@ -562,31 +609,46 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 	/** @return Enemy maximum pain points (pp). */
 	protected abstract long requestedMaxPainPoints();
 
-	/** @return The enemy's bullet attack power. Damage is multiplied by this factor. */
+	/**
+	 * @return The enemy's bullet attack power. Damage is multiplied by this
+	 *         factor.
+	 */
 	protected abstract float requestedBulletAttack();
-	/** @return The enemy's bullet resistance. Damage is divided by this factor. */
+
+	/**
+	 * @return The enemy's bullet resistance. Damage is divided by this factor.
+	 */
 	protected abstract float requestedBulletResistance();
-	
+
 	/** @return The score that will be added when the player kill this enemy. */
 	protected abstract InclusiveRange<Long> requestedScoreOnKill();
-	
+
 	/** Called when the enemy spawns. */
 	protected abstract void spawned(Entity e, ETrigger t);
-	
+
 	/**
-	 * May be overridden for custom values. 
-	 * @param The value for the battle in distance as specified on the map, or null if not specified. 
-	 * @return When the player is closer this enemy than the distance, this enemy will start fighting.
-	 */ 
+	 * May be overridden for custom values.
+	 * 
+	 * @param The
+	 *            value for the battle in distance as specified on the map, or
+	 *            null if not specified.
+	 * @return When the player is closer this enemy than the distance, this
+	 *         enemy will start fighting.
+	 */
 	protected float requestedBattleInDistance(Float valueFromMap) {
 		return valueFromMap == null ? 35.0f : valueFromMap;
 	}
+
 	/**
-	 * May be overridden for custom values. 
-	 * @param The value for the battle out distance as specified on the map, or null if not specified. 
-	 * @return When the player is further away from this enemy, this enemy will stop fighting.
+	 * May be overridden for custom values.
+	 * 
+	 * @param The
+	 *            value for the battle out distance as specified on the map, or
+	 *            null if not specified.
+	 * @return When the player is further away from this enemy, this enemy will
+	 *         stop fighting.
 	 */
 	protected float requestedBattleOutDistance(Float valueFromMap) {
 		return valueFromMap == null ? 45.0f : valueFromMap;
-	};	
+	};
 }

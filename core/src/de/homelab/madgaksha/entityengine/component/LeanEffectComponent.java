@@ -24,7 +24,7 @@ public class LeanEffectComponent implements Component, Poolable {
 	public float leanFactor = DEFAULT_LEAN_FACTOR;
 	public float targetAngle = DEFAULT_TARGET_ANGLE;
 	public float targetScale = DEFAULT_TARGET_SCALE;
-	
+
 	public LeanEffectComponent() {
 	}
 
@@ -35,7 +35,7 @@ public class LeanEffectComponent implements Component, Poolable {
 	public LeanEffectComponent(float targetAngle, float targetScale, float leanFactor) {
 		setup(targetAngle, targetScale, leanFactor);
 	}
-	
+
 	public void setup(float targetAngle, float targetScale) {
 		this.targetAngle = targetAngle;
 		this.targetScale = targetScale;

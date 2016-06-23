@@ -7,20 +7,21 @@ import de.homelab.madgaksha.logging.Logger;
 
 public enum EWeapon {
 	NONE(WeaponNone.class),
-	BASIC(WeaponBasic.class)
-	;
+	BASIC(WeaponBasic.class);
 
 	private final static Logger LOG = Logger.getLogger(EWeapon.class);
-	
+
 	private final Class<? extends AWeapon> clazz;
-	
+
 	private EWeapon(Class<? extends AWeapon> clazz) {
 		this.clazz = clazz;
 	}
-	
+
 	/**
 	 * Gets the weapon object for this weapon type.
-	 * @return The weapon object for this weapon type. Null if it could not be loaded.
+	 * 
+	 * @return The weapon object for this weapon type. Null if it could not be
+	 *         loaded.
 	 */
 	public AWeapon getWeapon() {
 		AWeapon weapon;

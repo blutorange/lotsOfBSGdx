@@ -28,7 +28,9 @@ public class AngularMovementSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public AngularMovementSystem(int priority) {
-		super(Family.all(AngularVelocityComponent.class, TemporalComponent.class).one(DirectionComponent.class, RotationComponent.class).exclude(InactiveComponent.class).get(), priority);
+		super(Family.all(AngularVelocityComponent.class, TemporalComponent.class)
+				.one(DirectionComponent.class, RotationComponent.class).exclude(InactiveComponent.class).get(),
+				priority);
 	}
 
 	@Override
@@ -37,9 +39,11 @@ public class AngularMovementSystem extends IteratingSystem {
 		final RotationComponent rc = Mapper.rotationComponent.get(entity);
 		final AngularVelocityComponent avc = Mapper.angularVelocityComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
-		
-		if (dc != null) dc.degree += avc.speed*deltaTime;
-		if (rc != null) rc.thetaZ += avc.speed*deltaTime;
+
+		if (dc != null)
+			dc.degree += avc.speed * deltaTime;
+		if (rc != null)
+			rc.thetaZ += avc.speed * deltaTime;
 	}
 
 }

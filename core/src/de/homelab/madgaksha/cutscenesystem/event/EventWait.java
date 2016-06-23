@@ -12,15 +12,18 @@ public class EventWait extends ACutsceneEvent {
 
 	private float remainingWaitTime;
 	private float timeToWait;
-	
+
 	/**
-	 * An event that simply wait for some time and then proceeds to the next event.
-	 * @param timeToWait Waiting time in seconds.
+	 * An event that simply wait for some time and then proceeds to the next
+	 * event.
+	 * 
+	 * @param timeToWait
+	 *            Waiting time in seconds.
 	 */
 	public EventWait(float timeToWait) {
 		this.timeToWait = timeToWait;
 	}
-	
+
 	@Override
 	public boolean isFinished() {
 		return remainingWaitTime <= 0.0f;
@@ -44,11 +47,11 @@ public class EventWait extends ACutsceneEvent {
 		remainingWaitTime = timeToWait;
 		return true;
 	}
-	
+
 	public void resetTimer() {
 		remainingWaitTime = timeToWait;
 	}
-	
+
 	public void cancelTimer() {
 		remainingWaitTime = 0.0f;
 	}
@@ -61,10 +64,11 @@ public class EventWait extends ACutsceneEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	public static ACutsceneEvent readNextObject(Scanner s) {
 		Float number = FileCutsceneProvider.nextNumber(s);
-		if (number == null) return null;
+		if (number == null)
+			return null;
 		return new EventWait(number);
 	}
 }

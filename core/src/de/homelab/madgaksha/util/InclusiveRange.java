@@ -5,8 +5,10 @@ public class InclusiveRange<T> {
 	public T min;
 	/** Upper limit of the range (inclusive). */
 	public T max;
+
 	/**
 	 * Constructs a new range with the given lower and upper limit (inclusive).
+	 * 
 	 * @param min
 	 * @param max
 	 */

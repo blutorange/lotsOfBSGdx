@@ -19,7 +19,8 @@ public class GrantScaleSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public GrantScaleSystem(int priority) {
-		super(Family.all(ScaleComponent.class, ShouldScaleComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(), priority);
+		super(Family.all(ScaleComponent.class, ShouldScaleComponent.class, TemporalComponent.class)
+				.exclude(InactiveComponent.class).get(), priority);
 	}
 
 	@Override
@@ -28,6 +29,7 @@ public class GrantScaleSystem extends IteratingSystem {
 		final ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
 		sc.scaleX = sc.scaleY = ssc.grantStrategy.compromise(sc.scaleX, ssc.scaleX, deltaTime);
-		if (ssc.scaleX != ssc.scaleY) sc.scaleY = ssc.grantStrategy.compromise(sc.scaleY, ssc.scaleY, deltaTime);
+		if (ssc.scaleX != ssc.scaleY)
+			sc.scaleY = ssc.grantStrategy.compromise(sc.scaleY, ssc.scaleY, deltaTime);
 	}
 }

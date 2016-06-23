@@ -16,14 +16,21 @@ public enum EShapeType {
 	ELLIPSE,
 	POLYGON,
 	POLYLINE;
-	
+
 	public static EShapeType valueOf(Shape2D shape) {
-		if (shape instanceof Rectangle) return EShapeType.RECTANGLE;
-		else if (shape instanceof Circle) return EShapeType.CIRCLE;
-		else if (shape instanceof Point) return EShapeType.POINT;
-		else if (shape instanceof Polygon) return EShapeType.POLYGON;
-		else if (shape instanceof Polyline) return EShapeType.POLYLINE;
-		else if (shape instanceof Ellipse) return EShapeType.ELLIPSE;
-		else return null;
+		if (shape instanceof Rectangle)
+			return EShapeType.RECTANGLE;
+		else if (shape instanceof Circle)
+			return EShapeType.CIRCLE;
+		else if (shape instanceof Point)
+			return EShapeType.POINT;
+		else if (shape instanceof Polygon)
+			return EShapeType.POLYGON;
+		else if (shape instanceof Polyline)
+			return EShapeType.POLYLINE;
+		else if (shape instanceof Ellipse)
+			return EShapeType.ELLIPSE;
+		else
+			return null;
 	}
 }

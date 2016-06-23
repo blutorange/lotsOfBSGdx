@@ -1,20 +1,20 @@
 >>EventTextbox
   TransitionIn
   Text EOF
-最近行方不明者が相次いているため、
-ここから南東の深淵は近づかないように願っている次第です。
+Viele Leute spurlos verschwunden im Nordosten.
+Bitte nähert euch daher nicht der Schlucht.
 　
-―――微妙にワケあり異世界探検者―――
+―――Der virtuelle Walker―――
 EOF
 
 >>EventTextbox
   Speaker Estelle
   Face Suprised
   Text EOF
-ゆくえふめーしゃー？
-なんだ、あたしにかかりゃ楽勝じゃない！
-なにが起こっているかのヒントが出るかも
-いちど南東へまわっていこうかな？
+Spurlos verschwunden?
+Wie auch immer, für mich ist es kein Problem!!
+Vielleicht finde ich auch heraus, was hier passiert,
+ein kleiner Abstecher kann nicht schaden!
 EOF
 
 >>EventTextbox
@@ -22,6 +22,7 @@ EOF
   Face Serious
   TransitionOut
   Text EOF
-でも本当に危なかったらどうしよう？
-一人じゃ心細いし、今はヨシュアをさがさないと。。。！
+Aber wenn es wirklich gefährlich ist??
+Alleine ist es vielleicht doch nicht so gut, ich
+schaue besser erstmal nach Joshua.
 EOF

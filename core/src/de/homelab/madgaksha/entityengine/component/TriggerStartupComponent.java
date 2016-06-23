@@ -8,8 +8,8 @@ import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.entity.ITrigger;
 
 /**
- * A component for objects that need to call some internal java function
- * when the game is started.
+ * A component for objects that need to call some internal java function when
+ * the game is started.
  * 
  * @author mad_gaksha
  */
@@ -21,14 +21,14 @@ public class TriggerStartupComponent implements Component, Poolable {
 	};
 
 	public ITrigger triggerAcceptingObject = DEFAULT_TRIGGER_ACCEPTING_OBJECT;
-	
+
 	public TriggerStartupComponent() {
 	}
-	
+
 	public TriggerStartupComponent(ITrigger triggerAcceptingObject) {
 		this.triggerAcceptingObject = triggerAcceptingObject;
 	}
-	
+
 	@Override
 	public void reset() {
 		triggerAcceptingObject = DEFAULT_TRIGGER_ACCEPTING_OBJECT;

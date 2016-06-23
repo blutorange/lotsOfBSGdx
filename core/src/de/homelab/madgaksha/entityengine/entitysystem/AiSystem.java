@@ -19,19 +19,23 @@ import de.homelab.madgaksha.logging.Logger;
 public class AiSystem extends IteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(AiSystem.class);
+
 	public AiSystem() {
 		this(DefaultPriority.aiSystem);
 	}
 
 	@SuppressWarnings("unchecked")
 	public AiSystem(int priority) {
-		super(Family.all(BehaviourComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(), priority);
+		super(Family.all(BehaviourComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(),
+				priority);
 	}
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		final BehaviourComponent bc = Mapper.behaviourComponent.get(entity);
-		if (bc.brain.behave(entity) && bc.cortex != null) bc.cortex.behave(entity);;
+		if (bc.brain.behave(entity) && bc.cortex != null)
+			bc.cortex.behave(entity);
+		;
 	}
 
 }

@@ -1,0 +1,17 @@
+>>EventTextbox
+  Speaker ESTELLE
+  Face Laughing
+  TransitionIn
+  Text EOF
+Pretty fragile for fearsome soldiers, huh?
+Or perhaps I'm just too strong!
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Laughing
+  TransitionOut
+  Text EOF
+There's something over there.
+Let's check it out!
+EOF

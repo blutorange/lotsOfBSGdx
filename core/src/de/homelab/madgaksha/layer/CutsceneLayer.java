@@ -9,7 +9,8 @@ import de.homelab.madgaksha.entityengine.entityutils.SystemUtils;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
- * Takes care of handling a sequence of textboxes. Useful for short story sequences.
+ * Takes care of handling a sequence of textboxes. Useful for short story
+ * sequences.
  * 
  * It draws them and advances to the next box upon pressing a key.
  * 
@@ -20,41 +21,46 @@ public class CutsceneLayer extends ALayer {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(CutsceneLayer.class);
-	
+
 	private final CutsceneEventProvider cutsceneEventProvider;
 	private ACutsceneEvent currentCutsceneEvent;
 	private int cutsceneCount = -1;
-	
+
 	/**
-	 * Adds a new layer with a set of cutscenes. 
-	 * @param cutsceneEventList List of cutscenes.
+	 * Adds a new layer with a set of cutscenes.
+	 * 
+	 * @param cutsceneEventList
+	 *            List of cutscenes.
 	 */
 	public CutsceneLayer(CutsceneEventProvider cutsceneEventProvider) {
 		this.cutsceneEventProvider = cutsceneEventProvider;
 	}
-	
+
 	@Override
 	public void draw(float deltaTime) {
-		if (currentCutsceneEvent != null) currentCutsceneEvent.render();
+		if (currentCutsceneEvent != null)
+			currentCutsceneEvent.render();
 	}
 
 	@Override
 	public void update(float deltaTime) {
-		if (currentCutsceneEvent == null) return;
-		
+		if (currentCutsceneEvent == null)
+			return;
+
 		// Check if current event is finished and proceed to next event.
 		if (currentCutsceneEvent.isFinished()) {
-			if (!proceedToNextEvent()) return;
+			if (!proceedToNextEvent())
+				return;
 		}
 
 		// Update event.
 		currentCutsceneEvent.update(deltaTime);
 	}
-	
+
 	@Override
 	public void removedFromStack() {
 		SystemUtils.enableAction();
-		currentCutsceneEvent = null;		
+		currentCutsceneEvent = null;
 		cutsceneEventProvider.end();
 	}
 
@@ -65,7 +71,7 @@ public class CutsceneLayer extends ALayer {
 		cutsceneEventProvider.initialize();
 		proceedToNextEvent();
 	}
-	
+
 	private void stopPlayerMovement() {
 		VelocityComponent vc = Mapper.velocityComponent.get(GlobalBag.playerEntity);
 		vc.x = vc.y = 0;
@@ -73,7 +79,8 @@ public class CutsceneLayer extends ALayer {
 
 	public boolean proceedToNextEvent() {
 		do {
-			if (currentCutsceneEvent != null) cutsceneEventProvider.eventDone(currentCutsceneEvent);
+			if (currentCutsceneEvent != null)
+				cutsceneEventProvider.eventDone(currentCutsceneEvent);
 			currentCutsceneEvent = cutsceneEventProvider.nextCutsceneEvent(++cutsceneCount);
 			if (currentCutsceneEvent == null) {
 				removeSelf();
@@ -92,9 +99,10 @@ public class CutsceneLayer extends ALayer {
 	public boolean isBlockUpdate() {
 		return false;
 	}
-	
+
 	@Override
 	public void resize(int width, int height) {
-		if (currentCutsceneEvent != null) currentCutsceneEvent.resize(width, height);
+		if (currentCutsceneEvent != null)
+			currentCutsceneEvent.resize(width, height);
 	}
 }

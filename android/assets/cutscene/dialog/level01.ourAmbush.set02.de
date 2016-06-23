@@ -1,0 +1,16 @@
+>>EventTextbox
+  Speaker ESTELLE
+  Face Surprised
+  TransitionIn
+  Text EOF
+Oh verdammt! Ich bin umzingelt!!
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Serious
+  TransitionOut
+  Text EOF
+Na dann geht es halt los! Kommt schon her!
+Ich nehme es mit euch allemal auf!
+EOF

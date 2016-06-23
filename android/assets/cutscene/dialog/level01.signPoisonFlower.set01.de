@@ -2,8 +2,9 @@
   TransitionIn
   TransitionOut
   Text EOF
-毒華（どくば）の花は上空にその臭気を噴射し、獲物を刈り取る。
-歩くよし、浮くあし。
+Die Toxiwerblume sendet ihr Miasma gen Himmel und ihre
+Beute gen Erde.
+Laufen lustig, Schweben schlecht.
 EOF
 
 >>EventTextbox
@@ -12,10 +13,10 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-そんな都合いいな理由、だれが納得できるかよ！
-まるであたしがこんなことになって分かってて、
-屁理屈でもなんでも構わない態度で
-通過できないようにしたかっただけじゃない！
+Wer akzeptiert schon diesen Grund?
+Das klingt ja beinahe, als hätte sich das jemand
+extra für mich ausgedacht, damit ich hier nicht
+weiterkomme!!
 EOF
 
 >>EventTextbox
@@ -23,7 +24,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-はたしそれはどうかね？
+Ist dem wirklich so?
 EOF
 
 >>EventTextbox
@@ -32,5 +33,5 @@ EOF
   Speaker Estelle
   Face SURPRISED
   Text EOF
-？？？
+???
 EOF

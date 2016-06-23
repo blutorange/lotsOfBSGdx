@@ -24,7 +24,8 @@ public class Logger {
 		switch (level) {
 		case Application.LOG_INFO:
 			s = String.format(format, "INFO", date, loggerClassName);
-			if (Gdx.app == null) logViaSystemOut(s, msg, error);
+			if (Gdx.app == null)
+				logViaSystemOut(s, msg, error);
 			else if (error == null)
 				Gdx.app.log(s, msg);
 			else
@@ -32,7 +33,8 @@ public class Logger {
 			break;
 		case Application.LOG_ERROR:
 			s = String.format(format, "ERROR", date, loggerClassName);
-			if (Gdx.app == null) logViaSystemErr(s, msg, error);
+			if (Gdx.app == null)
+				logViaSystemErr(s, msg, error);
 			else if (error == null)
 				Gdx.app.error(s, msg);
 			else
@@ -40,7 +42,8 @@ public class Logger {
 			break;
 		case Application.LOG_DEBUG:
 			s = String.format(format, "DEBUG", date, loggerClassName);
-			if (Gdx.app == null) logViaSystemOut(s, msg, error);
+			if (Gdx.app == null)
+				logViaSystemOut(s, msg, error);
 			else if (error == null)
 				Gdx.app.debug(s, msg);
 			else
@@ -55,9 +58,11 @@ public class Logger {
 			error.printStackTrace(ps);
 		}
 	}
+
 	private void logViaSystemOut(String s, String msg, Throwable error) {
 		logViaSystem(System.out, s, msg, error);
 	}
+
 	private void logViaSystemErr(String s, String msg, Throwable error) {
 		logViaSystem(System.err, s, msg, error);
 	}

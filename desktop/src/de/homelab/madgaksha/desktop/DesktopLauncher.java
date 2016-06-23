@@ -70,7 +70,6 @@ int status = JavaProcess.exec(MyClass.class);
 
  */
 
-
 package de.homelab.madgaksha.desktop;
 
 import java.awt.EventQueue;
@@ -109,7 +108,7 @@ import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.player.PEstelle;
 
 public class DesktopLauncher extends JFrame {
-	
+
 	/**
 	 * Version 1.
 	 */
@@ -127,12 +126,16 @@ public class DesktopLauncher extends JFrame {
 	private Process gameProcess = null;
 	private static DesktopLauncher instance = null;
 	private MainPanel mainPanel = null;
-	
+
 	/**
 	 * Exits and shows a message with the error.
-	 * @param level Severity.
-	 * @param log Log message.
-	 * @param msg GUI message.
+	 * 
+	 * @param level
+	 *            Severity.
+	 * @param log
+	 *            Log message.
+	 * @param msg
+	 *            GUI message.
 	 */
 	public static void exit(Level level, String log, String msg) {
 		killProcesses();
@@ -143,16 +146,16 @@ public class DesktopLauncher extends JFrame {
 		}
 		alert(msg);
 	}
-	
+
 	public static void killProcesses() {
-		//TODO	
+		// TODO
 	}
-	
+
 	/**
 	 * Prints the help for the command line arguments to stdout.
 	 */
-	private static void showHelp() {		
-		
+	private static void showHelp() {
+
 		System.out.println("The following command line options are available:");
 		System.out.println("");
 		System.out.println("-dw [--width]         Sets the width of the window.");
@@ -164,10 +167,12 @@ public class DesktopLauncher extends JFrame {
 		System.out.println("-ts [--textbox-speed] Sets the textbox speed in characters per second.");
 		System.out.println("-v  [--verbosity]     Sets the logging level. 0=none, 1=info, 2=error, 3=debug.");
 	}
-	
+
 	/**
-	 * Adds all available command line options and parses the command line. 
-	 * @param args Command line args.
+	 * Adds all available command line options and parses the command line.
+	 * 
+	 * @param args
+	 *            Command line args.
 	 * @return The parsed command line.
 	 */
 	private static CommandLine parseCommandLine(String[] args) {
@@ -184,18 +189,17 @@ public class DesktopLauncher extends JFrame {
 		o.addOption("f", "fps", true, "Framerate in frames per second.");
 		o.addOption("dw", "width", true, "Window width.");
 		o.addOption("dh", "height", true, "Window height");
-		
+
 		try {
 			line = parser.parse(o, args, false);
 		} catch (ParseException e) {
 			LOG.log(Level.SEVERE, "Invalid command line options. Try --help", e);
 			System.exit(-1);
 		}
-		
+
 		return line;
 	}
-	
-	
+
 	/**
 	 * Parses the command line options and initializes the main program. Type
 	 * <code>--help</code> for a list of available options.
@@ -203,7 +207,7 @@ public class DesktopLauncher extends JFrame {
 	 * @param args
 	 *            Command line options.
 	 */
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
 		final CommandLine line = parseCommandLine(args);
 
 		// Print help if asked to and exit.
@@ -211,27 +215,31 @@ public class DesktopLauncher extends JFrame {
 			showHelp();
 			System.exit(0);
 		}
-				
+
 		// Set the framerate
 		final Integer fps;
 		if (line.hasOption("fps")) {
 			final Scanner s = new Scanner(line.getOptionValue("fps"));
-			if (s.hasNextInt(10)) fps = s.nextInt(10);
-			else fps = null;
+			if (s.hasNextInt(10))
+				fps = s.nextInt(10);
+			else
+				fps = null;
 			s.close();
-		}
-		else fps = null;
-		
+		} else
+			fps = null;
+
 		// Set the textbox speed
 		final Float textboxSpeed;
 		if (line.hasOption("textbox-speed")) {
 			final Scanner s = new Scanner(line.getOptionValue("textbox-speed"));
-			if (s.hasNextFloat()) textboxSpeed = s.nextFloat();
-			else textboxSpeed = null;
+			if (s.hasNextFloat())
+				textboxSpeed = s.nextFloat();
+			else
+				textboxSpeed = null;
 			s.close();
-		}
-		else textboxSpeed = null;
-		
+		} else
+			textboxSpeed = null;
+
 		// Set the language.
 		Locale l;
 		if (line.hasOption("language")) {
@@ -240,43 +248,49 @@ public class DesktopLauncher extends JFrame {
 			l = Locale.getDefault();
 		}
 		Locale l2 = askUserForLanguage(l);
-		if (l2 != null) l = l2;
+		if (l2 != null)
+			l = l2;
 		final Locale locale = l;
-		
+
 		LOG.config("language set to " + l.getDisplayLanguage());
-		
+
 		// Set window dimensions.
 		final Integer width;
 		final Integer height;
 		final Boolean fullscreen;
 		if (line.hasOption("fullscreen")) {
 			fullscreen = line.getOptionValue("fullscreen").equalsIgnoreCase("true");
-		}
-		else fullscreen = null;
+		} else
+			fullscreen = null;
 		if (line.hasOption("width")) {
 			final String w = line.getOptionValue("width", "640");
 			final Scanner s = new Scanner(w);
-			if (s.hasNextInt(10)) width = s.nextInt(10);
-			else width = null;
+			if (s.hasNextInt(10))
+				width = s.nextInt(10);
+			else
+				width = null;
 			s.close();
-		}
-		else width = null;
+		} else
+			width = null;
 
 		if (line.hasOption("height")) {
 			final String h = line.getOptionValue("height", "480");
 			final Scanner s = new Scanner(h);
-			if (s.hasNextInt(10)) height = s.nextInt(10);
-			else height = null;
+			if (s.hasNextInt(10))
+				height = s.nextInt(10);
+			else
+				height = null;
 			s.close();
-		}
-		else height = null;
-		
+		} else
+			height = null;
+
 		// Set logging level.
 		int requestedVerbosity = Application.LOG_ERROR;
 		if (line.hasOption("verbosity")) {
 			final String v = line.getOptionValue("verbosity", String.valueOf(requestedVerbosity));
 			final Scanner s = new Scanner(v);
-			if (s.hasNextInt(10)) requestedVerbosity = s.nextInt(10);
+			if (s.hasNextInt(10))
+				requestedVerbosity = s.nextInt(10);
 			s.close();
 		}
 		final int verbosity;
@@ -298,19 +312,19 @@ public class DesktopLauncher extends JFrame {
 			System.out.println("Unknown logging level " + requestedVerbosity + ". Try --help.");
 			System.exit(-1);
 		}
-		
+
 		// Try to enable hardware acceleration, if available
 		try {
 			System.setProperty("sun.java2d.opengl", "true");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LOG.log(Level.WARNING, "could not enable hardware acceleration", e);
 		}
-				
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DesktopLauncher.instance = new DesktopLauncher(fullscreen, width, height, fps, textboxSpeed, locale, verbosity);
+					DesktopLauncher.instance = new DesktopLauncher(fullscreen, width, height, fps, textboxSpeed, locale,
+							verbosity);
 					DesktopLauncher.instance.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -321,44 +335,46 @@ public class DesktopLauncher extends JFrame {
 
 	/**
 	 * Asks the user for his preferred language.
+	 * 
 	 * @return The selected language, or null if none was selected.
 	 */
 	private static Locale askUserForLanguage(Locale defaultLocale) {
-		if (defaultLocale == null) defaultLocale = Locale.getDefault();
-		
+		if (defaultLocale == null)
+			defaultLocale = Locale.getDefault();
+
 		// Acquire list of available languages and sort by name.
-		Map<String,Locale> localeMap = I18n.getAvailableLocales();
+		Map<String, Locale> localeMap = I18n.getAvailableLocales();
 		List<String> optionList = new ArrayList<String>(localeMap.size());
 		optionList.addAll(localeMap.keySet());
 		Collections.sort(optionList);
 		String[] optionArray = optionList.toArray(new String[localeMap.size()]);
 		int defaultOption = 0;
-		
+
 		// Create list of human-readable choices and select default language.
 		for (String key : optionList) {
-			if (localeMap.get(key).toLanguageTag().equalsIgnoreCase(defaultLocale.toLanguageTag())) break;
+			if (localeMap.get(key).toLanguageTag().equalsIgnoreCase(defaultLocale.toLanguageTag()))
+				break;
 			++defaultOption;
 		}
-		if (defaultOption >= optionArray.length) defaultOption = 0;
-		
+		if (defaultOption >= optionArray.length)
+			defaultOption = 0;
+
 		// Create choice dialogue.
 		I18n.init(Locale.getDefault());
 		String choice = String.valueOf(JOptionPane.showInputDialog(null, I18n.main("desktop.startup.choose.language"),
-				I18n.main("desktop.startup.choose.language.title"),
-				JOptionPane.QUESTION_MESSAGE,
-				null,
-				optionArray,
+				I18n.main("desktop.startup.choose.language.title"), JOptionPane.QUESTION_MESSAGE, null, optionArray,
 				optionArray[defaultOption]));
-		
+
 		// Evaluate user's choice and set the locale to the user's choice.
 		if (localeMap.containsKey(choice)) {
 			LOG.log(Level.INFO, "got user language of choice: " + choice);
 			return localeMap.get(choice);
-		}
-		else return null;
+		} else
+			return null;
 	}
-	
-	private DesktopLauncher(Boolean fullscreen, Integer width, Integer height, Integer fps, Float textboxSpeed, Locale locale, int verbosity) {
+
+	private DesktopLauncher(Boolean fullscreen, Integer width, Integer height, Integer fps, Float textboxSpeed,
+			Locale locale, int verbosity) {
 		// Save configuration.
 		this.fullscreen = fullscreen;
 		this.width = width;
@@ -367,110 +383,110 @@ public class DesktopLauncher extends JFrame {
 		this.textboxSpeed = textboxSpeed;
 		this.locale = locale;
 		this.verbosity = verbosity;
-		
+
 		// Apply locale.
 		this.setLocale(locale);
-		JOptionPane.setDefaultLocale(locale);		
-		
+		JOptionPane.setDefaultLocale(locale);
+
 		// Load localization.
 		I18n.init(locale);
-		
+
 		// Handle closing etc.
 		setupWindowEvents();
-		
+
 		// Set our title.
 		this.setTitle(I18n.main("desktop.launcher.title"));
-		
+
 		// Render the main launcher screen.
 		renderLauncher();
 	}
 
 	private void setupWindowEvents() {
 		this.addWindowListener(new WindowListener() {
-			
+
 			@Override
 			public void windowOpened(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowIconified(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowDeiconified(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowDeactivated(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				if (mainPanel != null) mainPanel.writeConfig();
+				if (mainPanel != null)
+					mainPanel.writeConfig();
 				if (gameProcess != null) {
 					DesktopLauncher.alert(I18n.main("desktop.running.no.close"));
 					instance.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-				}
-				else {
+				} else {
 					killProcesses();
 					instance.setDefaultCloseOperation(EXIT_ON_CLOSE);
 				}
 			}
-			
+
 			@Override
 			public void windowClosed(WindowEvent arg0) {
 				// TODO Auto-generated method stub
 			}
-			
+
 			@Override
 			public void windowActivated(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 	}
-	
-	//TODO
+
+	// TODO
 	// just a simple button for testing now.
 	private void renderLauncher() {
-		
+
 		mainPanel = new MainPanel(width, height, fps, fullscreen, textboxSpeed);
 
 		final JButton startButton = mainPanel.getStartButton();
 		final JButton buttonForceQuit = mainPanel.getDebugButton();
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+
 		// Starting the game
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO check if multiple games are running
+				// TODO check if multiple games are running
 				if (gameProcess == null) {
 					disableUI();
 					if (!launchGame()) {
 						DesktopLauncher.alert(I18n.main("desktop.launch.failed"));
 					}
-				}
-				else {
+				} else {
 					LOG.info("cannot launch another game, still one active");
 					DesktopLauncher.alert(I18n.main("desktop.running.no.start"));
 				}
 			}
 		});
-		
+
 		// Force quit, only for debugging
 		buttonForceQuit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				if (gameProcess != null) gameProcess.destroy();
+				if (gameProcess != null)
+					gameProcess.destroy();
 			}
 		});
 
@@ -478,10 +494,10 @@ public class DesktopLauncher extends JFrame {
 		this.setBounds(100, 100, 450, 300);
 		this.pack();
 	}
-	
+
 	// Now we actually get to the meat.
-	private boolean launchGame() {	
-		//TODO Add actual level and player.
+	private boolean launchGame() {
+		// TODO Add actual level and player.
 		width = mainPanel.getConfigWidth();
 		height = mainPanel.getConfigHeight();
 		fps = mainPanel.getConfigFps();
@@ -489,15 +505,9 @@ public class DesktopLauncher extends JFrame {
 		textboxSpeed = mainPanel.getTextboxSpeed();
 		ALevel level = new Level01();
 		APlayer player = new PEstelle();
-		final GameParameters params = new GameParameters.Builder(level, player)
-				.requestedWidth(width)
-				.requestedLocale(locale)
-				.requestedHeight(height)
-				.requestedFullscreen(fullscreen)
-				.requestedFps(fps)
-				.requestedTextboxSpeed(textboxSpeed)
-				.requestedLogLevel(verbosity)
-				.requestedWindowTitle(level.getName())
+		final GameParameters params = new GameParameters.Builder(level, player).requestedWidth(width)
+				.requestedLocale(locale).requestedHeight(height).requestedFullscreen(fullscreen).requestedFps(fps)
+				.requestedTextboxSpeed(textboxSpeed).requestedLogLevel(verbosity).requestedWindowTitle(level.getName())
 				.build();
 		// Serialize as string, pass to launcher, and run.
 		try {
@@ -506,7 +516,7 @@ public class DesktopLauncher extends JFrame {
 				// Launch new thread to notify us when the
 				// game thread finishes. UI should stay
 				// responsive.
-				new Thread(new Runnable() {						
+				new Thread(new Runnable() {
 					@Override
 					public void run() {
 						try {
@@ -518,45 +528,43 @@ public class DesktopLauncher extends JFrame {
 							}
 						} catch (InterruptedException e) {
 							LOG.log(Level.SEVERE, "game process was interrupted", e);
-						}
-						finally {
+						} finally {
 							enableUI();
 						}
 						mainPanel.updateScore();
 					}
 				}).start();
 				return true;
-			}
-			else {
+			} else {
 				enableUI();
 				return false;
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LOG.log(Level.SEVERE, "unable to launch game", e);
 			enableUI();
 			return false;
 		}
 	}
-	
+
 	private void enableUI() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				gameProcess = null;
-				setEnabled(true);		
+				setEnabled(true);
 			}
 		});
 	}
+
 	private void disableUI() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				//TODO when disabling UI				
+				// TODO when disabling UI
 			}
 		});
 	}
-	
+
 	private static void alert(String msg) {
 		JOptionPane.showMessageDialog(null, msg);
 	}

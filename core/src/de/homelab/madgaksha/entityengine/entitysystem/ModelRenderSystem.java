@@ -30,7 +30,7 @@ public class ModelRenderSystem extends EntitySystem {
 	private ImmutableArray<Entity> entities;
 
 	private Environment environment;
-	
+
 	public ModelRenderSystem() {
 		this(DefaultPriority.modelRenderSystem);
 	}
@@ -55,13 +55,14 @@ public class ModelRenderSystem extends EntitySystem {
 			final ScaleComponent sc = Mapper.scaleComponent.get(entity);
 			final BoundingBoxRenderComponent bbrc = Mapper.boundingBoxRenderComponent.get(entity);
 			mc.modelInstance.transform.idt();
-			
+
 			// Do not render if off-screen.
-			if (bbrc != null && !GeoUtil.boundingBoxVisible(bbrc,pc)) continue;
+			if (bbrc != null && !GeoUtil.boundingBoxVisible(bbrc, pc))
+				continue;
 
 			// Set position.
 			mc.modelInstance.transform.translate(pc.x + pc.offsetX, pc.y + pc.offsetY, pc.z + pc.offsetZ);
-			
+
 			// Scale if desired.
 			if (sc != null)
 				mc.modelInstance.transform.scale(sc.scaleX, sc.scaleY, sc.scaleZ);
@@ -69,14 +70,14 @@ public class ModelRenderSystem extends EntitySystem {
 			// Rotate if desired.
 			if (rc != null) {
 				mc.modelInstance.transform.rotate(rc.axisX, rc.axisY, rc.axisZ, rc.thetaZ);
-			} 
-			
+			}
+
 			// Render model.
 			batchModel.render(mc.modelInstance, environment);
-		}		
+		}
 		batchModel.end();
 	}
-	
+
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(family);

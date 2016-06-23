@@ -28,28 +28,37 @@ public class VoicePlayer extends AAudioPlayer {
 	public boolean play(ESound sound) {
 		return play(sound, 1.0f, 0.0f, 1.0f, true);
 	}
+
 	public boolean play(ESound sound, boolean stop) {
 		return play(sound, 1.0f, 0.0f, 1.0f, stop);
 	}
+
 	public boolean play(ESound sound, float volume) {
 		return play(sound, volume, 0.0f, 1.0f, true);
 	}
+
 	public boolean play(ESound sound, float volume, boolean stop) {
 		return play(sound, volume, 0.0f, 1.0f, stop);
 	}
+
 	public boolean play(ESound sound, float volume, float pan) {
 		return play(sound, volume, pan, 1.0f, true);
 	}
+
 	public boolean play(ESound sound, float volume, float pan, float pitch) {
 		return play(sound, volume, pan, pitch, true);
 	}
+
 	public boolean play(ESound sound, float volume, float pan, float pitch, boolean stop) {
 		if (currentClip != null) {
-			if (isPlaying()) return false;
-			else if (stop) currentClip.stop();
+			if (isPlaying())
+				return false;
+			else if (stop)
+				currentClip.stop();
 		}
 		final Sound s = ResourceCache.getSound(sound);
-		if (s == null) return false;
+		if (s == null)
+			return false;
 		currentClip = s;
 		duration = sound.getDurationInMilliseconds();
 		startTime = TimeUtils.millis();
@@ -58,19 +67,21 @@ public class VoicePlayer extends AAudioPlayer {
 	}
 
 	private boolean isPlaying() {
-		return TimeUtils.millis()-startTime < duration;
+		return TimeUtils.millis() - startTime < duration;
 	}
-	
+
 	public void playUnconditionally(ESound sound) {
-		if (currentClip != null) currentClip.stop();
+		if (currentClip != null)
+			currentClip.stop();
 		currentClip = null;
 		play(sound, 1.0f, 0.0f, 1.0f);
 	}
 
 	public void stop() {
-		if (currentClip != null) currentClip.stop();
-	}	
-	
+		if (currentClip != null)
+			currentClip.stop();
+	}
+
 	/**
 	 * Should be called only once when exiting the game.
 	 */

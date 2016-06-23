@@ -15,7 +15,7 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum ETextureAtlas implements IResource<ETextureAtlas,TextureAtlas> {
+public enum ETextureAtlas implements IResource<ETextureAtlas, TextureAtlas> {
 	NINE_PATCHES("9patch/packed/9patchPacked.atlas"),
 	PARTICLE_EFFECTS("particle/packed/particleEffectPacked.atlas"),
 	STATUS_SCREEN("statusscreen/packed/statusScreenPacked.atlas"),
@@ -25,7 +25,8 @@ public enum ETextureAtlas implements IResource<ETextureAtlas,TextureAtlas> {
 	MISC("texture/misc/packed/miscPacked.atlas");
 
 	private final static Logger LOG = Logger.getLogger(ETextureAtlas.class);
-	private final static EnumMap<ETextureAtlas, TextureAtlas> textureAtlasCache = new EnumMap<ETextureAtlas, TextureAtlas>(ETextureAtlas.class);
+	private final static EnumMap<ETextureAtlas, TextureAtlas> textureAtlasCache = new EnumMap<ETextureAtlas, TextureAtlas>(
+			ETextureAtlas.class);
 
 	private String filename;
 
@@ -39,7 +40,7 @@ public enum ETextureAtlas implements IResource<ETextureAtlas,TextureAtlas> {
 			ta.clear();
 		}
 	}
-	
+
 	@Override
 	public TextureAtlas getObject() {
 		final FileHandle fileHandle = Gdx.files.internal(filename);
@@ -74,7 +75,7 @@ public enum ETextureAtlas implements IResource<ETextureAtlas,TextureAtlas> {
 	public EnumMap<ETextureAtlas, TextureAtlas> getMap() {
 		return textureAtlasCache;
 	}
-	
+
 	@Override
 	public void clearAllOfThisKind() {
 		ETextureAtlas.clearAll();

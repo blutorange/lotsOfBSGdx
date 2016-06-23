@@ -9,7 +9,8 @@ import de.homelab.madgaksha.entityengine.entity.IReceive;
 public class ReceiveTouchGroup01Component extends ReceiveTouchComponent {
 	public ReceiveTouchGroup01Component() {
 	}
+
 	public ReceiveTouchGroup01Component(IReceive t) {
 		super(t);
-	} 
+	}
 }

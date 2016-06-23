@@ -11,15 +11,15 @@ public class HomingForceField implements IForceField {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(HomingForceField.class);
 	private final static Vector2 v = new Vector2();
-	
+
 	public final PositionComponent target;
 	public final float springConstant;
-	
+
 	public HomingForceField(PositionComponent target, float springConstant) {
 		this.target = target;
 		this.springConstant = springConstant;
-	}	
-	
+	}
+
 	@Override
 	public Vector2 apply(Entity e) {
 		PositionComponent pc = Mapper.positionComponent.get(e);

@@ -17,14 +17,15 @@ public class LifeSystem extends IteratingSystem {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(LifeSystem.class);
-	
+
 	public LifeSystem() {
 		this(DefaultPriority.lifeSystem);
 	}
 
 	@SuppressWarnings("unchecked")
 	public LifeSystem(int priority) {
-		super(Family.all(LifeComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(), priority);
+		super(Family.all(LifeComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(),
+				priority);
 	}
 
 	@Override
@@ -33,8 +34,10 @@ public class LifeSystem extends IteratingSystem {
 		final TemporalComponent tc = Mapper.temporalComponent.get(entity);
 		lc.remainingLife -= tc.deltaTime;
 		if (lc.remainingLife <= 0.0f) {
-			if (lc.onDeath != null) lc.onDeath.kill(entity);
-			else gameEntityEngine.removeEntity(entity);
+			if (lc.onDeath != null)
+				lc.onDeath.kill(entity);
+			else
+				gameEntityEngine.removeEntity(entity);
 		}
 	}
 }

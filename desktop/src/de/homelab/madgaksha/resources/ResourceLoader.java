@@ -13,8 +13,7 @@ public class ResourceLoader {
 	private ResourceLoader() {
 	}
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(ResourceLoader.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ResourceLoader.class);
 
 	private static Map<Integer, Object> iconMap = new HashMap<Integer, Object>();
 
@@ -37,8 +36,7 @@ public class ResourceLoader {
 			return map.get(o);
 		} else {
 			if (map.size() > res.getLimit()) {
-				LOG.info("Clearing cache for resources of type "
-						+ res.getEnum().toString());
+				LOG.info("Clearing cache for resources of type " + res.getEnum().toString());
 				map.clear();
 			}
 			final Object r = res.getObject();

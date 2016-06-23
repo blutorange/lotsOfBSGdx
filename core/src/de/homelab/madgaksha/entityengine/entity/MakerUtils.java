@@ -61,21 +61,29 @@ import de.homelab.madgaksha.util.GeoUtil;
 public final class MakerUtils {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(MakerUtils.class);
-	private MakerUtils(){}
+
+	private MakerUtils() {
+	}
 
 	public static BoundingBoxRenderComponent makeBoundingBoxRender(Shape2D shape) {
 		return new BoundingBoxRenderComponent(GeoUtil.getBoundingBox(shape));
 	}
+
 	public static BoundingBoxMapComponent makeBoundingBoxMap(Shape2D shape) {
 		return new BoundingBoxMapComponent(GeoUtil.getBoundingBox(shape));
 	}
+
 	public static BoundingBoxCollisionComponent makeBoundingBoxCollision(Shape2D shape) {
 		return new BoundingBoxCollisionComponent(GeoUtil.getBoundingBox(shape));
 	}
-	/** 
+
+	/**
 	 * Makes a bounding box for the shape relative to the given center.
-	 * @param shape The shape.
-	 * @param center The center.
+	 * 
+	 * @param shape
+	 *            The shape.
+	 * @param center
+	 *            The center.
 	 * @return A bounding box relative to the given center.
 	 */
 	public static BoundingBoxCollisionComponent makeBoundingBoxCollision(Shape2D shape, PositionComponent center) {
@@ -86,11 +94,12 @@ public final class MakerUtils {
 		bbc.maxY -= center.y;
 		return bbc;
 	}
+
 	public static BoundingBoxCollisionComponent makeBoundingBoxCollisionRelativeToCenter(Shape2D shape) {
 		PositionComponent center = makePositionAtCenter(shape);
 		return makeBoundingBoxCollision(shape, center);
 	}
-	
+
 	public static PositionComponent makePositionAtCenter(Shape2D shape) {
 		final PositionComponent pc = new PositionComponent();
 		Vector2 center = new Vector2();
@@ -100,11 +109,12 @@ public final class MakerUtils {
 		return pc;
 	}
 
-	public static Component makeTrigger(ITrigger triggerAcceptingObject, IReceive triggerReceivingObject, ETrigger trigger, ECollisionGroup group) {
+	public static Component makeTrigger(ITrigger triggerAcceptingObject, IReceive triggerReceivingObject,
+			ETrigger trigger, ECollisionGroup group) {
 		switch (trigger) {
 		case MANUAL:
 			return null;
-		case SCREEN:		
+		case SCREEN:
 			return new TriggerScreenComponent(triggerAcceptingObject);
 		case STARTUP:
 			return new TriggerStartupComponent(triggerAcceptingObject);
@@ -112,10 +122,10 @@ public final class MakerUtils {
 			final ReceiveTouchComponent ttc = makeReceiveTouch(group, triggerReceivingObject);
 			return ttc;
 		default:
-			return null;		
+			return null;
 		}
 	}
-	
+
 	public static ReceiveTouchComponent makeReceiveTouch(ECollisionGroup group, IReceive triggerReceivingObject) {
 		switch (group) {
 		case GROUP_01:
@@ -132,7 +142,7 @@ public final class MakerUtils {
 			return new ReceiveTouchGroup05Component(triggerReceivingObject);
 		}
 	}
-	
+
 	public static Entity makeEnemyTargetCross() {
 		Entity targetCross = new Entity();
 		AngularVelocityComponent avc = new AngularVelocityComponent(level.getEnemyTargetCrossAngularVelocity());
@@ -147,7 +157,7 @@ public final class MakerUtils {
 		ShouldScaleComponent ssc = new ShouldScaleComponent(new ExponentialGrantStrategy(0.99f, 0.05f));
 		TemporalComponent tc = new TemporalComponent();
 		ZOrder0Component zoc = new ZOrder0Component();
-		
+
 		BoundingBoxRenderComponent bbrc = new BoundingBoxRenderComponent(sc.sprite.getX(), sc.sprite.getY(),
 				sc.sprite.getX() + sc.sprite.getWidth(), sc.sprite.getY() + sc.sprite.getHeight());
 		targetCross.add(avc);
@@ -163,19 +173,20 @@ public final class MakerUtils {
 		targetCross.add(ssc);
 		targetCross.add(tc);
 		targetCross.add(zoc);
-		
-		return targetCross; 
+
+		return targetCross;
 	}
 
 	/**
-	 * Sets up the family for camera tracking focus points and
-	 * adds the appropriate listeners for when new enemies appear
-	 * and leave.
+	 * Sets up the family for camera tracking focus points and adds the
+	 * appropriate listeners for when new enemies appear and leave.
+	 * 
 	 * @return The family for the focus points.
 	 */
 	public static Family makeFocusPointsFamily() {
 		@SuppressWarnings("unchecked")
-		final Family family = Family.all(PositionComponent.class,CameraFocusComponent.class).exclude(InactiveComponent.class).get();
+		final Family family = Family.all(PositionComponent.class, CameraFocusComponent.class)
+				.exclude(InactiveComponent.class).get();
 		gameEntityEngine.addEntityListener(family, new EntityListener() {
 			@Override
 			public void entityRemoved(Entity entity) {
@@ -187,11 +198,12 @@ public final class MakerUtils {
 				// Switch target cross to a valid target.
 				int focusPointsSize = cameraTrackingComponent.focusPoints.size();
 				if (focusPointsSize > 0) {
-					int index = Math.min(cameraTrackingComponent.trackedPointIndex, focusPointsSize-1);
+					int index = Math.min(cameraTrackingComponent.trackedPointIndex, focusPointsSize - 1);
 					cameraTrackingComponent.trackedPointIndex = index;
 					EnemyMaker.targetSwitched(cameraTrackingComponent.focusPoints.get(index), focusPointsSize != 1);
 				}
 			}
+
 			@Override
 			public void entityAdded(Entity entity) {
 				// Battle mode entered
@@ -203,13 +215,13 @@ public final class MakerUtils {
 		});
 		return family;
 	}
-	
+
 	public static Entity makeCamera(ALevel level, Entity playerE) {
 		final Entity myCamera = new Entity();
 		final Family familyFocusPoints = makeFocusPointsFamily();
-		
-		final ManyTrackingComponent mtc = new ManyTrackingComponent(level.getMapXW(), level.getMapYW(), level.getMapWidthW(),
-				level.getMapHeightW());
+
+		final ManyTrackingComponent mtc = new ManyTrackingComponent(level.getMapXW(), level.getMapYW(),
+				level.getMapWidthW(), level.getMapHeightW());
 		mtc.minimumElevation = level.getMapData().getMinimumCameraElevation();
 		mtc.maximumElevation = level.getMapData().getMaximumCameraElevation();
 		mtc.focusPoints = gameEntityEngine.getEntitiesFor(familyFocusPoints);
@@ -217,11 +229,12 @@ public final class MakerUtils {
 		mtc.baseDirection = level.getMapData().getBaseDirection();
 		mtc.gravity = level.getMapData().getPreferredPlayerLocation();
 		mtc.trackingOrientationStrategy = TrackingOrientationStrategy.RELATIVE;
-		
+
 		cameraTrackingComponent = mtc;
-		
-		myCamera.add(mtc);		
-		myCamera.add(new PositionComponent(viewportGame.getCamera().position.x,viewportGame.getCamera().position.y,viewportGame.getCamera().position.z));
+
+		myCamera.add(mtc);
+		myCamera.add(new PositionComponent(viewportGame.getCamera().position.x, viewportGame.getCamera().position.y,
+				viewportGame.getCamera().position.z));
 		myCamera.add(new RotationComponent(viewportGame.getRotationUpXY()));
 		myCamera.add(new ShouldPositionComponent(new ExponentialGrantStrategy(0.6f, 0.25f)));
 		myCamera.add(new ShouldRotationComponent(new ExponentialGrantStrategy(0.6f, 0.25f)));
@@ -231,17 +244,21 @@ public final class MakerUtils {
 		return myCamera;
 	}
 
-	/** Injects an entity into the entity system that will be called after the given amount of time.
+	/**
+	 * Injects an entity into the entity system that will be called after the
+	 * given amount of time.
 	 * 
-	 * @param f Duration in seconds.
-	 * @param iTimedCallback Callback to call.
+	 * @param f
+	 *            Duration in seconds.
+	 * @param iTimedCallback
+	 *            Callback to call.
 	 */
 	public static void addTimedRunnable(float duration, ITimedCallback timedCallback) {
 		final Entity e = gameEntityEngine.createEntity();
 		addTimedRunnableTo(e, duration, timedCallback);
 		gameEntityEngine.addEntity(e);
 	}
-	
+
 	public static void addTimedRunnableTo(Entity e, float duration, ITimedCallback timedCallback) {
 		TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
 		TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);
@@ -251,33 +268,45 @@ public final class MakerUtils {
 
 	/**
 	 * Adds a particle effect at the given position, with game coordiantes.
-	 * @param particleEffect Particle effect to add.
-	 * @param positionComponent Location where particle effect will be placed.
+	 * 
+	 * @param particleEffect
+	 *            Particle effect to add.
+	 * @param positionComponent
+	 *            Location where particle effect will be placed.
 	 */
-	public static void addParticleEffectGame(EParticleEffect particleEffect,PositionComponent positionComponent) {
+	public static void addParticleEffectGame(EParticleEffect particleEffect, PositionComponent positionComponent) {
 		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectGameComponent.class);
 		addParticleEffect(particleEffect, positionComponent, pec, null);
 	}
-	public static void addParticleEffectGame(EParticleEffect particleEffect,PositionComponent positionComponent, ITimedCallback callback) {
+
+	public static void addParticleEffectGame(EParticleEffect particleEffect, PositionComponent positionComponent,
+			ITimedCallback callback) {
 		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectGameComponent.class);
 		addParticleEffect(particleEffect, positionComponent, pec, callback);
 	}
+
 	/**
 	 * Adds a particle effect at the given position, with screen coordinates.
-	 * @param particleEffect Particle effect to add.
-	 * @param positionComponent Location where particle effect will be placed.
+	 * 
+	 * @param particleEffect
+	 *            Particle effect to add.
+	 * @param positionComponent
+	 *            Location where particle effect will be placed.
 	 * @return The newly created particle effect component.
 	 */
-	public static void addParticleEffectScreen(EParticleEffect particleEffect,PositionComponent positionComponent) {
+	public static void addParticleEffectScreen(EParticleEffect particleEffect, PositionComponent positionComponent) {
 		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectScreenComponent.class);
 		addParticleEffect(particleEffect, positionComponent, pec, null);
 	}
-	public static void addParticleEffectScreen(EParticleEffect particleEffect,PositionComponent positionComponent, ITimedCallback callback) {
+
+	public static void addParticleEffectScreen(EParticleEffect particleEffect, PositionComponent positionComponent,
+			ITimedCallback callback) {
 		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectScreenComponent.class);
 		addParticleEffect(particleEffect, positionComponent, pec, callback);
 	}
 
-	private static void addParticleEffect(EParticleEffect particleEffect,PositionComponent positionComponent, ParticleEffectComponent pec, ITimedCallback callback) {
+	private static void addParticleEffect(EParticleEffect particleEffect, PositionComponent positionComponent,
+			ParticleEffectComponent pec, ITimedCallback callback) {
 		final Entity entity = gameEntityEngine.createEntity();
 		final TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
 		pec.setup(ResourcePool.obtainParticleEffect(particleEffect));
@@ -288,5 +317,4 @@ public final class MakerUtils {
 		gameEntityEngine.addEntity(entity);
 	}
 
-	
 }

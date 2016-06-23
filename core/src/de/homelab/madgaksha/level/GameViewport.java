@@ -24,52 +24,53 @@ import de.homelab.madgaksha.logging.Logger;
 public class GameViewport extends Viewport {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(GameViewport.class);
-	
+
 	private PerspectiveCamera perspectiveCamera;
 	private float tanFovyH;
 	private float angleUpXY = 0.0f;
 	private float angleDirXY = 0.0f;
-	
-	private Vector2 yPlus = new Vector2(0.0f,1.0f);
+
+	private Vector2 yPlus = new Vector2(0.0f, 1.0f);
 	private Vector2 u = new Vector2();
 	private Vector3 v;
-	
+
 	private float ratioScreenGameWidth;
 	private float ratioScreenGameHeight;
-	
+
 	@Override
 	public void apply() {
 		apply(false);
 	}
+
 	@Override
 	public void apply(boolean x) {
 		super.apply(x);
 		angleDirXY = computeRotationDirXY();
 		angleUpXY = computeRotationUpXY();
 	}
-	
-	
+
 	public GameViewport(int screenWidth, int screenHeight, float mapWidthW, float mapHeightW, boolean centerCamera) {
 		// Compute dimensions of the game window in pixels.
 		Vector2 screenDimensions = computeGameViewportDimensions(screenWidth, screenHeight);
 		int gameWidth = (int) screenDimensions.x;
 		int gameHeight = (int) screenDimensions.y;
 
-		// Save ratio for transforming between game and screen coordinates later.
-		ratioScreenGameWidth = ((float)Gdx.graphics.getWidth()) / ((float)gameWidth);
-		ratioScreenGameHeight = ((float)Gdx.graphics.getHeight()) / ((float)gameHeight);
-		
+		// Save ratio for transforming between game and screen coordinates
+		// later.
+		ratioScreenGameWidth = ((float) Gdx.graphics.getWidth()) / ((float) gameWidth);
+		ratioScreenGameHeight = ((float) Gdx.graphics.getHeight()) / ((float) gameHeight);
+
 		// Create a new camera.
 		Camera camera = new PerspectiveCamera(ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y, gameWidth, gameHeight);
-		perspectiveCamera = (PerspectiveCamera)camera;
-		
+		perspectiveCamera = (PerspectiveCamera) camera;
+
 		// Position camera to show entire world height initially.
 		float elevation = mapHeightW * 0.5f * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF_INV;
 		camera.position.set(mapWidthW * 0.5f, mapHeightW * 0.5f, elevation);
-		camera.up.rotate(270f,0f,0f,1f);
+		camera.up.rotate(270f, 0f, 0f, 1f);
 
-		tanFovyH = (float)Math.tan(0.5*ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y*MathUtils.degreesToRadians);
-		
+		tanFovyH = (float) Math.tan(0.5 * ALevel.CAMERA_GAME_FIELD_OF_VIEW_Y * MathUtils.degreesToRadians);
+
 		setWorldHeight(mapHeightW);
 		setWorldWidth(mapHeightW * Game.VIEWPORT_GAME_AR);
 
@@ -79,7 +80,7 @@ public class GameViewport extends Viewport {
 
 		// Now look down on the world initially.
 		camera.direction.set(0.0f, 0.0f, -1.0f);
-	
+
 		// Connect camera.
 		setCamera(camera);
 
@@ -89,7 +90,6 @@ public class GameViewport extends Viewport {
 		apply(centerCamera);
 	}
 
-
 	@Override
 	public void update(int screenWidth, int screenHeight, boolean centerCamera) {
 		// Compute dimensions of the game window in pixels.
@@ -97,10 +97,11 @@ public class GameViewport extends Viewport {
 		int gameWidth = (int) screenDimensions.x;
 		int gameHeight = (int) screenDimensions.y;
 
-		// Save ratio for transforming between game and screen coordinates later.
-		ratioScreenGameWidth = ((float)Gdx.graphics.getWidth()) / ((float)gameWidth);
-		ratioScreenGameHeight = ((float)Gdx.graphics.getHeight()) / ((float)gameHeight);
-		
+		// Save ratio for transforming between game and screen coordinates
+		// later.
+		ratioScreenGameWidth = ((float) Gdx.graphics.getWidth()) / ((float) gameWidth);
+		ratioScreenGameHeight = ((float) Gdx.graphics.getHeight()) / ((float) gameHeight);
+
 		// Game window goes to the bottom left.
 		setScreenBounds(0, 0, gameWidth, gameHeight);
 
@@ -163,15 +164,16 @@ public class GameViewport extends Viewport {
 				gameWidth = gameHeight * Game.VIEWPORT_GAME_AR_NUM / Game.VIEWPORT_GAME_AR_DEN;
 			}
 		}
-				
+
 		// Floats can store ints exactly, unless too large
 		// which screen dimensions are not. Mantissa 23 bit.
 		return new Vector2((float) gameWidth, (float) gameHeight);
 	}
-	
+
 	public PerspectiveCamera getPerspectiveCamera() {
 		return perspectiveCamera;
 	}
+
 	/**
 	 * @return tan(fieldOfView/2)
 	 */
@@ -180,26 +182,28 @@ public class GameViewport extends Viewport {
 	}
 
 	public void setRotation(float thetaZ) {
-		perspectiveCamera.up.set(1.0f,0.0f,0.0f).rotate(perspectiveCamera.direction, thetaZ);
-		perspectiveCamera.direction.set(0.0f,0.0f,-1.0f);
+		perspectiveCamera.up.set(1.0f, 0.0f, 0.0f).rotate(perspectiveCamera.direction, thetaZ);
+		perspectiveCamera.direction.set(0.0f, 0.0f, -1.0f);
 	}
-	
+
 	private float computeRotationUpXY() {
 		v = perspectiveCamera.up;
-		return u.set(v.x,v.y).angle(yPlus);
+		return u.set(v.x, v.y).angle(yPlus);
 	}
+
 	private float computeRotationDirXY() {
 		v = perspectiveCamera.direction;
-		return u.set(v.x,v.y).angle(yPlus);
+		return u.set(v.x, v.y).angle(yPlus);
 	}
-	
+
 	public float getRotationUpXY() {
 		return angleUpXY;
 	}
+
 	public float getRotationDirXY() {
 		return angleDirXY;
 	}
-	
+
 	public Vector2 project(Vector2 v) {
 		super.project(v);
 		v.x *= ratioScreenGameWidth;

@@ -73,15 +73,15 @@ public class AwesomeAudio implements Audio {
 						os = dest.write(false);
 						is = file.read();
 						StreamUtils.copyStream(is, os);
-					}
-					finally {
-						if (os != null) StreamUtils.closeQuietly(os);
-						if (is != null) StreamUtils.closeQuietly(is);
+					} finally {
+						if (os != null)
+							StreamUtils.closeQuietly(os);
+						if (is != null)
+							StreamUtils.closeQuietly(is);
 					}
 				}
 				return AdxMusic.newAdxMusic(dest, true);
-			}
-			else
+			} else
 				return oldAudio.newMusic(file);
 		} catch (Exception e) {
 			LOG.error("could not open music file", e);

@@ -16,27 +16,28 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum ENinePatch implements IResource<ENinePatch,NinePatch> {
-	TEXTBOX_BLUE_ALL(ETextureAtlas.NINE_PATCHES,"textbox-blue-fc-all"),
-	TEXTBOX_BLUE_BOTTOM(ETextureAtlas.NINE_PATCHES,"textbox-blue-fc-bottom"),
-	TEXTBOX_BLUE_TOP(ETextureAtlas.NINE_PATCHES,"textbox-blue-fc-top"),
-	TEXTBOX_BLUE_LEFT(ETextureAtlas.NINE_PATCHES,"textbox-blue-fc-left"),
-	TEXTBOX_BLUE_RIGHT(ETextureAtlas.NINE_PATCHES,"textbox-blue-fc-right"),
-	TEXTBOX_BLUE_BOTTOM_LEFT(ETextureAtlas.NINE_PATCHES,"textbox-blue-fc-bottom-left"),
-	TEXTBOX_BLUE_BOTTOM_RIGHT(ETextureAtlas.NINE_PATCHES,"textbox-blue-fc-bottom-right"),
-	
-	STATUS_SCREEN_MAIN_FRAME(ETextureAtlas.STATUS_SCREEN,"soraFcBrownBox"),
-	STATUS_SCREEN_CELL_FRAME(ETextureAtlas.STATUS_SCREEN,"niceBrownBox"),
-	STATUS_SCREEN_HP_BAR_PLAYER(ETextureAtlas.STATUS_SCREEN,"pointBarBrownEllipse"),
-	STATUS_SCREEN_HP_BAR_FILL(ETextureAtlas.STATUS_SCREEN,"hpBarFill"),
-	STATUS_SCREEN_DATA_FRAME(ETextureAtlas.STATUS_SCREEN,"bracketsLrtd"),
-	
-	PAUSE_LAYER_OVERLAY(ETextureAtlas.NINE_PATCHES,"whiteRectangle"),
-	
+public enum ENinePatch implements IResource<ENinePatch, NinePatch> {
+	TEXTBOX_BLUE_ALL(ETextureAtlas.NINE_PATCHES, "textbox-blue-fc-all"),
+	TEXTBOX_BLUE_BOTTOM(ETextureAtlas.NINE_PATCHES, "textbox-blue-fc-bottom"),
+	TEXTBOX_BLUE_TOP(ETextureAtlas.NINE_PATCHES, "textbox-blue-fc-top"),
+	TEXTBOX_BLUE_LEFT(ETextureAtlas.NINE_PATCHES, "textbox-blue-fc-left"),
+	TEXTBOX_BLUE_RIGHT(ETextureAtlas.NINE_PATCHES, "textbox-blue-fc-right"),
+	TEXTBOX_BLUE_BOTTOM_LEFT(ETextureAtlas.NINE_PATCHES, "textbox-blue-fc-bottom-left"),
+	TEXTBOX_BLUE_BOTTOM_RIGHT(ETextureAtlas.NINE_PATCHES, "textbox-blue-fc-bottom-right"),
+
+	STATUS_SCREEN_MAIN_FRAME(ETextureAtlas.STATUS_SCREEN, "soraFcBrownBox"),
+	STATUS_SCREEN_CELL_FRAME(ETextureAtlas.STATUS_SCREEN, "niceBrownBox"),
+	STATUS_SCREEN_HP_BAR_PLAYER(ETextureAtlas.STATUS_SCREEN, "pointBarBrownEllipse"),
+	STATUS_SCREEN_HP_BAR_FILL(ETextureAtlas.STATUS_SCREEN, "hpBarFill"),
+	STATUS_SCREEN_DATA_FRAME(ETextureAtlas.STATUS_SCREEN, "bracketsLrtd"),
+
+	PAUSE_LAYER_OVERLAY(ETextureAtlas.NINE_PATCHES, "whiteRectangle"),
+
 	;
 
 	private final static Logger LOG = Logger.getLogger(ENinePatch.class);
-	private final static EnumMap<ENinePatch, NinePatch> ninePatchCache = new EnumMap<ENinePatch, NinePatch>(ENinePatch.class);
+	private final static EnumMap<ENinePatch, NinePatch> ninePatchCache = new EnumMap<ENinePatch, NinePatch>(
+			ENinePatch.class);
 
 	private final String patchName;
 	private final ETextureAtlas textureAtlas;
@@ -45,8 +46,10 @@ public enum ENinePatch implements IResource<ENinePatch,NinePatch> {
 	private final Dimension sizeFace;
 
 	/**
-	 * @param ta Texture atlas containing the nine patch.
-	 * @param p Name of the nine patch.
+	 * @param ta
+	 *            Texture atlas containing the nine patch.
+	 * @param p
+	 *            Name of the nine patch.
 	 */
 	private ENinePatch(ETextureAtlas ta, String p) {
 		patchName = p;
@@ -62,27 +65,31 @@ public enum ENinePatch implements IResource<ENinePatch,NinePatch> {
 			np.clear();
 		}
 	}
-	
+
 	public int getOffsetSpeakerX() {
 		return offsetSpeaker.width;
 	}
+
 	public int getOffsetSpeakerY() {
 		return offsetSpeaker.height;
 	}
+
 	public int getOffsetFaceX() {
 		return offsetFace.width;
 	}
+
 	public int getOffsetFaceY() {
 		return offsetFace.height;
 	}
+
 	public int getFaceWidth() {
 		return sizeFace.width;
 	}
+
 	public int getFaceHeight() {
 		return sizeFace.height;
 	}
 
-	
 	@Override
 	public NinePatch getObject() {
 		try {
@@ -111,7 +118,7 @@ public enum ENinePatch implements IResource<ENinePatch,NinePatch> {
 	@Override
 	public void clear() {
 		LOG.debug("disposing nine patch: " + String.valueOf(this));
-		//final NinePatch np = ninePatchCache.get(this);
+		// final NinePatch np = ninePatchCache.get(this);
 		ninePatchCache.remove(this);
 	}
 
@@ -119,7 +126,7 @@ public enum ENinePatch implements IResource<ENinePatch,NinePatch> {
 	public EnumMap<ENinePatch, NinePatch> getMap() {
 		return ninePatchCache;
 	}
-	
+
 	@Override
 	public void clearAllOfThisKind() {
 		ENinePatch.clearAll();

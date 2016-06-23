@@ -9,9 +9,10 @@ import com.badlogic.gdx.utils.Array;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
- * Helper class to use {@link Animation}s with {@link AtlasSprite}s instead of {@link Sprite}s.
- * This class makes sure you cannot put {@link Sprite}s in the keyFrames array that are not {@link AtlasSprite}s.
- *  
+ * Helper class to use {@link Animation}s with {@link AtlasSprite}s instead of
+ * {@link Sprite}s. This class makes sure you cannot put {@link Sprite}s in the
+ * keyFrames array that are not {@link AtlasSprite}s.
+ * 
  * @author madgaksha
  */
 public class AtlasAnimation extends Animation {
@@ -21,24 +22,24 @@ public class AtlasAnimation extends Animation {
 	public AtlasAnimation(float frameDuration, AtlasRegion... keyFrames) {
 		super(frameDuration, keyFrames);
 	}
-	
-	public AtlasAnimation (float frameDuration, Array<? extends AtlasRegion> keyFrames) {
+
+	public AtlasAnimation(float frameDuration, Array<? extends AtlasRegion> keyFrames) {
 		super(frameDuration, keyFrames);
 	}
 
 	public AtlasAnimation(float frameDuration, Array<? extends AtlasRegion> keyFrames, PlayMode playMode) {
 		super(frameDuration, keyFrames, playMode);
 	}
-	
-	public AtlasRegion getKeyFrame (float stateTime) {
+
+	public AtlasRegion getKeyFrame(float stateTime) {
 		return (AtlasRegion) super.getKeyFrame(stateTime);
 	}
-	
-	public AtlasRegion getKeyFrame (float stateTime, boolean looping) {
+
+	public AtlasRegion getKeyFrame(float stateTime, boolean looping) {
 		return (AtlasRegion) super.getKeyFrame(stateTime, looping);
 	}
-	
-	public AtlasRegion[] getKeyFrames(){
+
+	public AtlasRegion[] getKeyFrames() {
 		return (AtlasRegion[]) super.getKeyFrames();
 	}
 }

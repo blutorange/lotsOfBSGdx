@@ -20,6 +20,6 @@ public interface IGrantStrategy {
 	 * @return The value as close to the target value.
 	 */
 	public float compromise(float is, float should, float deltaTime);
-	
+
 	public Vector2 compromise2D(float isX, float isY, float shouldX, float shouldY, float deltaTime);
 }

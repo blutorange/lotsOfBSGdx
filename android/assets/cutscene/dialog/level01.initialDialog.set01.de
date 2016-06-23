@@ -3,18 +3,19 @@
   Face ANGRY
   TransitionIn
   Text EOF
-I just wanted to take a simple walk, so where did I end up?
-And come to think of it, why am I floating in the air?
-This isn't making any sense!
+Ich wollte nur einen kleinen Spaziergang machen...
+Wo bin ich nur gelandet? Und warum schwebe ich
+in der Luft? Das macht doch alles keinen Sinn!
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face EVASIVE
   Text EOF
-And where's Joshua? We were working hard as
-a good Bracer should...
-As soon as I left the city, this happened!
+Ich habe doch nur zusammen mit Joshua
+für die Gilde gearbeitet...
+Und als ich aus der Stadt ging, war
+ich plötzlich hier...
 EOF
 
 >>EventTextbox
@@ -22,6 +23,7 @@ EOF
   Face SHOU_GA_NAI
   TransitionOut
   Text EOF
-Oh well, I might as well go and look for some hints
-for what is going on here. Not much else I can do...
+Naja, bevor ich mir sinnlos den Kopf
+zerbreche kann ich auch erstmal die
+Gegend hier erkunden.
 EOF

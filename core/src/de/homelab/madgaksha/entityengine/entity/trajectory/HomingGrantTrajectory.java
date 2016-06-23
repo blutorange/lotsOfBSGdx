@@ -17,36 +17,39 @@ import de.homelab.madgaksha.logging.Logger;
 public class HomingGrantTrajectory extends BulletTrajectoryMaker {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(HomingGrantTrajectory.class);
-	
+
 	private PositionComponent positionComponent = null;
 	private IGrantStrategy grantStrategy = new ImmediateGrantStrategy();
 	private boolean ignoreTrackOffset = false;
-	public HomingGrantTrajectory () {
+
+	public HomingGrantTrajectory() {
 		super();
 	}
-	
+
 	public void grant(IGrantStrategy grantStrategy) {
 		this.grantStrategy = grantStrategy;
 	}
+
 	public void target(PositionComponent pc) {
 		this.positionComponent = pc;
 	}
+
 	public void ignoreTrackOffset(boolean ignoreTrackOffset) {
 		this.ignoreTrackOffset = ignoreTrackOffset;
 	}
-	
+
 	@Override
 	protected void setup(Entity e) {
 		super.setup(e);
 
 		final ShouldPositionComponent spc = gameEntityEngine.createComponent(ShouldPositionComponent.class);
 		final StickyComponent sc = gameEntityEngine.createComponent(StickyComponent.class);
-		
+
 		spc.grantStrategy = grantStrategy;
 		sc.stickToPositionComponent = positionComponent;
 		sc.ignoreTrackOffset = ignoreTrackOffset;
 		e.remove(VelocityComponent.class);
-		
+
 		e.add(spc).add(sc);
 	}
 
@@ -54,5 +57,5 @@ public class HomingGrantTrajectory extends BulletTrajectoryMaker {
 	protected IBehaving getBehaviour() {
 		return null;
 	}
-	
+
 }

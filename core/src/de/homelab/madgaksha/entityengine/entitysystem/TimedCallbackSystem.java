@@ -12,20 +12,23 @@ import de.homelab.madgaksha.entityengine.component.TimedCallbackComponent;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
- * Calls a callback after a given time, and keeps calling it a certain number of times again.
+ * Calls a callback after a given time, and keeps calling it a certain number of
+ * times again.
  * 
  * @author madgaksha
  */
 public class TimedCallbackSystem extends IteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(TimedCallbackSystem.class);
+
 	public TimedCallbackSystem() {
 		this(DefaultPriority.timedCallbackSystem);
 	}
 
 	@SuppressWarnings("unchecked")
 	public TimedCallbackSystem(int priority) {
-		super(Family.all(TimedCallbackComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(), priority);
+		super(Family.all(TimedCallbackComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(),
+				priority);
 	}
 
 	@Override

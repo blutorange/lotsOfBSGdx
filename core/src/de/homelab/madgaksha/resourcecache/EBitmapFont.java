@@ -21,10 +21,11 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum EBitmapFont implements IResource<EBitmapFont,BitmapFont> {
+public enum EBitmapFont implements IResource<EBitmapFont, BitmapFont> {
 	MAIN_FONT("mainFont");
 	private final static Logger LOG = Logger.getLogger(EBitmapFont.class);
-	private final static EnumMap<EBitmapFont, BitmapFont> bitmapFontCache = new EnumMap<EBitmapFont, BitmapFont>(EBitmapFont.class);
+	private final static EnumMap<EBitmapFont, BitmapFont> bitmapFontCache = new EnumMap<EBitmapFont, BitmapFont>(
+			EBitmapFont.class);
 
 	private String fontname;
 
@@ -38,6 +39,7 @@ public enum EBitmapFont implements IResource<EBitmapFont,BitmapFont> {
 			bf.clear();
 		}
 	}
+
 	public static Set<EBitmapFont> getMapKeys() {
 		return bitmapFontCache.keySet();
 	}
@@ -45,7 +47,7 @@ public enum EBitmapFont implements IResource<EBitmapFont,BitmapFont> {
 	@Override
 	public BitmapFont getObject() {
 		final FileHandle fileHandle = Gdx.files.internal("font/" + I18n.font(fontname));
-		FreeTypeFontGenerator g = null; 
+		FreeTypeFontGenerator g = null;
 		try {
 			g = new FreeTypeFontGenerator(fileHandle);
 			FreeTypeFontParameter p = new FreeTypeFontParameter();
@@ -56,16 +58,16 @@ public enum EBitmapFont implements IResource<EBitmapFont,BitmapFont> {
 			p.borderWidth = 1;
 			p.shadowOffsetX = 2;
 			p.shadowOffsetY = 3;
-			p.shadowColor = new Color(0f,0f,0f,0.5f);
+			p.shadowColor = new Color(0f, 0f, 0f, 0.5f);
 			p.color = Color.WHITE;
 			BitmapFont bf = g.generateFont(p);
 			return bf;
 		} catch (Exception e) {
 			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 			return null;
-		}
-		finally {
-			if (g != null) g.dispose();
+		} finally {
+			if (g != null)
+				g.dispose();
 		}
 	}
 
@@ -92,7 +94,7 @@ public enum EBitmapFont implements IResource<EBitmapFont,BitmapFont> {
 	public EnumMap<EBitmapFont, BitmapFont> getMap() {
 		return bitmapFontCache;
 	}
-	
+
 	@Override
 	public void clearAllOfThisKind() {
 		EBitmapFont.clearAll();

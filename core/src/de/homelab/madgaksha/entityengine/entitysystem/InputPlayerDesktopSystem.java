@@ -66,7 +66,7 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 				SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
 		}
 
-		// Arrow keys direction. 
+		// Arrow keys direction.
 		v.set((Gdx.input.isKeyPressed(ic.right)) ? 1.0f : (Gdx.input.isKeyPressed(ic.left)) ? -1.0f : 0.0f,
 				(Gdx.input.isKeyPressed(ic.up)) ? 1.0f : (Gdx.input.isKeyPressed(ic.down)) ? -1.0f : 0.0f);
 
@@ -86,7 +86,8 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 					: ic.accelerationFactorLow;
 			vc.x = (vc.x + f * v.x) * ic.frictionFactor;
 			vc.y = (vc.y + f * v.y) * ic.frictionFactor;
-			if (v.x*v.y != 0.0f) dc.degree = 630.0f-w.set(vc.x,vc.y).angle()+viewportGame.getRotationUpXY();
+			if (v.x * v.y != 0.0f)
+				dc.degree = 630.0f - w.set(vc.x, vc.y).angle() + viewportGame.getRotationUpXY();
 		}
 
 		// Check if we need to switch the targetted enemy and change

@@ -10,10 +10,10 @@ public class LinearMotionTrajectory extends BulletTrajectoryMaker {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(LinearMotionTrajectory.class);
 
-	public LinearMotionTrajectory () {
+	public LinearMotionTrajectory() {
 		super();
 	}
-	
+
 	@Override
 	protected void setup(Entity e) {
 		super.setup(e);

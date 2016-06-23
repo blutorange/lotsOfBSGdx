@@ -11,10 +11,10 @@ public class EventGameover extends ACutsceneEvent {
 	private final static Logger LOG = Logger.getLogger(EventGameover.class);
 
 	private boolean eventDone = false;
-	
+
 	public EventGameover() {
 	}
-	
+
 	@Override
 	public boolean isFinished() {
 		return eventDone;
@@ -38,10 +38,10 @@ public class EventGameover extends ACutsceneEvent {
 	public boolean begin() {
 		return true;
 	}
-	
+
 	public void resetTimer() {
 	}
-	
+
 	@Override
 	public void reset() {
 		eventDone = false;
@@ -50,7 +50,7 @@ public class EventGameover extends ACutsceneEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	public static ACutsceneEvent readNextObject(Scanner s) {
 		return new EventGameover();
 	}

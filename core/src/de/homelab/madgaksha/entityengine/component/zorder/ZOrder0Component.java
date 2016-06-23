@@ -4,7 +4,10 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class ZOrder0Component implements Component, Poolable {
-	public ZOrder0Component() {}
+	public ZOrder0Component() {
+	}
+
 	@Override
-	public void reset() {}
+	public void reset() {
+	}
 }

@@ -7,33 +7,34 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import de.homelab.madgaksha.entityengine.entity.IMortal;
 
 /**
- * Contains the callback {@link Entity} implementing {@link IMortal}. 
+ * Contains the callback {@link Entity} implementing {@link IMortal}.
+ * 
  * @author madgaksha
  *
  */
 public class DeathComponent implements Component, Poolable {
 
-	private final static IMortal DEFAULT_KILL = new IMortal() {		
+	private final static IMortal DEFAULT_KILL = new IMortal() {
 		@Override
 		public void kill(Entity e) {
 		}
-	}; 
+	};
 	private final static boolean DEFAULT_DEAD = false;
-	
+
 	public IMortal reaper = DEFAULT_KILL;
 	public boolean dead = DEFAULT_DEAD;
-	
-	public DeathComponent(){
+
+	public DeathComponent() {
 	}
-	
+
 	public DeathComponent(IMortal kill) {
 		setup(kill);
 	}
-	
+
 	public void setup(IMortal reaper) {
 		this.reaper = reaper;
 	}
-	
+
 	@Override
 	public void reset() {
 		reaper = DEFAULT_KILL;

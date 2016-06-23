@@ -40,18 +40,21 @@ public enum EFaceSet {
 		@Override
 		protected void fillMap() {
 		}
-	}
-	;
-	
-	protected EnumMap<EFaceVariation,ETexture> faceMap;
+	};
+
+	protected EnumMap<EFaceVariation, ETexture> faceMap;
+
 	protected abstract void fillMap();
+
 	private EFaceSet() {
 		faceMap = new EnumMap<EFaceVariation, ETexture>(EFaceVariation.class);
 		fillMap();
 	}
+
 	public ETexture getVariation(EFaceVariation variation) {
 		return faceMap.get(variation);
 	}
+
 	public boolean hasVariation(EFaceVariation variation) {
 		return faceMap.containsKey(variation);
 	}

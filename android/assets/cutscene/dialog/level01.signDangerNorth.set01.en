@@ -1,6 +1,7 @@
 >>EventTextbox
   TransitionIn
   Text EOF
+North, danger.
 きた、きき。
 EOF
 
@@ -8,21 +9,21 @@ EOF
   Speaker ESTELLE
   Face NORMAL
   Text EOF
-裏にもなにか書いてある。
-なになに。。。
+There's something written on the back of this sign
+as well. Let's see...
 EOF
 
 >>EventTextbox
   TransitionIn
   Text EOF
-北！
+NORTH!
 
-危機！
+DANGER!
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face EVASIVE
   Text EOF
-はいわかりました。ヨシュアを探しに行こう。。。
+Yeah, yeah, I got it. Let's go look for Joshua.
 EOF

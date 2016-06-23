@@ -28,20 +28,23 @@ public class NpcMaker extends EntityMaker {
 	private static class SingletonHolder {
 		private static final NpcMaker INSTANCE = new NpcMaker();
 	}
+
 	public static NpcMaker getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
+
 	private NpcMaker() {
 		super();
 	}
 
 	public void setup(Entity entity, Shape2D shape, EAnimationList animationList, boolean initiallyInactive,
 			Vector2 initialPosition, Float initDir) {
-		
+
 		setup(entity, shape, initiallyInactive, initialPosition, initDir);
-		
+
 		RotationComponent rc = new RotationComponent(true);
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(animationList, ESpriteDirectionStrategy.ZENITH);
+		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(animationList,
+				ESpriteDirectionStrategy.ZENITH);
 		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
 		SpriteComponent sc = new SpriteComponent(sac);
 
@@ -49,22 +52,31 @@ public class NpcMaker extends EntityMaker {
 		entity.add(sfdc);
 		entity.add(sac);
 		entity.add(sc);
-		
+
 	}
 
 	public void setup(Entity entity, Shape2D shape, EAnimation animation, boolean initiallyInactive,
 			Vector2 initialPosition, Float initDir) {
 	}
-	
+
 	/**
 	 * Adds the appropriate components to an entity to be used as an NPC.
-	 * @param entity Entity to setup.
-	 * @param shape Shape for the enitity. NPC will be positioned at the center of its bounding box.
-	 * @param initiallyInactive Whether the NPC is active and visible when the game starts.
-	 * @param initialPosition Initial position of the NPC in tiles. Relative to the center of the shape's bounding box.
-	 * @param initDir Initial looking direction of the NPC.
+	 * 
+	 * @param entity
+	 *            Entity to setup.
+	 * @param shape
+	 *            Shape for the enitity. NPC will be positioned at the center of
+	 *            its bounding box.
+	 * @param initiallyInactive
+	 *            Whether the NPC is active and visible when the game starts.
+	 * @param initialPosition
+	 *            Initial position of the NPC in tiles. Relative to the center
+	 *            of the shape's bounding box.
+	 * @param initDir
+	 *            Initial looking direction of the NPC.
 	 */
-	private void setup(Entity entity, Shape2D shape, boolean initiallyInactive, Vector2 initialPosition, Float initDir) {
+	private void setup(Entity entity, Shape2D shape, boolean initiallyInactive, Vector2 initialPosition,
+			Float initDir) {
 		super.setup(entity);
 
 		// Create components to be added.
@@ -77,7 +89,7 @@ public class NpcMaker extends EntityMaker {
 		PositionComponent center = MakerUtils.makePositionAtCenter(shape);
 		pc.setup(center.x + initialPosition.x, center.y + initialPosition.y);
 		dc.setup(initDir);
-		
+
 		// Add components to entity.
 		entity.add(pc);
 		entity.add(dc);
@@ -88,7 +100,7 @@ public class NpcMaker extends EntityMaker {
 			entity.add(new InvisibleComponent());
 		}
 	}
-	
+
 	@Override
 	protected IResource<? extends Enum<?>, ?>[] requestedResources() {
 		return null;

@@ -43,7 +43,7 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
 public abstract class ALevel {
 
 	private final static Logger LOG = Logger.getLogger(ALevel.class);
-	
+
 	public final static float WORLD_X = 0.0f;
 	public final static float WORLD_Y = 0.0f;
 
@@ -56,7 +56,7 @@ public abstract class ALevel {
 	private final static int DEFAULT_COMPONENT_POOL_MAX_SIZE = 1000;
 	private final static int DEFAULT_ENTITY_POOL_INITAL_SIZE = 100;
 	private final static int DEFAULT_ENTITY_POOL_MAX_SIZE = 1000;
-	
+
 	/**
 	 * The info window can work with virtual coordinates [0.0-1.0].
 	 */
@@ -75,13 +75,12 @@ public abstract class ALevel {
 	 */
 	public final static float VIEWPORT_SCREEN_VIRTUAL_HEIGHT = 720.0f;
 
-	
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMap loadedTiledMap;
 	private MapData mapData;
 	private Entity baseDirectionEntity;
 	private final ETexture backgroundImage;
-	private final IResource<? extends Enum<?>,?>[] requiredResources;
+	private final IResource<? extends Enum<?>, ?>[] requiredResources;
 	private final EMusic bgm;
 	private EMusic battleBgm;
 	private final EMusic gameOverBgm;
@@ -96,7 +95,7 @@ public abstract class ALevel {
 	private final ETexture enemyTargetCrossTexture;
 	private final Environment environment;
 	private Sprite icon;
-	
+
 	// =============================
 	// Constructor
 	// =============================
@@ -115,34 +114,38 @@ public abstract class ALevel {
 		enemyTargetCrossAngularVelocity = requestedEnemyTargetCrossAngularVelocity();
 		enemyTargetCrossTexture = requestedEnemyTargetCrossTexture();
 		environment = new Environment();
-		soundOnBattleWin = requestedSoundOnBattleWin(); 
+		soundOnBattleWin = requestedSoundOnBattleWin();
 		setupEnvironment(environment);
 	}
-	
-	/** Loads all necessary resources and reads the map.
+
+	/**
+	 * Loads all necessary resources and reads the map.
 	 * 
-	 * @param batch Sprite batch for this level.
+	 * @param batch
+	 *            Sprite batch for this level.
 	 * @return Whether the level could be initialized successfully.
 	 */
 	public boolean initialize(SpriteBatch batch) {
 		icon = requestedIcon().asSprite();
-		if (icon == null) return false;
-		
-		if (!ResourceCache.loadToRam(requiredResources)) return false;
-		
+		if (icon == null)
+			return false;
+
+		if (!ResourceCache.loadToRam(requiredResources))
+			return false;
+
 		loadedTiledMap = ResourceCache.getTiledMap(tiledMap);
-		if (loadedTiledMap == null) return false;
+		if (loadedTiledMap == null)
+			return false;
 		try {
 			mapData = new MapData(loadedTiledMap, getClass());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LOG.error("failed to load map", e);
 			return false;
 		}
 		mapRenderer = new OrthogonalTiledMapRenderer(loadedTiledMap, 1.0f, batch);
 		baseDirectionEntity = new Entity();
 		baseDirectionEntity.add(new PositionComponent(mapData.getBaseDirection()));
-		
+
 		return true;
 	}
 
@@ -177,66 +180,79 @@ public abstract class ALevel {
 	 * Must return a list of all resources that the level requires. They will
 	 * then be loaded into RAM before the level is started.
 	 * 
-	 * Does not include the player resources, see {@link APlayer#requestedRequiredResources}.
+	 * Does not include the player resources, see
+	 * {@link APlayer#requestedRequiredResources}.
 	 * 
 	 * @return List of all required resources.
 	 */
-	protected abstract IResource<? extends Enum<?>,?>[] requestedRequiredResources();
+	protected abstract IResource<? extends Enum<?>, ?>[] requestedRequiredResources();
 
-	/**@return Initial music that should be playing. Null if none. */
+	/** @return Initial music that should be playing. Null if none. */
 	protected abstract EMusic requestedBgm();
 
 	/** @return Music while fighting. */
 	protected abstract EMusic requestedBattleBgm();
-	
+
 	/** @return Music on game over. */
 	protected abstract EMusic requestedGameOverBgm();
-	
+
 	/**
 	 * @return The map to be loaded initially.
 	 */
 	protected abstract ETiledMap requestedTiledMap();
-		
+
 	/** Name of the level. */
 	protected abstract String requestedI18nNameKey();
-	protected abstract String requestedI18nDescriptionKey();	
 
-	/** A small icon for the level which may contain its name or an illustration.
+	protected abstract String requestedI18nDescriptionKey();
+
+	/**
+	 * A small icon for the level which may contain its name or an illustration.
 	 * Its aspect ration must be 5:1.
+	 * 
 	 * @return The icon for the level.
 	 */
 	protected abstract ETexture requestedIcon();
-	
-	/** @return Angular velocity of the target cross apearing beneath the enemy currently targetted. */
+
+	/**
+	 * @return Angular velocity of the target cross apearing beneath the enemy
+	 *         currently targetted.
+	 */
 	protected abstract float requestedEnemyTargetCrossAngularVelocity();
-	/** @return The texture to be used for the target cross apearing beneath the enemy currently targetted. */
+
+	/**
+	 * @return The texture to be used for the target cross apearing beneath the
+	 *         enemy currently targetted.
+	 */
 	protected abstract ETexture requestedEnemyTargetCrossTexture();
-	
+
 	protected abstract ESound requestedSoundOnBattleWin();
 
-		
 	// =============================
-	//       Implementations
+	// Implementations
 	// =============================
-	
+
 	/**
-	 * May be overridden to change the environment used for 3d models, ie. lights etc.
-	 * @param environment The environment to be setup.
+	 * May be overridden to change the environment used for 3d models, ie.
+	 * lights etc.
+	 * 
+	 * @param environment
+	 *            The environment to be setup.
 	 */
 	protected void setupEnvironment(Environment environment) {
 		// Default to basic white ambient light.
-		environment.set(new ColorAttribute(ColorAttribute.AmbientLight,1f,1f,1f,1f));
+		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
 	}
-	
+
 	public MapData getMapData() {
 		return mapData;
 	}
-	
+
 	/** @return Returns the renderer to render the map. */
 	public OrthogonalTiledMapRenderer getMapRenderer() {
 		return mapRenderer;
 	}
-	
+
 	/** @return The width of the map in world coordinates. */
 	public float getMapWidthW() {
 		return mapData.getWidthPixel();
@@ -246,7 +262,7 @@ public abstract class ALevel {
 	public float getMapHeightW() {
 		return mapData.getHeightPixel();
 	}
-	
+
 	public float getMapXW() {
 		return WORLD_X;
 	}
@@ -258,36 +274,39 @@ public abstract class ALevel {
 	public EMusic getBgm() {
 		return bgm;
 	}
+
 	public EMusic getBattleBgm() {
 		return battleBgm;
 	}
+
 	public EMusic getGameOverBgm() {
 		return gameOverBgm;
 	}
-	
+
 	public ETiledMap getTiledMap() {
 		return tiledMap;
 	}
-	
+
 	public TextureRegion getBackgroundImage() {
 		return ResourceCache.getTexture(backgroundImage);
 	}
-	
+
 	public String getName() {
 		return I18n.game(i18nNameKey);
 	}
-	
+
 	public String getDescription() {
 		return I18n.game(i18nDescriptionKey);
 	}
-	
+
 	public String getLauncherIcon() {
 		return "LEVEL_01";
 	}
-	
+
 	public float getEnemyTargetCrossAngularVelocity() {
 		return enemyTargetCrossAngularVelocity;
 	}
+
 	public ETexture getEnemyTargetCrossTexture() {
 		return enemyTargetCrossTexture;
 	}
@@ -295,12 +314,12 @@ public abstract class ALevel {
 	public ESound getSoundOnBattleWin() {
 		return soundOnBattleWin;
 	}
-	
+
 	/**
 	 * Status screen data with pixel values etc.
 	 */
 	public StatusScreen getStatusScreen(int w, int h) throws IOException {
-		return new StatusScreen(w,h);
+		return new StatusScreen(w, h);
 	}
 
 	/**
@@ -332,28 +351,31 @@ public abstract class ALevel {
 		return baseDirectionEntity;
 	}
 
-	/** Can be overridden for a custom HP bar color.
+	/**
+	 * Can be overridden for a custom HP bar color.
 	 * 
 	 * @return The color when the pain (HP) bar is at low health.
 	 */
 	protected Color requestedEnemyPainBarColorLow() {
-		return new Color(255.0f, 80.0f/255.0f, 80.0f/255.0f, 1.0f);
+		return new Color(255.0f, 80.0f / 255.0f, 80.0f / 255.0f, 1.0f);
 	}
-	
-	/** Can be overridden for a custom HP bar color.
+
+	/**
+	 * Can be overridden for a custom HP bar color.
 	 * 
 	 * @return The color when the pain bar is halfway to full.
 	 */
 	protected Color requestedEnemyPainBarColorMid() {
-		return new Color(255.0f, 153.0f/255.0f, 51.0f/255.0f, 1.0f);
+		return new Color(255.0f, 153.0f / 255.0f, 51.0f / 255.0f, 1.0f);
 	}
-	
-	/** Can be overridden for a custom HP bar color.
+
+	/**
+	 * Can be overridden for a custom HP bar color.
 	 * 
 	 * @return The color when the pain (HP) bar is at high health.
 	 */
 	protected Color requestedEnemyPainBarColorHigh() {
-		return new Color(0.0f, 204.0f/255.0f, 102.0f/255.0f, 1.0f);
+		return new Color(0.0f, 204.0f / 255.0f, 102.0f / 255.0f, 1.0f);
 	}
 
 	public Color getEnemyPainBarColorLow() {
@@ -376,49 +398,60 @@ public abstract class ALevel {
 	public Environment getEnvironment() {
 		return environment;
 	}
-	
-	/** Can be overwritten for other defaults
+
+	/**
+	 * Can be overwritten for other defaults
 	 * 
-	 * @return Maximum size of the component pool. Each entity gets multiple components.
+	 * @return Maximum size of the component pool. Each entity gets multiple
+	 *         components.
 	 */
 	public int getComponentPoolMaxSize() {
 		return DEFAULT_COMPONENT_POOL_MAX_SIZE;
 	}
-	/** Can be overwritten for other defaults
+
+	/**
+	 * Can be overwritten for other defaults
 	 * 
-	 * @return Initial size of the component pool. Each entity gets multiple components.
+	 * @return Initial size of the component pool. Each entity gets multiple
+	 *         components.
 	 */
 	public int getComponentPoolInitialSize() {
 		return DEFAULT_COMPONENT_POOL_INITAL_SIZE;
 	}
-	/** Can be overwritten for other defaults
+
+	/**
+	 * Can be overwritten for other defaults
 	 * 
-	 * @return Initial size of the entity pool. Each entity is a bullet, enemy etc.
+	 * @return Initial size of the entity pool. Each entity is a bullet, enemy
+	 *         etc.
 	 */
 	public int getEntityPoolInitialSize() {
 		return DEFAULT_ENTITY_POOL_INITAL_SIZE;
 	}
-	/** Can be overwritten for other defaults
+
+	/**
+	 * Can be overwritten for other defaults
 	 * 
-	 * @return Maximum size of the entity pool. Each entity is a bullet, enemy etc.
+	 * @return Maximum size of the entity pool. Each entity is a bullet, enemy
+	 *         etc.
 	 */
 	public int getEntityPoolPoolMaxSize() {
 		return DEFAULT_ENTITY_POOL_MAX_SIZE;
 	}
-	
+
 	protected final void pushCutsceneLayer(String filename) {
 		LOG.debug("pushing dialog: " + filename);
 		try {
 			CutsceneEventProvider provider = new FileCutsceneProvider(Gdx.files.internal(filename));
 			game.pushLayer(new CutsceneLayer(provider));
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LOG.error("could not push cutscene layer", e);
 		}
 	}
-	
+
 	protected final void switchBattleBgm(EMusic bgm) {
-		if (bgm != null) this.battleBgm = bgm;
+		if (bgm != null)
+			this.battleBgm = bgm;
 	}
 
 }

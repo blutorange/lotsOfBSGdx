@@ -13,14 +13,15 @@ import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 
 public class SpriteAnimationSystem extends IteratingSystem {
-	
+
 	public SpriteAnimationSystem() {
 		this(DefaultPriority.spriteAnimationSystem);
 	}
 
 	@SuppressWarnings("unchecked")
 	public SpriteAnimationSystem(int priority) {
-		super(Family.all(TemporalComponent.class, SpriteAnimationComponent.class, SpriteComponent.class).exclude(InactiveComponent.class).get(), priority);
+		super(Family.all(TemporalComponent.class, SpriteAnimationComponent.class, SpriteComponent.class)
+				.exclude(InactiveComponent.class).get(), priority);
 	}
 
 	@Override

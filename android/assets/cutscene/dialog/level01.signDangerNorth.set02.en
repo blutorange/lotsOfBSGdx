@@ -1,6 +1,7 @@
 >>EventTextbox
   TransitionIn
   Text EOF
+North, danger.
 きた、きき。
 EOF
 
@@ -8,23 +9,24 @@ EOF
   Speaker ESTELLE
   Face SERIOUS
   Text EOF
-前に同じ未知標があったような。。。
-裏にもなにか書いてある。
-なになに。。。
+Didn't I read that already?
+There's something written on the back as well.
+Let's see...
 EOF
 
 >>EventTextbox
   TransitionIn
   Text EOF
-来た！どうして？
-聞き！耳をすまして？
-北！近寄るな？
-危機！迫り来るか？
+Came! Why did you do it?
+Listen! Be quiet and open your ears?
+North! Do not go there?
+Danger! It hides there?
 EOF
 
 >>EventTextbox
   Speaker ESTELLE
   Face ANGRY
   Text EOF
-なー？頭来た！北へ来る！どうなっても知らないから！
+Ah, what? That's it!!
+Now I'm going there, no matter what!!!
 EOF

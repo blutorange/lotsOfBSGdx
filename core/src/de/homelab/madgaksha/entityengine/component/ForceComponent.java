@@ -24,24 +24,25 @@ public class ForceComponent implements Component, Poolable {
 
 	public ForceComponent() {
 	}
-	
+
 	public void setup(Vector2 force) {
 		x = force.x;
 		y = force.y;
 	}
+
 	public void setup(Vector3 force) {
 		x = force.x;
 		y = force.y;
 		z = force.z;
 	}
-	
+
 	@Override
 	public void reset() {
 		x = DEFAULT_X;
 		y = DEFAULT_Y;
 		z = DEFAULT_Z;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ForceComponent(" + x + "," + y + "," + z + ")";

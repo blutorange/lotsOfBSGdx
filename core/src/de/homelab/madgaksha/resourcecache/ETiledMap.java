@@ -14,18 +14,18 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public enum ETiledMap implements IResource<ETiledMap,TiledMap> {	
+public enum ETiledMap implements IResource<ETiledMap, TiledMap> {
 	LEVEL_01("map/Level01.tmx", Type.TMX);
 
 	private static enum Type {
 		TMX;
 	}
-	
+
 	private final static Logger LOG = Logger.getLogger(ETiledMap.class);
 	private final static EnumMap<ETiledMap, TiledMap> tiledMapCache = new EnumMap<ETiledMap, TiledMap>(ETiledMap.class);
 	private String filename;
 	private Type mapType;
-	
+
 	private ETiledMap(String f, Type t) {
 		filename = f;
 		mapType = t;
@@ -37,6 +37,7 @@ public enum ETiledMap implements IResource<ETiledMap,TiledMap> {
 			map.clear();
 		}
 	}
+
 	@Override
 	public TiledMap getObject() {
 		switch (mapType) {
@@ -75,7 +76,7 @@ public enum ETiledMap implements IResource<ETiledMap,TiledMap> {
 	public EnumMap<ETiledMap, TiledMap> getMap() {
 		return tiledMapCache;
 	}
-	
+
 	@Override
 	public void clearAllOfThisKind() {
 		ETiledMap.clearAll();

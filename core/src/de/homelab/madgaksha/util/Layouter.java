@@ -19,8 +19,9 @@ public final class Layouter {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(Layouter.class);
 
-	private Layouter() {};
-	
+	private Layouter() {
+	};
+
 	public static Rectangle layoutCenteredInBoxAndKeepAspectRatio(Rectangle rectangle, Padding padding,
 			float aspectRatio) {
 		return layoutAlignedInBoxAndKeepAspectRatio(rectangle, padding, aspectRatio, 0.5f, 0.5f);
@@ -63,6 +64,7 @@ public final class Layouter {
 		Arrays.fill(list, relativeWidth);
 		layoutHorizontallyWithRelativeWidth(parent, padding, list, children);
 	}
+
 	public static void layoutHorizontallyWithRelativeWidth(Rectangle parent, Padding padding, float[] relativeWidthList,
 			Rectangle... children) {
 		if (relativeWidthList.length != children.length)
@@ -146,6 +148,7 @@ public final class Layouter {
 		Arrays.fill(list, relativeHeight);
 		layoutVerticallyWithRelativeHeight(parent, padding, list, children);
 	}
+
 	public static void layoutVerticallyWithRelativeHeight(Rectangle parent, Padding padding, float[] relativeHeightList,
 			Rectangle... children) {
 		if (relativeHeightList.length != children.length)

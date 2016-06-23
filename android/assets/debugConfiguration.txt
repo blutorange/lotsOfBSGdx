@@ -2,7 +2,7 @@
     "requestedLevel": "de.homelab.madgaksha.level.Level01",
     "requestedPlayer": "de.homelab.madgaksha.player.PEstelle",
     "requestedLocale": {
-        "language": "ja",
+        "language": "de",
         "country": "",
         "variant": ""
     },

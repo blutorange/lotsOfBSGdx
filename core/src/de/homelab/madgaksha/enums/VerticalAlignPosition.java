@@ -26,7 +26,8 @@ public enum VerticalAlignPosition {
 	 *            Number of lines within this box. Divides the box vertically
 	 *            into <code>lineCount</code> rectangles used as the box for
 	 *            each line.
-	 * @param The additional spacing between two lines in pixel.
+	 * @param The
+	 *            additional spacing between two lines in pixel.
 	 * @return The vertical position for drawing the the first (topmost) line of
 	 *         the text. The get the position of the (i+1)-th line, subtract
 	 *         <code>i*box.height/lineCount</code>
@@ -34,7 +35,8 @@ public enum VerticalAlignPosition {
 	public float positionForCentered(Rectangle box, BitmapFont font, int lineCount, float lineSpacing) {
 		if (lineCount < 1)
 			throw new IllegalArgumentException("lineCount cannot be smaller than 1");
-		float posY = box.y + box.height - 0.5f * ((box.height - lineSpacing * (((float)lineCount)-1.0f)) / (float) lineCount);
+		float posY = box.y + box.height
+				- 0.5f * ((box.height - lineSpacing * (((float) lineCount) - 1.0f)) / (float) lineCount);
 		switch (this) {
 		case BETWEEN_BASE_LINE_AND_CAP_HEIGHT:
 			posY += 0.5f * font.getCapHeight();

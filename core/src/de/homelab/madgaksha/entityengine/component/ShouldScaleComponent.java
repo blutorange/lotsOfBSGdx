@@ -19,13 +19,15 @@ public class ShouldScaleComponent extends ScaleComponent implements Component, P
 
 	public ShouldScaleComponent() {
 	}
+
 	public ShouldScaleComponent(IGrantStrategy gs) {
 		setup(gs);
 	}
+
 	public void setup(IGrantStrategy gs) {
 		grantStrategy = gs;
 	}
-	
+
 	public void reset() {
 		super.reset();
 		grantStrategy = DEFAULT_GRANT_STRATEGY;

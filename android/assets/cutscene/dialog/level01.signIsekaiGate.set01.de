@@ -1,17 +1,18 @@
 >>EventTextbox
   TransitionIn
   Text EOF
-性別も種別も、やがて世界すら超えて
-この地に平和をもたらした英雄、
-故郷まで帰って永遠のねむりについた。
+Sie überwand die Grenzen der Rassen und letzlich auch
+die Grenzen der Welt. Nachdem sie dieser Welt wieder
+Frieden brachte, kehrte sie in ihr Heimatdorf zurück
+und fiel hier in ihren wollverdienten Schlaf.
 EOF
 
 >>EventTextbox
   TransitionOut
   Text EOF
-英雄トリキシアの名はよく知られているにも関わらず、
-もっとも気になる、精界書（せいかいのふみ）・二巻に書かれた異界譚
-については詳細は一切わかっていない。
+Die Helding Trixia – obwohl ihr Name weit und breit
+bekann ist, wissen wir wenig über das Anderweltabenteuer,
+von dem die Rede im zweiten Band des Geisterweltschrift.
 EOF
 
 >>EventTextbox
@@ -19,10 +20,10 @@ EOF
   Face NORMAL
   TransitionIn
   Text EOF
-英雄トリキシア、か。。。
-その名前、どこかで聞いたような、聞かなかったような。。。
-まあ、ここはあたし達のもといた世界じゃないし、
-知らなくてとーぜんだ！
+Die Heldin Trixia...
+Habe ich diesen Namen nicht schonmal gehört...?
+Naja, wo auch immer ich hier bin, es ist nicht unsere
+Welt, also ist es ja kein Wunder, dass ich sie nicht kenne.
 EOF
 
 >>EventTextbox
@@ -30,7 +31,7 @@ EOF
   Face LAUGHING
   TransitionOut
   Text EOF
-異界譚なんか、ここからつくればいい！
-というか、もう作ったんじゃない。色々あって、
-クロスベルまで来て活躍に活躍を重ねてさ。。。
+Anderweltabenteuer kann ich auch einfach selber machen!
+Das heißt, wir haben ja bereits ausreichend Abenteuer hinter
+uns. Selbst in Crossbell waren wir und haben mitgeholfen...
 EOF

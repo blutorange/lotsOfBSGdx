@@ -16,7 +16,7 @@ import de.homelab.madgaksha.entityengine.component.TimeScaleComponent;
  * @author madgaksha
  */
 public class TemporalSystem extends IteratingSystem {
-	
+
 	public TemporalSystem() {
 		this(DefaultPriority.temporalSystem);
 	}
@@ -34,7 +34,7 @@ public class TemporalSystem extends IteratingSystem {
 		if (tsfc != null) {
 			tc.deltaTime = tsfc.scaleDisabled ? Gdx.graphics.getRawDeltaTime() : tc.deltaTime * tsfc.timeScalingFactor;
 		}
-		
+
 		tc.totalTime += tc.deltaTime;
 	}
 }

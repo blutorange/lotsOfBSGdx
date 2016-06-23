@@ -41,7 +41,7 @@ public class BulletMaker extends EntityMaker {
 	private final static long DAMAGE_UPPER_RANGE = 120L;
 
 	private VoicePlayer scoreBulletVoicePlayer = new VoicePlayer();
-	
+
 	// Singleton
 	private static class SingletonHolder {
 		private static final BulletMaker INSTANCE = new BulletMaker();
@@ -55,13 +55,14 @@ public class BulletMaker extends EntityMaker {
 		super();
 	}
 
-	public static void makeForPlayer(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory,
-			long power) {
+	public static void makeForPlayer(BulletShapeMaker bulletShape, BulletTrajectoryMaker bulletTrajectory, long power) {
 		final Entity entity = gameEntityEngine.createEntity();
 		final ReceiveTouchComponent rtc = gameEntityEngine.createComponent(ReceiveTouchGroup02Component.class);
 		gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
-		//SingletonHolder.INSTANCE.setup(entity, playerEntity, rtc, bulletShape, bulletTrajectory, onDamageBulletHit, power);
-		SingletonHolder.INSTANCE.setup(entity, playerHitCircleEntity, rtc, bulletShape, bulletTrajectory, onDamageBulletHit, power);
+		// SingletonHolder.INSTANCE.setup(entity, playerEntity, rtc,
+		// bulletShape, bulletTrajectory, onDamageBulletHit, power);
+		SingletonHolder.INSTANCE.setup(entity, playerHitCircleEntity, rtc, bulletShape, bulletTrajectory,
+				onDamageBulletHit, power);
 		gameEntityEngine.addEntity(entity);
 	}
 
@@ -77,7 +78,8 @@ public class BulletMaker extends EntityMaker {
 			long score) {
 		final Entity entity = gameEntityEngine.createEntity();
 		final ReceiveTouchComponent rtc = gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
-		SingletonHolder.INSTANCE.setup(entity, playerHitCircleEntity, rtc, bulletShape, bulletTrajectory, onScoreBulletHit, score);
+		SingletonHolder.INSTANCE.setup(entity, playerHitCircleEntity, rtc, bulletShape, bulletTrajectory,
+				onScoreBulletHit, score);
 		gameEntityEngine.addEntity(entity);
 	}
 
@@ -98,7 +100,7 @@ public class BulletMaker extends EntityMaker {
 
 		final AnyChildComponent acc = Mapper.anyChildComponent.get(parent);
 		final SiblingComponent siblingEntryPoint = acc.childComponent;
-		
+
 		// Setup shape and trajectory.
 		bulletShape.setup(e);
 		bulletTrajectory.setup(e);
@@ -124,11 +126,7 @@ public class BulletMaker extends EntityMaker {
 		sc.me = e;
 		acc.childComponent = sc;
 
-		e.add(sc)
-			.add(bsc)
-			.add(rtc)
-			.add(pc)
-			.add(zoc);
+		e.add(sc).add(bsc).add(rtc).add(pc).add(zoc);
 	}
 
 	@Override
@@ -204,15 +202,18 @@ public class BulletMaker extends EntityMaker {
 		public void callbackTouched(Entity bullet, Entity player) {
 			final BulletStatusComponent bsc = Mapper.bulletStatusComponent.get(bullet);
 			SingletonHolder.INSTANCE.scoreBulletVoicePlayer.play(ESound.SCORE_BULLET_HIT, false);
-			if (bsc != null) gameScore.increaseBy(bsc.power);
+			if (bsc != null)
+				gameScore.increaseBy(bsc.power);
 			detachBulletFromSiblings(bullet);
 			gameEntityEngine.removeEntity(bullet);
 		}
 	};
-	
+
 	/**
 	 * Removes the bullet from the underlying linked list.
-	 * @param bullet Bullet to remove.
+	 * 
+	 * @param bullet
+	 *            Bullet to remove.
 	 */
 	static void detachBulletFromSiblings(Entity bullet) {
 		final SiblingComponent sc = Mapper.siblingComponent.get(bullet);
@@ -224,7 +225,7 @@ public class BulletMaker extends EntityMaker {
 		}
 		if (sc.nextSiblingComponent != null) {
 			sc.nextSiblingComponent.prevSiblingComponent = sc.prevSiblingComponent;
-			
+
 			acc.childComponent = sc.nextSiblingComponent;
 		}
 		sc.prevSiblingComponent = null;

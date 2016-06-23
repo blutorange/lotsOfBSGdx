@@ -11,21 +11,21 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  * @author mad_gaksha
  */
 public class HoverEffectComponent implements Component, Poolable {
-	private final static float DEFAULT_FREQUENCY = 2.0f*MathUtils.PI/1.0f;
+	private final static float DEFAULT_FREQUENCY = 2.0f * MathUtils.PI / 1.0f;
 	private final static float DEFAULT_AMPLITUDE = 8.0f;
 
 	public float frequency = DEFAULT_FREQUENCY;
 	public float amplitude = DEFAULT_AMPLITUDE;
-	
+
 	public HoverEffectComponent() {
 	}
 
 	public HoverEffectComponent(float amplitude, float frequency) {
 		setup(amplitude, frequency);
 	}
-	
+
 	public void setup(float amplitude, float frequency) {
-		this.frequency = 2.0f*MathUtils.PI/frequency;
+		this.frequency = 2.0f * MathUtils.PI / frequency;
 		this.amplitude = amplitude;
 	}
 

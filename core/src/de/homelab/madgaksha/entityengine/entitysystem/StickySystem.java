@@ -25,14 +25,15 @@ public class StickySystem extends IteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(StickySystem.class);
 	private final Vector3 upVector;
-	
+
 	public StickySystem() {
 		this(DefaultPriority.stickySystem);
 	}
 
 	@SuppressWarnings("unchecked")
 	public StickySystem(int priority) {
-		super(Family.all(ShouldPositionComponent.class, StickyComponent.class, TemporalComponent.class).exclude(InactiveComponent.class, VelocityComponent.class).get(), priority);
+		super(Family.all(ShouldPositionComponent.class, StickyComponent.class, TemporalComponent.class)
+				.exclude(InactiveComponent.class, VelocityComponent.class).get(), priority);
 		upVector = viewportGame.getPerspectiveCamera().up;
 	}
 
@@ -43,8 +44,7 @@ public class StickySystem extends IteratingSystem {
 		if (sec.offsetRelativeToCamera) {
 			spc.x = sec.stickToPositionComponent.x + sec.offsetY * upVector.x + sec.offsetX * upVector.y;
 			spc.y = sec.stickToPositionComponent.y + sec.offsetY * upVector.y - sec.offsetX * upVector.x;
-		}
-		else {
+		} else {
 			spc.x = sec.stickToPositionComponent.x + sec.offsetX;
 			spc.y = sec.stickToPositionComponent.y + sec.offsetY;
 		}

@@ -16,8 +16,8 @@ public class I18n {
 	private static Locale locale;
 	private static boolean initiated = false;
 
-	private static Locale[] availableLocales = {Locale.GERMAN, Locale.ENGLISH, Locale.JAPANESE};
-	
+	private static Locale[] availableLocales = { Locale.GERMAN, Locale.ENGLISH, Locale.JAPANESE };
+
 	// not instantiable
 	private I18n() {
 	};
@@ -63,16 +63,16 @@ public class I18n {
 		}
 		return m;
 	}
-	
+
 	/**
 	 * @return The short name of the current locale (eg. de, en, ja).
 	 */
 	public static String getShortName() {
 		return locale.getLanguage();
 	}
-	
-	public static Map<String,Locale> getAvailableLocales() {
-		Map<String,Locale> map = new HashMap<String,Locale>(availableLocales.length);
+
+	public static Map<String, Locale> getAvailableLocales() {
+		Map<String, Locale> map = new HashMap<String, Locale>(availableLocales.length);
 		for (Locale l : availableLocales) {
 			map.put(l.getDisplayLanguage(l), l);
 		}
@@ -90,18 +90,19 @@ public class I18n {
 	public static String game(String key) {
 		return getValue(game, key);
 	}
+
 	public static String gameE(String key) {
 		return StringEscapeUtils.unescapeJava(game(key));
 	}
-	
+
 	public static String font(String key) {
 		return getValue(font, key);
 	}
-	
+
 	public static String character(String key) {
 		return getValue(character, key);
 	}
-	
+
 	public static boolean hasFontKey(String key) {
 		return font.containsKey(key);
 	}

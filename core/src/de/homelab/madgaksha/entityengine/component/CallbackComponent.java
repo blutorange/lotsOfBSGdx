@@ -9,28 +9,29 @@ import de.homelab.madgaksha.entityengine.entity.CallbackMaker;
 
 /**
  * Contains information for {@link CallbackMaker} entities.
+ * 
  * @author madgaksha
  *
  */
 public class CallbackComponent implements Component, Poolable {
 	private static final Method DEFAULT_CALLBACK = null;
 	private static final MapProperties DEFAULT_PROPERTIES = null;
-	
+
 	public Method callback = DEFAULT_CALLBACK;
 	public MapProperties properties = DEFAULT_PROPERTIES;
-	
-	public CallbackComponent(){
+
+	public CallbackComponent() {
 	}
-	
+
 	public CallbackComponent(Method callback, MapProperties properties) {
 		setup(callback, properties);
 	}
-	
+
 	public void setup(Method callback, MapProperties properties) {
 		this.callback = callback;
 		this.properties = properties;
 	}
-	
+
 	@Override
 	public void reset() {
 		callback = null;

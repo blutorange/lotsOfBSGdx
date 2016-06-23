@@ -37,7 +37,8 @@ public class DamageSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public DamageSystem(int priority) {
-		super(Family.all(PainPointsComponent.class, DamageQueueComponent.class).exclude(InactiveComponent.class).get(), priority);
+		super(Family.all(PainPointsComponent.class, DamageQueueComponent.class).exclude(InactiveComponent.class).get(),
+				priority);
 	}
 
 	@Override

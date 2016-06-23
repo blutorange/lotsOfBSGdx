@@ -81,17 +81,19 @@ public final class PlayerMaker implements IHittable, IMortal {
 	private static class SingletonHolder {
 		private static final PlayerMaker INSTANCE = new PlayerMaker();
 	}
+
 	public static PlayerMaker getInstance() {
 		return SingletonHolder.INSTANCE;
-	}	
-	private PlayerMaker () {
+	}
+
+	private PlayerMaker() {
 		super();
 	}
-	
+
 	public Entity makePlayerBattleStigma(Entity playerE, APlayer playerA) {
 		Entity battleStigma = new Entity();
 		Rectangle bbm = playerA.getBoundingBoxMap();
-		
+
 		AngularVelocityComponent avc = new AngularVelocityComponent(playerA.getBattleStigmaAngularVelocity());
 		ColorComponent cc = new ColorComponent();
 		InactiveComponent iac = new InactiveComponent();
@@ -99,7 +101,8 @@ public final class PlayerMaker implements IHittable, IMortal {
 		PositionComponent pc = new PositionComponent(playerE);
 		RotationComponent rc = new RotationComponent();
 		SpriteComponent sc = new SpriteComponent(playerA.getBattleStigmaTexture());
-		StickyComponent sec = new StickyComponent(playerE, bbm.x+0.5f*bbm.width, bbm.y+0.5f*bbm.height, true, true);
+		StickyComponent sec = new StickyComponent(playerE, bbm.x + 0.5f * bbm.width, bbm.y + 0.5f * bbm.height, true,
+				true);
 		ScaleComponent slc = new ScaleComponent(0.0f, 0.0f, playerA.getBattleStigmaTexture().getOriginalScale());
 		ShouldPositionComponent spc = new ShouldPositionComponent(new ImmediateGrantStrategy());
 		ShouldScaleComponent ssc = new ShouldScaleComponent(new ExponentialGrantStrategy(0.5f, 0.5f));
@@ -119,13 +122,13 @@ public final class PlayerMaker implements IHittable, IMortal {
 		battleStigma.add(ssc);
 		battleStigma.add(tc);
 		battleStigma.add(zoc);
-		
-		return battleStigma; 
+
+		return battleStigma;
 	}
-	
+
 	public Entity makePlayerHitCircle(final APlayer playerA) {
 		Entity hitCircle = new Entity();
-		
+
 		InvisibleComponent ivc = new InvisibleComponent();
 		PositionComponent pc = new PositionComponent();
 		ShouldPositionComponent spc = new ShouldPositionComponent(new ImmediateGrantStrategy(), true);
@@ -133,11 +136,12 @@ public final class PlayerMaker implements IHittable, IMortal {
 		StickyComponent sec = new StickyComponent();
 		TemporalComponent tc = new TemporalComponent();
 		ZOrder4Component zoc = new ZOrder4Component();
-		
+
 		ABoundingBoxComponent bbcc = new BoundingBoxCollisionComponent();
 		ShapeComponent shc = null;
 		Shape2D exactShape = player.getExactShapeCollision();
-		if (exactShape != null) shc = new ShapeComponent();
+		if (exactShape != null)
+			shc = new ShapeComponent();
 		StatusValuesComponent svc = new StatusValuesComponent();
 		PainPointsComponent ppc = new PainPointsComponent();
 		DamageQueueComponent dqc = new DamageQueueComponent();
@@ -147,7 +151,8 @@ public final class PlayerMaker implements IHittable, IMortal {
 		VoiceComponent vcc = new VoiceComponent();
 		TriggerTouchComponent ttg1c = new TriggerTouchGroup01Component();
 		hitCircle.add(bbcc);
-		if (shc != null) hitCircle.add(shc);
+		if (shc != null)
+			hitCircle.add(shc);
 		hitCircle.add(svc);
 		hitCircle.add(ppc);
 		hitCircle.add(dqc);
@@ -155,7 +160,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 		hitCircle.add(dtc);
 		hitCircle.add(ghc);
 		hitCircle.add(vcc);
-		hitCircle.add(ttg1c);		
+		hitCircle.add(ttg1c);
 		hitCircle.add(pc);
 		hitCircle.add(sc);
 		hitCircle.add(spc);
@@ -163,32 +168,32 @@ public final class PlayerMaker implements IHittable, IMortal {
 		hitCircle.add(ivc);
 		hitCircle.add(tc);
 		hitCircle.add(zoc);
-		
-		return hitCircle; 
+
+		return hitCircle;
 	}
-	
+
 	public void setupPlayerHitCircle(final APlayer player) {
 		Rectangle bbc = player.getBoundingBoxCollision();
 		StickyComponent sec = Mapper.stickyComponent.get(playerHitCircleEntity);
-		sec.setup(playerEntity, bbc.x+0.5f*bbc.width, bbc.y+0.5f*bbc.height);
+		sec.setup(playerEntity, bbc.x + 0.5f * bbc.width, bbc.y + 0.5f * bbc.height);
 		sec.offsetRelativeToCamera = false;
 		sec.ignoreTrackOffset = true;
-		
+
 		SpriteComponent spc = Mapper.spriteComponent.get(playerHitCircleEntity);
 		spc.setup(player.getHitCircleTexture());
-		
+
 		ABoundingBoxComponent bbcc = Mapper.boundingBoxCollisionComponent.get(playerHitCircleEntity);
-		bbcc.setup(-bbc.width*0.5f,-bbc.height*0.5f,bbc.width*0.5f,bbc.height*0.5f);
+		bbcc.setup(-bbc.width * 0.5f, -bbc.height * 0.5f, bbc.width * 0.5f, bbc.height * 0.5f);
 
 		Shape2D exactShape = player.getExactShapeCollision();
 		ShapeComponent shc = Mapper.shapeComponent.get(playerHitCircleEntity);
 		if (exactShape != null && shc != null) {
 			shc.setup(exactShape);
 		}
-		
+
 		PainPointsComponent ppc = Mapper.painPointsComponent.get(playerHitCircleEntity);
 		ppc.setup(player.getMaxPainPoints());
-		
+
 		DeathComponent dtc = Mapper.deathComponent.get(playerHitCircleEntity);
 		dtc.setup(this);
 
@@ -197,7 +202,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 
 		StatusValuesComponent svc = Mapper.statusValuesComponent.get(playerHitCircleEntity);
 		svc.setup(player.getBulletAttack(), player.getBulletResistance());
-		
+
 		VoiceComponent vcc = Mapper.voiceComponent.get(playerHitCircleEntity);
 		vcc.onBattleModeStart = player.getVoiceOnBattleModeStart();
 		vcc.onBattleModeExit = player.getVoiceOnBattleModeEnd();
@@ -208,14 +213,14 @@ public final class PlayerMaker implements IHittable, IMortal {
 		vcc.onEnemyKilled = player.getVoiceOnEnemyKilled();
 		vcc.voicePlayer = new VoicePlayer();
 	}
-	
+
 	public void setupPlayer(final APlayer player) {
 		switch (Gdx.app.getType()) {
 		case Android:
-			//TODO
+			// TODO
 			break;
 		case Applet:
-			//TODO
+			// TODO
 			break;
 		case Desktop:
 			InputDesktopComponent ic = Mapper.inputDesktopComponent.get(playerEntity);
@@ -226,102 +231,102 @@ public final class PlayerMaker implements IHittable, IMortal {
 			ic.battleSpeedHigh = player.getMovementBattleSpeedHigh();
 			break;
 		case HeadlessDesktop:
-			//TODO
+			// TODO
 			break;
 		case WebGL:
-			//TODO
+			// TODO
 			break;
 		case iOS:
-			//TODO
+			// TODO
 			break;
 		default:
-			//TODO
+			// TODO
 			break;
-		
+
 		}
-		
+
 		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(playerEntity);
-		sfdc.setup(player.getAnimationList(),ESpriteDirectionStrategy.ZENITH);
-		
+		sfdc.setup(player.getAnimationList(), ESpriteDirectionStrategy.ZENITH);
+
 		SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(playerEntity);
 		sac.setup(sfdc);
 
 		SpriteComponent sc = Mapper.spriteComponent.get(playerEntity);
 		sc.setup(sac, player.getSpriteOrigin());
-		
+
 		ShadowComponent kc = Mapper.shadowComponent.get(playerEntity);
 		player.setupShadow(kc);
 		kc.relativeToCamera = false;
-		
+
 		ABoundingBoxComponent bbrc = Mapper.boundingBoxRenderComponent.get(playerEntity);
 		bbrc.setup(player.getBoundingBoxRender());
-		
+
 		ABoundingBoxComponent bbmc = Mapper.boundingBoxMapComponent.get(playerEntity);
 		bbmc.setup(player.getBoundingBoxMap());
-		
+
 		BoundingSphereComponent bsc = Mapper.boundingSphereComponent.get(playerEntity);
 		bsc.setup(player.getBoundingCircle());
-		
+
 		PositionComponent pc = Mapper.positionComponent.get(playerEntity);
 		pc.setup(level.getMapData().getPlayerInitialPosition(), true);
-		
+
 		VelocityComponent vc = Mapper.velocityComponent.get(playerEntity);
 		vc.setup(0.0f, 0.0f);
-		
+
 		RotationComponent rc = Mapper.rotationComponent.get(playerEntity);
 		rc.setup(false);
-		
+
 		DirectionComponent dc = Mapper.directionComponent.get(playerEntity);
 		dc.setup(level.getMapData().getPlayerInitialDirection());
-				
+
 		ShouldRotationComponent src = Mapper.shouldRotationComponent.get(playerEntity);
 		src.setup(new ExponentialGrantStrategy(0.1f));
-		
+
 		ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(playerEntity);
 		ssc.setup(new ExponentialGrantStrategy(0.1f));
-		
+
 		HoverEffectComponent hec = Mapper.hoverEffectComponent.get(playerEntity);
 		hec.setup(8.0f, 1.0f);
-		
+
 		LeanEffectComponent lec = Mapper.leanEffectComponent.get(playerEntity);
-		lec.setup(30.0f,0.10f,0.0001f);
+		lec.setup(30.0f, 0.10f, 0.0001f);
 
 		BehaviourComponent bc = Mapper.behaviourComponent.get(playerEntity);
 		bc.setup(onBehave);
 	}
-	
+
 	public Entity makePlayer(final APlayer player) {
 		final Entity e = new Entity();
-	
+
 		// Use appropriate input scheme for device.
 		switch (Gdx.app.getType()) {
 		case Android:
-			//TODO
+			// TODO
 			break;
 		case Applet:
-			//TODO
+			// TODO
 			break;
 		case Desktop:
 			InputDesktopComponent ic = new InputDesktopComponent();
 			e.add(ic);
 			break;
 		case HeadlessDesktop:
-			//TODO
+			// TODO
 			break;
 		case WebGL:
-			//TODO
+			// TODO
 			break;
 		case iOS:
-			//TODO
+			// TODO
 			break;
 		default:
-			//TODO
+			// TODO
 			break;
-		
+
 		}
-		
+
 		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent();
-		
+
 		SpriteAnimationComponent sac = new SpriteAnimationComponent();
 		SpriteComponent sc = new SpriteComponent();
 		ShadowComponent kc = new ShadowComponent();
@@ -337,55 +342,36 @@ public final class PlayerMaker implements IHittable, IMortal {
 		RotationComponent rc = new RotationComponent();
 		DirectionComponent dc = new DirectionComponent();
 		ScaleComponent slc = new ScaleComponent();
-		
+
 		ShouldRotationComponent src = new ShouldRotationComponent();
 		ShouldScaleComponent ssc = new ShouldScaleComponent();
-		
+
 		HoverEffectComponent hec = new HoverEffectComponent();
-		LeanEffectComponent lec = new LeanEffectComponent();		
-			
+		LeanEffectComponent lec = new LeanEffectComponent();
+
 		BehaviourComponent bc = new BehaviourComponent();
-			
+
 		VoiceComponent vcc = new VoiceComponent();
 
 		ZOrder2Component zoc = new ZOrder2Component();
-		
-		e.add(bc)
-		.add(vcc)
-		.add(lec)
-		.add(hec)
-		.add(src)
-		.add(tsc)
-		.add(ssc)			
-		.add(sc)
-		.add(sac)
-		.add(sfdc)
-		.add(bsc)
-		.add(bbmc)
-		.add(bbrc)
-		.add(pc)
-		.add(vc)
-		.add(rc)
-		.add(slc)
-		.add(dc)		
-		.add(tc)
-		.add(zoc)
-		.add(kc);
-		
+
+		e.add(bc).add(vcc).add(lec).add(hec).add(src).add(tsc).add(ssc).add(sc).add(sac).add(sfdc).add(bsc).add(bbmc)
+				.add(bbrc).add(pc).add(vc).add(rc).add(slc).add(dc).add(tc).add(zoc).add(kc);
+
 		return e;
 	}
-	
+
 	public void kill(Entity hitCircle) {
 		EnemyMaker.exitBattleMode(false);
-				
+
 		// Do not allow input anymore.
 		playerEntity.remove(InputDesktopComponent.class);
-		
+
 		playerEntity.remove(HoverEffectComponent.class);
 		playerEntity.remove(ShadowComponent.class);
 		playerEntity.remove(SpriteForDirectionComponent.class);
 		playerEntity.remove(SpriteAnimationComponent.class);
-		
+
 		// Animate battle stigma -> fade away.
 		final StickyComponent scStigma = Mapper.stickyComponent.get(playerBattleStigmaEntity);
 		if (scStigma != null) {
@@ -397,23 +383,25 @@ public final class PlayerMaker implements IHittable, IMortal {
 			ssc.scaleX = ssc.scaleY = 0.0f;
 			ssc.grantStrategy = new ExponentialGrantStrategy(0.1f, 1.0f);
 		}
-		
+
 		final ColorComponent cc = Mapper.colorComponent.get(playerBattleStigmaEntity);
-		if (cc != null) cc.setup(player.getBattleStigmaColorWhenHit());
+		if (cc != null)
+			cc.setup(player.getBattleStigmaColorWhenHit());
 
 		playerBattleStigmaEntity.remove(ColorFlashEffectComponent.class);
-		
+
 		gameEntityEngine.removeEntity(playerHitCircleEntity);
-		
+
 		// Show dead player animation.
-		final SpriteComponent sc = Mapper.spriteComponent.get(playerEntity);	
-		if (sc != null) sc.setup(player.getDeathSprite());
-		
+		final SpriteComponent sc = Mapper.spriteComponent.get(playerEntity);
+		if (sc != null)
+			sc.setup(player.getDeathSprite());
+
 		// Stop player movement.
 		final VelocityComponent vc = Mapper.velocityComponent.get(playerEntity);
 		vc.setup(0.0f, 0.0f, 0.0f);
 		playerEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
-		
+
 		// Show death animation.
 		final Entity deathEffect = gameEntityEngine.createEntity();
 
@@ -422,42 +410,43 @@ public final class PlayerMaker implements IHittable, IMortal {
 		final StickyComponent sec = gameEntityEngine.createComponent(StickyComponent.class);
 		final ShouldPositionComponent spc = gameEntityEngine.createComponent(ShouldPositionComponent.class);
 		final TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
-		
+
 		pec.particleEffect = ResourcePool.obtainParticleEffect(player.getParticleEffectOnDeath());
 		sec.setup(playerEntity);
 		spc.grantStrategy = new ImmediateGrantStrategy();
-		
+
 		deathEffect.add(pc);
 		deathEffect.add(pec);
 		deathEffect.add(sec);
 		deathEffect.add(spc);
 		deathEffect.add(tc);
-		
+
 		// Player death sound effect.
 		SoundPlayer.getInstance().play(ESound.PLAYER_EXPLODE_ON_DEATH);
 		gameEntityEngine.addEntity(deathEffect);
-		
+
 		// Game over music.
 		MusicPlayer.getInstance().loadNext(level.getGameOverBgm());
 		MusicPlayer.getInstance().setCrossFade(true);
 		MusicPlayer.getInstance().transition(1.0f);
-		
+
 		// Show everything in greyscale.
 		game.setFragmentShaderBatchGame(new FragmentShaderGrayscaleDarkened(0.0f, 0.8f, 5.0f));
-		
+
 		game.pause(false);
-		
+
 	}
-	
+
 	@Override
 	public void hitByBullet(Entity me, Entity you) {
 		if (Mapper.colorFlashEffectComponent.get(playerBattleStigmaEntity) == null) {
 			final ColorFlashEffectComponent cfec = gameEntityEngine.createComponent(ColorFlashEffectComponent.class);
-			if (Mapper.inactiveComponent.get(playerEntity) == null) { 
+			if (Mapper.inactiveComponent.get(playerEntity) == null) {
 				cfec.setup(Color.WHITE, player.getBattleStigmaColorWhenHit(), Interpolation.circle, 0.1f, 6);
 				playerBattleStigmaEntity.add(cfec);
 				final VoiceComponent vc = Mapper.voiceComponent.get(playerEntity);
-				if (vc != null) SoundPlayer.getInstance().play(ESound.BATTLE_STIGMA_ABSORB,10.0f);
+				if (vc != null)
+					SoundPlayer.getInstance().play(ESound.BATTLE_STIGMA_ABSORB, 10.0f);
 			}
 		}
 	}

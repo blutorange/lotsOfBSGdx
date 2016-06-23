@@ -55,12 +55,11 @@ public class GameParameters implements Serializable {
 		String levelClass = jsonData.get("requestedLevel").asString();
 		String playerClass = jsonData.get("requestedPlayer").asString();
 		try {
-			Class<ALevel> level = (Class<ALevel>)Class.forName(levelClass);
-			Class<APlayer> player = (Class<APlayer>)Class.forName(playerClass);
+			Class<ALevel> level = (Class<ALevel>) Class.forName(levelClass);
+			Class<APlayer> player = (Class<APlayer>) Class.forName(playerClass);
 			requestedLevel = level.newInstance();
 			requestedPlayer = player.newInstance();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("could not load level " + levelClass + " for player " + playerClass);
 			e.printStackTrace(System.err);
 			return;
@@ -98,7 +97,7 @@ public class GameParameters implements Serializable {
 		private float requestedTextboxSpeed = 10.0f;
 		private final APlayer requestedPlayer;
 		private final ALevel requestedLevel;
-		
+
 		public Builder(ALevel level, APlayer player) {
 			if (level == null)
 				throw new NullPointerException("level cannot be null");
@@ -109,17 +108,20 @@ public class GameParameters implements Serializable {
 		}
 
 		public Builder requestedLocale(Locale x) {
-			if (x != null) requestedLocale = x;
+			if (x != null)
+				requestedLocale = x;
 			return this;
 		}
 
 		public Builder requestedWidth(int x) {
-			if (x>0) requestedWidth = x;
+			if (x > 0)
+				requestedWidth = x;
 			return this;
 		}
 
 		public Builder requestedHeight(int x) {
-			if (x>0) requestedHeight = x;
+			if (x > 0)
+				requestedHeight = x;
 			return this;
 		}
 
@@ -129,12 +131,14 @@ public class GameParameters implements Serializable {
 		}
 
 		public Builder requestedFps(int x) {
-			if (x>0) requestedFps = x;
+			if (x > 0)
+				requestedFps = x;
 			return this;
 		}
 
 		public Builder requestedLogLevel(int x) {
-			if (x>=0) requestedLogLevel = x;
+			if (x >= 0)
+				requestedLogLevel = x;
 			return this;
 		}
 
@@ -142,12 +146,12 @@ public class GameParameters implements Serializable {
 			requestedWindowTitle = String.valueOf(x);
 			return this;
 		}
-		
+
 		public Builder requestedTextboxSpeed(float x) {
-			requestedTextboxSpeed = MathUtils.clamp(x,0.01f,999.0f);
+			requestedTextboxSpeed = MathUtils.clamp(x, 0.01f, 999.0f);
 			return this;
 		}
-		
+
 		// TODO
 		// !!!Change the read/write methods when changing this!!!
 		public GameParameters build() {

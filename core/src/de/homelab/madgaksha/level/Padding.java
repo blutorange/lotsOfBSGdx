@@ -9,7 +9,7 @@ public abstract class Padding {
 	private boolean dirty = true;
 	private int countHorizontal;
 	private int countVertical;
-	
+
 	public Padding() {
 		topValue = bottomValue = leftValue = rightValue = verticalValue = horizontalValue = 0.0f;
 	}
@@ -95,20 +95,23 @@ public abstract class Padding {
 	public void at(Rectangle rectangle) {
 		this.rectangle = rectangle;
 	}
+
 	public void at(Rectangle rectangle, int countHorizontal, int countVertical) {
 		this.rectangle = rectangle;
 		this.countHorizontal = countHorizontal;
 		this.countVertical = countVertical;
-		if (this.countHorizontal < 1) this.countHorizontal = 1;
-		if (this.countVertical < 1) this.countVertical = 1;
+		if (this.countHorizontal < 1)
+			this.countHorizontal = 1;
+		if (this.countVertical < 1)
+			this.countVertical = 1;
 	}
 
 	protected void apply() {
 		compute(rectangle);
-		if (topPixel + bottomPixel + (countVertical-1) * verticalPixel > rectangle.height) {
+		if (topPixel + bottomPixel + (countVertical - 1) * verticalPixel > rectangle.height) {
 			topPixel = bottomPixel = verticalPixel = 1.0f;
 		}
-		if (leftPixel + rightPixel + (countHorizontal-1) * horizontalPixel > rectangle.width) {
+		if (leftPixel + rightPixel + (countHorizontal - 1) * horizontalPixel > rectangle.width) {
 			leftPixel = rightPixel = horizontalPixel = 1.0f;
 		}
 	}

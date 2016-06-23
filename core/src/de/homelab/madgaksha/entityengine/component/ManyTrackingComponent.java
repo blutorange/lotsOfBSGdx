@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.enums.Gravity;
 import de.homelab.madgaksha.enums.TrackingOrientationStrategy;
+
 /**
  * Determines how an entity tracks other a collection of other entities and
  * orients itself.
@@ -25,29 +26,30 @@ public class ManyTrackingComponent implements Component, Poolable {
 	private final static float DEFAULT_ADJUSTMENT_POINT_LEFT = -64.0f;
 	private final static float DEFAULT_ADJUSTMENT_POINT_RIGHT = 64.0f;
 
-	private final static float DEFAULT_PLAYER_BOSS_THRESHOLD = 75.0f*75.0f;
+	private final static float DEFAULT_PLAYER_BOSS_THRESHOLD = 75.0f * 75.0f;
 	private final static float DEFAULTORLD_BORDER_LEFT = 0.0f;
 	private final static float DEFAULTORLD_BORDER_RIGHT = 100.0f;
 	private final static float DEFAULTORLD_BORDER_TOP = 100.0f;
 	private final static float DEFAULTORLD_BORDER_BOTTOM = 0.0f;
-	
+
 	private final static float DEFAULT_MARGIN_SCALING_FACTOR = 1.1f;
 
 	private final static Entity DEFAULT_PLAYER_POINT = new Entity().add(new PositionComponent());
 	private final static Vector2 DEFAULT_BASE_DIRECTION = new Vector2(0.0f, 1.0f);
 
 	private final static int DEFAULT_TRACKED_POINT_INDEX = 0;
-	
+
 	private final static TrackingOrientationStrategy DEFAULT_TRACKING_ORIENTATION_STRATEGY = TrackingOrientationStrategy.ABSOLUTE;
 	private final static Gravity DEFAULT_GRAVITY = Gravity.SOUTH;
 
-	public ManyTrackingComponent(float worldBorderLeftW, float worldBorderBottomW, float worldBorderRightW, float worldBorderTopW) {
+	public ManyTrackingComponent(float worldBorderLeftW, float worldBorderBottomW, float worldBorderRightW,
+			float worldBorderTopW) {
 		this.worldBorderTop = worldBorderTopW;
 		this.worldBorderBottom = worldBorderBottomW;
 		this.worldBorderLeft = worldBorderLeftW;
 		this.worldBorderRight = worldBorderRightW;
 	}
-	
+
 	@Override
 	public void reset() {
 		adjustmentPointTop = DEFAULT_ADJUSTMENT_POINT_TOP;
@@ -61,13 +63,13 @@ public class ManyTrackingComponent implements Component, Poolable {
 		worldBorderRight = DEFAULT_ADJUSTMENT_POINT_RIGHT;
 
 		trackedPointIndex = DEFAULT_TRACKED_POINT_INDEX;
-		
+
 		baseDirection = DEFAULT_BASE_DIRECTION;
 		playerPoint = DEFAULT_PLAYER_POINT;
 
 		trackingOrientationStrategy = DEFAULT_TRACKING_ORIENTATION_STRATEGY;
 		gravity = DEFAULT_GRAVITY;
-		
+
 		minimumElevation = DEFAULT_MINIMUM_ELEVATION;
 		maximumElevation = DEFAULT_MAXIMUM_ELEVATION;
 	}
@@ -80,13 +82,12 @@ public class ManyTrackingComponent implements Component, Poolable {
 
 	/** Index of the point currently tracked. */
 	public int trackedPointIndex = DEFAULT_TRACKED_POINT_INDEX;
-	
+
 	/**
 	 * When computing the world rectangle the camera should look at, these
-	 * points are added to the focus points, but in rotated player-boss 
-	 * world coordinates (the looking direction of the player and the axis
-	 * orthogonal to that).
-	 * <br>
+	 * points are added to the focus points, but in rotated player-boss world
+	 * coordinates (the looking direction of the player and the axis orthogonal
+	 * to that). <br>
 	 * This is essentially the smallest rectangle in world coordinates and
 	 * prevents the camera from zooming-in too close. <br>
 	 * Should be set along with {@link #playerBossThresholdW} and is typically
@@ -108,8 +109,8 @@ public class ManyTrackingComponent implements Component, Poolable {
 	public float adjustmentPointRight = DEFAULT_ADJUSTMENT_POINT_RIGHT;
 
 	/**
-	 * Default direction the player should look into when there
-	 * are no other points to track.
+	 * Default direction the player should look into when there are no other
+	 * points to track.
 	 */
 	public Vector2 baseDirection = DEFAULT_BASE_DIRECTION;
 	/**
@@ -119,18 +120,18 @@ public class ManyTrackingComponent implements Component, Poolable {
 	/**
 	 * 
 	 * How to determine the direction in which we are looking, ie. the
-	 * orientation of the screen.
-	 * <br><br>
+	 * orientation of the screen. <br>
+	 * <br>
 	 * ABSOLUTE: {@link #bossPoint} is interpreted as the directional vector for
-	 * the screen orientation.
-	 * <br><br>
+	 * the screen orientation. <br>
+	 * <br>
 	 * RELATIVE: The screen orients itself in the direction of the vector
-	 * {@link #playerPoint}-{@link #bossPoint}.
-	 * <br><br>
+	 * {@link #playerPoint}-{@link #bossPoint}. <br>
+	 * <br>
 	 * MINIBALL: We compute center C of the smallest enclosing circle of all
 	 * focusPoints and look in the direction of {@link #playerPoint}-C. This
-	 * uses the miniball library.
-	 * <br><br>
+	 * uses the miniball library. <br>
+	 * <br>
 	 * <a href="https://github.com/hbf/miniball">Miniball library on github.</a>
 	 * 
 	 */
@@ -160,11 +161,10 @@ public class ManyTrackingComponent implements Component, Poolable {
 
 	/** Relative margin to be added to the computed camera world rectangle. */
 	public float marginScalingFactor = DEFAULT_MARGIN_SCALING_FACTOR;
-	
+
 	/** The minimum height of the camera above the world. */
 	public float minimumElevation = DEFAULT_MINIMUM_ELEVATION;
 	/** The maximum height of the camera above the world. */
 	public float maximumElevation = DEFAULT_MAXIMUM_ELEVATION;
-	
 
 }

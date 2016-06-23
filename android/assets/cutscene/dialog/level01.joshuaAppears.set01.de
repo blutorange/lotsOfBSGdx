@@ -4,7 +4,7 @@
   Speaker Estelle
   Face Surprised
   Text EOF
-あ、ヨシュアみっけ。
+Ah, da ist ja Joshua.
 EOF
 
 >>EventTextbox
@@ -13,7 +13,8 @@ EOF
   Speaker Joshua
   Face Smiling
   Text EOF
-エステル！君とまたあえて嬉しいいんです。
+Estelle! Ich freue mich, dich wieder
+zu sehen.
 EOF
 
 >>EventTextbox
@@ -21,9 +22,7 @@ EOF
   Speaker Estelle
   Face EMBARRASED
   Text EOF
-そんな。。。
-
-あたしも嬉しいけど。。。
+Ich mich auch.
 EOF
 
 >>EventTextbox
@@ -31,9 +30,9 @@ EOF
   Speaker Estelle
   Face Angry
   Text EOF
-っていうか、そんなこといってる場合か！
-ね、ヨシュア、ここはどこ？
-みたことのないこの風景はなんだ？
+Das ist aber nicht der richtige Zeitpunk!
+Hey, Joshua, weißt du, wo wir sind?
+Diese unbekannt Landschaft, wo sind wir nur gelandet?
 EOF
 
 
@@ -43,8 +42,10 @@ EOF
   Speaker Joshua
   Face Serious
   Text EOF
-来てからちょっとだけ調べてみたが、今のところは
-分かりません。ただ、常ならぬ力が働いているのは確かです。
+Seit wir hier ankamen haben ich mit in der
+Umgebung umgeschaut, aber noch nicht viel
+herausgefunden. Aber eine unbekannte Kraft
+ist hier mit Sicherheit im Spiel.
 EOF
 
 >>EventTextbox
@@ -53,7 +54,8 @@ EOF
   Speaker Estelle
   Face EVASIVE
   Text EOF
-この泉も他と違うし、何かわけありの場所みたいけど。。。
+Dieser Springbrunnen sieht auch besonders
+aus... irgendetwas ist mit diesem Ort.
 EOF
 
 >>EventTextbox
@@ -61,10 +63,10 @@ EOF
   Speaker Joshua
   Face Serious
   Text EOF
-僕もそう思っている。川の近くにあった未知標によると、
-そこの泉は無明界（むみょうかい）にあるそうです。
-無明とは、前を照らす光がない、迷っていること。
-それとも、来たものを惑わす世界、という意味でしょうか。
+Das denke ich auch. Laut dem Schild nahe der
+Brücke ist das hier die Luxisenzwelt.
+Lux für Licht und Absenz für Abwesenheit. 
+Heißt das, wir sind hier ohne Licht verloren?
 EOF
 
 >>EventTextbox
@@ -72,9 +74,9 @@ EOF
   Face Serious
   TransitionOut
   Text EOF
-床にある星印も気にかかります。中の団子みたいな形を
-した丸に立っていると、変な力を感じます。
-導力にはない、まるで吸い込まれてしまいそうな感じ。。。
+Das Sternenzeichen am Boden sieht auch
+verdächtig aus. Ich fühle eine merkwürdige
+Kraft davon heraustreten...
 EOF
 
 >>EventTextbox
@@ -83,7 +85,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-ヨシュア？　ヨシュアってば！
+Joshua? Hey, Joshua!
 EOF
 
 >>EventTextbox
@@ -92,7 +94,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-。。。　。。。　。。。
+... ... ...
 EOF
 
 >>EventTextbox
@@ -101,7 +103,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-しっかりしろ、ヨシュア！
+Was ist denn los, Joshua?
 EOF
 
 >>EventTextbox
@@ -110,7 +112,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-。。。エステル。。。
+...Estelle...
 EOF
 
 >>EventTextbox
@@ -118,7 +120,8 @@ EOF
   Face CONTEMPLATING
   TransitionIn
   Text EOF
-もう大丈夫です。心配かけてすみません。
+Es geht wieder. Es tut mir Leid, wenn ich dir
+Sorgen bereitet habe.
 EOF
 
 >>EventTextbox
@@ -126,9 +129,9 @@ EOF
   Face Normal
   TransitionOut
   Text EOF
-ということで、それは何の力か、
-この場所とどう関係しているのか、
-まだ分からないことばかりです。
+Nunja, was das für eine Kraft ist und
+was sie mit diesem Ort zu tun hat sind
+alles noch ungeklärte Fragen.
 EOF
 
 >>EventTextbox
@@ -137,8 +140,9 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-ヨシュアも分からないなら今はどうしようもないね。
-ついでに聞くけど、ヨシュアはどうして浮いてない？
+Wenn selbst du es nicht weißt...
+Achso, jetzt wo es mir auffällt, warum
+schwebst du eigentlich nicht?
 EOF
 
 >>EventTextbox
@@ -147,7 +151,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-は？　浮遊、ですか？　
+Bitte? Schweben?　
 EOF
 
 >>EventTextbox
@@ -156,9 +160,10 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-ほら、あたし空中に浮いてるなじゃない！
-ヨシュアと離れて、町を出て、気を失って、
-また目覚めてからずっとこうだ。
+Siehst du das nicht? Ich schwebe in der Luft!
+Seit wir uns trennten und ich die Stadt verließ,
+benommen wurde und hier wieder aufwachte, schwebe
+ich in der Luft!
 EOF
 
 >>EventTextbox
@@ -167,8 +172,8 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-言われてみれば、確かに浮いているんですね。
-まだダイエット中？　
+Jetzt wo du es sagst, stimmt, du schwebst
+tatsächlich. Bist du schon wieder auf Diät?
 EOF
 
 >>EventTextbox
@@ -177,10 +182,10 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-違う。そうじゃない。
-こう見えても、あたし、食欲のある青年だ。
-ほら、前へ歩こう、と思えば勝手に体が前
-へ動く。浮いているままで。
+Nein, natürlich nicht. Mein Hunger
+kennt keine Grenzen.
+Wenn ich mir bewegen will, schwebt
+mein Körper einfach in dies Richtung.
 EOF
 
 >>EventTextbox
@@ -188,9 +193,10 @@ EOF
   Face Normal
   TransitionIn
   Text EOF
-これもしっくりと調べないとわかりません。
-後でゆっくりと考えましょう。
-浮いているなら、足で行かない場所もあるでしょう。　
+Das müssen wir noch gründlicher untersuchen.
+Aber erstmal stellt es keine Gefahr für dich
+dar. Finden wir erstmal heraus, wo wir eigentlich
+sind. Schweben kann auch hilfreich sein.
 EOF
 
 >>EventTextbox
@@ -198,7 +204,7 @@ EOF
   Face SMILING
   TransitionOut
   Text EOF
-それでは、僕はこれで。あとで合流しましょう。　
+Bis später dann, Estelle.　
 EOF
 
 >>EventTextbox
@@ -207,7 +213,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-へえ、ヨシュアと一緒に行かないの？
+Äh, wir gehen nicht zusammen?
 EOF
 
 >>EventTextbox
@@ -215,10 +221,10 @@ EOF
   Face CONTEMPLATING
   TransitionIn
   Text EOF
-いや、ふた手にわけたほうが有利だ。
-それほど危険な敵はないし、エステル一人でも
-大丈夫です。確かにテントがあった場所からちょっと
-道を北へ進むと弾装キューブがあったはずだ。
+Es ist besser, wenn wir getrennt weitersuchen.
+So gefährliche Monster sind hier nicht, das
+schaffst auch du. Nahe der Stadttore ist ein
+Rüstungswürfel, das sollte ausreichen.
 EOF
 
 >>EventTextbox
@@ -226,7 +232,8 @@ EOF
   Face Happy
   TransitionOut
   Text EOF
-それを装備すると、この辺の敵は速やかに倒せます。
+Wenn du den Inhalt anlegst, solltest du keine
+Probleme mit dem Gegnern dieser Region haben.
 EOF
 
 >>EventTextbox
@@ -235,8 +242,9 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-ざんねん。。。まあ、ヨシュアがそういってくれるなら、
-あたしも頑張らないと！　敵一匹か二匹、楽勝、楽勝！
+Schade... aber wenn du es so sagst, dann
+fühl ich mich gleich viel stärker! Ein paar
+Gegner sind doch kein Problem!!
 EOF
 
 >>EventTextbox
@@ -245,7 +253,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-エステル、油断は禁物ですよ。
+Estelle, Überschätzung kann zum Verhängnis werden!
 EOF
 
 >>EventTextbox
@@ -254,7 +262,8 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-はい、はい。それじゃ、あとでな、ヨシュア。
+Ja, ja, ich habe schon verstanden, Joshua.
+Bis bald also.
 EOF
 
 >>EventTextbox
@@ -262,16 +271,16 @@ EOF
   Face SMILING
   TransitionIn
   Text EOF
-エステルもお元気で。
+Bis bald, Estelle.
 EOF
 
 >>EventTextbox
   Speaker Joshua
   Face Serious
   Text EOF
-あっ、最後にもうひとつ。
-泉の後ろにある断崖の近くにも敵が潜めているから、
-弾装を手に入れたまでは近寄らないようにね。
+Oh, bevor ich es vergesse.
+Nahe der Klippen im Norden lauern starke Gegner.
+Du solltest dort besser erst einmal nicht hingehen.
 EOF
 
 >>EventTextbox
@@ -279,5 +288,5 @@ EOF
   Face SMILING
   TransitionOut
   Text EOF
-では、行くよ。
+Dann bis später, Estelle.
 EOF

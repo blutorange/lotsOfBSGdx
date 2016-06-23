@@ -3,9 +3,9 @@
   Speaker Estelle
   Face Serious
   Text EOF
-あまり都市から離れると色々危険すぎるんだ。か弱い乙女
-のあたしひとりじゃむり無理。武器ももってないし、
-これは町の近くで探すしかない。
+It's dangerous to get too far away from the city.
+I haven't even got a weapon and I'm alone.
+Let's search near the city walls first.
 EOF
 
 >>EventTextbox
@@ -13,7 +13,7 @@ EOF
   Face SHOU_GA_NAI
   TransitionOut
   Text EOF
-概要から東へ通る道があったんじゃいないか？
-ヨシュアもそこでいるかもしれないし、
-まずはあそこへいってみよ。
+Wasn't there a path to the east near the city gates?
+Joshua couldn't have gone too far too, so let's
+look there first.
 EOF

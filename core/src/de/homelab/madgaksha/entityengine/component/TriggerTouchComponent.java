@@ -37,7 +37,7 @@ public abstract class TriggerTouchComponent implements Component, Poolable {
 	public TriggerTouchComponent(ITrigger t) {
 		this.triggerAcceptingObject = t;
 	}
-	
+
 	@Override
 	public void reset() {
 		triggerAcceptingObject = DEFAULT_TRIGGER_ACCEPTING_OBJECT;

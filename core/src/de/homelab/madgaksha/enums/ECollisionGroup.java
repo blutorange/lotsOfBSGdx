@@ -8,8 +8,10 @@ import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
  * <ul>
  * <li>{@link MakerUtils#makeTriggerTouch}</li>
  * <li>{@link CollisionSystem}</li>
- * <li>Add the appropriate components in {@link de.homelab.madgaksha.entityengine.component.collision}.
+ * <li>Add the appropriate components in
+ * {@link de.homelab.madgaksha.entityengine.component.collision}.
  * </ul>
+ * 
  * @author madgaksha
  *
  */
@@ -18,6 +20,6 @@ public enum ECollisionGroup {
 	GROUP_02,
 	GROUP_03,
 	GROUP_04,
-	GROUP_05;	
+	GROUP_05;
 	public final static ECollisionGroup PLAYER_GROUP = GROUP_01;
 }

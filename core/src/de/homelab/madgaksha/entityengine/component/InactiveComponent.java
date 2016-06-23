@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
  * Component for entities that are inactive, but might still be visible.
+ * 
  * @see InvisibleComponent
  * @author madgaksha
  *

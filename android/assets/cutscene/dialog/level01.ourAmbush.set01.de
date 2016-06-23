@@ -1,0 +1,18 @@
+>>EventTextbox
+  Speaker ESTELLE
+  Face Laughing
+  TransitionIn
+  Text EOF
+Für Soldaten waren die aber ganz schön
+schwächlich! Vielleicht bin ich aber
+auch einfach zu stark geworden!!
+EOF
+
+>>EventTextbox
+  Speaker ESTELLE
+  Face Laughing
+  TransitionOut
+  Text EOF
+Oh, da drüben sehe ich etwas.
+Mal schauen gehen.
+EOF

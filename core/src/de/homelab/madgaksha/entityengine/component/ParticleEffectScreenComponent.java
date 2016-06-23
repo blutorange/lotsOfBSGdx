@@ -15,9 +15,11 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
 public class ParticleEffectScreenComponent extends ParticleEffectComponent {
 	public ParticleEffectScreenComponent() {
 	}
+
 	public ParticleEffectScreenComponent(EParticleEffect particleEffect) {
 		setup(particleEffect);
 	}
+
 	public ParticleEffectScreenComponent(PooledEffect particleEffect) {
 		setup(particleEffect);
 	}

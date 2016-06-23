@@ -2,10 +2,10 @@
   TransitionIn
   TransitionOut
   Text EOF
-無明界（むみょうかい）より出で、
-六処界（ろくしょかい）へ流るる河源は東（あずま）。
-水、鈴引きて、濁り江が如く濁り音色聞こえり。
-いかにも「ベル江（え）」の名を冠するに相応し。
+Springing forth in the Unbright World, and proceeding
+to the Sexaworld. The river spring is to the east.
+Water, it rings the bell, a muddy sound like muddy water.
+It bears the name of River Berue.
 EOF
 
 >>EventTextbox
@@ -13,9 +13,9 @@ EOF
   Face SULLEN
   TransitionIn
   Text EOF
-つまりここがムミョウ界ってこと？
-あーもう、意味わからないじゃない。
-ヨシュアなら説明してくれたのに。。。
+So this is the Unbright World?
+Uh, I don't understand a word of this!
+If Joshua were here, he could probably explain it...
 EOF
 
 >>EventTextbox
@@ -23,18 +23,19 @@ EOF
   Face NORMAL
   TransitionOut
   Text EOF
-それに、どう頑張っても川が亘れないみたい。
-浮いてるのにどうして？
-よし、もうやってみようか。。。
+And why can't I cross the river even
+though I'm floating???
+Alright, let's try again...
 EOF
 
 >>EventTextbox
   TransitionIn
   TransitionOut
   Text EOF
-【付】
-河源千里以内の水瘴気濃度凄まじ。
-生命に危険が及ぶ可能性高し。
+[post script]
+Within a few thousand miles of the the fountain spring
+the miasmatic density near the water is dangerously high.
+Danger for life!
 EOF
 
 >>EventTextbox
@@ -44,6 +45,5 @@ EOF
   Face SHOU_GA_NAI
   TransitionOut
   Text EOF
-。。。ということで、橋がいかにありがたい
-存在であるか改めて思い知らせた。
+...just how much I am grateful for bridges right now...
 EOF

@@ -25,17 +25,18 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 	MAIN_FONT("mainFont");
 
 	private final static Logger LOG = Logger.getLogger(EFreeTypeFontGenerator.class);
-	private final static EnumMap<EFreeTypeFontGenerator, FreeTypeFontGenerator> freeTypeFontGeneratorCache =
-			new EnumMap<EFreeTypeFontGenerator, FreeTypeFontGenerator>(EFreeTypeFontGenerator.class);
+	private final static EnumMap<EFreeTypeFontGenerator, FreeTypeFontGenerator> freeTypeFontGeneratorCache = new EnumMap<EFreeTypeFontGenerator, FreeTypeFontGenerator>(
+			EFreeTypeFontGenerator.class);
 
 	private final String fontName;
 
 	/**
-	 * The reference line used for centering text vertically. For Latin, between base line and
-	 * x height works well. For Japanese/Chinese, between base line and cap height works well.
+	 * The reference line used for centering text vertically. For Latin, between
+	 * base line and x height works well. For Japanese/Chinese, between base
+	 * line and cap height works well.
 	 */
 	private final VerticalAlignPosition verticalAlignPosition;
-	
+
 	private EFreeTypeFontGenerator(String fontName) {
 		this.fontName = fontName;
 		String vertAlignKey = fontName + "VerticalAlign";
@@ -43,14 +44,14 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 		try {
 			if (I18n.isInitiated() && I18n.hasFontKey(vertAlignKey)) {
 				vertAlign = VerticalAlignPosition.valueOf(I18n.font(vertAlignKey).toUpperCase(Locale.ROOT));
-			}
-			else {
+			} else {
 				throw new IllegalArgumentException("i18n key does not exist");
 			}
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			Logger logger = Logger.getLogger(EFreeTypeFontGenerator.class);
-			logger.error("could not read vertical align position for language " + I18n.getShortName() + " and font " + this, e);
+			logger.error(
+					"could not read vertical align position for language " + I18n.getShortName() + " and font " + this,
+					e);
 			logger.error("assure a proper value has been set for the key " + vertAlignKey);
 		}
 		this.verticalAlignPosition = vertAlign;
@@ -101,19 +102,24 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 	public EnumMap<EFreeTypeFontGenerator, FreeTypeFontGenerator> getMap() {
 		return freeTypeFontGeneratorCache;
 	}
-	
+
 	/**
-	 * Determines characters required for the current text, ie. the set of unique characters in {@link PlainTextbox#lineList}.
-	 * @param lineList Array of lines.
-	 * @param start First line to process.
-	 * @param nd Last line to process (exclusive).
+	 * Determines characters required for the current text, ie. the set of
+	 * unique characters in {@link PlainTextbox#lineList}.
+	 * 
+	 * @param lineList
+	 *            Array of lines.
+	 * @param start
+	 *            First line to process.
+	 * @param nd
+	 *            Last line to process (exclusive).
 	 */
 	public static String getRequiredCharacters(CharSequence[] lineList, int start, int end) {
 		// Get characters that need to be rendered.
 		final StringBuilder stringBuilder = new StringBuilder();
 		final Set<Character> charset = new HashSet<Character>();
 		for (int i = start; i != end; ++i) {
-			for (int j = lineList[i].length() ; j-->0 ; ) {
+			for (int j = lineList[i].length(); j-- > 0;) {
 				charset.add(lineList[i].charAt(j));
 			}
 		}
@@ -122,10 +128,13 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 		}
 		return stringBuilder.toString();
 	}
-	
+
 	/**
-	 * Determines characters required for the current text, ie. the set of unique characters in {@link PlainTextbox#lineList}.
-	 * @param text Text to process.
+	 * Determines characters required for the current text, ie. the set of
+	 * unique characters in {@link PlainTextbox#lineList}.
+	 * 
+	 * @param text
+	 *            Text to process.
 	 */
 	public static String getRequiredCharacters(String text) {
 		// Get characters that need to be rendered.
@@ -138,12 +147,12 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 			stringBuilder.append(c);
 		return stringBuilder.toString();
 	}
-	
+
 	@Override
 	public void clearAllOfThisKind() {
 		EFreeTypeFontGenerator.clearAll();
 	}
-	
+
 	public VerticalAlignPosition getVerticalAlignPosition() {
 		return verticalAlignPosition;
 	}

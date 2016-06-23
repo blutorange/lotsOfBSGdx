@@ -27,16 +27,15 @@ public class BattleModeActivateLayer extends ALayer {
 	private float totalTime = 0.0f;
 	private float durationInverse;
 	private float duration;
-	
+
 	public BattleModeActivateLayer(Interpolation interpolation, float duration) {
 		cutinSprite = ETexture.CUTIN_BATTLE_MODE_ACTIVATE.asSprite();
 		cutinSprite.setOriginCenter();
 		this.interpolation = interpolation;
-		this.durationInverse = 1.0f/duration;
+		this.durationInverse = 1.0f / duration;
 		this.duration = duration;
 	}
-	
-	
+
 	@Override
 	public void draw(float deltaTime) {
 		viewportPixel.apply();
@@ -51,10 +50,9 @@ public class BattleModeActivateLayer extends ALayer {
 		totalTime += deltaTime;
 		float ratio = totalTime * durationInverse;
 		if (ratio < 0.5f) {
-			cutinSprite.setAlpha(interpolation.apply(0.0f, 1.0f, 2*ratio));
-		}
-		else {
-			cutinSprite.setAlpha(interpolation.apply(1.0f, 0.0f, 2.0f*(ratio-0.5f)));
+			cutinSprite.setAlpha(interpolation.apply(0.0f, 1.0f, 2 * ratio));
+		} else {
+			cutinSprite.setAlpha(interpolation.apply(1.0f, 0.0f, 2.0f * (ratio - 0.5f)));
 		}
 		if (totalTime >= duration) {
 			totalTime = duration;
@@ -62,7 +60,6 @@ public class BattleModeActivateLayer extends ALayer {
 		}
 	}
 
-	
 	@Override
 	public void removedFromStack() {
 	}
@@ -76,7 +73,7 @@ public class BattleModeActivateLayer extends ALayer {
 	public boolean isBlockDraw() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isBlockUpdate() {
 		return false;
