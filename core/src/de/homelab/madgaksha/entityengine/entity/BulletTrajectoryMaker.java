@@ -4,6 +4,7 @@ import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.audiosystem.VoicePlayer;
 import de.homelab.madgaksha.entityengine.component.AlphaComponent;
@@ -93,7 +94,10 @@ public abstract class BulletTrajectoryMaker implements IMortal {
 		initialPositionX = x;
 		initialPositionY = y;
 	}
-
+	public void position(Vector2 v) {
+		initialPositionX = v.x;
+		initialPositionY = v.y;
+	}
 	/**
 	 * @param life
 	 *            The time in seconds the bullet will live until it fades away.
@@ -118,7 +122,12 @@ public abstract class BulletTrajectoryMaker implements IMortal {
 		initialVelocityX = vx;
 		initialVelocityY = vy;
 	}
-
+	public void velocity(Vector2 v) {
+		initialVelocityX = v.x;
+		initialVelocityY = v.y;
+		
+	}
+	
 	public void rotation(float degree) {
 		rotationDegree = degree;
 	}

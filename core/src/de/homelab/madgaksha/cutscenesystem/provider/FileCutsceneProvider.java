@@ -333,7 +333,6 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 				StringBuilder sb = new StringBuilder();
 				while (s.hasNext() && !FileCutsceneProvider.hasNextCommand(s))
 					sb.append(s.nextLine()).append(StringUtils.LF);
-				LOG.debug(sb.toString());
 				Scanner settingScanner = new Scanner(sb.toString());
 				settingScanner.useLocale(Locale.ROOT);
 				try {

@@ -21,7 +21,7 @@ public final class ResourceCache {
 	private final static Logger LOG = Logger.getLogger(ResourceCache.class);
 
 	public final static int LIMIT_MUSIC = 100;
-	public final static int LIMIT_TEXTURE = 100;
+	public final static int LIMIT_TEXTURE = 200;
 	public final static int LIMIT_ANIMATION = 50;
 	public final static int LIMIT_ANIMATION_LIST = 50;
 	public final static int LIMIT_SOUND = 100;

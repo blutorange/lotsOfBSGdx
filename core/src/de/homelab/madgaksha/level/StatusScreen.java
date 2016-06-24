@@ -201,7 +201,7 @@ public class StatusScreen {
 
 		batchPixel.begin();
 
-		// TODO remove me
+		// for testing
 		// for testing: draw rectangles
 		// if (false && DebugMode.activated) {
 		// NinePatch myNinePatch =
@@ -609,6 +609,7 @@ public class StatusScreen {
 		level.getIcon().setBounds(uiImageLevelName.x, uiImageLevelName.y, uiImageLevelName.width,
 				uiImageLevelName.height);
 
+		// Icons for weapon and tokugi.
 		updateWeaponAndTokugiLayout();
 
 		// Image icons for enemy.

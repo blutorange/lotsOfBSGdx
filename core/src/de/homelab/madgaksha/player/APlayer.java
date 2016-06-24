@@ -1,4 +1,5 @@
 package de.homelab.madgaksha.player;
+import static de.homelab.madgaksha.GlobalBag.statusScreen;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -18,8 +19,10 @@ import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.player.consumable.EConsumable;
 import de.homelab.madgaksha.player.tokugi.ATokugi;
 import de.homelab.madgaksha.player.tokugi.ETokugi;
+import de.homelab.madgaksha.player.tokugi.TokugiNone;
 import de.homelab.madgaksha.player.weapon.AWeapon;
 import de.homelab.madgaksha.player.weapon.EWeapon;
+import de.homelab.madgaksha.player.weapon.WeaponNone;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
@@ -508,6 +511,11 @@ public abstract class APlayer {
 		int index = obtainedWeaponList.indexOf(currentWeapon);
 		if (index >= 0 && obtainedWeaponList.size() > 1) {
 			equipWeapon(obtainedWeaponList.get(Math.floorMod(index + amount, obtainedWeaponList.size())));
+			statusScreen.updateWeaponAndTokugiLayout();
+			// Do not switch to WeaponNone when the player has got more than one weapon.
+			if ((currentWeapon instanceof WeaponNone) && obtainedWeaponList.size()>2) {
+				equipWeapon(obtainedWeaponList.get(Math.floorMod(index + amount + 1, obtainedWeaponList.size())));
+			}
 			return true;
 		}
 		return false;
@@ -550,6 +558,10 @@ public abstract class APlayer {
 		int index = obtainedTokugiList.indexOf(currentTokugi);
 		if (index >= 0 && obtainedTokugiList.size() > 1) {
 			equipTokugi(obtainedTokugiList.get(Math.floorMod(index + amount, obtainedTokugiList.size())));
+			if ((currentTokugi instanceof TokugiNone) && obtainedTokugiList.size() > 2) {
+				equipTokugi(obtainedTokugiList.get(Math.floorMod(index + amount + 1, obtainedTokugiList.size())));
+			}
+			statusScreen.updateWeaponAndTokugiLayout();
 			return true;
 		}
 		return false;

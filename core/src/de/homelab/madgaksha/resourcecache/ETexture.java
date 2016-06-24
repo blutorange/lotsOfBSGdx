@@ -114,6 +114,8 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	WEAPON_NONE_ICON_SUB("texture/statusicon/weapon", "none-sub.png"),
 	WEAPON_BASIC_ICON_MAIN("texture/statusicon/weapon/basic-main.png"),
 	WEAPON_BASIC_ICON_SUB("texture/statusicon/weapon", "basic-sub.png"),
+	WEAPON_MULTI_ICON_MAIN("texture/statusicon/weapon/multi-main.png"),
+	WEAPON_MULTI_ICON_SUB("texture/statusicon/weapon", "multi-sub.png"),
 
 	// =========================================================================
 	// TOKUGI
@@ -152,6 +154,23 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	BULLET_PACMAN_LIGHTORANGE(ETextureAtlas.BULLETS_BASIC, "pPacman14"),
 	BULLET_PACMAN_WHITE(ETextureAtlas.BULLETS_BASIC, "pPacman15"),
 
+	BULLET_STAR_BLACK(ETextureAtlas.BULLETS_BASIC, "pStar0"),
+	BULLET_STAR_RED(ETextureAtlas.BULLETS_BASIC, "pStar1"),
+	BULLET_STAR_LIGHTRED(ETextureAtlas.BULLETS_BASIC, "pStar2"),
+	BULLET_STAR_PINK(ETextureAtlas.BULLETS_BASIC, "pStar3"),
+	BULLET_STAR_LIGHTPINK(ETextureAtlas.BULLETS_BASIC, "pStar4"),
+	BULLET_STAR_BLUE(ETextureAtlas.BULLETS_BASIC, "pStar5"),
+	BULLET_STAR_LIGHTBLUE(ETextureAtlas.BULLETS_BASIC, "pStar6"),
+	BULLET_STAR_CYAN(ETextureAtlas.BULLETS_BASIC, "pStar7"),
+	BULLET_STAR_LIGHTCYAN(ETextureAtlas.BULLETS_BASIC, "pStar8"),
+	BULLET_STAR_GREEN(ETextureAtlas.BULLETS_BASIC, "pStar9"),
+	BULLET_STAR_LIGHTGREEN(ETextureAtlas.BULLETS_BASIC, "pStar10"),
+	BULLET_STAR_YELLOW(ETextureAtlas.BULLETS_BASIC, "pStar11"),
+	BULLET_STAR_LIGHTYELLOW(ETextureAtlas.BULLETS_BASIC, "pStar12"),
+	BULLET_STAR_ORANGE(ETextureAtlas.BULLETS_BASIC, "pStar13"),
+	BULLET_STAR_LIGHTORANGE(ETextureAtlas.BULLETS_BASIC, "pStar14"),
+	BULLET_STAR_WHITE(ETextureAtlas.BULLETS_BASIC, "pStar15"),
+	
 	BULLET_FLOWER_BLACK(ETextureAtlas.BULLETS_BASIC, "pFlower0"),
 	BULLET_FLOWER_RED(ETextureAtlas.BULLETS_BASIC, "pFlower1"),
 	BULLET_FLOWER_PINK(ETextureAtlas.BULLETS_BASIC, "pFlower2"),

@@ -43,6 +43,23 @@ public enum BulletShapeMaker {
 	PACMAN_LIGHTORANGE(ETexture.BULLET_PACMAN_LIGHTORANGE, Box.PACMAN, null, 150L),
 	PACMAN_WHITE(ETexture.BULLET_PACMAN_WHITE, Box.PACMAN, null, 150L),
 
+	STAR_BLACK(ETexture.BULLET_STAR_BLACK, Box.STAR, null, 150L),
+	STAR_RED(ETexture.BULLET_STAR_RED, Box.STAR, null, 150L),
+	STAR_LIGHTRED(ETexture.BULLET_STAR_LIGHTRED, Box.STAR, null, 150L),
+	STAR_PINK(ETexture.BULLET_STAR_PINK, Box.STAR, null, 150L),
+	STAR_LIGHTPINK(ETexture.BULLET_STAR_LIGHTPINK, Box.STAR, null, 150L),
+	STAR_BLUE(ETexture.BULLET_STAR_BLUE, Box.STAR, null, 150L),
+	STAR_LIGHTBLUE(ETexture.BULLET_STAR_LIGHTBLUE, Box.STAR, null, 150L),
+	STAR_CYAN(ETexture.BULLET_STAR_CYAN, Box.STAR, null, 150L),
+	STAR_LIGHTCYAN(ETexture.BULLET_STAR_LIGHTCYAN, Box.STAR, null, 150L),
+	STAR_GREEN(ETexture.BULLET_STAR_GREEN, Box.STAR, null, 150L),
+	STAR_LIGHTGREEN(ETexture.BULLET_STAR_LIGHTGREEN, Box.STAR, null, 150L),
+	STAR_YELLOW(ETexture.BULLET_STAR_YELLOW, Box.STAR, null, 150L),
+	STAR_LIGHTYELLOW(ETexture.BULLET_STAR_LIGHTYELLOW, Box.STAR, null, 150L),
+	STAR_ORANGE(ETexture.BULLET_STAR_ORANGE, Box.STAR, null, 150L),
+	STAR_LIGHTORANGE(ETexture.BULLET_STAR_LIGHTORANGE, Box.STAR, null, 150L),
+	STAR_WHITE(ETexture.BULLET_STAR_WHITE, Box.STAR, null, 150L),
+	
 	FLOWER_BLACK(ETexture.BULLET_FLOWER_BLACK, Box.FLOWER, null, 500L),
 	FLOWER_RED(ETexture.BULLET_FLOWER_RED, Box.FLOWER, null, 500L),
 	FLOWER_PINK(ETexture.BULLET_FLOWER_PINK, Box.FLOWER, null, 500L),
@@ -131,6 +148,7 @@ public enum BulletShapeMaker {
 
 	private final static class Box {
 		private final static Rectangle PACMAN = new Rectangle(-7.0f, -7.0f, 14.0f, 14.0f);
+		private final static Rectangle STAR = new Rectangle(-7.0f, -7.0f, 14.0f, 14.0f);
 		private final static Rectangle GEMLET = new Rectangle(-20.0f, -20f, 40.0f, 40.0f);
 		private final static Rectangle FLOWER = new Rectangle(-31.0f, -29.0f, 62.0f, 58.0f);
 	}
