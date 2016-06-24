@@ -119,15 +119,15 @@ import path.EPath;
  * <pre>
  *  EventWait 2.5
  * </pre>
- *
+ * 
  * 
  * <h2>Move event</h2>
  * 
  * The move event specifies details on which entity to move and how:
  * 
  * <pre>
- * &lt;EventParametersMove&gt; := &lt;GUID&gt;
- *{&lt;{@link EPath} &lt;POSITIVE_NUMBER&gt; [R|A] &lt;PathParameters&gt;}
+ *  &lt;EventParametersMove&gt; := &lt;GUID&gt;
+ * {&lt;{@link EPath} &lt;POSITIVE_NUMBER&gt; [R|A] &lt;PathParameters&gt;}
  * </pre>
  * 
  * The number after the path specifies the time in seconds for that path. If a
@@ -211,13 +211,11 @@ import path.EPath;
  * &lt;EOF&gt; is any arbitrary string marking the end of the text. It must not
  * occur at the beginning of any line in-between. <br>
  * <br>
- * If speaker and face are omitted, the textbox will not have a speaker or face.
- * <br>
+ * If speaker and face are omitted, the textbox will not have a speaker or face. <br>
  * <br>
  * Font size is relative to to the game screen height. At a game screen height
  * of 720 pixels, the font size is the number of pixels. At a game screen height
- * of 360 pixels, specifying a font size of 18 results in 9 pixels on-screen.
- * <br>
+ * of 360 pixels, specifying a font size of 18 results in 9 pixels on-screen. <br>
  * <br>
  * Line spacing is relative to the current line height (font size). A line
  * spacing of 0.5f will result in half the height of one line of text between
@@ -253,10 +251,11 @@ import path.EPath;
  * </pre>
  * 
  * @author madgaksha
- *
+ * 
  */
 public class FileCutsceneProvider implements CutsceneEventProvider {
-	private final static Logger LOG = Logger.getLogger(FileCutsceneProvider.class);
+	private final static Logger LOG = Logger
+			.getLogger(FileCutsceneProvider.class);
 
 	private final static String CutsceneEventClassPackage = "de.homelab.madgaksha.cutscenesystem.event.";
 
@@ -277,6 +276,7 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		try {
 			String content = fileHandle.readString("UTF-8");
 			s = new Scanner(content);
+			s.useLocale(Locale.ROOT);
 			readCutsceneEventArray(s, eventList);
 		} catch (Exception e) {
 			LOG.error("could not read cutscene array for " + fileHandle, e);
@@ -299,7 +299,8 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 	 * @param eventList
 	 *            List of events to fill.
 	 */
-	private void readCutsceneEventArray(Scanner s, List<ACutsceneEvent> eventList) {
+	private void readCutsceneEventArray(Scanner s,
+			List<ACutsceneEvent> eventList) {
 		while (s.hasNext()) {
 			FileCutsceneProvider.skipComments(s);
 			if (readNextCommand(s))
@@ -334,8 +335,10 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 					sb.append(s.nextLine()).append(StringUtils.LF);
 				LOG.debug(sb.toString());
 				Scanner settingScanner = new Scanner(sb.toString());
+				settingScanner.useLocale(Locale.ROOT);
 				try {
-					event = ACutsceneEvent.readNextObject(settingScanner, commandCutsceneClass);
+					event = ACutsceneEvent.readNextObject(settingScanner,
+							commandCutsceneClass);
 				} finally {
 					IOUtils.closeQuietly(settingScanner);
 				}
@@ -343,7 +346,8 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 					eventList.add(event);
 				break;
 			case 2:
-				FileCutsceneProvider provider = new FileCutsceneProvider(this.commandFileHandle);
+				FileCutsceneProvider provider = new FileCutsceneProvider(
+						this.commandFileHandle);
 				eventList.addAll(provider.eventList);
 				break;
 			default:
@@ -393,8 +397,10 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 	private boolean getEventClass(String className) {
 		String fullClassName = CutsceneEventClassPackage + className;
 		try {
-			nextCutsceneClass = (Class<? extends ACutsceneEvent>) ClassReflection.forName(fullClassName);
-			if (!ClassReflection.isAssignableFrom(ACutsceneEvent.class, nextCutsceneClass)) {
+			nextCutsceneClass = (Class<? extends ACutsceneEvent>) ClassReflection
+					.forName(fullClassName);
+			if (!ClassReflection.isAssignableFrom(ACutsceneEvent.class,
+					nextCutsceneClass)) {
 				LOG.error("not a cutscene event: " + nextCutsceneClass);
 				return false;
 			}
@@ -424,7 +430,8 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 	@Override
 	public ACutsceneEvent nextCutsceneEvent(int i) {
 		eventPosition += 1;
-		return eventPosition < eventList.size() ? eventList.get(eventPosition) : null;
+		return eventPosition < eventList.size() ? eventList.get(eventPosition)
+				: null;
 	}
 
 	/**
@@ -455,7 +462,8 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 
 	private static Color getColorForName(String name) {
 		try {
-			Field f = ClassReflection.getField(Color.class, name.toUpperCase(Locale.ROOT));
+			Field f = ClassReflection.getField(Color.class,
+					name.toUpperCase(Locale.ROOT));
 			Object o = f.get(null);
 			if (o instanceof Color)
 				return (Color) o;
@@ -469,7 +477,8 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 	public static Interpolation readNextInterpolation(Scanner s) {
 		if (s.hasNext("=.+=")) {
 			String param = s.next("=.+=");
-			String name = WordUtils.uncapitalize(param.substring(1, param.length() - 1));
+			String name = WordUtils.uncapitalize(param.substring(1,
+					param.length() - 1));
 			try {
 				Field f = ClassReflection.getField(Interpolation.class, name);
 				Object o = f.get(null);
