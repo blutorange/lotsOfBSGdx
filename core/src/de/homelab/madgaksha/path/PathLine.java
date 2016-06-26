@@ -1,4 +1,4 @@
-package path;
+package de.homelab.madgaksha.path;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.StringBuilder;

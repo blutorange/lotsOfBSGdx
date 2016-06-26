@@ -1,4 +1,4 @@
-package path;
+package de.homelab.madgaksha.path;
 
 import java.util.Scanner;
 
