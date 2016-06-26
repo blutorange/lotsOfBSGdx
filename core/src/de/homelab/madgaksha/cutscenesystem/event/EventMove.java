@@ -6,9 +6,11 @@ import static de.homelab.madgaksha.GlobalBag.level;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.KeyMapDesktop;
@@ -76,13 +78,13 @@ public class EventMove extends ACutsceneEvent {
 			totalTime += deltaTime;
 
 		// Move to the specified position.
-		pathList[currentPathIndex].apply(totalTime, vector);
+		pathList[currentPathIndex].applyTotal(totalTime, vector);
 		PositionComponent pc = Mapper.positionComponent.get(entityToMove);
 
 		if (pc == null)
 			return;
 		if (totalTime >= pathList[currentPathIndex].tmax) {
-			pathList[currentPathIndex].apply(pathList[currentPathIndex].tmax, vector);
+			pathList[currentPathIndex].applyTotal(pathList[currentPathIndex].tmax, vector);
 			++currentPathIndex;
 			totalTime = 0.0f;
 			if (currentPathIndex == pathList.length) {
@@ -121,7 +123,7 @@ public class EventMove extends ACutsceneEvent {
 		gameEntityEngine.getSystem(CollisionSystem.class).setProcessing(true);
 	}
 
-	public static ACutsceneEvent readNextObject(Scanner s) {
+	public static ACutsceneEvent readNextObject(Scanner s, FileHandle fh) {
 		// Read entity name
 		String guid = FileCutsceneProvider.readNextGuid(s);
 		if (guid == null) {
@@ -149,7 +151,7 @@ public class EventMove extends ACutsceneEvent {
 					return null;
 				}
 			} else {
-				String pathType = "PATH_" + next.toUpperCase();
+				String pathType = "PATH_" + next.toUpperCase(Locale.ROOT);
 				Float tmax = FileCutsceneProvider.nextNumber(s);
 				if (tmax == null) {
 					LOG.error("expected time value");
@@ -163,7 +165,8 @@ public class EventMove extends ACutsceneEvent {
 				// Try and instantiate path.
 				try {
 					EPath path = EPath.valueOf(pathType);
-					APath newPath = path.readNextObject(tmax, relative, s);
+					APath newPath = path.readNextObject(tmax, relative, level.getMapData().getWidthTiles(),
+							level.getMapData().getHeightTiles(), s);
 					if (newPath == null)
 						return null;
 					pathList.add(newPath);

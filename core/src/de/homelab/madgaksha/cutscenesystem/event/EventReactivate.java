@@ -8,6 +8,7 @@ import java.util.Scanner;
 import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.files.FileHandle;
 
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
@@ -89,7 +90,7 @@ public class EventReactivate extends ACutsceneEvent {
 	public void end() {
 	}
 
-	public static ACutsceneEvent readNextObject(Scanner s) {
+	public static ACutsceneEvent readNextObject(Scanner s, FileHandle fh) {
 		String guid = FileCutsceneProvider.readNextGuid(s);
 		if (guid == null) {
 			LOG.error("expected guid");

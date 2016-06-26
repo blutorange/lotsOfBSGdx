@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 import de.homelab.madgaksha.GameParameters;
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
+import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.event.EventTextbox;
 import de.homelab.madgaksha.cutscenesystem.textbox.EFaceVariation;
 import de.homelab.madgaksha.cutscenesystem.textbox.PlainTextbox;
@@ -27,8 +28,10 @@ import de.homelab.madgaksha.enums.ESpeaker;
 import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
+import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETextbox;
+import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
 import path.EPath;
 
@@ -148,11 +151,18 @@ import path.EPath;
  * This would move the player -20 tiles up, then 20 tiles to the right. Path
  * Parameters are as follows:
  * 
+ * 
  * <h3>PATH_LINE</h3>
  * 
  * 
  * 
  * <code>&lt;PathParameters&gt; := &lt;END_POINT_X&gt; &lt;END_POINT_Y&gt;</code>
+ * 
+ * <h2>Fancy scene event</h2>
+ * 
+ * An animation with multiple sprites, sounds and possibly models (later).
+ * 
+ * For more details and the format, see the javadocs for {@link EventFancyScene}.
  * 
  * <h2>Stage event</h2>
  * 
@@ -310,20 +320,21 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 
 	private static class Command {
 		private final int mode;
-		private Class<? extends ACutsceneEvent> commandCutsceneClass;
-		private FileHandle commandFileHandle;
+		private Class<? extends ACutsceneEvent> cutsceneClass;
+		private FileHandle fileHandle;
 
 		// CutsceneEvent
-		public Command(Class<? extends ACutsceneEvent> cutsceneClass) {
+		public Command(Class<? extends ACutsceneEvent> cutsceneClass, FileHandle inputFile) {
 			mode = 1;
-			this.commandCutsceneClass = cutsceneClass;
+			this.cutsceneClass = cutsceneClass;
+			this.fileHandle = inputFile;
 		}
 
 		// Include
 		public Command(FileHandle fileHandle) {
 			mode = 2;
 			LOG.debug("processing Include " + fileHandle);
-			this.commandFileHandle = fileHandle;
+			this.fileHandle = fileHandle;
 		}
 
 		public void process(Scanner s, List<ACutsceneEvent> eventList) {
@@ -337,7 +348,7 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 				settingScanner.useLocale(Locale.ROOT);
 				try {
 					event = ACutsceneEvent.readNextObject(settingScanner,
-							commandCutsceneClass);
+							cutsceneClass, fileHandle);
 				} finally {
 					IOUtils.closeQuietly(settingScanner);
 				}
@@ -346,7 +357,7 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 				break;
 			case 2:
 				FileCutsceneProvider provider = new FileCutsceneProvider(
-						this.commandFileHandle);
+						this.fileHandle);
 				eventList.addAll(provider.eventList);
 				break;
 			default:
@@ -387,7 +398,7 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		} else {
 			if (!getEventClass(nextCommandIdentifier))
 				return false;
-			nextCommand = new Command(nextCutsceneClass);
+			nextCommand = new Command(nextCutsceneClass, inputFile);
 		}
 		return true;
 	}
@@ -577,6 +588,42 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			return null;
 		}
 	}
+	
+	public static EPath nextPath(Scanner s) {
+		if (!s.hasNext())
+			return null;
+		String pathType = "PATH_" + s.next().toUpperCase(Locale.ROOT);
+		try {
+			return EPath.valueOf(pathType);
+		} catch (IllegalArgumentException e) {
+			LOG.error("no such path: " + pathType);
+			return null;
+		}
+	}
+	
+	public static ETexture nextTexture(Scanner s) {
+		if (!s.hasNext())
+			return null;
+		String t = s.next().toUpperCase(Locale.ROOT);
+		try {
+			return ETexture.valueOf(t);
+		} catch (IllegalArgumentException e) {
+			LOG.error("no such texture: " + t);
+			return null;
+		}
+	}
+	
+	public static ENinePatch nextNinePatch(Scanner s) {
+		if (!s.hasNext())
+			return null;
+		String t = s.next().toUpperCase(Locale.ROOT);
+		try {
+			return ENinePatch.valueOf(t);
+		} catch (IllegalArgumentException e) {
+			LOG.error("no such nine patch: " + t);
+			return null;
+		}
+	}
 
 	public static Long nextLong(Scanner s) {
 		if (s.hasNextLong(10))
@@ -587,5 +634,18 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			return (long) s.nextShort(10);
 		return null;
 	}
+
+	public static Integer nextInteger(Scanner s) {
+		if (s.hasNextInt(10))
+			return s.nextInt(10);
+		if (s.hasNextShort(10))
+			return (int) s.nextShort(10);
+		if (s.hasNextLong(10))
+			return (int) s.nextLong(10);
+		return null;
+	}
+
+
+
 
 }

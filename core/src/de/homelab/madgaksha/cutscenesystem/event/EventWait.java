@@ -2,6 +2,8 @@ package de.homelab.madgaksha.cutscenesystem.event;
 
 import java.util.Scanner;
 
+import com.badlogic.gdx.files.FileHandle;
+
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
@@ -64,7 +66,7 @@ public class EventWait extends ACutsceneEvent {
 	public void end() {
 	}
 
-	public static ACutsceneEvent readNextObject(Scanner s) {
+	public static ACutsceneEvent readNextObject(Scanner s, FileHandle fh) {
 		Float number = FileCutsceneProvider.nextNumber(s);
 		if (number == null) {
 			LOG.error("expected wait time");

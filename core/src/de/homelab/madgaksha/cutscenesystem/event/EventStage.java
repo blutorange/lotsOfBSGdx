@@ -9,6 +9,7 @@ import java.util.Scanner;
 import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.files.FileHandle;
 
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
@@ -199,7 +200,7 @@ public class EventStage extends ACutsceneEvent {
 		public abstract void setup(Scanner s, EventStage e);
 	}
 
-	public static ACutsceneEvent readNextObject(Scanner s) {
+	public static ACutsceneEvent readNextObject(Scanner s, FileHandle fh) {
 		// Read entity name
 		String guid = FileCutsceneProvider.readNextGuid(s);
 		if (guid == null) {

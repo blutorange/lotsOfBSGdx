@@ -26,7 +26,6 @@ public class PathLine extends APath {
 
 	@Override
 	public void apply(float t, Vector2 vector) {
-		t *= tmaxInverse;
 		if (relative)
 			vector.set(origin.x + t * x, origin.y + t * y);
 		else

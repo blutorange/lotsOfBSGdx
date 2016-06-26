@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.maps.MapProperties;
 
+import de.homelab.madgaksha.DebugMode;
 import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EMusic;
@@ -127,7 +128,11 @@ public class Level01 extends ALevel {
 	// =========================
 
 	public void initialDialog(MapProperties properties) {
-		pushCutsceneLayer("cutscene/level01.initialDialog");
+		// testing
+		if (DebugMode.activated) {
+			pushCutsceneLayer("cutscene/fancyScene/ougiTaikyokurin/ougiTaikyokurin.event");
+		}
+		else pushCutsceneLayer("cutscene/level01.initialDialog");
 	}
 
 	public void joshuaAppears(MapProperties properties) {
@@ -163,7 +168,7 @@ public class Level01 extends ALevel {
 		pushCutsceneLayer("cutscene/level01.monologueForSign");
 	}
 
-	public void turnBackJoshua(MapProperties properties) {
+	public void turnBackJoshua(MapProperties properties) {	
 		if (!joshuaAppearsTriggered)
 			pushCutsceneLayer("cutscene/level01.turnBackJoshua");
 	}

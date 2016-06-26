@@ -46,6 +46,7 @@ public enum ESound implements IResource<ESound, Sound> {
 	ESTELLE_MADA_MADA_IKERU_WA("sound/ed6t1030.wav", 1.230f),
 	ESTELLE_CHOU_DEKI("sound/ed6t1029.wav", 1.028f),
 	ESTELLE_SAA_IKU_WAYO("sound/ed6t1032.wav", 1.031f),
+	ESTELLE_TOTTEOKI_O_MISETE_AGERU("sound/ed6t1018.wav", 2.897f),
 
 	// ===================
 	// JOSHUA

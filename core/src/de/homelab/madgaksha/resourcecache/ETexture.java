@@ -27,6 +27,8 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 
 	OVAL_SHADOW(ETextureAtlas.MISC, "ovalShadow"),
 
+	DEFAULT(ETextureAtlas.MISC, "default"),
+	
 	// ==================
 	// BATTLE
 	// ==================
@@ -125,6 +127,13 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	TOKUGI_NONE_ICON_MAIN(ETextureAtlas.STATUS_SCREEN, "iconTokugiNoneMain"),
 	TOKUGI_NONE_ICON_SUB("texture/statusicon/tokugi", "none-sub.png"),
 
+	
+	// =========================================================================
+	// OUGI
+	// =========================================================================
+	OUGI_TAIKYOKURIN_RAY14(ETextureAtlas.OUGI_TAIKYOKURIN, "pRay14"),
+	OUGI_TAIKYOKURIN_CUTIN(ETextureAtlas.OUGI_TAIKYOKURIN, "cutin"),
+	
 	// =========================================================================
 	// LEVEL
 	// icons horizontal must be 3:1 aspect ratio

@@ -2,6 +2,8 @@ package de.homelab.madgaksha.cutscenesystem.event;
 
 import java.util.Scanner;
 
+import com.badlogic.gdx.files.FileHandle;
+
 import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
@@ -55,7 +57,7 @@ public class EventScore extends ACutsceneEvent {
 	public void end() {
 	}
 
-	public static ACutsceneEvent readNextObject(Scanner s) {
+	public static ACutsceneEvent readNextObject(Scanner s, FileHandle fh) {
 		Long score = FileCutsceneProvider.nextLong(s);
 		if (score == null) {
 			LOG.error("integer score expected");

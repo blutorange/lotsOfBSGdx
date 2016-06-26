@@ -1,0 +1,27 @@
+//Background
+NinePatch 0 R 0.0 Background1 4.0 4.5 OUGI_TAIKYOKURIN_BACKGROUND_1
+Position 0 R 0.0 Background1 0 0
+Opacity 0 R 0.0 Background1 0
+
+
+NinePatch 1 R 0.0 Background2 4.0 4.5 OUGI_TAIKYOKURIN_BACKGROUND_2
+Position 1 R 0.0 Background1 0 0
+Opacity 1 R 0.0 Background2 0
+
+Show 0 R 0.0 Background1 4.0
+Show 1 R 1.8 Background2 8.2
+
+// fade in
+Fade 0 R 0.0 Background1 0.2 1.0
+
+// cross fade
+Fade 1 R 1.8 Background2 0.4 1.0
+
+// fade out
+Fade 1 R 8.0 Background2 0.2 0.0
+
+// Speed stripes
+Include 2 R 1.8 speedStripes.anim
+
+// Preparation Part
+Include 3 R 0.2 estellePrepare.anim

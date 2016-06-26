@@ -1,11 +1,9 @@
 package de.homelab.madgaksha.level;
 
-import static de.homelab.madgaksha.GlobalBag.idEntityMap;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
+import static de.homelab.madgaksha.GlobalBag.idEntityMap;
 
 import java.util.Locale;
-
-import org.apache.commons.lang3.text.WordUtils;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.maps.MapLayer;
@@ -51,6 +49,7 @@ import de.homelab.madgaksha.resourcecache.EAnimation;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
 import de.homelab.madgaksha.util.GeoUtil;
+import de.homelab.madgaksha.util.LocaleRootWordUtils;
 
 /**
  * Reads a tiled map and extracts properties for later use. Objects can be added
@@ -583,7 +582,7 @@ public class MapData {
 		Float initDir = 0.0f;
 
 		// Fetch parameters.
-		String species = WordUtils.capitalizeFully(props.get("species", String.class)).replace(" ", "");
+		String species = LocaleRootWordUtils.capitalizeFully(props.get("species", String.class)).replace(" ", "");
 
 		String spawn = props.get("spawn", String.class).toUpperCase(Locale.ROOT);
 		if (props.containsKey("initX"))

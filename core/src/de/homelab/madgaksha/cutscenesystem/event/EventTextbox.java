@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
@@ -1029,7 +1030,7 @@ public class EventTextbox extends ACutsceneEvent {
 		}
 	}
 
-	public static ACutsceneEvent readNextObject(Scanner s) {
+	public static ACutsceneEvent readNextObject(Scanner s, FileHandle fh) {
 		// Set defaults.
 		Builder builder = new Builder();
 		while (s.hasNext()) {

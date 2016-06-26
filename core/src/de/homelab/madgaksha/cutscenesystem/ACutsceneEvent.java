@@ -2,6 +2,7 @@ package de.homelab.madgaksha.cutscenesystem;
 
 import java.util.Scanner;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
@@ -52,16 +53,16 @@ public abstract class ACutsceneEvent implements Poolable {
 	 *            Class of the cutscene event.
 	 * @return The cutscene object read, or null if it could not be read.
 	 */
-	public static ACutsceneEvent readNextObject(Scanner s, Class<? extends ACutsceneEvent> eventClass) {
+	public static ACutsceneEvent readNextObject(Scanner s, Class<? extends ACutsceneEvent> eventClass, FileHandle inputFile) {
 		try {
-			Method m = ClassReflection.getDeclaredMethod(eventClass, "readNextObject", Scanner.class);
-			ACutsceneEvent event = (ACutsceneEvent) m.invoke(null, s);
+			Method m = ClassReflection.getDeclaredMethod(eventClass, "readNextObject", Scanner.class, FileHandle.class);
+			ACutsceneEvent event = (ACutsceneEvent) m.invoke(null, s, inputFile);
 			if (event == null) {
 				LOG.error("failed to read cutscene event: " + eventClass);
 			}
 			return event;
 		} catch (ReflectionException e) {
-			LOG.error("cutscene event does not support configuration files", e);
+			LOG.error("cutscene event does not support configuration files: " + eventClass, e);
 			return null;
 		}
 	}

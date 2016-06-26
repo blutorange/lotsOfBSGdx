@@ -4,9 +4,17 @@ size: 512,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+default
+  rotate: false
+  xy: 2, 2
+  size: 1, 1
+  split: 0, 0, 0, 0
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
 textbox-blue-fc-all
   rotate: false
-  xy: 2, 38
+  xy: 2, 41
   size: 159, 81
   split: 19, 19, 21, 19
   pad: 24, 26, 21, 19
@@ -15,7 +23,7 @@ textbox-blue-fc-all
   index: -1
 textbox-blue-fc-bottom
   rotate: false
-  xy: 163, 59
+  xy: 163, 62
   size: 159, 60
   split: 19, 19, 0, 19
   pad: 17, 19, 13, 19
@@ -24,7 +32,7 @@ textbox-blue-fc-bottom
   index: -1
 textbox-blue-fc-bottom-left
   rotate: false
-  xy: 421, 59
+  xy: 421, 62
   size: 24, 60
   split: 19, 0, 0, 19
   pad: 19, 0, 11, 19
@@ -33,7 +41,7 @@ textbox-blue-fc-bottom-left
   index: -1
 textbox-blue-fc-bottom-right
   rotate: false
-  xy: 393, 59
+  xy: 393, 62
   size: 26, 60
   split: 0, 19, 0, 19
   pad: 0, 19, 0, 8
@@ -42,7 +50,7 @@ textbox-blue-fc-bottom-right
   index: -1
 textbox-blue-fc-left
   rotate: false
-  xy: 324, 38
+  xy: 324, 41
   size: 39, 81
   split: 19, 0, 20, 19
   orig: 39, 81
@@ -50,7 +58,7 @@ textbox-blue-fc-left
   index: -1
 textbox-blue-fc-right
   rotate: false
-  xy: 365, 38
+  xy: 365, 41
   size: 26, 81
   split: 0, 19, 20, 19
   pad: 0, 19, 6, 8
@@ -59,7 +67,7 @@ textbox-blue-fc-right
   index: -1
 textbox-blue-fc-top
   rotate: false
-  xy: 2, 2
+  xy: 2, 5
   size: 159, 34
   split: 19, 19, 20, 6
   pad: 17, 19, 20, 6
@@ -68,7 +76,7 @@ textbox-blue-fc-top
   index: -1
 whiteRectangle
   rotate: false
-  xy: 163, 49
+  xy: 163, 52
   size: 8, 8
   split: 1, 1, 1, 1
   orig: 8, 8
