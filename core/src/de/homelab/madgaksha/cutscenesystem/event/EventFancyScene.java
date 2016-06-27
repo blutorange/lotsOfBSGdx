@@ -15,6 +15,8 @@ import java.util.Stack;
 import org.apache.commons.io.IOUtils;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -34,14 +36,22 @@ import de.homelab.madgaksha.resourcepool.AtlasAnimation;
  * <li>Include &lt;Relative/Absolute> &lt;StartTime&gt; &lt;FileName&gt;</li>
  * <li>Sound &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;Entity&gt; &lt;Sound&gt;</li> 
  * <li>Sprite &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;DPI&gt; &lt;Texture&gt;</li>
- * <li>NinePatch &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;halfWidth&gt; &lt;halfHeight&gt; &lt;NinePatch&gt;</li>
+ * <li>Spritetarget &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;DPI&gt; &lt;LookingDirection&gt;</li>
+ * <li>Ninepatch &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;halfWidth&gt; &lt;halfHeight&gt; &lt;NinePatch&gt;</li>
  * <li>Position &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;X&gt; &lt;Y&gt;</li>
+ * <li>Scale &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;cropLeft&gt; &lt;cropBottom&gt; [&lt;cropRight&gt;=&lt;cropLeft&gt;] [&lt;cropTop&gt;=&lt;cropBottom&gt;]</li>
+ * <li>Scale &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;scaleX&gt; [&lt;scaleY&gt;=&lt;scaleX&gt;]</li>
  * <li>Opacity &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Opacity&gt;</li>
- * <li>Move &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;PathType&gt; &lt;Duration&gt; [=&lt;Interpolation&gt;=] &lt;Relative/Absolute&gt; &lt;PathDetails&gt;</li>
+ * <li>Move &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;PathType&gt; &lt;Duration&gt; [=&lt;Interpolation&gt;=(=linear)] &lt;Relative/Absolute&gt; &lt;PathDetails&gt;</li>
+ * <li>Zoom &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt; [=&lt;Interpolation&gt;=(=linear)] &lt;targetScaleX&gt; [&lt;targetScaleY&gt;=&lt;targetScaleX&gt;]</li>
  * <li>Show &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt;</li>
  * <li>Fade &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt; &lt;TargetOpacity&gt; [Interpolation=linear]</li>
  * </ul>
  * 
+ * Additionally, a z-index may be given immediately after the event name (and before the absolute/relative flag).
+ * The higher the z-index, the earlier events are processed (updated/rendered). This applies only to events
+ * of the same type, each type of event has got an additional internal priority too.
+ * <br><br>
  * (0,0) is at the center of the screen, and the screen's dimensions are width=8 and height=9.
  * <br><br>
  * A 8x9 pixel sprite with a DPI of 1 will fill the entire game screen.
@@ -49,26 +59,32 @@ import de.homelab.madgaksha.resourcepool.AtlasAnimation;
  * For example, a simple fade in with an image that move from the bottom left to the center:
  * 
  * <pre>
- * Sprite R 0.0 Estelle FACE_ESTELLE_01
- * Sprite R 0.2 Estelle FACE_ESTELLE_02
- * Sprite R 0.2 Estelle FACE_ESTELLE_03
- * Sprite R 0.2 Estelle FACE_ESTELLE_04
- * Sprite R 0.2 Estelle FACE_ESTELLE_05
- * Sprite R 0.2 Estelle FACE_ESTELLE_06
- * Sprite R 0.2 Estelle FACE_ESTELLE_07
- * Sprite R 0.2 Estelle FACE_ESTELLE_08
- * Sprite R 0.2 Estelle FACE_ESTELLE_09
+ * Sprite R 0.0 Joshua  100.0 FACE_JOSHUA_01
+ * Sprite R 0.0 Estelle 100.0 FACE_ESTELLE_01
+ * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_02
+ * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_03
+ * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_04
+ * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_05
+ * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_06
+ * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_07
+ * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_08
+ * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_09
  * 
  * Position R 0.0 Estelle -4.0 -4.5
+ * Position R 0.0 Joshua  -4.0 -4.0
  * Opacity R 0.0 Estelle 0.0
  * 
  * Move R 0.0 Estelle Line 0.5 A 0.0 0.0
  * Fade R 0.0 Estelle 0.5 1.0 Linear
  * 
- * Show R 0.0 Estelle 2.0
+ * Show 1 R 0.0 Estelle 2.0
+ * Show 2 R 0.0 Joshua 2.0
  * 
  * Sound R 0.5 Player ESTELLE_TOTTEOKI_O_MISETE_AGERU
  * </pre>
+ * 
+ * If there is any overlap, sprite Joshua will be drawn over sprite Estelle.
+ * 
  * @author madgaksha
  *
  */
@@ -169,9 +185,9 @@ public class EventFancyScene extends ACutsceneEvent {
 			spriteMap.put(key, new FancySpriteWrapper());
 	}
 
-	public void setSpriteTexture(String key, AtlasRegion region, float dpi) {
+	private void setSpriteTexture(String key, AtlasRegion region, float dpi) {
 		FancySpriteWrapper fsw = getSprite(key);
-		fsw.sprite.setAtlasRegion(region);
+		if (region != null) fsw.sprite.setAtlasRegion(region);
 		fsw.spriteDpi = dpi;
 	}
 	public void setSpriteTexture(String key, ETexture texture, float dpi) {
@@ -189,15 +205,33 @@ public class EventFancyScene extends ACutsceneEvent {
 	}
 	public void setSpriteTexture(String key, ENinePatch ninePatch, Vector2 dimensions) {
 		FancySpriteWrapper fsw = getSprite(key);
-		fsw.ninePatch = ResourceCache.getNinePatch(ninePatch);
-		fsw.ninePatchDimensions.set(dimensions);
-		fsw.mode = FancySpriteWrapper.Mode.NINE_PATCH;
+		NinePatch np = ResourceCache.getNinePatch(ninePatch);
+		if (np != null) {
+			fsw.ninePatch = np;
+			fsw.ninePatchDimensions.set(dimensions);
+			fsw.mode = FancySpriteWrapper.Mode.NINE_PATCH;
+		}
 	}
+	
 
 	public void setSpritePosition(String key, Vector2 position) {
 		getSprite(key).position.set(position);
 	}
+	
+	public void setSpriteScale(String key, Vector2 scale) {
+		getSprite(key).scale.set(scale);
+	}
 
+	public void setSpriteColor(String key, Color color) {
+		getSprite(key).color.set(color);		
+	}
+	
+	public void setSpriteCrop(String key, Vector2 cropX, Vector2 cropY) {
+		FancySpriteWrapper fsw = getSprite(key);
+		fsw.cropX.set(cropX);
+		fsw.cropY.set(cropY);
+	}
+	
 	public void setSpriteOpacity(String key, float opacity) {
 		getSprite(key).opacity = opacity;		
 	}

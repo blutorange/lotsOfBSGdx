@@ -33,7 +33,7 @@ public class FancySound extends AFancyEvent {
 	 */
 	public FancySound(Entity e, ESound sound, float volume) {
 		super(true);
-		VoiceComponent vc = Mapper.voiceComponent.get(e);
+		VoiceComponent vc = e != null ? Mapper.voiceComponent.get(e) : null;
 		if (vc != null && vc.voicePlayer != null) this.voicePlayer = vc.voicePlayer;
 		else this.voicePlayer = new VoicePlayer();
 		this.sound = sound;
@@ -50,7 +50,7 @@ public class FancySound extends AFancyEvent {
 	
 	@Override
 	public boolean begin(EventFancyScene efs) {
-		voicePlayer.play(sound, volume);
+		voicePlayer.playUnconditionally(sound, volume);
 		return true;
 	}
 
@@ -87,7 +87,7 @@ public class FancySound extends AFancyEvent {
 			return (sound != null) ? new FancySound(entity, sound) : null;
 		}
 		catch (IllegalArgumentException e) {
-			LOG.error("could not read entity", e);
+			LOG.error("could not read entity with voice player", e);
 			return null;
 		}
 	}

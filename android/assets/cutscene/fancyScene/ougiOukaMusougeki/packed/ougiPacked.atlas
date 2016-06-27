@@ -1,0 +1,133 @@
+
+ougiPacked.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+background1
+  rotate: false
+  xy: 2, 2
+  size: 5, 5
+  split: 0, 0, 0, 0
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+background2
+  rotate: false
+  xy: 1005, 972
+  size: 4, 50
+  split: 0, 0, 0, 0
+  orig: 4, 50
+  offset: 0, 0
+  index: -1
+cutin
+  rotate: false
+  xy: 2, 43
+  size: 869, 979
+  orig: 869, 979
+  offset: 0, 0
+  index: -1
+estelleFaceWhite
+  rotate: false
+  xy: 498, 33
+  size: 83, 8
+  orig: 83, 8
+  offset: 0, 0
+  index: -1
+kneel0
+  rotate: false
+  xy: 939, 760
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+pRay14
+  rotate: false
+  xy: 2, 9
+  size: 494, 32
+  orig: 494, 32
+  offset: 0, 0
+  index: -1
+run0
+  rotate: false
+  xy: 873, 958
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run1
+  rotate: false
+  xy: 873, 892
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run2
+  rotate: false
+  xy: 939, 958
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run3
+  rotate: false
+  xy: 873, 826
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run4
+  rotate: false
+  xy: 939, 892
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run5
+  rotate: false
+  xy: 873, 760
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run6
+  rotate: false
+  xy: 939, 826
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run7
+  rotate: false
+  xy: 873, 694
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+stand0
+  rotate: false
+  xy: 873, 628
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+
+ougiPacked2.png
+size: 1024,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+estelleFace
+  rotate: false
+  xy: 2, 2
+  size: 332, 64
+  orig: 332, 64
+  offset: 0, 0
+  index: -1
+estelleFaceBg
+  rotate: false
+  xy: 336, 2
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1

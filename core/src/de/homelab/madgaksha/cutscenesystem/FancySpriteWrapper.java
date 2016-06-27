@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.cutscenesystem;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -19,10 +20,16 @@ public final class FancySpriteWrapper {
 	
 	public AtlasAnimation atlasAnimation = ResourceCache.getAnimation(EAnimation.DEFAULT); 
 	
-	public Vector2 position = new Vector2();
+	public Vector2 position = new Vector2(0f,0f);
+	public Vector2 scale = new Vector2(1f,1f);
+	public Vector2 cropX = new Vector2(1f,1f);
+	public Vector2 cropY = new Vector2(1f,1f);
+	public Color color = new Color(Color.WHITE);
 	public float opacity = 1.0f;
-	public Mode mode;
+	public Mode mode = Mode.UNSET;
+	
 	public static enum Mode {
+		UNSET,
 		TEXTURE,
 		NINE_PATCH,
 		ATLAS_ANIMATION;

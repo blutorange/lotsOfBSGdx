@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="180" height="610" tilewidth="32" tileheight="32" nextobjectid="116">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="180" height="610" tilewidth="32" tileheight="32" nextobjectid="117">
  <properties>
   <property name="baseDirX" value="0"/>
   <property name="baseDirY" value="1"/>
@@ -8921,7 +8921,7 @@
     <property name="trigger" value="touch"/>
    </properties>
   </object>
-  <object id="59" name="turnBackJoshua" type="Callback" x="538" y="17801.5" width="1356.25" height="75.5">
+  <object id="59" name="turnBackJoshua" type="Callback" x="537" y="17801.5" width="1357.25" height="75.5">
    <properties>
     <property name="guid" value=""/>
     <property name="loop" type="int" value="-1"/>
@@ -9261,6 +9261,14 @@
     <property name="category" value="weapon"/>
     <property name="name" value="Multi"/>
     <property name="speed" type="float" value="45"/>
+   </properties>
+  </object>
+  <object id="116" name="testOugi" type="Callback" x="1303" y="18661" width="326" height="399">
+   <properties>
+    <property name="guid" value=""/>
+    <property name="loop" type="int" value="-1"/>
+    <property name="name" value="testOugi"/>
+    <property name="trigger" value="touch"/>
    </properties>
   </object>
  </objectgroup>

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.cutscenesystem.FancySpriteWrapper;
@@ -13,36 +14,35 @@ import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 
-public class FancyFade extends AFancyEvent {
-	private final static Logger LOG = Logger.getLogger(FancyFade.class);
+public class FancyZoom extends AFancyEvent {
+	private final static Logger LOG = Logger.getLogger(FancyZoom.class);
 
 	private String key = StringUtils.EMPTY;
-	private Interpolation interpolation = Interpolation.linear;
 	private float duration = 1.0f;
 	private float durationInverse = 1.0f;
+	private Vector2 originalScale = new Vector2(1f,1f);
+	private Vector2 targetScale = new Vector2(1f,1f);
+	private Interpolation interpolation = Interpolation.linear;
 	private boolean isDone = false;
-	private float startOpacity = 1.0f;
-	private float targetOpacity = 1.0f;
 	private FancySpriteWrapper sprite;
 	
-	public FancyFade(String key, float targetOpacity, float duration, Interpolation interpolation) {
+	public FancyZoom(String key, float targetScaleX, float targetScaleY, Interpolation interpolation, float duration) {
 		super(true);
-		if (duration < 0.01f) throw new IllegalArgumentException("duration must be greate than 0");
-		this.targetOpacity = targetOpacity;
+		this.targetScale.set(targetScaleX, targetScaleY);
+		this.key = key;
+		this.interpolation = interpolation;
 		this.duration = duration;
 		this.durationInverse = 1.0f/duration;
-		this.interpolation = interpolation;
-		this.key = key;
 	}
 	
 	@Override
 	public void reset() {
-		interpolation = Interpolation.linear;
+		targetScale.set(1f,1f);
+		duration = durationInverse = 1.0f;
 		isDone = false;
 		key = StringUtils.EMPTY;
 		sprite = null;
-		duration = durationInverse = 1.0f;
-		startOpacity = targetOpacity = 1.0f;
+		interpolation = Interpolation.linear;
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class FancyFade extends AFancyEvent {
 	@Override
 	public boolean begin(EventFancyScene efs) {
 		this.sprite = efs.getSprite(key);
-		this.startOpacity = sprite.opacity;
+		originalScale.set(sprite.scale);
 		return true;
 	}
 
@@ -67,7 +67,7 @@ public class FancyFade extends AFancyEvent {
 			passedTime = duration;
 			isDone = true;
 		}
-		sprite.opacity = interpolation.apply(startOpacity, targetOpacity, passedTime * durationInverse);
+		sprite.scale.set(originalScale).lerp(targetScale, interpolation.apply(passedTime * durationInverse));
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class FancyFade extends AFancyEvent {
 			return null;
 		}
 		String key = s.next();
-		
+				
 		Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {
 			LOG.error("expected duration");
@@ -97,14 +97,19 @@ public class FancyFade extends AFancyEvent {
 			return null;
 		}
 		
-		Float targetOpacity = FileCutsceneProvider.nextNumber(s);
-		if (targetOpacity == null) {
-			LOG.error("expected target opacity");
-		}
-		
 		Interpolation interpolation = FileCutsceneProvider.readNextInterpolation(s);
 		if (interpolation == null) interpolation = Interpolation.linear;
+
 		
-		return new FancyFade(key, targetOpacity, duration, interpolation);
+		Float targetScaleX = FileCutsceneProvider.nextNumber(s);
+		if (targetScaleX == null) {
+			LOG.error("expected target scale");
+			return null;
+		}
+		
+		Float targetScaleY = FileCutsceneProvider.nextNumber(s);
+		if (targetScaleY == null) targetScaleY = targetScaleX; 
+		
+		return new FancyZoom(key, targetScaleX, targetScaleY, interpolation, duration);
 	}
 }

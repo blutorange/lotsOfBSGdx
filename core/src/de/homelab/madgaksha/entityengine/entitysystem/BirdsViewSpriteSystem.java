@@ -82,6 +82,7 @@ public class BirdsViewSpriteSystem extends IteratingSystem {
 	 * @param degree
 	 *            Direction in which the sprite should look to. This is not
 	 *            relative to the looking direction of the camera.
+	 *            0 is looking to the right, 90 is looking down etc.
 	 * @param sfdc
 	 *            The component from which the direction should be extracted.
 	 * @return The animation for the given direction.
@@ -89,7 +90,7 @@ public class BirdsViewSpriteSystem extends IteratingSystem {
 	public static AtlasAnimation getForDirection(float degree,
 			SpriteForDirectionComponent sfdc) {
 		AtlasAnimation animation = null;
-		animation = sfdc.animationList[((int) (((degree + 270) + 360.0f / (2.0f * sfdc.animationList.length))
+		animation = sfdc.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * sfdc.animationList.length))
 				* sfdc.animationList.length / 360.0f))
 				% sfdc.animationList.length];
 		return animation;

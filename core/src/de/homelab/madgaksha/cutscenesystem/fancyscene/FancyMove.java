@@ -90,6 +90,10 @@ public class FancyMove extends AFancyEvent {
 			LOG.error("expected duration");
 			return null;
 		}
+		if (duration < 0.001f) {
+			LOG.error("duration must be greater than 0");
+			return null;
+		}
 		
 		Interpolation interpolation = FileCutsceneProvider.readNextInterpolation(s);
 		if (interpolation == null) interpolation = Interpolation.linear;

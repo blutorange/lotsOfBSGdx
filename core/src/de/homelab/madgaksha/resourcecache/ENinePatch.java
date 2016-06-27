@@ -19,8 +19,8 @@ import de.homelab.madgaksha.logging.Logger;
 public enum ENinePatch implements IResource<ENinePatch, NinePatch> {
 	DEFAULT(ETextureAtlas.NINE_PATCHES, "default"),
 	
-	OUGI_TAIKYOKURIN_BACKGROUND_1(ETextureAtlas.OUGI_TAIKYOKURIN, "background1"),
-	OUGI_TAIKYOKURIN_BACKGROUND_2(ETextureAtlas.OUGI_TAIKYOKURIN, "background2"),
+	OUGI_OUKA_MUSOUGEKI_BACKGROUND_1(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "background1"),
+	OUGI_OUKA_MUSOUGEKI_BACKGROUND_2(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "background2"),
 	
 	TEXTBOX_BLUE_ALL(ETextureAtlas.NINE_PATCHES, "textbox-blue-fc-all"),
 	TEXTBOX_BLUE_BOTTOM(ETextureAtlas.NINE_PATCHES, "textbox-blue-fc-bottom"),

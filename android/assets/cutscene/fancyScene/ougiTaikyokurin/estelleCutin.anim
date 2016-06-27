@@ -1,8 +1,0 @@
-Sound R 0.02 Player ESTELLE_TOTTEOKI_O_MISETE_AGERU
-Sprite R 0.0 Cutin 108.625 OUGI_TAIKYOKURIN_CUTIN
-Position R 0.0 Cutin -1 -3
-Opacity R 0.0 Cutin 0
-Move R 0.0 Cutin Line 0.25 =pow2Out= A 0 0
-Fade R 0.0 Cutin 0.25 1
-Fade R 1.5 Cutin 0.25 0
-Show R 0.0 Cutin 1.75

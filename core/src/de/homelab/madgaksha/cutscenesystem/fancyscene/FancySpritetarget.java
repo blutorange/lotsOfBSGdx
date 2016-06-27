@@ -22,12 +22,14 @@ public class FancySpritetarget extends AFancyEvent {
 	private final static Logger LOG = Logger.getLogger(FancySpritetarget.class);
 
 	private String key = StringUtils.EMPTY;
+	private float direction;
 	private float dpi;
 	
-	public FancySpritetarget(String key, float dpi) {
+	public FancySpritetarget(String key, float dpi, float direction) {
 		super(true);
 		this.dpi = dpi;
 		this.key = key;
+		this.direction = direction;
 	}
 	
 	@Override
@@ -39,12 +41,21 @@ public class FancySpritetarget extends AFancyEvent {
 	@Override
 	public boolean begin(EventFancyScene efs) {
 		// Get sprite animation of the current target.
-		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) return false;
+		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
+			LOG.debug("no such target");
+			return false;
+		}
 		Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
 		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(target);
-		if (sfdc == null) return false;
-		AtlasAnimation animation = BirdsViewSpriteSystem.getForDirection(90, sfdc);
-		if (animation == null) return false;
+		if (sfdc == null) {
+			LOG.debug("target does not possess sprite for direction component");
+			return false;
+		}
+		AtlasAnimation animation = BirdsViewSpriteSystem.getForDirection(direction, sfdc);
+		if (animation == null) {
+			LOG.debug("could not fetch animation for direction");
+			return false;
+		}
 		efs.setSpriteTexture(key, animation, dpi);
 		return false;
 	}
@@ -85,6 +96,12 @@ public class FancySpritetarget extends AFancyEvent {
 			return null;
 		}
 		
-		return new FancySpritetarget(key, dpi);
+		Float direction = FileCutsceneProvider.nextNumber(s);
+		if (direction == null) {
+			LOG.error("expected direction");
+			return null;
+		}
+		
+		return new FancySpritetarget(key, dpi, direction);
 	}
 }

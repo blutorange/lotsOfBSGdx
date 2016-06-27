@@ -1,0 +1,11 @@
+// Initialize
+// Sprite, show, position, fade-in and show
+Sprite   R 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_STAND0
+Position R 0.000 Estelle 0.000 -3.0
+Scale    R 0.000 Estelle 1.0
+Opacity  R 0.000 Estelle 0.000
+Fade     R 0.000 Estelle 0.300 1.0
+
+// Show
+Show    0 R 0.000 Estelle 8.950
+Include 1 R 5.850 cutinBody.anim

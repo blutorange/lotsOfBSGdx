@@ -22,6 +22,7 @@ import de.homelab.madgaksha.cutscenesystem.provider.CutsceneEventProvider;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.i18n.I18n;
+import de.homelab.madgaksha.layer.ALayer;
 import de.homelab.madgaksha.layer.CutsceneLayer;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.APlayer;
@@ -439,13 +440,21 @@ public abstract class ALevel {
 		return DEFAULT_ENTITY_POOL_MAX_SIZE;
 	}
 
-	protected final void pushCutsceneLayer(String filename) {
+	/**
+	 * Adds a new cutscene layer.
+	 * @param filename Name of the configuration file that can be read by {@link FileCutsceneProvider}.
+	 * @return The cutscene layer created, or null if it could not be created.
+	 */
+	protected final ALayer pushCutsceneLayer(String filename) {
 		LOG.debug("pushing dialog: " + filename);
 		try {
 			CutsceneEventProvider provider = new FileCutsceneProvider(Gdx.files.internal(filename));
-			game.pushLayer(new CutsceneLayer(provider));
+			ALayer layer = new CutsceneLayer(provider);
+			game.pushLayer(layer);
+			return layer;
 		} catch (Exception e) {
 			LOG.error("could not push cutscene layer", e);
+			return null;
 		}
 	}
 

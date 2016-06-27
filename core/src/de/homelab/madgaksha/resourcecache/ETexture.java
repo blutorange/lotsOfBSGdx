@@ -131,8 +131,22 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	// =========================================================================
 	// OUGI
 	// =========================================================================
-	OUGI_TAIKYOKURIN_RAY14(ETextureAtlas.OUGI_TAIKYOKURIN, "pRay14"),
-	OUGI_TAIKYOKURIN_CUTIN(ETextureAtlas.OUGI_TAIKYOKURIN, "cutin"),
+	OUGI_OUKA_MUSOUGEKI_RAY14(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "pRay14"),
+	OUGI_OUKA_MUSOUGEKI_CUTIN(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "cutin"),
+	OUGI_OUKA_MUSOUGEKI_STAND0(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "stand0"),
+	OUGI_OUKA_MUSOUGEKI_KNEEL0(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "kneel0"),
+	OUGI_OUKA_MUSOUGEKI_RUN0(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run0"),
+	OUGI_OUKA_MUSOUGEKI_RUN1(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run1"),
+	OUGI_OUKA_MUSOUGEKI_RUN2(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run2"),
+	OUGI_OUKA_MUSOUGEKI_RUN3(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run3"),
+	OUGI_OUKA_MUSOUGEKI_RUN4(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run4"),
+	OUGI_OUKA_MUSOUGEKI_RUN5(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run5"),
+	OUGI_OUKA_MUSOUGEKI_RUN6(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run6"),
+	OUGI_OUKA_MUSOUGEKI_RUN7(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run7"),
+	OUGI_OUKA_MUSOUGEKI_ESTELLE_FACE(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "estelleFace"),
+	OUGI_OUKA_MUSOUGEKI_ESTELLE_FACE_WHITE(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "estelleFaceWhite"),
+	OUGI_OUKA_MUSOUGEKI_ESTELLE_FACE_BG(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "estelleFaceBg"),
+	
 	
 	// =========================================================================
 	// LEVEL

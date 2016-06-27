@@ -1,12 +1,17 @@
 package de.homelab.madgaksha.level;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.math.Interpolation;
 
 import de.homelab.madgaksha.DebugMode;
 import de.homelab.madgaksha.GlobalBag;
+import de.homelab.madgaksha.cutscenesystem.event.EventReactivate;
+import de.homelab.madgaksha.layer.ALayer;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EMusic;
 import de.homelab.madgaksha.resourcecache.ESound;
@@ -128,13 +133,20 @@ public class Level01 extends ALevel {
 	// =========================
 
 	public void initialDialog(MapProperties properties) {
-		// testing
-		if (DebugMode.activated) {
-			pushCutsceneLayer("cutscene/fancyScene/ougiTaikyokurin/ougiTaikyokurin.event");
-		}
-		else pushCutsceneLayer("cutscene/level01.initialDialog");
+		if (!DebugMode.activated)
+			pushCutsceneLayer("cutscene/level01.initialDialog");
 	}
 
+	private ALayer debug;
+	public void testOugi(MapProperties properties) {
+		if (DebugMode.activated && Gdx.input.isKeyJustPressed(Keys.S)) {
+			if (debug != null) GlobalBag.game.popLayer(debug);
+			LOG.debug("launch");
+			debug = pushCutsceneLayer("cutscene/fancyScene/ougiOukaMusougeki/ougiOukaMusougeki.event");
+		}
+		EventReactivate.reactivateEvent("testougi");
+	}
+	
 	public void joshuaAppears(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.joshuaAppears");
 		joshuaAppearsTriggered = true;

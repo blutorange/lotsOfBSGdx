@@ -58,18 +58,21 @@ public class FancyShow extends AFancyEvent {
 		return true;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void render() {
 		switch (sprite.mode) {
+		case ATLAS_ANIMATION:
+			// no break
+			// update updates the sprite to the current key frame
 		case TEXTURE:
-		case ATLAS_ANIMATION: // update updates the sprite
 			sprite.sprite.draw(batchPixel);
 			break;
 		case NINE_PATCH:
 			float x = (sprite.position.x + 4.0f) * scaleX;
 			float y = (sprite.position.y + 4.5f) * scaleY;
-			float w = sprite.ninePatchDimensions.x * scaleX;
-			float h = sprite.ninePatchDimensions.y * scaleY;
+			float w = sprite.ninePatchDimensions.x * scaleX * sprite.scale.x;
+			float h = sprite.ninePatchDimensions.y * scaleY * sprite.scale.y;
 			sprite.ninePatch.draw(batchPixel, x-w, y-h, w+w, h+h);
 			break;
 		}
@@ -79,19 +82,36 @@ public class FancyShow extends AFancyEvent {
 	@Override
 	public void update(float deltaTime, float passedTime) {
 		switch (sprite.mode) {
-		case TEXTURE:
-			sprite.sprite.setScale(scaleDpi);
+		case ATLAS_ANIMATION:
+			sprite.sprite.setAtlasRegion(sprite.atlasAnimation.getKeyFrame(passedTime));
+			// no break because the texture for the key frame needs to be processed as well
+		case TEXTURE:	
+			sprite.sprite.setColor(sprite.color);
+			sprite.sprite.setScale(scaleDpi*sprite.scale.x,scaleDpi*sprite.scale.y);
 			sprite.sprite.setAlpha(sprite.opacity);
 			sprite.sprite.setCenter((sprite.position.x + 4.0f) * scaleX, (sprite.position.y + 4.5f) * scaleY);
+//			sprite.sprite.getRegionWidth()*sprite.cropX.x			
+//			float u = sprite.sprite.getU();
+//			float u2 = sprite.sprite.getU2();
+//			float v = sprite.sprite.getV();
+//			float v2 = sprite.sprite.getV2();
+//			u = 0.5f * ((u + u2) - (u2 - u) * sprite.cropX.y);
+//			u2 = 0.5f * ((u + u2) + (u2 - u) * sprite.cropX.x);
+//			v = 0.5f * ((v + v2) - (v2 - v) * sprite.cropY.y);
+//			v2 = 0.5f * ((v + v2) + (v2 - v) * sprite.cropY.x);
+//			sprite.sprite.setU(u);
+//			sprite.sprite.setU2(u2);
+//			sprite.sprite.setV(v);
+//			sprite.sprite.setV2(v2);
 			break;
 		case NINE_PATCH:
 			Color color = sprite.ninePatch.getColor();
+			color.set(sprite.color);
 			color.a = sprite.opacity;
 			sprite.ninePatch.setColor(color);
 			break;
-		case ATLAS_ANIMATION:
-			sprite.sprite.setAtlasRegion(sprite.atlasAnimation.getKeyFrame(passedTime));
-			break;
+		default:
+			LOG.debug("unknown display mode");
 		}
 		if (passedTime >= duration)
 			isDone = true;

@@ -1,0 +1,27 @@
+//Background
+NinePatch 0 R 0.0 Background1 4.0 4.5 OUGI_OUKA_MUSOUGEKI_BACKGROUND_1
+Position 0 R 0.0 Background1 0 0
+Opacity 0 R 0.0 Background1 0
+
+NinePatch 1 R 0.0 Background2 4.0 4.5 OUGI_OUKA_MUSOUGEKI_BACKGROUND_2
+Position 1 R 0.0 Background1 0 0
+Opacity 1 R 0.0 Background2 0
+
+Show 0 R 0.000 Background1 2.850
+Show 1 R 2.450 Background2 10.800
+
+// Fade in black background
+Fade 0 A  0.000 Background1 0.400 1.0
+// Fade in orange background
+Fade 1 A  2.450 Background2 0.400 1.0
+// Fade out orange background
+Fade 1 A 10.800 Background2 0.400 0.0
+
+// Background speed stripes
+Include 2 A 2.250 speedStripes.anim
+
+// Part 1, powering up and jumping
+Include 3 A 0.400 estellePrepare.anim
+
+// Part 2, attacking the enemy
+Include 4 A 2.250 estelleAttack.anim

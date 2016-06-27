@@ -1,0 +1,35 @@
+Fade in
+0.000-0.400 Fade in Background
+
+Face
+0.400-0.800 Fade in face
+0.800-1.400 Face visible
+1.400-1.800 Fade out face
+
+Part1
+1.850s
+Background Black
+0.400-1.200 standing facing front
+1.200-1.600 start running forward
+1.600-1.800 starting jumping up-front (kneeling)
+1.800-2.250 launching jumping up-front (moving)
+  -> gravity F=ma, parabola, at 1.5 at top of screen
+
+
+Part2
+8.950s
+Background Speed Stripes
+2.250-3.100 parabola towards enemy
+  -> estelle at top right, enemy at bottom left
+3.100-4.600 sword rain
+4.600-5.500 summersault jump backwards
+5.500-5.750 standing normally
+5.750-6.400 rotation hit
+6.400-6.500 holding staff at enemy 
+6.500-7.100 upwards slash
+7.200-7.300 preparing final hit
+7.300-8.350 collection energy
+8.100-9.700  body cutin (overlap is fading time)
+9.650-9.700 hitting enemy
+9.700-10.800 remaining still & explosion
+10.800-11.200 fading out

@@ -1,0 +1,35 @@
+// Sound
+Sound R 0.2 Player ESTELLE_IKU_WAYO_SHORTENED
+
+// Initialize
+// Sprite, show, position, fade-in and show
+Sprite   R 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_STAND0
+Position R 0.000 Estelle 0.000 -3.0
+Scale    R 0.000 Estelle 1.0
+Opacity  R 0.000 Estelle 0.000
+Fade     R 0.000 Estelle 0.300 1.0
+
+//Move R 0.0 Estelle Line 0.5 A 0.0 0.0
+
+// Run animation, 0.8-1.2 seconds
+Zoom   R 0.800 Estelle 0.400 =exp5= 2.0
+Move   R 0.800 Estelle Line 0.400 =exp5= R 0.0 -1.5
+Sprite R 0.800 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN0
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN2
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN3
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN4
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN5
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN6
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN7
+
+// Kneel for jump, 0.2 seconds
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_KNEEL0
+
+// Jump
+Sprite R 0.200 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN5
+Move   R 0.600 Estelle Line 0.450 =pow2Out= R 0.0 14.0
+
+// Show
+Show    0   R 0.000 Estelle 1.850
+Include 100 R 0.000 cutinFace.anim

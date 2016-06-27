@@ -3,6 +3,7 @@ package de.homelab.madgaksha.resourcepool;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasSprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
@@ -146,6 +147,11 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 		setOrigin(oldOriginX, oldOriginY);
 	}
 
+	@Deprecated
+	public void setCrop(Vector2 cropX, Vector2 cropY) {
+		//TODO
+	}
+	
 	@Override
 	public float getX() {
 		return super.getX() - region.offsetX;
