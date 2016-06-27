@@ -8,6 +8,8 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
+	DEFAULT(ETexture.DEFAULT,1,1,1,0.1f, AtlasAnimation.PlayMode.LOOP),
+	
 	// =================
 	// ESTELLE
 	// =================

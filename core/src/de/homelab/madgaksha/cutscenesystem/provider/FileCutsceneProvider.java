@@ -162,7 +162,8 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
  * 
  * An animation with multiple sprites, sounds and possibly models (later).
  * 
- * For more details and the format, see the javadocs for {@link EventFancyScene}.
+ * For more details and the format, see the javadocs for {@link EventFancyScene}
+ * .
  * 
  * <h2>Stage event</h2>
  * 
@@ -324,7 +325,8 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		private FileHandle fileHandle;
 
 		// CutsceneEvent
-		public Command(Class<? extends ACutsceneEvent> cutsceneClass, FileHandle inputFile) {
+		public Command(Class<? extends ACutsceneEvent> cutsceneClass,
+				FileHandle inputFile) {
 			mode = 1;
 			this.cutsceneClass = cutsceneClass;
 			this.fileHandle = inputFile;
@@ -366,6 +368,14 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		}
 	}
 
+	/**
+	 * Reads the next command string (include or cutsceneEvent) and stores the
+	 * result in the variables {@link #nextCommandIdentifier}.
+	 * 
+	 * @param s
+	 *            Scanner to read from.
+	 * @return Whether the next command has been read successfully.
+	 */
 	private boolean readNextCommandIdentifier(Scanner s) {
 		while (s.hasNext() && !FileCutsceneProvider.hasNextCommand(s))
 			s.nextLine();
@@ -376,6 +386,14 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		return false;
 	}
 
+	/**
+	 * Reads the next command, builds the {@link Command} object and stores the
+	 * result in {@link #nextCommand}.
+	 * 
+	 * @param s
+	 *            Scanner to read from.
+	 * @return Whether the next command has been read successfully.
+	 */
 	private boolean readNextCommand(Scanner s) {
 		if (!readNextCommandIdentifier(s)) {
 			return false;
@@ -403,6 +421,14 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		return true;
 	}
 
+	/**
+	 * Loads the event class with the corresponding name inside the package
+	 * {@link #CutsceneEventClassPackage}.
+	 * 
+	 * @param className
+	 *            Name of the class to load.
+	 * @return Whether the class could be loaded.
+	 */
 	@SuppressWarnings("unchecked")
 	private boolean getEventClass(String className) {
 		String fullClassName = CutsceneEventClassPackage + className;
@@ -422,6 +448,12 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		return true;
 	}
 
+	/**
+	 * Skips as much comment as possible.
+	 * 
+	 * @param s
+	 *            Scanner to read from and skip comments.
+	 */
 	public static void skipComments(Scanner s) {
 		while (s.hasNext(tokenComment))
 			s.nextLine();
@@ -466,10 +498,21 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		return null;
 	}
 
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return Whether the is a command matching {@link #tokenCommand}.
+	 */
 	public static boolean hasNextCommand(Scanner s) {
 		return s.hasNext(tokenCommand);
 	}
 
+	/**
+	 * @param name
+	 *            Name of the color.
+	 * @return A {@link Color} object for the given name, or null if there is no
+	 *         such color.
+	 */
 	private static Color getColorForName(String name) {
 		try {
 			Field f = ClassReflection.getField(Color.class,
@@ -484,6 +527,12 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		}
 	}
 
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return An {@link Interpolation} object, or null if no such interpolation
+	 *         exists.
+	 */
 	public static Interpolation readNextInterpolation(Scanner s) {
 		if (s.hasNext("=.+=")) {
 			String param = s.next("=.+=");
@@ -559,12 +608,23 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		return s.nextLine().trim();
 	}
 
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return Normalized object id.
+	 */
 	public static String readNextGuid(Scanner s) {
 		if (!s.hasNext())
 			return null;
 		return s.next().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]", "");
 	}
 
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return An {@link EParticleEffect} instance, or null if it could not be
+	 *         read.
+	 */
 	public static EParticleEffect nextParticleEffect(Scanner s) {
 		if (!s.hasNext())
 			return null;
@@ -577,6 +637,11 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		}
 	}
 
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return A {@link ESound} instance, or null if it could not be read.
+	 */
 	public static ESound nextSound(Scanner s) {
 		if (!s.hasNext())
 			return null;
@@ -588,7 +653,12 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return An instance of {@link EPath}, or null if it could not be read.
+	 */
 	public static EPath nextPath(Scanner s) {
 		if (!s.hasNext())
 			return null;
@@ -600,7 +670,12 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return An instance of {@link ETextbox}, or null if it could not be read.
+	 */
 	public static ETexture nextTexture(Scanner s) {
 		if (!s.hasNext())
 			return null;
@@ -612,7 +687,13 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return An instance of {@link ENinePatch}, or null if it could not be
+	 *         read.
+	 */
 	public static ENinePatch nextNinePatch(Scanner s) {
 		if (!s.hasNext())
 			return null;
@@ -625,6 +706,11 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		}
 	}
 
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return An instance of {@link Long}, or null if no number could be read.
+	 */
 	public static Long nextLong(Scanner s) {
 		if (s.hasNextLong(10))
 			return s.nextLong(10);
@@ -635,6 +721,12 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		return null;
 	}
 
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return An instance of {@link Integer}, or null if no number could be
+	 *         read.
+	 */
 	public static Integer nextInteger(Scanner s) {
 		if (s.hasNextInt(10))
 			return s.nextInt(10);
@@ -644,8 +736,5 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			return (int) s.nextLong(10);
 		return null;
 	}
-
-
-
 
 }

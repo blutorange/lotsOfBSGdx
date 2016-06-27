@@ -62,6 +62,7 @@ public class FancyShow extends AFancyEvent {
 	public void render() {
 		switch (sprite.mode) {
 		case TEXTURE:
+		case ATLAS_ANIMATION: // update updates the sprite
 			sprite.sprite.draw(batchPixel);
 			break;
 		case NINE_PATCH:
@@ -87,6 +88,9 @@ public class FancyShow extends AFancyEvent {
 			Color color = sprite.ninePatch.getColor();
 			color.a = sprite.opacity;
 			sprite.ninePatch.setColor(color);
+			break;
+		case ATLAS_ANIMATION:
+			sprite.sprite.setAtlasRegion(sprite.atlasAnimation.getKeyFrame(passedTime));
 			break;
 		}
 		if (passedTime >= duration)

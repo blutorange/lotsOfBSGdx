@@ -15,6 +15,7 @@ import java.util.Stack;
 import org.apache.commons.io.IOUtils;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
@@ -25,6 +26,7 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
+import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 /**
  * The following commands are available for reading from file.
@@ -167,13 +169,24 @@ public class EventFancyScene extends ACutsceneEvent {
 			spriteMap.put(key, new FancySpriteWrapper());
 	}
 
+	public void setSpriteTexture(String key, AtlasRegion region, float dpi) {
+		FancySpriteWrapper fsw = getSprite(key);
+		fsw.sprite.setAtlasRegion(region);
+		fsw.spriteDpi = dpi;
+	}
 	public void setSpriteTexture(String key, ETexture texture, float dpi) {
 		FancySpriteWrapper fsw = getSprite(key);
-		fsw.sprite.setAtlasRegion(ResourceCache.getTexture(texture));
-		fsw.spriteDpi = dpi;
+		setSpriteTexture(key, ResourceCache.getTexture(texture), dpi);
 		fsw.mode = FancySpriteWrapper.Mode.TEXTURE;
 	}
-	
+	public void setSpriteTexture(String key, AtlasAnimation animation, float dpi) {
+		FancySpriteWrapper fsw = getSprite(key);
+		if (animation != null) {
+			fsw.atlasAnimation = animation;
+			setSpriteTexture(key, animation.getKeyFrame(0.0f), dpi);
+		}
+		fsw.mode = FancySpriteWrapper.Mode.ATLAS_ANIMATION;
+	}
 	public void setSpriteTexture(String key, ENinePatch ninePatch, Vector2 dimensions) {
 		FancySpriteWrapper fsw = getSprite(key);
 		fsw.ninePatch = ResourceCache.getNinePatch(ninePatch);
