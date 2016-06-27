@@ -27,13 +27,13 @@ import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.enums.ESpeaker;
 import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.path.EPath;
 import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETextbox;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
-import path.EPath;
 
 /**
  * Reads cutscene events from a configuration file<br>

@@ -12,8 +12,8 @@ import de.homelab.madgaksha.cutscenesystem.FancySpriteWrapper;
 import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
-import path.APath;
-import path.EPath;
+import de.homelab.madgaksha.path.APath;
+import de.homelab.madgaksha.path.EPath;
 
 public class FancyMove extends AFancyEvent {
 	private final static Logger LOG = Logger.getLogger(FancyMove.class);

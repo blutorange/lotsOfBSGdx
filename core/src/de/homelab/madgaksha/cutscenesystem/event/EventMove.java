@@ -20,8 +20,8 @@ import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
 import de.homelab.madgaksha.logging.Logger;
-import path.APath;
-import path.EPath;
+import de.homelab.madgaksha.path.APath;
+import de.homelab.madgaksha.path.EPath;
 
 public class EventMove extends ACutsceneEvent {
 	private final static Logger LOG = Logger.getLogger(EventMove.class);
