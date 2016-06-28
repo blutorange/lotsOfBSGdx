@@ -19,13 +19,16 @@ Background Black
 Part2
 8.950s
 Background Speed Stripes
-2.250-3.100 parabola towards enemy
+2.250-2.700 parabola towards enemy
   -> estelle at top right, enemy at bottom left
+2.700-3.100 landing animation
 3.100-4.600 sword rain
-4.600-5.500 summersault jump backwards
+4.600-4.800 jump forward through enemy
+4.800-5.300 summersault jump backwards
+5.300-5.500 landing, waiting kneeling
 5.500-5.750 standing normally
-5.750-6.400 rotation hit
-6.400-6.500 holding staff at enemy 
+5.750-6.250 spin attack
+6.250-6.500 holding still 
 6.500-7.100 upwards slash
 7.200-7.300 preparing final hit
 7.300-8.350 collection energy
@@ -33,3 +36,59 @@ Background Speed Stripes
 9.650-9.700 hitting enemy
 9.700-10.800 remaining still & explosion
 10.800-11.200 fading out
+
+==Jump Frames==
+3 1/13
+4
+4 2/13
+5
+5
+5
+5 4/13
+6
+6 2/13
+7
+7
+7
+7 4/13
+
+==Landing Frames==
+1 
+1
+1
+1
+1
+1 1/2
+2
+2
+2
+2
+2
+2 1/2
+
+==SummersaultBackwards Frames==
+7
+7 7/50
+6
+6
+6 7/50
+5
+5 7/50
+4
+4 7/50
+3
+3
+3 7/50
+2
+2
+2
+2
+2 3/10
+
+=Jump Shadows=
+ - 8 shadows + 1 real
+ - first 4 shadows @ opacity=1
+ - 5th 0.8
+ - 6th 0.6
+ - 7th 0.4
+ - 8th 0.2

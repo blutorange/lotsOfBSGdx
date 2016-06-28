@@ -1,11 +1,137 @@
+Sound A 0.000 General ESTELLE_HAHHA
+
 // Initialize
 // Sprite, show, position, fade-in and show
-Sprite   R 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_STAND0
-Position R 0.000 Estelle 0.000 -3.0
-Scale    R 0.000 Estelle 1.0
-Opacity  R 0.000 Estelle 0.000
-Fade     R 0.000 Estelle 0.300 1.0
+Sprite   A 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP3
+Spritetarget A 0.000 Enemy 32.0 0.0
+
+// Position player
+Position A 0.000 Estelle 4.000 -2.5
+
+// Position enemy
+Position A 0.000 Enemy -7.000 -3.000
+
+// Parabola Jump
+Move A 0.000 Estelle Parabola 0.450 =linear= A 0.333 2.000 3.0 -2.0 -3.0
+
+// Move in enemy
+Move A 0.000 Enemy Line 0.450 =exp5Out= A -2.750 -3.000
+
+// Jump and landing animation
+Sprite A 0.035 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP4
+Sprite R 0.069 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP5
+Sprite R 0.138 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP6
+Sprite R 0.069 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP7
+Sound  A 0.350 General WOODEN_BEAT2
+Sprite R 0.139 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP1
+Sprite R 0.200 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP2
+Sprite R 0.200 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP0
+Sprite R 0.200 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN2
+
+// Move enemy and player to the center of the screen
+Move   A 0.500 Estelle Line 1.3 =pow2In= R 2.0 0.5
+Move   A 0.500 Enemy   Line 1.3 =pow2In= R 2.0 0.5
+
+// Sword rain 1.5s
+Sound  A 1.200 General ESTELLE_HYAA
+Sound  A 1.200 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN3
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN0
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN2
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN3
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN0
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN2
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN3
+//
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN0
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN2
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN3
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN0
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN2
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN3
+//
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN0
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN2
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN3
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN0
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN2
+Sound  R 0.100 General WOODEN_BEAT1
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN3
+
+// Jump forward at enemy
+Sound  A 2.350 General WOODEN_BEAT2
+Sprite A 2.350 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP1
+Move   A 2.350 Estelle Line 0.200 =pow2Out= R  -1.0 1.8
+
+// Estelle at position -1 -0.7 now
+
+// Summersault backwards 0.5s 
+Move   A 2.550 Estelle Parabola 0.500 =linear= R 0.2 0.8 1.5 2.05 -1.8
+Sprite A 2.550 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP7
+Sprite R 0.070 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP6
+Sprite R 0.070 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP5
+Sprite R 0.070 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP4
+Sprite R 0.070 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP3
+Sprite R 0.070 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP2
+
+//Shadows
+Include -1 A 2.600 summersaultOpacity100.anim
+Include -2 R 0.050 summersaultOpacity100.anim
+Include -3 R 0.050 summersaultOpacity100.anim
+Include -4 R 0.050 summersaultOpacity100.anim
+Include -5 R 0.050 summersaultOpacity80.anim
+Include -6 R 0.050 summersaultOpacity60.anim
+Include -7 R 0.050 summersaultOpacity40.anim
+Include -8 R 0.050 summersaultOpacity20.anim
+  
+// Standing back up after landing
+Sprite A 3.250 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP0
+
+// Estelle at position 1.05 -1.5 now
+
+// Spin attack 0.5s
+Sprite A 3.500 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN1
+Sprite R 0.100 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN2
+Sprite R 0.100 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN3
+Sprite R 0.100 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN4
+Sprite R 0.100 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN5
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN6
+Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN7
+// Hair falling down
+Sprite R 0.060 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN8
+Sprite R 0.060 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN9
+Sprite R 0.060 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN10
+// Shadow
+Include -1 A 3.400 spinAttackOpacity80.anim
+Include -4 A 3.500 spinAttackOpacity80.anim
 
 // Show
-Show    0 R 0.000 Estelle 8.950
-Include 1 R 5.850 cutinBody.anim
+Include -1 A 0.050 jumpOpacity100.anim
+Include -2 R 0.050 jumpOpacity100.anim
+Include -3 R 0.050 jumpOpacity100.anim
+Include -4 R 0.050 jumpOpacity100.anim
+Include -5 R 0.050 jumpOpacity80.anim
+Include -6 R 0.050 jumpOpacity60.anim
+Include -7 R 0.050 jumpOpacity40.anim
+Include -8 R 0.050 jumpOpacity20.anim
+Show     0 A 0.000 Estelle 8.950
+Show     1 A 0.000 Enemy   8.950
+Include  2 A 5.850 cutinBody.anim
+ 

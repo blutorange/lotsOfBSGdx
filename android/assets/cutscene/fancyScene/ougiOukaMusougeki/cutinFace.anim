@@ -17,64 +17,116 @@ Sprite R 0.000 Bg14 83 OUGI_OUKA_MUSOUGEKI_ESTELLE_FACE_BG
 Sprite R 0.000 Bg15 83 OUGI_OUKA_MUSOUGEKI_ESTELLE_FACE_BG
 
 // Face
-Position R 0.000 Face      0 0
-Crop     R 0.000 Face      1 0
-Position R 0.000 FaceWhite 0 0
-Opacity  R 0.000 Face      0
-Opacity  R 0.000 FaceWhite 1.0
-Slide    R 0.000 Face      0.400 =linear= 1 1 
-Fade     R 0.000 Face      0.400 1
-Fade     R 0.000 FaceWhite 0.400 0
-Fade     R 1.400 Face      0.400 0
+Position A 0.000 Face      1.0 0
+Crop     A 0.000 Face      1 0
+Position A 0.000 FaceWhite 0 0
+Opacity  A 0.000 FaceWhite 0.7
+// Fade in
+Slide    A 0.000 Face      0.400 =sineIn= 1 1 
+Fade     A 0.000 FaceWhite 0.400 =sineIn= 0
+Move     A 0.000 Face      Line 0.400  =sine= A 0.25 0
+// Fade out
+Slide    A 1.400 Face      0.400 =sineOut= 1 0
+Move     A 0.400 Face      Line 1.400 =linear= A -0.25 0
 
 // Background stripes, width=3.084337
-Position R 0.000 Bg1  -3.084337 0
-Position R 0.000 Bg2   0.000000 0
-Position R 0.000 Bg3   3.084337 0
-Position R 0.000 Bg4   6.168675 0
-Position R 0.000 Bg5   9.253012 0
-Position R 0.000 Bg6  12.337349 0
-Position R 0.000 Bg7  15.421687 0
-Position R 0.000 Bg8  18.506024 0
-Position R 0.000 Bg9  21.590361 0
-Position R 0.000 Bg10 24.674699 0
-Position R 0.000 Bg11 27.759036 0
-Position R 0.000 Bg12 30.843373 0
-Position R 0.000 Bg13 33.927711 0
-Position R 0.000 Bg14 37.012048 0
-Position R 0.000 Bg15 40.096386 0
+Position A 0.000 Bg1  -3.084337 0
+Position A 0.000 Bg2   0.000000 0
+Position A 0.000 Bg3   3.084337 0
+Position A 0.000 Bg4   6.168675 0
+Position A 0.000 Bg5   9.253012 0
+Position A 0.000 Bg6  12.337349 0
+Position A 0.000 Bg7  15.421687 0
+Position A 0.000 Bg8  18.506024 0
+Position A 0.000 Bg9  21.590361 0
+Position A 0.000 Bg10 24.674699 0
+Position A 0.000 Bg11 27.759036 0
+Position A 0.000 Bg12 30.843373 0
+Position A 0.000 Bg13 33.927711 0
+Position A 0.000 Bg14 37.012048 0
+Position A 0.000 Bg15 40.096386 0
+Crop     A 0.000 Bg1  1 0
+Crop     A 0.000 Bg2  1 0
+Crop     A 0.000 Bg3  1 0
+Crop     A 0.000 Bg4  1 0
+Crop     A 0.000 Bg5  1 0
+Crop     A 0.000 Bg6  1 0
+Crop     A 0.000 Bg7  1 0
+Crop     A 0.000 Bg8  1 0
+Crop     A 0.000 Bg9  1 0
+Crop     A 0.000 Bg10 1 0
+Crop     A 0.000 Bg11 1 0
+Crop     A 0.000 Bg12 1 0
+Crop     A 0.000 Bg13 1 0
+Crop     A 0.000 Bg14 1 0
+Crop     A 0.000 Bg15 1 0
 
-Move R 0.000 Bg1  Line 1.800 =linear= R -35 0
-Move R 0.000 Bg2  Line 1.800 =linear= R -35 0
-Move R 0.000 Bg3  Line 1.800 =linear= R -35 0
-Move R 0.000 Bg4  Line 1.800 =linear= R -35 0
-Move R 0.000 Bg5  Line 1.800 =linear= R -35 0
-Move R 0.000 Bg6  Line 1.800 =linear= R -35 0
-Move R 0.000 Bg7  Line 1.800 =linear= R -35 0
-Move R 0.000 Bg8  Line 1.800 =linear= R -35 0
-Move R 0.000 Bg9  Line 1.800 =linear= R -35 0
-Move R 0.000 Bg10 Line 1.800 =linear= R -35 0
-Move R 0.000 Bg11 Line 1.800 =linear= R -35 0
-Move R 0.000 Bg12 Line 1.800 =linear= R -35 0
-Move R 0.000 Bg13 Line 1.800 =linear= R -35 0
-Move R 0.000 Bg14 Line 1.800 =linear= R -35 0
-Move R 0.000 Bg15 Line 1.800 =linear= R -35 0
+// Animate stripes
+Move  A 0.000 Bg1  Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg2  Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg3  Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg4  Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg5  Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg6  Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg7  Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg8  Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg9  Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg10 Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg11 Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg12 Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg13 Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg14 Line 1.800 =linear= R -35 0
+Move  A 0.000 Bg15 Line 1.800 =linear= R -35 0
+
+// Fade in stripes
+Slide A 0.000 Bg1  0.400 =sineIn= 1 1
+Slide A 0.000 Bg2  0.400 =sineIn= 1 1
+Slide A 0.000 Bg3  0.400 =sineIn= 1 1
+Slide A 0.000 Bg4  0.400 =sineIn= 1 1
+Slide A 0.000 Bg5  0.400 =sineIn= 1 1
+Slide A 0.000 Bg6  0.400 =sineIn= 1 1
+Slide A 0.000 Bg7  0.400 =sineIn= 1 1
+Slide A 0.000 Bg8  0.400 =sineIn= 1 1
+Slide A 0.000 Bg9  0.400 =sineIn= 1 1
+Slide A 0.000 Bg10 0.400 =sineIn= 1 1
+Slide A 0.000 Bg11 0.400 =sineIn= 1 1
+Slide A 0.000 Bg12 0.400 =sineIn= 1 1
+Slide A 0.000 Bg13 0.400 =sineIn= 1 1
+Slide A 0.000 Bg14 0.400 =sineIn= 1 1
+Slide A 0.000 Bg15 0.400 =sineIn= 1 1
+
+// Fade out stripes
+Slide A 1.400 Bg1  0.400 =sineOut= 1 0
+Slide A 1.400 Bg2  0.400 =sineOut= 1 0
+Slide A 1.400 Bg3  0.400 =sineOut= 1 0
+Slide A 1.400 Bg4  0.400 =sineOut= 1 0
+Slide A 1.400 Bg5  0.400 =sineOut= 1 0
+Slide A 1.400 Bg6  0.400 =sineOut= 1 0
+Slide A 1.400 Bg7  0.400 =sineOut= 1 0
+Slide A 1.400 Bg8  0.400 =sineOut= 1 0
+Slide A 1.400 Bg9  0.400 =sineOut= 1 0
+Slide A 1.400 Bg10 0.400 =sineOut= 1 0
+Slide A 1.400 Bg11 0.400 =sineOut= 1 0
+Slide A 1.400 Bg12 0.400 =sineOut= 1 0
+Slide A 1.400 Bg13 0.400 =sineOut= 1 0
+Slide A 1.400 Bg14 0.400 =sineOut= 1 0
+Slide A 1.400 Bg15 0.400 =sineOut= 1 0
 
 // Show sprites
-Show  1 R 0.000 Face 1.800
-Show  2 R 0.000 FaceWhite 1.800
-Show  0   R 0.000 Bg1   1.800
-Show  0   R 0.000 Bg2   1.800
-Show  0   R 0.000 Bg3   1.800
-Show  0   R 0.000 Bg4   1.800
-Show  0   R 0.000 Bg5   1.800
-Show  0   R 0.000 Bg6   1.800
-Show  0   R 0.000 Bg7   1.800
-Show  0   R 0.000 Bg8   1.800
-Show  0   R 0.000 Bg9   1.800
-Show  0   R 0.000 Bg10  1.800
-Show  0   R 0.000 Bg11  1.800
-Show  0   R 0.000 Bg12  1.800
-Show  0   R 0.000 Bg13  1.800
-Show  0   R 0.000 Bg14  1.800
-Show  0   R 0.000 Bg15  1.800
+Show  1  A 0.000 Face      1.800
+Show  2  A 0.000 FaceWhite 1.800
+Show  0  A 0.000 Bg1       1.800
+Show  0  A 0.000 Bg2       1.800
+Show  0  A 0.000 Bg3       1.800
+Show  0  A 0.000 Bg4       1.800
+Show  0  A 0.000 Bg5       1.800
+Show  0  A 0.000 Bg6       1.800
+Show  0  A 0.000 Bg7       1.800
+Show  0  A 0.000 Bg8       1.800
+Show  0  A 0.000 Bg9       1.800
+Show  0  A 0.000 Bg10      1.800
+Show  0  A 0.000 Bg11      1.800
+Show  0  A 0.000 Bg12      1.800
+Show  0  A 0.000 Bg13      1.800
+Show  0  A 0.000 Bg14      1.800
+Show  0  A 0.000 Bg15      1.800

@@ -83,8 +83,8 @@ public class EventMove extends ACutsceneEvent {
 
 		if (pc == null)
 			return;
-		if (totalTime >= pathList[currentPathIndex].tmax) {
-			pathList[currentPathIndex].applyTotal(pathList[currentPathIndex].tmax, vector);
+		if (totalTime >= pathList[currentPathIndex].getTMax()) {
+			pathList[currentPathIndex].applyTotal(pathList[currentPathIndex].getTMax(), vector);
 			++currentPathIndex;
 			totalTime = 0.0f;
 			if (currentPathIndex == pathList.length) {

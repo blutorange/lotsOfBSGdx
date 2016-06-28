@@ -58,8 +58,8 @@ public class FancyMove extends AFancyEvent {
 
 	@Override
 	public void update(float deltaTime, float passedTime) {
-		if (passedTime >= path.tmax) {
-			passedTime = path.tmax;
+		if (passedTime >= path.getTMax()) {
+			passedTime = path.getTMax();
 			isDone = true;
 		}
 		path.applyWithInterpolation(passedTime, sprite.position, interpolation);

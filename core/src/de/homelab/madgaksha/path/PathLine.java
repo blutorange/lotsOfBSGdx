@@ -25,7 +25,7 @@ public class PathLine extends APath {
 	}
 
 	@Override
-	public void apply(float t, Vector2 vector) {
+	public void applyInternal(float t, Vector2 vector) {
 		if (relative)
 			vector.set(origin.x + t * x, origin.y + t * y);
 		else
@@ -36,5 +36,9 @@ public class PathLine extends APath {
 	public String toString() {
 		return new StringBuilder().append("PathLine(").append(tmax).append("s,").append(x).append(",").append(y)
 				.append(",relative=").append(relative).append(")").toString();
+	}
+
+	@Override
+	protected void computeParamters() {
 	}
 }

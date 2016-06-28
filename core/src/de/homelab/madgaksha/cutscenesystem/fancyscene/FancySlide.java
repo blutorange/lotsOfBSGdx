@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.cutscenesystem.FancySpriteWrapper;
@@ -17,22 +18,25 @@ public class FancySlide extends AFancyEvent {
 	private final static Logger LOG = Logger.getLogger(FancySlide.class);
 
 	private String key = StringUtils.EMPTY;
+	private FancySpriteWrapper sprite;
 	private Interpolation interpolation = Interpolation.linear;
 	private float duration = 1.0f;
 	private float durationInverse = 1.0f;
 	private boolean isDone = false;
-	private float startOpacity = 1.0f;
-	private float targetOpacity = 1.0f;
-	private FancySpriteWrapper sprite;
+	private Vector2 startCropX = new Vector2(1.0f,1.0f);
+	private Vector2 startCropY = new Vector2(1.0f,1.0f);
+	private Vector2 targetCropX = new Vector2(1.0f,1.0f);
+	private Vector2 targetCropY = new Vector2(1.0f,1.0f);
 	
-	public FancySlide(String key2, Float duration2, Interpolation interpolation, float targetCropLeft, float targetCropBottom, float targetCropRight, float targetCropTop) { 
+	public FancySlide(String key, Float duration, Interpolation interpolation, float targetCropLeft, float targetCropBottom, float targetCropRight, float targetCropTop) { 
 		super(true);
 		if (duration < 0.01f) throw new IllegalArgumentException("duration must be greate than 0");
-		this.targetOpacity = targetOpacity;
 		this.duration = duration;
 		this.durationInverse = 1.0f/duration;
 		this.interpolation = interpolation;
 		this.key = key;
+		this.targetCropX.set(targetCropLeft, targetCropRight);
+		this.targetCropY.set(targetCropBottom, targetCropTop);
 	}
 	
 
@@ -43,7 +47,10 @@ public class FancySlide extends AFancyEvent {
 		key = StringUtils.EMPTY;
 		sprite = null;
 		duration = durationInverse = 1.0f;
-		startOpacity = targetOpacity = 1.0f;
+		startCropX.set(1.0f,1.0f);
+		startCropY.set(1.0f,1.0f);
+		targetCropX.set(1.0f,1.0f);
+		targetCropY.set(1.0f,1.0f);
 	}
 
 	@Override
@@ -54,7 +61,8 @@ public class FancySlide extends AFancyEvent {
 	@Override
 	public boolean begin(EventFancyScene efs) {
 		this.sprite = efs.getSprite(key);
-		this.startOpacity = sprite.opacity;
+		this.startCropX.set(sprite.cropX);
+		this.startCropY.set(sprite.cropY);
 		return true;
 	}
 
@@ -68,7 +76,10 @@ public class FancySlide extends AFancyEvent {
 			passedTime = duration;
 			isDone = true;
 		}
-		sprite.opacity = interpolation.apply(startOpacity, targetOpacity, passedTime * durationInverse);
+		float alpha = interpolation.apply(passedTime * durationInverse);
+		sprite.cropX.set(startCropX).lerp(targetCropX, alpha);
+		sprite.cropY.set(startCropY).lerp(targetCropY, alpha);
+		
 	}
 
 	@Override

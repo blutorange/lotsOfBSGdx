@@ -160,14 +160,17 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 		FancyPosition(2),
 		FancyOpacity(2),
 		FancyScale(2),
+		FancyCrop(2),
 		
 		FancyMove(3),
 		FancyFade(3),
 		FancyZoom(3),
+		FancySlide(3),
 		
 		FancyShow(4),
 		FancyInclude(4),
 		;
+
 		private int p;
 		private Priority(int p) {
 			this.p = p;

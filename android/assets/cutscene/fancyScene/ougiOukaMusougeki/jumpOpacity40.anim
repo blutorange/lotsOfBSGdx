@@ -1,0 +1,19 @@
+// Initialize
+// Sprite, show, position, fade-in and show
+Sprite   A 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP3
+Position A 0.000 Estelle 4.000 -2.5
+Opacity  A 0.000 Estelle 0.4
+
+// Parabola Jump
+Move A 0.000 Estelle Parabola 0.450 =linear= A 0.4 2.000 3.0 -1.0 -3.0
+
+// Jump and landing animation
+Sprite A 0.035 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP4
+Sprite R 0.069 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP5
+Sprite R 0.138 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP6
+Sprite R 0.069 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP7
+Sprite R 0.139 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP1
+Sprite R 0.200 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP2
+
+// Show
+Show    0 R 0.000 Estelle 0.450

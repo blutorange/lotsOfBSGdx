@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 background1
   rotate: false
-  xy: 2, 2
+  xy: 999, 968
   size: 5, 5
   split: 0, 0, 0, 0
   orig: 5, 5
@@ -14,120 +14,268 @@ background1
   index: -1
 background2
   rotate: false
-  xy: 1005, 972
+  xy: 869, 379
   size: 4, 50
   split: 0, 0, 0, 0
   orig: 4, 50
   offset: 0, 0
   index: -1
-cutin
+cutinBody
   rotate: false
-  xy: 2, 43
-  size: 869, 979
-  orig: 869, 979
+  xy: 2, 374
+  size: 865, 599
+  orig: 865, 599
   offset: 0, 0
   index: -1
-estelleFaceWhite
-  rotate: false
-  xy: 498, 33
-  size: 83, 8
-  orig: 83, 8
-  offset: 0, 0
-  index: -1
-kneel0
-  rotate: false
-  xy: 939, 760
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: -1
-pRay14
-  rotate: false
-  xy: 2, 9
-  size: 494, 32
-  orig: 494, 32
-  offset: 0, 0
-  index: -1
-run0
-  rotate: false
-  xy: 873, 958
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-run1
-  rotate: false
-  xy: 873, 892
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-run2
-  rotate: false
-  xy: 939, 958
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-run3
-  rotate: false
-  xy: 873, 826
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-run4
-  rotate: false
-  xy: 939, 892
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-run5
-  rotate: false
-  xy: 873, 760
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-run6
-  rotate: false
-  xy: 939, 826
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-run7
-  rotate: false
-  xy: 873, 694
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-stand0
-  rotate: false
-  xy: 873, 628
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: -1
-
-ougiPacked2.png
-size: 1024,128
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 estelleFace
   rotate: false
-  xy: 2, 2
+  xy: 2, 274
   size: 332, 64
   orig: 332, 64
   offset: 0, 0
   index: -1
 estelleFaceBg
   rotate: false
-  xy: 336, 2
+  xy: 2, 208
   size: 256, 64
   orig: 256, 64
+  offset: 0, 0
+  index: -1
+estelleFaceWhite
+  rotate: false
+  xy: 2, 2
+  size: 83, 8
+  orig: 83, 8
+  offset: 0, 0
+  index: -1
+jump0
+  rotate: false
+  xy: 869, 909
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+jump1
+  rotate: false
+  xy: 390, 208
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+jump2
+  rotate: false
+  xy: 336, 274
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+jump3
+  rotate: false
+  xy: 2, 78
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+jump4
+  rotate: false
+  xy: 869, 779
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+jump5
+  rotate: false
+  xy: 68, 78
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+jump6
+  rotate: false
+  xy: 869, 497
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+jump7
+  rotate: false
+  xy: 869, 431
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+kneel0
+  rotate: false
+  xy: 935, 497
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+pRay14
+  rotate: false
+  xy: 2, 340
+  size: 494, 32
+  orig: 494, 32
+  offset: 0, 0
+  index: -1
+run0
+  rotate: false
+  xy: 935, 843
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run1
+  rotate: false
+  xy: 935, 777
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run2
+  rotate: false
+  xy: 935, 711
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run3
+  rotate: false
+  xy: 394, 142
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run4
+  rotate: false
+  xy: 394, 76
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run5
+  rotate: false
+  xy: 392, 10
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run6
+  rotate: false
+  xy: 935, 431
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+run7
+  rotate: false
+  xy: 456, 208
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+spin1
+  rotate: false
+  xy: 260, 208
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+spin10
+  rotate: false
+  xy: 132, 10
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+spin2
+  rotate: false
+  xy: 460, 142
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+spin3
+  rotate: false
+  xy: 869, 649
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+spin4
+  rotate: false
+  xy: 869, 563
+  size: 84, 84
+  orig: 84, 84
+  offset: 0, 0
+  index: -1
+spin5
+  rotate: false
+  xy: 2, 12
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+spin6
+  rotate: false
+  xy: 134, 142
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+spin7
+  rotate: false
+  xy: 134, 76
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+spin8
+  rotate: false
+  xy: 264, 142
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+spin9
+  rotate: false
+  xy: 264, 76
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+stand0
+  rotate: false
+  xy: 460, 76
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+swordrain0
+  rotate: false
+  xy: 262, 10
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+swordrain1
+  rotate: false
+  xy: 498, 308
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+swordrain2
+  rotate: false
+  xy: 628, 308
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+swordrain3
+  rotate: false
+  xy: 758, 308
+  size: 128, 64
+  orig: 128, 64
   offset: 0, 0
   index: -1

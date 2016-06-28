@@ -1,5 +1,6 @@
 // Sound
-Sound R 0.2 Player ESTELLE_IKU_WAYO_SHORTENED
+Sound A 0.2 Player ESTELLE_IKU_WAYO_SHORTENED
+Sound A 0.0 General OUGI_CUTIN_FLASH2
 
 // Initialize
 // Sprite, show, position, fade-in and show
@@ -27,6 +28,7 @@ Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN7
 Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_KNEEL0
 
 // Jump
+Sound  A 1.4   General JUMP1
 Sprite R 0.200 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN5
 Move   R 0.600 Estelle Line 0.450 =pow2Out= R 0.0 14.0
 

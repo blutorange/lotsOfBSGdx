@@ -6,9 +6,10 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class APath {
 
 	protected final Vector2 origin = new Vector2();
-	public final float tmaxInverse;
-	public final float tmax;
-	public final boolean relative;
+	protected final float tmaxInverse;
+	protected final float tmax;
+	protected final boolean relative;
+	private boolean dirty = false;
 
 	public APath(float tmax, boolean relative) {
 		this.tmaxInverse = 1.0f / tmax;
@@ -22,12 +23,14 @@ public abstract class APath {
 	 * @param alpha
 	 *            Value between 0 and 1.
 	 */
-	public final Vector2 applyInternal(float alpha) {
-		Vector2 v = new Vector2();
-		apply(alpha, v);
-		return v;
-	}
+	protected abstract void applyInternal(float alpha, Vector2 vector);
+	/**
+	 * When origin or anything else changes, this method gets called
+	 * so that the implementing path can update its parameters.
+	 */
+	protected abstract void computeParamters();
 
+	
 	/**
 	 * Returns the point at the given interval.
 	 * 
@@ -36,7 +39,10 @@ public abstract class APath {
 	 * @param vector
 	 *            Vector which will store the result.
 	 */
-	public abstract void apply(float t, Vector2 vector);
+	public void apply(float alpha, Vector2 vector) {
+		if (dirty) computeParamters();
+		applyInternal(alpha, vector);
+	}
 
 	/**
 	 * Returns the point at the given interval.
@@ -67,11 +73,16 @@ public abstract class APath {
 	 */
 	public void setOrigin(float x, float y) {
 		origin.set(x, y);
+		dirty = true;
 	}
 
 	public void setOrigin(Vector2 pos) {
 		origin.set(pos);
+		dirty = true;
 	}
 
+	public float getTMax() {
+		return tmax;
+	}
 
 }
