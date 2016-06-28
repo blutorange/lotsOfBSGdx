@@ -45,7 +45,7 @@ import de.homelab.madgaksha.resourcepool.AtlasAnimation;
  * <li>Move &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;PathType&gt; &lt;Duration&gt; [=&lt;Interpolation&gt;=(=linear)] &lt;Relative/Absolute&gt; &lt;PathDetails&gt;</li>
  * <li>Zoom &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt; [=&lt;Interpolation&gt;=(=linear)] &lt;targetScaleX&gt; [&lt;targetScaleY&gt;=&lt;targetScaleX&gt;]</li>
  * <li>Show &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt;</li>
- * <li>Fade &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt; &lt;TargetOpacity&gt; [Interpolation=linear]</li>
+ * <li>Fade &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt; [Interpolation=linear] &lt;TargetOpacity&gt;</li>
  * </ul>
  * 
  * Additionally, a z-index may be given immediately after the event name (and before the absolute/relative flag).

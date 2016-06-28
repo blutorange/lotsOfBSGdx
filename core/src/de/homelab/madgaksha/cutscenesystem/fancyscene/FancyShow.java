@@ -90,19 +90,7 @@ public class FancyShow extends AFancyEvent {
 			sprite.sprite.setScale(scaleDpi*sprite.scale.x,scaleDpi*sprite.scale.y);
 			sprite.sprite.setAlpha(sprite.opacity);
 			sprite.sprite.setCenter((sprite.position.x + 4.0f) * scaleX, (sprite.position.y + 4.5f) * scaleY);
-//			sprite.sprite.getRegionWidth()*sprite.cropX.x			
-//			float u = sprite.sprite.getU();
-//			float u2 = sprite.sprite.getU2();
-//			float v = sprite.sprite.getV();
-//			float v2 = sprite.sprite.getV2();
-//			u = 0.5f * ((u + u2) - (u2 - u) * sprite.cropX.y);
-//			u2 = 0.5f * ((u + u2) + (u2 - u) * sprite.cropX.x);
-//			v = 0.5f * ((v + v2) - (v2 - v) * sprite.cropY.y);
-//			v2 = 0.5f * ((v + v2) + (v2 - v) * sprite.cropY.x);
-//			sprite.sprite.setU(u);
-//			sprite.sprite.setU2(u2);
-//			sprite.sprite.setV(v);
-//			sprite.sprite.setV2(v2);
+			sprite.sprite.setCrop(sprite.cropX, sprite.cropY);
 			break;
 		case NINE_PATCH:
 			Color color = sprite.ninePatch.getColor();

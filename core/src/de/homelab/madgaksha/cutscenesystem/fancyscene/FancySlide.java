@@ -13,8 +13,8 @@ import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 
-public class FancyFade extends AFancyEvent {
-	private final static Logger LOG = Logger.getLogger(FancyFade.class);
+public class FancySlide extends AFancyEvent {
+	private final static Logger LOG = Logger.getLogger(FancySlide.class);
 
 	private String key = StringUtils.EMPTY;
 	private Interpolation interpolation = Interpolation.linear;
@@ -25,7 +25,7 @@ public class FancyFade extends AFancyEvent {
 	private float targetOpacity = 1.0f;
 	private FancySpriteWrapper sprite;
 	
-	public FancyFade(String key, float targetOpacity, Interpolation interpolation, float duration) {
+	public FancySlide(String key2, Float duration2, Interpolation interpolation, float targetCropLeft, float targetCropBottom, float targetCropRight, float targetCropTop) { 
 		super(true);
 		if (duration < 0.01f) throw new IllegalArgumentException("duration must be greate than 0");
 		this.targetOpacity = targetOpacity;
@@ -35,6 +35,7 @@ public class FancyFade extends AFancyEvent {
 		this.key = key;
 	}
 	
+
 	@Override
 	public void reset() {
 		interpolation = Interpolation.linear;
@@ -100,11 +101,22 @@ public class FancyFade extends AFancyEvent {
 		Interpolation interpolation = FileCutsceneProvider.readNextInterpolation(s);
 		if (interpolation == null) interpolation = Interpolation.linear;
 		
-		Float targetOpacity = FileCutsceneProvider.nextNumber(s);
-		if (targetOpacity == null) {
-			LOG.error("expected target opacity");
+		Float targetCropLeft = FileCutsceneProvider.nextNumber(s);
+		if (targetCropLeft == null) {
+			LOG.error("expected crop left");
 		}
 		
-		return new FancyFade(key, targetOpacity, interpolation, duration);
+		Float targetCropBottom = FileCutsceneProvider.nextNumber(s);
+		if (targetCropBottom == null) {
+			LOG.error("expected crop bottom");
+		}
+		
+		Float targetCropRight = FileCutsceneProvider.nextNumber(s);
+		if (targetCropRight == null) targetCropRight = targetCropLeft;
+		
+		Float targetCropTop = FileCutsceneProvider.nextNumber(s);
+		if (targetCropTop == null) targetCropTop = targetCropBottom;
+		
+		return new FancySlide(key, duration, interpolation, targetCropLeft, targetCropBottom, targetCropRight, targetCropTop);
 	}
 }

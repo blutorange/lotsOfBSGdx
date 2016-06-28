@@ -17,11 +17,12 @@ Sprite R 0.000 Bg14 83 OUGI_OUKA_MUSOUGEKI_ESTELLE_FACE_BG
 Sprite R 0.000 Bg15 83 OUGI_OUKA_MUSOUGEKI_ESTELLE_FACE_BG
 
 // Face
-//Crop   R 0.000 Face 1 2
 Position R 0.000 Face      0 0
+Crop     R 0.000 Face      1 0
 Position R 0.000 FaceWhite 0 0
 Opacity  R 0.000 Face      0
 Opacity  R 0.000 FaceWhite 1.0
+Slide    R 0.000 Face      0.400 =linear= 1 1 
 Fade     R 0.000 Face      0.400 1
 Fade     R 0.000 FaceWhite 0.400 0
 Fade     R 1.400 Face      0.400 0
