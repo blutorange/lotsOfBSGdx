@@ -2,7 +2,7 @@ Sprite   A 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP3
 Position A 0.000 Estelle -1.00 -0.70
 Opacity  A 0.000 Estelle 0.6
 
-Move   A 0.000 Estelle Parabola 0.500 =linear= R 0.2 0.8 1.5 2.05 -1.8
+Move   A 0.000 Estelle Parabola 0.500 =linear= R 0.2 0.8 1.5 1.55 -1.8
 Sprite A 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP7
 Sprite R 0.070 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP6
 Sprite R 0.070 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP5
