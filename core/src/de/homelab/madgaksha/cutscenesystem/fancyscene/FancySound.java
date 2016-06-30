@@ -67,7 +67,7 @@ public class FancySound extends AFancyEvent {
 	}
 
 	@Override
-	public void update(float deltaTime, float passedTime) {
+	public void update(float passedTime) {
 		isDone = passedTime >= sound.getDuration();
 	}
 
@@ -78,6 +78,10 @@ public class FancySound extends AFancyEvent {
 
 	@Override
 	public void end() {
+	}
+
+	@Override
+	public void attachedToScene(EventFancyScene scene) {	
 	}
 	
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
@@ -100,9 +104,5 @@ public class FancySound extends AFancyEvent {
 		}
 		else if (name.equals("general")) return null;
 		else throw new IllegalArgumentException("no such entity");
-	}
-	@Override
-	public boolean configure(EventFancyScene efs) {
-		return true;
 	}
 }

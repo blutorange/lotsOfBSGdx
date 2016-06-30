@@ -1,0 +1,23 @@
+Sprite   A 0.000 Circle 32.0 OUGI_OUKA_MUSOUGEKI_STAFF_CHARGE1
+
+Position A 0.000 Circle 2.300 -2.300
+Opacity  A 0.000 Circle 0
+Scale    A 0.000 Circle 5
+
+Fade A 0.000 Circle 0.400 =linear= 1.0
+Zoom A 0.000 Circle 0.400 =linear= 0.0
+
+Show A 0.000 Circle 0.400
+
+
+
+Sprite   A 0.000 Circle2 32.0 OUGI_OUKA_MUSOUGEKI_STAFF_CHARGE2
+
+Position A 0.000 Circle2 2.300 -2.300
+Opacity  A 0.000 Circle2 0
+Scale    A 0.000 Circle2 5
+
+Fade A 0.000 Circle2 0.400 =linear= 1.0
+Zoom A 0.000 Circle2 0.400 =linear= 0.0
+
+Show A 0.000 Circle2 0.400

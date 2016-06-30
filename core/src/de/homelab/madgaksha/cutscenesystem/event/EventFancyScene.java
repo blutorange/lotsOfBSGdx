@@ -3,9 +3,11 @@ package de.homelab.madgaksha.cutscenesystem.event;
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
 import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -15,37 +17,31 @@ import java.util.Stack;
 import org.apache.commons.io.IOUtils;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
-import de.homelab.madgaksha.cutscenesystem.FancySpriteWrapper;
+import de.homelab.madgaksha.cutscenesystem.FancyDrawable;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.ENinePatch;
-import de.homelab.madgaksha.resourcecache.ETexture;
-import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 /**
  * The following commands are available for reading from file.
  * <ul>
- * <li>Include &lt;Relative/Absolute> &lt;StartTime&gt; &lt;FileName&gt;</li>
- * <li>Sound &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;Entity&gt; &lt;Sound&gt;</li> 
- * <li>Sprite &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;DPI&gt; &lt;Texture&gt;</li>
- * <li>Spritetarget &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;DPI&gt; &lt;LookingDirection&gt;</li>
- * <li>Ninepatch &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;halfWidth&gt; &lt;halfHeight&gt; &lt;NinePatch&gt;</li>
- * <li>Position &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;X&gt; &lt;Y&gt;</li>
- * <li>Scale &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;cropLeft&gt; &lt;cropBottom&gt; [&lt;cropRight&gt;=&lt;cropLeft&gt;] [&lt;cropTop&gt;=&lt;cropBottom&gt;]</li>
- * <li>Scale &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;scaleX&gt; [&lt;scaleY&gt;=&lt;scaleX&gt;]</li>
- * <li>Opacity &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Opacity&gt;</li>
- * <li>Move &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;PathType&gt; &lt;Duration&gt; [=&lt;Interpolation&gt;=(=linear)] &lt;Relative/Absolute&gt; &lt;PathDetails&gt;</li>
- * <li>Zoom &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt; [=&lt;Interpolation&gt;=(=linear)] &lt;targetScaleX&gt; [&lt;targetScaleY&gt;=&lt;targetScaleX&gt;]</li>
- * <li>Show &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt;</li>
- * <li>Fade &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt; [Interpolation=linear] &lt;TargetOpacity&gt;</li>
+ * <li><b>Include</b> &lt;Relative/Absolute> &lt;StartTime&gt; &lt;FileName&gt;</li>
+ * <li><b>Sound</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;Entity&gt; &lt;Sound&gt;</li> 
+ * <li><b>Sprite</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;DPI&gt; &lt;Texture&gt;</li>
+ * <li><b>Spritetarget</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;DPI&gt; &lt;LookingDirection&gt;</li>
+ * <li><b>Ninepatch</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;halfWidth&gt; &lt;halfHeight&gt; &lt;NinePatch&gt;</li>
+ * <li><b>Position</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;X&gt; &lt;Y&gt;</li>
+ * <li><b>Origin</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;relativeOriginX&gt; &lt;relativeOriginY&gt;</li> 
+ * <li><b>Crop</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;cropLeft&gt; &lt;cropBottom&gt; [&lt;cropRight&gt;=&lt;cropLeft&gt;] [&lt;cropTop&gt;=&lt;cropBottom&gt;]</li>
+ * <li><b>Scale</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;scaleX&gt; [&lt;scaleY&gt;=&lt;scaleX&gt;]</li>
+ * <li><b>Opacity</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Opacity&gt;</li>
+ * <li><b>Move</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;PathType&gt; &lt;Duration&gt; [=&lt;Interpolation&gt;=(=linear)] &lt;Relative/Absolute&gt; &lt;PathDetails&gt;</li>
+ * <li><b>Slide</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt; [=&lt;Interpolation&gt;=(=linear)] &lt;CropLeft&gt; &lt;CropBottom&gt; [&lt;cropRight&gt;=&lt;cropLeft&gt;] [&lt;cropTop&gt;=&lt;cropBottom&gt;]</li> 
+ * <li><b>Zoom</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt; [=&lt;Interpolation&gt;=(=linear)] &lt;targetScaleX&gt; [&lt;targetScaleY&gt;=&lt;targetScaleX&gt;]</li>
+ * <li><b>Show</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt;</li>
+ * <li><b>Fade</b> &lt;Relative/Absolute&gt; &lt;StartTime&gt; &lt;SpriteName&gt; &lt;Duration&gt; [Interpolation=linear] &lt;TargetOpacity&gt;</li>
  * </ul>
  * 
  * Additionally, a z-index may be given immediately after the event name (and before the absolute/relative flag).
@@ -91,35 +87,38 @@ import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 public class EventFancyScene extends ACutsceneEvent {
 	private final static Logger LOG = Logger.getLogger(EventFancyScene.class);
 
-	private Stack<AFancyEvent> eventList = new Stack<AFancyEvent>();
-	private Stack<AFancyEvent> activeList = new Stack<AFancyEvent>();
-	private Map<String, FancySpriteWrapper> spriteMap = new HashMap<String, FancySpriteWrapper>();
+	private final List<AFancyEvent> eventList = new ArrayList<AFancyEvent>();
+	private final Stack<AFancyEvent> queueList = new Stack<AFancyEvent>();
+	private final LinkedList<AFancyEvent> activeList = new LinkedList<AFancyEvent>();//new Stack<AFancyEvent>();
+	private final Map<String, FancyDrawable> drawableMap = new HashMap<String, FancyDrawable>();
 	private float totalTime = 0.0f;
-
-	/**
-	 * Constructs a new fancy scene with an empty event list. Internal use only.
-	 */
-	private EventFancyScene() {
-	}
+	private float deltaTime = 0.0f;
 
 	public EventFancyScene(List<AFancyEvent> eventList) {
-		for (AFancyEvent fe : eventList) {
-			if (fe.configure(this)) {
-				this.eventList.add(fe);
-			}
-		}
+		this.eventList.addAll(eventList);
+		Collections.sort(this.eventList, Collections.reverseOrder());
+		for (AFancyEvent fe : this.eventList)
+			fe.attachedToScene(this);
 	}
 
 	@Override
 	public void reset() {
+		for (FancyDrawable fd : drawableMap.values())
+			fd.cleanup();
+		for (AFancyEvent fe : eventList)
+			//TODO call ResourcePool.freeFancyEvent(fe); instead
+			fe.reset();
 		eventList.clear();
+		drawableMap.clear();
+		queueList.clear();
 		activeList.clear();
 		totalTime = 0.0f;
+		deltaTime = 0.0f;
 	}
 
 	@Override
 	public boolean isFinished() {
-		return eventList.isEmpty() && activeList.isEmpty();
+		return queueList.isEmpty() && activeList.isEmpty();
 	}
 
 	@Override
@@ -137,34 +136,56 @@ public class EventFancyScene extends ACutsceneEvent {
 
 	@Override
 	public void update(float deltaTime) {
+		this.deltaTime = deltaTime;
 		totalTime += deltaTime;
-		boolean changed = false;
-		// Add events that should start now.
-		while (!eventList.empty() && totalTime >= eventList.peek().getStartTime()) {
-			AFancyEvent fe = eventList.pop();
-			if (fe.begin(this)) {
-				activeList.push(fe);
-				fe.update(totalTime - fe.getStartTime(), totalTime - fe.getStartTime());
-				changed = true;
-			}
-		}
-		if (changed) {
-			Collections.sort(activeList, AFancyEvent.ORDER_Z);
-		}
-		// Update events and remove those that are done.
+
+		boolean listChanged = false;
+		boolean eventsStarted = false;
+		
+		// We need to update all events currently active and remove those that
+		// are done before we can add new events. 
 		for (Iterator<AFancyEvent> it = activeList.iterator(); it.hasNext();) {
 			AFancyEvent fe = it.next();
+			fe.update(totalTime - fe.getStartTime());
 			if (fe.isFinished()) {
 				fe.end();
 				it.remove();
-			} else
-				fe.update(deltaTime, totalTime - fe.getStartTime());
+			}
+		}
+		
+		// Now we can add all new events that should start now.
+		while (!queueList.empty() && totalTime >= queueList.peek().getStartTime()) {
+			AFancyEvent fe = queueList.pop();
+			if (fe.begin(this)) {
+				activeList.push(fe);
+				listChanged = true;
+			}
+			eventsStarted = true;
+		}
+		
+		// Sort all active events by their z-index.
+		if (listChanged) {
+			Collections.sort(activeList, AFancyEvent.ORDER_Z);
+		}
+		
+		// Finally we need to update all events that have been added.
+		// As events may depend on each other, we need to update all events again,
+		// not only those that have been added.
+		if (eventsStarted) {
+			for (Iterator<AFancyEvent> it = activeList.iterator(); it.hasNext();) {
+				AFancyEvent fe = it.next();
+				fe.update(totalTime - fe.getStartTime());
+				if (fe.isFinished()) {
+					fe.end();
+					it.remove();
+				}
+			}
 		}
 	}
 
 	@Override
 	public void resize(int w, int h) {
-		for (AFancyEvent fe : eventList)
+		for (AFancyEvent fe : queueList)
 			fe.resize(w, h);
 		for (AFancyEvent fe : activeList)
 			fe.resize(w, h);
@@ -172,76 +193,50 @@ public class EventFancyScene extends ACutsceneEvent {
 
 	@Override
 	public boolean begin() {
-		Collections.sort(eventList, Collections.reverseOrder());
-		return !eventList.isEmpty();
+		for (FancyDrawable fd : drawableMap.values())
+			fd.resetToDefaults();
+		this.queueList.addAll(eventList);
+		this.activeList.clear();
+		totalTime = 0.0f;
+		deltaTime = 0.0f;
+		return !queueList.isEmpty();
 	}
 
 	@Override
 	public void end() {
 	}
 
-	public void addSprite(String key) {
-		if (!spriteMap.containsKey(key))
-			spriteMap.put(key, new FancySpriteWrapper());
+	/**
+	 * Requests a new drawable to be created for the given key.
+	 * Drawables will be created on-the-fly, use this for performance
+	 * optimizations.
+	 * @param key Name of the drawable.
+	 */
+	public void requestDrawable(String key) {
+		getDrawable(key);
 	}
-
-	private void setSpriteTexture(String key, AtlasRegion region, float dpi) {
-		FancySpriteWrapper fsw = getSprite(key);
-		if (region != null) fsw.sprite.setAtlasRegion(region);
-		fsw.spriteDpi = dpi;
-	}
-	public void setSpriteTexture(String key, ETexture texture, float dpi) {
-		FancySpriteWrapper fsw = getSprite(key);
-		setSpriteTexture(key, ResourceCache.getTexture(texture), dpi);
-		fsw.mode = FancySpriteWrapper.Mode.TEXTURE;
-	}
-	public void setSpriteTexture(String key, AtlasAnimation animation, float dpi) {
-		FancySpriteWrapper fsw = getSprite(key);
-		if (animation != null) {
-			fsw.atlasAnimation = animation;
-			setSpriteTexture(key, animation.getKeyFrame(0.0f), dpi);
+	
+	public FancyDrawable getDrawable(String key) {
+		FancyDrawable drawable = drawableMap.get(key);
+		if (drawable == null) {
+			drawable = new FancyDrawable();
+			drawableMap.put(key, drawable);
 		}
-		fsw.mode = FancySpriteWrapper.Mode.ATLAS_ANIMATION;
-	}
-	public void setSpriteTexture(String key, ENinePatch ninePatch, Vector2 dimensions) {
-		FancySpriteWrapper fsw = getSprite(key);
-		NinePatch np = ResourceCache.getNinePatch(ninePatch);
-		if (np != null) {
-			fsw.ninePatch = np;
-			fsw.ninePatchDimensions.set(dimensions);
-			fsw.mode = FancySpriteWrapper.Mode.NINE_PATCH;
-		}
-	}
-	
-
-	public void setSpritePosition(String key, Vector2 position) {
-		getSprite(key).position.set(position);
-	}
-	
-	public void setSpriteScale(String key, Vector2 scale) {
-		getSprite(key).scale.set(scale);
+		return drawable;
 	}
 
-	public void setSpriteColor(String key, Color color) {
-		getSprite(key).color.set(color);		
+	/**
+	 * The time that has passed since the last frame. Events can save a reference
+	 * to the parent and access the deltaTime if they need it to prevent rounding
+	 * errors from propagating.
+	 * Note, however, that {@link #update(float)} may be called more than
+	 * once per frame. Implemented events need to check the argument passedTime.
+	 * @return Time since the last frame.
+	 */
+	public float getDeltaTime() {
+		return deltaTime;
 	}
 	
-	public void setSpriteCrop(String key, Vector2 cropX, Vector2 cropY) {
-		FancySpriteWrapper fsw = getSprite(key);
-		fsw.cropX.set(cropX);
-		fsw.cropY.set(cropY);
-	}
-	
-	public void setSpriteOpacity(String key, float opacity) {
-		getSprite(key).opacity = opacity;		
-	}
-	
-	public FancySpriteWrapper getSprite(String key) {
-		addSprite(key);
-		return spriteMap.get(key);
-
-	}
-
 	public static EventFancyScene readNextObject(Scanner s, FileHandle inputFile) {
 		if (!s.hasNextLine()) {
 			LOG.error("expected file name for fancyScene configuration file");
@@ -249,11 +244,12 @@ public class EventFancyScene extends ACutsceneEvent {
 		}
 		String relativeFilePath = s.nextLine().trim();
 		FileHandle fileHandle = inputFile.parent().child(relativeFilePath);
-		EventFancyScene efs = new EventFancyScene();
-		return readEventList(fileHandle, efs) ? efs : null;
+		List<AFancyEvent> eventList = new ArrayList<AFancyEvent>();
+		if (!readEventList(fileHandle, eventList)) return null;
+		return new EventFancyScene(eventList);
 	}
 
-	private static boolean readEventList(FileHandle fileHandle, EventFancyScene efs) {
+	private static boolean readEventList(FileHandle fileHandle, List<AFancyEvent> eventList) {
 		Scanner scanner = null;
 		Map<Class<?>, Float> startMap = new HashMap<Class<?>, Float>();
 		try {
@@ -279,7 +275,7 @@ public class EventFancyScene extends ACutsceneEvent {
 					fancyEvent.resolveRelativeStartTime(startMap);
 					startMap.put(fancyEvent.getClass(), fancyEvent.getStartTime());
 					// Add event
-					efs.eventList.add(fancyEvent);
+					eventList.add(fancyEvent);
 				} finally {
 					IOUtils.closeQuietly(lineScanner);
 				}

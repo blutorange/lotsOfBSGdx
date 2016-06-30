@@ -11,6 +11,8 @@ import de.homelab.madgaksha.logging.Logger;
 public class FancyInclude extends AFancyEvent {
 
 	private EventFancyScene scene;
+	private EventFancyScene parent;
+	private float lastTime = 0.0f;
 
 	public FancyInclude(EventFancyScene scene) {
 		super(true);
@@ -21,16 +23,14 @@ public class FancyInclude extends AFancyEvent {
 
 	@Override
 	public void reset() {
-		this.scene = null;
-	}
-
-	@Override
-	public boolean configure(EventFancyScene efs) {
-		return true;
+		scene = null;
+		parent = null;
+		lastTime = 0.0f;
 	}
 
 	@Override
 	public boolean begin(EventFancyScene efs) {
+		parent = efs;
 		return scene.begin();
 	}
 
@@ -40,8 +40,9 @@ public class FancyInclude extends AFancyEvent {
 	}
 
 	@Override
-	public void update(float deltaTime, float passedTime) {
-		scene.update(deltaTime);
+	public void update(float currentTime) {
+		if (lastTime != currentTime) scene.update(parent.getDeltaTime());
+		lastTime = currentTime;
 	}
 
 	@Override
@@ -57,6 +58,10 @@ public class FancyInclude extends AFancyEvent {
 	@Override
 	public void end() {
 		scene.end();
+	}
+
+	@Override
+	public void attachedToScene(EventFancyScene scene) {
 	}
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

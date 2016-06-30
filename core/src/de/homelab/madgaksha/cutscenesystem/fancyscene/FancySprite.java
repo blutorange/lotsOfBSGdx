@@ -35,7 +35,7 @@ public class FancySprite extends AFancyEvent {
 
 	@Override
 	public boolean begin(EventFancyScene efs) {
-		efs.setSpriteTexture(key, texture, dpi);
+		efs.getDrawable(key).setDrawable(texture, dpi);
 		return false;
 	}
 
@@ -44,7 +44,7 @@ public class FancySprite extends AFancyEvent {
 	}
 
 	@Override
-	public void update(float deltaTime, float passedTime) {
+	public void update(float passedTime) {
 	}
 
 	@Override
@@ -56,10 +56,10 @@ public class FancySprite extends AFancyEvent {
 	public void end() {
 	}
 	
+
 	@Override
-	public boolean configure(EventFancyScene efs) {
-		efs.addSprite(key);
-		return true;
+	public void attachedToScene(EventFancyScene scene) {
+		scene.requestDrawable(key);		
 	}
 	
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
@@ -68,6 +68,7 @@ public class FancySprite extends AFancyEvent {
 			return null;
 		}
 		String key = s.next();
+		
 		Float dpi = FileCutsceneProvider.nextNumber(s);
 		if (dpi == null) {
 			LOG.error("expected dpi");

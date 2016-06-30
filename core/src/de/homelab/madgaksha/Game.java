@@ -226,6 +226,7 @@ public class Game implements ApplicationListener {
 			Gdx.app.exit();
 			return;
 		}
+
 		viewportPixel = new ScreenViewport();
 		viewportPixel.update(currentMonitorWidth, currentMonitorHeight, true);
 		computeBackgroundImageRectangle(currentMonitorWidth, currentMonitorHeight);

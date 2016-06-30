@@ -2,53 +2,42 @@ package de.homelab.madgaksha.cutscenesystem.fancyscene;
 
 import java.util.Scanner;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
-import de.homelab.madgaksha.cutscenesystem.FancySpriteWrapper;
 import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.path.APath;
 import de.homelab.madgaksha.path.EPath;
 
-public class FancyMove extends AFancyEvent {
+public class FancyMove extends DrawableFancy {
 	private final static Logger LOG = Logger.getLogger(FancyMove.class);
 
 	private APath path;
-	private String key = StringUtils.EMPTY;
 	private Interpolation interpolation = Interpolation.linear;
+	private Vector2 vector = new Vector2();
 	private boolean isDone = false;
-	private FancySpriteWrapper sprite;
 	
 	public FancyMove(String key, APath path, Interpolation interpolation) {
-		super(true);
+		super(key);
 		this.path = path;
-		this.key = key;
 		this.interpolation = interpolation;
 	}
 	
 	@Override
-	public void reset() {
+	public void resetSubclass() {
 		path = null;
 		isDone = false;
-		key = StringUtils.EMPTY;
-		sprite = null;
 		interpolation = Interpolation.linear;
 	}
 
 	@Override
-	public boolean configure(EventFancyScene efs) {
-		return true;
-	}
-
-	@Override
 	public boolean begin(EventFancyScene efs) {
-		this.sprite = efs.getSprite(key);
-		path.setOrigin(sprite.position);
+		path.setOrigin(drawable.getPosition);
+		isDone = false;
 		return true;
 	}
 
@@ -57,12 +46,13 @@ public class FancyMove extends AFancyEvent {
 	}
 
 	@Override
-	public void update(float deltaTime, float passedTime) {
+	public void update(float passedTime) {
 		if (passedTime >= path.getTMax()) {
 			passedTime = path.getTMax();
 			isDone = true;
 		}
-		path.applyWithInterpolation(passedTime, sprite.position, interpolation);
+		path.applyWithInterpolation(passedTime, vector, interpolation);
+		drawable.setPosition(vector);
 	}
 
 	@Override
@@ -72,7 +62,8 @@ public class FancyMove extends AFancyEvent {
 
 	@Override
 	public void end() {
-		reset();
+		// Make sure the sprite ends up at the correct position.
+		update(path.getTMax());
 	}
 	
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

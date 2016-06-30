@@ -2,23 +2,18 @@ package de.homelab.madgaksha.cutscenesystem.fancyscene;
 
 import java.util.Scanner;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
-import de.homelab.madgaksha.cutscenesystem.FancySpriteWrapper;
 import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 
-public class FancySlide extends AFancyEvent {
+public class FancySlide extends DrawableFancy {
 	private final static Logger LOG = Logger.getLogger(FancySlide.class);
 
-	private String key = StringUtils.EMPTY;
-	private FancySpriteWrapper sprite;
 	private Interpolation interpolation = Interpolation.linear;
 	private float duration = 1.0f;
 	private float durationInverse = 1.0f;
@@ -29,23 +24,20 @@ public class FancySlide extends AFancyEvent {
 	private Vector2 targetCropY = new Vector2(1.0f,1.0f);
 	
 	public FancySlide(String key, Float duration, Interpolation interpolation, float targetCropLeft, float targetCropBottom, float targetCropRight, float targetCropTop) { 
-		super(true);
+		super(key);
 		if (duration < 0.01f) throw new IllegalArgumentException("duration must be greate than 0");
 		this.duration = duration;
 		this.durationInverse = 1.0f/duration;
 		this.interpolation = interpolation;
-		this.key = key;
 		this.targetCropX.set(targetCropLeft, targetCropRight);
 		this.targetCropY.set(targetCropBottom, targetCropTop);
 	}
 	
 
 	@Override
-	public void reset() {
+	public void resetSubclass() {
 		interpolation = Interpolation.linear;
 		isDone = false;
-		key = StringUtils.EMPTY;
-		sprite = null;
 		duration = durationInverse = 1.0f;
 		startCropX.set(1.0f,1.0f);
 		startCropY.set(1.0f,1.0f);
@@ -54,15 +46,10 @@ public class FancySlide extends AFancyEvent {
 	}
 
 	@Override
-	public boolean configure(EventFancyScene efs) {
-		return true;
-	}
-
-	@Override
 	public boolean begin(EventFancyScene efs) {
-		this.sprite = efs.getSprite(key);
-		this.startCropX.set(sprite.cropX);
-		this.startCropY.set(sprite.cropY);
+		drawable.getCropX.as(startCropX);
+		drawable.getCropY.as(startCropY);
+		isDone = false;
 		return true;
 	}
 
@@ -71,15 +58,14 @@ public class FancySlide extends AFancyEvent {
 	}
 
 	@Override
-	public void update(float deltaTime, float passedTime) {
+	public void update(float passedTime) {
 		if (passedTime >= duration) {
 			passedTime = duration;
 			isDone = true;
 		}
 		float alpha = interpolation.apply(passedTime * durationInverse);
-		sprite.cropX.set(startCropX).lerp(targetCropX, alpha);
-		sprite.cropY.set(startCropY).lerp(targetCropY, alpha);
-		
+		drawable.setCropXLerp(startCropX, targetCropX, alpha);
+		drawable.setCropYLerp(startCropY, targetCropY, alpha);
 	}
 
 	@Override
@@ -89,9 +75,10 @@ public class FancySlide extends AFancyEvent {
 
 	@Override
 	public void end() {
-		reset();
+		// Make sure crop is set to its final value.
+		update(duration);
 	}
-	
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");

@@ -12,6 +12,7 @@ import de.homelab.madgaksha.resourcecache.ETextureAtlas;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEffect> {
+	DEFAULT("particle/default.p", ETextureAtlas.PARTICLE_EFFECTS),
 	FIRE_THROWER("particle/fireThrower.p", ETextureAtlas.PARTICLE_EFFECTS),
 	SMALL_FIRE("particle/smallFire.p", ETextureAtlas.PARTICLE_EFFECTS),
 	ENEMY_APPEAR_FLASH("particle/enemyAppearFlash.p", ETextureAtlas.PARTICLE_EFFECTS),

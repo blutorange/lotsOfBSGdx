@@ -42,21 +42,21 @@ public class FancySpritetarget extends AFancyEvent {
 	public boolean begin(EventFancyScene efs) {
 		// Get sprite animation of the current target.
 		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
-			LOG.debug("no such target");
+			LOG.error("no such target");
 			return false;
 		}
 		Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
 		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(target);
 		if (sfdc == null) {
-			LOG.debug("target does not possess sprite for direction component");
+			LOG.error("target does not possess sprite for direction component");
 			return false;
 		}
 		AtlasAnimation animation = BirdsViewSpriteSystem.getForDirection(direction, sfdc);
 		if (animation == null) {
-			LOG.debug("could not fetch animation for direction");
+			LOG.error("could not fetch animation for direction");
 			return false;
 		}
-		efs.setSpriteTexture(key, animation, dpi);
+		efs.getDrawable(key).setDrawable(animation, dpi);
 		return false;
 	}
 
@@ -65,7 +65,7 @@ public class FancySpritetarget extends AFancyEvent {
 	}
 
 	@Override
-	public void update(float deltaTime, float passedTime) {
+	public void update(float passedTime) {
 	}
 
 	@Override
@@ -76,11 +76,10 @@ public class FancySpritetarget extends AFancyEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	@Override
-	public boolean configure(EventFancyScene efs) {
-		efs.addSprite(key);
-		return true;
+	public void attachedToScene(EventFancyScene scene) {
+		scene.requestDrawable(key);		
 	}
 	
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

@@ -27,7 +27,8 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 	public final static Comparator<AFancyEvent> ORDER_Z = new Comparator<AFancyEvent>() {
 		@Override
 		public int compare(AFancyEvent o1, AFancyEvent o2) {
-			return o1.z < o2.z ? -1 : o1.z == o2.z ? 0 : 1;
+			return (o1.priority < o2.priority) ? -1 : (o1.priority == o2.priority) ? ((o1.z < o2.z) ? -1 : (o1.z == o2.z) ? 0 : 1) : 1;
+			//return o1.z < o2.z ? -1 : o1.z == o2.z ? 0 : 1;
 		}
 	};
 	
@@ -41,32 +42,55 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 		}
 	}
 	
+//	/**
+//	 * @param efs The cutscene event which contains this fancy event.
+//	 * @return Whether this event can be played back. Should be false for configuration setters.
+//	 */
+//	public abstract boolean configure(EventFancyScene efs);
+	
 	/**
-	 * @param efs The cutscene event which contains this fancy event.
-	 * @return Whether this event can be played back. Should be false for configuration setters.
+	 * Called at the earliest frame the event should be active.
+	 * It is not called in the correct z-order and should thus
+	 * not perform any functions related to {@link #update(float, float)}.
+	 * @param efs
+	 * @return
 	 */
-	public abstract boolean configure(EventFancyScene efs);
 	public abstract boolean begin(EventFancyScene efs);
 	public abstract void render();
 	/**
-	 * Called when some time has passed and the events needs to be updated.
+	 * Called when some time has passed and this event needs to be updated.
 	 * @param deltaTime Time that has passed since the last update.
 	 * @param passedTime Time that has passed since the beginning of this event.
 	 */
-	public abstract void update(float deltaTime, float passedTime);
+	public abstract void update(float passedTime);
+	/**
+	 * Called each frame to check whether this event is over.
+	 * @return Whether this event is over.
+	 */
 	public abstract boolean isFinished();
+	/**
+	 * Called after {@link #isFinished()} returned true. It is called
+	 * in the correct z order and may perform final {@link #update}s
+	 * and set attributes to their correct values for the end time.
+	 */
 	public abstract void end();
 	public void resize(int w, int h) {
-		
 	}
+	
+	/**
+	 * Called when this fancy event is added to a {@link EventFancyScene}.
+	 * This method should prepare the scene such as by adding the required
+	 * {@link FancyDrawable}s via a call to {@link EventFancyScene#requestDrawable(String)}.
+	 * @param scene
+	 */
+	public abstract void attachedToScene(EventFancyScene scene);
 	
 	/**
 	 * For sorting the eventList. Lowest start time last, highest first.
 	 */
 	@Override
 	public int compareTo(AFancyEvent you) {
-		int n = (startTime < you.startTime) ? -1 : (startTime == you.startTime) ? ((priority < you.priority) ? -1 : (priority == you.priority) ? 0 : 1) : 1;
-		return n;
+		return (startTime < you.startTime) ? -1 : (startTime == you.startTime) ? ((priority < you.priority) ? -1 : (priority == you.priority) ? 0 : 1) : 1;
 	}
 	
 	public float getStartTime() {
@@ -158,6 +182,7 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 		FancyNinepatch(1),
 		
 		FancyPosition(2),
+		FancyOrigin(2),
 		FancyOpacity(2),
 		FancyScale(2),
 		FancyCrop(2),
@@ -167,6 +192,7 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 		FancyZoom(3),
 		FancySlide(3),
 		
+		FancyPeffect(4),
 		FancyShow(4),
 		FancyInclude(4),
 		;

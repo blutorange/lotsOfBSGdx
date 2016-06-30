@@ -3,19 +3,21 @@ Sound A 0.000 General ESTELLE_HAHHA
 // Initialize
 // Sprite, show, position, fade-in and show
 Sprite   A 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP3
+Sprite   A 0.000 UpslashArc 32.0 OUGI_OUKA_MUSOUGEKI_UPSLASH_ARC
 Spritetarget A 0.000 Enemy 32.0 0.0
 
 // Position player
 Position A 0.000 Estelle 4.000 -2.5
 
 // Position enemy
-Position A 0.000 Enemy -7.000 -3.000
+Position A 0.000 Enemy -5.000 -3.000
+Origin   A 0.000 Enemy 1.0 0.5
 
 // Parabola Jump
 Move A 0.000 Estelle Parabola 0.450 =linear= A 0.333 2.000 3.0 -2.0 -3.0
 
 // Move in enemy
-Move A 0.000 Enemy Line 0.450 =exp5Out= A -2.750 -3.000
+Move A 0.000 Enemy Line 0.450 =exp5Out= A -0.750 -3.000
 
 // Jump and landing animation
 Sprite A 0.035 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP4
@@ -72,11 +74,12 @@ Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN0
 Sound  R 0.100 General WOODEN_BEAT1
 Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN1
 Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN2
-Sound  R 0.100 General WOODEN_BEAT1
 Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN3
 
 // Jump forward at enemy
-Sound  A 2.350 General WOODEN_BEAT2
+Sound  A 2.300 General WOODEN_BEAT2
+Sound  R 0.050 General WOODEN_BEAT2
+Sound  R 0.050 General WOODEN_BEAT2
 Sprite A 2.350 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP1
 Move   A 2.350 Estelle Line 0.200 =pow2Out= R  -1.0 1.8
 
@@ -128,15 +131,62 @@ Sound  A 4.250 General ESTELLE_YAA
 Sprite A 4.250 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP2
 Sprite R 0.100 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP0
 Sprite R 0.100 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP1
+Position A 4.350 UpslashArc -0.4 -3.1
+Opacity  A 4.350 UpslashArc 0
+Fade     A 4.350 UpslashArc 0.1 1
+Fade     A 4.750 UpslashArc 0.1 0
 
 // Final hit charge
 Sprite A 4.850 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT0
-Sprite R 0.060 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT1
-Sprite R 0.060 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT2
-Sprite R 0.060 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT3
-Sprite R 0.060 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT4
+Sprite R 0.033 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT1
+Sprite R 0.033 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT2
+Sprite R 0.033 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT3
+Sprite R 0.033 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT4
 Sound  A 4.900 General ESTELLE_HAA
-Sprite R 0.060 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT5
+Sprite R 0.033 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT5
+Include 2 A 5.150 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim  
+Include 2 R 0.050 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim  
+Include 2 R 0.050 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim  
+Include 2 R 0.050 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim  
+Include 2 R 0.050 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim  
+Include 2 R 0.050 staffCharge.anim
+Include 3 R 0.000 staffChargeLarge.anim
+Include 2 R 0.100 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim  
+Include 2 R 0.050 staffCharge.anim
+Include 2 R 0.100 staffCharge.anim
+
+// Final hit
+Sprite A 7.800 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT5
+Sprite R 0.016 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT4
+Sprite R 0.016 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT3
+Sprite R 0.016 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT2
+Sprite R 0.016 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT1
+Sprite R 0.016 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT6
+Sprite R 0.067 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT7
+Sprite R 0.067 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT8
+Sprite R 0.067 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT9
+
+Peffect      A 0.000 Particle 100 NPC_DISAPPEAR
+Position     A 0.000 Particle 0.0 0.0
+Show     100 A 0.000 Particle 20.000
+
+// Fade out
+Fade A 11.000 Estelle 0.400 0
+Fade A 11.000 Enemy   0.400 0
 
 
 // Show
@@ -148,7 +198,8 @@ Include -5 R 0.050 jumpOpacity80.anim
 Include -6 R 0.050 jumpOpacity60.anim
 Include -7 R 0.050 jumpOpacity40.anim
 Include -8 R 0.050 jumpOpacity20.anim
-Show     0 A 0.000 Estelle 8.950
-Show     1 A 0.000 Enemy   8.950
-Include  2 A 5.850 cutinBody.anim
+Show    -9 A 4.350 UpslashArc 0.500
+Show     0 A 0.000 Estelle 11.400
+Show     1 A 0.000 Enemy   11.400
+Include  100 A 5.700 cutinBody.anim
  

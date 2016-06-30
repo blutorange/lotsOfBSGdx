@@ -3,6 +3,8 @@ package de.homelab.madgaksha.path;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
+import de.homelab.madgaksha.getter.GetVector2;
+
 public abstract class APath {
 
 	protected final Vector2 origin = new Vector2();
@@ -64,7 +66,7 @@ public abstract class APath {
 	public void applyWithInterpolation(float totalTime, Vector2 vector, Interpolation interpolation) {
 		apply(interpolation.apply(totalTime*tmaxInverse), vector);
 	}
-	
+		
 	/**
 	 * Sets the origin. All paths are relative to this origin.
 	 * 
@@ -81,8 +83,19 @@ public abstract class APath {
 		dirty = true;
 	}
 
+	public void setOrigin(GetVector2 getOrigin) {
+		getOrigin.as(this.origin);
+		dirty = true;
+	}
+	
 	public float getTMax() {
 		return tmax;
 	}
-
+	
+	public float getOriginX() {
+		return origin.x;
+	}
+	public float getOriginY() {
+		return origin.y;
+	}
 }

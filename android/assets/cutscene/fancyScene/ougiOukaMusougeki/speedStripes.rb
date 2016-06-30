@@ -1,7 +1,7 @@
 count = 200
 speed = 0.5
 delay = 0.05
-duration = 7.650+1.300
+duration = 10.800
 
 lastSpeed = 0
 totalDelay = 0.0

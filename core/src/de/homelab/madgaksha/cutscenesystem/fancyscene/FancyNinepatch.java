@@ -35,7 +35,7 @@ public class FancyNinepatch extends AFancyEvent {
 
 	@Override
 	public boolean begin(EventFancyScene efs) {
-		efs.setSpriteTexture(key, ninePatch, dimensions);
+		efs.getDrawable(key).setDrawable(ninePatch, dimensions);
 		return false;
 	}
 
@@ -44,7 +44,7 @@ public class FancyNinepatch extends AFancyEvent {
 	}
 
 	@Override
-	public void update(float deltaTime, float passedTime) {
+	public void update(float passedTime) {
 	}
 
 	@Override
@@ -55,11 +55,10 @@ public class FancyNinepatch extends AFancyEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	@Override
-	public boolean configure(EventFancyScene efs) {
-		efs.addSprite(key);
-		return true;
+	public void attachedToScene(EventFancyScene scene) {
+		scene.requestDrawable(key);		
 	}
 	
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

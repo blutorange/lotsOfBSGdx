@@ -25,6 +25,13 @@ buddhaStarYellow
   orig: 66, 64
   offset: 0, 0
   index: -1
+default
+  rotate: false
+  xy: 103, 24
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
 greenBar
   rotate: false
   xy: 137, 43
@@ -76,7 +83,7 @@ whiteBarV5
   index: -1
 whitePixel
   rotate: false
-  xy: 103, 24
+  xy: 201, 90
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

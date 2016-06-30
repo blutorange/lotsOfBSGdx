@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.math.Interpolation;
 
 import de.homelab.madgaksha.DebugMode;
 import de.homelab.madgaksha.GlobalBag;

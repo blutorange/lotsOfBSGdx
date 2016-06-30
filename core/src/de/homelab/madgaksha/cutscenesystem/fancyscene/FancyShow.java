@@ -1,108 +1,50 @@
 package de.homelab.madgaksha.cutscenesystem.fancyscene;
 
-import static de.homelab.madgaksha.GlobalBag.batchPixel;
-import static de.homelab.madgaksha.GlobalBag.viewportGame;
-
 import java.util.Scanner;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 
 import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
-import de.homelab.madgaksha.cutscenesystem.FancySpriteWrapper;
 import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 
-public class FancyShow extends AFancyEvent {
+public class FancyShow extends DrawableFancy {
 	private final static Logger LOG = Logger.getLogger(FancyShow.class);
 
-	private String key = StringUtils.EMPTY;
-	private FancySpriteWrapper sprite;
 	private float duration;
+	private float lastTime = 0.0f;
 	private boolean isDone = false;
-	private float scaleX = 640.0f / 8.0f;
-	private float scaleY = scaleX * 9.0f / 8.0f;
-	private float scaleDpi = 1.0f;
-
 	public FancyShow(String key, float duration) {
-		super(true);
-		this.key = key;
+		super(key);
 		this.duration = duration;
 	}
 
 	@Override
-	public void reset() {
-		key = StringUtils.EMPTY;
+	public void resetSubclass() {
 		duration = 0.0f;
-		sprite = null;
+		lastTime = 0.0f;
 		isDone = false;
-		scaleX = 640.0f / 8.0f;
-		scaleY = scaleX * 9.0f / 8.0f;
-		scaleDpi = 1.0f;
 	}
 
 	@Override
-	public boolean configure(EventFancyScene efs) {
-		efs.addSprite(key);
+	public boolean begin(EventFancyScene scene) {
+		lastTime = 0.0f;
+		isDone = false;
+		drawable.resize();
 		return true;
 	}
 
-	@Override
-	public boolean begin(EventFancyScene efs) {
-		this.sprite = efs.getSprite(key);
-		this.sprite.sprite.setOriginCenter();
-		setScale();
-		return true;
-	}
-
-	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void render() {
-		switch (sprite.mode) {
-		case ATLAS_ANIMATION:
-			// no break
-			// update updates the sprite to the current key frame
-		case TEXTURE:
-			sprite.sprite.draw(batchPixel);
-			break;
-		case NINE_PATCH:
-			float x = (sprite.position.x + 4.0f) * scaleX;
-			float y = (sprite.position.y + 4.5f) * scaleY;
-			float w = sprite.ninePatchDimensions.x * scaleX * sprite.scale.x;
-			float h = sprite.ninePatchDimensions.y * scaleY * sprite.scale.y;
-			sprite.ninePatch.draw(batchPixel, x-w, y-h, w+w, h+h);
-			break;
-		}
-
+		drawable.render();
 	}
 
 	@Override
-	public void update(float deltaTime, float passedTime) {
-		switch (sprite.mode) {
-		case ATLAS_ANIMATION:
-			sprite.sprite.setAtlasRegion(sprite.atlasAnimation.getKeyFrame(passedTime));
-			// no break because the texture for the key frame needs to be processed as well
-		case TEXTURE:	
-			sprite.sprite.setColor(sprite.color);
-			sprite.sprite.setScale(scaleDpi*sprite.scale.x,scaleDpi*sprite.scale.y);
-			sprite.sprite.setAlpha(sprite.opacity);
-			sprite.sprite.setCenter((sprite.position.x + 4.0f) * scaleX, (sprite.position.y + 4.5f) * scaleY);
-			sprite.sprite.setCrop(sprite.cropX, sprite.cropY);
-			break;
-		case NINE_PATCH:
-			Color color = sprite.ninePatch.getColor();
-			color.set(sprite.color);
-			color.a = sprite.opacity;
-			sprite.ninePatch.setColor(color);
-			break;
-		default:
-			LOG.debug("unknown display mode");
-		}
-		if (passedTime >= duration)
+	public void update(float currentTime) {
+		if (drawable.update(currentTime-lastTime, currentTime) || currentTime >= duration)
 			isDone = true;
+		lastTime = currentTime;
 	}
 
 	@Override
@@ -112,18 +54,11 @@ public class FancyShow extends AFancyEvent {
 
 	@Override
 	public void end() {
-		reset();
 	}
 
 	@Override
 	public void resize(int w, int h) {
-		setScale();
-	}
-
-	private void setScale() {
-		scaleX = viewportGame.getScreenWidth() / 8.0f;
-		scaleY = viewportGame.getScreenHeight() / 9.0f;
-		if (sprite != null) scaleDpi = viewportGame.getScreenWidth() / (8.0f * sprite.spriteDpi);
+		drawable.resize();
 	}
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

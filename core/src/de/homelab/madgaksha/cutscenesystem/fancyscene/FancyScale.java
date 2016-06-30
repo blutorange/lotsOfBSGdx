@@ -32,7 +32,7 @@ public class FancyScale extends AFancyEvent {
 
 	@Override
 	public boolean begin(EventFancyScene efs) {
-		efs.setSpriteScale(key, scale);
+		efs.getDrawable(key).setScale(scale);
 		return false;
 	}
 
@@ -41,7 +41,7 @@ public class FancyScale extends AFancyEvent {
 	}
 
 	@Override
-	public void update(float deltaTime, float passedTime) {
+	public void update(float passedTime) {
 	}
 
 	@Override
@@ -54,9 +54,8 @@ public class FancyScale extends AFancyEvent {
 	}
 	
 	@Override
-	public boolean configure(EventFancyScene efs) {
-		efs.addSprite(key);
-		return true;
+	public void attachedToScene(EventFancyScene scene) {
+		scene.requestDrawable(key);		
 	}
 	
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

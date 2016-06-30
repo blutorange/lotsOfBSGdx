@@ -1,0 +1,19 @@
+Sound A 0.000 General ESTELLE_HAHHA
+
+// Initialize
+Sprite   A 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP3
+Position A 0.000 Estelle 3.000 2.5
+Move A 0.000 Estelle Parabola 0.450 =linear= R 0.5 -1 1 -2 -3
+
+// Jump and landing animation
+
+// Show
+//Include -1 A 0.050 jumpOpacity100.anim
+//Include -2 R 0.050 jumpOpacity100.anim
+//Include -3 R 0.050 jumpOpacity100.anim
+//Include -4 R 0.050 jumpOpacity100.anim
+//Include -5 R 0.050 jumpOpacity80.anim
+//Include -6 R 0.050 jumpOpacity60.anim
+//Include -7 R 0.050 jumpOpacity40.anim
+//Include -8 R 0.050 jumpOpacity20.anim
+Show     0 A 0.000 Estelle 11.400 

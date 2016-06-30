@@ -9,7 +9,7 @@
     "requestedWidth": 1280,
     "requestedHeight": 720,
     "requestedFullscreen": false,
-    "requestedFps": 30,
+    "requestedFps": 60,
     "requestedLogLevel": 3,
     "requestedWindowTitle": "Get up and running",
     "requestedTextboxSpeed": 15 

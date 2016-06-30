@@ -1,0 +1,10 @@
+Sprite   A 0.000 Circle 32.0 OUGI_OUKA_MUSOUGEKI_STAFF_CHARGE1
+Position A 0.000 Circle 2.300 -2.300
+Opacity  A 0.000 Circle 0.0
+Scale    A 0.000 Circle 12
+
+Fade A 0.000 Circle 1.200 =pow2Out= 1.0
+Zoom A 0.000 Circle 1.200 =pow2Out= 0.0
+
+
+Show A 0.000 Circle 1.200
