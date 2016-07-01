@@ -2,42 +2,34 @@ package de.homelab.madgaksha.shader;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
-public class FragmentShader {
-	private final static String DEFAULT_PROGRAM;
-	static {
-		DEFAULT_PROGRAM = "#ifdef GL_ES\n" //
-				+ "#define LOWP lowp\n" //
-				+ "precision mediump float;\n" //
-				+ "#else\n" //
-				+ "#define LOWP \n" //
-				+ "#endif\n" //
-				+ "varying LOWP vec4 v_color;\n" //
-				+ "varying vec2 v_texCoords;\n" //
-				+ "uniform sampler2D u_texture;\n" //
-				+ "void main()\n"//
-				+ "{\n" //
-				+ "  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n" //
-				+ "}";
-	}
-	private final static FragmentShader DEFAULT = new FragmentShader(DEFAULT_PROGRAM);
+public abstract class FragmentShader {
 
-	public static FragmentShader getDefault() {
-		return DEFAULT;
-	}
-
+	private final static FragmentShader DEFAULT = new FragmentShaderDefault();
 	private final String program;
-
-	public FragmentShader(String program) {
-		this.program = program;
+	private ShaderProgram shaderProgram;
+	
+	public FragmentShader() {
+		this.program = requestedProgram();
 	}
-
 	public String getProgram() {
 		return program;
 	}
 
-	public void update(float deltaTime) {
-	};
+	protected abstract String requestedProgram();
+	public abstract void update(float deltaTime);
+	abstract void setUniforms(ShaderProgram shaderProgram);
 
-	public void forShaderProgram(ShaderProgram sp) {
+	void setShaderProgram(ShaderProgram shaderProgram) {
+		this.shaderProgram = shaderProgram;
+		forShaderProgram(shaderProgram);
+	}
+	protected void forShaderProgram(ShaderProgram sp){
 	};
+	protected ShaderProgram getShaderProgram() {
+		return shaderProgram;
+	}
+	
+	public static FragmentShader getDefault() {
+		return DEFAULT;
+	}
 }

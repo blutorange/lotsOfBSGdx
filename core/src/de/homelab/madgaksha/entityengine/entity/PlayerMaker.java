@@ -71,7 +71,7 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcepool.ResourcePool;
-import de.homelab.madgaksha.shader.FragmentShaderGrayscaleDarkened;
+import de.homelab.madgaksha.shader.FragmentShaderGrayscale;
 
 public final class PlayerMaker implements IHittable, IMortal {
 	@SuppressWarnings("unused")
@@ -430,11 +430,14 @@ public final class PlayerMaker implements IHittable, IMortal {
 		MusicPlayer.getInstance().setCrossFade(true);
 		MusicPlayer.getInstance().transition(1.0f);
 
-		// Show everything in greyscale.
-		game.setFragmentShaderBatchGame(new FragmentShaderGrayscaleDarkened(0.0f, 0.8f, 5.0f));
-
-		game.pause(false);
-
+		// Show everything in greyscale and pause after a few seconds.
+		game.setFragmentShaderBatchGame(new FragmentShaderGrayscale(0.0f, 0.9f, 1.0f, 0.2f, 9.0f, Interpolation.sineIn));
+		MakerUtils.addTimedRunnable(12.0f, new ITimedCallback() {
+			@Override
+			public void run(Entity entity, Object data) {
+				game.pause();				
+			}
+		});
 	}
 
 	@Override

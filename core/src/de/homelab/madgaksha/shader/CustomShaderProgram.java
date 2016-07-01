@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import de.homelab.madgaksha.logging.Logger;
 
-public class CustomShaderProgram {
-	@SuppressWarnings("unused")
+public class CustomShaderProgram extends ShaderProgram {
 	private final static Logger LOG = Logger.getLogger(CustomShaderProgram.class);
 
-	private final ShaderProgram sp;
 	private final FragmentShader fs;
 	private final VertexShader vs;
+	private final boolean compiled;
 
 	public CustomShaderProgram() {
 		this(VertexShader.getDefault(), FragmentShader.getDefault());
@@ -22,24 +21,37 @@ public class CustomShaderProgram {
 	}
 
 	public CustomShaderProgram(VertexShader vs, FragmentShader fs) {
+		super(vs.getProgram(), fs.getProgram());
+		if (!isCompiled()) {
+			LOG.error("could not compile shader program");
+			compiled = false;
+			this.fs = null;
+			this.vs = null;
+			return;
+		}
 		this.fs = fs;
 		this.vs = vs;
-		sp = new ShaderProgram(vs.getProgram(), fs.getProgram());
-		fs.forShaderProgram(sp);
-		vs.forShaderProgram(sp);
+		this.compiled = true;
+		fs.setShaderProgram(this);
+		vs.setShaderProgram(this);
 	}
 
 	public void update(float deltaTime) {
+		if (!compiled) return;
 		fs.update(deltaTime);
 		vs.update(deltaTime);
 	}
 
 	public void apply(SpriteBatch batch) {
-		batch.setShader(sp);
+		if (!compiled) return;
+		batch.setShader(this);
 	}
 
-	public void dispose() {
-		if (sp != null)
-			sp.dispose();
+	@Override
+	public void begin() {
+		if (!compiled) return;
+		super.begin();
+		fs.setUniforms(this);
+		vs.setUniforms(this);
 	}
 }

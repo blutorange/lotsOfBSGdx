@@ -35,8 +35,8 @@ public class TokugiSign implements Poolable {
 	private final static Interpolation INTERPOLATION_OUT = Interpolation.sineOut;
 
 	private final static float POSITION_X = 0.5f;
-	private final static float POSITION_Y = 0.94f;
-	private final static float HALFHEIGHT = 0.04f;
+	private final static float POSITION_Y = 0.92f;
+	private final static float HALFHEIGHT = 0.06f;
 	
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(TokugiSign.class);

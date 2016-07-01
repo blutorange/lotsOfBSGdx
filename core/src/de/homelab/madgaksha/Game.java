@@ -269,6 +269,9 @@ public class Game implements ApplicationListener {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+		if (customShaderProgramBatchGame != null && running)
+			customShaderProgramBatchGame.update(Gdx.graphics.getRawDeltaTime()*timeScalingFactor);
+		
 		// Render background first.
 		renderBackground();
 
