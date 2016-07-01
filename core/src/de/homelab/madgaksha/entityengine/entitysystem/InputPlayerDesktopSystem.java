@@ -3,6 +3,7 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import static de.homelab.madgaksha.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
 import static de.homelab.madgaksha.GlobalBag.player;
+import static de.homelab.madgaksha.GlobalBag.playerEntity;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
@@ -19,6 +20,7 @@ import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.InputDesktopComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
 import de.homelab.madgaksha.logging.Logger;
@@ -110,6 +112,12 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 				EnemyMaker.targetSwitched(
 						cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex), true);
 			}
+		}
+		
+		// Fire tokugi.
+		if (battleModeActive && KeyMapDesktop.isTokugiFireJustPressed()) {
+			TemporalComponent tc = Mapper.temporalComponent.get(entity);
+			player.getEquippedTokugi().fire(playerEntity, tc.deltaTime);
 		}
 	}
 }

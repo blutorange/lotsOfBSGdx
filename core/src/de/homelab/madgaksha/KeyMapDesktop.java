@@ -51,4 +51,8 @@ public final class KeyMapDesktop {
 		return Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT);
 	}
 
+	public static boolean isTokugiFireJustPressed() {
+		return Gdx.input.isKeyJustPressed(Keys.HOME) && Gdx.input.isKeyPressed(Keys.END);
+	}
+
 }

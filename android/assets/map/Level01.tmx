@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="180" height="610" tilewidth="32" tileheight="32" nextobjectid="118">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="180" height="610" tilewidth="32" tileheight="32" nextobjectid="119">
  <properties>
   <property name="baseDirX" value="0"/>
   <property name="baseDirY" value="1"/>
@@ -3539,7 +3539,7 @@
   </tile>
   <tile id="705">
    <properties>
-    <property name="blocking" type="bool" value="true"/>
+    <property name="blocking" type="bool" value="false"/>
    </properties>
   </tile>
   <tile id="706">
@@ -8921,7 +8921,7 @@
     <property name="trigger" value="touch"/>
    </properties>
   </object>
-  <object id="59" name="turnBackJoshua" type="Callback" x="537" y="17801.5" width="1357.25" height="75.5">
+  <object id="59" name="turnBackJoshua" type="Callback" x="532" y="17801.5" width="1362.25" height="75.5">
    <properties>
     <property name="guid" value=""/>
     <property name="loop" type="int" value="-1"/>
@@ -9271,7 +9271,7 @@
     <property name="trigger" value="touch"/>
    </properties>
   </object>
-  <object id="117" name="SoldierRed" type="Enemy" x="1382" y="18731.7" width="132" height="156.667">
+  <object id="117" name="SoldierRed" type="Enemy" x="892" y="18153.7" width="132" height="156.667">
    <properties>
     <property name="battleIn" type="float" value="20"/>
     <property name="battleOut" type="float" value="30"/>
@@ -9280,6 +9280,13 @@
     <property name="initY" type="float" value="0"/>
     <property name="spawn" value="screen"/>
     <property name="species" value="Soldier Red"/>
+   </properties>
+  </object>
+  <object id="118" name="OukaMusougeki" type="Item" x="1200.83" y="18558" width="32.3333" height="32">
+   <properties>
+    <property name="category" value="tokugi"/>
+    <property name="name" value="OukaMusougeki"/>
+    <property name="speed" type="float" value="45"/>
    </properties>
   </object>
  </objectgroup>

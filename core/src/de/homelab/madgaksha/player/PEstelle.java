@@ -102,7 +102,7 @@ public class PEstelle extends APlayer {
 
 	@Override
 	protected ETokugi[] requestedSupportedTokugi() {
-		return new ETokugi[] { ETokugi.BOMB };
+		return new ETokugi[] { ETokugi.OUKAMUSOUGEKI };
 	}
 
 	@Override

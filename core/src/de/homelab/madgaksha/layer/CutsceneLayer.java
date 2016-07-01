@@ -25,6 +25,7 @@ public class CutsceneLayer extends ALayer {
 	private final CutsceneEventProvider cutsceneEventProvider;
 	private ACutsceneEvent currentCutsceneEvent;
 	private int cutsceneCount = -1;
+	private Runnable callbackOnDone;
 
 	/**
 	 * Adds a new layer with a set of cutscenes.
@@ -36,6 +37,12 @@ public class CutsceneLayer extends ALayer {
 		this.cutsceneEventProvider = cutsceneEventProvider;
 	}
 
+	public CutsceneLayer(CutsceneEventProvider cutsceneEventProvider, Runnable callbackOnDone) {
+		this.cutsceneEventProvider = cutsceneEventProvider;
+		this.callbackOnDone = callbackOnDone;
+	}
+
+	
 	@Override
 	public void draw(float deltaTime) {
 		if (currentCutsceneEvent != null)
@@ -62,6 +69,7 @@ public class CutsceneLayer extends ALayer {
 		SystemUtils.enableAction();
 		currentCutsceneEvent = null;
 		cutsceneEventProvider.end();
+		if (callbackOnDone != null) callbackOnDone.run();
 	}
 
 	@Override

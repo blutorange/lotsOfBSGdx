@@ -27,9 +27,16 @@ public enum ESound implements IResource<ESound, Sound> {
 	TEXTBOX_ADVANCE("sound/ed6se002.wav", 0.200f),
 	TEXT_ADVANCE("sound/ed6se005.wav", 0.033f),
 
+	CHARGEUP1("sound/ed6se612.wav", 5.500f),
+	CHARGEUP2("sound/ed6se586.wav", 1.380f),
+	EXPLOSION1("sound/ed6se581.wav", 3.014f),
+	EXPLOSION2("sound/ed6se246.wav", 3.605f),
 	JUMP1("sound/ed6se571.wav", 0.453f),
+	JUMP2("sound/ed6se132.wav", 0.618f),
+	THUMB1("sound/ed6se164.wav", 0.157f),
 	WOODEN_BEAT1("sound/ed6se553.wav", 0.444f),
 	WOODEN_BEAT2("sound/ed6se802.wav", 2.000f),
+	WOODEN_BEAT3("sound/ed6se803.wav", 2.000f),
 	OUGI_CUTIN_FLASH("sound/ed6se155.wav"),
 	OUGI_CUTIN_FLASH2("sound/ed6se543.wav"),
 	

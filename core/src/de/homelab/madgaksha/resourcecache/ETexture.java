@@ -126,16 +126,22 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	// =========================================================================
 	TOKUGI_NONE_ICON_MAIN(ETextureAtlas.STATUS_SCREEN, "iconTokugiNoneMain"),
 	TOKUGI_NONE_ICON_SUB("texture/statusicon/tokugi", "none-sub.png"),
+	TOKUGI_OUKAMUSOUGEKI_ICON_MAIN("texture/statusicon/tokugi/oukamusougeki-main.png"),
+	TOKUGI_OUKAMUSOUGEKI_ICON_SUB("texture/statusicon/tokugi", "oukamusougeki-sub.png"),
+	TOKUGI_OUKAMUSOUGEKI_SIGN("texture/statusicon/tokugi/oukamusougeki-sign.png"),
 
 	
 	// =========================================================================
 	// OUGI
 	// =========================================================================
+	OUGI_OUKA_MUSOUGEKI_RAY3(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "pRay3"),
 	OUGI_OUKA_MUSOUGEKI_RAY14(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "pRay14"),
+	OUGI_OUKA_MUSOUGEKI_RAY15(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "pRay15"),
 	OUGI_OUKA_MUSOUGEKI_CUTIN_BODY(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "cutinBody"),
 	OUGI_OUKA_MUSOUGEKI_STAND0(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "stand0"),
 	OUGI_OUKA_MUSOUGEKI_KNEEL0(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "kneel0"),
 	OUGI_OUKA_MUSOUGEKI_UPSLASH_ARC(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "upslashArc"),
+	OUGI_OUKA_DAMAGE_CIRCLE(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "damageCircle"),
 	OUGI_OUKA_MUSOUGEKI_STAFF_CHARGE1(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "staffCharge1"),
 	OUGI_OUKA_MUSOUGEKI_STAFF_CHARGE2(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "staffCharge2"),
 	OUGI_OUKA_MUSOUGEKI_RUN0(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run0"),

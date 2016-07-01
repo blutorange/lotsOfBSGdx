@@ -18,6 +18,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
+import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.CutsceneEventProvider;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
@@ -445,7 +447,7 @@ public abstract class ALevel {
 	 * @param filename Name of the configuration file that can be read by {@link FileCutsceneProvider}.
 	 * @return The cutscene layer created, or null if it could not be created.
 	 */
-	protected final ALayer pushCutsceneLayer(String filename) {
+	public final ALayer pushCutsceneLayer(String filename) {
 		LOG.debug("pushing dialog: " + filename);
 		try {
 			CutsceneEventProvider provider = new FileCutsceneProvider(Gdx.files.internal(filename));
@@ -457,6 +459,48 @@ public abstract class ALevel {
 			return null;
 		}
 	}
+	
+	/**
+	 * Adds a new cutscene layer.
+	 * @param filename Name of the configuration file that can be read by {@link FileCutsceneProvider}.
+	 * @return The cutscene layer created, or null if it could not be created.
+	 */
+	public final ALayer pushCutsceneLayer(String filename, Runnable onDone) {
+		LOG.debug("pushing dialog: " + filename);
+		try {
+			CutsceneEventProvider provider = new FileCutsceneProvider(Gdx.files.internal(filename));
+			ALayer layer = new CutsceneLayer(provider, onDone);
+			game.pushLayer(layer);
+			return layer;
+		} catch (Exception e) {
+			LOG.error("could not push cutscene layer", e);
+			return null;
+		}
+	}
+	
+	public final ALayer pushFancyScene(final EventFancyScene ougi) {
+		CutsceneEventProvider provider = new CutsceneEventProvider() {
+			private int i = 0;
+			@Override
+			public ACutsceneEvent nextCutsceneEvent(int n) {
+				return ++i > 1 ? null : ougi;
+			}
+			@Override
+			public void initialize() {
+			}
+			@Override
+			public void eventDone(ACutsceneEvent currentCutsceneEvent) {
+				ougi.end();
+			}
+			@Override
+			public void end() {
+			}
+		};
+		ALayer layer = new CutsceneLayer(provider);
+		game.pushLayer(layer);
+		return layer;
+	}
+
 
 	protected final void switchBattleBgm(EMusic bgm) {
 		if (bgm != null)

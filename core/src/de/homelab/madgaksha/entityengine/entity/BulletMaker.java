@@ -23,6 +23,7 @@ import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup01
 import de.homelab.madgaksha.entityengine.component.collision.ReceiveTouchGroup02Component;
 import de.homelab.madgaksha.entityengine.component.zorder.ZOrder1Component;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
+import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETextureAtlas;
@@ -32,13 +33,6 @@ public class BulletMaker extends EntityMaker {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(BulletMaker.class);
-
-	/** Frequency at which an entity hit by a bullet takes 1x damage, in Hz. */
-	private final static float DAMAGE_FREQUENCY = 20.0f;
-	/** Lower range of the random damage variance, in percent. */
-	private final static long DAMAGE_LOWER_RANGE = 80L;
-	/** Upper range of the random damage variance, in percent. */
-	private final static long DAMAGE_UPPER_RANGE = 120L;
 
 	private VoicePlayer scoreBulletVoicePlayer = new VoicePlayer();
 
@@ -164,7 +158,7 @@ public class BulletMaker extends EntityMaker {
 					attackNum = 1L;
 				}
 
-				factor *= tc.deltaTime * DAMAGE_FREQUENCY;
+				factor *= tc.deltaTime * ComponentUtils.DAMAGE_FREQUENCY;
 
 				// Read info from defender, his bullet resistance.
 				final long resistanceNum = svcYou != null ? svcYou.bulletResistanceNum : 1L;
@@ -180,7 +174,7 @@ public class BulletMaker extends EntityMaker {
 				long damage = (bsc.power * factorNum * attackNum) / (resistanceNum * factorDen);
 
 				// Apply random variance.
-				damage *= MathUtils.random(DAMAGE_LOWER_RANGE, DAMAGE_UPPER_RANGE);
+				damage *= MathUtils.random(ComponentUtils.DAMAGE_LOWER_RANGE, ComponentUtils.DAMAGE_UPPER_RANGE);
 				damage /= 100L;
 
 				// Queue defender to take damage.

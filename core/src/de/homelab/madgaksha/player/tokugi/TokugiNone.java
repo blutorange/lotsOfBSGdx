@@ -1,5 +1,7 @@
 package de.homelab.madgaksha.player.tokugi;
 
+import com.badlogic.ashley.core.Entity;
+
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EModel;
 import de.homelab.madgaksha.resourcecache.ETexture;
@@ -27,5 +29,33 @@ public class TokugiNone extends ATokugi {
 	@Override
 	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
 		return null;
+	}
+
+	@Override
+	public void fire(Entity player, float deltaTime) {		
+	}
+
+	@Override
+	protected long requestedRequiredScore() {
+		return Long.MAX_VALUE;
+	}
+
+	@Override
+	protected long requestedRemainingPainPoints() {
+		return Long.MAX_VALUE;
+	}
+
+	@Override
+	public void openFire(Entity player, float deltaTime) {
+	}
+
+	@Override
+	protected ETexture requestedSign() {
+		return null;
+	}
+
+	@Override
+	protected float requestedSignDelay() {
+		return 0.0f;
 	}
 }

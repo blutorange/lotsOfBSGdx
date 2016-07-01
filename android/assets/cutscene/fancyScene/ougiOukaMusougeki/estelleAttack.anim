@@ -5,6 +5,8 @@ Sound A 0.000 General ESTELLE_HAHHA
 Sprite   A 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP3
 Sprite   A 0.000 UpslashArc 32.0 OUGI_OUKA_MUSOUGEKI_UPSLASH_ARC
 Spritetarget A 0.000 Enemy 32.0 0.0
+Peffect      A 0.000 Explosion 100 OUGI_OUKA_MUSOUGEKI_EXPLOSION
+Sprite       A 0.000 DamageCircle 32.0 OUGI_OUKA_DAMAGE_CIRCLE
 
 // Position player
 Position A 0.000 Estelle 4.000 -2.5
@@ -17,14 +19,22 @@ Origin   A 0.000 Enemy 1.0 0.5
 Move A 0.000 Estelle Parabola 0.450 =linear= A 0.333 2.000 3.0 -2.0 -3.0
 
 // Move in enemy
-Move A 0.000 Enemy Line 0.450 =exp5Out= A -0.750 -3.000
+Move A 0.000 Enemy Line 0.450 =exp5Out= A -1.850 -3.000
+
+// Enemy hit animation for landing attack
+Peffect  A 0.425 SimpleHit 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT
+Position A 0.425 SimpleHit -2.75 -3.000 
+Show 11  A 0.425 SimpleHit 1.0 
 
 // Jump and landing animation
 Sprite A 0.035 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP4
 Sprite R 0.069 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP5
 Sprite R 0.138 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP6
 Sprite R 0.069 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP7
-Sound  A 0.350 General WOODEN_BEAT2
+Sound       A 0.350 General WOODEN_BEAT2
+//Soundtarget A 0.350 onLightDamage
+Damagetarget A 0.350 2000000
+Shake       A 0.300 M3 0.25
 Sprite R 0.139 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP1
 Sprite R 0.200 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP2
 Sprite R 0.200 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP0
@@ -35,6 +45,7 @@ Move   A 0.500 Estelle Line 1.3 =pow2In= R 2.0 0.5
 Move   A 0.500 Enemy   Line 1.3 =pow2In= R 2.0 0.5
 
 // Sword rain 1.5s
+Shake  A 1.200 M4 1.5
 Sound  A 1.200 General ESTELLE_HYAA
 Sound  A 1.200 General WOODEN_BEAT1
 Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN3
@@ -76,16 +87,86 @@ Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN1
 Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN2
 Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SWORDRAIN3
 
+// Enemy pain sound
+//Soundtarget A 1.200 onLightDamage
+//Soundtarget R 0.150 onLightDamage
+//Soundtarget R 0.150 onLightDamage
+//Soundtarget R 0.150 onLightDamage
+//Soundtarget R 0.150 onLightDamage
+//Soundtarget R 0.150 onLightDamage
+//Soundtarget R 0.150 onLightDamage
+Damagetarget A 1.200 400000
+Damagetarget R 0.150 400000
+Damagetarget R 0.150 400000
+Damagetarget R 0.150 400000
+Damagetarget R 0.150 400000
+Damagetarget R 0.150 400000
+Damagetarget R 0.150 400000
+
+
+// Enemy hit animation for sword rain
+Peffect  A 0.000 SimpleHit5 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2
+Position A 0.000 SimpleHit5 -2.800 -2.900 1 1
+Show  11 A 1.200 SimpleHit5 1.0
+Peffect  R 0.000 SimpleHit6 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2
+Position R 0.000 SimpleHit6 -2.800 -2.900 1 1
+Show  11 R 0.150 SimpleHit6 1.0
+Peffect  R 0.000 SimpleHit7 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2
+Position R 0.000 SimpleHit7 -2.800 -2.900 1 1
+Show  11 R 0.150 SimpleHit8 1.0
+Peffect  R 0.000 SimpleHit8 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2
+Position R 0.000 SimpleHit8 -2.800 -2.900 1 1
+Show  11 R 0.150 SimpleHit8 1.0
+Peffect  R 0.000 SimpleHit9 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2
+Position R 0.000 SimpleHit9 -2.800 -2.900 1 1
+Show  11 R 0.150 SimpleHit9 1.0
+Peffect  R 0.000 SimpleHit10 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2
+Position R 0.000 SimpleHit10 -2.800 -2.900 1 1
+Show  11 R 0.150 SimpleHit10 1.0
+Peffect  R 0.000 SimpleHit11 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2
+Position R 0.000 SimpleHit11 -2.800 -2.900 1 1
+Show  11 R 0.150 SimpleHit11 1.0
+Peffect  R 0.000 SimpleHit12 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2
+Position R 0.000 SimpleHit12 -2.800 -2.900 1 1
+Show  11 R 0.150 SimpleHit12 1.0
+Peffect  R 0.000 SimpleHit13 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2
+Position R 0.000 SimpleHit13 -2.800 -2.900 1 1
+Show  11 R 0.150 SimpleHit13 1.01
+
+// Move in particle effects as well
+Move   A 0.500 SimpleHit5 Line 1.3 =pow2In= R 2.0 0.5
+Move   A 0.500 SimpleHit6 Line 1.3 =pow2In= R 2.0 0.5
+Move   A 0.500 SimpleHit7 Line 1.3 =pow2In= R 2.0 0.5
+Move   A 0.500 SimpleHit8 Line 1.3 =pow2In= R 2.0 0.5
+Move   A 0.500 SimpleHit9 Line 1.3 =pow2In= R 2.0 0.5
+Move   A 0.500 SimpleHit10 Line 1.3 =pow2In= R 2.0 0.5
+Move   A 0.500 SimpleHit11 Line 1.3 =pow2In= R 2.0 0.5
+Move   A 0.500 SimpleHit12 Line 1.3 =pow2In= R 2.0 0.5
+Move   A 0.500 SimpleHit13 Line 1.3 =pow2In= R 2.0 0.5
+
 // Jump forward at enemy
-Sound  A 2.300 General WOODEN_BEAT2
-Sound  R 0.050 General WOODEN_BEAT2
-Sound  R 0.050 General WOODEN_BEAT2
-Sprite A 2.350 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP1
-Move   A 2.350 Estelle Line 0.200 =pow2Out= R  -1.0 1.8
+Sound       A 2.350 General JUMP1
+Shake       A 2.300 M3 0.25
+//Soundtarget A 2.300 onHeavyDamage
+Damagetarget A 2.300 2000000
+Sound        A 2.300 General WOODEN_BEAT2
+Sound        R 0.050 General WOODEN_BEAT2
+Sound        R 0.050 General WOODEN_BEAT2
+Sprite       A 2.350 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP1
+Move         A 2.350 Estelle Line 0.200 =pow2Out= R  -1.0 1.8
+
+// Enemy hit animation for upwards jump
+Peffect  A 2.350 SimpleHit2 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT
+Position A 2.350 SimpleHit2 -0.75 -2.800  
+Show 11  A 2.350 SimpleHit2 1.0
+
 
 // Estelle at position -1 -0.7 now
 
-// Summersault backwards 0.5s 
+// Summersault backwards 0.5s
+Sound  A 2.500 General JUMP2
+Sound  A 3.050 General THUMB1
+Shake  A 3.050 M3 0.1
 Move   A 2.550 Estelle Parabola 0.500 =linear= R 0.2 0.8 1.5 1.55 -1.8
 Sprite A 2.550 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP7
 Sprite R 0.070 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP6
@@ -112,13 +193,18 @@ Sprite A 3.250 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP0
 
 // Spin attack 0.5s
 Sprite A 3.500 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN1
-Sound  A 3.600 General ESTELLE_SEI
+Sound  A 3.550 General ESTELLE_SEI
 Sprite A 3.600 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN2
 Sprite A 3.700 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN3
 Sprite A 3.800 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN4
 Sprite A 3.900 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN5
 Sprite A 3.950 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN6
 Sprite A 4.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN7
+Sound  A 4.000 General WOODEN_BEAT2
+//Soundtarget A 4.000 onLightDamage
+Damagetarget A 4.000 4000000
+Shake  A 4.000 M3 0.25
+
 // Hair falling down
 Sprite R 0.080 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN8
 Sprite R 0.080 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN9
@@ -126,8 +212,17 @@ Sprite R 0.080 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_SPIN10
 // Shadow
 Include -1 A 3.580 spinAttackOpacity40.anim
 
+// Enemy hit animation for spin attack
+Peffect  A 3.950 SimpleHit3 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT
+Position A 3.950 SimpleHit3 -0.75 -2.800  
+Show 11  A 3.950 SimpleHit3 1.0
+
 // Slash at enemy
-Sound  A 4.250 General ESTELLE_YAA
+Sound       A 4.250 General ESTELLE_YAA
+Sound       A 4.300 General WOODEN_BEAT2
+//Soundtarget A 4.300 onLightDamage
+Damagetarget A 4.300 3000000
+Shake  A 4.300 M3 0.25
 Sprite A 4.250 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP2
 Sprite R 0.100 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP0
 Sprite R 0.100 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP1
@@ -136,6 +231,12 @@ Opacity  A 4.350 UpslashArc 0
 Fade     A 4.350 UpslashArc 0.1 1
 Fade     A 4.750 UpslashArc 0.1 0
 
+// Enemy hit animation for slash attack
+Peffect  A 4.400 SimpleHit4 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT
+Position A 4.400 SimpleHit4 -0.75 -2.800  
+Show 11  A 4.400 SimpleHit4 1.0
+
+
 // Final hit charge
 Sprite A 4.850 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT0
 Sprite R 0.033 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT1
@@ -143,7 +244,11 @@ Sprite R 0.033 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT2
 Sprite R 0.033 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT3
 Sprite R 0.033 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT4
 Sound  A 4.900 General ESTELLE_HAA
+Sound  A 4.900 General CHARGEUP1
+Sound  A 5.100 General CHARGEUP2
+Sound  A 5.900 General CHARGEUP2
 Sprite R 0.033 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT5
+Shake  A 5.150 M2 2.5
 Include 2 A 5.150 staffCharge.anim
 Include 2 R 0.100 staffCharge.anim  
 Include 2 R 0.050 staffCharge.anim
@@ -170,6 +275,12 @@ Include 2 R 0.050 staffCharge.anim
 Include 2 R 0.100 staffCharge.anim
 
 // Final hit
+Sound  A 7.900 General WOODEN_BEAT2
+Sound  R 0.300 General WOODEN_BEAT3
+Sound  R 0.300 General WOODEN_BEAT3
+Sound  R 0.300 General WOODEN_BEAT3
+Sound  R 0.300 General WOODEN_BEAT2
+Sound  R 0.300 General WOODEN_BEAT2
 Sprite A 7.800 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT5
 Sprite R 0.016 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT4
 Sprite R 0.016 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT3
@@ -180,9 +291,24 @@ Sprite R 0.067 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT7
 Sprite R 0.067 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT8
 Sprite R 0.067 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_FINALHIT9
 
-Peffect      A 0.000 Particle 100 NPC_DISAPPEAR
-Position     A 0.000 Particle 0.0 0.0
-Show     100 A 0.000 Particle 20.000
+// Enemy pain sound for final hit
+//Soundtarget A 7.900 onHeavyDamage
+//Soundtarget R 1.000 onHeavyDamage
+//Soundtarget R 1.000 onHeavyDamage
+Damagetarget A 7.900 6000000
+Damagetarget R 1.000 6000000
+Damagetarget R 1.000 6000000
+
+// Explosion for final hit
+Shake     A 7.900 M8 2.2
+Sound     A 8.000 General Explosion1
+Sound     A 8.000 General Explosion2
+Position  A 0.000 Explosion    -1.2 -2.5
+Position  A 0.000 DamageCircle -1.2 -2.5
+Scale     A 0.000 DamageCircle 0.0
+Opacity   A 0.000 DamageCircle 0.40
+Zoom      A 8.000 DamageCircle 3.0 =sineOut= 5.0 
+Fade      A 10.000 DamageCircle 1.0 =linear= 0.0 
 
 // Fade out
 Fade A 11.000 Estelle 0.400 0
@@ -201,5 +327,7 @@ Include -8 R 0.050 jumpOpacity20.anim
 Show    -9 A 4.350 UpslashArc 0.500
 Show     0 A 0.000 Estelle 11.400
 Show     1 A 0.000 Enemy   11.400
+Include  5 A 0.000 speedStripes.anim
+Show     12 A 8.000 DamageCircle 3.0
+Show     11 A 7.900 Explosion    100.0
 Include  100 A 5.700 cutinBody.anim
- 

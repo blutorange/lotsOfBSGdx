@@ -316,7 +316,7 @@ public class Game implements ApplicationListener {
 			// Update our viewports.
 			viewportGame.update(width, height, false);
 			viewportPixel.update(width, height, true);
-			statusScreen.update(width, height);
+			statusScreen.resize(width, height);
 
 			// Save current resolution.
 			currentMonitorWidth = width;
@@ -490,6 +490,9 @@ public class Game implements ApplicationListener {
 	}
 
 	private void renderStatusScreen() {
+		// Update status screen
+		statusScreen.update(timeScalingFactor * Gdx.graphics.getRawDeltaTime());
+		// Render status screen
 		viewportPixel.apply(false);
 		batchPixel.setProjectionMatrix(viewportPixel.getCamera().combined);
 		shapeRenderer.setProjectionMatrix(viewportPixel.getCamera().combined);

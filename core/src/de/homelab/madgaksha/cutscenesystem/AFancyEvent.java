@@ -176,6 +176,9 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 	
 	public static enum Priority {
 		FancySound(0),
+		FancySoundtarget(0),
+		FancyDamagetarget(0),
+		FancyShake(0),
 		
 		FancySprite(1),
 		FancySpritetarget(1),

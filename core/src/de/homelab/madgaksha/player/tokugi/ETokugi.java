@@ -7,7 +7,7 @@ import de.homelab.madgaksha.logging.Logger;
 
 public enum ETokugi {
 	NONE(TokugiNone.class),
-	BOMB(TokugiBomb.class),;
+	OUKAMUSOUGEKI(TokugiOukaMusougeki.class),;
 
 	private final static Logger LOG = Logger.getLogger(ETokugi.class);
 

@@ -49,7 +49,7 @@ public final class FancyDrawable {
 
 	private boolean scalePe;
 	private boolean positionPe;
-	private Vector2 scaleParticleEffectLast = new Vector2();
+	private float scaleParticleEffectLast = 1.0f;
 
 	private Mode mode;
 
@@ -92,7 +92,7 @@ public final class FancyDrawable {
 		rotation = 0.0f;
 
 		scalePe = positionPe = false;
-		scaleParticleEffectLast.set(1.0f, 1.0f);
+		//scaleParticleEffectLast = scaleUnitsPerScreen * (scale.x + scale.y) * 0.5f;
 
 		mode = Mode.UNSET;
 	}
@@ -346,7 +346,8 @@ public final class FancyDrawable {
 			drawablePooledEffect = pe;
 			this.dimensionsSpriteUnitsPerScreen = unitsPerScreen;
 			resize();
-			positionPe = true;
+			scaleParticleEffectLast = 1.0f;
+			scalePe = true;
 			mode = Mode.PARTICLE_EFFECT;
 		}
 	}
@@ -441,11 +442,9 @@ public final class FancyDrawable {
 	}
 
 	private void setScaleParticleEffect() {
-		float newScale = Math.max((scale.x + scale.y), 0.2f);
-		float oldScale = Math.max((scaleParticleEffectLast.x + scaleParticleEffectLast.y), 0.2f);
-		LOG.debug(scaleUnitsPerScreen * newScale / oldScale);
-		drawablePooledEffect.scaleEffect(scaleUnitsPerScreen * newScale / oldScale);
-		scaleParticleEffectLast.set(scale);
+		float newScale = 0.5f * Math.max(scaleUnitsPerScreen * (scale.x + scale.y), 0.2f);
+		drawablePooledEffect.scaleEffect(newScale / scaleParticleEffectLast);
+		scaleParticleEffectLast = newScale;
 	}
 
 	/**
@@ -478,7 +477,7 @@ public final class FancyDrawable {
 	public final GetVector2 getCropY = new GetVector2(){
 		@Override
 		public void as(Vector2 target) {
-			target.set(cropX);
+			target.set(cropY);
 		}
 	};
 	public final GetVector2 getOrigin = new GetVector2(){

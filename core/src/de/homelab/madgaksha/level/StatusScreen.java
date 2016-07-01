@@ -8,6 +8,9 @@ import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.shapeRenderer;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
@@ -16,11 +19,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
 
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.EnemyIconComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.player.tokugi.ATokugi;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
@@ -142,15 +147,30 @@ public class StatusScreen {
 
 	private Color lerpColor = new Color();
 
+	/**
+	 * List of {@link TokugiSign}s showing the currently used {@link ATokugi}.
+	 * New tokugis are are added at the end of the list, and should be rendered
+	 * last.
+	 */
+	private List<TokugiSign> tokugiSignList = new LinkedList<TokugiSign>();
+	private Pool<TokugiSign> tokugiSignPool = new Pool<TokugiSign>(15,50) {
+		@Override
+		protected TokugiSign newObject() {
+			return new TokugiSign();
+		}
+	};
+
 	public StatusScreen(int w, int h) throws IOException {
 		computeScreenDimensions(w, h);
 		loadResources();
 		computeUILayout();
 	}
 
-	public void update(int screenWidth, int screenHeight) {
+	public void resize(int screenWidth, int screenHeight) {
 		computeScreenDimensions(screenWidth, screenHeight);
 		computeUILayout();
+		for (TokugiSign ts : tokugiSignList)
+			ts.resize();
 	}
 
 	private void loadResources() throws IOException {
@@ -197,8 +217,17 @@ public class StatusScreen {
 		}
 	}
 
-	public void render() {
+	public void update(float deltaTime) {
+		for (Iterator<TokugiSign> it = tokugiSignList.iterator(); it.hasNext();) {
+			TokugiSign ts = it.next();
+			if (!ts.update(deltaTime)) {
+				it.remove();
+				tokugiSignPool.free(ts);
+			}
+		}
+	}
 
+	public void render() {
 		batchPixel.begin();
 
 		// for testing
@@ -503,8 +532,11 @@ public class StatusScreen {
 		framePainBar.draw(batchPixel, uiCellEnemyPainBar.x, uiCellEnemyPainBar.y, uiCellEnemyPainBar.width,
 				uiCellEnemyPainBar.height);
 
-		batchPixel.end();
+		// Draw tokugi signs
+		for (TokugiSign ts : tokugiSignList)
+			ts.render();
 
+		batchPixel.end();
 	}
 
 	/**
@@ -524,6 +556,15 @@ public class StatusScreen {
 
 	private void forPlayer(PainPointsComponent ppc) {
 		playerPainPoints = ppc;
+	}
+
+	public void addTokugiDisplay(ATokugi aTokugi) {
+		ETexture signTexture = aTokugi.getSign();
+		if (signTexture != null) {
+			TokugiSign tokugiSign = tokugiSignPool.obtain();
+			tokugiSign.setup(aTokugi.getSign());
+			tokugiSignList.add(tokugiSign);
+		}
 	}
 
 	/**
@@ -1050,4 +1091,5 @@ public class StatusScreen {
 		COMPACTED,
 		FULL;
 	}
+
 }

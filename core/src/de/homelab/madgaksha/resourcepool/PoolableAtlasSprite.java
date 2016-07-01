@@ -65,14 +65,14 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 		} else
 			super.setBounds(region.offsetX, region.offsetY, width, height);
 		setColor(1, 1, 1, 1);
-		this.originalU = getU();
-		this.originalV = getV();
-		this.originalU2 = getU2();
-		this.originalV2 = getV2();
+		this.originalU = region.getU();
+		this.originalV = region.getV();
+		this.originalU2 = region.getU2();
+		this.originalV2 = region.getV2();
 		this.originalX = getX();
 		this.originalY = getY();
-		this.originalWidth = getWidth();
-		this.originalHeight = getHeight();
+		this.originalWidth = region.getRegionWidth();
+		this.originalHeight = region.getRegionHeight();
 		this.originalOriginX = getOriginX();
 		this.originalOriginY = getOriginY();
 	}

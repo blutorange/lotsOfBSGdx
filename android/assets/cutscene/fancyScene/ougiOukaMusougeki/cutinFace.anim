@@ -45,6 +45,7 @@ Position A 0.000 Bg12 30.843373 0
 Position A 0.000 Bg13 33.927711 0
 Position A 0.000 Bg14 37.012048 0
 Position A 0.000 Bg15 40.096386 0
+Crop     A 0.000 FaceWhite  1 0
 Crop     A 0.000 Bg1  1 0
 Crop     A 0.000 Bg2  1 0
 Crop     A 0.000 Bg3  1 0
@@ -79,6 +80,7 @@ Move  A 0.000 Bg14 Line 1.800 =linear= R -35 0
 Move  A 0.000 Bg15 Line 1.800 =linear= R -35 0
 
 // Fade in stripes
+Slide A 0.000 FaceWhite  0.400 =sineIn= 1 1
 Slide A 0.000 Bg1  0.400 =sineIn= 1 1
 Slide A 0.000 Bg2  0.400 =sineIn= 1 1
 Slide A 0.000 Bg3  0.400 =sineIn= 1 1

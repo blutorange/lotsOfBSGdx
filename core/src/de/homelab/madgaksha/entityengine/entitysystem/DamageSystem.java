@@ -51,6 +51,10 @@ public class DamageSystem extends IteratingSystem {
 			VoiceComponent vc = Mapper.voiceComponent.get(entity);
 
 			ppc.painPoints = MathUtils.clamp(ppc.painPoints + dqc.queuedDamage, 0L, ppc.maxPainPoints);
+			if (dqc.keepOneHp) {
+				ppc.painPoints = Math.min(ppc.maxPainPoints - 1, ppc.painPoints);
+				dqc.keepOneHp = false;
+			}
 			ppc.updatePainPoints();
 			// Check if entity just died :(
 			if (ppc.painPoints == ppc.maxPainPoints) {

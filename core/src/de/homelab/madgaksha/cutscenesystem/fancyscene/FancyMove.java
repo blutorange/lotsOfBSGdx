@@ -74,7 +74,10 @@ public class FancyMove extends DrawableFancy {
 		String key = s.next();
 		
 		EPath path = FileCutsceneProvider.nextPath(s);
-		if (path == null) return null;
+		if (path == null) {
+			LOG.error("expected path");
+			return null;
+		}
 		
 		Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {

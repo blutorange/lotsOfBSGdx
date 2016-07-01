@@ -31,6 +31,8 @@ public class FancyInclude extends AFancyEvent {
 	@Override
 	public boolean begin(EventFancyScene efs) {
 		parent = efs;
+		scene.setParent(parent);
+		lastTime = 0.0f;
 		return scene.begin();
 	}
 

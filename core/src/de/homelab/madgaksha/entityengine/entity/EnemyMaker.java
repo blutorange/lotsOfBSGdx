@@ -63,6 +63,7 @@ import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup02
 import de.homelab.madgaksha.entityengine.component.zorder.ZOrder2Component;
 import de.homelab.madgaksha.entityengine.entity.trajectory.HomingGrantTrajectory;
 import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.InputPlayerDesktopSystem;
 import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.entityengine.entityutils.SystemUtils;
 import de.homelab.madgaksha.enums.ECollisionGroup;
@@ -408,6 +409,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 
 		cameraTrackingComponent.playerPoint = enemy;
 		gameEntityEngine.getSystem(AiSystem.class).setProcessing(false);
+		gameEntityEngine.getSystem(InputPlayerDesktopSystem.class).setProcessing(false);
 		playerEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
 
 		// Switch player to battle mode animation.
@@ -533,6 +535,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 				@Override
 				public void run(Entity entity, Object data) {
 					gameEntityEngine.getSystem(AiSystem.class).setProcessing(true);
+					gameEntityEngine.getSystem(InputPlayerDesktopSystem.class).setProcessing(true);
 					playerEntity.remove(InactiveComponent.class);
 				}
 			});

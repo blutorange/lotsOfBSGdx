@@ -5,6 +5,7 @@ import java.util.Scanner;
 import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
@@ -17,11 +18,13 @@ public class FancyPosition extends AFancyEvent {
 
 	private String key = StringUtils.EMPTY;
 	private Vector2 position = new Vector2();
+	private Vector2 delta = new Vector2();
 	
-	public FancyPosition(String key, float x, float y) {
+	public FancyPosition(String key, float x, float y, float dx, float dy) {
 		super(true);
 		this.key = key;
 		this.position.set(x, y);
+		this.delta.set(Math.max(0.0f, dx), Math.max(0.0f, dy));
 	}
 	
 	@Override
@@ -32,7 +35,12 @@ public class FancyPosition extends AFancyEvent {
 
 	@Override
 	public boolean begin(EventFancyScene scene) {
-		scene.getDrawable(key).setPosition(position);
+		if (delta.x != 0.0f || delta.y != 0.0f) {
+			float dx = MathUtils.random(-delta.x, delta.x);
+			float dy = MathUtils.random(-delta.y, delta.y);
+			scene.getDrawable(key).setPosition(position.x + dx, position.y + dy);
+		} else
+			scene.getDrawable(key).setPosition(position);
 		return false;
 	}
 
@@ -64,9 +72,21 @@ public class FancyPosition extends AFancyEvent {
 			return null;
 		}
 		String key = s.next();
+		
 		Float x = FileCutsceneProvider.nextNumber(s);
 		Float y = FileCutsceneProvider.nextNumber(s);
-		return (x != null && y != null) ? new FancyPosition(key, x, y) : null;
+		
+		if (x == null || y == null) {
+			LOG.error("expected position");
+			return null;
+		}
+		
+		Float dx = FileCutsceneProvider.nextNumber(s);
+		Float dy = FileCutsceneProvider.nextNumber(s);
+		if (dx == null) dx = 0.0f;
+		if (dy == null) dy = 0.0f;
+		
+		return new FancyPosition(key, x, y, dx, dy);
 	}
 
 }

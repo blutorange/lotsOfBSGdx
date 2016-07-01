@@ -459,9 +459,10 @@ public final class PlayerMaker implements IHittable, IMortal {
 		onBehave = new IBehaving() {
 			@Override
 			public boolean behave(Entity e) {
-				TemporalComponent tc = Mapper.temporalComponent.get(e);
-				if (battleModeActive)
+				if (battleModeActive) {
+					TemporalComponent tc = Mapper.temporalComponent.get(e);
 					player.getEquippedWeapon().fire(playerEntity, tc.deltaTime);
+				}					
 				return false;
 			}
 		};

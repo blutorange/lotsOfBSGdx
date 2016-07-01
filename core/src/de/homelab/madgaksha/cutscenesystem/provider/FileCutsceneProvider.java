@@ -25,6 +25,7 @@ import de.homelab.madgaksha.cutscenesystem.textbox.EFaceVariation;
 import de.homelab.madgaksha.cutscenesystem.textbox.PlainTextbox;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.enums.ESpeaker;
+import de.homelab.madgaksha.enums.RichterScale;
 import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.path.EPath;
@@ -702,6 +703,24 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			return ENinePatch.valueOf(t);
 		} catch (IllegalArgumentException e) {
 			LOG.error("no such nine patch: " + t);
+			return null;
+		}
+	}
+	
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return An instance of {@link RichterScale}, or null if it could not be
+	 *         read.
+	 */
+	public static RichterScale nextRichterScale(Scanner s) {
+		if (!s.hasNext())
+			return null;
+		String rs = s.next().toUpperCase(Locale.ROOT);
+		try {
+			return RichterScale.valueOf(rs);
+		} catch (IllegalArgumentException e) {
+			LOG.error("no such richter scale: " + rs);
 			return null;
 		}
 	}
