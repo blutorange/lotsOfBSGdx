@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
+import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.textbox.FancyTextbox;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
@@ -31,6 +32,7 @@ public final class ResourceCache {
 	public final static int LIMIT_TEXTURE_ATLAS = 20;
 	public final static int LIMIT_MODEL = 30;
 	public final static int LIMIT_FREE_TYPE_FONT_GENERATOR = 5;
+	public final static int LIMIT_FANCY_SCENE = 50;
 
 	private ResourceCache() {
 	}
@@ -190,6 +192,13 @@ public final class ResourceCache {
 	public static void clearAllTextureAtlas() {
 		ETextureAtlas.clearAll();
 	}
+	
+	/**
+	 * Clears all fancy scene objects from the cache.
+	 */
+	public static void clearAllFancyScene() {
+		EFancyScene.clearAll();
+	}
 
 	/**
 	 * Clears all animation objects from the cache.
@@ -252,6 +261,7 @@ public final class ResourceCache {
 		clearAllModel();
 		clearAllFreeTypeFontGenerator();
 		clearAllTextbox();
+		clearAllFancyScene();
 	}
 
 	/**
@@ -433,5 +443,20 @@ public final class ResourceCache {
 
 	public static FancyTextbox getTextbox(ETextbox textbox, boolean cached) {
 		return (FancyTextbox) getResource(textbox, cached);
+	}
+	
+	/**
+	 * Fetches the requested fancy scene from the cache, or loads it.
+	 * 
+	 * @param textbox
+	 *            Fancy scene font to load.
+	 * @return Loaded fancy scene.
+	 */
+	public static EventFancyScene getFancyScene(EFancyScene eventFancyScene) {
+		return (EventFancyScene) getResource(eventFancyScene, true);
+	}
+
+	public static EventFancyScene getFancyScene(EFancyScene eventFancyScene, boolean cached) {
+		return (EventFancyScene) getResource(eventFancyScene, cached);
 	}
 }

@@ -69,13 +69,14 @@ public final class ComponentUtils {
 	 *            Entity whose sprite animation list needs to be changed.
 	 * @param animationList
 	 *            The new animation list.
+	 * @param spriteDirectionStrategy How to orient the sprite.
 	 */
-	public static void switchAnimationList(Entity entity, EAnimationList animationList) {
+	public static void switchAnimationList(Entity entity, EAnimationList animationList, ESpriteDirectionStrategy spriteDirectionStrategy) {
 		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(entity);
 		SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
 		SpriteComponent sc = Mapper.spriteComponent.get(entity);
 		if (sfdc != null && sac != null && sc != null) {
-			sfdc.setup(animationList, ESpriteDirectionStrategy.ZENITH);
+			sfdc.setup(animationList, spriteDirectionStrategy);
 			sac.setup(sfdc);
 			sc.setup(sac);
 		}

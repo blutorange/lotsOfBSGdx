@@ -94,7 +94,7 @@ public enum ETextbox implements IResource<ETextbox, PlainTextbox> {
 
 	@Override
 	public void clear() {
-		LOG.debug("disposing free type font generator: " + String.valueOf(this));
+		LOG.debug("clearing textbox: " + String.valueOf(this));
 		final PlainTextbox tb = textboxCache.get(this);
 		if (tb != null)
 			tb.dispose();

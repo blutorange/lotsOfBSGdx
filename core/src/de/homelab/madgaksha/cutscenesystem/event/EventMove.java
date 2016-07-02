@@ -13,7 +13,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 
-import de.homelab.madgaksha.KeyMapDesktop;
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.entityengine.Mapper;
@@ -71,8 +70,8 @@ public class EventMove extends ACutsceneEvent {
 	}
 
 	@Override
-	public void update(float deltaTime) {
-		if (KeyMapDesktop.isSpeedupPressed())
+	public void update(float deltaTime, boolean isSpedup) {
+		if (isSpedup)
 			totalTime += 10.0f * deltaTime;
 		else
 			totalTime += deltaTime;

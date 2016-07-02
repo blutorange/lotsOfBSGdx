@@ -37,19 +37,22 @@ public class CustomShaderProgram extends ShaderProgram {
 	}
 
 	public void update(float deltaTime) {
-		if (!compiled) return;
+		if (!compiled)
+			return;
 		fs.update(deltaTime);
 		vs.update(deltaTime);
 	}
 
 	public void apply(SpriteBatch batch) {
-		if (!compiled) return;
+		if (!compiled)
+			return;
 		batch.setShader(this);
 	}
 
 	@Override
 	public void begin() {
-		if (!compiled) return;
+		if (!compiled)
+			return;
 		super.begin();
 		fs.setUniforms(this);
 		vs.setUniforms(this);

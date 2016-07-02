@@ -478,7 +478,7 @@ public abstract class ALevel {
 		}
 	}
 	
-	public final ALayer pushFancyScene(final EventFancyScene ougi) {
+	public final ALayer pushFancyScene(final EventFancyScene ougi, Runnable onDone) {
 		CutsceneEventProvider provider = new CutsceneEventProvider() {
 			private int i = 0;
 			@Override
@@ -496,7 +496,7 @@ public abstract class ALevel {
 			public void end() {
 			}
 		};
-		ALayer layer = new CutsceneLayer(provider);
+		ALayer layer = new CutsceneLayer(provider, onDone);
 		game.pushLayer(layer);
 		return layer;
 	}

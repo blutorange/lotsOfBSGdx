@@ -79,7 +79,7 @@ public class EventStage extends ACutsceneEvent {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(float deltaTime, boolean allowSpeedup) {
 		final PositionComponent pc;
 		switch (state) {
 		case STARTED:

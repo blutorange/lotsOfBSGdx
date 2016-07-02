@@ -134,6 +134,8 @@ public class EventFancyScene extends ACutsceneEvent {
 	private float totalTime = 0.0f;
 	private float deltaTime = 0.0f;
 
+	private boolean isSpedup = false;
+	
 	private EventFancyScene parent;
 	private final Vector3 shake = new Vector3();
 
@@ -174,8 +176,9 @@ public class EventFancyScene extends ACutsceneEvent {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(float deltaTime, boolean isSpedup) {
 		this.deltaTime = deltaTime;
+		this.isSpedup = isSpedup;
 		totalTime += deltaTime;
 
 		boolean listChanged = false;
@@ -223,10 +226,6 @@ public class EventFancyScene extends ACutsceneEvent {
 				}
 			}
 		}
-		
-		if (parent == null && totalTime >= 14f) {
-			LOG.debug("asd");
-		}
 	}
 
 	@Override
@@ -244,6 +243,7 @@ public class EventFancyScene extends ACutsceneEvent {
 		this.activeList.clear();
 		this.queueList.clear();
 		this.queueList.addAll(eventList);
+		this.isSpedup = false;
 		totalTime = 0.0f;
 		deltaTime = 0.0f;
 		shake.set(0.0f, 0.0f, 0.0f);
@@ -265,6 +265,7 @@ public class EventFancyScene extends ACutsceneEvent {
 		deltaTime = 0.0f;
 		shake.set(0f, 0f, 0f);
 		parent = null;
+		isSpedup = false;
 	}
 
 	@Override
@@ -336,7 +337,7 @@ public class EventFancyScene extends ACutsceneEvent {
 			return null;
 		}
 		String relativeFilePath = s.nextLine().trim();
-		FileHandle fileHandle = inputFile.parent().child(relativeFilePath);
+		FileHandle fileHandle = inputFile.isDirectory() ? inputFile.child(relativeFilePath) : inputFile.parent().child(relativeFilePath);
 		List<AFancyEvent> eventList = new ArrayList<AFancyEvent>();
 		if (!readEventList(fileHandle, eventList))
 			return null;
@@ -381,5 +382,9 @@ public class EventFancyScene extends ACutsceneEvent {
 			IOUtils.closeQuietly(scanner);
 		}
 		return true;
+	}
+
+	public boolean isSpedup() {
+		return isSpedup;
 	}
 }

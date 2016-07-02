@@ -38,7 +38,7 @@ public class EventScore extends ACutsceneEvent {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(float deltaTime, boolean allowSpeedup) {
 		GlobalBag.gameScore.increaseBy(score);
 		SoundPlayer.getInstance().play(ESound.SCORE_BULLET_HIT);
 		eventDone = true;

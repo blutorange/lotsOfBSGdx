@@ -5,15 +5,16 @@ import static de.homelab.madgaksha.GlobalBag.level;
 import com.badlogic.ashley.core.Entity;
 
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.EFancyScene;
 import de.homelab.madgaksha.resourcecache.EModel;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
+import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 public class TokugiOukaMusougeki extends ATokugi {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(TokugiOukaMusougeki.class);
-	private final static String PATH = "cutscene/fancyScene/ougiOukaMusougeki/ougiOukaMusougeki.event";
-
+	
 	@Override
 	protected ETexture requestedSign() {
 		return ETexture.TOKUGI_OUKAMUSOUGEKI_SIGN;
@@ -40,13 +41,14 @@ public class TokugiOukaMusougeki extends ATokugi {
 			ETexture.TOKUGI_OUKAMUSOUGEKI_ICON_MAIN,
 			ETexture.TOKUGI_OUKAMUSOUGEKI_ICON_SUB,
 			ETexture.TOKUGI_OUKAMUSOUGEKI_SIGN,
+			EFancyScene.OUKA_MUSOUGEKI,
 			EModel.ITEM_WEAPON_BASIC,
 		};
 	}
 
 	@Override
 	public void openFire(Entity player, float deltaTime) {
-		level.pushCutsceneLayer(PATH, new Runnable() {
+		level.pushFancyScene(ResourceCache.getFancyScene(EFancyScene.OUKA_MUSOUGEKI), new Runnable() {
 			@Override
 			public void run() {
 				dealFinalDamagePoint();
@@ -66,6 +68,6 @@ public class TokugiOukaMusougeki extends ATokugi {
 
 	@Override
 	protected float requestedSignDelay() {
-		return 1.0f;
+		return 0.1f;
 	}
 }

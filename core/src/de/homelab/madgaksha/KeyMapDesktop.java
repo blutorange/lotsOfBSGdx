@@ -40,11 +40,11 @@ public final class KeyMapDesktop {
 	}
 
 	public static boolean isWeaponSwitchJustPressed() {
-		return Gdx.input.isKeyJustPressed(Keys.PAGE_UP);
+		return Gdx.input.isKeyJustPressed(Keys.PAGE_UP) || Gdx.input.isKeyJustPressed(Keys.Q);
 	}
 
 	public static boolean isTokugiSwitchJustPressed() {
-		return Gdx.input.isKeyJustPressed(Keys.INSERT);
+		return Gdx.input.isKeyJustPressed(Keys.INSERT) || Gdx.input.isKeyJustPressed(Keys.W);
 	}
 
 	public static boolean isSpeedupPressed() {
@@ -52,7 +52,14 @@ public final class KeyMapDesktop {
 	}
 
 	public static boolean isTokugiFireJustPressed() {
-		return Gdx.input.isKeyJustPressed(Keys.HOME) && Gdx.input.isKeyPressed(Keys.END);
+		return Gdx.input.isKeyJustPressed(Keys.M) && Gdx.input.isKeyPressed(Keys.X);
 	}
 
+	public static boolean isEnemyPrevJustPressed() {
+		return Gdx.input.isKeyJustPressed(Keys.FORWARD_DEL) || Gdx.input.isKeyJustPressed(Keys.A);
+	}
+
+	public static boolean isEnemyNextJustPressed() {
+		return Gdx.input.isKeyJustPressed(Keys.PAGE_DOWN) || Gdx.input.isKeyJustPressed(Keys.S);
+	}
 }

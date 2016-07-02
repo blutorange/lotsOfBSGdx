@@ -102,7 +102,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 		RotationComponent rc = new RotationComponent();
 		SpriteComponent sc = new SpriteComponent(playerA.getBattleStigmaTexture());
 		StickyComponent sec = new StickyComponent(playerE, bbm.x + 0.5f * bbm.width, bbm.y + 0.5f * bbm.height, true,
-				true);
+				false);
 		ScaleComponent slc = new ScaleComponent(0.0f, 0.0f, playerA.getBattleStigmaTexture().getOriginalScale());
 		ShouldPositionComponent spc = new ShouldPositionComponent(new ImmediateGrantStrategy());
 		ShouldScaleComponent ssc = new ShouldScaleComponent(new ExponentialGrantStrategy(0.5f, 0.5f));
@@ -431,11 +431,12 @@ public final class PlayerMaker implements IHittable, IMortal {
 		MusicPlayer.getInstance().transition(1.0f);
 
 		// Show everything in greyscale and pause after a few seconds.
-		game.setFragmentShaderBatchGame(new FragmentShaderGrayscale(0.0f, 0.9f, 1.0f, 0.2f, 9.0f, Interpolation.sineIn));
+		game.setFragmentShaderBatchGame(
+				new FragmentShaderGrayscale(0.0f, 0.9f, 1.0f, 0.2f, 9.0f, Interpolation.sineIn));
 		MakerUtils.addTimedRunnable(12.0f, new ITimedCallback() {
 			@Override
 			public void run(Entity entity, Object data) {
-				game.pause();				
+				game.pause();
 			}
 		});
 	}
@@ -465,7 +466,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 				if (battleModeActive) {
 					TemporalComponent tc = Mapper.temporalComponent.get(e);
 					player.getEquippedWeapon().fire(playerEntity, tc.deltaTime);
-				}					
+				}
 				return false;
 			}
 		};

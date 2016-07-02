@@ -1,6 +1,7 @@
 package de.homelab.madgaksha.layer;
 
 import de.homelab.madgaksha.GlobalBag;
+import de.homelab.madgaksha.KeyMapDesktop;
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.provider.CutsceneEventProvider;
 import de.homelab.madgaksha.entityengine.Mapper;
@@ -26,7 +27,8 @@ public class CutsceneLayer extends ALayer {
 	private ACutsceneEvent currentCutsceneEvent;
 	private int cutsceneCount = -1;
 	private Runnable callbackOnDone;
-
+	private boolean allowSpeedup = false;
+	
 	/**
 	 * Adds a new layer with a set of cutscenes.
 	 * 
@@ -51,6 +53,7 @@ public class CutsceneLayer extends ALayer {
 
 	@Override
 	public void update(float deltaTime) {
+		allowSpeedup = allowSpeedup || !KeyMapDesktop.isSpeedupPressed();
 		if (currentCutsceneEvent == null)
 			return;
 
@@ -61,7 +64,7 @@ public class CutsceneLayer extends ALayer {
 		}
 
 		// Update event.
-		currentCutsceneEvent.update(deltaTime);
+		currentCutsceneEvent.update(deltaTime, allowSpeedup && KeyMapDesktop.isSpeedupPressed());
 	}
 
 	@Override
@@ -77,6 +80,7 @@ public class CutsceneLayer extends ALayer {
 		SystemUtils.disableActionExceptGrantPosition();
 		stopPlayerMovement();
 		cutsceneEventProvider.initialize();
+		allowSpeedup = !KeyMapDesktop.isSpeedupPressed();
 		proceedToNextEvent();
 	}
 

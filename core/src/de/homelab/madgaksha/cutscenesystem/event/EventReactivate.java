@@ -48,7 +48,7 @@ public class EventReactivate extends ACutsceneEvent {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(float deltaTime, boolean allowSpeedup) {
 		if (!eventDone) {
 			EventReactivate.reactivateEvent(entity);
 //			final TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);

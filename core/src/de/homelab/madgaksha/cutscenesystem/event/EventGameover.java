@@ -27,7 +27,7 @@ public class EventGameover extends ACutsceneEvent {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(float deltaTime, boolean allowSpeedup) {
 		GlobalBag.game.gameover();
 		eventDone = true;
 	}

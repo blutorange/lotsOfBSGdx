@@ -1,8 +1,8 @@
 package de.homelab.madgaksha.entityengine.entity;
 
-import static de.homelab.madgaksha.GlobalBag.enemyKillCount;
 import static de.homelab.madgaksha.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
+import static de.homelab.madgaksha.GlobalBag.enemyKillCount;
 import static de.homelab.madgaksha.GlobalBag.enemyTargetCrossEntity;
 import static de.homelab.madgaksha.GlobalBag.game;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
@@ -50,8 +50,6 @@ import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
 import de.homelab.madgaksha.entityengine.component.SiblingComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
 import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.entityengine.component.StickyComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
@@ -362,7 +360,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		MakerUtils.addTimedRunnable(3.0f, onTargetCrossVanished);
 
 		// Switch player to normal mode animation.
-		ComponentUtils.switchAnimationList(playerEntity, player.getAnimationList());
+		ComponentUtils.switchAnimationList(playerEntity, player.getAnimationList(), ESpriteDirectionStrategy.ZENITH);
 
 		// Add particle effect to player for exiting battle mode.
 		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(),
@@ -413,11 +411,8 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		playerEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
 
 		// Switch player to battle mode animation.
-		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(playerEntity);
-		SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(playerEntity);
-		sfdc.setup(player.getBattleAnimationList(), ESpriteDirectionStrategy.ZENITH);
-		sac.setup(sfdc);
-		Mapper.spriteComponent.get(playerEntity).setup(sac);
+		ComponentUtils.switchAnimationList(playerEntity, player.getBattleAnimationList(),
+				ESpriteDirectionStrategy.STATIC);
 
 		// Scroll camera back to the player after enemy preview finishes.
 		MakerUtils.addTimedRunnable(3.0f, onEnemyPreviewFinish);

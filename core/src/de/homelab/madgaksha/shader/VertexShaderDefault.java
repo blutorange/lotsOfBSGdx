@@ -26,7 +26,6 @@ public class VertexShaderDefault extends VertexShader {
 				+ "}\n";
 	}
 
-	
 	@Override
 	protected String requestedProgram() {
 		return PROGRAM;

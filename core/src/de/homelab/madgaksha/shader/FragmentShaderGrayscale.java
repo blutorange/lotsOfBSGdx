@@ -38,11 +38,13 @@ public class FragmentShaderGrayscale extends FragmentShader {
 		this(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, Interpolation.linear);
 	}
 
-	public FragmentShaderGrayscale(float ratioStart, float ratioEnd, float contrastStart, float contrastEnd, float duration) {
+	public FragmentShaderGrayscale(float ratioStart, float ratioEnd, float contrastStart, float contrastEnd,
+			float duration) {
 		this(ratioStart, ratioEnd, contrastStart, contrastEnd, duration, Interpolation.linear);
 	}
 
-	public FragmentShaderGrayscale(float ratioStart, float ratioEnd, float contrastStart, float contrastEnd, float duration, Interpolation interpolation) {
+	public FragmentShaderGrayscale(float ratioStart, float ratioEnd, float contrastStart, float contrastEnd,
+			float duration, Interpolation interpolation) {
 		this.ratioStart = ratioStart;
 		this.ratioEnd = ratioEnd;
 		this.contrastStart = contrastStart;

@@ -33,9 +33,7 @@ public abstract class ACutsceneEvent implements Poolable {
 	 * @param deltaTime
 	 *            Time in seconds since the last call to render.
 	 */
-	public abstract void update(float deltaTime);
-
-	public abstract void resize(int width, int height);
+	public abstract void update(float deltaTime, boolean isSpedup);
 
 	/**
 	 * Called once when this cutscene event starts.
@@ -45,6 +43,8 @@ public abstract class ACutsceneEvent implements Poolable {
 	 */
 	public abstract boolean begin();
 
+	public abstract void resize(int width, int height);
+
 	/**
 	 * 
 	 * @param s
@@ -53,7 +53,8 @@ public abstract class ACutsceneEvent implements Poolable {
 	 *            Class of the cutscene event.
 	 * @return The cutscene object read, or null if it could not be read.
 	 */
-	public static ACutsceneEvent readNextObject(Scanner s, Class<? extends ACutsceneEvent> eventClass, FileHandle inputFile) {
+	public static ACutsceneEvent readNextObject(Scanner s, Class<? extends ACutsceneEvent> eventClass,
+			FileHandle inputFile) {
 		try {
 			Method m = ClassReflection.getDeclaredMethod(eventClass, "readNextObject", Scanner.class, FileHandle.class);
 			ACutsceneEvent event = (ACutsceneEvent) m.invoke(null, s, inputFile);

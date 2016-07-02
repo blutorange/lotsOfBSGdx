@@ -71,8 +71,8 @@ public class BirdsViewSpriteSystem extends IteratingSystem {
 			// LOG.debug((int)((dc.degree + 360.0f / (2.0f *
 			// sfdc.animationList.length)) * sfdc.animationList.length /
 			// 360.0f));
-			sac.animation = sfdc.animationList[((int) ((dc.degree + 360.0f / (2.0f * sfdc.animationList.length))
-					* sfdc.animationList.length / 360.0f))
+			sac.animation = sfdc.animationList[((int) (((dc.degree - 90 + 360)
+					+ 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f))
 					% sfdc.animationList.length];
 			break;
 		}
