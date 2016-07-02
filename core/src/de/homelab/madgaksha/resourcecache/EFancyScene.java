@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -47,7 +48,7 @@ public enum EFancyScene implements IResource<EFancyScene, EventFancyScene> {
 	@Override
 	public EventFancyScene getObject() {
 		try {
-			FileHandle inputFile = new FileHandle(path);
+			FileHandle inputFile = Gdx.files.internal(path);
 			Scanner scanner = new Scanner(inputFile.name());
 			scanner.useLocale(Locale.ROOT);
 			EventFancyScene scene = EventFancyScene.readNextObject(scanner, inputFile);
