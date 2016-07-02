@@ -181,6 +181,7 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 		FancyShake(0),
 		
 		FancySprite(1),
+		FancyAnimation(1),
 		FancySpritetarget(1),
 		FancyNinepatch(1),
 		

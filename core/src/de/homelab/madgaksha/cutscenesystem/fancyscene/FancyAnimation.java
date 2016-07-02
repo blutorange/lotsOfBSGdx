@@ -10,32 +10,32 @@ import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.ETexture;
+import de.homelab.madgaksha.resourcecache.EAnimation;
 
-public class FancySprite extends AFancyEvent {
-	private final static Logger LOG = Logger.getLogger(FancySprite.class);
+public class FancyAnimation extends AFancyEvent {
+	private final static Logger LOG = Logger.getLogger(FancyAnimation.class);
 
 	private String key = StringUtils.EMPTY;
 	private float dpi;
-	private ETexture texture;
+	private EAnimation animation;
 	
-	public FancySprite(String key, float dpi, ETexture texture) {
+	public FancyAnimation(String key, float dpi, EAnimation animation) {
 		super(true);
 		this.dpi = dpi;
 		this.key = key;
-		this.texture = texture;
+		this.animation = animation;
 	}
 	
 	@Override
 	public void reset() {
 		dpi = 1.0f;
 		key = StringUtils.EMPTY;
-		texture = null;
+		animation = null;
 	}
 
 	@Override
 	public boolean begin(EventFancyScene efs) {
-		efs.getDrawable(key).setDrawable(texture, dpi);
+		efs.getDrawable(key).setDrawable(animation, dpi);
 		return false;
 	}
 
@@ -74,11 +74,11 @@ public class FancySprite extends AFancyEvent {
 			LOG.error("expected dpi");
 			return null;
 		}
-		ETexture texture = FileCutsceneProvider.nextTexture(s);
-		if (texture == null) {
-			LOG.error("expected texture");
+		EAnimation animation = FileCutsceneProvider.nextAnimation(s);
+		if (animation == null) {
+			LOG.error("expected animation");
 			return null;
 		}
-		return new FancySprite(key, dpi, texture);
+		return new FancyAnimation(key, dpi, animation);
 	}
 }

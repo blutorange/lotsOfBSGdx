@@ -315,15 +315,20 @@ public final class FancyDrawable {
 			mode = FancyDrawable.Mode.TEXTURE;
 		}
 	}
-
-	public void setDrawable(AtlasAnimation animation, float unitsPerScreen) {
+	
+	public void setDrawable(EAnimation animation, float unitsPerScreen) {
 		if (mode == Mode.CLEANUP)
 			return;
-		if (animation != null) {
-			drawableAtlasAnimation = animation;
-			mode = FancyDrawable.Mode.ATLAS_ANIMATION;
-			setDrawable(animation.getKeyFrame(0.0f), unitsPerScreen);
-		}
+		AtlasAnimation a = ResourceCache.getAnimation(animation);
+		setDrawable(a, unitsPerScreen);
+	}
+
+	public void setDrawable(AtlasAnimation animation, float unitsPerScreen) {
+		if (mode == Mode.CLEANUP || animation == null)
+			return;
+		drawableAtlasAnimation = animation;
+		mode = FancyDrawable.Mode.ATLAS_ANIMATION;
+		setDrawable(animation.getKeyFrame(0.0f), unitsPerScreen);
 	}
 
 	public void setDrawable(ENinePatch ninePatch, Vector2 dimensions) {
@@ -492,5 +497,6 @@ public final class FancyDrawable {
 			target.set(color);			
 		}
 	};
+
 	
 }

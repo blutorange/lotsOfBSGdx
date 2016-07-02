@@ -29,6 +29,7 @@ import de.homelab.madgaksha.enums.RichterScale;
 import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.path.EPath;
+import de.homelab.madgaksha.resourcecache.EAnimation;
 import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ESound;
@@ -675,7 +676,7 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 	/**
 	 * @param s
 	 *            Scanner to read from.
-	 * @return An instance of {@link ETextbox}, or null if it could not be read.
+	 * @return An instance of {@link ETexture}, or null if it could not be read.
 	 */
 	public static ETexture nextTexture(Scanner s) {
 		if (!s.hasNext())
@@ -685,6 +686,23 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			return ETexture.valueOf(t);
 		} catch (IllegalArgumentException e) {
 			LOG.error("no such texture: " + t);
+			return null;
+		}
+	}
+	
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return An instance of {@link EAnimation}, or null if it could not be read.
+	 */
+	public static EAnimation nextAnimation(Scanner s) {
+		if (!s.hasNext())
+			return null;
+		String a = s.next().toUpperCase(Locale.ROOT);
+		try {
+			return EAnimation.valueOf(a);
+		} catch (IllegalArgumentException e) {
+			LOG.error("no such animation: " + a);
 			return null;
 		}
 	}
@@ -755,5 +773,6 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			return (int) s.nextLong(10);
 		return null;
 	}
+
 
 }

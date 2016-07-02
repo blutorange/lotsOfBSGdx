@@ -2,7 +2,9 @@ package de.homelab.madgaksha.resourcecache;
 
 import java.util.EnumMap;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
@@ -26,26 +28,36 @@ public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 	// ENEMIES
 	// =================
 
+	OUGI_OUKA_MUSOUGEKI_SAKURA(ETextureAtlas.OUGI_OUKA_MUSOUGEKI,"sakura", 0.100f, AtlasAnimation.PlayMode.LOOP),
 	;
 
 	private final static Logger LOG = Logger.getLogger(EAnimation.class);
 	private final static EnumMap<EAnimation, AtlasAnimation> animationCache = new EnumMap<EAnimation, AtlasAnimation>(
 			EAnimation.class);
 
-	private ETexture eTexture;
+	private ETextureAtlas textureAtlas;
+	private String name;
+	private ETexture texture;
 	private int tileWidth;
 	private int tileHeight;
 	private int count;
-	private float frameDuration;
-	private AtlasAnimation.PlayMode playMode;
+	private final float frameDuration;
+	private final AtlasAnimation.PlayMode playMode;
 
-	private EAnimation(ETexture et, int tw, int th, int c, float fd, AtlasAnimation.PlayMode pm) {
-		eTexture = et;
-		tileWidth = tw;
-		tileHeight = th;
-		count = c;
-		frameDuration = fd;
-		playMode = pm;
+	private EAnimation(ETextureAtlas textureAtlas, String name, float frameDuration, AtlasAnimation.PlayMode playMode) {
+		this.textureAtlas = textureAtlas;
+		this.name = name;
+		this.playMode = playMode;
+		this.frameDuration = frameDuration;
+	}
+	
+	private EAnimation(ETexture texture, int tileWidth, int tileHeight, int count, float frameDuration, AtlasAnimation.PlayMode playMode) {
+		this.texture = texture;
+		this.tileWidth = tileWidth;
+		this.tileHeight = tileHeight;
+		this.count = count;
+		this.frameDuration = frameDuration;
+		this.playMode = playMode;
 	}
 
 	public static void clearAll() {
@@ -67,14 +79,26 @@ public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 
 	@Override
 	public AtlasAnimation getObject() {
-		// Get texture
-		final AtlasRegion atlasRegion = ResourceCache.getTexture(eTexture);
-		if (atlasRegion == null)
-			return null;
-		final AtlasRegion[] atlasRegionArray = splitAtlasRegion(atlasRegion, tileWidth, tileHeight, count);
-		final AtlasAnimation animation = new AtlasAnimation(frameDuration, atlasRegionArray);
-		animation.setPlayMode(playMode);
-		return animation;
+		if (textureAtlas != null) {
+			// Retrieve texture atlas and texture regions.
+			TextureAtlas atlas = ResourceCache.getTextureAtlas(textureAtlas);
+			if (atlas == null) return null;
+			Array<AtlasRegion> atlasRegionArray = atlas.findRegions(name);
+			if (atlasRegionArray.size == 0) return null;
+			AtlasAnimation animation = new AtlasAnimation(frameDuration, atlasRegionArray);
+			animation.setPlayMode(playMode);
+			return animation;
+		}
+		else {
+			// Retrieve texture and split as tiles.
+			AtlasRegion atlasRegion = ResourceCache.getTexture(texture);
+			if (atlasRegion == null)
+				return null;
+			AtlasRegion[] atlasRegionArray = splitAtlasRegion(atlasRegion, tileWidth, tileHeight, count);
+			AtlasAnimation animation = new AtlasAnimation(frameDuration, atlasRegionArray);
+			animation.setPlayMode(playMode);
+			return animation;
+		}
 	}
 
 	@Override

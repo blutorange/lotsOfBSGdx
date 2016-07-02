@@ -4,18 +4,27 @@ Sound A 0.0 General OUGI_CUTIN_FLASH2
 
 // Initialize
 // Sprite, show, position, fade-in and show
-Sprite   R 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_STAND0
-Position R 0.000 Estelle 0.000 -3.0
-Scale    R 0.000 Estelle 1.0
-Opacity  R 0.000 Estelle 0.000
-Fade     R 0.000 Estelle 0.300 1.0
+Sprite   A 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_STAND0
+Position A 0.000 Estelle 0.000 -3.0
+Scale    A 0.000 Estelle 1.0
+Opacity  A 0.000 Estelle 0.000
+Fade     A 0.000 Estelle 0.300 1.0
 
-//Move R 0.0 Estelle Line 0.5 A 0.0 0.0
+// Low 3.5
+// High 7.5
+//Animation A 0.000 Sakura1 32.0 OUGI_OUKA_MUSOUGEKI_SAKURA
+//Position  A 0.000 Sakura1 5.0 9.5
+//Show      A 0.000 Sakura1 5.0
+//Opacity   A 0.000 Sakura1 0.0
+//Fade      A 0.000 Sakura1 0.2 1
+//Fade      A 1.800 Sakura1 0.2 0
+//Move      A 0.000 Sakura1 Parabola 2.0 =pow2In= R 0.5 -4.0 -7.0 -10 -11 
+
 
 // Run animation, 0.8-1.2 seconds
-Zoom   R 0.800 Estelle 0.400 =exp5= 2.0
-Move   R 0.800 Estelle Line 0.400 =exp5= R 0.0 -1.5
-Sprite R 0.800 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN0
+Zoom   A 0.800 Estelle 0.400 =exp5= 2.0
+Move   A 0.800 Estelle Line 0.400 =exp5= R 0.0 -1.5
+Sprite A 0.800 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN0
 Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN1
 Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN2
 Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN3
@@ -39,4 +48,5 @@ Show     A 1.250 Dust 1.0
 
 // Show
 Show    0   A 0.000 Estelle 1.850
+Include 50  A 0.000 sakura.anim
 Include 100 A 0.100 cutinFace.anim

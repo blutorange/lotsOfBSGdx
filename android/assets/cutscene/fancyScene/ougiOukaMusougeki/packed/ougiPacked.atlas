@@ -293,6 +293,118 @@ run7
   orig: 64, 64
   offset: 0, 0
   index: -1
+sakura
+  rotate: false
+  xy: 891, 158
+  size: 22, 11
+  orig: 22, 11
+  offset: 0, 0
+  index: 0
+sakura
+  rotate: false
+  xy: 869, 422
+  size: 20, 13
+  orig: 20, 13
+  offset: 0, 0
+  index: 1
+sakura
+  rotate: false
+  xy: 1005, 999
+  size: 17, 22
+  orig: 17, 22
+  offset: 0, 0
+  index: 8
+sakura
+  rotate: false
+  xy: 498, 341
+  size: 20, 13
+  orig: 20, 13
+  offset: 0, 0
+  index: 9
+sakura
+  rotate: false
+  xy: 498, 320
+  size: 15, 19
+  orig: 15, 19
+  offset: 0, 0
+  index: 2
+sakura
+  rotate: false
+  xy: 520, 269
+  size: 7, 19
+  orig: 7, 19
+  offset: 0, 0
+  index: 5
+sakura
+  rotate: false
+  xy: 1001, 458
+  size: 13, 21
+  orig: 13, 21
+  offset: 0, 0
+  index: 3
+sakura
+  rotate: false
+  xy: 948, 268
+  size: 15, 19
+  orig: 15, 19
+  offset: 0, 0
+  index: 10
+sakura
+  rotate: false
+  xy: 378, 24
+  size: 13, 20
+  orig: 13, 20
+  offset: 0, 0
+  index: 11
+sakura
+  rotate: false
+  xy: 948, 248
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: 14
+sakura
+  rotate: false
+  xy: 1001, 433
+  size: 9, 23
+  orig: 9, 23
+  offset: 0, 0
+  index: 4
+sakura
+  rotate: false
+  xy: 948, 230
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 7
+sakura
+  rotate: false
+  xy: 1001, 411
+  size: 9, 20
+  orig: 9, 20
+  offset: 0, 0
+  index: 12
+sakura
+  rotate: false
+  xy: 949, 215
+  size: 16, 13
+  orig: 16, 13
+  offset: 0, 0
+  index: 15
+sakura
+  rotate: false
+  xy: 949, 198
+  size: 11, 15
+  orig: 11, 15
+  offset: 0, 0
+  index: 6
+sakura
+  rotate: false
+  xy: 1001, 390
+  size: 7, 19
+  orig: 7, 19
+  offset: 0, 0
+  index: 13
 simpleHit1
   rotate: false
   xy: 891, 229
@@ -323,7 +435,7 @@ simpleHit4
   index: -1
 simpleHit5
   rotate: false
-  xy: 1005, 1005
+  xy: 1005, 981
   size: 17, 16
   orig: 17, 16
   offset: 0, 0
