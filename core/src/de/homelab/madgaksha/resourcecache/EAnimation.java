@@ -28,7 +28,7 @@ public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 	// ENEMIES
 	// =================
 
-	OUGI_OUKA_MUSOUGEKI_SAKURA(ETextureAtlas.OUGI_OUKA_MUSOUGEKI,"sakura", 0.100f, AtlasAnimation.PlayMode.LOOP),
+	OUGI_OUKA_MUSOUGEKI_SAKURA(ETextureAtlas.OUGI_OUKA_MUSOUGEKI,"sakura", 0.075f, AtlasAnimation.PlayMode.LOOP),
 	;
 
 	private final static Logger LOG = Logger.getLogger(EAnimation.class);

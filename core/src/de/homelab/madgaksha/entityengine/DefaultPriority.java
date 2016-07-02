@@ -38,11 +38,12 @@ public class DefaultPriority {
 
 	// drawing
 	public final static int viewportUpdateSystem = 15;
-	public final static int birdsViewSpriteSystem = 16;
-	public final static int spriteAnimationSystem = 17;
-	public final static int spriteRenderSystem = 18;
-	public final static int modelRenderSystem = 19;
-	public final static int particleEffectRenderSystem = 20;
+	public final static int spriteModeSystem = 16;
+	public final static int birdsViewSpriteSystem = 17;
+	public final static int spriteAnimationSystem = 18;
+	public final static int spriteRenderSystem = 19;
+	public final static int modelRenderSystem = 20;
+	public final static int particleEffectRenderSystem = 21;
 
-	public final static int timedCallbackSystem = 21;
+	public final static int timedCallbackSystem = 22;
 }

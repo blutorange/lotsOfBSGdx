@@ -22,6 +22,7 @@ import de.homelab.madgaksha.logging.Logger;
 public enum EModel implements IResource<EModel, Model> {
 	ITEM_WEAPON_BASIC("model/itemBasicWeapon.g3db"),
 	ITEM_WEAPON_MULTI("model/itemMultiWeapon.g3db"),
+	ITEM_TOKUGI_OUKAMUSOUGEKI("model/itemOukaMusougekiTokugi.g3db"),
 	;
 
 	private final static Logger LOG = Logger.getLogger(EModel.class);

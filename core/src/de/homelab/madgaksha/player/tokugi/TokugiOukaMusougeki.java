@@ -32,7 +32,7 @@ public class TokugiOukaMusougeki extends ATokugi {
 
 	@Override
 	public EModel getModel() {
-		return EModel.ITEM_WEAPON_BASIC;
+		return EModel.ITEM_TOKUGI_OUKAMUSOUGEKI;
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class TokugiOukaMusougeki extends ATokugi {
 			ETexture.TOKUGI_OUKAMUSOUGEKI_ICON_SUB,
 			ETexture.TOKUGI_OUKAMUSOUGEKI_SIGN,
 			EFancyScene.OUKA_MUSOUGEKI,
-			EModel.ITEM_WEAPON_BASIC,
+			EModel.ITEM_TOKUGI_OUKAMUSOUGEKI,
 		};
 	}
 

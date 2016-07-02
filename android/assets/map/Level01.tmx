@@ -9263,14 +9263,6 @@
     <property name="speed" type="float" value="45"/>
    </properties>
   </object>
-  <object id="116" name="testOugi" type="Callback" x="1303" y="18661" width="326" height="399">
-   <properties>
-    <property name="guid" value=""/>
-    <property name="loop" type="int" value="-1"/>
-    <property name="name" value="testOugi"/>
-    <property name="trigger" value="touch"/>
-   </properties>
-  </object>
   <object id="117" name="SoldierRed" type="Enemy" x="892" y="18153.7" width="132" height="156.667">
    <properties>
     <property name="battleIn" type="float" value="20"/>
@@ -9282,8 +9274,11 @@
     <property name="species" value="Soldier Red"/>
    </properties>
   </object>
-  <object id="118" name="OukaMusougeki" type="Item" x="1200.83" y="18558" width="32.3333" height="32">
+  <object id="118" name="OukaMusougeki" type="Item" x="1503.83" y="18396" width="32.3333" height="32">
    <properties>
+    <property name="axisX" type="float" value="0"/>
+    <property name="axisY" type="float" value="1"/>
+    <property name="axisZ" type="float" value="1"/>
     <property name="category" value="tokugi"/>
     <property name="name" value="OukaMusougeki"/>
     <property name="speed" type="float" value="45"/>

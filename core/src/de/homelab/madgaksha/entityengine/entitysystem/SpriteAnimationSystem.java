@@ -28,8 +28,7 @@ public class SpriteAnimationSystem extends IteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		final SpriteComponent sc = Mapper.spriteComponent.get(entity);
 		final SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
-		deltaTime = Mapper.temporalComponent.get(entity).totalTime;
-		final AtlasRegion ar = sac.animation.getKeyFrame(deltaTime);
+		final AtlasRegion ar = sac.animation.getKeyFrame(Mapper.temporalComponent.get(entity).totalTime);
 		sc.sprite.setAtlasRegion(ar);
 	}
 }

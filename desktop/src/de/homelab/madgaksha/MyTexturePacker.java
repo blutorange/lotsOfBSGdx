@@ -37,7 +37,7 @@ public class MyTexturePacker {
 		TexturePacker.process(inputDir, outputDir, packFileName);
 		
 		System.out.println("packing ougi textures...");
-		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/cutscene/fancyScene/ougiOukaMusougeki";
+		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/cutscene/fancyScene/ougiOukaMusougeki/res";
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/cutscene/fancyScene/ougiOukaMusougeki/packed";
 		packFileName = "ougiPacked";
 		TexturePacker.process(inputDir, outputDir, packFileName);

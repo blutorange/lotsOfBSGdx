@@ -46,6 +46,7 @@ import de.homelab.madgaksha.entityengine.entitysystem.ParticleEffectRenderSystem
 import de.homelab.madgaksha.entityengine.entitysystem.PostEffectSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ScaleFromDistanceSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteAnimationSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.SpriteModeSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.StickySystem;
 import de.homelab.madgaksha.entityengine.entitysystem.TemporalSystem;
@@ -89,9 +90,8 @@ public class EntityLayer extends ALayer {
 	@Override
 	public void update(float deltaTime) {
 		doUpdate = true;
-
 	}
-
+	
 	@Override
 	public void removedFromStack() {
 		if (gameEntityEngine != null) {
@@ -146,6 +146,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new ParticleEffectRenderSystem());
 		gameEntityEngine.addSystem(new ScaleFromDistanceSystem());
 		gameEntityEngine.addSystem(new SpriteAnimationSystem());
+		gameEntityEngine.addSystem(new SpriteModeSystem());
 		gameEntityEngine.addSystem(new SpriteRenderSystem());
 		gameEntityEngine.addSystem(new StickySystem());
 		gameEntityEngine.addSystem(new PostEffectSystem());

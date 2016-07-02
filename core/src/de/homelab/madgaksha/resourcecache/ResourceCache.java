@@ -97,7 +97,7 @@ public final class ResourceCache {
 		if (requiredResources == null)
 			return true;
 		for (IResource<? extends Enum<?>, ?> r : requiredResources) {
-			LOG.debug("fetch: " + r);
+			LOG.debug("fetch " + r.getClass().getSimpleName() + ": " + r);
 			if (!loadToRam(r))
 				return false;
 		}

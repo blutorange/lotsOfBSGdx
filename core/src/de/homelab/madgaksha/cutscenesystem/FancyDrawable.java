@@ -276,29 +276,6 @@ public final class FancyDrawable {
 		return rotation;
 	}
 
-//	public void getPosition(Vector2 position) {
-//		position.set(this.position);
-//	}
-//
-//	public void getOrigin(Vector2 origin) {
-//		origin.set(this.origin);
-//	}
-//
-//	public void getScale(Vector2 scale) {
-//		scale.set(this.scale);
-//	}
-//
-//	public void getCropX(Vector2 cropX) {
-//		cropX.set(this.cropX);
-//	}
-//
-//	public void getCropY(Vector2 cropY) {
-//		cropY.set(this.cropY);
-//	}
-//
-//	public void getColor(Color color) {
-//		color.set(this.color);
-//	}
 
 	private void setDrawable(AtlasRegion region, float unitsPerScreen) {
 		this.drawableSprite.setAtlasRegion(region);
@@ -347,15 +324,17 @@ public final class FancyDrawable {
 			return;
 		PooledEffect pe = ResourcePool.obtainParticleEffect(effect);
 		if (pe != null) {
+			resetScaleParticleEffect();
 			ResourcePool.freeParticleEffect(drawablePooledEffect);
 			drawablePooledEffect = pe;
-			this.dimensionsSpriteUnitsPerScreen = unitsPerScreen;
-			resize();
+			dimensionsSpriteUnitsPerScreen = unitsPerScreen;
 			scaleParticleEffectLast = 1.0f;
+			resize();
 			scalePe = true;
 			mode = Mode.PARTICLE_EFFECT;
 		}
 	}
+
 
 	/**
 	 * Called when drawable needs to be rendered.
@@ -440,7 +419,7 @@ public final class FancyDrawable {
 			retVal = drawablePooledEffect.isComplete();
 			break;
 		default:
-			LOG.error("unknown drawable encountered during update: " + mode);
+			LOG.error("unknown drawable " + mode + " encountered during update: " + this);
 			retVal = true;
 		}
 		return retVal;
@@ -451,13 +430,21 @@ public final class FancyDrawable {
 		drawablePooledEffect.scaleEffect(newScale / scaleParticleEffectLast);
 		scaleParticleEffectLast = newScale;
 	}
+	
+	private void resetScaleParticleEffect() {
+		float newScale = 1.0f;
+		drawablePooledEffect.scaleEffect(newScale / scaleParticleEffectLast);
+		scaleParticleEffectLast = newScale;
+	}
 
 	/**
 	 * Called when this drawable is not needed any longer.
 	 */
 	public void cleanup() {
-		if (drawablePooledEffect != null)
+		if (drawablePooledEffect != null) {
+			resetScaleParticleEffect();
 			ResourcePool.freeParticleEffect(drawablePooledEffect);
+		}
 		mode = Mode.CLEANUP;
 	}
 	

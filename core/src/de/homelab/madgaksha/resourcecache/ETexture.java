@@ -76,12 +76,14 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	// ENEMIES
 	// ===================
 	SOLDIER_RED_0("sprite/soldierRed0.png"),
-	SOLDIER_RED_0_MAIN("texture/statusicon/enemy/soldierRed-main.png"),
-	SOLDIER_RED_0_SUB("texture/statusicon/enemy", "soldierRed-sub.png"),
+	SOLDIER_RED_1("sprite/soldierRed1.png"),
+	SOLDIER_RED_MAIN("texture/statusicon/enemy/soldierRed-main.png"),
+	SOLDIER_RED_SUB("texture/statusicon/enemy", "soldierRed-sub.png"),
 
 	SOLDIER_GREEN_0("sprite/soldierGreen0.png"),
-	SOLDIER_GREEN_0_MAIN("texture/statusicon/enemy/soldierGreen-main.png"),
-	SOLDIER_GREEN_0_SUB("texture/statusicon/enemy", "soldierGreen-sub.png"),
+	SOLDIER_GREEN_1("sprite/soldierGreen1.png"),
+	SOLDIER_GREEN_MAIN("texture/statusicon/enemy/soldierGreen-main.png"),
+	SOLDIER_GREEN_SUB("texture/statusicon/enemy", "soldierGreen-sub.png"),
 
 	// ===================
 	// STATUSSCREEN
@@ -144,6 +146,11 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	OUGI_OUKA_DAMAGE_CIRCLE(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "damageCircle"),
 	OUGI_OUKA_MUSOUGEKI_STAFF_CHARGE1(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "staffCharge1"),
 	OUGI_OUKA_MUSOUGEKI_STAFF_CHARGE2(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "staffCharge2"),
+	OUGI_OUKA_MUSOUGEKI_NAME1OU(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "name1Ou"),
+	OUGI_OUKA_MUSOUGEKI_NAME2KA(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "name2Ka"),
+	OUGI_OUKA_MUSOUGEKI_NAME3MU(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "name3Mu"),
+	OUGI_OUKA_MUSOUGEKI_NAME4SOU(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "name4Sou"),
+	OUGI_OUKA_MUSOUGEKI_NAME5GEKI(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "name5Geki"),
 	OUGI_OUKA_MUSOUGEKI_RUN0(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run0"),
 	OUGI_OUKA_MUSOUGEKI_RUN1(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run1"),
 	OUGI_OUKA_MUSOUGEKI_RUN2(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "run2"),

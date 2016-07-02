@@ -17,6 +17,8 @@ import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent.SpriteMode;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
@@ -43,23 +45,30 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 
 		BehaviourComponent bc = new BehaviourComponent(BEHAVIOUR_BASICS);
 		RotationComponent rc = new RotationComponent(true);
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(requestedAnimationList(),
-				ESpriteDirectionStrategy.ZENITH);
-		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
-		SpriteComponent sc = new SpriteComponent(sac);
+		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent();
+		SpriteForDirectionListComponent sfdlc = new SpriteForDirectionListComponent(SpriteMode.NORMAL);
+		SpriteAnimationComponent sac = new SpriteAnimationComponent();
+		SpriteComponent sc = new SpriteComponent();
 
 		bc.cortex = getBehaviour(null);
-
+		sfdlc.setupNormal(requestedAnimationListNormal(), ESpriteDirectionStrategy.ZENITH, true);
+		sfdlc.setupDamage(requestedAnimationListDamage(), ESpriteDirectionStrategy.ZENITH, true);
+		sfdc.setup(sfdlc.normal.animationList, sfdlc.normal.spriteDirectionStrategy);
+		sac.setup(sfdc);
+		sc.setup(sac);
+		
 		e.add(bc);
 		e.add(sc);
 		e.add(sac);
 		e.add(sfdc);
+		e.add(sfdlc);
 		e.add(rc);
 	}
 
 	protected abstract IBehaving getBehaviour(MapProperties props);
-
-	protected abstract EAnimationList requestedAnimationList();
+	
+	protected abstract EAnimationList requestedAnimationListNormal();
+	protected abstract EAnimationList requestedAnimationListDamage();
 
 	private final static IBehaving BEHAVIOUR_BASICS = new IBehaving() {
 		@Override

@@ -27,6 +27,7 @@ public enum ESound implements IResource<ESound, Sound> {
 	TEXTBOX_ADVANCE("sound/ed6se002.wav", 0.200f),
 	TEXT_ADVANCE("sound/ed6se005.wav", 0.033f),
 
+	WIND1("sound/ed6se088.wav", 3.396f),
 	CHARGEUP1("sound/ed6se612.wav", 5.500f),
 	CHARGEUP2("sound/ed6se586.wav", 1.380f),
 	EXPLOSION1("sound/ed6se581.wav", 3.014f),
@@ -39,6 +40,7 @@ public enum ESound implements IResource<ESound, Sound> {
 	WOODEN_BEAT3("sound/ed6se803.wav", 2.000f),
 	OUGI_CUTIN_FLASH("sound/ed6se155.wav"),
 	OUGI_CUTIN_FLASH2("sound/ed6se543.wav"),
+	SWORD1("sound/ed6se501.wav", 0.660f),
 	
 	// ===================
 	// WEAPONS
@@ -70,6 +72,7 @@ public enum ESound implements IResource<ESound, Sound> {
 	ESTELLE_IKU_WAYO_SHORTENED("sound/ed6t1010Shortened.wav", 1.998f),
 	ESTELLE_SAA_IKU_WAYO("sound/ed6t1032.wav", 1.031f),
 	ESTELLE_TOTTEOKI_O_MISETE_AGERU("sound/ed6t1018.wav", 2.897f),
+	ESTELLE_OUKA_MUSOUGEKI("sound/scEvoEstelle01Edit.wav", 2.489f),
 
 	// ===================
 	// JOSHUA

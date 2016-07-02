@@ -85,12 +85,12 @@ public class SoldierRedMaker extends NormalEnemyMaker {
 
 	@Override
 	protected ETexture requestedIconMain() {
-		return ETexture.SOLDIER_RED_0_MAIN;
+		return ETexture.SOLDIER_RED_MAIN;
 	}
 
 	@Override
 	protected ETexture requestedIconSub() {
-		return ETexture.SOLDIER_RED_0_SUB;
+		return ETexture.SOLDIER_RED_SUB;
 	}
 
 	@Override
@@ -178,10 +178,14 @@ public class SoldierRedMaker extends NormalEnemyMaker {
 	}
 
 	@Override
-	protected EAnimationList requestedAnimationList() {
+	protected EAnimationList requestedAnimationListNormal() {
 		return EAnimationList.SOLDIER_RED_0;
 	}
-
+	@Override
+	protected EAnimationList requestedAnimationListDamage() {
+		return EAnimationList.SOLDIER_RED_1;
+	}
+	
 	@Override
 	protected float requestedBulletAttack() {
 		return 0.8f;

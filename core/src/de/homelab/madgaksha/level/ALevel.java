@@ -448,16 +448,7 @@ public abstract class ALevel {
 	 * @return The cutscene layer created, or null if it could not be created.
 	 */
 	public final ALayer pushCutsceneLayer(String filename) {
-		LOG.debug("pushing dialog: " + filename);
-		try {
-			CutsceneEventProvider provider = new FileCutsceneProvider(Gdx.files.internal(filename));
-			ALayer layer = new CutsceneLayer(provider);
-			game.pushLayer(layer);
-			return layer;
-		} catch (Exception e) {
-			LOG.error("could not push cutscene layer", e);
-			return null;
-		}
+		return pushCutsceneLayer(filename, null);
 	}
 	
 	/**
@@ -476,6 +467,10 @@ public abstract class ALevel {
 			LOG.error("could not push cutscene layer", e);
 			return null;
 		}
+	}
+	
+	public final ALayer pushFancyScene(final EventFancyScene ougi) {
+		return pushFancyScene(ougi, null);
 	}
 	
 	public final ALayer pushFancyScene(final EventFancyScene ougi, Runnable onDone) {

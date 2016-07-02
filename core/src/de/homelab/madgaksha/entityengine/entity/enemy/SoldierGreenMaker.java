@@ -101,12 +101,12 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 
 	@Override
 	protected ETexture requestedIconMain() {
-		return ETexture.SOLDIER_GREEN_0_MAIN;
+		return ETexture.SOLDIER_GREEN_MAIN;
 	}
 
 	@Override
 	protected ETexture requestedIconSub() {
-		return ETexture.SOLDIER_GREEN_0_SUB;
+		return ETexture.SOLDIER_GREEN_SUB;
 	}
 
 	@Override
@@ -160,8 +160,13 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 	}
 
 	@Override
-	protected EAnimationList requestedAnimationList() {
+	protected EAnimationList requestedAnimationListNormal() {
 		return EAnimationList.SOLDIER_GREEN_0;
+	}
+	
+	@Override
+	protected EAnimationList requestedAnimationListDamage() {
+		return EAnimationList.SOLDIER_GREEN_1;
 	}
 
 	@Override

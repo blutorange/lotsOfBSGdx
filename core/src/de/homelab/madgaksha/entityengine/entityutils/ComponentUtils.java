@@ -5,14 +5,17 @@ import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.BulletStatusComponent;
 import de.homelab.madgaksha.entityengine.component.ComponentQueueComponent;
 import de.homelab.madgaksha.entityengine.component.DamageQueueComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.GetHitComponent;
+import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.QuakeEffectComponent;
@@ -45,7 +48,7 @@ public final class ComponentUtils {
 	public final static long DAMAGE_LOWER_RANGE = 80L;
 	/** Upper range of the random damage variance, in percent. */
 	public final static long DAMAGE_UPPER_RANGE = 120L;
-	
+
 	public static void applyComponentQueue(Entity e, ComponentQueueComponent cqc) {
 		for (Class<? extends Component> c : cqc.remove)
 			e.remove(c);
@@ -69,9 +72,11 @@ public final class ComponentUtils {
 	 *            Entity whose sprite animation list needs to be changed.
 	 * @param animationList
 	 *            The new animation list.
-	 * @param spriteDirectionStrategy How to orient the sprite.
+	 * @param spriteDirectionStrategy
+	 *            How to orient the sprite.
 	 */
-	public static void switchAnimationList(Entity entity, EAnimationList animationList, ESpriteDirectionStrategy spriteDirectionStrategy) {
+	public static void switchAnimationList(Entity entity, EAnimationList animationList,
+			ESpriteDirectionStrategy spriteDirectionStrategy) {
 		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(entity);
 		SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
 		SpriteComponent sc = Mapper.spriteComponent.get(entity);
@@ -103,7 +108,20 @@ public final class ComponentUtils {
 		v1.set(pcAtWhom.x - pcWho.x, pcAtWhom.y - pcWho.y);
 		dc.degree = 630.0f - v1.angle();
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	private static Family FAMILY_BULLET = Family.all(BulletStatusComponent.class).get();
+
+	public static void setBulletAction(boolean active) {
+		if (active)
+			for (Entity e : gameEntityEngine.getEntitiesFor(FAMILY_BULLET))
+				e.remove(InactiveComponent.class);
+		else
+			for (Entity e : gameEntityEngine.getEntitiesFor(FAMILY_BULLET))
+				e.add(gameEntityEngine.createComponent(InactiveComponent.class));
+
+	}
+
 	public static void dealDamage(Entity attacker, Entity defender, long basePower, boolean keepOneHp) {
 		// Read basic info for damage calculation.
 		final StatusValuesComponent svcAttacker = attacker == null ? null : Mapper.statusValuesComponent.get(attacker);
@@ -121,24 +139,24 @@ public final class ComponentUtils {
 			if (svcDefender != null && ppcAttacker != null && tcAttacker != null && svcAttacker != null) {
 				// Read info from defender, his bullet resistance.
 				final long resistanceNum = svcDefender.bulletResistanceNum;
-	
+
 				// Read info from attacker, his pain points and bullet attack.
 				factor = (ppcAttacker.painPointsRatio * ppcAttacker.painPointsRatio + 1.0f);
 				attackNum = svcAttacker.bulletAttackNum;
-	
+
 				factor *= tcAttacker.deltaTime * DAMAGE_FREQUENCY;
-	
+
 				// Attack power is higher the more pain the attacker had to
 				// endure.
 				final long factorNum = (int) (factor * 1000.0f);
 				final long factorDen = 1000L;
-	
+
 				// Calculate damage.
 				// damage = basePower * attackPower / resistance *
 				// (1+painPointsRation^2) * random(0.8..1.2)
 				damage = (basePower * factorNum * attackNum) / (resistanceNum * factorDen);
 			}
-			
+
 			// Apply random variance.
 			damage *= MathUtils.random(DAMAGE_LOWER_RANGE, DAMAGE_UPPER_RANGE);
 			damage /= 100L;
@@ -146,7 +164,7 @@ public final class ComponentUtils {
 			// Queue defender to take damage.
 			dqc.queuedDamage += MathUtils.clamp(damage, 0L, DamageSystem.MAX_PAIN_POINTS - damage);
 			dqc.keepOneHp = dqc.keepOneHp || keepOneHp;
-			
+
 			// Custom stuff on getting hit.
 			GetHitComponent ghc = Mapper.getHitComponent.get(defender);
 			if (ghc != null)

@@ -11,6 +11,7 @@ import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent.SpriteDirection;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
@@ -93,6 +94,14 @@ public class BirdsViewSpriteSystem extends IteratingSystem {
 		animation = sfdc.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * sfdc.animationList.length))
 				* sfdc.animationList.length / 360.0f))
 				% sfdc.animationList.length];
+		return animation;
+	}
+
+	public static AtlasAnimation getForDirection(float degree, SpriteDirection sd) {
+		AtlasAnimation animation = null;
+		animation = sd.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * sd.animationList.length))
+				* sd.animationList.length / 360.0f))
+				% sd.animationList.length];
 		return animation;
 	}
 }

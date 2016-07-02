@@ -32,7 +32,7 @@ public class SpriteAnimationComponent implements Component, Poolable {
 	}
 
 	public void setup(SpriteForDirectionComponent sfdc) {
-		animation = sfdc.animationList[0];
+		if (sfdc.animationList.length != 0) animation = sfdc.animationList[0];
 	}
 
 	@Override

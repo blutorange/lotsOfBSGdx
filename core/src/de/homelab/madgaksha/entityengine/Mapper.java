@@ -49,6 +49,7 @@ import de.homelab.madgaksha.entityengine.component.SiblingComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent;
 import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.entityengine.component.StickyComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
@@ -207,6 +208,8 @@ public final class Mapper {
 			.getFor(SpriteComponent.class);
 	public final static ComponentMapper<SpriteForDirectionComponent> spriteForDirectionComponent = ComponentMapper
 			.getFor(SpriteForDirectionComponent.class);
+	public final static ComponentMapper<SpriteForDirectionListComponent> spriteForDirectionListComponent = ComponentMapper
+			.getFor(SpriteForDirectionListComponent.class);
 	public final static ComponentMapper<StatusValuesComponent> statusValuesComponent = ComponentMapper
 			.getFor(StatusValuesComponent.class);
 	public final static ComponentMapper<StickyComponent> stickyComponent = ComponentMapper

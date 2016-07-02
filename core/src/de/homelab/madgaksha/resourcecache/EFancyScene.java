@@ -1,6 +1,7 @@
 package de.homelab.madgaksha.resourcecache;
 
 import java.util.EnumMap;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -48,6 +49,7 @@ public enum EFancyScene implements IResource<EFancyScene, EventFancyScene> {
 		try {
 			FileHandle inputFile = new FileHandle(path);
 			Scanner scanner = new Scanner(inputFile.name());
+			scanner.useLocale(Locale.ROOT);
 			EventFancyScene scene = EventFancyScene.readNextObject(scanner, inputFile);
 			IOUtils.closeQuietly(scanner);
 			return scene;
