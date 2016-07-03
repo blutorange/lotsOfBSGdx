@@ -99,7 +99,7 @@
             <MultiLine>false</MultiLine>
             <Value disabled="false">Es läuft bereits ein Spiel. Vor dem Starten beende dieses bitte.</Value>
             <Value disabled="false">Please end the current game before starting a new one.</Value>
-            <Value disabled="true"></Value>
+            <Value disabled="false">ゲームを開始するまえに、他のゲーム画面を閉じてください。</Value>
         </Property>
         <Property>
             <Name>desktop.launch.failed</Name>

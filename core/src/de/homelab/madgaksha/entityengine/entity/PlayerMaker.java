@@ -364,10 +364,12 @@ public final class PlayerMaker implements IHittable, IMortal {
 	}
 
 	public void kill(Entity hitCircle) {
+		game.setGameLost();
 		EnemyMaker.exitBattleMode(false);
 
 		// Do not allow input anymore.
 		playerEntity.remove(InputDesktopComponent.class);
+		playerEntity.remove(BehaviourComponent.class);
 
 		playerEntity.remove(HoverEffectComponent.class);
 		playerEntity.remove(ShadowComponent.class);

@@ -4,7 +4,7 @@
   <property name="baseDirX" value="0"/>
   <property name="baseDirY" value="1"/>
   <property name="gravity" value="south"/>
-  <property name="maxElevation" value="2500"/>
+  <property name="maxElevation" value="2400"/>
   <property name="minElevation" value="800"/>
   <property name="playerDir" value="180"/>
   <property name="playerX" value="45"/>
@@ -9305,7 +9305,7 @@
     <property name="battleIn" type="float" value="40"/>
     <property name="battleOut" type="float" value="50"/>
     <property name="bulletLifeTime" type="float" value="15"/>
-    <property name="bulletScale" type="float" value="1"/>
+    <property name="bulletScale" type="float" value="0.5"/>
     <property name="initDir" value="0.0"/>
     <property name="initX" type="float" value="0"/>
     <property name="initY" type="float" value="0"/>
@@ -9318,7 +9318,7 @@
     <property name="battleIn" type="float" value="40"/>
     <property name="battleOut" type="float" value="50"/>
     <property name="bulletLifeTime" type="float" value="15"/>
-    <property name="bulletScale" type="float" value="1"/>
+    <property name="bulletScale" type="float" value="0.5"/>
     <property name="initDir" value="0.0"/>
     <property name="initX" type="float" value="0"/>
     <property name="initY" type="float" value="0"/>

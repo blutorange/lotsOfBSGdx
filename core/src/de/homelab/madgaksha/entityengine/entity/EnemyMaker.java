@@ -395,6 +395,8 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 
 	/** Called when we enter battle mode. */
 	public static void enterBattleMode(Entity enemy) {
+		if (game.isGameLost()) return;
+		
 		LOG.debug("entering battle mode");
 
 		battleModeActive = true;

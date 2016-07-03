@@ -117,6 +117,8 @@ public class Game implements ApplicationListener {
 	/** Custom shaders for the game. */
 	private CustomShaderProgram customShaderProgramBatchGame = null;
 
+	private boolean gameLost = false;
+
 	/**
 	 * @param params
 	 *            Screen size, fps etc. that were requested.
@@ -607,6 +609,13 @@ public class Game implements ApplicationListener {
 			IOUtils.closeQuietly(is);
 		this.exitRequested = true;
 		Gdx.app.exit();
+	}
+
+	public void setGameLost() {
+		gameLost  = true;
+	}
+	public boolean isGameLost() {
+		return gameLost;
 	}
 
 }
