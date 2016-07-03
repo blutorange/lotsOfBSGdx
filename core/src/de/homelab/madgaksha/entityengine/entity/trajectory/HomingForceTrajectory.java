@@ -12,7 +12,7 @@ import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.entity.BulletTrajectoryMaker;
 import de.homelab.madgaksha.entityengine.entity.IBehaving;
-import de.homelab.madgaksha.forcefield.HomingForceField;
+import de.homelab.madgaksha.field.HomingForceField;
 import de.homelab.madgaksha.logging.Logger;
 
 public class HomingForceTrajectory extends BulletTrajectoryMaker {

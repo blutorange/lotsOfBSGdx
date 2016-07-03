@@ -3,10 +3,9 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
@@ -23,7 +22,7 @@ import de.homelab.madgaksha.resourcepool.AtlasAnimation;
  * @author madgaksha
  * 
  */
-public class BirdsViewSpriteSystem extends IteratingSystem {
+public class BirdsViewSpriteSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger
@@ -36,9 +35,9 @@ public class BirdsViewSpriteSystem extends IteratingSystem {
 	@SuppressWarnings("unchecked")
 	public BirdsViewSpriteSystem(int priority) {
 		super(
-				Family.all(SpriteForDirectionComponent.class,
+				DisableIteratingSystem.all(SpriteForDirectionComponent.class,
 						SpriteAnimationComponent.class,
-						DirectionComponent.class).get(), priority);
+						DirectionComponent.class), priority);
 	}
 
 	@Override

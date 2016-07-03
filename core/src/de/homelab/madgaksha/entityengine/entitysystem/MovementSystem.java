@@ -3,10 +3,9 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import static de.homelab.madgaksha.GlobalBag.level;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
@@ -21,7 +20,7 @@ import de.homelab.madgaksha.logging.Logger;
  * 
  * @author madgaksha
  */
-public class MovementSystem extends IteratingSystem {
+public class MovementSystem extends DisableIteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(MovementSystem.class);
 
@@ -30,6 +29,8 @@ public class MovementSystem extends IteratingSystem {
 	private final float tileHeight;
 	private final float tileWidthInverse;
 	private final float tileHeightInverse;
+	private final float reducedTileWidth;
+	private final float reducedTileHeight;
 
 	public MovementSystem() {
 		this(DefaultPriority.movementSystem);
@@ -37,13 +38,15 @@ public class MovementSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public MovementSystem(int priority) {
-		super(Family.all(PositionComponent.class, VelocityComponent.class, TemporalComponent.class)
-				.exclude(InactiveComponent.class).get(), priority);
+		super(DisableIteratingSystem.all(PositionComponent.class, VelocityComponent.class, TemporalComponent.class)
+				.exclude(InactiveComponent.class), priority);
 		mapData = level.getMapData();
 		tileWidth = mapData.getWidthTiles();
 		tileHeight = mapData.getHeightTiles();
 		tileWidthInverse = 1.0f / mapData.getWidthTiles();
 		tileHeightInverse = 1.0f / mapData.getHeightTiles();
+		reducedTileHeight = 0.95f * tileHeight;
+		reducedTileWidth = 0.95f * tileWidth;
 	}
 
 	@Override
@@ -56,16 +59,16 @@ public class MovementSystem extends IteratingSystem {
 		// BoundingBoxMapComponent.
 		if (pc.limitToMap && bbmc != null) {
 			// Move position component to the center of the bounding box.
-			float hw = 0.5f * (bbmc.maxX - bbmc.minX);
-			float hh = 0.5f * (bbmc.maxY - bbmc.minY);
-			pc.x += bbmc.minX + hw;
-			pc.y += bbmc.minY + hh;
+			float dx = bbmc.minX + 0.5f * (bbmc.maxX - bbmc.minX);
+			float dy = bbmc.minY + 0.5f * (bbmc.maxY - bbmc.minY);
+			pc.x += dx;
+			pc.y += dy;
 			// Move on the map, respecting blocking tiles
 			// mapMovement(pc, vc.x * deltaTime, vc.y * deltaTime, hh, hw);
 			mapMovement(pc, vc, deltaTime);
 			// Move position component back to its original position.
-			pc.x -= bbmc.minX + hw;
-			pc.y -= bbmc.minY + hh;
+			pc.x -= dx;
+			pc.y -= dy;
 		} else {
 			pc.x += vc.x * deltaTime;
 			pc.y += vc.y * deltaTime;
@@ -351,8 +354,21 @@ public class MovementSystem extends IteratingSystem {
 	}
 
 	private void mapMovement(PositionComponent pc, VelocityComponent vc, float deltaTime) {
-		float newx = pc.x + vc.x * deltaTime;
-		float newy = pc.y + vc.y * deltaTime;
+		// Limit movement speed to avoid clipping.
+		float f = 1.0f;
+		float dx = Math.abs(vc.x * deltaTime);
+		float dy = Math.abs(vc.y * deltaTime);
+		if (dx > dy) {
+			if (dx > tileWidth * 0.9f) {
+				f = reducedTileWidth/dx;
+			}
+		}
+		else if (dy > tileWidth * 0.9f){
+			f = reducedTileHeight/dy;
+		}
+		final float newx = pc.x + f * vc.x * deltaTime;
+		final float newy = pc.y + f * vc.y * deltaTime; 
+		
 		if (mapData.isTileBlocking(newx, newy)) {
 			// Bottom left tile point.
 			int tx = (int) (pc.x * tileWidthInverse);
@@ -365,18 +381,14 @@ public class MovementSystem extends IteratingSystem {
 			// Check which tile this movement would get us in and move only
 			// vertically/horizontally.
 			if (vc.x * vc.y * (vc.x * (ty * tileHeight - pc.y) - vc.y * (tx * tileWidth - pc.x)) > 0) {
-				newy = pc.y + vc.y * deltaTime;
 				if (mapData.isTileBlocking(pc.x, newy)) {
-					newx = pc.x + vc.x * deltaTime;
 					if (!mapData.isTileBlocking(newx, pc.y))
 						pc.x = newx;
 				} else {
 					pc.y = newy;
 				}
 			} else {
-				newx = pc.x + vc.x * deltaTime;
 				if (mapData.isTileBlocking(newx, pc.y)) {
-					newy = pc.y + vc.y * deltaTime;
 					if (!mapData.isTileBlocking(pc.x, newy))
 						pc.y = newy;
 				} else {
@@ -384,30 +396,36 @@ public class MovementSystem extends IteratingSystem {
 				}
 			}
 		} else {
-			// TODO refactor?
 			// Make sure we are not too fast and would move through a blocking
 			// tile.
 			// Bottom left tile point.
 			int tx = (int) (pc.x * tileWidthInverse);
 			int ty = (int) (pc.y * tileHeightInverse);
-			// Get quadrant of of velocity vector
-			if (vc.x > 0)
-				++tx;
-			if (vc.y > 0)
-				++ty;
-			// Check which tile this movement would get us in and move only
-			// vertically/horizontally.
-			if (vc.x * vc.y * (vc.x * (ty * tileHeight - pc.y) - vc.y * (tx * tileWidth - pc.x)) > 0) {
-				float tmp = pc.y + vc.y * deltaTime;
-				if (!mapData.isTileBlocking(pc.x, tmp)) {
-					pc.x = newx;
-					pc.y = newy;
-				}
-			} else {
-				float tmp = pc.x + vc.x * deltaTime;
-				if (!mapData.isTileBlocking(tmp, pc.y)) {
-					pc.x = newx;
-					pc.y = newy;
+			
+			int newTileX = (int) (pc.x*tileWidthInverse);
+			int newTileY = (int) (pc.y*tileWidthInverse);
+			if (newTileX == tx || newTileY == ty) {
+				// Allow move immediately when we do not move diagonally.
+				pc.x = newx;
+				pc.y = newy;
+			}
+			else {	
+				// Otherwise, check tile to the left / right first.
+				// Get quadrant of velocity vector
+				if (vc.x > 0)
+					++tx;
+				if (vc.y > 0)
+					++ty;
+				// Check which tile this movement would get us in and move only
+				// vertically/horizontally.
+				if (vc.x * vc.y * (vc.x * (ty * tileHeight - pc.y) - vc.y * (tx * tileWidth - pc.x)) > 0) {
+					if (!mapData.isTileBlocking(pc.x, newy)) {
+						pc.y = newy;
+					}
+				} else {
+					if (!mapData.isTileBlocking(newx, pc.y)) {
+						pc.x = newx;
+					}
 				}
 			}
 		}

@@ -52,11 +52,11 @@ Sound A 1.350 General SWORD1
 Sound R 0.000 General WOODEN_BEAT2
 
 // Have enemy take damage for final hit
-Damagetarget A 0.000 3600000
-Damagetarget A 0.250 3600000
-Damagetarget A 0.876 3600000
-Damagetarget A 1.068 3600000
-Damagetarget A 1.350 3600000
+Damagetarget A 0.000 2000000
+Damagetarget A 0.250 2000000
+Damagetarget A 0.876 2000000
+Damagetarget A 1.068 2000000
+Damagetarget A 1.350 2000000
 
 Fade A 2.800 Name1 0.200 =linear= 0
 Fade A 2.800 Name2 0.200 =linear= 0

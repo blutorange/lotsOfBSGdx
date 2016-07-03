@@ -9,6 +9,7 @@ import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.GlobalBag;
@@ -44,8 +45,8 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public InputPlayerDesktopSystem(int priority) {
-		super(Family.all(VelocityComponent.class, InputDesktopComponent.class, DirectionComponent.class).get(),
-				priority);
+		super(Family.all(VelocityComponent.class, InputDesktopComponent.class,
+				DirectionComponent.class).get(), priority);
 	}
 
 	@Override
@@ -68,8 +69,10 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		}
 
 		// Arrow keys direction.
-		v.set((KeyMapDesktop.isPlayerMoveRightPressed()) ? 1.0f : (KeyMapDesktop.isPlayerMoveLeftPressed()) ? -1.0f : 0.0f,
-				(KeyMapDesktop.isPlayerMoveUpPressed()) ? 1.0f : (KeyMapDesktop.isPlayerMoveDownPressed()) ? -1.0f : 0.0f);
+		v.set((KeyMapDesktop.isPlayerMoveRightPressed()) ? 1.0f
+				: (KeyMapDesktop.isPlayerMoveLeftPressed()) ? -1.0f : 0.0f,
+				(KeyMapDesktop.isPlayerMoveUpPressed()) ? 1.0f
+						: (KeyMapDesktop.isPlayerMoveDownPressed()) ? -1.0f : 0.0f);
 
 		if (ic.relativeToCamera)
 			v.rotate(-viewportGame.getRotationUpXY());
@@ -83,14 +86,16 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 			final PositionComponent pcPlayer = Mapper.positionComponent.get(entity);
 			dc.degree = 450.0f - w.set(pcPlayer.x - pcEnemy.x, pcPlayer.y - pcEnemy.y).angle();
 		} else {
-			final float f = KeyMapDesktop.isSpeedupPressed() ? ic.accelerationFactorHigh
-					: ic.accelerationFactorLow;
+			final float f = KeyMapDesktop.isSpeedupPressed() ? ic.accelerationFactorHigh : ic.accelerationFactorLow;
 			vc.x = (vc.x + f * v.x) * ic.frictionFactor;
 			vc.y = (vc.y + f * v.y) * ic.frictionFactor;
 			if (v.x * v.y != 0.0f)
 				dc.degree = 630.0f - w.set(vc.x, vc.y).angle() + viewportGame.getRotationUpXY();
 		}
 
+		// Random randomness
+		if (v.x * v.y > 0.0f) MathUtils.random.nextInt();
+		
 		// Check if we need to switch the targetted enemy and change
 		// the info displayed on the status screen.
 		if (cameraTrackingComponent.focusPoints.size() > 1) {

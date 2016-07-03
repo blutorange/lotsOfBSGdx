@@ -10,9 +10,9 @@ EOF
 >>EventTextbox
   TransitionOut
   Text EOF
-Die Helding Trixia – obwohl ihr Name weit und breit
-bekann ist, wissen wir wenig über das Anderweltabenteuer,
-von dem die Rede im zweiten Band des Geisterweltschrift.
+Die Heldin Trixia – obwohl ihr Name weit und breit
+bekannt ist, wissen wir wenig über das Anderweltabenteuer,
+von dem die Rede im zweiten Band der Geisterweltschrift ist.
 EOF
 
 >>EventTextbox
@@ -21,7 +21,7 @@ EOF
   TransitionIn
   Text EOF
 Die Heldin Trixia...
-Habe ich diesen Namen nicht schonmal gehört...?
+Habe ich diesen Namen nicht schon einmal gehört...?
 Naja, wo auch immer ich hier bin, es ist nicht unsere
 Welt, also ist es ja kein Wunder, dass ich sie nicht kenne.
 EOF

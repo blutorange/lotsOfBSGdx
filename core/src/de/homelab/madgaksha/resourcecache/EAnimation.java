@@ -29,6 +29,14 @@ public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 	// =================
 
 	OUGI_OUKA_MUSOUGEKI_SAKURA(ETextureAtlas.OUGI_OUKA_MUSOUGEKI,"sakura", 0.075f, AtlasAnimation.PlayMode.LOOP),
+	
+	// =================
+	// BULLETS
+	// =================
+	NOTE_RED(ETextureAtlas.BULLETS_BASIC, "pNote0", 0.15f, AtlasAnimation.PlayMode.LOOP),
+	NOTE_BLUE(ETextureAtlas.BULLETS_BASIC, "pNote1", 0.15f, AtlasAnimation.PlayMode.LOOP),
+	NOTE_YELLOW(ETextureAtlas.BULLETS_BASIC, "pNote2", 0.15f, AtlasAnimation.PlayMode.LOOP),
+	NOTE_PINK(ETextureAtlas.BULLETS_BASIC, "pNote3", 0.15f, AtlasAnimation.PlayMode.LOOP),
 	;
 
 	private final static Logger LOG = Logger.getLogger(EAnimation.class);

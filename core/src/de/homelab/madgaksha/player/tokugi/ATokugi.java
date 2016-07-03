@@ -154,20 +154,26 @@ public abstract class ATokugi implements IMapItem {
 			long queuedDamage = dqc == null ? 0L : dqc.queuedDamage;
 			final ATokugi tokugi = this;
 			if (ppc != null && (ppc.maxPainPoints - ppc.painPoints - queuedDamage) > requestedRemainingPainPoints()) {
+				if (!openFire(player, deltaTime)) return;
 				gameScore.decreaseBy(requestedRequiredScore());
 				MakerUtils.addTimedRunnable(requestedSignDelay(), new ITimedCallback() {					
 					@Override
 					public void run(Entity entity, Object data) {
-						statusScreen.addTokugiDisplay(tokugi);
+						statusScreen.addTokugiSign(tokugi);
 					}
 				});
 	
 				ComponentUtils.dealDamage(null, GlobalBag.playerHitCircleEntity, requestedRemainingPainPoints(), false);
-				openFire(player, deltaTime);
 			}
 		}
 	}
 	
-	public abstract void openFire(Entity player, float deltaTime);
+	/**
+	 * Fires the tokugi. May return false when tokugi cannot be used right now. 
+	 * @param player Player entity.
+	 * @param deltaTime Time since the last frame in seconds.
+	 * @return Whether the tokugi has been fired.
+	 */
+	public abstract boolean openFire(Entity player, float deltaTime);
 
 }

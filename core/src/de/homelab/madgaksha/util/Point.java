@@ -13,6 +13,10 @@ public class Point implements Shape2D {
 	public float x = 0.0f;
 	public float y = 0.0f;
 
+	public Point(){
+		
+	}
+	
 	/**
 	 * Constructs a new point at the center of the rectangle.
 	 * 
@@ -27,6 +31,11 @@ public class Point implements Shape2D {
 	public Point(float x, float y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Point(Point point) {
+		this.x = point.x;
+		this.y = point.y;
 	}
 
 	@Override

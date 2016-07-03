@@ -37,7 +37,7 @@ EOF
   Speaker ESTELLE
   Face Serious
   Text EOF
-Irgendwas ist am Zelt...
+Irgendetwas ist am Zelt...
 EOF
 
 >>EventTextbox
@@ -53,7 +53,7 @@ EOF
   TransitionIn
   Text EOF
 Ich bin Leonard. Wir schieben gemeinsam Wache. Wer hätte gedacht,
-das so etwas passieren könnte? Zuerst war mein Kumpel, mit dem ich
+dass so etwas passieren könnte? Zuerst war mein Kumpel, mit dem ich
 gemeinsam Wache halte, noch bei mir. Doch ihn hat es erwischt.
 Derzeit scheint alles friedlich zu sein, also lasst mich berichten.
 EOF
@@ -84,7 +84,7 @@ EOF
 >>EventTextbox
   TransitionOut
   Text EOF
-Moment. War das draußen nicht eben irgendein Geräusch...?
+Moment. War da draußen nicht eben irgendein Geräusch...?
 EOF
 
 >>EventTextbox

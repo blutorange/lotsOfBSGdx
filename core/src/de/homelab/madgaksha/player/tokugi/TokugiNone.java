@@ -46,7 +46,8 @@ public class TokugiNone extends ATokugi {
 	}
 
 	@Override
-	public void openFire(Entity player, float deltaTime) {
+	public boolean openFire(Entity player, float deltaTime) {
+		return false;
 	}
 
 	@Override

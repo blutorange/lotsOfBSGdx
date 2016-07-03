@@ -1,10 +1,9 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.BehaviourComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
@@ -16,7 +15,7 @@ import de.homelab.madgaksha.logging.Logger;
  * 
  * @author madgaksha
  */
-public class AiSystem extends IteratingSystem {
+public class AiSystem extends DisableIteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(AiSystem.class);
 
@@ -26,8 +25,8 @@ public class AiSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public AiSystem(int priority) {
-		super(Family.all(BehaviourComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(),
-				priority);
+		super(DisableIteratingSystem.all(BehaviourComponent.class, TemporalComponent.class)
+				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override

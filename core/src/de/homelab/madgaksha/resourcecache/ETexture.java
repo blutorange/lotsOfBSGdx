@@ -85,6 +85,15 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	SOLDIER_GREEN_MAIN("texture/statusicon/enemy/soldierGreen-main.png"),
 	SOLDIER_GREEN_SUB("texture/statusicon/enemy", "soldierGreen-sub.png"),
 
+	ICER_0("sprite/icer0.png"),
+	ICER_1("sprite/icer1.png"),
+	ICER_TOKUGI_SIGN_0("texture/statusicon/enemy/icer-tokugi0.png"),
+	ICER_TOKUGI_SIGN_1("texture/statusicon/enemy/icer-tokugi1.png"),
+	ICER_MAIN("texture/statusicon/enemy/icer-main.png"),
+	ICER_SUB("texture/statusicon/enemy", "icer-sub.png"),
+	
+
+	
 	// ===================
 	// STATUSSCREEN
 	// ===================
@@ -252,6 +261,11 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	BULLET_FLOWER_GREEN(ETextureAtlas.BULLETS_BASIC, "pFlower5"),
 	BULLET_FLOWER_YELLOW(ETextureAtlas.BULLETS_BASIC, "pFlower6"),
 	BULLET_FLOWER_WHITE(ETextureAtlas.BULLETS_BASIC, "pFlower7"),
+	
+	BULLET_PLASMA_RED(ETextureAtlas.BULLETS_LARGE, "pPlasma0"),
+	BULLET_PLASMA_BLUE(ETextureAtlas.BULLETS_LARGE, "pPlasma1"),
+	BULLET_PLASMA_GREEN(ETextureAtlas.BULLETS_LARGE, "pPlasma2"),
+	BULLET_PLASMA_YELLOW(ETextureAtlas.BULLETS_LARGE, "pPlasma3"),
 
 	BULLET_GEMLET_BROWN(ETextureAtlas.BULLETS_BASIC, "pGemlet0"),
 	BULLET_GEMLET_BLUE(ETextureAtlas.BULLETS_BASIC, "pGemlet1"),

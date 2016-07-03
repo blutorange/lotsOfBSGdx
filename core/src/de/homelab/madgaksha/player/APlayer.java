@@ -52,6 +52,7 @@ public abstract class APlayer {
 	final private Rectangle boundingBoxMap;
 	final private Rectangle boundingBoxRender;
 	final private Rectangle boundingBoxCollision;
+	final private Vector2 offsetPlayerToHitCircle;
 	final private Vector2 spriteOrigin;
 	/**
 	 * x,y are the offset relative to the center of the sprites (bottom left).
@@ -116,6 +117,7 @@ public abstract class APlayer {
 		this.animationList = requestedAnimationList();
 		this.battleAnimationList = requestedBattleAnimationList();
 		this.spriteOrigin = requestedSpriteOrigin();
+		this.offsetPlayerToHitCircle = requestedOffsetPlayerToHitCircle();
 		this.boundingCircle = requestedBoundingCircle();
 		this.boundingBoxMap = requestedBoundingBoxMap();
 		this.boundingBoxRender = requestedBoundingBoxRender();
@@ -200,7 +202,9 @@ public abstract class APlayer {
 	 *         world position (0,0).
 	 */
 	protected abstract Vector2 requestedSpriteOrigin();
-
+	
+	protected abstract Vector2 requestedOffsetPlayerToHitCircle();
+	
 	/** @return Radius of the sphere bounding the player. */
 	protected abstract Circle requestedBoundingCircle();
 
@@ -359,6 +363,10 @@ public abstract class APlayer {
 
 	public Rectangle getBoundingBoxCollision() {
 		return boundingBoxCollision;
+	}
+	
+	public Vector2 getOffsetPlayerToHitCircle() {
+		return offsetPlayerToHitCircle;
 	}
 
 	public Rectangle getBoundingBoxRender() {

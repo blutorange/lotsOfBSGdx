@@ -1,10 +1,9 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
@@ -18,7 +17,7 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  * 
  */
-public class SpriteModeSystem extends IteratingSystem {
+public class SpriteModeSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(SpriteModeSystem.class);
@@ -29,7 +28,8 @@ public class SpriteModeSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public SpriteModeSystem(int priority) {
-		super(Family.all(SpriteForDirectionComponent.class, SpriteForDirectionListComponent.class).exclude(InactiveComponent.class).get(), priority);
+		super(DisableIteratingSystem.all(SpriteForDirectionComponent.class, SpriteForDirectionListComponent.class)
+				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
@@ -37,7 +37,8 @@ public class SpriteModeSystem extends IteratingSystem {
 		final SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(entity);
 		final SpriteForDirectionListComponent sfdlc = Mapper.spriteForDirectionListComponent.get(entity);
 		SpriteDirection sd = sfdlc.mode.getSpriteDirection(sfdlc);
-		if (sd == null) sd = sfdlc.dfault;
+		if (sd == null)
+			sd = sfdlc.dfault;
 		sfdc.animationList = sd.animationList;
 		sfdc.spriteDirectionStrategy = sd.spriteDirectionStrategy;
 	}

@@ -32,7 +32,7 @@ EOF
   Text EOF
 Das ist aber nicht der richtige Zeitpunk!
 Hey, Joshua, weißt du, wo wir sind?
-Diese unbekannt Landschaft, wo sind wir nur gelandet?
+Diese unbekannte Landschaft, wo sind wir nur gelandet?
 EOF
 
 
@@ -42,9 +42,9 @@ EOF
   Speaker Joshua
   Face Serious
   Text EOF
-Seit wir hier ankamen haben ich mit in der
+Seit wir hier ankamen, haben ich mit in der
 Umgebung umgeschaut, aber noch nicht viel
-herausgefunden. Aber eine unbekannte Kraft
+herausgefunden. Doch eine unbekannte Kraft
 ist hier mit Sicherheit im Spiel.
 EOF
 
@@ -185,7 +185,7 @@ EOF
 Nein, natürlich nicht. Mein Hunger
 kennt keine Grenzen.
 Wenn ich mir bewegen will, schwebt
-mein Körper einfach in dies Richtung.
+mein Körper einfach in diese Richtung.
 EOF
 
 >>EventTextbox
@@ -243,7 +243,7 @@ EOF
   TransitionOut
   Text EOF
 Schade... aber wenn du es so sagst, dann
-fühl ich mich gleich viel stärker! Ein paar
+fühle ich mich gleich viel stärker! Ein paar
 Gegner sind doch kein Problem!!
 EOF
 

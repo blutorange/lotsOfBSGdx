@@ -34,7 +34,6 @@ public class TemporalSystem extends IteratingSystem {
 		if (tsfc != null) {
 			tc.deltaTime = tsfc.scaleDisabled ? Gdx.graphics.getRawDeltaTime() : tc.deltaTime * tsfc.timeScalingFactor;
 		}
-
 		tc.totalTime += tc.deltaTime;
 	}
 }

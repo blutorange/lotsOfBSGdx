@@ -35,6 +35,6 @@ public class ForceFieldSystem extends IteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		final ForceComponent fc = Mapper.forceComponent.get(entity);
 		final ForceFieldComponent ffc = Mapper.forceFieldComponent.get(entity);
-		fc.setup(ffc.field.apply(entity));
+		ffc.field.apply(entity, fc);
 	}
 }

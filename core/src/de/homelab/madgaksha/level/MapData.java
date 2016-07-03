@@ -391,7 +391,10 @@ public class MapData {
 				if (c != null) {
 					com.badlogic.gdx.maps.MapProperties props = c.getTile().getProperties();
 					if (props.containsKey("blocking") && Boolean.valueOf(props.get("blocking", String.class))) {
-						tileFlags[x][y] |= 1; // 0b00000001;
+						tileFlags[x][y] = 1; // 0b00000001;
+					}
+					else {
+						tileFlags[x][y] = 0;
 					}
 				}
 			}
@@ -851,6 +854,16 @@ public class MapData {
 
 	public Gravity getPreferredPlayerLocation() {
 		return preferredPlayerLocation;
+	}
+
+	public static float getNumber(MapProperties props, String key, float defaultValue) {
+		Object o = props.get(key);
+		return o == null ? defaultValue : Float.valueOf(String.valueOf(o));
+	}
+
+	public static boolean getBoolean(MapProperties props, String key, boolean defaultValue) {
+		Object o = props.get(key);
+		return o == null ? defaultValue : Boolean.valueOf(String.valueOf(o));
 	}
 
 }

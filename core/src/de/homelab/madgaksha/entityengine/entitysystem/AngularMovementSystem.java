@@ -1,10 +1,9 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.AngularVelocityComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
@@ -18,7 +17,7 @@ import de.homelab.madgaksha.logging.Logger;
  * 
  * @author madgaksha
  */
-public class AngularMovementSystem extends IteratingSystem {
+public class AngularMovementSystem extends DisableIteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(AngularMovementSystem.class);
 
@@ -28,9 +27,8 @@ public class AngularMovementSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public AngularMovementSystem(int priority) {
-		super(Family.all(AngularVelocityComponent.class, TemporalComponent.class)
-				.one(DirectionComponent.class, RotationComponent.class).exclude(InactiveComponent.class).get(),
-				priority);
+		super(DisableIteratingSystem.all(AngularVelocityComponent.class, TemporalComponent.class)
+				.one(DirectionComponent.class, RotationComponent.class).exclude(InactiveComponent.class), priority);
 	}
 
 	@Override

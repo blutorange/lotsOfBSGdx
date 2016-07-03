@@ -1,15 +1,21 @@
 package de.homelab.madgaksha.entityengine.entityutils;
 
+import static de.homelab.madgaksha.GlobalBag.cameraEntity;
+import static de.homelab.madgaksha.GlobalBag.enemyTargetCrossEntity;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
+import static de.homelab.madgaksha.GlobalBag.playerBattleStigmaEntity;
+import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 
 import com.badlogic.ashley.core.EntitySystem;
 
+import de.homelab.madgaksha.entityengine.component.DisableAllExceptTheseComponent;
 import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.ForceFieldSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.InputPlayerDesktopSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.LifeSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.MovementSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.VelocityFieldSystem;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
@@ -25,35 +31,33 @@ public class SystemUtils {
 
 	public static void disableAction() {
 		gameEntityEngine.getSystem(AiSystem.class).setProcessing(false);
+		gameEntityEngine.getSystem(VelocityFieldSystem.class).setProcessing(false);
+		gameEntityEngine.getSystem(ForceFieldSystem.class).setProcessing(false);
 		gameEntityEngine.getSystem(MovementSystem.class).setProcessing(false);
-		gameEntityEngine.getSystem(GrantPositionSystem.class).setProcessing(false);
 		gameEntityEngine.getSystem(CollisionSystem.class).setProcessing(false);
-		//gameEntityEngine.getSystem(DamageSystem.class).setProcessing(false);
 		gameEntityEngine.getSystem(LifeSystem.class).setProcessing(false);
 		final EntitySystem inputDesktop = gameEntityEngine.getSystem(InputPlayerDesktopSystem.class);
 		if (inputDesktop != null)
 			inputDesktop.setProcessing(false);
+		cameraEntity.add(gameEntityEngine.createComponent(DisableAllExceptTheseComponent.class));
+		playerHitCircleEntity.add(gameEntityEngine.createComponent(DisableAllExceptTheseComponent.class));
+		playerBattleStigmaEntity.add(gameEntityEngine.createComponent(DisableAllExceptTheseComponent.class));
+		enemyTargetCrossEntity.add(gameEntityEngine.createComponent(DisableAllExceptTheseComponent.class));
 	}
 
 	public static void enableAction() {
 		gameEntityEngine.getSystem(AiSystem.class).setProcessing(true);
+		gameEntityEngine.getSystem(VelocityFieldSystem.class).setProcessing(true);
+		gameEntityEngine.getSystem(ForceFieldSystem.class).setProcessing(true);
 		gameEntityEngine.getSystem(MovementSystem.class).setProcessing(true);
-		gameEntityEngine.getSystem(GrantPositionSystem.class).setProcessing(true);
 		gameEntityEngine.getSystem(CollisionSystem.class).setProcessing(true);
-		//gameEntityEngine.getSystem(DamageSystem.class).setProcessing(true);
 		gameEntityEngine.getSystem(LifeSystem.class).setProcessing(true);
 		final EntitySystem inputDesktop = gameEntityEngine.getSystem(InputPlayerDesktopSystem.class);
 		if (inputDesktop != null)
 			inputDesktop.setProcessing(true);
-	}
-
-	public static void disableActionExceptCamera() {
-		disableAction();
-	}
-
-	public static void disableActionExceptGrantPosition() {
-		disableAction();
-		gameEntityEngine.getSystem(GrantPositionSystem.class).setProcessing(true);
-
+		cameraEntity.remove(DisableAllExceptTheseComponent.class);
+		playerHitCircleEntity.remove(DisableAllExceptTheseComponent.class);
+		playerBattleStigmaEntity.remove(DisableAllExceptTheseComponent.class);
+		enemyTargetCrossEntity.remove(DisableAllExceptTheseComponent.class);
 	}
 }

@@ -1,16 +1,16 @@
-package de.homelab.madgaksha.forcefield;
+package de.homelab.madgaksha.field;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.ForceComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.logging.Logger;
 
 public class HomingForceField implements IForceField {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(HomingForceField.class);
-	private final static Vector2 v = new Vector2();
+	//private final static Vector2 v = new Vector2();
 
 	public final PositionComponent target;
 	public final float springConstant;
@@ -21,9 +21,9 @@ public class HomingForceField implements IForceField {
 	}
 
 	@Override
-	public Vector2 apply(Entity e) {
+	public void apply(Entity e, ForceComponent fc) {
 		PositionComponent pc = Mapper.positionComponent.get(e);
-		v.set(target.x - pc.x, target.y - pc.y).scl(springConstant);
-		return v;
+		fc.x = springConstant * (target.x - pc.x);
+		fc.y = springConstant * (target.y - pc.y);
 	}
 }

@@ -4,13 +4,12 @@ import static de.homelab.madgaksha.GlobalBag.visibleWorld;
 import static de.homelab.madgaksha.GlobalBag.visibleWorldBoundingBox;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 
 import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
@@ -23,7 +22,7 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public class ViewportUpdateSystem extends IteratingSystem {
+public class ViewportUpdateSystem extends DisableIteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(ViewportUpdateSystem.class);
 	private final static float[] vertices = new float[8];
@@ -34,7 +33,8 @@ public class ViewportUpdateSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public ViewportUpdateSystem(int priority) {
-		super(Family.all(ViewportComponent.class, PositionComponent.class, RotationComponent.class).get(), priority);
+		super(DisableIteratingSystem.all(ViewportComponent.class, PositionComponent.class, RotationComponent.class),
+				priority);
 	}
 
 	@Override

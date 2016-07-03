@@ -1,12 +1,11 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
@@ -19,7 +18,7 @@ import de.homelab.madgaksha.logging.Logger;
  * 
  * @author madgaksha
  */
-public class ScaleFromDistanceSystem extends IteratingSystem {
+public class ScaleFromDistanceSystem extends DisableIteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(ScaleFromDistanceSystem.class);
 
@@ -31,8 +30,8 @@ public class ScaleFromDistanceSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public ScaleFromDistanceSystem(int priority) {
-		super(Family.all(PositionComponent.class, ShouldScaleComponent.class, ScaleFromDistanceComponent.class)
-				.exclude(InactiveComponent.class).get(), priority);
+		super(DisableIteratingSystem.all(PositionComponent.class, ShouldScaleComponent.class, ScaleFromDistanceComponent.class)
+				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override

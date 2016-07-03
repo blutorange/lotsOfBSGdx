@@ -1,6 +1,7 @@
 package de.homelab.madgaksha.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
@@ -38,6 +39,11 @@ public class VelocityComponent implements Component, Poolable {
 	public void setup(float x, float y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public void setup(Vector2 v) {
+		this.x = v.x;
+		this.y = v.y;
 	}
 
 	public void setup(float x, float y, float z) {

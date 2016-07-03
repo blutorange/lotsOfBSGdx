@@ -3,11 +3,10 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldPositionComponent;
@@ -21,7 +20,7 @@ import de.homelab.madgaksha.logging.Logger;
  * 
  * @author madgaksha
  */
-public class StickySystem extends IteratingSystem {
+public class StickySystem extends DisableIteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(StickySystem.class);
 	private final Vector3 upVector;
@@ -32,8 +31,8 @@ public class StickySystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public StickySystem(int priority) {
-		super(Family.all(ShouldPositionComponent.class, StickyComponent.class, TemporalComponent.class)
-				.exclude(InactiveComponent.class, VelocityComponent.class).get(), priority);
+		super(DisableIteratingSystem.all(ShouldPositionComponent.class, StickyComponent.class, TemporalComponent.class)
+				.exclude(InactiveComponent.class, VelocityComponent.class), priority);
 		upVector = viewportGame.getPerspectiveCamera().up;
 	}
 

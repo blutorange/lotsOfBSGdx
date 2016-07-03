@@ -22,10 +22,12 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	// =================
 	// ENEMIES
 	// =================
-	SOLDIER_RED_0(ETexture.SOLDIER_RED_0, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
-	SOLDIER_RED_1(ETexture.SOLDIER_RED_1, 64, 128, 8, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
+	SOLDIER_RED_0(ETexture.SOLDIER_RED_0, 64, 68, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
+	SOLDIER_RED_1(ETexture.SOLDIER_RED_1, 64, 68, 8, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
 	SOLDIER_GREEN_0(ETexture.SOLDIER_GREEN_0, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
 	SOLDIER_GREEN_1(ETexture.SOLDIER_GREEN_1, 64, 128, 8, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
+	ICER_0(ETexture.ICER_0, 128, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
+	ICER_1(ETexture.ICER_1, 128, 128, 8, 0.1f, AtlasAnimation.PlayMode.LOOP, 8),
 	;
 
 	private final static Logger LOG = Logger.getLogger(EAnimationList.class);

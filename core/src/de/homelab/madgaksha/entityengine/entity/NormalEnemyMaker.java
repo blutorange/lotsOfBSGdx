@@ -50,7 +50,7 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 		SpriteAnimationComponent sac = new SpriteAnimationComponent();
 		SpriteComponent sc = new SpriteComponent();
 
-		bc.cortex = getBehaviour(null);
+		bc.cortex = getBehaviour(props);
 		sfdlc.setupNormal(requestedAnimationListNormal(), ESpriteDirectionStrategy.ZENITH, true);
 		sfdlc.setupDamage(requestedAnimationListDamage(), ESpriteDirectionStrategy.ZENITH, true);
 		sfdc.setup(sfdlc.normal.animationList, sfdlc.normal.spriteDirectionStrategy);

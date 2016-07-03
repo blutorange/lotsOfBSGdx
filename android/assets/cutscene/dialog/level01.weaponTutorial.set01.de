@@ -11,10 +11,17 @@ EOF
 
 >>EventTextbox
   TransitionIn
-  TransitionOut
   Text EOF
 Waffenwürfel und andere Items kommen automatisch
 zu dir, sobald du dich ihnen näherst. Normale Waffen
 aktivieren sich von alleine, sobald der Kampf beginnt.
 Konzentriere dich zuerst einmal auf das Ausweichen!
+EOF
+
+>>EventTextbox
+  TransitionOut
+  Text EOF
+Der gelbe Punkt des Lebens, der nur während der
+Ekstase des Gefechts zu sichten ist, bestimmt
+einzig und alleine den Ausgang eben dessen.
 EOF

@@ -25,25 +25,29 @@ public class DefaultPriority {
 	public final static int inputPlayerDesktopSystem = 5;
 	public final static int forceFieldSystem = 6;
 	public final static int accelerationSystem = 7;
-	public final static int movementSystem = 8;
-	public final static int collisionSystem = 9;
+	public final static int velocityFieldSystem = 8;
+	public final static int movementSystem = 9;
+	public final static int collisionSystem = 10;
 
-	public final static int postEffectSystem = 10;
+	public final static int postEffectSystem = 11;
 
-	public final static int grantPositionSystem = 11;
-	public final static int grantRotationSystem = 12;
-	public final static int grantScaleSystem = 13;
+	public final static int grantPositionSystem = 12;
+	public final static int grantRotationSystem = 13;
+	public final static int grantScaleSystem = 14;
+	public final static int grantDirectionSystem = 15;
 
-	public final static int damageSystem = 14;
+	public final static int damageSystem = 16;
 
 	// drawing
-	public final static int viewportUpdateSystem = 15;
-	public final static int spriteModeSystem = 16;
-	public final static int birdsViewSpriteSystem = 17;
-	public final static int spriteAnimationSystem = 18;
-	public final static int spriteRenderSystem = 19;
-	public final static int modelRenderSystem = 20;
-	public final static int particleEffectRenderSystem = 21;
+	public final static int viewportUpdateSystem = 17;
+	public final static int spriteModeSystem = 18;
+	public final static int birdsViewSpriteSystem = 19;
+	public final static int spriteAnimationSystem = 20;
+	public final static int spriteRenderSystem = 21;
+	public final static int modelRenderSystem = 22;
+	public final static int particleEffectRenderSystem = 23;
 
-	public final static int timedCallbackSystem = 22;
+	public final static int timedCallbackSystem = 24;
+
+	
 }

@@ -60,9 +60,6 @@ import de.homelab.madgaksha.entityengine.component.boundingbox.BoundingBoxRender
 import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup02Component;
 import de.homelab.madgaksha.entityengine.component.zorder.ZOrder2Component;
 import de.homelab.madgaksha.entityengine.entity.trajectory.HomingGrantTrajectory;
-import de.homelab.madgaksha.entityengine.entitysystem.AiSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
-import de.homelab.madgaksha.entityengine.entitysystem.InputPlayerDesktopSystem;
 import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.entityengine.entityutils.SystemUtils;
 import de.homelab.madgaksha.enums.ECollisionGroup;
@@ -382,13 +379,14 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 			SystemUtils.disableAction();
 			game.setGlobalTimeScale(0.12f);
 			MakerUtils.addTimedRunnable(level.getSoundOnBattleWin().getDurationInMilliseconds() * 0.12f * 0.001f,
-					new ITimedCallback() {
-						@Override
-						public void run(Entity entity, Object data) {
-							SystemUtils.enableAction();
-							game.setGlobalTimeScale(1.0f);
-						}
-					});
+				new ITimedCallback() {
+					@Override
+					public void run(Entity entity, Object data) {
+						SystemUtils.enableAction();
+						game.setGlobalTimeScale(1.0f);
+					}
+				}
+			);
 		}
 
 		// Remove target info from status screen.
@@ -407,9 +405,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		MusicPlayer.getInstance().transition(2.0f);
 
 		cameraTrackingComponent.playerPoint = enemy;
-		gameEntityEngine.getSystem(AiSystem.class).setProcessing(false);
-		gameEntityEngine.getSystem(CollisionSystem.class).setProcessing(false);
-		gameEntityEngine.getSystem(InputPlayerDesktopSystem.class).setProcessing(false);
+		SystemUtils.disableAction();
 		ComponentUtils.setBulletAction(false);
 		playerEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
 
@@ -532,9 +528,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 			MakerUtils.addTimedRunnable(0.3f, new ITimedCallback() {
 				@Override
 				public void run(Entity entity, Object data) {
-					gameEntityEngine.getSystem(AiSystem.class).setProcessing(true);
-					gameEntityEngine.getSystem(InputPlayerDesktopSystem.class).setProcessing(true);
-					gameEntityEngine.getSystem(CollisionSystem.class).setProcessing(true);
+					SystemUtils.enableAction();
 					ComponentUtils.setBulletAction(true);
 					playerEntity.remove(InactiveComponent.class);
 				}

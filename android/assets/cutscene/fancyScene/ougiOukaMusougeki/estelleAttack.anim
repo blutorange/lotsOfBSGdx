@@ -12,14 +12,14 @@ Sprite       A 0.000 DamageCircle 32.0 OUGI_OUKA_DAMAGE_CIRCLE
 Position A 0.000 Estelle 4.000 -2.5
 
 // Position enemy
-Position A 0.000 Enemy -5.000 -3.000
-Origin   A 0.000 Enemy 1.0 0.5
+Position A 0.000 Enemy -5.000 -4.100
+Origin   A 0.000 Enemy 1.0 0.0
 
 // Parabola Jump
 Move A 0.000 Estelle Parabola 0.450 =linear= A 0.333 2.000 3.0 -2.0 -3.0
 
 // Move in enemy
-Move A 0.000 Enemy Line 0.450 =exp5Out= A -1.850 -3.000
+Move A 0.000 Enemy Line 0.450 =exp5Out= A -1.850 -4.100
 
 // Enemy hit animation for landing attack
 Peffect  A 0.425 SimpleHit 50  OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT

@@ -27,6 +27,11 @@ public enum ESound implements IResource<ESound, Sound> {
 	TEXTBOX_ADVANCE("sound/ed6se002.wav", 0.200f),
 	TEXT_ADVANCE("sound/ed6se005.wav", 0.033f),
 
+	CRYING1("sound/ed7se934.wav", 6.224f),
+	HUMMING1("sound/ed7se968.wav", 3.832f),
+	SAW1("sound/ed7se948.wav", 1.733f),
+	SAW2("sound/ed7se946.wav", 4.458f),
+	BEEP1("sound/ed7se967.wav", 0.653f),
 	WIND1("sound/ed6se088.wav", 3.396f),
 	CHARGEUP1("sound/ed6se612.wav", 5.500f),
 	CHARGEUP2("sound/ed6se586.wav", 1.380f),
@@ -82,6 +87,8 @@ public enum ESound implements IResource<ESound, Sound> {
 	// ===================
 	// OTHER
 	// ===================
+	ICER_TOKUGI_0("sound/icerTokugi0.wav", 1.715f),
+	ICER_TOKUGI_1("sound/icerTokugi1.wav", 3.250f),
 	HORA_KOCCHI_DA_ZE("sound/ed6t1252.wav", 1.192f),
 	HOOORGH("sound/ed6t1257.wav", 3.657f),
 	NURRGH("sound/ed6t1270.wav", 0.284f),

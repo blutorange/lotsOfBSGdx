@@ -3,13 +3,12 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IntervalIteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.Game;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
@@ -26,34 +25,30 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public class CameraTracingSystem extends IntervalIteratingSystem {
+public class CameraTracingSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(CameraTracingSystem.class);
 
 	/** In seconds. */
-	private final static float DEFAULT_UPDATE_INTERVAL = 0.05f;
+	// private final static float DEFAULT_UPDATE_INTERVAL = 0.05f;
 
 	/** Last vector longer than the threshold. */
 	private Vector2 lastDirAboveThreshold = new Vector2(0, 1);
 
 	public CameraTracingSystem() {
-		this(DEFAULT_UPDATE_INTERVAL, DefaultPriority.cameraZoomingSystem);
-	}
-
-	public CameraTracingSystem(int priority) {
-		this(DEFAULT_UPDATE_INTERVAL, priority);
+		this(DefaultPriority.cameraZoomingSystem);
 	}
 
 	@SuppressWarnings("unchecked")
-	public CameraTracingSystem(float updateInterval, int priority) {
-		super(Family.all(ManyTrackingComponent.class, ShouldPositionComponent.class, ShouldRotationComponent.class)
-				.get(), updateInterval, priority);
+	public CameraTracingSystem(int priority) {
+		super(DisableIteratingSystem.all(ManyTrackingComponent.class, ShouldPositionComponent.class,
+				ShouldRotationComponent.class), priority);
 	}
 
 	@SuppressWarnings("incomplete-switch")
 	@Override
-	protected void processEntity(Entity entity) {
+	protected void processEntity(Entity entity, float deltaTime) {
 		final ShouldPositionComponent spc = Mapper.shouldPositionComponent.get(entity);
 		final ShouldRotationComponent src = Mapper.shouldRotationComponent.get(entity);
 		final ManyTrackingComponent mtc = Mapper.manyTrackingComponent.get(entity);

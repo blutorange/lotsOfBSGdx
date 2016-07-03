@@ -11,10 +11,18 @@ EOF
 
 >>EventTextbox
   TransitionIn
-  TransitionOut
   Text EOF
 Combat cubes and other items will come to you
 on their own once you get close enough to them.
 As soon as battle begins, normal weapons activate
 automatically. Let's concentrate on dodging for now!
+EOF
+
+>>EventTextbox
+  TransitionOut
+  Text EOF
+The yellow vital point of life is not easily
+visible. It is only during the ecstasy encountered
+while battling it becomes apparent. Life or death,
+it is the only judge. 
 EOF

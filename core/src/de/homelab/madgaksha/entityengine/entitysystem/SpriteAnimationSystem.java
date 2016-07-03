@@ -1,18 +1,17 @@
 package de.homelab.madgaksha.entityengine.entitysystem;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 
-public class SpriteAnimationSystem extends IteratingSystem {
+public class SpriteAnimationSystem extends DisableIteratingSystem {
 
 	public SpriteAnimationSystem() {
 		this(DefaultPriority.spriteAnimationSystem);
@@ -20,8 +19,8 @@ public class SpriteAnimationSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public SpriteAnimationSystem(int priority) {
-		super(Family.all(TemporalComponent.class, SpriteAnimationComponent.class, SpriteComponent.class)
-				.exclude(InactiveComponent.class).get(), priority);
+		super(DisableIteratingSystem.all(TemporalComponent.class, SpriteAnimationComponent.class, SpriteComponent.class)
+				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override

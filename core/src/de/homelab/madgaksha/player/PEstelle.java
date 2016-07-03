@@ -59,9 +59,14 @@ public class PEstelle extends APlayer {
 
 	@Override
 	protected Rectangle requestedBoundingBoxCollision() {
-		return new Rectangle(-2.0f, -51.0f, 0.0f, 0.0f);
+		return new Rectangle(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 
+	@Override
+	protected Vector2 requestedOffsetPlayerToHitCircle() {
+		return new Vector2(2.0f, 51.0f);
+	}
+	
 	@Override
 	protected Shape2D requestedExactShapeCollision() {
 		return new Point(requestedBoundingBoxCollision());

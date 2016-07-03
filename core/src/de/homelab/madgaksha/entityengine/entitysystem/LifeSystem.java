@@ -3,17 +3,16 @@ package de.homelab.madgaksha.entityengine.entitysystem;
 import static de.homelab.madgaksha.GlobalBag.gameEntityEngine;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.homelab.madgaksha.entityengine.DefaultPriority;
+import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.LifeComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.logging.Logger;
 
-public class LifeSystem extends IteratingSystem {
+public class LifeSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(LifeSystem.class);
@@ -24,7 +23,7 @@ public class LifeSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public LifeSystem(int priority) {
-		super(Family.all(LifeComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(),
+		super(DisableIteratingSystem.all(LifeComponent.class, TemporalComponent.class).exclude(InactiveComponent.class),
 				priority);
 	}
 

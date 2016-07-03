@@ -77,7 +77,7 @@ public class CutsceneLayer extends ALayer {
 
 	@Override
 	public void addedToStack() {
-		SystemUtils.disableActionExceptGrantPosition();
+		SystemUtils.disableAction();
 		stopPlayerMovement();
 		cutsceneEventProvider.initialize();
 		allowSpeedup = !KeyMapDesktop.isSpeedupPressed();

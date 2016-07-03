@@ -50,7 +50,7 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 		super();
 		linearMotionTrajectory = new LinearMotionTrajectory();
 		linearMotionTrajectory.life(10.0f);
-		linearMotionTrajectory.rotation(540.0f);
+		linearMotionTrajectory.angularSpeed(540.0f);
 
 		fadeInAimTrajectory = new FadeInAimTrajectory();
 		fadeInAimTrajectory.timeFadeIn(0.1f);

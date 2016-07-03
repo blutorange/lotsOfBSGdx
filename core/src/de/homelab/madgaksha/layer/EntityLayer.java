@@ -35,6 +35,7 @@ import de.homelab.madgaksha.entityengine.entitysystem.CameraTracingSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.CollisionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ForceFieldSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.GrantDirectionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantPositionSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantRotationSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.GrantScaleSystem;
@@ -51,6 +52,7 @@ import de.homelab.madgaksha.entityengine.entitysystem.SpriteRenderSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.StickySystem;
 import de.homelab.madgaksha.entityengine.entitysystem.TemporalSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.TimedCallbackSystem;
+import de.homelab.madgaksha.entityengine.entitysystem.VelocityFieldSystem;
 import de.homelab.madgaksha.entityengine.entitysystem.ViewportUpdateSystem;
 import de.homelab.madgaksha.logging.Logger;
 
@@ -140,6 +142,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new GrantPositionSystem());
 		gameEntityEngine.addSystem(new GrantRotationSystem());
 		gameEntityEngine.addSystem(new GrantScaleSystem());
+		gameEntityEngine.addSystem(new GrantDirectionSystem());
 		gameEntityEngine.addSystem(new LifeSystem());
 		gameEntityEngine.addSystem(new ModelRenderSystem());
 		gameEntityEngine.addSystem(new MovementSystem());
@@ -152,6 +155,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new PostEffectSystem());
 		gameEntityEngine.addSystem(new TimedCallbackSystem());
 		gameEntityEngine.addSystem(new TemporalSystem());
+		gameEntityEngine.addSystem(new VelocityFieldSystem());
 		gameEntityEngine.addSystem(new ViewportUpdateSystem());
 
 		switch (Gdx.app.getType()) {

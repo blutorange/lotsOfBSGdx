@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.collision.Ray;
 
 import de.homelab.madgaksha.entityengine.component.ABoundingBoxComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
+import de.homelab.madgaksha.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.enums.EShapeType;
 import de.homelab.madgaksha.logging.Logger;
 
@@ -525,6 +526,65 @@ public class GeoUtil {
 			Rectangle r = pp.getBoundingRectangle();
 			center.x = r.x + 0.5f * r.width;
 			center.y = r.y + 0.5f * r.height;
+		}
+	}
+
+	public static void scaleShapeBy(ShapeComponent sc, float scaleX, float scaleY) {
+		switch (sc.shapeType) {
+		case CIRCLE:
+			Circle c = (Circle)sc.shape;
+			if (scaleX != scaleY) {
+				sc.shape = new Ellipse(c);
+				e.width *= scaleX;
+				e.height *= scaleY;
+			}
+			else {
+				c.radius *= scaleX;
+			}
+			break;
+		case ELLIPSE:
+			Ellipse e = (Ellipse)sc.shape;
+			e.width *= scaleX;
+			e.height *= scaleY;
+			break;
+		case POINT:
+			// nothing to be done;
+			break;
+		case POLYGON:
+			Polygon p = (Polygon)sc.shape;
+			p.setScale(scaleX, scaleY);
+			break;
+		case POLYLINE:
+			Polyline l = (Polyline)sc.shape;
+			l.setScale(scaleX, scaleY);
+			break;
+		case RECTANGLE:
+			Rectangle r = (Rectangle)sc.shape;
+			r.width *= scaleX;
+			r.height *= scaleY;
+			break;
+		default:
+			break;
+		}
+	}
+
+	public static Shape2D cloneShape(Shape2D shape) {
+		switch (EShapeType.valueOf(shape)) {
+		case CIRCLE:
+			return new Circle((Circle)shape);
+		case ELLIPSE:
+			return new Ellipse((Ellipse)shape);
+		case POINT:
+			return new Point((Point)shape);
+		case POLYGON:
+			return new Polygon(((Polygon)shape).getTransformedVertices());
+		case POLYLINE:
+			return new Polyline(((Polyline)shape).getTransformedVertices());
+		case RECTANGLE:
+			return new Rectangle((Rectangle)shape);
+		default:
+			LOG.error("unkown shape type: " + shape);
+			return shape;
 		}
 	}
 }

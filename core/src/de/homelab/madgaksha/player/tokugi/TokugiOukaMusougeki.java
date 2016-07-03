@@ -3,10 +3,13 @@ package de.homelab.madgaksha.player.tokugi;
 import static de.homelab.madgaksha.GlobalBag.level;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.TimeUtils;
 
+import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EFancyScene;
 import de.homelab.madgaksha.resourcecache.EModel;
+import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
@@ -14,6 +17,9 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
 public class TokugiOukaMusougeki extends ATokugi {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(TokugiOukaMusougeki.class);
+	
+	private final static long COOLDOWN = 30000;
+	private long previousTime = TimeUtils.millis()-COOLDOWN;
 	
 	@Override
 	protected ETexture requestedSign() {
@@ -47,13 +53,20 @@ public class TokugiOukaMusougeki extends ATokugi {
 	}
 
 	@Override
-	public void openFire(Entity player, float deltaTime) {
+	public boolean openFire(Entity player, float deltaTime) {
+		long currentTime = TimeUtils.millis();
+		if (currentTime - previousTime < COOLDOWN) {
+			SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
+			return false;
+		}
+		previousTime = currentTime;
 		level.pushFancyScene(ResourceCache.getFancyScene(EFancyScene.OUKA_MUSOUGEKI), new Runnable() {
 			@Override
 			public void run() {
 				dealFinalDamagePoint();
 			}
 		});
+		return true;
 	}
 
 	@Override

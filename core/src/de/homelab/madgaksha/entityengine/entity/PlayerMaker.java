@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
+import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.audiosystem.MusicPlayer;
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
@@ -173,17 +174,18 @@ public final class PlayerMaker implements IHittable, IMortal {
 	}
 
 	public void setupPlayerHitCircle(final APlayer player) {
-		Rectangle bbc = player.getBoundingBoxCollision();
+		Vector2 offsetFromPlayer = player.getOffsetPlayerToHitCircle();
 		StickyComponent sec = Mapper.stickyComponent.get(playerHitCircleEntity);
-		sec.setup(playerEntity, bbc.x + 0.5f * bbc.width, bbc.y + 0.5f * bbc.height);
+		sec.setup(playerEntity, -offsetFromPlayer.x, -offsetFromPlayer.y);
 		sec.offsetRelativeToCamera = false;
 		sec.ignoreTrackOffset = true;
 
 		SpriteComponent spc = Mapper.spriteComponent.get(playerHitCircleEntity);
 		spc.setup(player.getHitCircleTexture());
 
+		Rectangle bbc = player.getBoundingBoxCollision();
 		ABoundingBoxComponent bbcc = Mapper.boundingBoxCollisionComponent.get(playerHitCircleEntity);
-		bbcc.setup(-bbc.width * 0.5f, -bbc.height * 0.5f, bbc.width * 0.5f, bbc.height * 0.5f);
+		bbcc.setup(bbc);
 
 		Shape2D exactShape = player.getExactShapeCollision();
 		ShapeComponent shc = Mapper.shapeComponent.get(playerHitCircleEntity);

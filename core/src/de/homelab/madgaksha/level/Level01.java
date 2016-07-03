@@ -183,7 +183,7 @@ public class Level01 extends ALevel {
 	}
 
 	public void demoEnd(MapProperties properties) {
-		if (GlobalBag.enemyKillCount >= 31)
+		if (GlobalBag.enemyKillCount >= 35)
 			pushCutsceneLayer("cutscene/level01.demoEnd");
 		else
 			pushCutsceneLayer("cutscene/level01.demoNotEnd");
