@@ -30,7 +30,7 @@ public class FancyShake extends AFancyEvent {
 		this.richterScale = richterScale;
 		this.duration = duration;
 	}
-	
+
 	@Override
 	public void reset() {
 		richterScale = RichterScale.M1;
@@ -76,20 +76,20 @@ public class FancyShake extends AFancyEvent {
 	public void attachedToScene(EventFancyScene scene) {
 		this.scene = scene;
 	}
-	
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {	
+
+	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		RichterScale richterScale = FileCutsceneProvider.nextRichterScale(s);
 		if (richterScale == null) {
 			LOG.error("expected richter scale");
 			return null;
 		}
-		
+
 		Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {
 			LOG.error("expected duration");
 			return null;
 		}
-		
+
 		return new FancyShake(richterScale, duration);
 	}
 }

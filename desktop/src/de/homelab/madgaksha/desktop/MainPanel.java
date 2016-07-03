@@ -149,7 +149,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 
 		lblTitle = new JLabel("Title", SwingConstants.CENTER);
 		lblTitle.setFont(lblTitle.getFont().deriveFont(25.0f).deriveFont(Font.BOLD));
-		
+
 		lblDescription = new JLabel("Description", SwingConstants.CENTER);
 
 		JPanel panel_3 = new JPanel();
@@ -310,7 +310,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 		lblTitle.validate();
 		lblDescription.validate();
 		lblScore.validate();
-		
+
 		// Set level icon.
 		lblLevelImage.setIcon(icon);
 	}

@@ -23,12 +23,20 @@ public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEff
 	DEFAULT_PLAYER_DEATH("particle/deathEffectRed.p", ETextureAtlas.PARTICLE_EFFECTS),
 	ALL_MY_ITEM_ARE_BELONG_TO_ME("particle/itemGetFountain.p", ETextureAtlas.PARTICLE_EFFECTS),
 	NPC_DISAPPEAR("particle/npcDisappear.p", ETextureAtlas.PARTICLE_EFFECTS),
-	
-	OUGI_OUKA_MUSOUGEKI_EXPLOSION("cutscene/fancyScene/ougiOukaMusougeki/res/explosion.p", ETextureAtlas.OUGI_OUKA_MUSOUGEKI),
-	OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT("cutscene/fancyScene/ougiOukaMusougeki/res/simpleHit.p", ETextureAtlas.OUGI_OUKA_MUSOUGEKI),
-	OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2("cutscene/fancyScene/ougiOukaMusougeki/res/simpleHit2.p", ETextureAtlas.OUGI_OUKA_MUSOUGEKI),
-	OUGI_OUKA_MUSOUGEKI_JUMP_DUST("cutscene/fancyScene/ougiOukaMusougeki/res/jumpDust.p", ETextureAtlas.OUGI_OUKA_MUSOUGEKI),
-	
+
+	OUGI_OUKA_MUSOUGEKI_EXPLOSION(
+			"cutscene/fancyScene/ougiOukaMusougeki/res/explosion.p",
+			ETextureAtlas.OUGI_OUKA_MUSOUGEKI),
+	OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT(
+			"cutscene/fancyScene/ougiOukaMusougeki/res/simpleHit.p",
+			ETextureAtlas.OUGI_OUKA_MUSOUGEKI),
+	OUGI_OUKA_MUSOUGEKI_SIMPLE_HIT2(
+			"cutscene/fancyScene/ougiOukaMusougeki/res/simpleHit2.p",
+			ETextureAtlas.OUGI_OUKA_MUSOUGEKI),
+	OUGI_OUKA_MUSOUGEKI_JUMP_DUST(
+			"cutscene/fancyScene/ougiOukaMusougeki/res/jumpDust.p",
+			ETextureAtlas.OUGI_OUKA_MUSOUGEKI),
+
 	;
 
 	private final static Logger LOG = Logger.getLogger(EParticleEffect.class);

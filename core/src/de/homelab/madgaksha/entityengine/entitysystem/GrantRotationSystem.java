@@ -18,7 +18,8 @@ public class GrantRotationSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public GrantRotationSystem(int priority) {
-		super(DisableIteratingSystem.all(TemporalComponent.class, RotationComponent.class, ShouldRotationComponent.class)
+		super(DisableIteratingSystem
+				.all(TemporalComponent.class, RotationComponent.class, ShouldRotationComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 

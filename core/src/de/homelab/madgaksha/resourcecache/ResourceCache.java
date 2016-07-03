@@ -192,7 +192,7 @@ public final class ResourceCache {
 	public static void clearAllTextureAtlas() {
 		ETextureAtlas.clearAll();
 	}
-	
+
 	/**
 	 * Clears all fancy scene objects from the cache.
 	 */
@@ -444,7 +444,7 @@ public final class ResourceCache {
 	public static FancyTextbox getTextbox(ETextbox textbox, boolean cached) {
 		return (FancyTextbox) getResource(textbox, cached);
 	}
-	
+
 	/**
 	 * Fetches the requested fancy scene from the cache, or loads it.
 	 * 

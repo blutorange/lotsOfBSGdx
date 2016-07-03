@@ -234,7 +234,8 @@ public final class ComponentUtils {
 
 	public static void scaleShapeOfEntityBy(Entity e, float initialScaleX, float initialScaleY) {
 		ShapeComponent sc = Mapper.shapeComponent.get(e);
-		if (sc == null) return;
-		GeoUtil.scaleShapeBy(sc, initialScaleX, initialScaleY);		
+		if (sc == null)
+			return;
+		GeoUtil.scaleShapeBy(sc, initialScaleX, initialScaleY);
 	}
 }

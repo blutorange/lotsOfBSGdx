@@ -49,5 +49,4 @@ public class DefaultPriority {
 
 	public final static int timedCallbackSystem = 24;
 
-	
 }

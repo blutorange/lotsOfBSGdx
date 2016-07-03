@@ -532,18 +532,17 @@ public class GeoUtil {
 	public static void scaleShapeBy(ShapeComponent sc, float scaleX, float scaleY) {
 		switch (sc.shapeType) {
 		case CIRCLE:
-			Circle c = (Circle)sc.shape;
+			Circle c = (Circle) sc.shape;
 			if (scaleX != scaleY) {
 				sc.shape = new Ellipse(c);
 				e.width *= scaleX;
 				e.height *= scaleY;
-			}
-			else {
+			} else {
 				c.radius *= scaleX;
 			}
 			break;
 		case ELLIPSE:
-			Ellipse e = (Ellipse)sc.shape;
+			Ellipse e = (Ellipse) sc.shape;
 			e.width *= scaleX;
 			e.height *= scaleY;
 			break;
@@ -551,15 +550,15 @@ public class GeoUtil {
 			// nothing to be done;
 			break;
 		case POLYGON:
-			Polygon p = (Polygon)sc.shape;
+			Polygon p = (Polygon) sc.shape;
 			p.setScale(scaleX, scaleY);
 			break;
 		case POLYLINE:
-			Polyline l = (Polyline)sc.shape;
+			Polyline l = (Polyline) sc.shape;
 			l.setScale(scaleX, scaleY);
 			break;
 		case RECTANGLE:
-			Rectangle r = (Rectangle)sc.shape;
+			Rectangle r = (Rectangle) sc.shape;
 			r.width *= scaleX;
 			r.height *= scaleY;
 			break;
@@ -571,17 +570,17 @@ public class GeoUtil {
 	public static Shape2D cloneShape(Shape2D shape) {
 		switch (EShapeType.valueOf(shape)) {
 		case CIRCLE:
-			return new Circle((Circle)shape);
+			return new Circle((Circle) shape);
 		case ELLIPSE:
-			return new Ellipse((Ellipse)shape);
+			return new Ellipse((Ellipse) shape);
 		case POINT:
-			return new Point((Point)shape);
+			return new Point((Point) shape);
 		case POLYGON:
-			return new Polygon(((Polygon)shape).getTransformedVertices());
+			return new Polygon(((Polygon) shape).getTransformedVertices());
 		case POLYLINE:
-			return new Polyline(((Polyline)shape).getTransformedVertices());
+			return new Polyline(((Polyline) shape).getTransformedVertices());
 		case RECTANGLE:
-			return new Rectangle((Rectangle)shape);
+			return new Rectangle((Rectangle) shape);
 		default:
 			LOG.error("unkown shape type: " + shape);
 			return shape;

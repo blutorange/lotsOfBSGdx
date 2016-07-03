@@ -54,7 +54,7 @@ public class FancyPeffect extends AFancyEvent {
 	@Override
 	public void resize(int w, int h) {
 	}
-	
+
 	@Override
 	public boolean isFinished() {
 		return true;
@@ -62,7 +62,7 @@ public class FancyPeffect extends AFancyEvent {
 
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);		
+		scene.requestDrawable(key);
 	}
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
@@ -71,19 +71,19 @@ public class FancyPeffect extends AFancyEvent {
 			return null;
 		}
 		String key = s.next();
-		
+
 		Float unitsPerScreen = FileCutsceneProvider.nextNumber(s);
 		if (unitsPerScreen == null) {
 			LOG.error("expected unitsPerScreen");
 			return null;
 		}
-		
+
 		EParticleEffect effect = FileCutsceneProvider.nextParticleEffect(s);
 		if (effect == null) {
 			LOG.error("expected particle effect");
 			return null;
 		}
-		
+
 		return new FancyPeffect(key, effect, unitsPerScreen);
 	}
 }

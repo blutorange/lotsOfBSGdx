@@ -163,7 +163,7 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 	protected EAnimationList requestedAnimationListNormal() {
 		return EAnimationList.SOLDIER_GREEN_0;
 	}
-	
+
 	@Override
 	protected EAnimationList requestedAnimationListDamage() {
 		return EAnimationList.SOLDIER_GREEN_1;

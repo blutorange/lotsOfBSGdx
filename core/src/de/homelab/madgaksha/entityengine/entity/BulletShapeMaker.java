@@ -35,7 +35,7 @@ public enum BulletShapeMaker {
 	PACMAN_BLACK(ETexture.BULLET_PACMAN_BLACK, Box.PACMAN, null, BoxRender.PACMAN, 150L),
 	PACMAN_RED(ETexture.BULLET_PACMAN_RED, Box.PACMAN, null, BoxRender.PACMAN, 150L),
 	PACMAN_LIGHTRED(ETexture.BULLET_PACMAN_LIGHTRED, Box.PACMAN, null, BoxRender.PACMAN, 150L),
-	PACMAN_PINK(ETexture.BULLET_PACMAN_PINK, Box.PACMAN, null, BoxRender.PACMAN,150L),
+	PACMAN_PINK(ETexture.BULLET_PACMAN_PINK, Box.PACMAN, null, BoxRender.PACMAN, 150L),
 	PACMAN_LIGHTPINK(ETexture.BULLET_PACMAN_LIGHTPINK, Box.PACMAN, null, BoxRender.PACMAN, 150L),
 	PACMAN_BLUE(ETexture.BULLET_PACMAN_BLUE, Box.PACMAN, null, BoxRender.PACMAN, 150L),
 	PACMAN_LIGHTBLUE(ETexture.BULLET_PACMAN_LIGHTBLUE, Box.PACMAN, null, BoxRender.PACMAN, 150L),
@@ -65,32 +65,31 @@ public enum BulletShapeMaker {
 	STAR_ORANGE(ETexture.BULLET_STAR_ORANGE, Box.STAR, null, BoxRender.STAR, 150L),
 	STAR_LIGHTORANGE(ETexture.BULLET_STAR_LIGHTORANGE, Box.STAR, null, BoxRender.STAR, 150L),
 	STAR_WHITE(ETexture.BULLET_STAR_WHITE, Box.STAR, null, BoxRender.STAR, 150L),
-	
-	FLOWER_BLACK(ETexture.BULLET_FLOWER_BLACK, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER,500L),
-	FLOWER_RED(ETexture.BULLET_FLOWER_RED, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER,500L),
-	FLOWER_PINK(ETexture.BULLET_FLOWER_PINK, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER,500L),
-	FLOWER_BLUE(ETexture.BULLET_FLOWER_BLUE, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER,500L),
-	FLOWER_CYAN(ETexture.BULLET_FLOWER_CYAN, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER,500L),
-	FLOWER_GREEN(ETexture.BULLET_FLOWER_GREEN, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER,500L),
-	FLOWER_YELLOW(ETexture.BULLET_FLOWER_YELLOW, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER,500L),
-	FLOWER_WHITE(ETexture.BULLET_FLOWER_WHITE, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER,500L),
 
-	NOTE_RED(EAnimation.NOTE_RED, Box.NOTE, null, BoxRender.NOTE,1000L),
-	NOTE_BLUE(EAnimation.NOTE_BLUE, Box.NOTE, null, BoxRender.NOTE,1000L),
-	NOTE_YELLOW(EAnimation.NOTE_YELLOW, Box.NOTE, null, BoxRender.NOTE,1000L),
-	NOTE_PINK(EAnimation.NOTE_PINK, Box.NOTE, null, BoxRender.NOTE,1000L),
-	
-	PLASMA_RED(ETexture.BULLET_PLASMA_RED, Box.PLASMA, Shape.PLASMA, BoxRender.PLASMA,2000L),
-	PLASMA_BLUE(ETexture.BULLET_PLASMA_BLUE, Box.PLASMA, Shape.PLASMA, BoxRender.PLASMA,2000L),
-	PLASMA_GREEN(ETexture.BULLET_PLASMA_GREEN, Box.PLASMA, Shape.PLASMA, BoxRender.PLASMA,2000L),
-	PLASMA_YELLOW(ETexture.BULLET_PLASMA_YELLOW, Box.PLASMA, Shape.PLASMA, BoxRender.PLASMA,2000L),
-	
+	FLOWER_BLACK(ETexture.BULLET_FLOWER_BLACK, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER, 500L),
+	FLOWER_RED(ETexture.BULLET_FLOWER_RED, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER, 500L),
+	FLOWER_PINK(ETexture.BULLET_FLOWER_PINK, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER, 500L),
+	FLOWER_BLUE(ETexture.BULLET_FLOWER_BLUE, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER, 500L),
+	FLOWER_CYAN(ETexture.BULLET_FLOWER_CYAN, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER, 500L),
+	FLOWER_GREEN(ETexture.BULLET_FLOWER_GREEN, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER, 500L),
+	FLOWER_YELLOW(ETexture.BULLET_FLOWER_YELLOW, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER, 500L),
+	FLOWER_WHITE(ETexture.BULLET_FLOWER_WHITE, Box.FLOWER, Shape.FLOWER, BoxRender.FLOWER, 500L),
+
+	NOTE_RED(EAnimation.NOTE_RED, Box.NOTE, null, BoxRender.NOTE, 1000L),
+	NOTE_BLUE(EAnimation.NOTE_BLUE, Box.NOTE, null, BoxRender.NOTE, 1000L),
+	NOTE_YELLOW(EAnimation.NOTE_YELLOW, Box.NOTE, null, BoxRender.NOTE, 1000L),
+	NOTE_PINK(EAnimation.NOTE_PINK, Box.NOTE, null, BoxRender.NOTE, 1000L),
+
+	PLASMA_RED(ETexture.BULLET_PLASMA_RED, Box.PLASMA, Shape.PLASMA, BoxRender.PLASMA, 2000L),
+	PLASMA_BLUE(ETexture.BULLET_PLASMA_BLUE, Box.PLASMA, Shape.PLASMA, BoxRender.PLASMA, 2000L),
+	PLASMA_GREEN(ETexture.BULLET_PLASMA_GREEN, Box.PLASMA, Shape.PLASMA, BoxRender.PLASMA, 2000L),
+	PLASMA_YELLOW(ETexture.BULLET_PLASMA_YELLOW, Box.PLASMA, Shape.PLASMA, BoxRender.PLASMA, 2000L),
+
 	// Score bullets.
 	GEMLET_BROWN(ETexture.BULLET_GEMLET_BROWN, Box.GEMLET, null, BoxRender.GEMLET),
 	GEMLET_BLUE(ETexture.BULLET_GEMLET_BLUE, Box.GEMLET, null, BoxRender.GEMLET),
 	GEMLET_RED(ETexture.BULLET_GEMLET_RED, Box.GEMLET, null, BoxRender.GEMLET),
-	GEMLET_GREEN(ETexture.BULLET_GEMLET_GREEN, Box.GEMLET, null, BoxRender.GEMLET),
-	;
+	GEMLET_GREEN(ETexture.BULLET_GEMLET_GREEN, Box.GEMLET, null, BoxRender.GEMLET),;
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(BulletShapeMaker.class);
@@ -113,7 +112,8 @@ public enum BulletShapeMaker {
 	 *            Exact shape of the bullet. May be null if bounding box is
 	 *            sufficient. Position is relative to the texture's center.
 	 */
-	private BulletShapeMaker(ETexture texture, Rectangle boundingBoxCollision, Shape2D exactShape, Rectangle boundingBoxRender) {
+	private BulletShapeMaker(ETexture texture, Rectangle boundingBoxCollision, Shape2D exactShape,
+			Rectangle boundingBoxRender) {
 		this(texture, boundingBoxCollision, exactShape, boundingBoxRender, 0L);
 	}
 
@@ -130,7 +130,8 @@ public enum BulletShapeMaker {
 	 * @param score
 	 *            Score this bullet is worth.
 	 */
-	private BulletShapeMaker(ETexture texture, Rectangle boundingBoxCollision, Shape2D exactShape, Rectangle boundingBoxRender, long score) {
+	private BulletShapeMaker(ETexture texture, Rectangle boundingBoxCollision, Shape2D exactShape,
+			Rectangle boundingBoxRender, long score) {
 		this.resource = texture;
 		this.sprite = texture.asSprite();
 		this.boundingBoxCollision = boundingBoxCollision;
@@ -138,10 +139,12 @@ public enum BulletShapeMaker {
 		this.exactShape = exactShape;
 		this.score = score;
 	}
-	
-	private BulletShapeMaker(EAnimation animation, Rectangle boundingBoxCollision, Shape2D exactShape, Rectangle boundingBoxRender) {
+
+	private BulletShapeMaker(EAnimation animation, Rectangle boundingBoxCollision, Shape2D exactShape,
+			Rectangle boundingBoxRender) {
 		this(animation, boundingBoxCollision, exactShape, boundingBoxRender, 0L);
 	}
+
 	/**
 	 * 
 	 * @param texture
@@ -155,7 +158,8 @@ public enum BulletShapeMaker {
 	 * @param score
 	 *            Score this bullet is worth.
 	 */
-	private BulletShapeMaker(EAnimation animation, Rectangle boundingBoxCollision, Shape2D exactShape, Rectangle boundingBoxRender, long score) {
+	private BulletShapeMaker(EAnimation animation, Rectangle boundingBoxCollision, Shape2D exactShape,
+			Rectangle boundingBoxRender, long score) {
 		this.resource = animation;
 		this.animation = ResourceCache.getAnimation(animation);
 		this.boundingBoxCollision = boundingBoxCollision;
@@ -173,18 +177,17 @@ public enum BulletShapeMaker {
 	 */
 	public void setup(Entity e) {
 		SpriteComponent sc = gameEntityEngine.createComponent(SpriteComponent.class);
-		
+
 		if (animation == null) {
 			sc.setup(sprite);
-		}
-		else {
+		} else {
 			SpriteAnimationComponent sac = gameEntityEngine.createComponent(SpriteAnimationComponent.class);
 			sac.setup(animation);
 			sc.setup(sac);
 			e.add(sac);
 		}
-		
-		BoundingBoxCollisionComponent bbcc = gameEntityEngine.createComponent(BoundingBoxCollisionComponent.class);	
+
+		BoundingBoxCollisionComponent bbcc = gameEntityEngine.createComponent(BoundingBoxCollisionComponent.class);
 		BoundingBoxRenderComponent bbrc = gameEntityEngine.createComponent(BoundingBoxRenderComponent.class);
 		bbcc.setup(boundingBoxCollision);
 		bbrc.setup(boundingBoxRender);
@@ -220,7 +223,7 @@ public enum BulletShapeMaker {
 		private final static Rectangle PLASMA = new Rectangle(-70.0f, -70.0f, 140.0f, 140.0f);
 		private final static Rectangle STAR = new Rectangle(-10.0f, -10.0f, 20.0f, 20.0f);
 	}
-	
+
 	private final static class Shape {
 		private final static Shape2D FLOWER = new Circle(0.0f, 0.0f, 30.0f);
 		private final static Shape2D PLASMA = new Circle(0.0f, 0.0f, 62.0f);

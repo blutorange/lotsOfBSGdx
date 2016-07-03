@@ -32,7 +32,7 @@ public class TokugiNone extends ATokugi {
 	}
 
 	@Override
-	public void fire(Entity player, float deltaTime) {		
+	public void fire(Entity player, float deltaTime) {
 	}
 
 	@Override

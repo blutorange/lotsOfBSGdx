@@ -19,17 +19,17 @@ public class FancyPosition extends AFancyEvent {
 	private String key = StringUtils.EMPTY;
 	private Vector2 position = new Vector2();
 	private Vector2 delta = new Vector2();
-	
+
 	public FancyPosition(String key, float x, float y, float dx, float dy) {
 		super(true);
 		this.key = key;
 		this.position.set(x, y);
 		this.delta.set(Math.max(0.0f, dx), Math.max(0.0f, dy));
 	}
-	
+
 	@Override
 	public void reset() {
-		position.set(0.0f,0.0f);
+		position.set(0.0f, 0.0f);
 		key = StringUtils.EMPTY;
 	}
 
@@ -63,29 +63,31 @@ public class FancyPosition extends AFancyEvent {
 
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);		
+		scene.requestDrawable(key);
 	}
-		
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
 		String key = s.next();
-		
+
 		Float x = FileCutsceneProvider.nextNumber(s);
 		Float y = FileCutsceneProvider.nextNumber(s);
-		
+
 		if (x == null || y == null) {
 			LOG.error("expected position");
 			return null;
 		}
-		
+
 		Float dx = FileCutsceneProvider.nextNumber(s);
 		Float dy = FileCutsceneProvider.nextNumber(s);
-		if (dx == null) dx = 0.0f;
-		if (dy == null) dy = 0.0f;
-		
+		if (dx == null)
+			dx = 0.0f;
+		if (dy == null)
+			dy = 0.0f;
+
 		return new FancyPosition(key, x, y, dx, dy);
 	}
 

@@ -181,11 +181,12 @@ public class SoldierRedMaker extends NormalEnemyMaker {
 	protected EAnimationList requestedAnimationListNormal() {
 		return EAnimationList.SOLDIER_RED_0;
 	}
+
 	@Override
 	protected EAnimationList requestedAnimationListDamage() {
 		return EAnimationList.SOLDIER_RED_1;
 	}
-	
+
 	@Override
 	protected float requestedBulletAttack() {
 		return 0.8f;

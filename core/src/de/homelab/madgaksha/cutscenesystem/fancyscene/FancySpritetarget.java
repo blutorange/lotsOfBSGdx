@@ -54,8 +54,8 @@ public class FancySpritetarget extends AFancyEvent {
 			return false;
 		}
 		Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
-		
-		// Animation		
+
+		// Animation
 		AtlasAnimation animation = null;
 		SpriteForDirectionListComponent sfdcl = Mapper.spriteForDirectionListComponent.get(target);
 		if (sfdcl != null) {
@@ -69,14 +69,13 @@ public class FancySpritetarget extends AFancyEvent {
 				return false;
 			}
 			animation = BirdsViewSpriteSystem.getForDirection(direction, sd);
-		}
-		else {
+		} else {
 			SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(target);
 			if (sfdc == null) {
 				LOG.error("target does not possess sprite for direction component");
 				return false;
 			}
-			animation = BirdsViewSpriteSystem.getForDirection(direction, sfdc);			
+			animation = BirdsViewSpriteSystem.getForDirection(direction, sfdc);
 		}
 
 		// Check animation and set it
@@ -134,8 +133,7 @@ public class FancySpritetarget extends AFancyEvent {
 			String name = s.next().toUpperCase(Locale.ROOT);
 			try {
 				mode = SpriteMode.valueOf(name);
-			}
-			catch (IllegalArgumentException e) {
+			} catch (IllegalArgumentException e) {
 				LOG.error("no such sprite mode", e);
 				mode = SpriteMode.NORMAL;
 			}

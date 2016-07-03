@@ -135,7 +135,7 @@ public class EventFancyScene extends ACutsceneEvent {
 	private float deltaTime = 0.0f;
 
 	private boolean isSpedup = false;
-	
+
 	private EventFancyScene parent;
 	private final Vector3 shake = new Vector3();
 
@@ -167,7 +167,7 @@ public class EventFancyScene extends ACutsceneEvent {
 		batchPixel.begin();
 		renderMain();
 		batchPixel.end();
-		viewportPixel.getCamera().position.set(oldPosition);		
+		viewportPixel.getCamera().position.set(oldPosition);
 	}
 
 	public void renderMain() {
@@ -337,7 +337,8 @@ public class EventFancyScene extends ACutsceneEvent {
 			return null;
 		}
 		String relativeFilePath = s.nextLine().trim();
-		FileHandle fileHandle = inputFile.isDirectory() ? inputFile.child(relativeFilePath) : inputFile.parent().child(relativeFilePath);
+		FileHandle fileHandle = inputFile.isDirectory() ? inputFile.child(relativeFilePath)
+				: inputFile.parent().child(relativeFilePath);
 		List<AFancyEvent> eventList = new ArrayList<AFancyEvent>();
 		if (!readEventList(fileHandle, eventList))
 			return null;

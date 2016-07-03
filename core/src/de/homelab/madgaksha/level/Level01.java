@@ -165,7 +165,7 @@ public class Level01 extends ALevel {
 		pushCutsceneLayer("cutscene/level01.monologueForSign");
 	}
 
-	public void turnBackJoshua(MapProperties properties) {	
+	public void turnBackJoshua(MapProperties properties) {
 		if (!joshuaAppearsTriggered)
 			pushCutsceneLayer("cutscene/level01.turnBackJoshua");
 	}

@@ -10,8 +10,8 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
-	DEFAULT(ETexture.DEFAULT,1,1,1,0.1f, AtlasAnimation.PlayMode.LOOP),
-	
+	DEFAULT(ETexture.DEFAULT, 1, 1, 1, 0.1f, AtlasAnimation.PlayMode.LOOP),
+
 	// =================
 	// ESTELLE
 	// =================
@@ -28,16 +28,15 @@ public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 	// ENEMIES
 	// =================
 
-	OUGI_OUKA_MUSOUGEKI_SAKURA(ETextureAtlas.OUGI_OUKA_MUSOUGEKI,"sakura", 0.075f, AtlasAnimation.PlayMode.LOOP),
-	
+	OUGI_OUKA_MUSOUGEKI_SAKURA(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "sakura", 0.075f, AtlasAnimation.PlayMode.LOOP),
+
 	// =================
 	// BULLETS
 	// =================
 	NOTE_RED(ETextureAtlas.BULLETS_BASIC, "pNote0", 0.15f, AtlasAnimation.PlayMode.LOOP),
 	NOTE_BLUE(ETextureAtlas.BULLETS_BASIC, "pNote1", 0.15f, AtlasAnimation.PlayMode.LOOP),
 	NOTE_YELLOW(ETextureAtlas.BULLETS_BASIC, "pNote2", 0.15f, AtlasAnimation.PlayMode.LOOP),
-	NOTE_PINK(ETextureAtlas.BULLETS_BASIC, "pNote3", 0.15f, AtlasAnimation.PlayMode.LOOP),
-	;
+	NOTE_PINK(ETextureAtlas.BULLETS_BASIC, "pNote3", 0.15f, AtlasAnimation.PlayMode.LOOP),;
 
 	private final static Logger LOG = Logger.getLogger(EAnimation.class);
 	private final static EnumMap<EAnimation, AtlasAnimation> animationCache = new EnumMap<EAnimation, AtlasAnimation>(
@@ -58,8 +57,9 @@ public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 		this.playMode = playMode;
 		this.frameDuration = frameDuration;
 	}
-	
-	private EAnimation(ETexture texture, int tileWidth, int tileHeight, int count, float frameDuration, AtlasAnimation.PlayMode playMode) {
+
+	private EAnimation(ETexture texture, int tileWidth, int tileHeight, int count, float frameDuration,
+			AtlasAnimation.PlayMode playMode) {
 		this.texture = texture;
 		this.tileWidth = tileWidth;
 		this.tileHeight = tileHeight;
@@ -90,14 +90,15 @@ public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 		if (textureAtlas != null) {
 			// Retrieve texture atlas and texture regions.
 			TextureAtlas atlas = ResourceCache.getTextureAtlas(textureAtlas);
-			if (atlas == null) return null;
+			if (atlas == null)
+				return null;
 			Array<AtlasRegion> atlasRegionArray = atlas.findRegions(name);
-			if (atlasRegionArray.size == 0) return null;
+			if (atlasRegionArray.size == 0)
+				return null;
 			AtlasAnimation animation = new AtlasAnimation(frameDuration, atlasRegionArray);
 			animation.setPlayMode(playMode);
 			return animation;
-		}
-		else {
+		} else {
 			// Retrieve texture and split as tiles.
 			AtlasRegion atlasRegion = ResourceCache.getTexture(texture);
 			if (atlasRegion == null)

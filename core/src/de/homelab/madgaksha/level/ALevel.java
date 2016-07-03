@@ -444,16 +444,22 @@ public abstract class ALevel {
 
 	/**
 	 * Adds a new cutscene layer.
-	 * @param filename Name of the configuration file that can be read by {@link FileCutsceneProvider}.
+	 * 
+	 * @param filename
+	 *            Name of the configuration file that can be read by
+	 *            {@link FileCutsceneProvider}.
 	 * @return The cutscene layer created, or null if it could not be created.
 	 */
 	public final ALayer pushCutsceneLayer(String filename) {
 		return pushCutsceneLayer(filename, null);
 	}
-	
+
 	/**
 	 * Adds a new cutscene layer.
-	 * @param filename Name of the configuration file that can be read by {@link FileCutsceneProvider}.
+	 * 
+	 * @param filename
+	 *            Name of the configuration file that can be read by
+	 *            {@link FileCutsceneProvider}.
 	 * @return The cutscene layer created, or null if it could not be created.
 	 */
 	public final ALayer pushCutsceneLayer(String filename, Runnable onDone) {
@@ -468,25 +474,29 @@ public abstract class ALevel {
 			return null;
 		}
 	}
-	
+
 	public final ALayer pushFancyScene(final EventFancyScene ougi) {
 		return pushFancyScene(ougi, null);
 	}
-	
+
 	public final ALayer pushFancyScene(final EventFancyScene ougi, Runnable onDone) {
 		CutsceneEventProvider provider = new CutsceneEventProvider() {
 			private int i = 0;
+
 			@Override
 			public ACutsceneEvent nextCutsceneEvent(int n) {
 				return ++i > 1 ? null : ougi;
 			}
+
 			@Override
 			public void initialize() {
 			}
+
 			@Override
 			public void eventDone(ACutsceneEvent currentCutsceneEvent) {
 				ougi.end();
 			}
+
 			@Override
 			public void end() {
 			}
@@ -495,7 +505,6 @@ public abstract class ALevel {
 		game.pushLayer(layer);
 		return layer;
 	}
-
 
 	protected final void switchBattleBgm(EMusic bgm) {
 		if (bgm != null)

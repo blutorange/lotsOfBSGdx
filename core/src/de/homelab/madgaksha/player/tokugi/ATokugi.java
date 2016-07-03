@@ -42,11 +42,11 @@ public abstract class ATokugi implements IMapItem {
 	protected abstract long requestedRequiredScore();
 
 	protected abstract ETexture requestedSign();
-	
+
 	protected abstract float requestedSignDelay();
-		
+
 	protected abstract long requestedRemainingPainPoints();
-	
+
 	/**
 	 * Can be overridden for custom sound when acquiring an item with a weapon
 	 * of this type.
@@ -68,11 +68,10 @@ public abstract class ATokugi implements IMapItem {
 	public ETokugi getType() {
 		return type;
 	}
-	
+
 	public ETexture getSign() {
 		return sign;
 	}
-
 
 	public Sprite getIconMain() {
 		return iconMain;
@@ -137,16 +136,16 @@ public abstract class ATokugi implements IMapItem {
 		player.learnTokugi(this);
 		statusScreen.updateWeaponAndTokugiLayout();
 	}
-	
+
 	protected void dealFinalDamagePoint() {
 		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
 			LOG.error("no such target");
 			return;
-		}		
+		}
 		Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
 		ComponentUtils.dealDamage(null, target, 10, false);
 	}
-	
+
 	public void fire(Entity player, float deltaTime) {
 		if (gameScore.getScore() >= requestedRequiredScore()) {
 			PainPointsComponent ppc = Mapper.painPointsComponent.get(playerHitCircleEntity);
@@ -154,24 +153,28 @@ public abstract class ATokugi implements IMapItem {
 			long queuedDamage = dqc == null ? 0L : dqc.queuedDamage;
 			final ATokugi tokugi = this;
 			if (ppc != null && (ppc.maxPainPoints - ppc.painPoints - queuedDamage) > requestedRemainingPainPoints()) {
-				if (!openFire(player, deltaTime)) return;
+				if (!openFire(player, deltaTime))
+					return;
 				gameScore.decreaseBy(requestedRequiredScore());
-				MakerUtils.addTimedRunnable(requestedSignDelay(), new ITimedCallback() {					
+				MakerUtils.addTimedRunnable(requestedSignDelay(), new ITimedCallback() {
 					@Override
 					public void run(Entity entity, Object data) {
 						statusScreen.addTokugiSign(tokugi);
 					}
 				});
-	
+
 				ComponentUtils.dealDamage(null, GlobalBag.playerHitCircleEntity, requestedRemainingPainPoints(), false);
 			}
 		}
 	}
-	
+
 	/**
-	 * Fires the tokugi. May return false when tokugi cannot be used right now. 
-	 * @param player Player entity.
-	 * @param deltaTime Time since the last frame in seconds.
+	 * Fires the tokugi. May return false when tokugi cannot be used right now.
+	 * 
+	 * @param player
+	 *            Player entity.
+	 * @param deltaTime
+	 *            Time since the last frame in seconds.
 	 * @return Whether the tokugi has been fired.
 	 */
 	public abstract boolean openFire(Entity player, float deltaTime);

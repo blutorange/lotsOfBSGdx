@@ -56,7 +56,7 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 		sfdc.setup(sfdlc.normal.animationList, sfdlc.normal.spriteDirectionStrategy);
 		sac.setup(sfdc);
 		sc.setup(sac);
-		
+
 		e.add(bc);
 		e.add(sc);
 		e.add(sac);
@@ -66,8 +66,9 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 	}
 
 	protected abstract IBehaving getBehaviour(MapProperties props);
-	
+
 	protected abstract EAnimationList requestedAnimationListNormal();
+
 	protected abstract EAnimationList requestedAnimationListDamage();
 
 	private final static IBehaving BEHAVIOUR_BASICS = new IBehaving() {

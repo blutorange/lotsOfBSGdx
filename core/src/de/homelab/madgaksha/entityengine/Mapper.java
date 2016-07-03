@@ -153,7 +153,8 @@ public final class Mapper {
 	public final static ComponentMapper<DeathComponent> deathComponent = ComponentMapper.getFor(DeathComponent.class);
 	public final static ComponentMapper<DirectionComponent> directionComponent = ComponentMapper
 			.getFor(DirectionComponent.class);
-	public final static ComponentMapper<DisableAllExceptTheseComponent> disableAllExceptTheseComponent = ComponentMapper.getFor(DisableAllExceptTheseComponent.class);
+	public final static ComponentMapper<DisableAllExceptTheseComponent> disableAllExceptTheseComponent = ComponentMapper
+			.getFor(DisableAllExceptTheseComponent.class);
 	public final static ComponentMapper<EnemyIconComponent> enemyIconComponent = ComponentMapper
 			.getFor(EnemyIconComponent.class);
 	public final static ComponentMapper<FadeEffectComponent> fadeEffectComponent = ComponentMapper

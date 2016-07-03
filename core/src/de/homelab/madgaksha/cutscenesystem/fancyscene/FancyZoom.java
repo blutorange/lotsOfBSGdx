@@ -16,22 +16,22 @@ public class FancyZoom extends DrawableFancy {
 
 	private float duration = 1.0f;
 	private float durationInverse = 1.0f;
-	private Vector2 originalScale = new Vector2(1f,1f);
-	private Vector2 targetScale = new Vector2(1f,1f);
+	private Vector2 originalScale = new Vector2(1f, 1f);
+	private Vector2 targetScale = new Vector2(1f, 1f);
 	private Interpolation interpolation = Interpolation.linear;
 	private boolean isDone = false;
-	
+
 	public FancyZoom(String key, float targetScaleX, float targetScaleY, Interpolation interpolation, float duration) {
 		super(key);
 		this.targetScale.set(targetScaleX, targetScaleY);
 		this.interpolation = interpolation;
 		this.duration = duration;
-		this.durationInverse = 1.0f/duration;
+		this.durationInverse = 1.0f / duration;
 	}
-	
+
 	@Override
 	public void resetSubclass() {
-		targetScale.set(1f,1f);
+		targetScale.set(1f, 1f);
 		duration = durationInverse = 1.0f;
 		isDone = false;
 		interpolation = Interpolation.linear;
@@ -75,7 +75,7 @@ public class FancyZoom extends DrawableFancy {
 			return null;
 		}
 		String key = s.next();
-				
+
 		Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {
 			LOG.error("expected duration");
@@ -85,20 +85,21 @@ public class FancyZoom extends DrawableFancy {
 			LOG.error("duration must be greater than 0");
 			return null;
 		}
-		
-		Interpolation interpolation = FileCutsceneProvider.readNextInterpolation(s);
-		if (interpolation == null) interpolation = Interpolation.linear;
 
-		
+		Interpolation interpolation = FileCutsceneProvider.readNextInterpolation(s);
+		if (interpolation == null)
+			interpolation = Interpolation.linear;
+
 		Float targetScaleX = FileCutsceneProvider.nextNumber(s);
 		if (targetScaleX == null) {
 			LOG.error("expected target scale");
 			return null;
 		}
-		
+
 		Float targetScaleY = FileCutsceneProvider.nextNumber(s);
-		if (targetScaleY == null) targetScaleY = targetScaleX; 
-		
+		if (targetScaleY == null)
+			targetScaleY = targetScaleX;
+
 		return new FancyZoom(key, targetScaleX, targetScaleY, interpolation, duration);
 	}
 }

@@ -24,27 +24,21 @@ public class WeaponMulti extends AWeapon {
 
 	private final static float BULLET_FORWARD_SPREAD_MIN = -22.0f;
 	private final static float BULLET_FORWARD_SPREAD_MAX = 22.0f;
-	private final static int BULLET_FORWARD_SPREAD_COUNT = 17; 
+	private final static int BULLET_FORWARD_SPREAD_COUNT = 17;
 	private final static long BULLET_POWER = 22432L;
 	private final static float BULLET_INTERVAL_MIN = 0.4f;
 	private final static float BULLET_INTERVAL_MAX = 1.2f;
 	private final static float BULLET_LIFE = 3.0f;
 	private final static float BULLET_ANGULAR_SPEED = 900.0f;
 	private final static float BULLET_SPEED = 730.0f;
-	private final static BulletShapeMaker bulletList[] = new BulletShapeMaker[]{
-		BulletShapeMaker.STAR_BLUE,
-		BulletShapeMaker.STAR_CYAN,
-		BulletShapeMaker.STAR_GREEN,
-		BulletShapeMaker.STAR_ORANGE,
-		BulletShapeMaker.STAR_PINK,
-		BulletShapeMaker.STAR_RED,
-		BulletShapeMaker.STAR_YELLOW,
-	};
+	private final static BulletShapeMaker bulletList[] = new BulletShapeMaker[] { BulletShapeMaker.STAR_BLUE,
+			BulletShapeMaker.STAR_CYAN, BulletShapeMaker.STAR_GREEN, BulletShapeMaker.STAR_ORANGE,
+			BulletShapeMaker.STAR_PINK, BulletShapeMaker.STAR_RED, BulletShapeMaker.STAR_YELLOW, };
 
 	private float remainingTime = 0.0f;
 	private Vector2 v = new Vector2();
 	private LinearMotionTrajectory linearMotionTrajectory = new LinearMotionTrajectory();
-	
+
 	@Override
 	public EModel getModel() {
 		return EModel.ITEM_WEAPON_MULTI;
@@ -52,10 +46,7 @@ public class WeaponMulti extends AWeapon {
 
 	@Override
 	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
-		return new IResource<?,?>[]{
-			ETexture.WEAPON_MULTI_ICON_MAIN,
-			ETexture.WEAPON_MULTI_ICON_SUB
-		};
+		return new IResource<?, ?>[] { ETexture.WEAPON_MULTI_ICON_MAIN, ETexture.WEAPON_MULTI_ICON_SUB };
 	}
 
 	@Override
@@ -80,27 +71,30 @@ public class WeaponMulti extends AWeapon {
 			final Entity enemy = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
 			final PositionComponent pcEnemy = Mapper.positionComponent.get(enemy);
 			final PositionComponent pcPlayer = Mapper.positionComponent.get(player);
-			float deltaSpread = (BULLET_FORWARD_SPREAD_MAX-BULLET_FORWARD_SPREAD_MIN)/(float)(BULLET_FORWARD_SPREAD_COUNT-1);
-			
+			float deltaSpread = (BULLET_FORWARD_SPREAD_MAX - BULLET_FORWARD_SPREAD_MIN)
+					/ (float) (BULLET_FORWARD_SPREAD_COUNT - 1);
+
 			v.set(pcEnemy.x - pcPlayer.x, pcEnemy.y - pcPlayer.y).nor().scl(BULLET_SPEED);
-			
+
 			linearMotionTrajectory.life(BULLET_LIFE);
 			linearMotionTrajectory.position(pcPlayer.x, pcPlayer.y);
 			linearMotionTrajectory.angularSpeed(BULLET_ANGULAR_SPEED);
-			
+
 			v.rotate(-90.0f);
 			linearMotionTrajectory.velocity(v);
-			BulletMaker.makeForPlayer(bulletList[MathUtils.random(bulletList.length-1)], linearMotionTrajectory, BULLET_POWER);
+			BulletMaker.makeForPlayer(bulletList[MathUtils.random(bulletList.length - 1)], linearMotionTrajectory,
+					BULLET_POWER);
 			v.rotate(180.0f);
 			linearMotionTrajectory.velocity(v);
-			BulletMaker.makeForPlayer(bulletList[MathUtils.random(bulletList.length-1)], linearMotionTrajectory, BULLET_POWER);
+			BulletMaker.makeForPlayer(bulletList[MathUtils.random(bulletList.length - 1)], linearMotionTrajectory,
+					BULLET_POWER);
 			v.rotate(-90.0f);
-			
+
 			// Create forward bullets.
 			v.rotate(BULLET_FORWARD_SPREAD_MIN);
-			for (int i = 0; i!= BULLET_FORWARD_SPREAD_COUNT; ++i) {
-				BulletShapeMaker bulletShape = bulletList[MathUtils.random(bulletList.length-1)];
-				v.rotate(deltaSpread);				
+			for (int i = 0; i != BULLET_FORWARD_SPREAD_COUNT; ++i) {
+				BulletShapeMaker bulletShape = bulletList[MathUtils.random(bulletList.length - 1)];
+				v.rotate(deltaSpread);
 				linearMotionTrajectory.velocity(v);
 				BulletMaker.makeForPlayer(bulletShape, linearMotionTrajectory, BULLET_POWER);
 

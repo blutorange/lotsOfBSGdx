@@ -26,13 +26,13 @@ public abstract class APath {
 	 *            Value between 0 and 1.
 	 */
 	protected abstract void applyInternal(float alpha, Vector2 vector);
+
 	/**
-	 * When origin or anything else changes, this method gets called
-	 * so that the implementing path can update its parameters.
+	 * When origin or anything else changes, this method gets called so that the
+	 * implementing path can update its parameters.
 	 */
 	protected abstract void computeParamters();
 
-	
 	/**
 	 * Returns the point at the given interval.
 	 * 
@@ -42,7 +42,8 @@ public abstract class APath {
 	 *            Vector which will store the result.
 	 */
 	public void apply(float alpha, Vector2 vector) {
-		if (dirty) computeParamters();
+		if (dirty)
+			computeParamters();
 		applyInternal(alpha, vector);
 	}
 
@@ -55,18 +56,21 @@ public abstract class APath {
 	 *            Vector which will store the result.
 	 */
 	public void applyTotal(float totalTime, Vector2 vector) {
-		apply(Math.min(totalTime,tmax)*tmaxInverse, vector);
+		apply(Math.min(totalTime, tmax) * tmaxInverse, vector);
 	}
-	
+
 	/**
-	 * @param totalTime Value between 0 and tmax.
-	 * @param vector Vector which will store the result.
-	 * @param interpolation Interpolation scheme to use.
+	 * @param totalTime
+	 *            Value between 0 and tmax.
+	 * @param vector
+	 *            Vector which will store the result.
+	 * @param interpolation
+	 *            Interpolation scheme to use.
 	 */
 	public void applyWithInterpolation(float totalTime, Vector2 vector, Interpolation interpolation) {
-		apply(interpolation.apply(totalTime*tmaxInverse), vector);
+		apply(interpolation.apply(totalTime * tmaxInverse), vector);
 	}
-		
+
 	/**
 	 * Sets the origin. All paths are relative to this origin.
 	 * 
@@ -87,14 +91,15 @@ public abstract class APath {
 		getOrigin.as(this.origin);
 		dirty = true;
 	}
-	
+
 	public float getTMax() {
 		return tmax;
 	}
-	
+
 	public float getOriginX() {
 		return origin.x;
 	}
+
 	public float getOriginY() {
 		return origin.y;
 	}

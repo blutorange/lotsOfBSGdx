@@ -360,15 +360,14 @@ public class MovementSystem extends DisableIteratingSystem {
 		float dy = Math.abs(vc.y * deltaTime);
 		if (dx > dy) {
 			if (dx > tileWidth * 0.9f) {
-				f = reducedTileWidth/dx;
+				f = reducedTileWidth / dx;
 			}
-		}
-		else if (dy > tileWidth * 0.9f){
-			f = reducedTileHeight/dy;
+		} else if (dy > tileWidth * 0.9f) {
+			f = reducedTileHeight / dy;
 		}
 		final float newx = pc.x + f * vc.x * deltaTime;
-		final float newy = pc.y + f * vc.y * deltaTime; 
-		
+		final float newy = pc.y + f * vc.y * deltaTime;
+
 		if (mapData.isTileBlocking(newx, newy)) {
 			// Bottom left tile point.
 			int tx = (int) (pc.x * tileWidthInverse);
@@ -401,15 +400,14 @@ public class MovementSystem extends DisableIteratingSystem {
 			// Bottom left tile point.
 			int tx = (int) (pc.x * tileWidthInverse);
 			int ty = (int) (pc.y * tileHeightInverse);
-			
-			int newTileX = (int) (pc.x*tileWidthInverse);
-			int newTileY = (int) (pc.y*tileWidthInverse);
+
+			int newTileX = (int) (pc.x * tileWidthInverse);
+			int newTileY = (int) (pc.y * tileWidthInverse);
 			if (newTileX == tx || newTileY == ty) {
 				// Allow move immediately when we do not move diagonally.
 				pc.x = newx;
 				pc.y = newy;
-			}
-			else {	
+			} else {
 				// Otherwise, check tile to the left / right first.
 				// Get quadrant of velocity vector
 				if (vc.x > 0)

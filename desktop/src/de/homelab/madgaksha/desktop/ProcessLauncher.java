@@ -52,9 +52,11 @@ public class ProcessLauncher {
 				@Override
 				public void resume() {
 				}
+
 				@Override
 				public void pause() {
 				}
+
 				@Override
 				public void dispose() {
 					// Let the libGdx thread awaken this thread again.

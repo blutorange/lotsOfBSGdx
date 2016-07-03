@@ -16,13 +16,13 @@ public class FancyOpacity extends AFancyEvent {
 
 	private String key = StringUtils.EMPTY;
 	private float opacity;
-	
+
 	public FancyOpacity(String key, float opacity) {
 		super(true);
 		this.key = key;
 		this.opacity = opacity;
 	}
-	
+
 	@Override
 	public void reset() {
 		opacity = 1.0f;
@@ -54,9 +54,9 @@ public class FancyOpacity extends AFancyEvent {
 
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);		
+		scene.requestDrawable(key);
 	}
-	
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");

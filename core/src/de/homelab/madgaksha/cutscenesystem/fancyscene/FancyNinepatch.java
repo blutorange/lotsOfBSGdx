@@ -19,14 +19,14 @@ public class FancyNinepatch extends AFancyEvent {
 	private String key = StringUtils.EMPTY;
 	private Vector2 dimensions = new Vector2();
 	private ENinePatch ninePatch;
-	
+
 	public FancyNinepatch(String key, Vector2 dimensions, ENinePatch ninePatch) {
 		super(true);
 		this.key = key;
 		this.dimensions.set(dimensions);
 		this.ninePatch = ninePatch;
 	}
-	
+
 	@Override
 	public void reset() {
 		key = StringUtils.EMPTY;
@@ -58,9 +58,9 @@ public class FancyNinepatch extends AFancyEvent {
 
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);		
+		scene.requestDrawable(key);
 	}
-	
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected nine patch name");
@@ -68,7 +68,7 @@ public class FancyNinepatch extends AFancyEvent {
 		}
 		String key = s.next();
 		Float width = FileCutsceneProvider.nextNumber(s);
-		Float height= FileCutsceneProvider.nextNumber(s);
+		Float height = FileCutsceneProvider.nextNumber(s);
 		if (width == null || height == null) {
 			LOG.error("expected nine patch dimensions");
 			return null;

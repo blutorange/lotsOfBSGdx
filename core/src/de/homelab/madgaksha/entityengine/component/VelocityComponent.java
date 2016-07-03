@@ -40,7 +40,7 @@ public class VelocityComponent implements Component, Poolable {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public void setup(Vector2 v) {
 		this.x = v.x;
 		this.y = v.y;

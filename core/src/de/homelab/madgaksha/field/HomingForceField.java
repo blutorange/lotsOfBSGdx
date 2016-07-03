@@ -10,7 +10,7 @@ import de.homelab.madgaksha.logging.Logger;
 public class HomingForceField implements IForceField {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(HomingForceField.class);
-	//private final static Vector2 v = new Vector2();
+	// private final static Vector2 v = new Vector2();
 
 	public final PositionComponent target;
 	public final float springConstant;

@@ -53,13 +53,15 @@ public abstract class DisableIteratingSystem extends EntitySystem {
 	public static Builder all(Class<? extends Component>... c) {
 		return new Builder().all(c);
 	}
+
 	public static Builder one(Class<? extends Component>... c) {
 		return new Builder().one(c);
 	}
+
 	public static Builder exclude(Class<? extends Component>... c) {
 		return new Builder().exclude(c);
 	}
-	
+
 	public static class Builder {
 		private List<Class<? extends Component>> componentTypesAll = new ArrayList<Class<? extends Component>>();
 		private List<Class<? extends Component>> componentTypesOne = new ArrayList<Class<? extends Component>>();
@@ -89,10 +91,10 @@ public abstract class DisableIteratingSystem extends EntitySystem {
 			componentTypesAll.remove(componentTypesAll.size() - 1);
 			return f;
 		}
-		
+
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		private Family get() {
-			Class[] all = new Class[0]; 
+			Class[] all = new Class[0];
 			all = componentTypesAll.toArray(all);
 			Class[] one = new Class[0];
 			one = componentTypesOne.toArray(one);
@@ -126,8 +128,7 @@ public abstract class DisableIteratingSystem extends EntitySystem {
 		if (entitiesAll.size() != 0) {
 			for (int i = 0; i < entitiesAll.size(); ++i)
 				processEntity(entitiesAll.get(i), deltaTime);
-		}
-		else
+		} else
 			for (int i = 0; i < entitiesExclude.size(); ++i)
 				processEntity(entitiesExclude.get(i), deltaTime);
 	}

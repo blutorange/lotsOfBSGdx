@@ -17,16 +17,16 @@ public class FancyOrigin extends AFancyEvent {
 
 	private String key = StringUtils.EMPTY;
 	private Vector2 origin = new Vector2();
-	
+
 	public FancyOrigin(String key, float x, float y) {
 		super(true);
 		this.key = key;
 		this.origin.set(x, y);
 	}
-	
+
 	@Override
 	public void reset() {
-		origin.set(0.0f,0.0f);
+		origin.set(0.0f, 0.0f);
 		key = StringUtils.EMPTY;
 	}
 
@@ -55,9 +55,9 @@ public class FancyOrigin extends AFancyEvent {
 
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);		
+		scene.requestDrawable(key);
 	}
-	
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
@@ -66,7 +66,7 @@ public class FancyOrigin extends AFancyEvent {
 		String key = s.next();
 		Float x = FileCutsceneProvider.nextNumber(s);
 		Float y = FileCutsceneProvider.nextNumber(s);
-		if (x == null || y== null) {
+		if (x == null || y == null) {
 			LOG.error("expected position");
 			return null;
 		}

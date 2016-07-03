@@ -45,8 +45,8 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public InputPlayerDesktopSystem(int priority) {
-		super(Family.all(VelocityComponent.class, InputDesktopComponent.class,
-				DirectionComponent.class).get(), priority);
+		super(Family.all(VelocityComponent.class, InputDesktopComponent.class, DirectionComponent.class).get(),
+				priority);
 	}
 
 	@Override
@@ -94,8 +94,9 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		}
 
 		// Random randomness
-		if (v.x * v.y > 0.0f) MathUtils.random.nextInt();
-		
+		if (v.x * v.y > 0.0f)
+			MathUtils.random.nextInt();
+
 		// Check if we need to switch the targetted enemy and change
 		// the info displayed on the status screen.
 		if (cameraTrackingComponent.focusPoints.size() > 1) {

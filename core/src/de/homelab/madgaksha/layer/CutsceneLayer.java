@@ -28,7 +28,7 @@ public class CutsceneLayer extends ALayer {
 	private int cutsceneCount = -1;
 	private Runnable callbackOnDone;
 	private boolean allowSpeedup = false;
-	
+
 	/**
 	 * Adds a new layer with a set of cutscenes.
 	 * 
@@ -44,7 +44,6 @@ public class CutsceneLayer extends ALayer {
 		this.callbackOnDone = callbackOnDone;
 	}
 
-	
 	@Override
 	public void draw(float deltaTime) {
 		if (currentCutsceneEvent != null)
@@ -72,7 +71,8 @@ public class CutsceneLayer extends ALayer {
 		SystemUtils.enableAction();
 		currentCutsceneEvent = null;
 		cutsceneEventProvider.end();
-		if (callbackOnDone != null) callbackOnDone.run();
+		if (callbackOnDone != null)
+			callbackOnDone.run();
 	}
 
 	@Override

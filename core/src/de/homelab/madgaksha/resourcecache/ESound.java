@@ -46,7 +46,7 @@ public enum ESound implements IResource<ESound, Sound> {
 	OUGI_CUTIN_FLASH("sound/ed6se155.wav"),
 	OUGI_CUTIN_FLASH2("sound/ed6se543.wav"),
 	SWORD1("sound/ed6se501.wav", 0.660f),
-	
+
 	// ===================
 	// WEAPONS
 	// ===================

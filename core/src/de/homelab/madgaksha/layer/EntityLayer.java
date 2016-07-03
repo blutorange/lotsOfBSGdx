@@ -93,7 +93,7 @@ public class EntityLayer extends ALayer {
 	public void update(float deltaTime) {
 		doUpdate = true;
 	}
-	
+
 	@Override
 	public void removedFromStack() {
 		if (gameEntityEngine != null) {

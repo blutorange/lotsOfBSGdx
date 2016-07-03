@@ -51,7 +51,7 @@ public class PathParabola extends APath {
 
 	private final static float TAU_MIN = 0.0001f;
 	private final static float TAU_MAX = 0.9999f;
-	
+
 	private final Vector2 p2 = new Vector2();
 	private final Vector2 p1 = new Vector2();
 	private final Vector2 p0 = new Vector2();
@@ -65,8 +65,8 @@ public class PathParabola extends APath {
 	public PathParabola(float tmax, boolean relative, float tau, float x1, float y1, float x2, float y2) {
 		super(tmax, relative);
 		this.r0.set(origin);
-		this.r1.set(x1,y1);
-		this.r2.set(x2,y2);
+		this.r1.set(x1, y1);
+		this.r2.set(x2, y2);
 		// Sanitize tau, we get infinity when tau is either 0 or 1.
 		this.tau = MathUtils.clamp(tau, TAU_MIN, TAU_MAX);
 		computeParamters();
@@ -75,7 +75,7 @@ public class PathParabola extends APath {
 	@Override
 	protected void computeParamters() {
 		r0.set(origin);
-		
+
 		if (relative) {
 			r1.add(origin);
 			r2.add(origin);
@@ -87,16 +87,15 @@ public class PathParabola extends APath {
 		float m = 1.0f / (tau * (1.0f - tau));
 		float b = m * (r1.x - r0.x - tau * tau * (r2.x - r0.x));
 		float e = m * (r1.y - r0.y - tau * tau * (r2.y - r0.y));
-	
+
 		float a = r2.x - r0.x - b;
 		float d = r2.y - r0.y - e;
 
-//		float m = 1.0f / (tau * (1.0f - tau));
-//		p0.set(r0);
-//		p1.set(r2).sub(r0).scl(-tau*tau).add(r1).sub(r0).scl(m);
-//		p2.set(r2).sub(r0).sub(p1);
+		// float m = 1.0f / (tau * (1.0f - tau));
+		// p0.set(r0);
+		// p1.set(r2).sub(r0).scl(-tau*tau).add(r1).sub(r0).scl(m);
+		// p2.set(r2).sub(r0).sub(p1);
 
-		
 		if (relative) {
 			r1.sub(origin);
 			r2.sub(origin);

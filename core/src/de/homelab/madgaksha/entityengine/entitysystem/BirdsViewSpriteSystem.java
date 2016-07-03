@@ -25,8 +25,7 @@ import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 public class BirdsViewSpriteSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unused")
-	private final static Logger LOG = Logger
-			.getLogger(BirdsViewSpriteSystem.class);
+	private final static Logger LOG = Logger.getLogger(BirdsViewSpriteSystem.class);
 
 	public BirdsViewSpriteSystem() {
 		this(DefaultPriority.birdsViewSpriteSystem);
@@ -34,25 +33,20 @@ public class BirdsViewSpriteSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public BirdsViewSpriteSystem(int priority) {
-		super(
-				DisableIteratingSystem.all(SpriteForDirectionComponent.class,
-						SpriteAnimationComponent.class,
-						DirectionComponent.class), priority);
+		super(DisableIteratingSystem.all(SpriteForDirectionComponent.class, SpriteAnimationComponent.class,
+				DirectionComponent.class), priority);
 	}
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
-		final SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent
-				.get(entity);
-		final SpriteAnimationComponent sac = Mapper.spriteAnimationComponent
-				.get(entity);
+		final SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(entity);
+		final SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
 		final DirectionComponent dc = Mapper.directionComponent.get(entity);
 
 		switch (sfdc.spriteDirectionStrategy) {
 		case ZENITH:
-			sac.animation = sfdc.animationList[((int) (((dc.degree
-					- viewportGame.getRotationUpXY() - 90 + 360) + 360.0f / (2.0f * sfdc.animationList.length))
-					* sfdc.animationList.length / 360.0f))
+			sac.animation = sfdc.animationList[((int) (((dc.degree - viewportGame.getRotationUpXY() - 90 + 360)
+					+ 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f))
 					% sfdc.animationList.length];
 			break;
 		case SIDEWAYS:
@@ -60,9 +54,8 @@ public class BirdsViewSpriteSystem extends DisableIteratingSystem {
 			// Project direction vector of the camera to the x-y-plane.
 			// Compute angle of this vector to the vector (0,1,0).
 			// Use this angle as above.
-			sac.animation = sfdc.animationList[((int) (((dc.degree
-					+ viewportGame.getRotationDirXY() - 90 + 360) + 360.0f / (2.0f * sfdc.animationList.length))
-					* sfdc.animationList.length / 360.0f))
+			sac.animation = sfdc.animationList[((int) (((dc.degree + viewportGame.getRotationDirXY() - 90 + 360)
+					+ 360.0f / (2.0f * sfdc.animationList.length)) * sfdc.animationList.length / 360.0f))
 					% sfdc.animationList.length];
 			break;
 		case STATIC:
@@ -81,26 +74,23 @@ public class BirdsViewSpriteSystem extends DisableIteratingSystem {
 	/**
 	 * @param degree
 	 *            Direction in which the sprite should look to. This is not
-	 *            relative to the looking direction of the camera.
-	 *            0 is looking to the right, 90 is looking down etc.
+	 *            relative to the looking direction of the camera. 0 is looking
+	 *            to the right, 90 is looking down etc.
 	 * @param sfdc
 	 *            The component from which the direction should be extracted.
 	 * @return The animation for the given direction.
 	 */
-	public static AtlasAnimation getForDirection(float degree,
-			SpriteForDirectionComponent sfdc) {
+	public static AtlasAnimation getForDirection(float degree, SpriteForDirectionComponent sfdc) {
 		AtlasAnimation animation = null;
 		animation = sfdc.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * sfdc.animationList.length))
-				* sfdc.animationList.length / 360.0f))
-				% sfdc.animationList.length];
+				* sfdc.animationList.length / 360.0f)) % sfdc.animationList.length];
 		return animation;
 	}
 
 	public static AtlasAnimation getForDirection(float degree, SpriteDirection sd) {
 		AtlasAnimation animation = null;
 		animation = sd.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * sd.animationList.length))
-				* sd.animationList.length / 360.0f))
-				% sd.animationList.length];
+				* sd.animationList.length / 360.0f)) % sd.animationList.length];
 		return animation;
 	}
 }

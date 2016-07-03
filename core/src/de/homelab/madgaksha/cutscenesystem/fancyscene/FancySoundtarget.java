@@ -22,13 +22,13 @@ public class FancySoundtarget extends AFancyEvent {
 	private ESound sound;
 	private float volume;
 	private boolean isDone;
-	
+
 	public FancySoundtarget(VoiceRetriever voiceRetriever, float volume) {
 		super(true);
 		this.voiceRetriever = voiceRetriever;
 		this.volume = volume;
 	}
-	
+
 	@Override
 	public void reset() {
 		voiceRetriever = null;
@@ -85,35 +85,35 @@ public class FancySoundtarget extends AFancyEvent {
 			public ESound fetch(VoiceComponent vc) {
 				return vc.onSpawn;
 			}
-		},		
-		;
+		},;
 		public abstract ESound fetch(VoiceComponent vc);
 	}
-	
+
 	@Override
 	public boolean begin(EventFancyScene efs) {
 		// Get voice component for current target.
 		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
 			LOG.error("no such target");
 			return false;
-		}		
+		}
 		Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
 		VoiceComponent vc = Mapper.voiceComponent.get(target);
 		if (vc == null) {
 			LOG.error("target does not possess voice component");
 			return false;
 		}
-		
+
 		sound = voiceRetriever.fetch(vc);
 		if (sound == null) {
 			LOG.error("target does not possess this type of sound");
 			return false;
 		}
-		
-		if (vc.voicePlayer != null) vc.voicePlayer.playUnconditionally(sound, volume);
-		
+
+		if (vc.voicePlayer != null)
+			vc.voicePlayer.playUnconditionally(sound, volume);
+
 		isDone = false;
-		
+
 		return true;
 	}
 
@@ -123,7 +123,7 @@ public class FancySoundtarget extends AFancyEvent {
 
 	@Override
 	public void update(float passedTime) {
-		isDone = sound==null || passedTime >= sound.getDuration();
+		isDone = sound == null || passedTime >= sound.getDuration();
 	}
 
 	@Override
@@ -145,18 +145,19 @@ public class FancySoundtarget extends AFancyEvent {
 			return null;
 		}
 		String soundType = s.next();
-		
+
 		VoiceRetriever voiceRetriever = null;
 		try {
 			voiceRetriever = VoiceRetriever.valueOf(soundType);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			LOG.error("no such sound type", e);
 		}
-		if (voiceRetriever == null) return null;
-		
+		if (voiceRetriever == null)
+			return null;
+
 		Float volume = FileCutsceneProvider.nextNumber(s);
-		if (volume == null) volume = 1.0f;
+		if (volume == null)
+			volume = 1.0f;
 
 		return new FancySoundtarget(voiceRetriever, volume);
 	}

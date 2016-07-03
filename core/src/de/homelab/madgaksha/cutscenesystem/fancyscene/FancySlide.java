@@ -18,31 +18,32 @@ public class FancySlide extends DrawableFancy {
 	private float duration = 1.0f;
 	private float durationInverse = 1.0f;
 	private boolean isDone = false;
-	private Vector2 startCropX = new Vector2(1.0f,1.0f);
-	private Vector2 startCropY = new Vector2(1.0f,1.0f);
-	private Vector2 targetCropX = new Vector2(1.0f,1.0f);
-	private Vector2 targetCropY = new Vector2(1.0f,1.0f);
-	
-	public FancySlide(String key, Float duration, Interpolation interpolation, float targetCropLeft, float targetCropBottom, float targetCropRight, float targetCropTop) { 
+	private Vector2 startCropX = new Vector2(1.0f, 1.0f);
+	private Vector2 startCropY = new Vector2(1.0f, 1.0f);
+	private Vector2 targetCropX = new Vector2(1.0f, 1.0f);
+	private Vector2 targetCropY = new Vector2(1.0f, 1.0f);
+
+	public FancySlide(String key, Float duration, Interpolation interpolation, float targetCropLeft,
+			float targetCropBottom, float targetCropRight, float targetCropTop) {
 		super(key);
-		if (duration < 0.01f) throw new IllegalArgumentException("duration must be greate than 0");
+		if (duration < 0.01f)
+			throw new IllegalArgumentException("duration must be greate than 0");
 		this.duration = duration;
-		this.durationInverse = 1.0f/duration;
+		this.durationInverse = 1.0f / duration;
 		this.interpolation = interpolation;
 		this.targetCropX.set(targetCropLeft, targetCropRight);
 		this.targetCropY.set(targetCropBottom, targetCropTop);
 	}
-	
 
 	@Override
 	public void resetSubclass() {
 		interpolation = Interpolation.linear;
 		isDone = false;
 		duration = durationInverse = 1.0f;
-		startCropX.set(1.0f,1.0f);
-		startCropY.set(1.0f,1.0f);
-		targetCropX.set(1.0f,1.0f);
-		targetCropY.set(1.0f,1.0f);
+		startCropX.set(1.0f, 1.0f);
+		startCropY.set(1.0f, 1.0f);
+		targetCropX.set(1.0f, 1.0f);
+		targetCropY.set(1.0f, 1.0f);
 	}
 
 	@Override
@@ -85,7 +86,7 @@ public class FancySlide extends DrawableFancy {
 			return null;
 		}
 		String key = s.next();
-		
+
 		Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {
 			LOG.error("expected duration");
@@ -97,24 +98,28 @@ public class FancySlide extends DrawableFancy {
 		}
 
 		Interpolation interpolation = FileCutsceneProvider.readNextInterpolation(s);
-		if (interpolation == null) interpolation = Interpolation.linear;
-		
+		if (interpolation == null)
+			interpolation = Interpolation.linear;
+
 		Float targetCropLeft = FileCutsceneProvider.nextNumber(s);
 		if (targetCropLeft == null) {
 			LOG.error("expected crop left");
 		}
-		
+
 		Float targetCropBottom = FileCutsceneProvider.nextNumber(s);
 		if (targetCropBottom == null) {
 			LOG.error("expected crop bottom");
 		}
-		
+
 		Float targetCropRight = FileCutsceneProvider.nextNumber(s);
-		if (targetCropRight == null) targetCropRight = targetCropLeft;
-		
+		if (targetCropRight == null)
+			targetCropRight = targetCropLeft;
+
 		Float targetCropTop = FileCutsceneProvider.nextNumber(s);
-		if (targetCropTop == null) targetCropTop = targetCropBottom;
-		
-		return new FancySlide(key, duration, interpolation, targetCropLeft, targetCropBottom, targetCropRight, targetCropTop);
+		if (targetCropTop == null)
+			targetCropTop = targetCropBottom;
+
+		return new FancySlide(key, duration, interpolation, targetCropLeft, targetCropBottom, targetCropRight,
+				targetCropTop);
 	}
 }

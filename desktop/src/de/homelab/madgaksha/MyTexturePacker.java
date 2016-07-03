@@ -35,13 +35,12 @@ public class MyTexturePacker {
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/texture/misc/packed";
 		packFileName = "miscPacked";
 		TexturePacker.process(inputDir, outputDir, packFileName);
-		
+
 		System.out.println("packing ougi textures...");
 		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/cutscene/fancyScene/ougiOukaMusougeki/res";
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/cutscene/fancyScene/ougiOukaMusougeki/packed";
 		packFileName = "ougiPacked";
 		TexturePacker.process(inputDir, outputDir, packFileName);
-		
 
 		System.out.println("packing face textures...");
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/texture/face-packed";

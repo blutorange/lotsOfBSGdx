@@ -33,7 +33,7 @@ public class OptionsFrame extends JFrame implements WindowListener {
 			launchConfig.fps = Math.max(1, fps);
 		}
 	};
-	
+
 	final InputChangeListener listenerWidth = new InputChangeListener() {
 		@Override
 		public void inputChanged(int width) {

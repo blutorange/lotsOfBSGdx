@@ -1,4 +1,5 @@
 package de.homelab.madgaksha.player;
+
 import static de.homelab.madgaksha.GlobalBag.statusScreen;
 
 import java.util.ArrayList;
@@ -202,9 +203,9 @@ public abstract class APlayer {
 	 *         world position (0,0).
 	 */
 	protected abstract Vector2 requestedSpriteOrigin();
-	
+
 	protected abstract Vector2 requestedOffsetPlayerToHitCircle();
-	
+
 	/** @return Radius of the sphere bounding the player. */
 	protected abstract Circle requestedBoundingCircle();
 
@@ -364,7 +365,7 @@ public abstract class APlayer {
 	public Rectangle getBoundingBoxCollision() {
 		return boundingBoxCollision;
 	}
-	
+
 	public Vector2 getOffsetPlayerToHitCircle() {
 		return offsetPlayerToHitCircle;
 	}
@@ -520,8 +521,9 @@ public abstract class APlayer {
 		if (index >= 0 && obtainedWeaponList.size() > 1) {
 			equipWeapon(obtainedWeaponList.get(Math.floorMod(index + amount, obtainedWeaponList.size())));
 			statusScreen.updateWeaponAndTokugiLayout();
-			// Do not switch to WeaponNone when the player has got more than one weapon.
-			if ((currentWeapon instanceof WeaponNone) && obtainedWeaponList.size()>2) {
+			// Do not switch to WeaponNone when the player has got more than one
+			// weapon.
+			if ((currentWeapon instanceof WeaponNone) && obtainedWeaponList.size() > 2) {
 				equipWeapon(obtainedWeaponList.get(Math.floorMod(index + amount + 1, obtainedWeaponList.size())));
 			}
 			return true;

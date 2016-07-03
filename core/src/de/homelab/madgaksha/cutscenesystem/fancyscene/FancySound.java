@@ -24,30 +24,42 @@ public class FancySound extends AFancyEvent {
 	private ESound sound;
 	private float volume;
 	private boolean isDone = false;
-	
+
 	/**
 	 * A sound for the given entity or a general sound.
-	 * @param e The entity making this sound, or null for an environmental sound.
-	 * @param sound The sound that should be played.
-	 * @param volume Volume of the sound.
+	 * 
+	 * @param e
+	 *            The entity making this sound, or null for an environmental
+	 *            sound.
+	 * @param sound
+	 *            The sound that should be played.
+	 * @param volume
+	 *            Volume of the sound.
 	 */
 	public FancySound(Entity e, ESound sound, float volume) {
 		super(true);
 		VoiceComponent vc = e != null ? Mapper.voiceComponent.get(e) : null;
-		if (vc != null && vc.voicePlayer != null) this.voicePlayer = vc.voicePlayer;
-		else this.voicePlayer = new VoicePlayer();
+		if (vc != null && vc.voicePlayer != null)
+			this.voicePlayer = vc.voicePlayer;
+		else
+			this.voicePlayer = new VoicePlayer();
 		this.sound = sound;
 		this.volume = volume;
 	}
+
 	/**
 	 * A sound for the given entity or a general sound at a volume of 1.0f.
-	 * @param e The entity making this sound, or null for an environmental sound.
-	 * @param sound The sound that should be played.
+	 * 
+	 * @param e
+	 *            The entity making this sound, or null for an environmental
+	 *            sound.
+	 * @param sound
+	 *            The sound that should be played.
 	 */
 	public FancySound(Entity e, ESound sound) {
 		this(e, sound, 1.0f);
 	}
-	
+
 	@Override
 	public boolean begin(EventFancyScene efs) {
 		voicePlayer.playUnconditionally(sound, volume);
@@ -61,7 +73,7 @@ public class FancySound extends AFancyEvent {
 		volume = 1.0f;
 		isDone = false;
 	}
-	
+
 	@Override
 	public void render() {
 	}
@@ -81,28 +93,29 @@ public class FancySound extends AFancyEvent {
 	}
 
 	@Override
-	public void attachedToScene(EventFancyScene scene) {	
+	public void attachedToScene(EventFancyScene scene) {
 	}
-	
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		try {
 			Entity entity = nextEntity(s);
 			ESound sound = FileCutsceneProvider.nextSound(s);
 			return (sound != null) ? new FancySound(entity, sound) : null;
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			LOG.error("could not read entity with voice player", e);
 			return null;
 		}
 	}
-	
+
 	private static Entity nextEntity(Scanner s) throws IllegalArgumentException {
-		if (!s.hasNext()) return null;
+		if (!s.hasNext())
+			return null;
 		String name = s.next().toLowerCase(Locale.ROOT);
 		if (name.equals("player")) {
 			return playerHitCircleEntity;
-		}
-		else if (name.equals("general")) return null;
-		else throw new IllegalArgumentException("no such entity");
+		} else if (name.equals("general"))
+			return null;
+		else
+			throw new IllegalArgumentException("no such entity");
 	}
 }

@@ -28,7 +28,7 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	OVAL_SHADOW(ETextureAtlas.MISC, "ovalShadow"),
 
 	DEFAULT(ETextureAtlas.MISC, "default"),
-	
+
 	// ==================
 	// BATTLE
 	// ==================
@@ -91,9 +91,7 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	ICER_TOKUGI_SIGN_1("texture/statusicon/enemy/icer-tokugi1.png"),
 	ICER_MAIN("texture/statusicon/enemy/icer-main.png"),
 	ICER_SUB("texture/statusicon/enemy", "icer-sub.png"),
-	
 
-	
 	// ===================
 	// STATUSSCREEN
 	// ===================
@@ -141,7 +139,6 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	TOKUGI_OUKAMUSOUGEKI_ICON_SUB("texture/statusicon/tokugi", "oukamusougeki-sub.png"),
 	TOKUGI_OUKAMUSOUGEKI_SIGN("texture/statusicon/tokugi/oukamusougeki-sign.png"),
 
-	
 	// =========================================================================
 	// OUGI
 	// =========================================================================
@@ -205,8 +202,7 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	OUGI_OUKA_MUSOUGEKI_ESTELLE_FACE(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "estelleFace"),
 	OUGI_OUKA_MUSOUGEKI_ESTELLE_FACE_WHITE(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "estelleFaceWhite"),
 	OUGI_OUKA_MUSOUGEKI_ESTELLE_FACE_BG(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "estelleFaceBg"),
-	
-	
+
 	// =========================================================================
 	// LEVEL
 	// icons horizontal must be 3:1 aspect ratio
@@ -252,7 +248,7 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	BULLET_STAR_ORANGE(ETextureAtlas.BULLETS_BASIC, "pStar13"),
 	BULLET_STAR_LIGHTORANGE(ETextureAtlas.BULLETS_BASIC, "pStar14"),
 	BULLET_STAR_WHITE(ETextureAtlas.BULLETS_BASIC, "pStar15"),
-	
+
 	BULLET_FLOWER_BLACK(ETextureAtlas.BULLETS_BASIC, "pFlower0"),
 	BULLET_FLOWER_RED(ETextureAtlas.BULLETS_BASIC, "pFlower1"),
 	BULLET_FLOWER_PINK(ETextureAtlas.BULLETS_BASIC, "pFlower2"),
@@ -261,7 +257,7 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	BULLET_FLOWER_GREEN(ETextureAtlas.BULLETS_BASIC, "pFlower5"),
 	BULLET_FLOWER_YELLOW(ETextureAtlas.BULLETS_BASIC, "pFlower6"),
 	BULLET_FLOWER_WHITE(ETextureAtlas.BULLETS_BASIC, "pFlower7"),
-	
+
 	BULLET_PLASMA_RED(ETextureAtlas.BULLETS_LARGE, "pPlasma0"),
 	BULLET_PLASMA_BLUE(ETextureAtlas.BULLETS_LARGE, "pPlasma1"),
 	BULLET_PLASMA_GREEN(ETextureAtlas.BULLETS_LARGE, "pPlasma2"),

@@ -39,7 +39,7 @@ public class SpriteForDirectionComponent implements Component, Poolable {
 	public SpriteForDirectionComponent(ESpriteDirectionStrategy estrat) {
 		spriteDirectionStrategy = estrat;
 	}
-	
+
 	public SpriteForDirectionComponent(AtlasAnimation[] al) {
 		setup(al, DEFAULT_SPRITE_DIRECTION_STRATEGY);
 	}
@@ -64,6 +64,7 @@ public class SpriteForDirectionComponent implements Component, Poolable {
 		animationList = al;
 		spriteDirectionStrategy = estrat;
 	}
+
 	public void setup(EAnimationList eal, ESpriteDirectionStrategy estrat) {
 		setup(eal, estrat, true);
 	}

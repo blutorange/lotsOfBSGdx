@@ -25,14 +25,14 @@ import de.homelab.madgaksha.logging.Logger;
 public abstract class BulletTrajectoryMaker implements IMortal {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(BulletTrajectoryMaker.class);
-	
+
 	private float initialPositionX = 0.0f;
 	private float initialPositionY = 0.0f;
 	private float initialVelocityX = 0.0f;
 	private float initialVelocityY = 0.0f;
 	private float initialScaleX = 1.0f;
 	private float initialScaleY = 1.0f;
-	
+
 	protected VoicePlayer voicePlayer;
 	private final ITimedCallback onBulletDeath = new ITimedCallback() {
 		@Override
@@ -79,7 +79,7 @@ public abstract class BulletTrajectoryMaker implements IMortal {
 			ComponentUtils.scaleBoundingBoxRenderOfEntityBy(e, initialScaleX, initialScaleY);
 			ComponentUtils.scaleBoundingBoxCollisionOfEntityBy(e, initialScaleX, initialScaleY);
 		}
-		
+
 		e.add(bc).add(lc).add(pc).add(tc).add(vc);
 
 		if (angularSpeed != 0.0f) {
@@ -99,9 +99,9 @@ public abstract class BulletTrajectoryMaker implements IMortal {
 		}
 		return sc;
 	}
-	
+
 	protected abstract IBehaving getBehaviour();
-	
+
 	protected float getInitialPositionX() {
 		return initialPositionX;
 	}
@@ -130,34 +130,42 @@ public abstract class BulletTrajectoryMaker implements IMortal {
 		initialPositionX = x;
 		initialPositionY = y;
 	}
+
 	public void position(Vector2 v) {
 		initialPositionX = v.x;
 		initialPositionY = v.y;
 	}
+
 	public void position(Entity e) {
 		PositionComponent pc = Mapper.positionComponent.get(e);
-		if (pc!=null) position(pc);
+		if (pc != null)
+			position(pc);
 	}
+
 	public void position(PositionComponent pc) {
 		initialPositionX = pc.x;
 		initialPositionY = pc.y;
 	}
-	
+
 	/**
-	 * @param scaleXY Sets the scaling in x and y direction.
+	 * @param scaleXY
+	 *            Sets the scaling in x and y direction.
 	 */
 	public void scale(float scaleXY) {
 		this.initialScaleX = this.initialScaleY = scaleXY;
 	}
+
 	/**
-	 * @param scaleX Sets the scaling in x direction.
-	 * @param scaleY Sets the scaling in y direction.
+	 * @param scaleX
+	 *            Sets the scaling in x direction.
+	 * @param scaleY
+	 *            Sets the scaling in y direction.
 	 */
 	public void scale(float scaleX, float scaleY) {
 		this.initialScaleX = scaleX;
 		this.initialScaleY = scaleY;
 	}
-	
+
 	/**
 	 * @param life
 	 *            The time in seconds the bullet will live until it fades away.
@@ -182,10 +190,11 @@ public abstract class BulletTrajectoryMaker implements IMortal {
 		initialVelocityX = vx;
 		initialVelocityY = vy;
 	}
+
 	public void velocity(Vector2 v) {
 		initialVelocityX = v.x;
 		initialVelocityY = v.y;
-		
+
 	}
 
 	public void voicePlayer(VoicePlayer vp) {

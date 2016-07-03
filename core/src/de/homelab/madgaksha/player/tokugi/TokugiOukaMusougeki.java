@@ -17,15 +17,15 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
 public class TokugiOukaMusougeki extends ATokugi {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(TokugiOukaMusougeki.class);
-	
+
 	private final static long COOLDOWN = 30000;
-	private long previousTime = TimeUtils.millis()-COOLDOWN;
-	
+	private long previousTime = TimeUtils.millis() - COOLDOWN;
+
 	@Override
 	protected ETexture requestedSign() {
 		return ETexture.TOKUGI_OUKAMUSOUGEKI_SIGN;
 	}
-	
+
 	@Override
 	protected ETexture requestedIconMain() {
 		return ETexture.TOKUGI_OUKAMUSOUGEKI_ICON_MAIN;
@@ -43,13 +43,8 @@ public class TokugiOukaMusougeki extends ATokugi {
 
 	@Override
 	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
-		return new IResource<?,?>[]{
-			ETexture.TOKUGI_OUKAMUSOUGEKI_ICON_MAIN,
-			ETexture.TOKUGI_OUKAMUSOUGEKI_ICON_SUB,
-			ETexture.TOKUGI_OUKAMUSOUGEKI_SIGN,
-			EFancyScene.OUKA_MUSOUGEKI,
-			EModel.ITEM_TOKUGI_OUKAMUSOUGEKI,
-		};
+		return new IResource<?, ?>[] { ETexture.TOKUGI_OUKAMUSOUGEKI_ICON_MAIN, ETexture.TOKUGI_OUKAMUSOUGEKI_ICON_SUB,
+				ETexture.TOKUGI_OUKAMUSOUGEKI_SIGN, EFancyScene.OUKA_MUSOUGEKI, EModel.ITEM_TOKUGI_OUKAMUSOUGEKI, };
 	}
 
 	@Override
@@ -76,7 +71,7 @@ public class TokugiOukaMusougeki extends ATokugi {
 
 	@Override
 	protected long requestedRemainingPainPoints() {
-		return 420000000/100*21;
+		return 420000000 / 100 * 21;
 	}
 
 	@Override

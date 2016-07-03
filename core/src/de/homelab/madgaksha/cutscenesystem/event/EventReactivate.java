@@ -51,14 +51,16 @@ public class EventReactivate extends ACutsceneEvent {
 	public void update(float deltaTime, boolean allowSpeedup) {
 		if (!eventDone) {
 			EventReactivate.reactivateEvent(entity);
-//			final TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);
-//			final ComponentQueueComponent cqc = gameEntityEngine.createComponent(ComponentQueueComponent.class);
-//
-//			tcc.setup(CallbackMaker.LOOP_CALLBACK_ONCE, 0, -1);
-//			cqc.remove.add(InactiveComponent.class);
-//
-//			entity.add(tcc);
-//			entity.add(cqc);
+			// final TimedCallbackComponent tcc =
+			// gameEntityEngine.createComponent(TimedCallbackComponent.class);
+			// final ComponentQueueComponent cqc =
+			// gameEntityEngine.createComponent(ComponentQueueComponent.class);
+			//
+			// tcc.setup(CallbackMaker.LOOP_CALLBACK_ONCE, 0, -1);
+			// cqc.remove.add(InactiveComponent.class);
+			//
+			// entity.add(tcc);
+			// entity.add(cqc);
 
 			eventDone = true;
 		}
@@ -99,19 +101,19 @@ public class EventReactivate extends ACutsceneEvent {
 		}
 		return new EventReactivate(guid);
 	}
-	
+
 	public static void reactivateEvent(String eventGuid) {
 		reactivateEvent(idEntityMap.get(eventGuid));
 	}
-	
+
 	public static void reactivateEvent(Entity entity) {
 		if (entity != null) {
 			final TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);
 			final ComponentQueueComponent cqc = gameEntityEngine.createComponent(ComponentQueueComponent.class);
-	
+
 			tcc.setup(CallbackMaker.LOOP_CALLBACK_ONCE, 0, -1);
 			cqc.remove.add(InactiveComponent.class);
-	
+
 			entity.add(tcc);
 			entity.add(cqc);
 		}

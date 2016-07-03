@@ -272,8 +272,8 @@ public class Game implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		if (customShaderProgramBatchGame != null && running)
-			customShaderProgramBatchGame.update(Gdx.graphics.getRawDeltaTime()*timeScalingFactor);
-		
+			customShaderProgramBatchGame.update(Gdx.graphics.getRawDeltaTime() * timeScalingFactor);
+
 		// Render background first.
 		renderBackground();
 
@@ -428,12 +428,12 @@ public class Game implements ApplicationListener {
 
 		// Dispose temporary files.
 		LOG.debug("emptying temporary directory tempadx");
-//		FileHandle dest = Gdx.files.local("tempadx/");
-//		try {
-//			dest.emptyDirectory();
-//		} catch (GdxRuntimeException e) {
-//			LOG.error("failed to empty temporary directory tempadx", e);
-//		}
+		// FileHandle dest = Gdx.files.local("tempadx/");
+		// try {
+		// dest.emptyDirectory();
+		// } catch (GdxRuntimeException e) {
+		// LOG.error("failed to empty temporary directory tempadx", e);
+		// }
 
 		// Dispose custom shaders.
 		if (customShaderProgramBatchGame != null)
@@ -612,8 +612,9 @@ public class Game implements ApplicationListener {
 	}
 
 	public void setGameLost() {
-		gameLost  = true;
+		gameLost = true;
 	}
+
 	public boolean isGameLost() {
 		return gameLost;
 	}

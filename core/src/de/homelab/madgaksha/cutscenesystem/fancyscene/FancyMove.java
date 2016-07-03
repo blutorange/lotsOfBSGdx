@@ -20,13 +20,13 @@ public class FancyMove extends DrawableFancy {
 	private Interpolation interpolation = Interpolation.linear;
 	private Vector2 vector = new Vector2();
 	private boolean isDone = false;
-	
+
 	public FancyMove(String key, APath path, Interpolation interpolation) {
 		super(key);
 		this.path = path;
 		this.interpolation = interpolation;
 	}
-	
+
 	@Override
 	public void resetSubclass() {
 		path = null;
@@ -65,20 +65,20 @@ public class FancyMove extends DrawableFancy {
 		// Make sure the sprite ends up at the correct position.
 		update(path.getTMax());
 	}
-	
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
 		String key = s.next();
-		
+
 		EPath path = FileCutsceneProvider.nextPath(s);
 		if (path == null) {
 			LOG.error("expected path");
 			return null;
 		}
-		
+
 		Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {
 			LOG.error("expected duration");
@@ -88,24 +88,24 @@ public class FancyMove extends DrawableFancy {
 			LOG.error("duration must be greater than 0");
 			return null;
 		}
-		
+
 		Interpolation interpolation = FileCutsceneProvider.readNextInterpolation(s);
-		if (interpolation == null) interpolation = Interpolation.linear;
+		if (interpolation == null)
+			interpolation = Interpolation.linear;
 
 		if (!s.hasNext()) {
 			LOG.error("expected relative/absolute flag");
 			return null;
 		}
 		boolean relativePath = s.next().equalsIgnoreCase("r");
-		
+
 		APath newPath = path.readNextObject(duration, relativePath, 1.0f, 1.0f, s);
 		if (newPath == null) {
 			LOG.error("expected path data");
 			return null;
 		}
-		
+
 		return new FancyMove(key, newPath, interpolation);
 	}
-
 
 }

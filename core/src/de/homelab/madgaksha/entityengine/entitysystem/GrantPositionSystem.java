@@ -19,7 +19,8 @@ public class GrantPositionSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public GrantPositionSystem(int priority) {
-		super(DisableIteratingSystem.all(TemporalComponent.class, PositionComponent.class, ShouldPositionComponent.class)
+		super(DisableIteratingSystem
+				.all(TemporalComponent.class, PositionComponent.class, ShouldPositionComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 

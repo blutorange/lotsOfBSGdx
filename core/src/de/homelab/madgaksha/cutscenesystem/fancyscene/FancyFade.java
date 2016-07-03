@@ -19,16 +19,17 @@ public class FancyFade extends DrawableFancy {
 	private boolean isDone = false;
 	private float startOpacity = 1.0f;
 	private float targetOpacity = 1.0f;
-	
+
 	public FancyFade(String key, float targetOpacity, Interpolation interpolation, float duration) {
 		super(key);
-		if (duration < 0.01f) throw new IllegalArgumentException("duration must be greate than 0");
+		if (duration < 0.01f)
+			throw new IllegalArgumentException("duration must be greate than 0");
 		this.targetOpacity = targetOpacity;
 		this.duration = duration;
-		this.durationInverse = 1.0f/duration;
+		this.durationInverse = 1.0f / duration;
 		this.interpolation = interpolation;
 	}
-	
+
 	@Override
 	public void resetSubclass() {
 		interpolation = Interpolation.linear;
@@ -67,14 +68,14 @@ public class FancyFade extends DrawableFancy {
 		// Make sure the opacity is set to its final value.
 		update(duration);
 	}
-		
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
 		String key = s.next();
-		
+
 		Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {
 			LOG.error("expected duration");
@@ -86,13 +87,14 @@ public class FancyFade extends DrawableFancy {
 		}
 
 		Interpolation interpolation = FileCutsceneProvider.readNextInterpolation(s);
-		if (interpolation == null) interpolation = Interpolation.linear;
-		
+		if (interpolation == null)
+			interpolation = Interpolation.linear;
+
 		Float targetOpacity = FileCutsceneProvider.nextNumber(s);
 		if (targetOpacity == null) {
 			LOG.error("expected target opacity");
 		}
-		
+
 		return new FancyFade(key, targetOpacity, interpolation, duration);
 	}
 }

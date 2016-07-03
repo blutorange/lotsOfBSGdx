@@ -15,6 +15,7 @@ public class FancyShow extends DrawableFancy {
 	private float duration;
 	private float lastTime = 0.0f;
 	private boolean isDone = false;
+
 	public FancyShow(String key, float duration) {
 		super(key);
 		this.duration = duration;
@@ -42,7 +43,7 @@ public class FancyShow extends DrawableFancy {
 
 	@Override
 	public void update(float currentTime) {
-		if (drawable.update(currentTime-lastTime, currentTime) || currentTime >= duration)
+		if (drawable.update(currentTime - lastTime, currentTime) || currentTime >= duration)
 			isDone = true;
 		lastTime = currentTime;
 	}

@@ -65,7 +65,7 @@ public final class FancyDrawable {
 	public FancyDrawable() {
 		resetToDefaults();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "FancyDrawable-" + mode + "@" + position;
@@ -92,7 +92,8 @@ public final class FancyDrawable {
 		rotation = 0.0f;
 
 		scalePe = positionPe = false;
-		//scaleParticleEffectLast = scaleUnitsPerScreen * (scale.x + scale.y) * 0.5f;
+		// scaleParticleEffectLast = scaleUnitsPerScreen * (scale.x + scale.y) *
+		// 0.5f;
 
 		mode = Mode.UNSET;
 	}
@@ -276,7 +277,6 @@ public final class FancyDrawable {
 		return rotation;
 	}
 
-
 	private void setDrawable(AtlasRegion region, float unitsPerScreen) {
 		this.drawableSprite.setAtlasRegion(region);
 		this.dimensionsSpriteUnitsPerScreen = unitsPerScreen;
@@ -292,7 +292,7 @@ public final class FancyDrawable {
 			mode = FancyDrawable.Mode.TEXTURE;
 		}
 	}
-	
+
 	public void setDrawable(EAnimation animation, float unitsPerScreen) {
 		if (mode == Mode.CLEANUP)
 			return;
@@ -334,7 +334,6 @@ public final class FancyDrawable {
 			mode = Mode.PARTICLE_EFFECT;
 		}
 	}
-
 
 	/**
 	 * Called when drawable needs to be rendered.
@@ -430,7 +429,7 @@ public final class FancyDrawable {
 		drawablePooledEffect.scaleEffect(newScale / scaleParticleEffectLast);
 		scaleParticleEffectLast = newScale;
 	}
-	
+
 	private void resetScaleParticleEffect() {
 		float newScale = 1.0f;
 		drawablePooledEffect.scaleEffect(newScale / scaleParticleEffectLast);
@@ -447,32 +446,32 @@ public final class FancyDrawable {
 		}
 		mode = Mode.CLEANUP;
 	}
-	
-	public final GetVector2 getPosition = new GetVector2(){
+
+	public final GetVector2 getPosition = new GetVector2() {
 		@Override
 		public void as(Vector2 target) {
 			target.set(position);
 		}
 	};
-	public final GetVector2 getScale = new GetVector2(){
+	public final GetVector2 getScale = new GetVector2() {
 		@Override
 		public void as(Vector2 target) {
 			target.set(scale);
 		}
 	};
-	public final GetVector2 getCropX = new GetVector2(){
+	public final GetVector2 getCropX = new GetVector2() {
 		@Override
 		public void as(Vector2 target) {
 			target.set(cropX);
 		}
 	};
-	public final GetVector2 getCropY = new GetVector2(){
+	public final GetVector2 getCropY = new GetVector2() {
 		@Override
 		public void as(Vector2 target) {
 			target.set(cropY);
 		}
 	};
-	public final GetVector2 getOrigin = new GetVector2(){
+	public final GetVector2 getOrigin = new GetVector2() {
 		@Override
 		public void as(Vector2 target) {
 			target.set(origin);
@@ -481,9 +480,8 @@ public final class FancyDrawable {
 	public final GetColor getColor = new GetColor() {
 		@Override
 		public void as(Color target) {
-			target.set(color);			
+			target.set(color);
 		}
 	};
 
-	
 }

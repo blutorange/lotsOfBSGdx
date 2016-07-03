@@ -47,8 +47,7 @@ public enum EPath {
 				return null;
 			}
 
-			return new PathParabola(tmax, relative, tau, x1 * scaleX, y1 * scaleY,
-					x2 * scaleX, y2 * scaleY);
+			return new PathParabola(tmax, relative, tau, x1 * scaleX, y1 * scaleY, x2 * scaleX, y2 * scaleY);
 		}
 	};
 

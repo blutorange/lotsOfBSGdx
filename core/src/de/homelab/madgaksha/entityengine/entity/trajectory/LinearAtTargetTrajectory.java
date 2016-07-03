@@ -23,16 +23,18 @@ public class LinearAtTargetTrajectory extends BulletTrajectoryMaker {
 	private final Vector2 v = new Vector2();
 	private float velocity = 0.0f;
 	private PositionComponent target = new PositionComponent();
-	
+
 	public LinearAtTargetTrajectory() {
 		super();
 	}
 
 	/**
-	 * Sets the initial velocity at which to move at the player. 
-	 * Note that the direction is managed by this trajectory,
-	 * {@link #velocity(float)} should be used directly.
-	 * @param velocity Vector whose length is the initial velocity.
+	 * Sets the initial velocity at which to move at the player. Note that the
+	 * direction is managed by this trajectory, {@link #velocity(float)} should
+	 * be used directly.
+	 * 
+	 * @param velocity
+	 *            Vector whose length is the initial velocity.
 	 */
 	@Override
 	@Deprecated
@@ -41,28 +43,33 @@ public class LinearAtTargetTrajectory extends BulletTrajectoryMaker {
 	}
 
 	/**
-	 * Sets the initial velocity at which to move at the player. 
-	 * Note that the direction is managed by this trajectory,
-	 * {@link #velocity(float)} should be used directly.
-	 * @param vx Vector whose length is the initial velocity.
-	 * @param vy Vector whose length is the initial velocity.
+	 * Sets the initial velocity at which to move at the player. Note that the
+	 * direction is managed by this trajectory, {@link #velocity(float)} should
+	 * be used directly.
+	 * 
+	 * @param vx
+	 *            Vector whose length is the initial velocity.
+	 * @param vy
+	 *            Vector whose length is the initial velocity.
 	 */
 	@Override
 	@Deprecated
 	public void velocity(float vx, float vy) {
-		velocity(v.set(vx,vy).len());
+		velocity(v.set(vx, vy).len());
 	}
 
 	public void velocity(float velocity) {
 		this.velocity = velocity;
 	}
-	
+
 	public void target(PositionComponent pc) {
 		this.target = pc;
 	}
+
 	public void target(Entity e) {
 		PositionComponent pc = Mapper.positionComponent.get(e);
-		if (pc != null) this.target = pc;
+		if (pc != null)
+			this.target = pc;
 	}
 
 	@Override
@@ -76,6 +83,5 @@ public class LinearAtTargetTrajectory extends BulletTrajectoryMaker {
 	protected IBehaving getBehaviour() {
 		return null;
 	}
-
 
 }

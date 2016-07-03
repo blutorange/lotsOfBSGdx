@@ -22,14 +22,15 @@ public class SpiralVelocityField implements IVelocityField {
 		this(target, speedRadial, speedTangential, minDistance, 0.0f);
 	}
 
-	public SpiralVelocityField(PositionComponent target, float speedRadial, float speedTangential, float minDistance, float changeDirectionChance) {
+	public SpiralVelocityField(PositionComponent target, float speedRadial, float speedTangential, float minDistance,
+			float changeDirectionChance) {
 		this.speedRadial = speedRadial;
 		this.speedTangential = speedTangential;
 		this.minDistance = minDistance;
 		this.target = target;
 		this.changeDirectionChance = changeDirectionChance;
 	}
-	
+
 	@Override
 	public void apply(Entity e, VelocityComponent vc) {
 		PositionComponent pc = Mapper.positionComponent.get(e);
@@ -37,12 +38,14 @@ public class SpiralVelocityField implements IVelocityField {
 		// For small probabilities p, 1-(1-p/n)^n ~ p
 		// Thus the result is about the same independent of whether
 		// we check once per second or twice per second
-		// at half the probability etc. 
-		if (MathUtils.randomBoolean(tc.deltaTime * changeDirectionChance)) speedTangential = -speedTangential;
+		// at half the probability etc.
+		if (MathUtils.randomBoolean(tc.deltaTime * changeDirectionChance))
+			speedTangential = -speedTangential;
 		float vx = target.x - pc.x;
 		float vy = target.y - pc.y;
-		float len = (float)Math.sqrt(vx*vx+vy*vy);
-		if (len < minDistance) return;
+		float len = (float) Math.sqrt(vx * vx + vy * vy);
+		if (len < minDistance)
+			return;
 		vx /= len;
 		vy /= len;
 		vc.x = speedRadial * vx + speedTangential * vy;

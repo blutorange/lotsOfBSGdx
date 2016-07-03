@@ -17,16 +17,16 @@ public class FancyScale extends AFancyEvent {
 
 	private String key = StringUtils.EMPTY;
 	private Vector2 scale = new Vector2();
-	
+
 	public FancyScale(String key, float x, float y) {
 		super(true);
 		this.key = key;
 		this.scale.set(x, y);
 	}
-	
+
 	@Override
 	public void reset() {
-		scale.set(0.0f,0.0f);
+		scale.set(0.0f, 0.0f);
 		key = StringUtils.EMPTY;
 	}
 
@@ -52,12 +52,12 @@ public class FancyScale extends AFancyEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);		
+		scene.requestDrawable(key);
 	}
-	
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
@@ -70,7 +70,8 @@ public class FancyScale extends AFancyEvent {
 			return null;
 		}
 		Float y = FileCutsceneProvider.nextNumber(s);
-		if (y == null) y = x;
+		if (y == null)
+			y = x;
 		return new FancyScale(key, x, y);
 	}
 

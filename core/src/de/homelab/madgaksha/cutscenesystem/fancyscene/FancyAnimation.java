@@ -18,14 +18,14 @@ public class FancyAnimation extends AFancyEvent {
 	private String key = StringUtils.EMPTY;
 	private float dpi;
 	private EAnimation animation;
-	
+
 	public FancyAnimation(String key, float dpi, EAnimation animation) {
 		super(true);
 		this.dpi = dpi;
 		this.key = key;
 		this.animation = animation;
 	}
-	
+
 	@Override
 	public void reset() {
 		dpi = 1.0f;
@@ -55,20 +55,19 @@ public class FancyAnimation extends AFancyEvent {
 	@Override
 	public void end() {
 	}
-	
 
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);		
+		scene.requestDrawable(key);
 	}
-	
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
 		String key = s.next();
-		
+
 		Float dpi = FileCutsceneProvider.nextNumber(s);
 		if (dpi == null) {
 			LOG.error("expected dpi");

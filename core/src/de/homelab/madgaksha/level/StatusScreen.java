@@ -153,7 +153,7 @@ public class StatusScreen {
 	 * last.
 	 */
 	private List<TokugiSign> tokugiSignList = new LinkedList<TokugiSign>();
-	private Pool<TokugiSign> tokugiSignPool = new Pool<TokugiSign>(15,50) {
+	private Pool<TokugiSign> tokugiSignPool = new Pool<TokugiSign>(15, 50) {
 		@Override
 		protected TokugiSign newObject() {
 			return new TokugiSign();
@@ -465,21 +465,20 @@ public class StatusScreen {
 		ratio = targetPainPoints == null ? 0.0f : (1.0f - targetPainPoints.painPointsRatio);
 		if (ratio > 0.5f) {
 			lerpColor.set(level.getEnemyPainBarColorMid()).lerp(level.getEnemyPainBarColorHigh(), ratio);
-				shapeRenderer.rect(uiCellEnemyPainBarLowMid.x, uiCellEnemyPainBarLowMid.y,
-						uiCellEnemyPainBarLowMid.width, uiCellEnemyPainBarLowMid.height,
-						level.getEnemyPainBarColorLow(), level.getEnemyPainBarColorMid(),
-						level.getEnemyPainBarColorMid(), level.getEnemyPainBarColorLow());
-				shapeRenderer.rect(uiCellEnemyPainBarMidHigh.x, uiCellEnemyPainBarMidHigh.y,
-						(uiCellEnemyPainBarMidHigh.width * (ratio - 0.5f)) * 2.0f, uiCellEnemyPainBarMidHigh.height,
-						level.getEnemyPainBarColorMid(), lerpColor, lerpColor, level.getEnemyPainBarColorMid());
+			shapeRenderer.rect(uiCellEnemyPainBarLowMid.x, uiCellEnemyPainBarLowMid.y, uiCellEnemyPainBarLowMid.width,
+					uiCellEnemyPainBarLowMid.height, level.getEnemyPainBarColorLow(), level.getEnemyPainBarColorMid(),
+					level.getEnemyPainBarColorMid(), level.getEnemyPainBarColorLow());
+			shapeRenderer.rect(uiCellEnemyPainBarMidHigh.x, uiCellEnemyPainBarMidHigh.y,
+					(uiCellEnemyPainBarMidHigh.width * (ratio - 0.5f)) * 2.0f, uiCellEnemyPainBarMidHigh.height,
+					level.getEnemyPainBarColorMid(), lerpColor, lerpColor, level.getEnemyPainBarColorMid());
 		} else {
 			lerpColor.set(level.getEnemyPainBarColorLow()).lerp(level.getEnemyPainBarColorMid(), ratio * 2.0f);
-				shapeRenderer.rect(uiCellEnemyPainBarLowMid.x, uiCellEnemyPainBarLowMid.y,
-						uiCellEnemyPainBarLowMid.width * ratio * 2.0f, uiCellEnemyPainBarLowMid.height,
-						level.getEnemyPainBarColorLow(), lerpColor, lerpColor, level.getEnemyPainBarColorLow());
+			shapeRenderer.rect(uiCellEnemyPainBarLowMid.x, uiCellEnemyPainBarLowMid.y,
+					uiCellEnemyPainBarLowMid.width * ratio * 2.0f, uiCellEnemyPainBarLowMid.height,
+					level.getEnemyPainBarColorLow(), lerpColor, lerpColor, level.getEnemyPainBarColorLow());
 		}
 		shapeRenderer.end();
-		
+
 		batchPixel.begin();
 		// Draw images for level name, weapon, tokugi and enemy.
 		// We draw them last because they use different texture files.
@@ -547,20 +546,23 @@ public class StatusScreen {
 			tokugiSign.setup(aTokugi.getSign());
 		}
 	}
+
 	public void addTokugiSign(ETexture texture) {
 		TokugiSign sign = addNewTokugiSign();
 		sign.setup(texture);
 	}
+
 	public void addTokugiSign(TokugiSign tokugiSign) {
 		tokugiSignList.add(tokugiSign);
 		tokugiSign.begin();
 	}
+
 	public TokugiSign addNewTokugiSign() {
 		TokugiSign tokugiSign = tokugiSignPool.obtain();
 		addTokugiSign(tokugiSign);
 		return tokugiSign;
 	}
-	
+
 	/**
 	 * Switches target to the specified enemy and shows the enemy's info in this
 	 * statusScreen.

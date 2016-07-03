@@ -8,8 +8,7 @@ import de.homelab.madgaksha.logging.Logger;
 public enum EWeapon {
 	NONE(WeaponNone.class),
 	BASIC(WeaponBasic.class),
-	MULTI(WeaponMulti.class)
-	;
+	MULTI(WeaponMulti.class);
 
 	private final static Logger LOG = Logger.getLogger(EWeapon.class);
 

@@ -73,6 +73,7 @@ public class VoicePlayer extends AAudioPlayer {
 	public void playUnconditionally(ESound sound) {
 		playUnconditionally(sound, 1.0f);
 	}
+
 	public void playUnconditionally(ESound sound, float volume) {
 		if (currentClip != null)
 			currentClip.stop();

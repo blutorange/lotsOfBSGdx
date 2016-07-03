@@ -392,8 +392,7 @@ public class MapData {
 					com.badlogic.gdx.maps.MapProperties props = c.getTile().getProperties();
 					if (props.containsKey("blocking") && Boolean.valueOf(props.get("blocking", String.class))) {
 						tileFlags[x][y] = 1; // 0b00000001;
-					}
-					else {
+					} else {
 						tileFlags[x][y] = 0;
 					}
 				}

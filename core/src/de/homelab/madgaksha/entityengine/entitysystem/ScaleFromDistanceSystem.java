@@ -30,7 +30,8 @@ public class ScaleFromDistanceSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public ScaleFromDistanceSystem(int priority) {
-		super(DisableIteratingSystem.all(PositionComponent.class, ShouldScaleComponent.class, ScaleFromDistanceComponent.class)
+		super(DisableIteratingSystem
+				.all(PositionComponent.class, ShouldScaleComponent.class, ScaleFromDistanceComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 

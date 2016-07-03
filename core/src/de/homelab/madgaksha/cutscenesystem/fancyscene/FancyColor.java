@@ -17,13 +17,13 @@ public class FancyColor extends AFancyEvent {
 
 	private String key = StringUtils.EMPTY;
 	private Color color = new Color(Color.WHITE);
-	
+
 	public FancyColor(String key, Color color) {
 		super(true);
 		this.key = key;
 		this.color.set(color);
 	}
-	
+
 	@Override
 	public void reset() {
 		color.set(Color.WHITE);
@@ -55,9 +55,9 @@ public class FancyColor extends AFancyEvent {
 
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);		
+		scene.requestDrawable(key);
 	}
-	
+
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");

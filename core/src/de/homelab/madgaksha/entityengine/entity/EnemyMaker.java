@@ -379,14 +379,13 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 			SystemUtils.disableAction();
 			game.setGlobalTimeScale(0.12f);
 			MakerUtils.addTimedRunnable(level.getSoundOnBattleWin().getDurationInMilliseconds() * 0.12f * 0.001f,
-				new ITimedCallback() {
-					@Override
-					public void run(Entity entity, Object data) {
-						SystemUtils.enableAction();
-						game.setGlobalTimeScale(1.0f);
-					}
-				}
-			);
+					new ITimedCallback() {
+						@Override
+						public void run(Entity entity, Object data) {
+							SystemUtils.enableAction();
+							game.setGlobalTimeScale(1.0f);
+						}
+					});
 		}
 
 		// Remove target info from status screen.
@@ -395,8 +394,9 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 
 	/** Called when we enter battle mode. */
 	public static void enterBattleMode(Entity enemy) {
-		if (game.isGameLost()) return;
-		
+		if (game.isGameLost())
+			return;
+
 		LOG.debug("entering battle mode");
 
 		battleModeActive = true;

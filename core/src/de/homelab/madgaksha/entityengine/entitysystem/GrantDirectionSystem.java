@@ -18,7 +18,8 @@ public class GrantDirectionSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public GrantDirectionSystem(int priority) {
-		super(DisableIteratingSystem.all(TemporalComponent.class, DirectionComponent.class, ShouldDirectionComponent.class)
+		super(DisableIteratingSystem
+				.all(TemporalComponent.class, DirectionComponent.class, ShouldDirectionComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 
