@@ -303,8 +303,8 @@ public class MainPanel extends JPanel implements ComponentListener {
 			score = 0L;
 
 		// Set title, description, score.
-		lblTitle.setText(level.getName());
-		lblDescription.setText(level.getDescription());
+		lblTitle.setText("<html><p style=\"width:auto\">" + level.getName() + "</p></html>");
+		lblDescription.setText("<html><p style=\"width:auto\">" + level.getDescription() + "</p></html>");
 		lblScore.setText(String.valueOf(score));
 
 		lblTitle.validate();

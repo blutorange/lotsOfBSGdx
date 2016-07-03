@@ -4,6 +4,8 @@ This project is CC-0, for the licenses of the libaries see the their respective 
 
 Now with libGDX, as a project for the BA.
 
+Only working for the desktop version right now, android launcher not done yet.
+
 # How to run
 
 (1) Setup your development environment.
@@ -26,5 +28,3 @@ Now with libGDX, as a project for the BA.
 (4) Package the project
 
 > https://github.com/libgdx/libgdx/wiki/Gradle-on-the-Commandline#packaging-the-project
-
-

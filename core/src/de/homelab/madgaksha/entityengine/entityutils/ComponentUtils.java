@@ -15,6 +15,7 @@ import de.homelab.madgaksha.entityengine.component.BulletStatusComponent;
 import de.homelab.madgaksha.entityengine.component.ComponentQueueComponent;
 import de.homelab.madgaksha.entityengine.component.DamageQueueComponent;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
+import de.homelab.madgaksha.entityengine.component.EnemyIconComponent;
 import de.homelab.madgaksha.entityengine.component.GetHitComponent;
 import de.homelab.madgaksha.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
@@ -27,6 +28,7 @@ import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
 import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
+import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.enums.RichterScale;
@@ -46,6 +48,10 @@ public final class ComponentUtils {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(ComponentUtils.class);
 	private final static Vector2 v1 = new Vector2();
+	@SuppressWarnings("unchecked")
+	private final static Family FAMILY_BULLET = Family.all(BulletStatusComponent.class).get();
+	@SuppressWarnings("unchecked")
+	private final static Family FAMILY_ENEMY = Family.all(EnemyIconComponent.class).exclude(InactiveComponent.class).get();
 
 	/** Frequency at which an entity hit by a bullet takes 1x damage, in Hz. */
 	public final static float DAMAGE_FREQUENCY = 20.0f;
@@ -114,9 +120,6 @@ public final class ComponentUtils {
 		dc.degree = 630.0f - v1.angle();
 	}
 
-	@SuppressWarnings("unchecked")
-	private static Family FAMILY_BULLET = Family.all(BulletStatusComponent.class).get();
-
 	public static void setBulletAction(boolean active) {
 		if (active)
 			for (Entity e : gameEntityEngine.getEntitiesFor(FAMILY_BULLET))
@@ -125,6 +128,12 @@ public final class ComponentUtils {
 			for (Entity e : gameEntityEngine.getEntitiesFor(FAMILY_BULLET))
 				e.add(gameEntityEngine.createComponent(InactiveComponent.class));
 
+	}
+	
+	public static void convertAllActiveBulletsToScoreBullets() {
+		for (Entity enemy : gameEntityEngine.getEntitiesFor(FAMILY_ENEMY)) {
+			EnemyMaker.releaseBullets(enemy, true);
+		}
 	}
 
 	public static void dealDamage(Entity attacker, Entity defender, long basePower, boolean keepOneHp) {

@@ -257,7 +257,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 	 *            Whether the bullets should be converted to homing score
 	 *            bullets.
 	 */
-	private void releaseBullets(Entity enemy, boolean convertScore) {
+	public static void releaseBullets(Entity enemy, boolean convertScore) {
 		AnyChildComponent acc = Mapper.anyChildComponent.get(enemy);
 		if (acc != null && acc.childComponent != null) {
 			PositionComponent pc = Mapper.positionComponent.get(playerHitCircleEntity);
@@ -265,13 +265,13 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 			// Iterate over all bullets before this bullet.
 			for (SiblingComponent sibling = acc.childComponent.prevSiblingComponent; sibling != null; sibling = sibling.prevSiblingComponent) {
 				if (convertScore)
-					convertBulletToScoreBullet(sibling.me, pc, gs);
+					EnemyMaker.convertBulletToScoreBullet(sibling.me, pc, gs);
 				gameEntityEngine.removeEntity(sibling.me);
 			}
 			// Iterate over this bullet and the following bullets.
 			for (SiblingComponent sibling = acc.childComponent; sibling != null; sibling = sibling.nextSiblingComponent) {
 				if (convertScore)
-					convertBulletToScoreBullet(sibling.me, pc, gs);
+					EnemyMaker.convertBulletToScoreBullet(sibling.me, pc, gs);
 				gameEntityEngine.removeEntity(sibling.me);
 			}
 		}
@@ -279,7 +279,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 			acc.childComponent = null;
 	}
 
-	private void convertBulletToScoreBullet(Entity bullet, PositionComponent playerEntityPositionComponent,
+	private static void convertBulletToScoreBullet(Entity bullet, PositionComponent playerEntityPositionComponent,
 			IGrantStrategy gs) {
 		final PositionComponent pc = Mapper.positionComponent.get(bullet);
 		final BulletStatusComponent bsc = Mapper.bulletStatusComponent.get(bullet);
@@ -293,7 +293,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		final BulletShapeMaker bulletShape = scoreBulletShapes[MathUtils.random(3)];
 		BulletMaker.makeAsScoreBullet(bulletShape, homingTrajectory, bsc.score);
 	}
-
+	
 	/**
 	 * Callback for spawning the enemy.
 	 */

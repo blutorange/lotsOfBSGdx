@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
+import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EFancyScene;
 import de.homelab.madgaksha.resourcecache.EModel;
@@ -61,6 +62,7 @@ public class TokugiOukaMusougeki extends ATokugi {
 				dealFinalDamagePoint();
 			}
 		});
+		ComponentUtils.convertAllActiveBulletsToScoreBullets();
 		return true;
 	}
 

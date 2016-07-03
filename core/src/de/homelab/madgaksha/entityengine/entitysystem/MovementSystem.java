@@ -78,6 +78,7 @@ public class MovementSystem extends DisableIteratingSystem {
 
 	// Still needs some work with bounding boxes.
 	@SuppressWarnings("unused")
+	@Deprecated
 	private void mapMovement(PositionComponent pc, float deltaX, float deltaY, float hw, float hh) {
 		// Target position.
 		float targetX = pc.x + deltaX;
@@ -381,8 +382,9 @@ public class MovementSystem extends DisableIteratingSystem {
 			// vertically/horizontally.
 			if (vc.x * vc.y * (vc.x * (ty * tileHeight - pc.y) - vc.y * (tx * tileWidth - pc.x)) > 0) {
 				if (mapData.isTileBlocking(pc.x, newy)) {
-					if (!mapData.isTileBlocking(newx, pc.y))
+					if (!mapData.isTileBlocking(newx, pc.y)) {
 						pc.x = newx;
+					}
 				} else {
 					pc.y = newy;
 				}
@@ -401,8 +403,8 @@ public class MovementSystem extends DisableIteratingSystem {
 			int tx = (int) (pc.x * tileWidthInverse);
 			int ty = (int) (pc.y * tileHeightInverse);
 
-			int newTileX = (int) (pc.x * tileWidthInverse);
-			int newTileY = (int) (pc.y * tileWidthInverse);
+			int newTileX = (int) (newx * tileWidthInverse);
+			int newTileY = (int) (newy * tileWidthInverse);
 			if (newTileX == tx || newTileY == ty) {
 				// Allow move immediately when we do not move diagonally.
 				pc.x = newx;
