@@ -7,9 +7,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-import de.homelab.madgaksha.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.ESound;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
 

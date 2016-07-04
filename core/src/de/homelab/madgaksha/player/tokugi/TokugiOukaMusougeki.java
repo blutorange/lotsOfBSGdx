@@ -56,7 +56,7 @@ public class TokugiOukaMusougeki extends ATokugi {
 			return false;
 		}
 		previousTime = currentTime;
-		level.pushFancyScene(ResourceCache.getFancyScene(EFancyScene.OUKA_MUSOUGEKI), new Runnable() {
+		level.pushFancyScene(ResourceCache.getEventFancyScene(EFancyScene.OUKA_MUSOUGEKI), new Runnable() {
 			@Override
 			public void run() {
 				dealFinalDamagePoint();

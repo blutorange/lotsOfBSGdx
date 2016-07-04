@@ -452,11 +452,10 @@ public final class ResourceCache {
 	 *            Fancy scene font to load.
 	 * @return Loaded fancy scene.
 	 */
-	public static EventFancyScene getFancyScene(EFancyScene eventFancyScene) {
+	public static EventFancyScene getEventFancyScene(EFancyScene eventFancyScene) {
 		return (EventFancyScene) getResource(eventFancyScene, true);
 	}
-
-	public static EventFancyScene getFancyScene(EFancyScene eventFancyScene, boolean cached) {
+	public static EventFancyScene getEventFancyScene(EFancyScene eventFancyScene, boolean cached) {
 		return (EventFancyScene) getResource(eventFancyScene, cached);
-	}
+	}	
 }

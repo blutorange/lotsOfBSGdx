@@ -5,12 +5,10 @@ import static de.homelab.madgaksha.GlobalBag.game;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
-import java.awt.Button;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
