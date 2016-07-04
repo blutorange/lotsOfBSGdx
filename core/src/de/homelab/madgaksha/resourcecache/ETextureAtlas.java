@@ -24,7 +24,11 @@ public enum ETextureAtlas implements IResource<ETextureAtlas, TextureAtlas> {
 	BULLETS_LARGE("bullets/large-packed/bulletsLarge.atlas"),
 	FACES_ESTELLE("texture/face-packed/estellePacked.atlas"),
 	FACES_JOSHUA("texture/face-packed/joshuaPacked.atlas"),
-	MISC("texture/misc/packed/miscPacked.atlas");
+	MISC("texture/misc/packed/miscPacked.atlas"),
+	SOLDIER_RED("sprite/packed/soldierred.atlas"),
+	SOLDIER_GREEN("sprite/packed/soldiergreen.atlas"),
+	ICER("sprite/packed/icer.atlas"),
+	;
 
 	private final static Logger LOG = Logger.getLogger(ETextureAtlas.class);
 	private final static EnumMap<ETextureAtlas, TextureAtlas> textureAtlasCache = new EnumMap<ETextureAtlas, TextureAtlas>(

@@ -12,8 +12,14 @@ import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 
+import de.homelab.madgaksha.GameParameters;
 import de.homelab.madgaksha.logging.LoggerFactory;
 
+/**
+ * {@link GameParameters} for the desktop that can be saved to file.
+ * @author madgaksha
+ *
+ */
 public class LaunchConfig {
 	private final static Logger LOG = LoggerFactory.getLogger(LaunchConfig.class);
 	public Integer fps;

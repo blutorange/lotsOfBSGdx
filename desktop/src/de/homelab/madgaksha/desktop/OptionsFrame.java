@@ -18,6 +18,12 @@ import javax.swing.border.EmptyBorder;
 
 import de.homelab.madgaksha.i18n.I18n;
 
+/**
+ * The window where the user can view and change several options related
+ * to the game such as frame rate etc.
+ * @author madgaksha
+ *
+ */
 public class OptionsFrame extends JFrame implements WindowListener {
 	private static final long serialVersionUID = 1L;
 	private JSpinner spnWidth;

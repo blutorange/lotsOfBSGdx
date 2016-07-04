@@ -15,6 +15,11 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.util.LocaleSerializer;
 
+/**
+ * Parameters that can be passed to the {@link Game}.
+ * @author madgaksha
+ *
+ */
 public class GameParameters implements Serializable {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(GameParameters.class);

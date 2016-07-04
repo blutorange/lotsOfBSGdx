@@ -2,7 +2,9 @@ package de.homelab.madgaksha.resourcecache;
 
 import java.util.EnumMap;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
@@ -12,7 +14,7 @@ import de.homelab.madgaksha.resourcepool.AtlasAnimation;
  * Can be initialized with a sprite sheet, in which case it must start
  * at the top-left.
  * <br><br>
- * Alternatively, it can be initiailzed with a list of {@link EAnimation}.
+ * Alternatively, it can be initialized with a list of {@link EAnimation}.
  * @author madgaksha
  *
  */
@@ -31,20 +33,21 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	// =================
 	// ENEMIES
 	// =================
-	SOLDIER_RED_0(ETexture.SOLDIER_RED_0, 64, 68, 0.1f, AtlasAnimation.PlayMode.LOOP, 8, 8),
-	SOLDIER_RED_1(ETexture.SOLDIER_RED_1, 64, 68, 0.1f, AtlasAnimation.PlayMode.LOOP, 8, 1),
-	SOLDIER_GREEN_0(ETexture.SOLDIER_GREEN_0, 64, 68, 0.1f, AtlasAnimation.PlayMode.LOOP, 8, 8),
-	SOLDIER_GREEN_1(ETexture.SOLDIER_GREEN_1, 64, 68, 0.1f, AtlasAnimation.PlayMode.LOOP, 8, 1),
-	ICER_0(ETexture.ICER_0, 128, 128, 0.1f, AtlasAnimation.PlayMode.LOOP, 8, 8),
-	ICER_1(ETexture.ICER_1, 128, 128, 0.1f, AtlasAnimation.PlayMode.LOOP, 8, 1),
+	SOLDIER_RED_0(ETextureAtlas.SOLDIER_RED, "SOLDIER_RED_0", 8, 0.1f, AtlasAnimation.PlayMode.LOOP),
+	SOLDIER_RED_1(ETextureAtlas.SOLDIER_RED, "SOLDIER_RED_1", 8, 0.1f, AtlasAnimation.PlayMode.LOOP),
+	SOLDIER_GREEN_0(ETextureAtlas.SOLDIER_GREEN, "SOLDIER_GREEN_0", 8, 0.1f, AtlasAnimation.PlayMode.LOOP),
+	SOLDIER_GREEN_1(ETextureAtlas.SOLDIER_GREEN, "SOLDIER_GREEN_1", 8, 0.1f, AtlasAnimation.PlayMode.LOOP),
+	ICER_0(ETextureAtlas.ICER, "ICER_0", 8, 0.2f, AtlasAnimation.PlayMode.LOOP),
+	ICER_1(ETextureAtlas.ICER, "ICER_1", 8, 0.2f, AtlasAnimation.PlayMode.LOOP),
 	;
 
 	private final static Logger LOG = Logger.getLogger(EAnimationList.class);
 	private final static EnumMap<EAnimationList, AtlasAnimation[]> animationListCache = new EnumMap<EAnimationList, AtlasAnimation[]>(
 			EAnimationList.class);
 
-	private EAnimation[] animationList;
-	private ETexture eTexture;
+	private final int mode;
+	private final Object data;
+	private String name;
 	private int tileWidth;
 	private int tileHeight;
 	private int frameCount;
@@ -53,11 +56,23 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	private int animationModeCount;
 
 	private EAnimationList(EAnimation... animationList) {
-		this.animationList = animationList;
+		this.data = animationList;
+		this.mode = 0;
 	}
 	
+	private EAnimationList(ETextureAtlas textureAtlas, String name, int animationModeCount, float frameDuration, AtlasAnimation.PlayMode playMode) {
+		this.playMode = playMode;
+		this.animationModeCount = animationModeCount;
+		this.frameDuration = frameDuration;
+		this.name = name;
+		this.data = textureAtlas;
+		this.mode = 1;
+	}
+
+	
 	private EAnimationList(ETexture et, int tw, int th, float fd, AtlasAnimation.PlayMode pm, int amc, int fc) {
-		eTexture = et;
+		data = et;
+		mode = 2;
 		tileWidth = tw;
 		tileHeight = th;
 		frameCount = fc;
@@ -86,17 +101,35 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	@Override
 	public AtlasAnimation[] getObject() {
 		AtlasAnimation[] atlasAnimationList;
-		if (animationList != null) {
+		switch (mode) {
+		// EAnimation[]
+		case 0:
+			EAnimation[] animationList = (EAnimation[])data;
 			atlasAnimationList = new AtlasAnimation[animationList.length];
 			for (int i = 0; i != animationList.length; ++i) {
 				atlasAnimationList[i] = ResourceCache.getAnimation(animationList[i]);
 				if (animationList[i] == null)
 					return null;
+			}			
+			break;
+		// ETextureAtlas
+		case 1:
+			TextureAtlas textureAtlas = ResourceCache.getTextureAtlas((ETextureAtlas)data);
+			if (textureAtlas == null) return null;
+			atlasAnimationList = new AtlasAnimation[animationModeCount];
+			for (int i = 0; i != animationModeCount; ++i) {
+				Array<AtlasRegion> atlasRegionArray = textureAtlas.findRegions(name + "_" + i);
+				if (atlasRegionArray == null || atlasRegionArray.size == 0)
+					return null;
+				AtlasAnimation animation = new AtlasAnimation(frameDuration, atlasRegionArray);
+				animation.setPlayMode(playMode);
+				atlasAnimationList[i] = animation;
 			}
-		}
-		else {
+			break;
+		// ETexture
+		case 2:
 			// Retrieve sprite sheet.
-			AtlasRegion atlasRegion = ResourceCache.getTexture(eTexture);
+			AtlasRegion atlasRegion = ResourceCache.getTexture((ETexture)data);
 			if (atlasRegion == null)
 				return null;
 			// Split sprite sheet.
@@ -105,7 +138,10 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 			for (int i = 0; i != animationModeCount; ++i) {
 				atlasAnimationList[i] = new AtlasAnimation(frameDuration, atlasRegionArray[i]);
 				atlasAnimationList[i].setPlayMode(playMode);
-			}
+			}			
+			break;
+		default:
+			return null;
 		}
 		return atlasAnimationList;
 	}

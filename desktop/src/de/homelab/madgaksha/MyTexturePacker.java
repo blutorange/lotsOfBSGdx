@@ -1,6 +1,10 @@
 package de.homelab.madgaksha;
 
+import java.io.File;
+import java.io.FileFilter;
+
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 
 public class MyTexturePacker {
 	public static void main(String[] args) {
@@ -58,5 +62,27 @@ public class MyTexturePacker {
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/statusscreen/packed";
 		packFileName = "statusScreenPacked";
 		TexturePacker.process(inputDir, outputDir, packFileName);
+		
+		// Sprites
+		System.out.println("packing sprites");
+		Settings settings = new Settings();
+//		settings.stripWhitespaceX = settings.stripWhitespaceY = true;
+		for (File f : listDirectories("/home/madgaksha/git/lotsOfBSGdx/android/assets/sprite")) {
+			inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/sprite/" + f.getName();
+			outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/sprite/packed";
+			packFileName = f.getName();
+			TexturePacker.process(settings, inputDir, outputDir, packFileName);
+		}
+	}
+
+	private static File[] listDirectories(String dirName) {
+		File dir = new File(dirName);
+		File[]dirList = dir.listFiles(new FileFilter() {
+			@Override
+			public boolean accept(File paramFile) {
+				return paramFile.isDirectory() && !paramFile.getName().equalsIgnoreCase("packed");
+			}
+		});
+		return dirList != null ? dirList : new File[0];
 	}
 }

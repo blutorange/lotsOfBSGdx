@@ -17,8 +17,7 @@ import de.homelab.madgaksha.GameParameters;
 import de.homelab.madgaksha.logging.LoggerFactory;
 
 /**
- * Based upon http://stackoverflow.com/a/31120304/3925216 Adding multiple
- * windows in LibGDX?
+ * Based upon http://stackoverflow.com/a/31120304/3925216 
  * 
  * The game itself consists of one level, the desktop launcher is responsible
  * for selecting a level and launching the lwglj game. Having more than one
@@ -110,7 +109,7 @@ public class ProcessLauncher {
 		//
 		// Thread.sleep((long)(1000 * secondsPerBuffer / bufferCount));
 		//
-		// For the default value (512 and 9), this gives a sleeping time
+		// For the default value (512 and 9), this results in a sleeping time
 		// of 0, resulting in 100% CPU usage.
 		//
 		// This assumes the sampling rate will not be higher than 48000/s
