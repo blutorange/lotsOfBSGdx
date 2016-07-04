@@ -366,13 +366,24 @@ public class MovementSystem extends DisableIteratingSystem {
 		} else if (dy > tileWidth * 0.9f) {
 			f = reducedTileHeight / dy;
 		}
+		
+		// Get new position
 		final float newx = pc.x + f * vc.x * deltaTime;
 		final float newy = pc.y + f * vc.y * deltaTime;
 
-		if (mapData.isTileBlocking(newx, newy)) {
+		int tx = (int) (pc.x * tileWidthInverse);
+		int ty = (int) (pc.y * tileHeightInverse);
+
+		int newTileX = (int) (newx * tileWidthInverse);
+		int newTileY = (int) (newy * tileWidthInverse);
+		
+		if (!mapData.isTileBlocking(newx, newy) && (newTileX == tx || newTileY == ty)) {
+			// Allow move immediately when we do not move diagonally.
+			pc.x = newx;
+			pc.y = newy;
+		} else {
+			// Otherwise, check if we can move vertically / horizontally.
 			// Bottom left tile point.
-			int tx = (int) (pc.x * tileWidthInverse);
-			int ty = (int) (pc.y * tileHeightInverse);
 			// Get quadrant of of velocity vector
 			if (vc.x > 0)
 				++tx;
@@ -394,38 +405,6 @@ public class MovementSystem extends DisableIteratingSystem {
 						pc.y = newy;
 				} else {
 					pc.x = newx;
-				}
-			}
-		} else {
-			// Make sure we are not too fast and would move through a blocking
-			// tile.
-			// Bottom left tile point.
-			int tx = (int) (pc.x * tileWidthInverse);
-			int ty = (int) (pc.y * tileHeightInverse);
-
-			int newTileX = (int) (newx * tileWidthInverse);
-			int newTileY = (int) (newy * tileWidthInverse);
-			if (newTileX == tx || newTileY == ty) {
-				// Allow move immediately when we do not move diagonally.
-				pc.x = newx;
-				pc.y = newy;
-			} else {
-				// Otherwise, check tile to the left / right first.
-				// Get quadrant of velocity vector
-				if (vc.x > 0)
-					++tx;
-				if (vc.y > 0)
-					++ty;
-				// Check which tile this movement would get us in and move only
-				// vertically/horizontally.
-				if (vc.x * vc.y * (vc.x * (ty * tileHeight - pc.y) - vc.y * (tx * tileWidth - pc.x)) > 0) {
-					if (!mapData.isTileBlocking(pc.x, newy)) {
-						pc.y = newy;
-					}
-				} else {
-					if (!mapData.isTileBlocking(newx, pc.y)) {
-						pc.x = newx;
-					}
 				}
 			}
 		}
