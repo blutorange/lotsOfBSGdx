@@ -4,7 +4,7 @@
   Speaker Estelle
   Face Surprised
   Text EOF
-あ、ヨシュアみっけ。
+Oh, I found you, Joshua.
 EOF
 
 >>EventTextbox
@@ -13,7 +13,7 @@ EOF
   Speaker Joshua
   Face Smiling
   Text EOF
-エステル！君とまたあえて嬉しいいんです。
+Estelle. I am glad I could meet you again.
 EOF
 
 >>EventTextbox
@@ -21,9 +21,9 @@ EOF
   Speaker Estelle
   Face EMBARRASED
   Text EOF
-そんな。。。
+Don't say it like that....
 
-あたしも嬉しいけど。。。
+...though I'm happy too...
 EOF
 
 >>EventTextbox
@@ -31,9 +31,9 @@ EOF
   Speaker Estelle
   Face Angry
   Text EOF
-っていうか、そんなこといってる場合か！
-ね、ヨシュア、ここはどこ？
-みたことのないこの風景はなんだ？
+But that's beside the point right now!
+Hey, Joshua, just where are we?
+What is this strange place?
 EOF
 
 
@@ -43,8 +43,10 @@ EOF
   Speaker Joshua
   Face Serious
   Text EOF
-来てからちょっとだけ調べてみたが、今のところは
-分かりません。ただ、常ならぬ力が働いているのは確かです。
+Since I came here I did investigate the
+immediate area, but did not find anything.
+However, I am certain there is some
+mysterious power at work here.
 EOF
 
 >>EventTextbox
@@ -53,7 +55,9 @@ EOF
   Speaker Estelle
   Face EVASIVE
   Text EOF
-この泉も他と違うし、何かわけありの場所みたいけど。。。
+This spring looks different as well,
+there seems to be something special
+about this place.
 EOF
 
 >>EventTextbox
@@ -61,10 +65,10 @@ EOF
   Speaker Joshua
   Face Serious
   Text EOF
-僕もそう思っている。川の近くにあった未知標によると、
-そこの泉は無明界（むみょうかい）にあるそうです。
-無明とは、前を照らす光がない、迷っていること。
-それとも、来たものを惑わす世界、という意味でしょうか。
+Yes, that is my impression as well. The sign
+near the river said it was located in the
+Unbright World. Does that mean we are lost
+in the dark without a way out?
 EOF
 
 >>EventTextbox
@@ -72,9 +76,9 @@ EOF
   Face Serious
   TransitionOut
   Text EOF
-床にある星印も気にかかります。中の団子みたいな形を
-した丸に立っていると、変な力を感じます。
-導力にはない、まるで吸い込まれてしまいそうな感じ。。。
+That star sign on the ground looks suspicious as.
+well. With its round shape it almost feels
+as if it absorbed our energy...
 EOF
 
 >>EventTextbox
@@ -83,7 +87,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-ヨシュア？　ヨシュアってば！
+Joshua? Hey, Joshua!
 EOF
 
 >>EventTextbox
@@ -92,7 +96,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-。。。　。。。　。。。
+... ... ...
 EOF
 
 >>EventTextbox
@@ -101,7 +105,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-しっかりしろ、ヨシュア！
+Hang in there, Joshua!
 EOF
 
 >>EventTextbox
@@ -110,7 +114,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-。。。エステル。。。
+... Estelle ...
 EOF
 
 >>EventTextbox
@@ -118,7 +122,7 @@ EOF
   Face CONTEMPLATING
   TransitionIn
   Text EOF
-もう大丈夫です。心配かけてすみません。
+Do not worry, I feel fine again.
 EOF
 
 >>EventTextbox
@@ -126,9 +130,9 @@ EOF
   Face Normal
   TransitionOut
   Text EOF
-ということで、それは何の力か、
-この場所とどう関係しているのか、
-まだ分からないことばかりです。
+So basically we do not know much about that
+power, or what this place is. Right know,
+we do not know much at all...
 EOF
 
 >>EventTextbox
@@ -137,8 +141,9 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-ヨシュアも分からないなら今はどうしようもないね。
-ついでに聞くけど、ヨシュアはどうして浮いてない？
+If you don't know either, I guess there's
+nothing to be done about it for now.
+And let me ask, why don't you float?
 EOF
 
 >>EventTextbox
@@ -147,7 +152,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-は？　浮遊、ですか？　
+What? Float?　
 EOF
 
 >>EventTextbox
@@ -156,9 +161,10 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-ほら、あたし空中に浮いてるなじゃない！
-ヨシュアと離れて、町を出て、気を失って、
-また目覚めてからずっとこうだ。
+Look, I'm floating in the air!
+After we got separated, I left the city. Soon after
+I must have fallen unconscious and when I awakened
+I was here, floating ever since. 
 EOF
 
 >>EventTextbox
@@ -167,8 +173,9 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-言われてみれば、確かに浮いているんですね。
-まだダイエット中？　
+Well, now that you mention it, you are right,
+you are floating indeed.
+Are you on a diet again?
 EOF
 
 >>EventTextbox
@@ -177,10 +184,10 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-違う。そうじゃない。
-こう見えても、あたし、食欲のある青年だ。
-ほら、前へ歩こう、と思えば勝手に体が前
-へ動く。浮いているままで。
+No, of couse not! Think what you will, but as a Bracer I
+need to eat all I can! Anyways, when I'm thinking about
+taking a step forward, my body just moves there on
+its own. While floating.
 EOF
 
 >>EventTextbox
@@ -188,9 +195,10 @@ EOF
   Face Normal
   TransitionIn
   Text EOF
-これもしっくりと調べないとわかりません。
-後でゆっくりと考えましょう。
-浮いているなら、足で行かない場所もあるでしょう。　
+We need to investigate this carefully later.
+For now it does not seem to pose any immediate
+danger and there might be some places you can
+only reach floating. Bear with it for now.
 EOF
 
 >>EventTextbox
@@ -198,7 +206,7 @@ EOF
   Face SMILING
   TransitionOut
   Text EOF
-それでは、僕はこれで。あとで合流しましょう。　
+Until later then, Estelle. We will meet up later.
 EOF
 
 >>EventTextbox
@@ -207,7 +215,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-へえ、ヨシュアと一緒に行かないの？
+What? We aren't going together?
 EOF
 
 >>EventTextbox
@@ -215,10 +223,10 @@ EOF
   Face CONTEMPLATING
   TransitionIn
   Text EOF
-いや、ふた手にわけたほうが有利だ。
-それほど危険な敵はないし、エステル一人でも
-大丈夫です。確かにテントがあった場所からちょっと
-道を北へ進むと弾装キューブがあったはずだ。
+No, it is better to split up. We can cover a larger
+area and find a way out of here more quickly. The 
+enemies of this area are not too strong, you should
+be able to handle them by yourself.
 EOF
 
 >>EventTextbox
@@ -226,7 +234,9 @@ EOF
   Face Happy
   TransitionOut
   Text EOF
-それを装備すると、この辺の敵は速やかに倒せます。
+I saw a Combat Cube to the north of the
+city gates. Collect it and you should be able
+to eliminate them.
 EOF
 
 >>EventTextbox
@@ -235,8 +245,9 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-ざんねん。。。まあ、ヨシュアがそういってくれるなら、
-あたしも頑張らないと！　敵一匹か二匹、楽勝、楽勝！
+Oh well, too bad. But if you say it like that, I've got
+to do my best as well! How hard can it be to beat a few
+enemies? Just leave it to me!!
 EOF
 
 >>EventTextbox
@@ -245,7 +256,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-エステル、油断は禁物ですよ。
+Estelle, overestimation lead to damnation.
 EOF
 
 >>EventTextbox
@@ -254,7 +265,7 @@ EOF
   TransitionIn
   TransitionOut
   Text EOF
-はい、はい。それじゃ、あとでな、ヨシュア。
+Yes, yes, I know. Later, Joshua.
 EOF
 
 >>EventTextbox
@@ -262,16 +273,17 @@ EOF
   Face SMILING
   TransitionIn
   Text EOF
-エステルもお元気で。
+Take care, Estelle.
 EOF
 
 >>EventTextbox
   Speaker Joshua
   Face Serious
   Text EOF
-あっ、最後にもうひとつ。
-泉の後ろにある断崖の近くにも敵が潜めているから、
-弾装を手に入れたまでは近寄らないようにね。
+Before I forget, I need to warn you about
+the cliffs to the north. A strong enemy hides
+there waiting for prey. I suggest you avoid
+approaching the cliffs unarmed.
 EOF
 
 >>EventTextbox
@@ -279,5 +291,5 @@ EOF
   Face SMILING
   TransitionOut
   Text EOF
-では、行くよ。
+I am off. See you later.
 EOF

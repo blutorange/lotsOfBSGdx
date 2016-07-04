@@ -77,7 +77,7 @@ public class MyTextureSplitter implements ApplicationListener {
 		}
 		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		LwjglApplication lwjglApplication = new LwjglApplication(splitter, config);
+		new LwjglApplication(splitter, config);
 	}
 
 	

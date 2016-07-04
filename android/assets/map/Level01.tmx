@@ -9241,7 +9241,7 @@
     <property name="battleIn" type="float" value="45"/>
     <property name="battleOut" type="float" value="60"/>
     <property name="initDir" value="0.0"/>
-    <property name="initY" value="3"/>
+    <property name="initY" value="-6"/>
     <property name="spawn" value="touch"/>
     <property name="species" value="Soldier Green"/>
    </properties>
@@ -9251,7 +9251,8 @@
     <property name="battleIn" type="float" value="45"/>
     <property name="battleOut" type="float" value="60"/>
     <property name="initDir" value="0.0"/>
-    <property name="initY" value="3"/>
+    <property name="initX" type="float" value="4"/>
+    <property name="initY" value="0"/>
     <property name="spawn" value="touch"/>
     <property name="species" value="Soldier Green"/>
    </properties>
