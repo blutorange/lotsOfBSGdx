@@ -355,16 +355,6 @@ public class Game implements ApplicationListener {
 		MusicPlayer.getInstance().pause();
 	}
 
-	public void pause(boolean block) {
-		LOG.debug("pausing game");
-		pauseLayer.setBlockUpdate(block);
-		if (running)
-			pushLayer(pauseLayer);
-		running = false;
-		if (block)
-			MusicPlayer.getInstance().pause();
-	}
-
 	@Override
 	public void resume() {
 		// game should stay paused and resume only when pressing a button

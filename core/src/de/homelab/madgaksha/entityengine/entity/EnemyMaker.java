@@ -293,7 +293,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		final BulletShapeMaker bulletShape = scoreBulletShapes[MathUtils.random(3)];
 		BulletMaker.makeAsScoreBullet(bulletShape, homingTrajectory, bsc.score);
 	}
-	
+
 	/**
 	 * Callback for spawning the enemy.
 	 */

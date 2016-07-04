@@ -5,9 +5,12 @@ import static de.homelab.madgaksha.GlobalBag.game;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
+import java.awt.Button;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,6 +26,11 @@ import de.homelab.madgaksha.resourcecache.EFreeTypeFontGenerator;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 
+/**
+ * A simple pause screen with the option to exit the game.
+ * 
+ * @author madgaksha
+ */
 public class PauseLayer extends ALayer {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(PauseLayer.class);
@@ -49,15 +57,16 @@ public class PauseLayer extends ALayer {
 
 	@Override
 	public void removedFromStack() {
-		game.unpause();
 		Gdx.input.setInputProcessor(null);
 		if (bitmapFont != null)
 			bitmapFont.dispose();
+		game.unpause();
+
 	}
 
 	@Override
 	public void addedToStack() {
-		allowInput = false;
+		allowInput = !isAnythingPressed();
 		Gdx.input.setInputProcessor(new InputProcessor() {
 
 			@Override
@@ -174,5 +183,25 @@ public class PauseLayer extends ALayer {
 		p.borderColor = Color.BLACK;
 		p.characters = EFreeTypeFontGenerator.getRequiredCharacters(pauseMessage);
 		bitmapFont = g.generateFont(p);
+	}
+
+	/**
+	 * @return {@link #<code>true</code>} iff any button, key, screen etc. is
+	 *         pressed / touched.
+	 */
+	private boolean isAnythingPressed() {
+		// Touchscreen keys
+		if (Gdx.input.isTouched())
+			return true;
+		// Keyboard keys
+		for (int i = 0; i != 256; ++i)
+			if (Gdx.input.isKeyPressed(i))
+				return true;
+		// Mouse keys
+		if (Gdx.input.isButtonPressed(Buttons.BACK) || Gdx.input.isButtonPressed(Buttons.FORWARD)
+				|| Gdx.input.isButtonPressed(Buttons.LEFT) || Gdx.input.isButtonPressed(Buttons.MIDDLE)
+				|| Gdx.input.isButtonPressed(Buttons.RIGHT))
+			return true;
+		return false;
 	}
 }

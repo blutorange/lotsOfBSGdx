@@ -51,7 +51,8 @@ public final class ComponentUtils {
 	@SuppressWarnings("unchecked")
 	private final static Family FAMILY_BULLET = Family.all(BulletStatusComponent.class).get();
 	@SuppressWarnings("unchecked")
-	private final static Family FAMILY_ENEMY = Family.all(EnemyIconComponent.class).exclude(InactiveComponent.class).get();
+	private final static Family FAMILY_ENEMY = Family.all(EnemyIconComponent.class).exclude(InactiveComponent.class)
+			.get();
 
 	/** Frequency at which an entity hit by a bullet takes 1x damage, in Hz. */
 	public final static float DAMAGE_FREQUENCY = 20.0f;
@@ -129,7 +130,7 @@ public final class ComponentUtils {
 				e.add(gameEntityEngine.createComponent(InactiveComponent.class));
 
 	}
-	
+
 	public static void convertAllActiveBulletsToScoreBullets() {
 		for (Entity enemy : gameEntityEngine.getEntitiesFor(FAMILY_ENEMY)) {
 			EnemyMaker.releaseBullets(enemy, true);

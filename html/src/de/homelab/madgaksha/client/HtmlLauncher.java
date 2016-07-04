@@ -13,17 +13,17 @@ import de.homelab.madgaksha.player.PEstelle;
 
 public class HtmlLauncher extends GwtApplication {
 
-        @Override
-        public GwtApplicationConfiguration getConfig () {
-                return new GwtApplicationConfiguration(480, 320);
-        }
+	@Override
+	public GwtApplicationConfiguration getConfig() {
+		return new GwtApplicationConfiguration(480, 320);
+	}
 
-        @Override
-        public ApplicationListener createApplicationListener () {
-        		APlayer player = new PEstelle();
-        		ALevel level = new Level01();
-        		final GameParameters.Builder params = new GameParameters.Builder(level, player);
-        		//TODO set params
-                return new Game(params.build());
-        }
+	@Override
+	public ApplicationListener createApplicationListener() {
+		APlayer player = new PEstelle();
+		ALevel level = new Level01();
+		final GameParameters.Builder params = new GameParameters.Builder(level, player);
+		// TODO set params
+		return new Game(params.build());
+	}
 }

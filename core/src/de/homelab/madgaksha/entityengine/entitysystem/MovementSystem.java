@@ -366,7 +366,7 @@ public class MovementSystem extends DisableIteratingSystem {
 		} else if (dy > tileWidth * 0.9f) {
 			f = reducedTileHeight / dy;
 		}
-		
+
 		// Get new position
 		final float newx = pc.x + f * vc.x * deltaTime;
 		final float newy = pc.y + f * vc.y * deltaTime;
@@ -376,7 +376,7 @@ public class MovementSystem extends DisableIteratingSystem {
 
 		int newTileX = (int) (newx * tileWidthInverse);
 		int newTileY = (int) (newy * tileWidthInverse);
-		
+
 		if (!mapData.isTileBlocking(newx, newy) && (newTileX == tx || newTileY == ty)) {
 			// Allow move immediately when we do not move diagonally.
 			pc.x = newx;
