@@ -33,8 +33,10 @@ import de.homelab.madgaksha.resourcepool.EParticleEffect;
 
 public abstract class APlayer {
 
-	private final EAnimationList animationList;
+	private final EAnimationList normalAnimationList;
 	private final EAnimationList battleAnimationList;
+	private final EAnimationList damageAnimationList;
+	private final EAnimationList deathAnimationList;
 	private final float movementAccelerationFactorLow;
 	private final float movementAccelerationFactorHigh;
 	private final float movementFrictionFactor;
@@ -78,7 +80,6 @@ public abstract class APlayer {
 	 */
 	private final ETexture hitCircleTexture;
 	private final ETexture battleStigmaTexture;
-	private final ETexture deathSprite;
 
 	private final Color battleStigmaColorWhenHit;
 
@@ -115,8 +116,10 @@ public abstract class APlayer {
 		this.movementFrictionFactor = requestedMovementFrictionFactor();
 		this.movementBattleSpeedLow = requestedMovementBattleSpeedLow();
 		this.movementBattleSpeedHigh = requestedMovementBattleSpeedHigh();
-		this.animationList = requestedAnimationList();
+		this.normalAnimationList = requestedNormalAnimationList();
 		this.battleAnimationList = requestedBattleAnimationList();
+		this.damageAnimationList = requestedDamageAnimationList();
+		this.deathAnimationList = requestedDeathAnimationList();
 		this.spriteOrigin = requestedSpriteOrigin();
 		this.offsetPlayerToHitCircle = requestedOffsetPlayerToHitCircle();
 		this.boundingCircle = requestedBoundingCircle();
@@ -142,7 +145,6 @@ public abstract class APlayer {
 		this.voiceOnDeath = requestedVoiceOnDeath();
 		this.battleStigmaColorWhenHit = requestedBattleStigmaColorWhenHit();
 		this.particleEffectOnDeath = requestedParticleEffectOnDeath();
-		this.deathSprite = requestedDeathSprite();
 		this.battleModeEnterParticleEffect = requestedBattleModeEnterParticleEffect();
 		this.battleModeExitParticleEffect = requestedBattleModeExitParticleEffect();
 
@@ -174,10 +176,16 @@ public abstract class APlayer {
 	// Abstract methods
 	// ====================================
 	/** @return The animated sprite used for the player. */
-	protected abstract EAnimationList requestedAnimationList();
+	protected abstract EAnimationList requestedNormalAnimationList();
 
 	/** @return The animated sprite used for the player during battle. */
 	protected abstract EAnimationList requestedBattleAnimationList();
+
+	/** @return The animated sprite used for the player when taking damage. */
+	protected abstract EAnimationList requestedDamageAnimationList();
+
+	/** @return The animated sprite used for the player when dead. */
+	protected abstract EAnimationList requestedDeathAnimationList();
 
 	/** @return Friction factor of the player. */
 	protected abstract float requestedMovementFrictionFactor();
@@ -298,9 +306,6 @@ public abstract class APlayer {
 		return EParticleEffect.DEFAULT_PLAYER_DEATH;
 	};
 
-	/** @return Sprite when player is dead. */
-	protected abstract ETexture requestedDeathSprite();
-
 	/**
 	 * Must return a list of all resources that the level requires. They will
 	 * then be loaded into RAM before the level is started.
@@ -346,8 +351,12 @@ public abstract class APlayer {
 
 	public abstract void setupShadow(ShadowComponent kc);
 
-	public EAnimationList getAnimationList() {
-		return animationList;
+	public EAnimationList getNormalAnimationList() {
+		return normalAnimationList;
+	}
+
+	public EAnimationList getDamageAnimationList() {
+		return damageAnimationList;
 	}
 
 	public EAnimationList getBattleAnimationList() {
@@ -617,8 +626,8 @@ public abstract class APlayer {
 		return particleEffectOnDeath;
 	}
 
-	public ETexture getDeathSprite() {
-		return deathSprite;
+	public EAnimationList getDeathAnimationList() {
+		return deathAnimationList;
 	}
 
 	@Override

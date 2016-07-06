@@ -14,10 +14,10 @@ import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.entityengine.Mapper;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent.SpriteDirection;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent.SpriteMode;
+import de.homelab.madgaksha.entityengine.component.AnimationForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent.AnimationForDirection;
+import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent.AnimationMode;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
@@ -26,11 +26,11 @@ public class FancySpritetarget extends AFancyEvent {
 	private final static Logger LOG = Logger.getLogger(FancySpritetarget.class);
 
 	private String key;
-	private SpriteMode mode;
+	private AnimationMode mode;
 	private float direction;
 	private float dpi;
 
-	public FancySpritetarget(String key, float dpi, float direction, SpriteMode mode) {
+	public FancySpritetarget(String key, float dpi, float direction, AnimationMode mode) {
 		super(true);
 		this.dpi = dpi;
 		this.key = key;
@@ -41,7 +41,7 @@ public class FancySpritetarget extends AFancyEvent {
 	@Override
 	public void reset() {
 		key = StringUtils.EMPTY;
-		mode = SpriteMode.NORMAL;
+		mode = AnimationMode.NORMAL;
 		dpi = 1.0f;
 		direction = 0.0f;
 	}
@@ -57,12 +57,12 @@ public class FancySpritetarget extends AFancyEvent {
 
 		// Animation
 		AtlasAnimation animation = null;
-		SpriteForDirectionListComponent sfdcl = Mapper.spriteForDirectionListComponent.get(target);
+		AnimationModeListComponent sfdcl = Mapper.animationModeListComponent.get(target);
 		if (sfdcl != null) {
-			SpriteDirection sd = mode.getSpriteDirection(sfdcl);
+			AnimationForDirection sd = mode.getAnimationForDirection(sfdcl);
 			if (sd == null) {
 				LOG.error("target does not possess this sprite mode");
-				sd = SpriteMode.NORMAL.getSpriteDirection(sfdcl);
+				sd = AnimationMode.NORMAL.getAnimationForDirection(sfdcl);
 			}
 			if (sd == null) {
 				LOG.error("target does not possess normal sprite mode");
@@ -70,7 +70,7 @@ public class FancySpritetarget extends AFancyEvent {
 			}
 			animation = BirdsViewSpriteSystem.getForDirection(direction, sd);
 		} else {
-			SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(target);
+			AnimationForDirectionComponent sfdc = Mapper.animationForDirectionComponent.get(target);
 			if (sfdc == null) {
 				LOG.error("target does not possess sprite for direction component");
 				return false;
@@ -128,14 +128,14 @@ public class FancySpritetarget extends AFancyEvent {
 			return null;
 		}
 
-		SpriteMode mode = SpriteMode.NORMAL;
+		AnimationMode mode = AnimationMode.NORMAL;
 		if (s.hasNext()) {
 			String name = s.next().toUpperCase(Locale.ROOT);
 			try {
-				mode = SpriteMode.valueOf(name);
+				mode = AnimationMode.valueOf(name);
 			} catch (IllegalArgumentException e) {
 				LOG.error("no such sprite mode", e);
-				mode = SpriteMode.NORMAL;
+				mode = AnimationMode.NORMAL;
 			}
 		}
 

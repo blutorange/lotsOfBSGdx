@@ -24,9 +24,7 @@ import de.homelab.madgaksha.resourcepool.SpritePool;
  */
 public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	MAIN_BACKGROUND("texture/mainBackground.jpg"),
-
 	OVAL_SHADOW(ETextureAtlas.MISC, "ovalShadow"),
-
 	DEFAULT(ETextureAtlas.MISC, "default"),
 
 	// ==================
@@ -38,13 +36,8 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	CUTIN_BATTLE_MODE_ACTIVATE("texture/battleModeActivate.png"),
 
 	// ==================
-	// ESTELLE
+	//  FACES - ESTELLE
 	// ==================
-	ESTELLE_RUNNING("sprite/estelle00001.png"),
-	ESTELLE_STANDING("sprite/estelle00100.png"),
-	ESTELLE_SWINGING("sprite/estelle00107.png"),
-	ESTELLE_ON_KNEES("sprite/estelle00104.png"),
-
 	FACE_ESTELLE_01(ETextureAtlas.FACES_ESTELLE, "estelle01"),
 	FACE_ESTELLE_02(ETextureAtlas.FACES_ESTELLE, "estelle02"),
 	FACE_ESTELLE_03(ETextureAtlas.FACES_ESTELLE, "estelle03"),
@@ -57,9 +50,8 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	FACE_ESTELLE_10(ETextureAtlas.FACES_ESTELLE, "estelle10"),
 
 	// ==================
-	// JOSHUA
+	//  FACES - JOSHUA
 	// ==================
-	JOSHUA_STANDING("sprite/joshua00010.png"),
 	FACE_JOSHUA_01(ETextureAtlas.FACES_JOSHUA, "joshua01"),
 	FACE_JOSHUA_02(ETextureAtlas.FACES_JOSHUA, "joshua02"),
 	FACE_JOSHUA_03(ETextureAtlas.FACES_JOSHUA, "joshua03"),
@@ -73,27 +65,21 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	FACE_JOSHUA_11(ETextureAtlas.FACES_JOSHUA, "joshua11"),
 
 	// ===================
-	// ENEMIES
+	//  ICONS - ENEMIES
 	// ===================
-	SOLDIER_RED_0("sprite/soldierRed0.png"),
-	SOLDIER_RED_1("sprite/soldierRed1.png"),
 	SOLDIER_RED_MAIN("texture/statusicon/enemy/soldierRed-main.png"),
 	SOLDIER_RED_SUB("texture/statusicon/enemy", "soldierRed-sub.png"),
 
-	SOLDIER_GREEN_0("sprite/soldierGreen0.png"),
-	SOLDIER_GREEN_1("sprite/soldierGreen1.png"),
 	SOLDIER_GREEN_MAIN("texture/statusicon/enemy/soldierGreen-main.png"),
 	SOLDIER_GREEN_SUB("texture/statusicon/enemy", "soldierGreen-sub.png"),
 
-	ICER_0("sprite/icer0.png"),
-	ICER_1("sprite/icer1.png"),
 	ICER_TOKUGI_SIGN_0("texture/statusicon/enemy/icer-tokugi0.png"),
 	ICER_TOKUGI_SIGN_1("texture/statusicon/enemy/icer-tokugi1.png"),
 	ICER_MAIN("texture/statusicon/enemy/icer-main.png"),
 	ICER_SUB("texture/statusicon/enemy", "icer-sub.png"),
 
 	// ===================
-	// STATUSSCREEN
+	//  STATUSSCREEN
 	// ===================
 	STATUS_ICON_TIME(ETextureAtlas.STATUS_SCREEN, "iconTimeSmall"),
 	STATUS_ICON_SCORE(ETextureAtlas.STATUS_SCREEN, "iconScoreSmall"),

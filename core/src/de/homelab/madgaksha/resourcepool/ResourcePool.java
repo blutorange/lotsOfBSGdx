@@ -4,7 +4,9 @@ import java.util.EnumMap;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.utils.Pool;
 
+import de.homelab.madgaksha.entityengine.component.AnimationModeQueueComponent.AnimationModeTransition;
 import de.homelab.madgaksha.logging.Logger;
 
 public final class ResourcePool {
@@ -12,6 +14,14 @@ public final class ResourcePool {
 
 	private final static EnumMap<EParticleEffect, ParticleEffectPool> particleEffectPool = new EnumMap<EParticleEffect, ParticleEffectPool>(
 			EParticleEffect.class);
+
+	private final static Pool<AnimationModeTransition> animationModeTransitionPool = new Pool<AnimationModeTransition>(
+			100, 2000) {
+		@Override
+		protected AnimationModeTransition newObject() {
+			return new AnimationModeTransition();
+		}
+	};
 
 	public static void init() {
 		for (EParticleEffect resource : EParticleEffect.values()) {
@@ -23,6 +33,13 @@ public final class ResourcePool {
 	private ResourcePool() {
 	}
 
+	public static AnimationModeTransition obtainAnimationModeTransition() {
+		return animationModeTransitionPool.obtain();
+	}
+	public static void freeAnimationModeTransition(AnimationModeTransition amt) {
+		animationModeTransitionPool.free(amt);
+	}
+	
 	public static PooledEffect obtainParticleEffect(EParticleEffect effect) {
 		try {
 			return particleEffectPool.get(effect).obtain();
@@ -31,7 +48,6 @@ public final class ResourcePool {
 			return null;
 		}
 	}
-
 	public static void freeParticleEffect(PooledEffect pooledEffect) {
 		pooledEffect.free();
 		// particleEffectPool.get(eParticleEffect).free(pooledEffect);

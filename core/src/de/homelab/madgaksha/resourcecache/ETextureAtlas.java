@@ -17,14 +17,32 @@ import de.homelab.madgaksha.logging.Logger;
  */
 public enum ETextureAtlas implements IResource<ETextureAtlas, TextureAtlas> {
 	NINE_PATCHES("9patch/packed/9patchPacked.atlas"),
-	OUGI_OUKA_MUSOUGEKI("cutscene/fancyScene/ougiOukaMusougeki/packed/ougiPacked.atlas"),
+	MISC("texture/misc/packed/miscPacked.atlas"),
 	PARTICLE_EFFECTS("particle/packed/particleEffectPacked.atlas"),
 	STATUS_SCREEN("statusscreen/packed/statusScreenPacked.atlas"),
+	
+	//======================================
+	//            SPECIAL ATTACKS
+	//======================================
+	OUGI_OUKA_MUSOUGEKI("cutscene/fancyScene/ougiOukaMusougeki/packed/ougiPacked.atlas"),
+
+	//======================================
+	//                BULLETS
+	//======================================
 	BULLETS_BASIC("bullets/basic-packed/bulletsBasic.atlas"),
 	BULLETS_LARGE("bullets/large-packed/bulletsLarge.atlas"),
+	
+	//======================================
+	//                FACES
+	//======================================
 	FACES_ESTELLE("texture/face-packed/estellePacked.atlas"),
 	FACES_JOSHUA("texture/face-packed/joshuaPacked.atlas"),
-	MISC("texture/misc/packed/miscPacked.atlas"),
+	
+	//======================================
+	//               SPRITES
+	//======================================
+	ESTELLE("sprite/packed/estelle.atlas"),
+	JOSHUA("sprite/packed/joshua.atlas"),
 	SOLDIER_RED("sprite/packed/soldierred.atlas"),
 	SOLDIER_GREEN("sprite/packed/soldiergreen.atlas"),
 	ICER("sprite/packed/icer.atlas"),

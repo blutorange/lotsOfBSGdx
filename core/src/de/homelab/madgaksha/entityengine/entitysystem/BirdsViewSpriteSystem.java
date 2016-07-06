@@ -9,8 +9,8 @@ import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent.SpriteDirection;
+import de.homelab.madgaksha.entityengine.component.AnimationForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent.AnimationForDirection;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
@@ -33,13 +33,13 @@ public class BirdsViewSpriteSystem extends DisableIteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public BirdsViewSpriteSystem(int priority) {
-		super(DisableIteratingSystem.all(SpriteForDirectionComponent.class, SpriteAnimationComponent.class,
+		super(DisableIteratingSystem.all(AnimationForDirectionComponent.class, SpriteAnimationComponent.class,
 				DirectionComponent.class), priority);
 	}
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
-		final SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(entity);
+		final AnimationForDirectionComponent sfdc = Mapper.animationForDirectionComponent.get(entity);
 		final SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
 		final DirectionComponent dc = Mapper.directionComponent.get(entity);
 
@@ -80,14 +80,14 @@ public class BirdsViewSpriteSystem extends DisableIteratingSystem {
 	 *            The component from which the direction should be extracted.
 	 * @return The animation for the given direction.
 	 */
-	public static AtlasAnimation getForDirection(float degree, SpriteForDirectionComponent sfdc) {
+	public static AtlasAnimation getForDirection(float degree, AnimationForDirectionComponent sfdc) {
 		AtlasAnimation animation = null;
 		animation = sfdc.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * sfdc.animationList.length))
 				* sfdc.animationList.length / 360.0f)) % sfdc.animationList.length];
 		return animation;
 	}
 
-	public static AtlasAnimation getForDirection(float degree, SpriteDirection sd) {
+	public static AtlasAnimation getForDirection(float degree, AnimationForDirection sd) {
 		AtlasAnimation animation = null;
 		animation = sd.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * sd.animationList.length))
 				* sd.animationList.length / 360.0f)) % sd.animationList.length];

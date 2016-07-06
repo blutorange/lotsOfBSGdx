@@ -11,7 +11,7 @@ import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationForDirectionComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.zorder.ZOrder2Component;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
@@ -43,7 +43,7 @@ public class NpcMaker extends EntityMaker {
 		setup(entity, shape, initiallyInactive, initialPosition, initDir);
 
 		RotationComponent rc = new RotationComponent(true);
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent(animationList,
+		AnimationForDirectionComponent sfdc = new AnimationForDirectionComponent(animationList,
 				ESpriteDirectionStrategy.ZENITH);
 		SpriteAnimationComponent sac = new SpriteAnimationComponent(sfdc);
 		SpriteComponent sc = new SpriteComponent(sac);

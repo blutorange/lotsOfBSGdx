@@ -417,7 +417,7 @@ public class Game implements ApplicationListener {
 			debugFont.dispose();
 
 		// Dispose temporary files.
-		LOG.debug("emptying temporary directory tempadx");
+		//LOG.debug("emptying temporary directory tempadx");
 		// FileHandle dest = Gdx.files.local("tempadx/");
 		// try {
 		// dest.emptyDirectory();

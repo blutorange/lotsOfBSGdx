@@ -38,8 +38,6 @@ import de.homelab.madgaksha.entityengine.component.InputDesktopComponent;
 import de.homelab.madgaksha.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
-import de.homelab.madgaksha.entityengine.component.ParticleEffectComponent;
-import de.homelab.madgaksha.entityengine.component.ParticleEffectScreenComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
@@ -50,7 +48,10 @@ import de.homelab.madgaksha.entityengine.component.ShouldRotationComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeQueueComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent.AnimationMode;
 import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.entityengine.component.StickyComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
@@ -65,13 +66,13 @@ import de.homelab.madgaksha.entityengine.component.collision.TriggerTouchGroup01
 import de.homelab.madgaksha.entityengine.component.zorder.ZOrder0Component;
 import de.homelab.madgaksha.entityengine.component.zorder.ZOrder2Component;
 import de.homelab.madgaksha.entityengine.component.zorder.ZOrder4Component;
+import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.grantstrategy.ExponentialGrantStrategy;
 import de.homelab.madgaksha.grantstrategy.ImmediateGrantStrategy;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.resourcecache.ESound;
-import de.homelab.madgaksha.resourcepool.ResourcePool;
 import de.homelab.madgaksha.shader.FragmentShaderGrayscale;
 
 public final class PlayerMaker implements IHittable, IMortal {
@@ -247,8 +248,17 @@ public final class PlayerMaker implements IHittable, IMortal {
 
 		}
 
-		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(playerEntity);
-		sfdc.setup(player.getAnimationList(), ESpriteDirectionStrategy.ZENITH);
+		AnimationModeQueueComponent smqc = Mapper.animationModeQueueComponent.get(playerEntity);
+		smqc.currentMode = AnimationMode.NORMAL;
+
+		AnimationModeListComponent sfdlc = Mapper.animationModeListComponent.get(playerEntity);
+		sfdlc.setupNormal(player.getNormalAnimationList(), ESpriteDirectionStrategy.STATIC, true);
+		sfdlc.setupBattle(player.getBattleAnimationList(), ESpriteDirectionStrategy.STATIC, true);
+		sfdlc.setupDamage(player.getDamageAnimationList(), ESpriteDirectionStrategy.STATIC, true);
+		sfdlc.setupDeath(player.getDeathAnimationList(), ESpriteDirectionStrategy.STATIC, true);
+
+		AnimationForDirectionComponent sfdc = Mapper.animationForDirectionComponent.get(playerEntity);
+		sfdc.setup(player.getNormalAnimationList(), ESpriteDirectionStrategy.STATIC);
 
 		SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(playerEntity);
 		sac.setup(sfdc);
@@ -327,10 +337,12 @@ public final class PlayerMaker implements IHittable, IMortal {
 
 		}
 
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent();
-
+		AnimationModeQueueComponent smqc = new AnimationModeQueueComponent();
+		AnimationModeListComponent sfdlc = new AnimationModeListComponent();
+		AnimationForDirectionComponent sfdc = new AnimationForDirectionComponent();
 		SpriteAnimationComponent sac = new SpriteAnimationComponent();
 		SpriteComponent sc = new SpriteComponent();
+
 		ShadowComponent kc = new ShadowComponent();
 
 		ABoundingBoxComponent bbrc = new BoundingBoxRenderComponent();
@@ -358,7 +370,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 		ZOrder2Component zoc = new ZOrder2Component();
 
 		e.add(bc).add(vcc).add(lec).add(hec).add(src).add(tsc).add(ssc).add(sc).add(sac).add(sfdc).add(bsc).add(bbmc)
-				.add(bbrc).add(pc).add(vc).add(rc).add(slc).add(dc).add(tc).add(zoc).add(kc);
+				.add(bbrc).add(pc).add(vc).add(rc).add(slc).add(dc).add(tc).add(zoc).add(kc).add(sfdlc).add(smqc);
 
 		return e;
 	}
@@ -367,82 +379,62 @@ public final class PlayerMaker implements IHittable, IMortal {
 		game.setGameLost();
 		EnemyMaker.exitBattleMode(false);
 
-		// Do not allow input anymore.
-		playerEntity.remove(InputDesktopComponent.class);
+		// Do not allow input anymore and disable player.
 		playerEntity.remove(BehaviourComponent.class);
-
 		playerEntity.remove(HoverEffectComponent.class);
+		playerEntity.remove(InputDesktopComponent.class);
+		playerEntity.remove(LeanEffectComponent.class);
 		playerEntity.remove(ShadowComponent.class);
-		playerEntity.remove(SpriteForDirectionComponent.class);
-		playerEntity.remove(SpriteAnimationComponent.class);
+		playerEntity.remove(ShouldRotationComponent.class);
+		playerEntity.remove(ShouldScaleComponent.class);
+		playerEntity.remove(VelocityComponent.class);
+		playerEntity.remove(VoiceComponent.class);
 
-		// Animate battle stigma -> fade away.
+		// Animate battle stigma -> make red and fade away.
 		final StickyComponent scStigma = Mapper.stickyComponent.get(playerBattleStigmaEntity);
-		if (scStigma != null) {
+		if (scStigma != null)
 			scStigma.setup(playerEntity);
-		}
-
 		final ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(playerBattleStigmaEntity);
 		if (ssc != null) {
 			ssc.scaleX = ssc.scaleY = 0.0f;
 			ssc.grantStrategy = new ExponentialGrantStrategy(0.1f, 1.0f);
 		}
-
 		final ColorComponent cc = Mapper.colorComponent.get(playerBattleStigmaEntity);
 		if (cc != null)
 			cc.setup(player.getBattleStigmaColorWhenHit());
-
 		playerBattleStigmaEntity.remove(ColorFlashEffectComponent.class);
 
+		// Remove hit circle as there won't be any battles anymore.
 		gameEntityEngine.removeEntity(playerHitCircleEntity);
 
-		// Show dead player animation.
-		final SpriteComponent sc = Mapper.spriteComponent.get(playerEntity);
-		if (sc != null)
-			sc.setup(player.getDeathSprite());
-
-		// Stop player movement.
-		final VelocityComponent vc = Mapper.velocityComponent.get(playerEntity);
-		vc.setup(0.0f, 0.0f, 0.0f);
-		playerEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
-
-		// Show death animation.
-		final Entity deathEffect = gameEntityEngine.createEntity();
-
-		final PositionComponent pc = gameEntityEngine.createComponent(PositionComponent.class);
-		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectScreenComponent.class);
-		final StickyComponent sec = gameEntityEngine.createComponent(StickyComponent.class);
-		final ShouldPositionComponent spc = gameEntityEngine.createComponent(ShouldPositionComponent.class);
-		final TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
-
-		pec.particleEffect = ResourcePool.obtainParticleEffect(player.getParticleEffectOnDeath());
-		sec.setup(playerEntity);
-		spc.grantStrategy = new ImmediateGrantStrategy();
-
-		deathEffect.add(pc);
-		deathEffect.add(pec);
-		deathEffect.add(sec);
-		deathEffect.add(spc);
-		deathEffect.add(tc);
+		// Show death animation and and pause after a few seconds after it
+		// finishes.
+		final ITimedCallback onDeathEffectDone = new ITimedCallback() {
+			@Override
+			public void run(Entity entity, Object data) {
+				ComponentUtils.transitionToSpriteMode(playerEntity, AnimationMode.DEATH);
+				MakerUtils.addTimedRunnable(6.0f, new ITimedCallback() {
+					@Override
+					public void run(Entity entity, Object data) {
+						game.pause();
+					}
+				});
+			}
+		};
+		MakerUtils.addParticleEffectScreen(player.getParticleEffectOnDeath(),
+				Mapper.positionComponent.get(playerEntity), onDeathEffectDone);
 
 		// Player death sound effect.
 		SoundPlayer.getInstance().play(ESound.PLAYER_EXPLODE_ON_DEATH);
-		gameEntityEngine.addEntity(deathEffect);
 
 		// Game over music.
 		MusicPlayer.getInstance().loadNext(level.getGameOverBgm());
 		MusicPlayer.getInstance().setCrossFade(true);
 		MusicPlayer.getInstance().transition(1.0f);
 
-		// Show everything in greyscale and pause after a few seconds.
+		// Show everything in greyscale.
 		game.setFragmentShaderBatchGame(
 				new FragmentShaderGrayscale(0.0f, 0.9f, 1.0f, 0.2f, 9.0f, Interpolation.sineIn));
-		MakerUtils.addTimedRunnable(12.0f, new ITimedCallback() {
-			@Override
-			public void run(Entity entity, Object data) {
-				game.pause();
-			}
-		});
 	}
 
 	@Override

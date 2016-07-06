@@ -22,13 +22,13 @@ public class PEstelle extends APlayer {
 	@Override
 	protected IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
 		return new IResource[] { EAnimationList.ESTELLE_STANDING, EAnimationList.ESTELLE_RUNNING,
-				ETexture.ESTELLE_ON_KNEES, ETexture.OVAL_SHADOW, ESound.ESTELLE_YOSOMI_SITARA_BUTTOBASU_WAYO,
+				EAnimationList.ESTELLE_ON_KNEES, ETexture.OVAL_SHADOW, ESound.ESTELLE_YOSOMI_SITARA_BUTTOBASU_WAYO,
 				ESound.ESTELLE_GYAA, ESound.ESTELLE_UERRGH, ESound.ESTELLE_MINNA_GOMEN,
 				ESound.ESTELLE_MADA_MADA_IKERU_WA, ESound.ESTELLE_SAA_IKU_WAYO, ESound.ESTELLE_CHOU_DEKI };
 	}
 
 	@Override
-	public EAnimationList requestedAnimationList() {
+	public EAnimationList requestedNormalAnimationList() {
 		return EAnimationList.ESTELLE_STANDING;
 	}
 
@@ -188,8 +188,13 @@ public class PEstelle extends APlayer {
 	}
 
 	@Override
-	protected ETexture requestedDeathSprite() {
-		return ETexture.ESTELLE_ON_KNEES;
+	protected EAnimationList requestedDamageAnimationList() {
+		return EAnimationList.ESTELLE_HIT;
+	}
+	
+	@Override
+	protected EAnimationList requestedDeathAnimationList() {
+		return EAnimationList.ESTELLE_ON_KNEES;
 	}
 
 }

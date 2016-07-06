@@ -34,7 +34,7 @@ public final class GlobalBag {
 	private GlobalBag() {
 	}
 
-	public static int bitmapFontRasterSize;
+	public static int bitmapFontRasterSize = 3;
 
 	public static int currentMonitorWidth;
 	public static int currentMonitorHeight;

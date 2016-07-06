@@ -22,24 +22,20 @@ import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
 import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.QuakeEffectComponent;
 import de.homelab.madgaksha.entityengine.component.ShapeComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent.AnimationMode;
+import de.homelab.madgaksha.entityengine.component.AnimationModeQueueComponent;
 import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.entityengine.entity.EnemyMaker;
 import de.homelab.madgaksha.entityengine.entitysystem.DamageSystem;
-import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.enums.RichterScale;
 import de.homelab.madgaksha.field.SpiralVelocityField;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.util.GeoUtil;
 
 /**
- * Utilities for working with an entity's pain points. Usually processed by an
- * appropriate entity system, this should be used sparingly.
+ * Utilities for working with an entity's pain points.
  * 
  * @author madgaksha
  *
@@ -75,28 +71,6 @@ public final class ComponentUtils {
 		final ComponentQueueComponent cqc = Mapper.componentQueueComponent.get(e);
 		if (cqc != null)
 			applyComponentQueue(e, cqc);
-	}
-
-	/**
-	 * Switches the animation list to the given animation list.
-	 * 
-	 * @param entity
-	 *            Entity whose sprite animation list needs to be changed.
-	 * @param animationList
-	 *            The new animation list.
-	 * @param spriteDirectionStrategy
-	 *            How to orient the sprite.
-	 */
-	public static void switchAnimationList(Entity entity, EAnimationList animationList,
-			ESpriteDirectionStrategy spriteDirectionStrategy) {
-		SpriteForDirectionComponent sfdc = Mapper.spriteForDirectionComponent.get(entity);
-		SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
-		SpriteComponent sc = Mapper.spriteComponent.get(entity);
-		if (sfdc != null && sac != null && sc != null) {
-			sfdc.setup(animationList, spriteDirectionStrategy);
-			sac.setup(sfdc);
-			sc.setup(sac);
-		}
 	}
 
 	public static void enableScreenQuake(float amplitude, float frequency) {
@@ -243,9 +217,44 @@ public final class ComponentUtils {
 	}
 
 	public static void scaleShapeOfEntityBy(Entity e, float initialScaleX, float initialScaleY) {
-		ShapeComponent sc = Mapper.shapeComponent.get(e);
+		final ShapeComponent sc = Mapper.shapeComponent.get(e);
 		if (sc == null)
 			return;
 		GeoUtil.scaleShapeBy(sc, initialScaleX, initialScaleY);
+	}
+
+	/**
+	 * Adds the given sprite mode to the entities queue. It needs a
+	 * {@link AnimationModeQueueComponent}.
+	 * 
+	 * @param e
+	 *            Entity to setup.
+	 * @param targetMode
+	 *            Mode to transition to.
+	 * @param waitForCompletion
+	 *            Whether we should wait for the current animation to complete.
+	 * @param resetAnimation
+	 *            Whether the new animation should be reset.
+	 */
+	public static void transitionToSpriteMode(Entity e, AnimationMode targetMode, boolean waitForCompletion,
+			boolean resetAnimation) {
+		final AnimationModeQueueComponent smqc = Mapper.animationModeQueueComponent.get(e);
+		if (smqc != null) {
+			smqc.queue(targetMode, waitForCompletion, resetAnimation);
+		}
+	}
+
+	/**
+	 * Same as
+	 * {@link #transitionToSpriteMode(Entity, AnimationMode, boolean, boolean)},
+	 * but defaults to true for waitForCompletion and resetAnimation.
+	 * 
+	 * @param e
+	 *            Entity to setup.
+	 * @param targetMode
+	 *            Mode to transition to.
+	 */
+	public static void transitionToSpriteMode(Entity e, AnimationMode targetMode) {
+		transitionToSpriteMode(e, targetMode, true, true);
 	}
 }

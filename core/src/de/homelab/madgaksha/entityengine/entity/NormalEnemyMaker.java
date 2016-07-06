@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.entityengine.ETrigger;
 import de.homelab.madgaksha.entityengine.Mapper;
+import de.homelab.madgaksha.entityengine.component.AnimationForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent;
 import de.homelab.madgaksha.entityengine.component.BattleDistanceComponent;
 import de.homelab.madgaksha.entityengine.component.BehaviourComponent;
 import de.homelab.madgaksha.entityengine.component.CameraFocusComponent;
@@ -16,9 +18,6 @@ import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent.SpriteMode;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
@@ -45,8 +44,8 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 
 		BehaviourComponent bc = new BehaviourComponent(BEHAVIOUR_BASICS);
 		RotationComponent rc = new RotationComponent(true);
-		SpriteForDirectionComponent sfdc = new SpriteForDirectionComponent();
-		SpriteForDirectionListComponent sfdlc = new SpriteForDirectionListComponent(SpriteMode.NORMAL);
+		AnimationForDirectionComponent sfdc = new AnimationForDirectionComponent();
+		AnimationModeListComponent sfdlc = new AnimationModeListComponent();
 		SpriteAnimationComponent sac = new SpriteAnimationComponent();
 		SpriteComponent sc = new SpriteComponent();
 

@@ -8,8 +8,11 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 public class SpriteAnimationComponent implements Component, Poolable {
+	private final static float DEFAULT_START_TIME = 0.0f;
+
 	public AtlasAnimation animation = null;
-	public float stateTime = 0.0f;
+	/** Entity's local time when the animation started. */
+	public float startTime = DEFAULT_START_TIME;
 
 	public SpriteAnimationComponent() {
 
@@ -23,7 +26,7 @@ public class SpriteAnimationComponent implements Component, Poolable {
 		setup(ea);
 	}
 
-	public SpriteAnimationComponent(SpriteForDirectionComponent sfdc) {
+	public SpriteAnimationComponent(AnimationForDirectionComponent sfdc) {
 		setup(sfdc);
 	}
 
@@ -35,15 +38,15 @@ public class SpriteAnimationComponent implements Component, Poolable {
 		animation = a;
 	}
 
-	public void setup(SpriteForDirectionComponent sfdc) {
+	public void setup(AnimationForDirectionComponent sfdc) {
 		if (sfdc.animationList.length != 0)
 			animation = sfdc.animationList[0];
 	}
 
 	@Override
 	public void reset() {
-		this.animation = null;
-		this.stateTime = 0.0f;
+		animation = null;
+		startTime = DEFAULT_START_TIME;
 	}
 
 }

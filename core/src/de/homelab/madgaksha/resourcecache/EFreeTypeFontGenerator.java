@@ -35,26 +35,10 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 	 * base line and x height works well. For Japanese/Chinese, between base
 	 * line and cap height works well.
 	 */
-	private final VerticalAlignPosition verticalAlignPosition;
+	private VerticalAlignPosition verticalAlignPosition = null;
 
 	private EFreeTypeFontGenerator(String fontName) {
 		this.fontName = fontName;
-		String vertAlignKey = fontName + "VerticalAlign";
-		VerticalAlignPosition vertAlign = VerticalAlignPosition.BETWEEN_BASE_LINE_AND_X_HEIGHT;
-		try {
-			if (I18n.isInitiated() && I18n.hasFontKey(vertAlignKey)) {
-				vertAlign = VerticalAlignPosition.valueOf(I18n.font(vertAlignKey).toUpperCase(Locale.ROOT));
-			} else {
-				throw new IllegalArgumentException("i18n key does not exist");
-			}
-		} catch (IllegalArgumentException e) {
-			Logger logger = Logger.getLogger(EFreeTypeFontGenerator.class);
-			logger.error(
-					"could not read vertical align position for language " + I18n.getShortName() + " and font " + this,
-					e);
-			logger.error("assure a proper value has been set for the key " + vertAlignKey);
-		}
-		this.verticalAlignPosition = vertAlign;
 	}
 
 	public static void clearAll() {
@@ -153,7 +137,27 @@ public enum EFreeTypeFontGenerator implements IResource<EFreeTypeFontGenerator, 
 		EFreeTypeFontGenerator.clearAll();
 	}
 
+	private void retrieveVerticalAlignPosition() {
+		String vertAlignKey = fontName + "VerticalAlign";
+		VerticalAlignPosition vertAlign = VerticalAlignPosition.BETWEEN_BASE_LINE_AND_X_HEIGHT;
+		try {
+			if (I18n.isInitiated() && I18n.hasFontKey(vertAlignKey)) {
+				vertAlign = VerticalAlignPosition.valueOf(I18n.font(vertAlignKey).toUpperCase(Locale.ROOT));
+			} else {
+				throw new IllegalArgumentException("i18n key does not exist");
+			}
+		} catch (IllegalArgumentException e) {
+			Logger logger = Logger.getLogger(EFreeTypeFontGenerator.class);
+			logger.error(
+					"could not read vertical align position for language " + I18n.getShortName() + " and font " + this,
+					e);
+			logger.error("assure a proper value has been set for the key " + vertAlignKey);
+		}
+		this.verticalAlignPosition = vertAlign;
+	}
+	
 	public VerticalAlignPosition getVerticalAlignPosition() {
+		if (verticalAlignPosition == null) retrieveVerticalAlignPosition();
 		return verticalAlignPosition;
 	}
 }

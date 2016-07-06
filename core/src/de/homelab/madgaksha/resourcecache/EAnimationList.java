@@ -22,13 +22,15 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	// =================
 	// ESTELLE
 	// =================
-	ESTELLE_RUNNING(ETexture.ESTELLE_RUNNING, 64, 128, 0.1f, AtlasAnimation.PlayMode.LOOP, 8, 8),
-	ESTELLE_STANDING(ETexture.ESTELLE_STANDING, 128, 128, 0.1f, AtlasAnimation.PlayMode.LOOP, 8, 8),
-
+	ESTELLE_RUNNING(ETextureAtlas.ESTELLE, "ESTELLE_RUNNING", 8, 0.1f, AtlasAnimation.PlayMode.LOOP),
+	ESTELLE_STANDING(ETextureAtlas.ESTELLE, "ESTELLE_STANDING", 8, 0.1f, AtlasAnimation.PlayMode.LOOP),
+	ESTELLE_HIT(ETextureAtlas.ESTELLE, "ESTELLE_HIT", 8, 0.1f, AtlasAnimation.PlayMode.LOOP),
+	ESTELLE_ON_KNEES(ETextureAtlas.ESTELLE, "ESTELLE_ON_KNEES", 8, 0.35f, AtlasAnimation.PlayMode.NORMAL),
+	
 	// =================
 	// JOSHUA
 	// =================
-	JOSHUA_STANDING(ETexture.JOSHUA_STANDING, 64, 128, 0.1f, AtlasAnimation.PlayMode.LOOP, 8, 8),
+	JOSHUA_STANDING(ETextureAtlas.JOSHUA, "JOSHUA_STANDING", 8, 0.1f, AtlasAnimation.PlayMode.LOOP),
 
 	// =================
 	// ENEMIES
@@ -45,8 +47,8 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	private final static EnumMap<EAnimationList, AtlasAnimation[]> animationListCache = new EnumMap<EAnimationList, AtlasAnimation[]>(
 			EAnimationList.class);
 
-	private final int mode;
-	private final Object data;
+	private ETextureAtlas textureAtlas;
+	private ETexture texture;
 	private String name;
 	private int tileWidth;
 	private int tileHeight;
@@ -55,24 +57,17 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	private AtlasAnimation.PlayMode playMode;
 	private int animationModeCount;
 
-	private EAnimationList(EAnimation... animationList) {
-		this.data = animationList;
-		this.mode = 0;
-	}
-	
 	private EAnimationList(ETextureAtlas textureAtlas, String name, int animationModeCount, float frameDuration, AtlasAnimation.PlayMode playMode) {
 		this.playMode = playMode;
 		this.animationModeCount = animationModeCount;
 		this.frameDuration = frameDuration;
 		this.name = name;
-		this.data = textureAtlas;
-		this.mode = 1;
+		this.textureAtlas = textureAtlas;
 	}
 
 	
 	private EAnimationList(ETexture et, int tw, int th, float fd, AtlasAnimation.PlayMode pm, int amc, int fc) {
-		data = et;
-		mode = 2;
+		texture = et;
 		tileWidth = tw;
 		tileHeight = th;
 		frameCount = fc;
@@ -101,35 +96,26 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	@Override
 	public AtlasAnimation[] getObject() {
 		AtlasAnimation[] atlasAnimationList;
-		switch (mode) {
-		// EAnimation[]
-		case 0:
-			EAnimation[] animationList = (EAnimation[])data;
-			atlasAnimationList = new AtlasAnimation[animationList.length];
-			for (int i = 0; i != animationList.length; ++i) {
-				atlasAnimationList[i] = ResourceCache.getAnimation(animationList[i]);
-				if (animationList[i] == null)
-					return null;
-			}			
-			break;
 		// ETextureAtlas
-		case 1:
-			TextureAtlas textureAtlas = ResourceCache.getTextureAtlas((ETextureAtlas)data);
-			if (textureAtlas == null) return null;
+		if (textureAtlas != null) {
+			TextureAtlas loadedTextureAtlas = ResourceCache.getTextureAtlas(textureAtlas);
+			if (loadedTextureAtlas == null) return null;
 			atlasAnimationList = new AtlasAnimation[animationModeCount];
 			for (int i = 0; i != animationModeCount; ++i) {
-				Array<AtlasRegion> atlasRegionArray = textureAtlas.findRegions(name + "_" + i);
-				if (atlasRegionArray == null || atlasRegionArray.size == 0)
+				Array<AtlasRegion> atlasRegionArray = loadedTextureAtlas.findRegions(name + "_" + i);
+				if (atlasRegionArray == null || atlasRegionArray.size == 0) {
+					LOG.error("atlas region empty or does not exist: " + name + "_" + i);
 					return null;
+				}
 				AtlasAnimation animation = new AtlasAnimation(frameDuration, atlasRegionArray);
 				animation.setPlayMode(playMode);
 				atlasAnimationList[i] = animation;
 			}
-			break;
+		}
 		// ETexture
-		case 2:
+		else {
 			// Retrieve sprite sheet.
-			AtlasRegion atlasRegion = ResourceCache.getTexture((ETexture)data);
+			AtlasRegion atlasRegion = ResourceCache.getTexture(texture);
 			if (atlasRegion == null)
 				return null;
 			// Split sprite sheet.
@@ -139,9 +125,6 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 				atlasAnimationList[i] = new AtlasAnimation(frameDuration, atlasRegionArray[i]);
 				atlasAnimationList[i].setPlayMode(playMode);
 			}			
-			break;
-		default:
-			return null;
 		}
 		return atlasAnimationList;
 	}

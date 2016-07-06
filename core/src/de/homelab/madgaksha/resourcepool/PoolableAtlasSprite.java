@@ -100,7 +100,7 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 	public void setX(float x) {
 		if (cropped) {
 			originalX = x + region.offsetX;
-			dirtyCrop = true;// applyCrop();
+			dirtyCrop = true;
 		} else {
 			super.translateX(x + region.offsetX - originalX);
 			originalX = x + region.offsetX;
@@ -111,7 +111,7 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 	public void setY(float y) {
 		if (cropped) {
 			originalY = y + region.offsetY;
-			dirtyCrop = true;// applyCrop();
+			dirtyCrop = true;
 		} else {
 			super.translateY(y + region.offsetY - originalY);
 			originalY = y + region.offsetY;

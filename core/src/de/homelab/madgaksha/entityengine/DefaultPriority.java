@@ -40,7 +40,7 @@ public class DefaultPriority {
 
 	// drawing
 	public final static int viewportUpdateSystem = 17;
-	public final static int spriteModeSystem = 18;
+	public final static int animationModeSystem = 18;
 	public final static int birdsViewSpriteSystem = 19;
 	public final static int spriteAnimationSystem = 20;
 	public final static int spriteRenderSystem = 21;

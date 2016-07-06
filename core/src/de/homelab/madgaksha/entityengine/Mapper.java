@@ -50,8 +50,9 @@ import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
 import de.homelab.madgaksha.entityengine.component.SiblingComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionComponent;
-import de.homelab.madgaksha.entityengine.component.SpriteForDirectionListComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationForDirectionComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeQueueComponent;
 import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.entityengine.component.StickyComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
@@ -123,6 +124,12 @@ public final class Mapper {
 	public final static ComponentMapper<AlphaComponent> alphaComponent = ComponentMapper.getFor(AlphaComponent.class);
 	public final static ComponentMapper<AngularVelocityComponent> angularVelocityComponent = ComponentMapper
 			.getFor(AngularVelocityComponent.class);
+	public final static ComponentMapper<AnimationForDirectionComponent> animationForDirectionComponent = ComponentMapper
+			.getFor(AnimationForDirectionComponent.class);
+	public final static ComponentMapper<AnimationModeListComponent> animationModeListComponent = ComponentMapper
+			.getFor(AnimationModeListComponent.class);
+	public final static ComponentMapper<AnimationModeQueueComponent> animationModeQueueComponent = ComponentMapper
+			.getFor(AnimationModeQueueComponent.class);
 	public final static ComponentMapper<AnyChildComponent> anyChildComponent = ComponentMapper
 			.getFor(AnyChildComponent.class);
 	public final static ComponentMapper<BattleDistanceComponent> battleDistanceComponent = ComponentMapper
@@ -213,10 +220,6 @@ public final class Mapper {
 			.getFor(SpriteAnimationComponent.class);
 	public final static ComponentMapper<SpriteComponent> spriteComponent = ComponentMapper
 			.getFor(SpriteComponent.class);
-	public final static ComponentMapper<SpriteForDirectionComponent> spriteForDirectionComponent = ComponentMapper
-			.getFor(SpriteForDirectionComponent.class);
-	public final static ComponentMapper<SpriteForDirectionListComponent> spriteForDirectionListComponent = ComponentMapper
-			.getFor(SpriteForDirectionListComponent.class);
 	public final static ComponentMapper<StatusValuesComponent> statusValuesComponent = ComponentMapper
 			.getFor(StatusValuesComponent.class);
 	public final static ComponentMapper<StickyComponent> stickyComponent = ComponentMapper

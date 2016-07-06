@@ -1,0 +1,183 @@
+Jul 05, 2016 10:35:54 PM de.homelab.madgaksha.MyResourceChecker create
+INFO: checking for language: fr
+[ERROR] - Tue Jul 05 22:35:56 CEST 2016 - de.homelab.madgaksha.resourcecache.ETexture: could not locate or open resource: SOLDIER_RED_SUB
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: texture/statusicon/enemy/fr/soldierRed-sub.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:148)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:100)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:92)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:332)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:1)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.getResource(ResourceCache.java:70)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.loadToRam(ResourceCache.java:85)
+	at de.homelab.madgaksha.MyResourceChecker.render(MyResourceChecker.java:93)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:223)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:124)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: texture/statusicon/enemy/fr/soldierRed-sub.png (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:136)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:145)
+	... 10 more
+Jul 05, 2016 10:35:56 PM de.homelab.madgaksha.MyResourceChecker render
+SEVERE: could not load resource: SOLDIER_RED_SUB
+[ERROR] - Tue Jul 05 22:35:56 CEST 2016 - de.homelab.madgaksha.resourcecache.ETexture: could not locate or open resource: SOLDIER_GREEN_SUB
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: texture/statusicon/enemy/fr/soldierGreen-sub.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:148)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:100)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:92)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:332)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:1)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.getResource(ResourceCache.java:70)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.loadToRam(ResourceCache.java:85)
+	at de.homelab.madgaksha.MyResourceChecker.render(MyResourceChecker.java:93)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:223)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:124)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: texture/statusicon/enemy/fr/soldierGreen-sub.png (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:136)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:145)
+	... 10 more
+Jul 05, 2016 10:35:56 PM de.homelab.madgaksha.MyResourceChecker render
+SEVERE: could not load resource: SOLDIER_GREEN_SUB
+[ERROR] - Tue Jul 05 22:35:56 CEST 2016 - de.homelab.madgaksha.resourcecache.ETexture: could not locate or open resource: ICER_SUB
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: texture/statusicon/enemy/fr/icer-sub.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:148)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:100)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:92)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:332)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:1)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.getResource(ResourceCache.java:70)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.loadToRam(ResourceCache.java:85)
+	at de.homelab.madgaksha.MyResourceChecker.render(MyResourceChecker.java:93)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:223)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:124)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: texture/statusicon/enemy/fr/icer-sub.png (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:136)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:145)
+	... 10 more
+Jul 05, 2016 10:35:56 PM de.homelab.madgaksha.MyResourceChecker render
+SEVERE: could not load resource: ICER_SUB
+[ERROR] - Tue Jul 05 22:35:57 CEST 2016 - de.homelab.madgaksha.resourcecache.ETexture: could not locate or open resource: STATUS_ICON_NO_ENEMY_SUB
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: texture/statusicon/enemy/fr/none-sub.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:148)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:100)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:92)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:332)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:1)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.getResource(ResourceCache.java:70)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.loadToRam(ResourceCache.java:85)
+	at de.homelab.madgaksha.MyResourceChecker.render(MyResourceChecker.java:93)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:223)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:124)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: texture/statusicon/enemy/fr/none-sub.png (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:136)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:145)
+	... 10 more
+Jul 05, 2016 10:35:57 PM de.homelab.madgaksha.MyResourceChecker render
+SEVERE: could not load resource: STATUS_ICON_NO_ENEMY_SUB
+[ERROR] - Tue Jul 05 22:35:57 CEST 2016 - de.homelab.madgaksha.resourcecache.ETexture: could not locate or open resource: WEAPON_NONE_ICON_SUB
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: texture/statusicon/weapon/fr/none-sub.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:148)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:100)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:92)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:332)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:1)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.getResource(ResourceCache.java:70)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.loadToRam(ResourceCache.java:85)
+	at de.homelab.madgaksha.MyResourceChecker.render(MyResourceChecker.java:93)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:223)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:124)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: texture/statusicon/weapon/fr/none-sub.png (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:136)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:145)
+	... 10 more
+Jul 05, 2016 10:35:57 PM de.homelab.madgaksha.MyResourceChecker render
+SEVERE: could not load resource: WEAPON_NONE_ICON_SUB
+[ERROR] - Tue Jul 05 22:35:57 CEST 2016 - de.homelab.madgaksha.resourcecache.ETexture: could not locate or open resource: WEAPON_BASIC_ICON_SUB
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: texture/statusicon/weapon/fr/basic-sub.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:148)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:100)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:92)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:332)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:1)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.getResource(ResourceCache.java:70)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.loadToRam(ResourceCache.java:85)
+	at de.homelab.madgaksha.MyResourceChecker.render(MyResourceChecker.java:93)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:223)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:124)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: texture/statusicon/weapon/fr/basic-sub.png (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:136)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:145)
+	... 10 more
+Jul 05, 2016 10:35:57 PM de.homelab.madgaksha.MyResourceChecker render
+SEVERE: could not load resource: WEAPON_BASIC_ICON_SUB
+[ERROR] - Tue Jul 05 22:35:57 CEST 2016 - de.homelab.madgaksha.resourcecache.ETexture: could not locate or open resource: WEAPON_MULTI_ICON_SUB
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: texture/statusicon/weapon/fr/multi-sub.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:148)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:100)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:92)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:332)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:1)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.getResource(ResourceCache.java:70)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.loadToRam(ResourceCache.java:85)
+	at de.homelab.madgaksha.MyResourceChecker.render(MyResourceChecker.java:93)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:223)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:124)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: texture/statusicon/weapon/fr/multi-sub.png (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:136)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:145)
+	... 10 more
+Jul 05, 2016 10:35:57 PM de.homelab.madgaksha.MyResourceChecker render
+SEVERE: could not load resource: WEAPON_MULTI_ICON_SUB
+[ERROR] - Tue Jul 05 22:35:57 CEST 2016 - de.homelab.madgaksha.resourcecache.ETexture: could not locate or open resource: TOKUGI_NONE_ICON_SUB
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: texture/statusicon/tokugi/fr/none-sub.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:148)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:100)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:92)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:332)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:1)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.getResource(ResourceCache.java:70)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.loadToRam(ResourceCache.java:85)
+	at de.homelab.madgaksha.MyResourceChecker.render(MyResourceChecker.java:93)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:223)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:124)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: texture/statusicon/tokugi/fr/none-sub.png (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:136)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:145)
+	... 10 more
+Jul 05, 2016 10:35:57 PM de.homelab.madgaksha.MyResourceChecker render
+SEVERE: could not load resource: TOKUGI_NONE_ICON_SUB
+[ERROR] - Tue Jul 05 22:35:57 CEST 2016 - de.homelab.madgaksha.resourcecache.ETexture: could not locate or open resource: TOKUGI_OUKAMUSOUGEKI_ICON_SUB
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: texture/statusicon/tokugi/fr/oukamusougeki-sub.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:148)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:100)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:92)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:332)
+	at de.homelab.madgaksha.resourcecache.ETexture.getObject(ETexture.java:1)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.getResource(ResourceCache.java:70)
+	at de.homelab.madgaksha.resourcecache.ResourceCache.loadToRam(ResourceCache.java:85)
+	at de.homelab.madgaksha.MyResourceChecker.render(MyResourceChecker.java:93)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:223)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:124)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: texture/statusicon/tokugi/fr/oukamusougeki-sub.png (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:136)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:145)
+	... 10 more
+Jul 05, 2016 10:35:57 PM de.homelab.madgaksha.MyResourceChecker render
+SEVERE: could not load resource: TOKUGI_OUKAMUSOUGEKI_ICON_SUB
+all resources processed

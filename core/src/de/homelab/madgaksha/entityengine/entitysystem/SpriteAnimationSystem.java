@@ -12,7 +12,7 @@ import de.homelab.madgaksha.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
 
 public class SpriteAnimationSystem extends DisableIteratingSystem {
-
+	
 	public SpriteAnimationSystem() {
 		this(DefaultPriority.spriteAnimationSystem);
 	}
@@ -27,7 +27,7 @@ public class SpriteAnimationSystem extends DisableIteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		final SpriteComponent sc = Mapper.spriteComponent.get(entity);
 		final SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
-		final AtlasRegion ar = sac.animation.getKeyFrame(Mapper.temporalComponent.get(entity).totalTime);
+		final AtlasRegion ar = sac.animation.getKeyFrame(Mapper.temporalComponent.get(entity).totalTime - sac.startTime);;
 		sc.sprite.setAtlasRegion(ar);
 	}
 }

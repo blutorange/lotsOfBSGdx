@@ -1,6 +1,7 @@
 package de.homelab.madgaksha;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,8 +15,8 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.StringBuilder;
 
+import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.LoggerFactory;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
@@ -27,7 +28,6 @@ public class MyTextureSplitter implements ApplicationListener {
 	private int animationListListIndex;
 	private final EAnimationList[] animationListList;
 	private final File outputDirectoryFile;
-	private final StringBuilder stringBuilder;
 	
 	public static void main(String args[]) {
 		EAnimationList animationListList[] = null;
@@ -85,11 +85,11 @@ public class MyTextureSplitter implements ApplicationListener {
 		this.animationListList = animationListList;
 		this.outputDirectoryFile = outputDirectoryFile;
 		this.animationListListIndex = 0;
-		this.stringBuilder = new StringBuilder();
 	}
 	
 	@Override
 	public void create() {
+		I18n.init(Locale.ROOT);
 	}
 
 	@Override
@@ -127,7 +127,6 @@ public class MyTextureSplitter implements ApplicationListener {
 		ResourceCache.clearAllTexture();
 		ResourceCache.clearAllAnimation();
 		ResourceCache.clearAllAnimationLists();
-		System.out.println(stringBuilder.toString());
 	}
 	
 	private static void printHelp() {
@@ -138,7 +137,6 @@ public class MyTextureSplitter implements ApplicationListener {
 		String outputFilePrefix = animationList.toString();
 		FileHandle outputDirectory = Gdx.files.absolute(outputDirectoryFile.getAbsolutePath());
 		AtlasAnimation[] list = ResourceCache.getAnimationList(animationList);
-		stringBuilder.append(animationList.toString()).append("(TextureAtlas.").append(animationList.toString()).append(", \"").append(animationList.toString()).append("\", ").append(list.length).append(")\n");
 		for (int mode = 0 ; mode != list.length; ++mode) {
 			AtlasAnimation animation = list[mode];
 			AtlasRegion[] frames = animation.getKeyFrames();

@@ -15,19 +15,14 @@ public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 	// =================
 	// ESTELLE
 	// =================
-	ESTELLE_RUNNING(ETexture.ESTELLE_RUNNING, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP),
-	ESTELLE_STANDING(ETexture.ESTELLE_STANDING, 128, 128, 40, 0.2f, AtlasAnimation.PlayMode.LOOP),
-	ESTELLE_SWINGING(ETexture.ESTELLE_SWINGING, 128, 128, 20, 0.1f, AtlasAnimation.PlayMode.LOOP),
 
 	// =================
 	// JOSHUA
 	// =================
-	JOSHUA_STANDING(ETexture.JOSHUA_STANDING, 64, 128, 64, 0.1f, AtlasAnimation.PlayMode.LOOP),
 
 	// =================
 	// ENEMIES
 	// =================
-
 	OUGI_OUKA_MUSOUGEKI_SAKURA(ETextureAtlas.OUGI_OUKA_MUSOUGEKI, "sakura", 0.075f, AtlasAnimation.PlayMode.LOOP),
 
 	// =================

@@ -66,7 +66,7 @@ public class MyTexturePacker {
 		// Sprites
 		System.out.println("packing sprites");
 		Settings settings = new Settings();
-//		settings.stripWhitespaceX = settings.stripWhitespaceY = true;
+		settings.stripWhitespaceX = settings.stripWhitespaceY = true;
 		for (File f : listDirectories("/home/madgaksha/git/lotsOfBSGdx/android/assets/sprite")) {
 			inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/sprite/" + f.getName();
 			outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/sprite/packed";

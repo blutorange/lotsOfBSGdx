@@ -4,905 +4,1179 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-ESTELLE_RUNNING_0
+ESTELLE_HIT_0
   rotate: false
-  xy: 912, 782
-  size: 64, 128
+  xy: 2, 873
+  size: 83, 59
+  orig: 128, 64
+  offset: 23, 2
+  index: 0
+ESTELLE_HIT_1
+  rotate: false
+  xy: 81, 800
+  size: 49, 71
   orig: 64, 128
-  offset: 0, 0
+  offset: 8, 28
+  index: 0
+ESTELLE_HIT_2
+  rotate: false
+  xy: 133, 730
+  size: 43, 69
+  orig: 64, 128
+  offset: 11, 29
+  index: 0
+ESTELLE_HIT_3
+  rotate: false
+  xy: 491, 946
+  size: 84, 51
+  orig: 128, 64
+  offset: 23, 6
+  index: 0
+ESTELLE_HIT_4
+  rotate: false
+  xy: 406, 944
+  size: 83, 53
+  orig: 128, 64
+  offset: 23, 5
+  index: 0
+ESTELLE_HIT_5
+  rotate: false
+  xy: 322, 695
+  size: 49, 61
+  orig: 64, 64
+  offset: 8, 1
+  index: 0
+ESTELLE_HIT_6
+  rotate: false
+  xy: 463, 731
+  size: 43, 65
+  orig: 64, 128
+  offset: 11, 31
+  index: 0
+ESTELLE_HIT_7
+  rotate: false
+  xy: 2, 934
+  size: 85, 63
+  orig: 128, 128
+  offset: 22, 32
+  index: 0
+ESTELLE_ON_KNEES_0
+  rotate: false
+  xy: 824, 940
+  size: 74, 57
+  orig: 128, 64
+  offset: 28, 3
+  index: 0
+ESTELLE_ON_KNEES_0
+  rotate: false
+  xy: 183, 645
+  size: 58, 51
+  orig: 64, 64
+  offset: 4, 6
+  index: 1
+ESTELLE_ON_KNEES_0
+  rotate: false
+  xy: 456, 677
+  size: 53, 52
+  orig: 64, 64
+  offset: 6, 5
+  index: 2
+ESTELLE_ON_KNEES_0
+  rotate: false
+  xy: 151, 58
+  size: 41, 59
+  orig: 64, 64
+  offset: 12, 2
+  index: 3
+ESTELLE_ON_KNEES_1
+  rotate: false
+  xy: 2, 13
+  size: 76, 56
+  orig: 128, 64
+  offset: 27, 3
+  index: 0
+ESTELLE_ON_KNEES_1
+  rotate: false
+  xy: 577, 946
+  size: 81, 51
+  orig: 128, 64
+  offset: 24, 6
+  index: 1
+ESTELLE_ON_KNEES_1
+  rotate: false
+  xy: 743, 944
+  size: 79, 53
+  orig: 128, 64
+  offset: 25, 5
+  index: 2
+ESTELLE_ON_KNEES_1
+  rotate: false
+  xy: 81, 608
+  size: 73, 53
+  orig: 128, 64
+  offset: 28, 5
+  index: 3
+ESTELLE_ON_KNEES_2
+  rotate: false
+  xy: 327, 886
+  size: 77, 49
+  orig: 128, 64
+  offset: 26, 7
+  index: 3
+ESTELLE_ON_KNEES_2
+  rotate: false
+  xy: 80, 11
+  size: 66, 55
+  orig: 128, 64
+  offset: 32, 4
+  index: 1
+ESTELLE_ON_KNEES_2
+  rotate: false
+  xy: 183, 698
+  size: 68, 50
+  orig: 128, 64
+  offset: 31, 6
+  index: 2
+ESTELLE_ON_KNEES_2
+  rotate: false
+  xy: 152, 547
+  size: 37, 59
+  orig: 64, 64
+  offset: 14, 2
+  index: 0
+ESTELLE_ON_KNEES_3
+  rotate: false
+  xy: 148, 2
+  size: 46, 54
+  orig: 64, 64
+  offset: 10, 4
+  index: 3
+ESTELLE_ON_KNEES_3
+  rotate: false
+  xy: 151, 485
+  size: 41, 60
+  orig: 64, 64
+  offset: 12, 1
+  index: 0
+ESTELLE_ON_KNEES_3
+  rotate: false
+  xy: 234, 77
+  size: 40, 57
+  orig: 64, 64
+  offset: 13, 3
+  index: 1
+ESTELLE_ON_KNEES_3
+  rotate: false
+  xy: 368, 437
+  size: 41, 56
+  orig: 64, 64
+  offset: 12, 3
+  index: 2
+ESTELLE_ON_KNEES_4
+  rotate: false
+  xy: 900, 939
+  size: 74, 58
+  orig: 128, 64
+  offset: 28, 2
+  index: 0
+ESTELLE_ON_KNEES_4
+  rotate: false
+  xy: 403, 743
+  size: 58, 53
+  orig: 64, 64
+  offset: 4, 5
+  index: 1
+ESTELLE_ON_KNEES_4
+  rotate: false
+  xy: 194, 455
+  size: 53, 57
+  orig: 64, 64
+  offset: 6, 3
+  index: 2
+ESTELLE_ON_KNEES_4
+  rotate: false
+  xy: 276, 77
+  size: 41, 58
+  orig: 64, 64
+  offset: 12, 2
+  index: 3
+ESTELLE_ON_KNEES_5
+  rotate: false
+  xy: 2, 71
+  size: 76, 57
+  orig: 128, 64
+  offset: 27, 3
+  index: 0
+ESTELLE_ON_KNEES_5
+  rotate: false
+  xy: 660, 947
+  size: 81, 50
+  orig: 128, 64
+  offset: 24, 6
+  index: 1
+ESTELLE_ON_KNEES_5
+  rotate: false
+  xy: 406, 895
+  size: 79, 47
+  orig: 128, 64
+  offset: 25, 8
+  index: 2
+ESTELLE_ON_KNEES_5
+  rotate: false
+  xy: 406, 798
+  size: 74, 48
+  orig: 128, 64
+  offset: 28, 7
+  index: 3
+ESTELLE_ON_KNEES_6
+  rotate: false
+  xy: 406, 848
+  size: 77, 45
+  orig: 128, 64
+  offset: 26, 9
+  index: 3
+ESTELLE_ON_KNEES_6
+  rotate: false
+  xy: 79, 435
+  size: 68, 48
+  orig: 128, 64
+  offset: 31, 7
+  index: 2
+ESTELLE_ON_KNEES_6
+  rotate: false
+  xy: 253, 699
+  size: 67, 49
+  orig: 128, 64
+  offset: 31, 7
+  index: 1
+ESTELLE_ON_KNEES_6
+  rotate: false
+  xy: 319, 77
+  size: 38, 58
+  orig: 64, 64
+  offset: 14, 2
+  index: 0
+ESTELLE_ON_KNEES_7
+  rotate: false
+  xy: 152, 425
+  size: 40, 58
+  orig: 64, 64
+  offset: 13, 2
+  index: 2
+ESTELLE_ON_KNEES_7
+  rotate: false
+  xy: 204, 206
+  size: 45, 58
+  orig: 64, 64
+  offset: 10, 2
+  index: 3
+ESTELLE_ON_KNEES_7
+  rotate: false
+  xy: 249, 269
+  size: 41, 52
+  orig: 64, 64
+  offset: 12, 5
+  index: 1
+ESTELLE_ON_KNEES_7
+  rotate: false
+  xy: 273, 579
+  size: 42, 59
+  orig: 64, 64
+  offset: 12, 2
   index: 0
 ESTELLE_RUNNING_0
   rotate: false
-  xy: 912, 652
-  size: 64, 128
+  xy: 976, 939
+  size: 46, 58
   orig: 64, 128
-  offset: 0, 0
-  index: 1
+  offset: 10, 34
+  index: 6
 ESTELLE_RUNNING_0
   rotate: false
-  xy: 912, 522
-  size: 64, 128
+  xy: 204, 329
+  size: 43, 61
   orig: 64, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_RUNNING_0
-  rotate: false
-  xy: 912, 392
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_RUNNING_0
-  rotate: false
-  xy: 912, 262
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
+  offset: 11, 33
   index: 4
 ESTELLE_RUNNING_0
   rotate: false
-  xy: 912, 132
-  size: 64, 128
+  xy: 204, 266
+  size: 43, 61
   orig: 64, 128
-  offset: 0, 0
+  offset: 11, 33
   index: 5
 ESTELLE_RUNNING_0
   rotate: false
-  xy: 912, 2
-  size: 64, 128
+  xy: 249, 14
+  size: 42, 61
   orig: 64, 128
-  offset: 0, 0
-  index: 6
-ESTELLE_STANDING_0
-  rotate: false
-  xy: 2, 782
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
+  offset: 12, 33
   index: 0
-ESTELLE_STANDING_0
-  rotate: false
-  xy: 2, 652
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_STANDING_0
-  rotate: false
-  xy: 132, 782
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_STANDING_0
-  rotate: false
-  xy: 2, 522
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_STANDING_0
-  rotate: false
-  xy: 132, 652
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_STANDING_0
-  rotate: false
-  xy: 262, 782
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_STANDING_0
-  rotate: false
-  xy: 2, 392
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 6
-ESTELLE_STANDING_0
-  rotate: false
-  xy: 132, 522
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 7
-ESTELLE_STANDING_1
-  rotate: false
-  xy: 262, 652
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_STANDING_1
-  rotate: false
-  xy: 392, 782
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_STANDING_1
-  rotate: false
-  xy: 2, 262
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_STANDING_1
-  rotate: false
-  xy: 132, 392
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_STANDING_1
-  rotate: false
-  xy: 262, 522
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_STANDING_1
-  rotate: false
-  xy: 392, 652
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_STANDING_1
-  rotate: false
-  xy: 522, 782
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 6
-ESTELLE_STANDING_1
-  rotate: false
-  xy: 2, 132
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 7
-ESTELLE_STANDING_2
-  rotate: false
-  xy: 132, 262
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_STANDING_2
-  rotate: false
-  xy: 262, 392
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_STANDING_2
-  rotate: false
-  xy: 392, 522
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_STANDING_2
-  rotate: false
-  xy: 522, 652
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_STANDING_2
-  rotate: false
-  xy: 652, 782
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_STANDING_2
-  rotate: false
-  xy: 2, 2
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_STANDING_2
-  rotate: false
-  xy: 132, 132
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 6
-ESTELLE_STANDING_2
-  rotate: false
-  xy: 262, 262
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 7
-ESTELLE_STANDING_3
-  rotate: false
-  xy: 392, 392
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_STANDING_3
-  rotate: false
-  xy: 522, 522
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_STANDING_3
-  rotate: false
-  xy: 652, 652
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_STANDING_3
-  rotate: false
-  xy: 782, 782
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_STANDING_3
-  rotate: false
-  xy: 132, 2
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_STANDING_3
-  rotate: false
-  xy: 262, 132
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_STANDING_3
-  rotate: false
-  xy: 392, 262
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 6
-ESTELLE_STANDING_3
-  rotate: false
-  xy: 522, 392
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 7
-ESTELLE_STANDING_4
-  rotate: false
-  xy: 652, 522
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_STANDING_4
-  rotate: false
-  xy: 782, 652
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_STANDING_4
-  rotate: false
-  xy: 262, 2
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_STANDING_4
-  rotate: false
-  xy: 392, 132
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_STANDING_4
-  rotate: false
-  xy: 522, 262
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_STANDING_4
-  rotate: false
-  xy: 652, 392
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_STANDING_4
-  rotate: false
-  xy: 782, 522
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 6
-ESTELLE_STANDING_4
-  rotate: false
-  xy: 392, 2
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 7
-ESTELLE_STANDING_5
-  rotate: false
-  xy: 522, 132
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_STANDING_5
-  rotate: false
-  xy: 652, 262
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_STANDING_5
-  rotate: false
-  xy: 782, 392
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_STANDING_5
-  rotate: false
-  xy: 522, 2
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_STANDING_5
-  rotate: false
-  xy: 652, 132
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_STANDING_5
-  rotate: false
-  xy: 782, 262
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_STANDING_5
-  rotate: false
-  xy: 652, 2
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 6
-ESTELLE_STANDING_5
-  rotate: false
-  xy: 782, 132
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 7
-ESTELLE_STANDING_6
-  rotate: false
-  xy: 782, 2
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 0
-
-estelle2.png
-size: 1024,1024
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 ESTELLE_RUNNING_0
   rotate: false
-  xy: 2, 132
-  size: 64, 128
+  xy: 373, 616
+  size: 44, 60
   orig: 64, 128
-  offset: 0, 0
+  offset: 11, 33
   index: 7
-ESTELLE_RUNNING_1
+ESTELLE_RUNNING_0
   rotate: false
-  xy: 132, 262
-  size: 64, 128
+  xy: 411, 429
+  size: 39, 60
   orig: 64, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_RUNNING_1
-  rotate: false
-  xy: 262, 392
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
+  offset: 13, 33
   index: 1
-ESTELLE_RUNNING_1
+ESTELLE_RUNNING_0
   rotate: false
-  xy: 392, 522
-  size: 64, 128
+  xy: 487, 885
+  size: 37, 57
   orig: 64, 128
-  offset: 0, 0
+  offset: 14, 35
   index: 2
-ESTELLE_RUNNING_1
+ESTELLE_RUNNING_0
   rotate: false
-  xy: 522, 652
-  size: 64, 128
+  xy: 485, 827
+  size: 37, 56
   orig: 64, 128
-  offset: 0, 0
+  offset: 14, 35
   index: 3
 ESTELLE_RUNNING_1
   rotate: false
-  xy: 652, 782
-  size: 64, 128
+  xy: 242, 579
+  size: 29, 64
   orig: 64, 128
-  offset: 0, 0
+  offset: 18, 31
+  index: 0
+ESTELLE_RUNNING_1
+  rotate: false
+  xy: 246, 514
+  size: 34, 63
+  orig: 64, 128
+  offset: 16, 32
+  index: 2
+ESTELLE_RUNNING_1
+  rotate: false
+  xy: 249, 449
+  size: 38, 63
+  orig: 64, 128
+  offset: 14, 31
   index: 4
 ESTELLE_RUNNING_1
   rotate: false
-  xy: 2, 2
-  size: 64, 128
+  xy: 293, 14
+  size: 33, 61
   orig: 64, 128
-  offset: 0, 0
+  offset: 16, 33
+  index: 1
+ESTELLE_RUNNING_1
+  rotate: false
+  xy: 328, 14
+  size: 36, 61
+  orig: 64, 128
+  offset: 15, 33
+  index: 3
+ESTELLE_RUNNING_1
+  rotate: false
+  xy: 415, 491
+  size: 38, 60
+  orig: 64, 128
+  offset: 14, 33
   index: 5
 ESTELLE_RUNNING_1
   rotate: false
-  xy: 68, 132
-  size: 64, 128
+  xy: 501, 615
+  size: 38, 60
   orig: 64, 128
-  offset: 0, 0
+  offset: 14, 33
   index: 6
 ESTELLE_RUNNING_1
   rotate: false
-  xy: 198, 262
-  size: 64, 128
+  xy: 643, 885
+  size: 32, 59
   orig: 64, 128
-  offset: 0, 0
+  offset: 17, 34
   index: 7
 ESTELLE_RUNNING_2
   rotate: false
-  xy: 328, 392
-  size: 64, 128
+  xy: 373, 678
+  size: 28, 64
   orig: 64, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_RUNNING_2
-  rotate: false
-  xy: 458, 522
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_RUNNING_2
-  rotate: false
-  xy: 588, 652
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_RUNNING_2
-  rotate: false
-  xy: 718, 782
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_RUNNING_2
-  rotate: false
-  xy: 68, 2
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_RUNNING_2
-  rotate: false
-  xy: 134, 132
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_RUNNING_2
-  rotate: false
-  xy: 264, 262
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
+  offset: 18, 31
   index: 6
 ESTELLE_RUNNING_2
   rotate: false
-  xy: 394, 392
-  size: 64, 128
+  xy: 532, 424
+  size: 29, 63
   orig: 64, 128
-  offset: 0, 0
+  offset: 18, 32
+  index: 0
+ESTELLE_RUNNING_2
+  rotate: false
+  xy: 537, 489
+  size: 29, 61
+  orig: 64, 128
+  offset: 18, 33
+  index: 1
+ESTELLE_RUNNING_2
+  rotate: false
+  xy: 539, 552
+  size: 29, 61
+  orig: 64, 128
+  offset: 18, 33
+  index: 5
+ESTELLE_RUNNING_2
+  rotate: false
+  xy: 563, 423
+  size: 29, 64
+  orig: 64, 128
+  offset: 18, 31
+  index: 2
+ESTELLE_RUNNING_2
+  rotate: false
+  xy: 594, 423
+  size: 29, 64
+  orig: 64, 128
+  offset: 18, 31
+  index: 3
+ESTELLE_RUNNING_2
+  rotate: false
+  xy: 524, 820
+  size: 29, 63
+  orig: 64, 128
+  offset: 18, 32
+  index: 4
+ESTELLE_RUNNING_2
+  rotate: false
+  xy: 555, 820
+  size: 29, 64
+  orig: 64, 128
+  offset: 18, 31
   index: 7
 ESTELLE_RUNNING_3
   rotate: false
-  xy: 524, 522
-  size: 64, 128
+  xy: 152, 360
+  size: 42, 63
   orig: 64, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_RUNNING_3
-  rotate: false
-  xy: 654, 652
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_RUNNING_3
-  rotate: false
-  xy: 784, 782
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_RUNNING_3
-  rotate: false
-  xy: 134, 2
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_RUNNING_3
-  rotate: false
-  xy: 200, 132
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_RUNNING_3
-  rotate: false
-  xy: 330, 262
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_RUNNING_3
-  rotate: false
-  xy: 460, 392
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
+  offset: 12, 32
   index: 6
 ESTELLE_RUNNING_3
   rotate: false
-  xy: 590, 522
-  size: 64, 128
+  xy: 194, 77
+  size: 38, 64
   orig: 64, 128
-  offset: 0, 0
+  offset: 14, 31
+  index: 0
+ESTELLE_RUNNING_3
+  rotate: false
+  xy: 249, 386
+  size: 38, 61
+  orig: 64, 128
+  offset: 14, 33
+  index: 5
+ESTELLE_RUNNING_3
+  rotate: false
+  xy: 249, 323
+  size: 41, 61
+  orig: 64, 128
+  offset: 12, 33
+  index: 7
+ESTELLE_RUNNING_3
+  rotate: false
+  xy: 282, 514
+  size: 33, 63
+  orig: 64, 128
+  offset: 16, 31
+  index: 4
+ESTELLE_RUNNING_3
+  rotate: false
+  xy: 419, 616
+  size: 35, 60
+  orig: 64, 128
+  offset: 15, 33
+  index: 1
+ESTELLE_RUNNING_3
+  rotate: false
+  xy: 715, 882
+  size: 35, 60
+  orig: 64, 128
+  offset: 15, 33
+  index: 2
+ESTELLE_RUNNING_3
+  rotate: false
+  xy: 897, 878
+  size: 32, 59
+  orig: 64, 128
+  offset: 17, 34
+  index: 3
+ESTELLE_RUNNING_4
+  rotate: false
+  xy: 251, 206
+  size: 42, 61
+  orig: 64, 128
+  offset: 12, 33
+  index: 0
+ESTELLE_RUNNING_4
+  rotate: false
+  xy: 273, 640
+  size: 46, 57
+  orig: 64, 128
+  offset: 10, 35
+  index: 6
+ESTELLE_RUNNING_4
+  rotate: false
+  xy: 369, 553
+  size: 43, 61
+  orig: 64, 128
+  offset: 11, 33
+  index: 4
+ESTELLE_RUNNING_4
+  rotate: false
+  xy: 456, 615
+  size: 43, 60
+  orig: 64, 128
+  offset: 11, 33
+  index: 5
+ESTELLE_RUNNING_4
+  rotate: false
+  xy: 369, 495
+  size: 44, 56
+  orig: 64, 128
+  offset: 11, 35
   index: 7
 ESTELLE_RUNNING_4
   rotate: false
-  xy: 720, 652
-  size: 64, 128
+  xy: 452, 427
+  size: 39, 60
   orig: 64, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_RUNNING_4
-  rotate: false
-  xy: 850, 782
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
+  offset: 13, 33
   index: 1
 ESTELLE_RUNNING_4
   rotate: false
-  xy: 200, 2
-  size: 64, 128
+  xy: 493, 427
+  size: 37, 60
   orig: 64, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_RUNNING_4
-  rotate: false
-  xy: 266, 132
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
+  offset: 14, 33
   index: 3
 ESTELLE_RUNNING_4
   rotate: false
-  xy: 396, 262
-  size: 64, 128
+  xy: 526, 886
+  size: 37, 58
   orig: 64, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_RUNNING_4
-  rotate: false
-  xy: 526, 392
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_RUNNING_4
-  rotate: false
-  xy: 656, 522
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 6
-ESTELLE_RUNNING_4
-  rotate: false
-  xy: 786, 652
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 7
+  offset: 14, 34
+  index: 2
 ESTELLE_RUNNING_5
   rotate: false
-  xy: 916, 782
-  size: 64, 128
+  xy: 499, 552
+  size: 38, 61
   orig: 64, 128
-  offset: 0, 0
+  offset: 14, 33
+  index: 4
+ESTELLE_RUNNING_5
+  rotate: false
+  xy: 568, 489
+  size: 30, 61
+  orig: 64, 128
+  offset: 17, 33
   index: 0
 ESTELLE_RUNNING_5
   rotate: false
-  xy: 266, 2
-  size: 64, 128
+  xy: 565, 886
+  size: 37, 58
   orig: 64, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_RUNNING_5
-  rotate: false
-  xy: 332, 132
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_RUNNING_5
-  rotate: false
-  xy: 462, 262
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_RUNNING_5
-  rotate: false
-  xy: 592, 392
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_RUNNING_5
-  rotate: false
-  xy: 722, 522
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
+  offset: 14, 34
   index: 5
 ESTELLE_RUNNING_5
   rotate: false
-  xy: 852, 652
-  size: 64, 128
+  xy: 604, 886
+  size: 37, 58
   orig: 64, 128
-  offset: 0, 0
+  offset: 14, 34
   index: 6
 ESTELLE_RUNNING_5
   rotate: false
-  xy: 332, 2
-  size: 64, 128
+  xy: 677, 884
+  size: 36, 61
   orig: 64, 128
-  offset: 0, 0
+  offset: 15, 33
+  index: 3
+ESTELLE_RUNNING_5
+  rotate: false
+  xy: 752, 881
+  size: 34, 61
+  orig: 64, 128
+  offset: 16, 33
+  index: 2
+ESTELLE_RUNNING_5
+  rotate: false
+  xy: 788, 881
+  size: 33, 61
+  orig: 64, 128
+  offset: 16, 33
+  index: 1
+ESTELLE_RUNNING_5
+  rotate: false
+  xy: 931, 878
+  size: 32, 59
+  orig: 64, 128
+  offset: 17, 34
   index: 7
 ESTELLE_RUNNING_6
   rotate: false
-  xy: 398, 132
-  size: 64, 128
+  xy: 620, 823
+  size: 29, 60
   orig: 64, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_RUNNING_6
-  rotate: false
-  xy: 528, 262
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_RUNNING_6
-  rotate: false
-  xy: 658, 392
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_RUNNING_6
-  rotate: false
-  xy: 788, 522
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
+  offset: 18, 33
   index: 3
 ESTELLE_RUNNING_6
   rotate: false
-  xy: 398, 2
-  size: 64, 128
+  xy: 651, 823
+  size: 29, 59
   orig: 64, 128
-  offset: 0, 0
+  offset: 18, 34
+  index: 0
+ESTELLE_RUNNING_6
+  rotate: false
+  xy: 682, 823
+  size: 29, 59
+  orig: 64, 128
+  offset: 18, 34
   index: 4
 ESTELLE_RUNNING_6
   rotate: false
-  xy: 464, 132
-  size: 64, 128
+  xy: 713, 822
+  size: 29, 58
   orig: 64, 128
-  offset: 0, 0
+  offset: 18, 34
+  index: 1
+ESTELLE_RUNNING_6
+  rotate: false
+  xy: 744, 821
+  size: 29, 58
+  orig: 64, 128
+  offset: 18, 34
+  index: 2
+ESTELLE_RUNNING_6
+  rotate: false
+  xy: 775, 819
+  size: 29, 60
+  orig: 64, 128
+  offset: 18, 33
+  index: 7
+ESTELLE_RUNNING_6
+  rotate: false
+  xy: 537, 759
+  size: 28, 59
+  orig: 64, 128
+  offset: 19, 34
   index: 5
 ESTELLE_RUNNING_6
   rotate: false
-  xy: 594, 262
-  size: 64, 128
+  xy: 567, 760
+  size: 28, 58
   orig: 64, 128
-  offset: 0, 0
+  offset: 19, 34
   index: 6
-ESTELLE_RUNNING_6
+ESTELLE_RUNNING_7
   rotate: false
-  xy: 724, 392
-  size: 64, 128
+  xy: 414, 553
+  size: 39, 61
   orig: 64, 128
-  offset: 0, 0
+  offset: 13, 33
+  index: 5
+ESTELLE_RUNNING_7
+  rotate: false
+  xy: 455, 552
+  size: 42, 61
+  orig: 64, 128
+  offset: 12, 33
   index: 7
 ESTELLE_RUNNING_7
   rotate: false
-  xy: 464, 2
-  size: 64, 128
+  xy: 455, 489
+  size: 41, 61
   orig: 64, 128
-  offset: 0, 0
-  index: 0
-ESTELLE_RUNNING_7
-  rotate: false
-  xy: 530, 132
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_RUNNING_7
-  rotate: false
-  xy: 660, 262
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_RUNNING_7
-  rotate: false
-  xy: 530, 2
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 3
-ESTELLE_RUNNING_7
-  rotate: false
-  xy: 596, 132
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 4
-ESTELLE_RUNNING_7
-  rotate: false
-  xy: 596, 2
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_RUNNING_7
-  rotate: false
-  xy: 918, 652
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
+  offset: 12, 33
   index: 6
 ESTELLE_RUNNING_7
   rotate: false
-  xy: 854, 522
-  size: 64, 128
+  xy: 498, 489
+  size: 37, 61
   orig: 64, 128
-  offset: 0, 0
+  offset: 14, 33
+  index: 0
+ESTELLE_RUNNING_7
+  rotate: false
+  xy: 823, 880
+  size: 35, 58
+  orig: 64, 128
+  offset: 15, 34
+  index: 1
+ESTELLE_RUNNING_7
+  rotate: false
+  xy: 860, 880
+  size: 35, 58
+  orig: 64, 128
+  offset: 15, 34
+  index: 2
+ESTELLE_RUNNING_7
+  rotate: false
+  xy: 965, 878
+  size: 32, 59
+  orig: 64, 128
+  offset: 17, 34
+  index: 3
+ESTELLE_RUNNING_7
+  rotate: false
+  xy: 586, 823
+  size: 32, 61
+  orig: 64, 128
+  offset: 17, 33
+  index: 4
+ESTELLE_STANDING_0
+  rotate: false
+  xy: 2, 685
+  size: 77, 60
+  orig: 128, 128
+  offset: 9, 33
+  index: 5
+ESTELLE_STANDING_0
+  rotate: false
+  xy: 327, 937
+  size: 77, 60
+  orig: 128, 128
+  offset: 9, 33
+  index: 6
+ESTELLE_STANDING_0
+  rotate: false
+  xy: 2, 623
+  size: 77, 60
+  orig: 128, 128
+  offset: 9, 33
+  index: 7
+ESTELLE_STANDING_0
+  rotate: false
+  xy: 2, 374
+  size: 77, 59
+  orig: 128, 128
+  offset: 9, 34
+  index: 0
+ESTELLE_STANDING_0
+  rotate: false
+  xy: 2, 313
+  size: 77, 59
+  orig: 128, 128
+  offset: 9, 34
+  index: 1
+ESTELLE_STANDING_0
+  rotate: false
+  xy: 2, 252
+  size: 77, 59
+  orig: 128, 128
+  offset: 9, 34
+  index: 3
+ESTELLE_STANDING_0
+  rotate: false
+  xy: 2, 191
+  size: 77, 59
+  orig: 128, 128
+  offset: 9, 34
+  index: 4
+ESTELLE_STANDING_0
+  rotate: false
+  xy: 2, 130
+  size: 76, 59
+  orig: 128, 128
+  offset: 10, 34
+  index: 2
+ESTELLE_STANDING_1
+  rotate: false
+  xy: 234, 812
+  size: 69, 60
+  orig: 128, 128
+  offset: 20, 33
+  index: 5
+ESTELLE_STANDING_1
+  rotate: false
+  xy: 250, 750
+  size: 69, 60
+  orig: 128, 128
+  offset: 20, 33
+  index: 6
+ESTELLE_STANDING_1
+  rotate: false
+  xy: 81, 373
+  size: 69, 60
+  orig: 128, 128
+  offset: 20, 33
+  index: 7
+ESTELLE_STANDING_1
+  rotate: false
+  xy: 81, 312
+  size: 69, 59
+  orig: 128, 128
+  offset: 20, 34
+  index: 0
+ESTELLE_STANDING_1
+  rotate: false
+  xy: 81, 251
+  size: 69, 59
+  orig: 128, 128
+  offset: 20, 34
+  index: 1
+ESTELLE_STANDING_1
+  rotate: false
+  xy: 81, 190
+  size: 69, 59
+  orig: 128, 128
+  offset: 20, 34
+  index: 2
+ESTELLE_STANDING_1
+  rotate: false
+  xy: 80, 129
+  size: 69, 59
+  orig: 128, 128
+  offset: 20, 34
+  index: 3
+ESTELLE_STANDING_1
+  rotate: false
+  xy: 80, 68
+  size: 69, 59
+  orig: 128, 128
+  offset: 20, 34
+  index: 4
+ESTELLE_STANDING_2
+  rotate: false
+  xy: 132, 801
+  size: 28, 70
+  orig: 128, 128
+  offset: 51, 28
+  index: 2
+ESTELLE_STANDING_2
+  rotate: false
+  xy: 377, 815
+  size: 27, 69
+  orig: 128, 128
+  offset: 51, 29
+  index: 0
+ESTELLE_STANDING_2
+  rotate: false
+  xy: 373, 744
+  size: 28, 69
+  orig: 128, 128
+  offset: 51, 29
+  index: 1
+ESTELLE_STANDING_2
+  rotate: false
+  xy: 151, 119
+  size: 28, 69
+  orig: 128, 128
+  offset: 51, 29
+  index: 3
+ESTELLE_STANDING_2
+  rotate: false
+  xy: 234, 136
+  size: 27, 68
+  orig: 128, 128
+  offset: 51, 29
+  index: 4
+ESTELLE_STANDING_2
+  rotate: false
+  xy: 263, 137
+  size: 27, 67
+  orig: 128, 128
+  offset: 51, 30
+  index: 5
+ESTELLE_STANDING_2
+  rotate: false
+  xy: 292, 137
+  size: 27, 67
+  orig: 128, 128
+  offset: 51, 30
+  index: 7
+ESTELLE_STANDING_2
+  rotate: false
+  xy: 289, 446
+  size: 26, 66
+  orig: 128, 128
+  offset: 51, 30
+  index: 6
+ESTELLE_STANDING_3
+  rotate: false
+  xy: 81, 731
+  size: 50, 67
+  orig: 128, 128
+  offset: 46, 30
+  index: 2
+ESTELLE_STANDING_3
+  rotate: false
+  xy: 81, 663
+  size: 49, 66
+  orig: 128, 128
+  offset: 46, 30
+  index: 1
+ESTELLE_STANDING_3
+  rotate: false
+  xy: 132, 663
+  size: 49, 65
+  orig: 128, 128
+  offset: 46, 31
+  index: 3
+ESTELLE_STANDING_3
+  rotate: false
+  xy: 321, 758
+  size: 50, 64
+  orig: 128, 128
+  offset: 46, 31
+  index: 4
+ESTELLE_STANDING_3
+  rotate: false
+  xy: 191, 579
+  size: 49, 64
+  orig: 128, 128
+  offset: 46, 31
+  index: 0
+ESTELLE_STANDING_3
+  rotate: false
+  xy: 194, 514
+  size: 50, 63
+  orig: 128, 128
+  offset: 46, 32
+  index: 5
+ESTELLE_STANDING_3
+  rotate: false
+  xy: 152, 295
+  size: 50, 63
+  orig: 128, 128
+  offset: 46, 32
+  index: 7
+ESTELLE_STANDING_3
+  rotate: false
+  xy: 152, 232
+  size: 50, 61
+  orig: 128, 128
+  offset: 46, 33
+  index: 6
+ESTELLE_STANDING_4
+  rotate: false
+  xy: 89, 936
+  size: 78, 61
+  orig: 128, 128
+  offset: 38, 33
+  index: 6
+ESTELLE_STANDING_4
+  rotate: false
+  xy: 2, 810
+  size: 77, 61
+  orig: 128, 128
+  offset: 38, 33
+  index: 0
+ESTELLE_STANDING_4
+  rotate: false
+  xy: 169, 936
+  size: 77, 61
+  orig: 128, 128
+  offset: 38, 33
+  index: 4
+ESTELLE_STANDING_4
+  rotate: false
+  xy: 2, 747
+  size: 77, 61
+  orig: 128, 128
+  offset: 38, 33
+  index: 5
+ESTELLE_STANDING_4
+  rotate: false
+  xy: 248, 936
+  size: 77, 61
+  orig: 128, 128
+  offset: 38, 33
+  index: 7
+ESTELLE_STANDING_4
+  rotate: false
+  xy: 2, 560
+  size: 76, 61
+  orig: 128, 128
+  offset: 39, 33
+  index: 3
+ESTELLE_STANDING_4
+  rotate: false
+  xy: 2, 497
+  size: 75, 61
+  orig: 128, 128
+  offset: 39, 33
+  index: 1
+ESTELLE_STANDING_4
+  rotate: false
+  xy: 2, 435
+  size: 75, 60
+  orig: 128, 128
+  offset: 39, 33
+  index: 2
+ESTELLE_STANDING_5
+  rotate: false
+  xy: 89, 873
+  size: 69, 61
+  orig: 128, 128
+  offset: 36, 33
+  index: 6
+ESTELLE_STANDING_5
+  rotate: false
+  xy: 160, 874
+  size: 70, 60
+  orig: 128, 128
+  offset: 36, 33
+  index: 0
+ESTELLE_STANDING_5
+  rotate: false
+  xy: 232, 874
+  size: 70, 60
+  orig: 128, 128
+  offset: 36, 33
+  index: 1
+ESTELLE_STANDING_5
+  rotate: false
+  xy: 162, 812
+  size: 70, 60
+  orig: 128, 128
+  offset: 36, 33
+  index: 3
+ESTELLE_STANDING_5
+  rotate: false
+  xy: 305, 824
+  size: 70, 60
+  orig: 128, 128
+  offset: 36, 33
+  index: 4
+ESTELLE_STANDING_5
+  rotate: false
+  xy: 178, 750
+  size: 70, 60
+  orig: 128, 128
+  offset: 36, 33
+  index: 5
+ESTELLE_STANDING_5
+  rotate: false
+  xy: 80, 547
+  size: 70, 59
+  orig: 128, 128
+  offset: 36, 34
+  index: 2
+ESTELLE_STANDING_5
+  rotate: false
+  xy: 79, 485
+  size: 70, 60
+  orig: 128, 128
+  offset: 36, 33
   index: 7
 ESTELLE_STANDING_6
   rotate: false
-  xy: 2, 782
-  size: 128, 128
+  xy: 806, 817
+  size: 29, 61
   orig: 128, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_STANDING_6
-  rotate: false
-  xy: 2, 652
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
+  offset: 48, 33
   index: 2
 ESTELLE_STANDING_6
   rotate: false
-  xy: 132, 782
-  size: 128, 128
+  xy: 837, 815
+  size: 28, 63
   orig: 128, 128
-  offset: 0, 0
-  index: 3
+  offset: 49, 32
+  index: 0
 ESTELLE_STANDING_6
   rotate: false
-  xy: 2, 522
-  size: 128, 128
+  xy: 867, 815
+  size: 28, 63
   orig: 128, 128
-  offset: 0, 0
+  offset: 49, 32
   index: 4
 ESTELLE_STANDING_6
   rotate: false
-  xy: 132, 652
-  size: 128, 128
+  xy: 897, 815
+  size: 28, 61
   orig: 128, 128
-  offset: 0, 0
+  offset: 49, 33
+  index: 1
+ESTELLE_STANDING_6
+  rotate: false
+  xy: 927, 815
+  size: 28, 61
+  orig: 128, 128
+  offset: 49, 33
+  index: 3
+ESTELLE_STANDING_6
+  rotate: false
+  xy: 957, 813
+  size: 28, 63
+  orig: 128, 128
+  offset: 49, 32
   index: 5
 ESTELLE_STANDING_6
   rotate: false
-  xy: 262, 782
-  size: 128, 128
+  xy: 987, 813
+  size: 27, 63
   orig: 128, 128
-  offset: 0, 0
+  offset: 49, 32
   index: 6
 ESTELLE_STANDING_6
   rotate: false
-  xy: 2, 392
-  size: 128, 128
+  xy: 508, 755
+  size: 27, 63
   orig: 128, 128
-  offset: 0, 0
+  offset: 49, 32
   index: 7
 ESTELLE_STANDING_7
   rotate: false
-  xy: 132, 522
-  size: 128, 128
+  xy: 403, 678
+  size: 51, 63
   orig: 128, 128
-  offset: 0, 0
+  offset: 26, 32
+  index: 6
+ESTELLE_STANDING_7
+  rotate: false
+  xy: 196, 392
+  size: 51, 61
+  orig: 128, 128
+  offset: 26, 33
+  index: 2
+ESTELLE_STANDING_7
+  rotate: false
+  xy: 181, 143
+  size: 51, 61
+  orig: 128, 128
+  offset: 26, 33
+  index: 5
+ESTELLE_STANDING_7
+  rotate: false
+  xy: 196, 14
+  size: 51, 61
+  orig: 128, 128
+  offset: 26, 33
+  index: 7
+ESTELLE_STANDING_7
+  rotate: false
+  xy: 321, 632
+  size: 50, 61
+  orig: 128, 128
+  offset: 27, 33
   index: 0
 ESTELLE_STANDING_7
   rotate: false
-  xy: 262, 652
-  size: 128, 128
+  xy: 317, 569
+  size: 50, 61
   orig: 128, 128
-  offset: 0, 0
-  index: 1
-ESTELLE_STANDING_7
-  rotate: false
-  xy: 392, 782
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-ESTELLE_STANDING_7
-  rotate: false
-  xy: 2, 262
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
+  offset: 27, 33
   index: 3
 ESTELLE_STANDING_7
   rotate: false
-  xy: 132, 392
-  size: 128, 128
+  xy: 317, 506
+  size: 50, 61
   orig: 128, 128
-  offset: 0, 0
+  offset: 27, 33
   index: 4
 ESTELLE_STANDING_7
   rotate: false
-  xy: 262, 522
-  size: 128, 128
+  xy: 317, 443
+  size: 49, 61
   orig: 128, 128
-  offset: 0, 0
-  index: 5
-ESTELLE_STANDING_7
-  rotate: false
-  xy: 392, 652
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 6
-ESTELLE_STANDING_7
-  rotate: false
-  xy: 522, 782
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 7
+  offset: 27, 33
+  index: 1

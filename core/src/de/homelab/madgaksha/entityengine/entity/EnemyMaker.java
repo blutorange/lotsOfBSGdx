@@ -50,6 +50,7 @@ import de.homelab.madgaksha.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.entityengine.component.ShouldScaleComponent;
 import de.homelab.madgaksha.entityengine.component.SiblingComponent;
+import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent.AnimationMode;
 import de.homelab.madgaksha.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.entityengine.component.StickyComponent;
 import de.homelab.madgaksha.entityengine.component.TemporalComponent;
@@ -63,7 +64,6 @@ import de.homelab.madgaksha.entityengine.entity.trajectory.HomingGrantTrajectory
 import de.homelab.madgaksha.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.entityengine.entityutils.SystemUtils;
 import de.homelab.madgaksha.enums.ECollisionGroup;
-import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.grantstrategy.IGrantStrategy;
 import de.homelab.madgaksha.grantstrategy.SpeedIncreaseGrantStrategy;
 import de.homelab.madgaksha.layer.BattleModeActivateLayer;
@@ -358,7 +358,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		MakerUtils.addTimedRunnable(3.0f, onTargetCrossVanished);
 
 		// Switch player to normal mode animation.
-		ComponentUtils.switchAnimationList(playerEntity, player.getAnimationList(), ESpriteDirectionStrategy.ZENITH);
+		ComponentUtils.transitionToSpriteMode(playerEntity, AnimationMode.NORMAL);
 
 		// Add particle effect to player for exiting battle mode.
 		MakerUtils.addParticleEffectGame(player.getBattleModeEnterParticleEffect(),
@@ -412,8 +412,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		playerEntity.add(gameEntityEngine.createComponent(InactiveComponent.class));
 
 		// Switch player to battle mode animation.
-		ComponentUtils.switchAnimationList(playerEntity, player.getBattleAnimationList(),
-				ESpriteDirectionStrategy.STATIC);
+		ComponentUtils.transitionToSpriteMode(playerEntity, AnimationMode.BATTLE);
 
 		// Scroll camera back to the player after enemy preview finishes.
 		MakerUtils.addTimedRunnable(3.0f, onEnemyPreviewFinish);
