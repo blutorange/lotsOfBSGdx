@@ -1,17 +1,17 @@
-package de.homelab.madgaksha.resourcepool;
+package de.homelab.madgaksha.bettersprite;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasSprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 import de.homelab.madgaksha.logging.Logger;
 
 /**
- * Helper class to use {@link Animation}s with {@link AtlasSprite}s instead of
- * {@link Sprite}s. This class makes sure you cannot put {@link Sprite}s in the
- * keyFrames array that are not {@link AtlasSprite}s.
+ * Helper class to use {@link Animation}s with {@link AtlasRegion}s instead of
+ * {@link TextureRegion}s. This class makes sure you cannot put
+ * {@link TextureRegion}s in the keyFrames array that are not
+ * {@link AtlasRegion}s.
  * 
  * @author madgaksha
  */

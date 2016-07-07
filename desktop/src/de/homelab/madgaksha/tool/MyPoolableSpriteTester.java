@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-import de.homelab.madgaksha.bettersprite.AtlasSprite;
+import de.homelab.madgaksha.bettersprite.CroppableAtlasSprite;
 import de.homelab.madgaksha.logging.LoggerFactory;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
@@ -57,6 +57,7 @@ public class MyPoolableSpriteTester implements ApplicationListener {
 	public void create() {
 		font = new BitmapFont();
 		batch = new SpriteBatch();
+		batch.enableBlending();
 		testIndex = 0; 
 		ResourcePool.init();
 		if (testList.length > 0) testList[0].findSubject();
@@ -116,13 +117,13 @@ public class MyPoolableSpriteTester implements ApplicationListener {
 	}
 	
 	private final static class Test01 implements Test {
-		private AtlasSprite sprite;
+		private CroppableAtlasSprite sprite;
 		private ShapeRenderer shapeRenderer;
 		private float centerX = 250;
 		private float centerY = 250;
 		@Override
 		public void findSubject() {
-			sprite = new AtlasSprite(ResourceCache.getTexture(ETexture.TEST_POOLABLE_SPRITE_TEST));
+			sprite = new CroppableAtlasSprite(ResourceCache.getTexture(ETexture.TEST_POOLABLE_SPRITE_TEST));
 					//ETexture.TEST_POOLABLE_SPRITE_TEST.asSprite();
 			shapeRenderer = new ShapeRenderer();
 		}

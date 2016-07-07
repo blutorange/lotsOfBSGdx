@@ -43,6 +43,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.NumberUtils;
 
 /**
@@ -59,7 +60,7 @@ import com.badlogic.gdx.utils.NumberUtils;
  * @author mzechner
  * @author Nathan Sweet
  */
-public class Sprite extends TextureRegion {
+public class CroppableSprite extends TextureRegion {
 	static final int VERTEX_SIZE = 2 + 1 + 2;
 	static final int SPRITE_SIZE = 4 * VERTEX_SIZE;
 
@@ -80,7 +81,7 @@ public class Sprite extends TextureRegion {
 	 * Creates an uninitialized sprite. The sprite will need a texture region
 	 * and bounds set before it can be drawn.
 	 */
-	public Sprite() {
+	public CroppableSprite() {
 		setColor(1, 1, 1, 1);
 	}
 
@@ -88,7 +89,7 @@ public class Sprite extends TextureRegion {
 	 * Creates a sprite with width, height, and texture region equal to the size
 	 * of the texture.
 	 */
-	public Sprite(Texture texture) {
+	public CroppableSprite(Texture texture) {
 		this(texture, 0, 0, texture.getWidth(), texture.getHeight());
 	}
 
@@ -103,7 +104,7 @@ public class Sprite extends TextureRegion {
 	 *            The height of the texture region. May be negative to flip the
 	 *            sprite when drawn.
 	 */
-	public Sprite(Texture texture, int srcWidth, int srcHeight) {
+	public CroppableSprite(Texture texture, int srcWidth, int srcHeight) {
 		this(texture, 0, 0, srcWidth, srcHeight);
 	}
 
@@ -118,7 +119,7 @@ public class Sprite extends TextureRegion {
 	 *            The height of the texture region. May be negative to flip the
 	 *            sprite when drawn.
 	 */
-	public Sprite(Texture texture, int srcX, int srcY, int srcWidth, int srcHeight) {
+	public CroppableSprite(Texture texture, int srcX, int srcY, int srcWidth, int srcHeight) {
 		if (texture == null)
 			throw new IllegalArgumentException("texture cannot be null.");
 		setTexture(texture);
@@ -134,7 +135,7 @@ public class Sprite extends TextureRegion {
 	 * region is a copy of the parameter region - altering one does not affect
 	 * the other
 	 */
-	public Sprite(TextureRegion region) {
+	public CroppableSprite(TextureRegion region) {
 		setRegion(region);
 		setColor(1, 1, 1, 1);
 		setSize(region.getRegionWidth(), region.getRegionHeight());
@@ -152,7 +153,7 @@ public class Sprite extends TextureRegion {
 	 *            The height of the texture region. May be negative to flip the
 	 *            sprite when drawn.
 	 */
-	public Sprite(TextureRegion region, int srcX, int srcY, int srcWidth, int srcHeight) {
+	public CroppableSprite(TextureRegion region, int srcX, int srcY, int srcWidth, int srcHeight) {
 		setRegion(region, srcX, srcY, srcWidth, srcHeight);
 		setColor(1, 1, 1, 1);
 		setSize(Math.abs(srcWidth), Math.abs(srcHeight));
@@ -160,12 +161,12 @@ public class Sprite extends TextureRegion {
 	}
 
 	/** Creates a sprite that is a copy in every way of the specified sprite. */
-	public Sprite(Sprite sprite) {
+	public CroppableSprite(CroppableSprite sprite) {
 		set(sprite);
 	}
 
 	/** Make this sprite a copy in every way of the specified sprite */
-	public void set(Sprite sprite) {
+	public void set(CroppableSprite sprite) {
 		if (sprite == null)
 			throw new IllegalArgumentException("sprite cannot be null.");
 		System.arraycopy(sprite.vertices, 0, vertices, 0, SPRITE_SIZE);
@@ -402,6 +403,22 @@ public class Sprite extends TextureRegion {
 	/**
 	 * Crops the sprites to the given boundaries, relative to the origin.
 	 * 
+	 * @param cropX
+	 *            Relative amount to crop to the left and right of the current origin.
+	 * @param cropY
+	 *            Relative amount to crop to the bottom and top of the current origin.
+	 */
+	public void setCrop(Vector2 cropX, Vector2 cropY) {
+		setCrop(cropX.x, cropX.y, cropY.x, cropY.y);
+	}
+
+	public void setCrop(CroppableSprite sprite) {
+		setCrop(sprite.cropLeft, sprite.cropRight, sprite.cropBottom, sprite.cropTop);
+	}
+	
+	/**
+	 * Crops the sprites to the given boundaries, relative to the origin.
+	 * 
 	 * @param cropLeft
 	 *            Relative amount to crop to the left of the current origin.
 	 * @param cropRight
@@ -581,12 +598,13 @@ public class Sprite extends TextureRegion {
 				final float v = getV();
 				final float v2 = getV2();
 
-				float originU = - (u2 - u) * localX / width;
-				float originV = - (v2 - v) * localY / height;
+				// Origin can be outside the sprite's image, so we need to clamp.
+				float originU = - (u2 - u) * MathUtils.clamp(localX / width, -1f, 0f);
+				float originV = - (v2 - v) * MathUtils.clamp(localY / height, -1f, 0f);
 				
-				// make sure width->0 or height->0 don't cause problems
-				if (!Float.isFinite(originU)) originU = u;
-				if (!Float.isFinite(originV)) originV = v;
+				// 0/0 is NaN, which will not be clamped.
+				if (originU != originU) originU = u;
+				if (originV != originV) originV = v;
 				
 				final float worldOriginU = u + originU;
 				final float worldOriginV = v + originV;
@@ -777,11 +795,44 @@ public class Sprite extends TextureRegion {
 		color.a = ((intBits >>> 24) & 0xff) / 255f;
 		return color;
 	}
+	
+	public void getCropX(Vector2 cropX) {
+		cropX.set(cropLeft, cropRight);
+	}
+	
+	public Vector2 getCropX() {
+		return new Vector2(cropLeft, cropRight);
+	}
+	
+	public void getCropY(Vector2 cropY) {
+		cropY.set(cropBottom, cropTop);
+	}
+	
+	public float getCropLeft() {
+		return cropLeft;
+	}
+	
+	public float getCropRight() {
+		return cropRight;
+	}
+	
+	public float getCropBottom() {
+		return cropBottom;
+	}
+	
+	public float getCropTop() {
+		return cropTop;
+	}
+	
+	public Vector2 getCropY() {
+		return new Vector2(cropBottom, cropTop);
+	}
 
+	@Override
 	public void setRegion(float u, float v, float u2, float v2) {
 		super.setRegion(u, v, u2, v2);
 
-		float[] vertices = Sprite.this.vertices;
+		float[] vertices = CroppableSprite.this.vertices;
 		vertices[U1] = u;
 		vertices[V1] = v2;
 
@@ -793,6 +844,8 @@ public class Sprite extends TextureRegion {
 
 		vertices[U4] = u2;
 		vertices[V4] = v2;
+		
+		dirty = dirty || cropped;
 	}
 
 	public void setU(float u) {
@@ -849,7 +902,7 @@ public class Sprite extends TextureRegion {
 	 */
 	public void flip(boolean x, boolean y) {
 		super.flip(x, y);
-		float[] vertices = Sprite.this.vertices;
+		float[] vertices = CroppableSprite.this.vertices;
 		if (x) {
 			float temp = vertices[U1];
 			vertices[U1] = vertices[U3];
@@ -866,5 +919,9 @@ public class Sprite extends TextureRegion {
 			vertices[V2] = vertices[V4];
 			vertices[V4] = temp;
 		}
+	}
+
+	public void unsetCrop() {
+		setCrop(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }

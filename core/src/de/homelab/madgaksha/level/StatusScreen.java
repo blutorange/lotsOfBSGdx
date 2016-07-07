@@ -15,12 +15,12 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 
+import de.homelab.madgaksha.bettersprite.CroppableSprite;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.EnemyIconComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
@@ -119,18 +119,18 @@ public class StatusScreen {
 	private final Rectangle uiPainBarDigitsSeparatorMK = new Rectangle();
 	private final Rectangle uiPainBarDigitsSeparatorK1 = new Rectangle();
 
-	private Sprite textureIconEnemy;
-	private Sprite textureIconScore;
-	private Sprite textureIconTime;
-	private Sprite textureIconPainBar;
-	private Sprite textureIconTokugi;
-	private Sprite textureIconWeapon;
-	private Sprite textureNoEnemyMain;
-	private Sprite textureNoEnemySub;
-	private Sprite targetIconMain = null;
-	private Sprite targetIconSub = null;
-	private Sprite spriteSeparatorTime;
-	private final Sprite spriteNumeral[] = new Sprite[10];
+	private CroppableSprite textureIconEnemy;
+	private CroppableSprite textureIconScore;
+	private CroppableSprite textureIconTime;
+	private CroppableSprite textureIconPainBar;
+	private CroppableSprite textureIconTokugi;
+	private CroppableSprite textureIconWeapon;
+	private CroppableSprite textureNoEnemyMain;
+	private CroppableSprite textureNoEnemySub;
+	private CroppableSprite targetIconMain = null;
+	private CroppableSprite targetIconSub = null;
+	private CroppableSprite spriteSeparatorTime;
+	private final CroppableSprite spriteNumeral[] = new CroppableSprite[10];
 
 	private PainPointsComponent targetPainPoints = null;
 	private PainPointsComponent playerPainPoints = null;

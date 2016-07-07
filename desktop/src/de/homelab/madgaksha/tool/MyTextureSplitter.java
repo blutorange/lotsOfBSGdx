@@ -16,11 +16,11 @@ import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
+import de.homelab.madgaksha.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.LoggerFactory;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 public class MyTextureSplitter implements ApplicationListener {
 	private final static Logger LOG = LoggerFactory.getLogger(MyTexturePacker.class);

@@ -3,11 +3,11 @@ package de.homelab.madgaksha.entityengine.component;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import de.homelab.madgaksha.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.enums.ESpriteDirectionStrategy;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimationList;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 /**
  * List of sprite for direction components for different

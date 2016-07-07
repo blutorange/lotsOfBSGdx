@@ -50,6 +50,10 @@ public class MyResourceChecker implements ApplicationListener {
 		addAllResources(resourceList);
 		
 		Locale locale = Locale.forLanguageTag(args[0]);
+		if (!I18n.isLocaleAvailable(locale)) {
+			LOG.severe("locale " + locale.getDisplayName() + " does not exist!");
+			System.exit(-1);
+		}
 		
 		MyResourceChecker checker = new MyResourceChecker(resourceList, locale);
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();

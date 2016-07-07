@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 
+import de.homelab.madgaksha.bettersprite.AtlasAnimation;
+import de.homelab.madgaksha.bettersprite.CroppableAtlasSprite;
 import de.homelab.madgaksha.getter.GetColor;
 import de.homelab.madgaksha.getter.GetVector2;
 import de.homelab.madgaksha.logging.Logger;
@@ -18,9 +20,7 @@ import de.homelab.madgaksha.resourcecache.EAnimation;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
-import de.homelab.madgaksha.resourcepool.CroppableAtlasSprite;
 import de.homelab.madgaksha.resourcepool.ResourcePool;
 
 public final class FancyDrawable {
@@ -278,8 +278,8 @@ public final class FancyDrawable {
 	}
 
 	private void setDrawable(AtlasRegion region, float unitsPerScreen) {
-		this.drawableSprite.setAtlasRegion(region);
-		this.dimensionsSpriteUnitsPerScreen = unitsPerScreen;
+		drawableSprite.setAtlasRegion(region);
+		dimensionsSpriteUnitsPerScreen = unitsPerScreen;
 		resize();
 	}
 

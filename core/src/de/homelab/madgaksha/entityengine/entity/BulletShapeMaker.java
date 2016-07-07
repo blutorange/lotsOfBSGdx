@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 
+import de.homelab.madgaksha.bettersprite.AtlasAnimation;
+import de.homelab.madgaksha.bettersprite.CroppableAtlasSprite;
 import de.homelab.madgaksha.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.SpriteComponent;
@@ -18,8 +20,6 @@ import de.homelab.madgaksha.resourcecache.EAnimation;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcepool.AtlasAnimation;
-import de.homelab.madgaksha.resourcepool.CroppableAtlasSprite;
 import de.homelab.madgaksha.util.GeoUtil;
 
 /**

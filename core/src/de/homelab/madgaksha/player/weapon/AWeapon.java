@@ -4,11 +4,11 @@ import static de.homelab.madgaksha.GlobalBag.player;
 import static de.homelab.madgaksha.GlobalBag.statusScreen;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector3;
 
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
+import de.homelab.madgaksha.bettersprite.CroppableSprite;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.player.APlayer;
 import de.homelab.madgaksha.player.IMapItem;
@@ -21,8 +21,8 @@ public abstract class AWeapon implements IMapItem {
 	private final static Logger LOG = Logger.getLogger(AWeapon.class);
 
 	private ESound soundOnAcquire;
-	private Sprite iconMain = null;
-	private Sprite iconSub = null;
+	private CroppableSprite iconMain = null;
+	private CroppableSprite iconSub = null;
 	private EWeapon type = null;
 
 	public AWeapon() {
@@ -51,11 +51,11 @@ public abstract class AWeapon implements IMapItem {
 		return ESound.ACQUIRE_WEAPON;
 	}
 
-	public Sprite getIconMain() {
+	public CroppableSprite getIconMain() {
 		return iconMain;
 	}
 
-	public Sprite getIconSub() {
+	public CroppableSprite getIconSub() {
 		return iconSub;
 	}
 

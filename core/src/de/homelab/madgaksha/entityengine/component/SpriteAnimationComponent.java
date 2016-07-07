@@ -3,9 +3,9 @@ package de.homelab.madgaksha.entityengine.component;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import de.homelab.madgaksha.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.resourcecache.EAnimation;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
-import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 public class SpriteAnimationComponent implements Component, Poolable {
 	private final static float DEFAULT_START_TIME = 0.0f;

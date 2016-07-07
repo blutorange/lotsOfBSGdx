@@ -51,7 +51,7 @@ public class TokugiOukaMusougeki extends ATokugi {
 	@Override
 	public boolean openFire(Entity player, float deltaTime) {
 		long currentTime = TimeUtils.millis();
-		if (currentTime - previousTime < COOLDOWN) {
+		if (currentTime - previousTime < COOLDOWN || !isSomethingTargetted()) {
 			SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
 			return false;
 		}

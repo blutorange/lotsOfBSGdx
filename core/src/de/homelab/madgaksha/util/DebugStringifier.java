@@ -3,13 +3,14 @@ package de.homelab.madgaksha.util;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+
+import de.homelab.madgaksha.bettersprite.CroppableSprite;
 
 public class DebugStringifier {
 	private DebugStringifier() {
 	}
 
-	public static String get(Sprite s) {
+	public static String get(CroppableSprite s) {
 		return new StringBuilder().append(s.toString()).append("\n  x=").append(s.getX()).append("\n  y=")
 				.append(s.getY()).append("\n  width=").append(s.getWidth()).append("\n  height=").append(s.getHeight())
 				.append("\n  originX=").append(s.getOriginX()).append("\n  originY=").append(s.getOriginY())

@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.files.FileHandle;
 
+import de.homelab.madgaksha.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
@@ -20,7 +21,6 @@ import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent.An
 import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent.AnimationMode;
 import de.homelab.madgaksha.entityengine.entitysystem.BirdsViewSpriteSystem;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 public class FancySpritetarget extends AFancyEvent {
 	private final static Logger LOG = Logger.getLogger(FancySpritetarget.class);

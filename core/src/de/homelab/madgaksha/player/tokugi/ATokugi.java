@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.player.tokugi;
 
+import static de.homelab.madgaksha.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.GlobalBag.cameraTrackingComponent;
 import static de.homelab.madgaksha.GlobalBag.gameScore;
 import static de.homelab.madgaksha.GlobalBag.player;
@@ -7,12 +8,12 @@ import static de.homelab.madgaksha.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.GlobalBag.statusScreen;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector3;
 
 import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.audiosystem.SoundPlayer;
+import de.homelab.madgaksha.bettersprite.CroppableSprite;
 import de.homelab.madgaksha.entityengine.Mapper;
 import de.homelab.madgaksha.entityengine.component.DamageQueueComponent;
 import de.homelab.madgaksha.entityengine.component.PainPointsComponent;
@@ -29,8 +30,8 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
 public abstract class ATokugi implements IMapItem {
 	private final static Logger LOG = Logger.getLogger(ATokugi.class);
 
-	private Sprite iconMain = null;
-	private Sprite iconSub = null;
+	private CroppableSprite iconMain = null;
+	private CroppableSprite iconSub = null;
 	private ESound soundOnAcquire;
 	private ETokugi type = null;
 	private ETexture sign;
@@ -73,11 +74,11 @@ public abstract class ATokugi implements IMapItem {
 		return sign;
 	}
 
-	public Sprite getIconMain() {
+	public CroppableSprite getIconMain() {
 		return iconMain;
 	}
 
-	public Sprite getIconSub() {
+	public CroppableSprite getIconSub() {
 		return iconSub;
 	}
 
@@ -138,7 +139,7 @@ public abstract class ATokugi implements IMapItem {
 	}
 
 	protected void dealFinalDamagePoint() {
-		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
+		if (!isSomethingTargetted()) {
 			LOG.error("no such target");
 			return;
 		}
@@ -162,12 +163,15 @@ public abstract class ATokugi implements IMapItem {
 						statusScreen.addTokugiSign(tokugi);
 					}
 				});
-
 				ComponentUtils.dealDamage(null, GlobalBag.playerHitCircleEntity, requestedRemainingPainPoints(), false);
 			}
 		}
 	}
 
+	protected boolean isSomethingTargetted() {
+		return battleModeActive && cameraTrackingComponent.trackedPointIndex < cameraTrackingComponent.focusPoints.size();
+	}
+	
 	/**
 	 * Fires the tokugi. May return false when tokugi cannot be used right now.
 	 * 

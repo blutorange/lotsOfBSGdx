@@ -1,11 +1,11 @@
 package de.homelab.madgaksha.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import de.homelab.madgaksha.bettersprite.CroppableAtlasSprite;
+import de.homelab.madgaksha.bettersprite.CroppableSprite;
 import de.homelab.madgaksha.resourcecache.ETexture;
-import de.homelab.madgaksha.resourcepool.CroppableAtlasSprite;
 
 /**
  * Represents the force that is applied to objects.
@@ -22,7 +22,7 @@ public class ShadowComponent implements Component, Poolable {
 	private final static float DEFAULT_OFFSET_ROTATE_Y = 0.0f;
 	private final static boolean DEFAULT_RELATIVE_TO_CAMERA = true;
 
-	public Sprite sprite;
+	public CroppableSprite sprite;
 	public float offsetX = DEFAULT_OFFSET_X;
 	public float offsetY = DEFAULT_OFFSET_Y;
 	public float scaleFactorX = DEFAULT_SCALE_FACTOR_X;

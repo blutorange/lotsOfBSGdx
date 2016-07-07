@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import de.homelab.madgaksha.bettersprite.CroppableAtlasSprite;
 import de.homelab.madgaksha.resourcecache.ETexture;
-import de.homelab.madgaksha.resourcepool.CroppableAtlasSprite;
 import de.homelab.madgaksha.resourcepool.SpritePool;
 import de.homelab.madgaksha.util.DebugStringifier;
 

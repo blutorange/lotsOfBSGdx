@@ -6,15 +6,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 
+import de.homelab.madgaksha.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 /**
  * Different animations for each mode, eg. different looking directions.
- * Can be initialized with a sprite sheet, in which case it must start
- * at the top-left.
- * <br><br>
- * Alternatively, it can be initialized with a list of {@link EAnimation}.
+ * Uses {@link TextureAtlas} in favor of simple sprite sheets.
+ *
  * @author madgaksha
  *
  */
@@ -47,15 +45,11 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	private final static EnumMap<EAnimationList, AtlasAnimation[]> animationListCache = new EnumMap<EAnimationList, AtlasAnimation[]>(
 			EAnimationList.class);
 
-	private ETextureAtlas textureAtlas;
-	private ETexture texture;
-	private String name;
-	private int tileWidth;
-	private int tileHeight;
-	private int frameCount;
-	private float frameDuration;
-	private AtlasAnimation.PlayMode playMode;
-	private int animationModeCount;
+	private final ETextureAtlas textureAtlas;
+	private final String name;
+	private final float frameDuration;
+	private final AtlasAnimation.PlayMode playMode;
+	private final int animationModeCount;
 
 	private EAnimationList(ETextureAtlas textureAtlas, String name, int animationModeCount, float frameDuration, AtlasAnimation.PlayMode playMode) {
 		this.playMode = playMode;
@@ -63,17 +57,6 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 		this.frameDuration = frameDuration;
 		this.name = name;
 		this.textureAtlas = textureAtlas;
-	}
-
-	
-	private EAnimationList(ETexture et, int tw, int th, float fd, AtlasAnimation.PlayMode pm, int amc, int fc) {
-		texture = et;
-		tileWidth = tw;
-		tileHeight = th;
-		frameCount = fc;
-		frameDuration = fd;
-		playMode = pm;
-		animationModeCount = amc;
 	}
 
 	public static void clearAll() {
@@ -96,8 +79,6 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	@Override
 	public AtlasAnimation[] getObject() {
 		AtlasAnimation[] atlasAnimationList;
-		// ETextureAtlas
-		if (textureAtlas != null) {
 			TextureAtlas loadedTextureAtlas = ResourceCache.getTextureAtlas(textureAtlas);
 			if (loadedTextureAtlas == null) return null;
 			atlasAnimationList = new AtlasAnimation[animationModeCount];
@@ -111,21 +92,6 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 				animation.setPlayMode(playMode);
 				atlasAnimationList[i] = animation;
 			}
-		}
-		// ETexture
-		else {
-			// Retrieve sprite sheet.
-			AtlasRegion atlasRegion = ResourceCache.getTexture(texture);
-			if (atlasRegion == null)
-				return null;
-			// Split sprite sheet.
-			AtlasRegion[][] atlasRegionArray = splitAtlasRegion(atlasRegion);
-			atlasAnimationList = new AtlasAnimation[animationModeCount];
-			for (int i = 0; i != animationModeCount; ++i) {
-				atlasAnimationList[i] = new AtlasAnimation(frameDuration, atlasRegionArray[i]);
-				atlasAnimationList[i].setPlayMode(playMode);
-			}			
-		}
 		return atlasAnimationList;
 	}
 
@@ -139,29 +105,6 @@ public enum EAnimationList implements IResource<EAnimationList, AtlasAnimation[]
 	@Override
 	public EnumMap getMap() {
 		return animationListCache;
-	}
-
-	private AtlasRegion[][] splitAtlasRegion(AtlasRegion atlasRegion) {
-		int width = atlasRegion.getRegionWidth();
-		int height = atlasRegion.getRegionHeight();
-		// Origin of the coordinate system is to the top left.
-		// Sprite sheets (should) should start on the top-left as well.
-		int x = atlasRegion.getRegionX();
-		int y = atlasRegion.getRegionY();
-
-		int rows = Math.min(animationModeCount, height / tileHeight);
-		int cols = Math.min(frameCount, width / tileWidth);
-
-		int startX = x;
-		AtlasRegion[][] tiles = new AtlasRegion[rows][cols];
-		for (int row = 0; row < rows; row++, y += tileHeight) {
-			x = startX;
-			for (int col = 0; col < cols; col++, x += tileWidth) {
-				tiles[row][col] = new AtlasRegion(atlasRegion.getTexture(), x, y, tileWidth, tileHeight);
-			}
-		}
-
-		return tiles;
 	}
 
 	@Override

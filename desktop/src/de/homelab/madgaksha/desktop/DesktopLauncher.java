@@ -193,7 +193,7 @@ public class DesktopLauncher extends JFrame {
 		try {
 			line = parser.parse(o, args, false);
 		} catch (ParseException e) {
-			LOG.log(Level.SEVERE, "Invalid command line options. Try --help", e);
+			LOG.log(Level.SEVERE, "Invalid command line options. Try --help");
 			System.exit(-1);
 		}
 
@@ -360,7 +360,7 @@ public class DesktopLauncher extends JFrame {
 			defaultOption = 0;
 
 		// Create choice dialogue.
-		I18n.init(Locale.getDefault());
+		I18n.init(localeMap.get(optionList.get(defaultOption)));
 		String choice = String.valueOf(JOptionPane.showInputDialog(null, I18n.main("desktop.startup.choose.language"),
 				I18n.main("desktop.startup.choose.language.title"), JOptionPane.QUESTION_MESSAGE, null, optionArray,
 				optionArray[defaultOption]));

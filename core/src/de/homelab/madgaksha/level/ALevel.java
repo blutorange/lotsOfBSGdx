@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -18,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.homelab.madgaksha.bettersprite.CroppableSprite;
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.CutsceneEventProvider;
@@ -97,7 +97,7 @@ public abstract class ALevel {
 	private final float enemyTargetCrossAngularVelocity;
 	private final ETexture enemyTargetCrossTexture;
 	private final Environment environment;
-	private Sprite icon;
+	private CroppableSprite icon;
 
 	// =============================
 	// Constructor
@@ -393,7 +393,7 @@ public abstract class ALevel {
 		return enemyPainBarColorHigh;
 	}
 
-	public Sprite getIcon() {
+	public CroppableSprite getIcon() {
 		return icon;
 	}
 

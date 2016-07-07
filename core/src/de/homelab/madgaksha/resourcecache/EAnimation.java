@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 
+import de.homelab.madgaksha.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 	DEFAULT(ETexture.DEFAULT, 1, 1, 1, 0.1f, AtlasAnimation.PlayMode.LOOP),

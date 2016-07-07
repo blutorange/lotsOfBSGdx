@@ -16,7 +16,7 @@ public class I18n {
 	private static Locale locale;
 	private static boolean initiated = false;
 
-	private static Locale[] availableLocales = { Locale.GERMAN, Locale.ENGLISH, Locale.JAPANESE };
+	private static Locale[] availableLocales = { Locale.ENGLISH, Locale.GERMAN, Locale.JAPANESE };
 
 	// not instantiable
 	private I18n() {
@@ -32,6 +32,8 @@ public class I18n {
 	 *            The locale to use.
 	 */
 	public static void init(Locale l) {
+		if (l == null) l = availableLocales[0];
+		if (!isLocaleAvailable(l)) l = availableLocales[0];
 		locale = l;
 		ResourceBundle rbMain = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.main", locale);
 		ResourceBundle rbGame = ResourceBundle.getBundle("de.homelab.madgaksha.i18n.game", locale);
@@ -71,6 +73,12 @@ public class I18n {
 		return locale.getLanguage();
 	}
 
+	public static boolean isLocaleAvailable(Locale otherLocale) {
+		for (Locale l : availableLocales)
+			if (l.equals(otherLocale)) return true;
+		return false;
+	}
+	
 	public static Map<String, Locale> getAvailableLocales() {
 		Map<String, Locale> map = new HashMap<String, Locale>(availableLocales.length);
 		for (Locale l : availableLocales) {

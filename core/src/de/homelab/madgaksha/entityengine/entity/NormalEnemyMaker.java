@@ -44,23 +44,23 @@ public abstract class NormalEnemyMaker extends EnemyMaker {
 
 		BehaviourComponent bc = new BehaviourComponent(BEHAVIOUR_BASICS);
 		RotationComponent rc = new RotationComponent(true);
-		AnimationForDirectionComponent sfdc = new AnimationForDirectionComponent();
-		AnimationModeListComponent sfdlc = new AnimationModeListComponent();
+		AnimationModeListComponent amlc = new AnimationModeListComponent();
+		AnimationForDirectionComponent afdc = new AnimationForDirectionComponent();
 		SpriteAnimationComponent sac = new SpriteAnimationComponent();
 		SpriteComponent sc = new SpriteComponent();
 
 		bc.cortex = getBehaviour(props);
-		sfdlc.setupNormal(requestedAnimationListNormal(), ESpriteDirectionStrategy.ZENITH, true);
-		sfdlc.setupDamage(requestedAnimationListDamage(), ESpriteDirectionStrategy.ZENITH, true);
-		sfdc.setup(sfdlc.normal.animationList, sfdlc.normal.spriteDirectionStrategy);
-		sac.setup(sfdc);
+		amlc.setupNormal(requestedAnimationListNormal(), ESpriteDirectionStrategy.ZENITH, true);
+		amlc.setupDamage(requestedAnimationListDamage(), ESpriteDirectionStrategy.ZENITH, true);
+		afdc.setup(amlc.normal.animationList, amlc.normal.spriteDirectionStrategy);
+		sac.setup(afdc);
 		sc.setup(sac);
 
 		e.add(bc);
 		e.add(sc);
 		e.add(sac);
-		e.add(sfdc);
-		e.add(sfdlc);
+		e.add(afdc);
+		e.add(amlc);
 		e.add(rc);
 	}
 

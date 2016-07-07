@@ -5,9 +5,9 @@ import static de.homelab.madgaksha.GlobalBag.game;
 import static de.homelab.madgaksha.GlobalBag.viewportGame;
 import static de.homelab.madgaksha.GlobalBag.viewportPixel;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
 
+import de.homelab.madgaksha.bettersprite.CroppableSprite;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
@@ -22,7 +22,7 @@ public class BattleModeActivateLayer extends ALayer {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(BattleModeActivateLayer.class);
-	private Sprite cutinSprite;
+	private CroppableSprite cutinSprite;
 	private Interpolation interpolation;
 	private float totalTime = 0.0f;
 	private float durationInverse;

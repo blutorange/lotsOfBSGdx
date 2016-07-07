@@ -4,6 +4,7 @@ import static de.homelab.madgaksha.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
 
+import de.homelab.madgaksha.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.entityengine.DefaultPriority;
 import de.homelab.madgaksha.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.entityengine.Mapper;
@@ -12,7 +13,6 @@ import de.homelab.madgaksha.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.entityengine.component.AnimationForDirectionComponent;
 import de.homelab.madgaksha.entityengine.component.AnimationModeListComponent.AnimationForDirection;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 
 /**
  * Computes the correct frame for a bird's view sprite.
@@ -80,17 +80,17 @@ public class BirdsViewSpriteSystem extends DisableIteratingSystem {
 	 *            The component from which the direction should be extracted.
 	 * @return The animation for the given direction.
 	 */
-	public static AtlasAnimation getForDirection(float degree, AnimationForDirectionComponent sfdc) {
+	public static AtlasAnimation getForDirection(float degree, AnimationForDirectionComponent afdc) {
 		AtlasAnimation animation = null;
-		animation = sfdc.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * sfdc.animationList.length))
-				* sfdc.animationList.length / 360.0f)) % sfdc.animationList.length];
+		animation = afdc.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * afdc.animationList.length))
+				* afdc.animationList.length / 360.0f)) % afdc.animationList.length];
 		return animation;
 	}
 
-	public static AtlasAnimation getForDirection(float degree, AnimationForDirection sd) {
+	public static AtlasAnimation getForDirection(float degree, AnimationForDirection afd) {
 		AtlasAnimation animation = null;
-		animation = sd.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * sd.animationList.length))
-				* sd.animationList.length / 360.0f)) % sd.animationList.length];
+		animation = afd.animationList[((int) (((degree + 180.0f) + 360.0f / (2.0f * afd.animationList.length))
+				* afd.animationList.length / 360.0f)) % afd.animationList.length];
 		return animation;
 	}
 }
