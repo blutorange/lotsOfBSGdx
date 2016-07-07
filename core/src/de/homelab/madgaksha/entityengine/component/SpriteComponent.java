@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.resourcecache.ETexture;
-import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
+import de.homelab.madgaksha.resourcepool.CroppableAtlasSprite;
 import de.homelab.madgaksha.resourcepool.SpritePool;
 import de.homelab.madgaksha.util.DebugStringifier;
 
@@ -14,7 +14,7 @@ public class SpriteComponent implements Component, Poolable {
 
 	private boolean managed = false;
 
-	public PoolableAtlasSprite sprite;
+	public CroppableAtlasSprite sprite;
 
 	/**
 	 * Creates a new sprite component. Used mainly for pooling.
@@ -28,7 +28,7 @@ public class SpriteComponent implements Component, Poolable {
 	 * @param sprite
 	 *            The sprite with the texture to use.
 	 */
-	public SpriteComponent(PoolableAtlasSprite sprite) {
+	public SpriteComponent(CroppableAtlasSprite sprite) {
 		setup(sprite);
 	}
 
@@ -50,7 +50,7 @@ public class SpriteComponent implements Component, Poolable {
 		setup(sac, origin);
 	}
 
-	public void setup(PoolableAtlasSprite sprite) {
+	public void setup(CroppableAtlasSprite sprite) {
 		this.sprite = sprite;
 		this.managed = false;
 	}

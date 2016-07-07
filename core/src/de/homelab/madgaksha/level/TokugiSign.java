@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ETexture;
-import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
+import de.homelab.madgaksha.resourcepool.CroppableAtlasSprite;
 
 public class TokugiSign implements Poolable {
 	private final static float DURATION_IN = 0.5f;
@@ -42,7 +42,7 @@ public class TokugiSign implements Poolable {
 	private final static Logger LOG = Logger.getLogger(TokugiSign.class);
 	private final Vector2 centerPosition = new Vector2();
 	private Mode mode;
-	private PoolableAtlasSprite sign;
+	private CroppableAtlasSprite sign;
 	private float totalTime;
 
 	public TokugiSign() {

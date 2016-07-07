@@ -10,12 +10,12 @@ import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 /**
  * A pool for sprites that support {@link TextureAtlas}. It uses
- * {@link AtlasRegion}s and {@link PoolableAtlasSprite}s.
+ * {@link AtlasRegion}s and {@link CroppableAtlasSprite}s.
  * 
  * @author madgaksha
  *
  */
-public class SpritePool extends Pool<PoolableAtlasSprite> {
+public class SpritePool extends Pool<CroppableAtlasSprite> {
 
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(SpritePool.class);
@@ -36,16 +36,16 @@ public class SpritePool extends Pool<PoolableAtlasSprite> {
 	}
 
 	@Override
-	protected PoolableAtlasSprite newObject() {
-		return new PoolableAtlasSprite();
+	protected CroppableAtlasSprite newObject() {
+		return new CroppableAtlasSprite();
 	}
 
-	public PoolableAtlasSprite obtain(ETexture texture) {
+	public CroppableAtlasSprite obtain(ETexture texture) {
 		return obtain(ResourceCache.getTexture(texture));
 	}
 
-	public PoolableAtlasSprite obtain(AtlasRegion region) {
-		PoolableAtlasSprite sprite = obtain();
+	public CroppableAtlasSprite obtain(AtlasRegion region) {
+		CroppableAtlasSprite sprite = obtain();
 		sprite.setAtlasRegion(region);
 		return sprite;
 	}

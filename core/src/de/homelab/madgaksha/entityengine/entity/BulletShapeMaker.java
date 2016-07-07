@@ -19,7 +19,7 @@ import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.IResource;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
-import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
+import de.homelab.madgaksha.resourcepool.CroppableAtlasSprite;
 import de.homelab.madgaksha.util.GeoUtil;
 
 /**
@@ -94,7 +94,7 @@ public enum BulletShapeMaker {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(BulletShapeMaker.class);
 
-	private PoolableAtlasSprite sprite;
+	private CroppableAtlasSprite sprite;
 	private AtlasAnimation animation;
 	private final IResource<? extends Enum<?>, ?> resource;
 	private final Rectangle boundingBoxCollision;

@@ -22,6 +22,11 @@ public enum ETextureAtlas implements IResource<ETextureAtlas, TextureAtlas> {
 	STATUS_SCREEN("statusscreen/packed/statusScreenPacked.atlas"),
 	
 	//======================================
+	//            TESTING ONLY
+	//======================================	
+	TEST_POOLABLE_SPRITE_TEST("test/poolableSpriteTest/packed/poolableSpriteTest.atlas"),
+	
+	//======================================
 	//            SPECIAL ATTACKS
 	//======================================
 	OUGI_OUKA_MUSOUGEKI("cutscene/fancyScene/ougiOukaMusougeki/packed/ougiPacked.atlas"),

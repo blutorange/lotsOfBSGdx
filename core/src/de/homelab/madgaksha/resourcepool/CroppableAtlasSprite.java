@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * THIS IS THE SAME AS AtlasSprite, BUT SLIGHTLY MODIFIED BY ME TO ALLOW
+ * FOR POOLING AND CROPPING SPRITES. IT ALSO FIXES A BUG WITH AtlasSprite#setCenter
+
+ * Copyright 2011 See AUTHORS file.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package de.homelab.madgaksha.resourcepool;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,15 +28,17 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import de.homelab.madgaksha.logging.Logger;
 
 /**
- * Makes minor change to {@link AtlasSprite} to make them poolable. Namely,
- * adding a no-arg constructor and allowing for the atlasRegion to be set later.
+ * Makes minor change to {@link AtlasSprite} to make them poolable, allow
+ * for cropping and fixes a bug with {@link AtlasSprite#setCenter} and
+ * {@link AtlasSprite#setOriginCenter}.
  * 
+ * @author mzechner
+ * @author Nathan Sweet 
  * @author madgaksha
- *
  */
-public class PoolableAtlasSprite extends Sprite implements Poolable {
+public class CroppableAtlasSprite extends Sprite implements Poolable {
 	@SuppressWarnings("unused")
-	private final static Logger LOG = Logger.getLogger(PoolableAtlasSprite.class);
+	private final static Logger LOG = Logger.getLogger(CroppableAtlasSprite.class);
 
 	private AtlasRegion region;
 	private float originalOffsetX, originalOffsetY;
@@ -26,28 +46,39 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 	private float cropRight = 1.0f;
 	private float cropBottom = 1.0f;
 	private float cropTop = 1.0f;
+	/**	 Original texture coordinates, before cropping was applied. */
 	private float originalU, originalU2, originalV, originalV2;
-	private float originalOriginX, originalOriginY, originalWidth, originalHeight, originalX, originalY;
+	/**	 Original origin x and y, before cropping was applied. */
+	private float originalOriginX, originalOriginY;
+	/** Original width and height, before cropping was applied. */
+	private float originalWidth, originalHeight;
+	/**	 Original position x and y, before cropping was applied. */
+	private float originalX, originalY;
 	private boolean cropped = false;
 	private boolean dirtyCrop = false;
 
-	public PoolableAtlasSprite() {
-		originalOffsetX = 0;
-		originalOffsetY = 0;
+	public CroppableAtlasSprite() {
+		super();
 		reset();
 	}
-
+	
 	public void reset() {
-		this.originalOffsetX = this.originalOffsetY = 0.0f;
 		cropLeft = cropRight = cropBottom = cropTop = 1.0f;
+		originalX = originalY = 0.0f;
+		originalWidth = originalHeight = 0.0f;
+		originalOffsetX = originalOffsetY = 0.0f;
+		originalOriginX = originalOriginY = 0.0f;
+		originalU = originalU2 = originalV = originalV2 = 0.0f;
 		cropped = false;
-		setColor(1f, 1f, 1f, 1f);
-		setTexture(null);
+		dirtyCrop = false;
+		super.setBounds(0f,0f,0f,0f);
+		super.setColor(1f, 1f, 1f, 1f);
+		super.setTexture(null);
+		super.setScale(1f);
 		region = null;
-		setScale(1f);
 	}
 
-	public PoolableAtlasSprite(AtlasRegion region) {
+	public CroppableAtlasSprite(AtlasRegion region) {
 		setAtlasRegion(region);
 	}
 
@@ -69,12 +100,12 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 		this.originalV = region.getV();
 		this.originalU2 = region.getU2();
 		this.originalV2 = region.getV2();
-		this.originalX = getX();
-		this.originalY = getY();
+		this.originalX = super.getX();
+		this.originalY = super.getY();
 		this.originalWidth = region.getRegionWidth();
 		this.originalHeight = region.getRegionHeight();
-		this.originalOriginX = getOriginX();
-		this.originalOriginY = getOriginY();
+		this.originalOriginX = super.getOriginX();
+		this.originalOriginY = super.getOriginY();
 	}
 
 	@Override
@@ -85,6 +116,8 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 
 	/**
 	 * Sets the position relative to the current origin of this sprite.
+	 * For example, if the current origin is at the top-left corner,
+	 * this sets the position so that the top-left corner is at (x,y).
 	 * 
 	 * @param x
 	 *            x coordinate.
@@ -92,8 +125,8 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 	 *            y coordinate.
 	 */
 	public void setPositionOrigin(float x, float y) {
-		setX(x - originalOriginX);
-		setY(y - originalOriginY);
+		setX(x - originalOriginX - region.offsetX);
+		setY(y - originalOriginY - region.offsetY);
 	}
 
 	@Override
@@ -131,32 +164,39 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 		originalWidth = packedWidth * widthRatio;
 		originalHeight = packedHeight * heightRatio;
 		if (cropped)
-			dirtyCrop = true;// applyCrop();
+			dirtyCrop = true;
 		else
 			super.setBounds(originalX, originalY, originalWidth, originalHeight);
 	}
 
 	@Override
-	public void setCenterX(float y) {
-		setX(y - originalWidth / 2);
+	public void setCenterX(float x) {
+		setX(x - region.originalWidth / 2);
 	}
 
 	@Override
 	public void setCenterY(float y) {
-		setY(y - originalHeight / 2);
+		setY(y - region.originalHeight / 2);
 	}
 
+	/** Sets the size of this sprite when drawn, before scaling and rotation are applied. This modifies
+	 * the top-right corner of this sprite so that it lies at (width, height) relative to the current
+	 * position of this sprite's bottom-left corner.
+	 * <br><br>
+	 * If origin, rotation, or scale are changed, it is slightly more efficient to set the size after those operations. If both position and size are to be changed, it is
+	 * better to use {@link #setBounds(float, float, float, float)}. */
 	@Override
 	public void setSize(float width, float height) {
 		setBounds(getX(), getY(), width, height);
 	}
 
+	/** Sets the origin in relation to the sprite's position for scaling, cropping and rotating it. */
 	@Override
 	public void setOrigin(float originX, float originY) {
 		originalOriginX = originX - region.offsetX;
 		originalOriginY = originY - region.offsetY;
 		if (cropped)
-			dirtyCrop = true;// applyCrop();
+			dirtyCrop = true;
 		else
 			super.setOrigin(originalOriginX, originalOriginY);
 	}
@@ -169,7 +209,7 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 	 *            Origin to be set.
 	 */
 	public void setOriginRelative(Vector2 origin) {
-		setOrigin(origin.x * originalWidth, origin.y * originalHeight);
+		setOrigin(origin.x * region.originalWidth, origin.y * region.originalHeight);
 	}
 
 	/**
@@ -182,12 +222,12 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 	 *            Origin to be set.
 	 */
 	public void setOriginRelative(float originX, float originY) {
-		setOrigin(originX * originalWidth, originY * originalHeight);
+		setOrigin(originX * region.originalWidth, originY * region.originalHeight);
 	}
 
 	@Override
 	public void setOriginCenter() {
-		setOrigin(originalWidth / 2, originalHeight / 2);
+		setOrigin(region.originalWidth / 2, region.originalHeight / 2);
 	}
 
 	@Override
@@ -249,19 +289,47 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 	 * Crops the sprites to the given boundaries, relative to the origin.
 	 * 
 	 * @param cropX
-	 *            Relative amount to crop left and right.
+	 *            Relative amount to crop to the left and right of the current origin.
 	 * @param cropY
-	 *            Relative amount to crop bottom and top.
+	 *            Relative amount to crop to the bottom and top of the current origin.
 	 */
 	public void setCrop(Vector2 cropX, Vector2 cropY) {
-		cropLeft = cropX.x;
-		cropRight = cropX.y;
-		cropBottom = cropY.x;
-		cropTop = cropY.y;
+		setCrop(cropX.x, cropX.y, cropY.x, cropY.y);
+	}
+
+	/**
+	 * Crops the sprites to the given boundaries, relative to the origin.
+	 * 
+	 * @param cropLR
+	 *            Relative amount to crop to the left and right of the current origin.
+	 * @param cropBT
+	 *            Relative amount to crop to the bottom and top of the current origin.
+	 */
+	public void setCrop(float cropLR, float cropBT) {
+		setCrop(cropLR, cropLR, cropBT, cropBT);
+	}
+	
+	/**
+	 * Crops the sprites to the given boundaries, relative to the origin.
+	 * 
+	 * @param cropLeft
+	 *            Relative amount to crop to the left of the current origin.
+	 * @param cropRight
+	 *            Relative amount to crop to the right of the current origin.
+	 * @param cropBottom
+	 *            Relative amount to crop to the bottom of the current origin.
+	 * @param cropTop
+	 *            Relative amount to crop to the top of the current origin.
+	 */
+	public void setCrop(float cropLeft, float cropRight, float cropBottom, float cropTop) {
+		this.cropLeft = cropLeft;
+		this.cropRight = cropRight;
+		this.cropBottom = cropBottom;
+		this.cropTop = cropTop;
 		cropped = cropLeft != 1.0f || cropRight != 1.0f || cropBottom != 1.0f || cropTop != 1.0f;
 		if (cropped) {
 			setRegion(originalU, originalV, originalU2, originalV2);
-			dirtyCrop = true;// applyCrop();
+			dirtyCrop = true;
 		}
 	}
 
@@ -328,20 +396,26 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 			super.setU2(u2);
 	}
 
+	//TODO rethink this computation, origin... are values accounting for stripWhitespace
 	/**
 	 * Sets the dimensions of the image for the current crop. Texture
 	 * coordinates are set separately by
-	 * {@link PoolableAtlasSprite#setRegion(float, float, float, float)}
+	 * {@link CroppableAtlasSprite#setRegion(float, float, float, float)}
 	 */
 	private void applyCrop() {
 		// Compute new position, width, height, and origin.
-		float x = originalX + originalOriginX * (1.0f - cropLeft);
-		float y = originalY + originalOriginY * (1.0f - cropBottom);
-		float w = (originalOriginX * cropLeft + (originalWidth - originalOriginX) * cropRight);
-		float h = (originalOriginY * cropBottom + (originalHeight - originalOriginY) * cropTop);
-		float ox = originalOriginX * cropLeft;
-		float oy = originalOriginY * cropBottom;
+		float x = getX() + getOriginX() * (1.0f - cropLeft);
+		float y = getY() + getOriginY() * (1.0f - cropBottom);
+		float w = (getOriginX() * cropLeft + (getWidth() - getOriginX()) * cropRight);
+		float h = (getOriginY() * cropBottom + (getHeight() - getOriginY()) * cropTop);
+		float ox = getOriginX() * cropLeft;
+		float oy = getOriginY() * cropBottom;
 
+		x = Math.max(originalX, x);
+		y = Math.max(originalY, y);
+		if (x+w > originalX + originalWidth) w = originalX + originalWidth - x;
+		if (y+h > originalY + originalHeight) h = originalY + originalHeight - y;
+		
 		// Apply origin and bounds.
 		super.setBounds(x, y, w, h);
 		super.setOrigin(ox, oy);
@@ -358,40 +432,40 @@ public class PoolableAtlasSprite extends Sprite implements Poolable {
 
 	@Override
 	public float getX() {
-		return super.getX() - region.offsetX;
+		return originalX - region.offsetX;
 	}
 
 	@Override
 	public float getY() {
-		return super.getY() - region.offsetY;
+		return originalY - region.offsetY;
 	}
 
 	@Override
 	public float getOriginX() {
-		return super.getOriginX() + region.offsetX;
+		return originalOriginX + region.offsetX;
 	}
 
 	@Override
 	public float getOriginY() {
-		return super.getOriginY() + region.offsetY;
+		return originalOriginY + region.offsetY;
 	}
 
 	@Override
 	public float getWidth() {
-		return super.getWidth() / region.getRotatedPackedWidth() * region.originalWidth;
+		return originalWidth / region.getRotatedPackedWidth() * region.originalWidth;
 	}
 
 	@Override
 	public float getHeight() {
-		return super.getHeight() / region.getRotatedPackedHeight() * region.originalHeight;
+		return originalHeight / region.getRotatedPackedHeight() * region.originalHeight;
 	}
 
 	public float getWidthRatio() {
-		return super.getWidth() / region.getRotatedPackedWidth();
+		return originalWidth / region.getRotatedPackedWidth();
 	}
 
 	public float getHeightRatio() {
-		return super.getHeight() / region.getRotatedPackedHeight();
+		return originalHeight / region.getRotatedPackedHeight();
 	}
 
 	public AtlasRegion getAtlasRegion() {

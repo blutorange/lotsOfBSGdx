@@ -1,4 +1,4 @@
-package de.homelab.madgaksha;
+package de.homelab.madgaksha.tool;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;

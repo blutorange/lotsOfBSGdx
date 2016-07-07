@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
+import de.homelab.madgaksha.resourcepool.CroppableAtlasSprite;
 import de.homelab.madgaksha.resourcepool.SpritePool;
 
 /**
@@ -27,6 +27,12 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 	OVAL_SHADOW(ETextureAtlas.MISC, "ovalShadow"),
 	DEFAULT(ETextureAtlas.MISC, "default"),
 
+	// ==================
+	// TESTING ONLY
+	// ==================
+	TEST_POOLABLE_SPRITE_TEST(ETextureAtlas.TEST_POOLABLE_SPRITE_TEST, "poolableSpriteTest"),
+
+	
 	// ==================
 	// BATTLE
 	// ==================
@@ -301,11 +307,11 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 		}
 	}
 
-	public PoolableAtlasSprite asSprite() {
+	public CroppableAtlasSprite asSprite() {
 		final AtlasRegion ar = ResourceCache.getTexture(this);
 		if (ar == null)
 			return null;
-		final PoolableAtlasSprite sprite = SpritePool.getInstance().obtain(ar);
+		final CroppableAtlasSprite sprite = SpritePool.getInstance().obtain(ar);
 		sprite.setScale(scale);
 		return sprite;
 	}

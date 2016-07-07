@@ -20,13 +20,13 @@ import de.homelab.madgaksha.resourcecache.ETexture;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcepool.AtlasAnimation;
 import de.homelab.madgaksha.resourcepool.EParticleEffect;
-import de.homelab.madgaksha.resourcepool.PoolableAtlasSprite;
+import de.homelab.madgaksha.resourcepool.CroppableAtlasSprite;
 import de.homelab.madgaksha.resourcepool.ResourcePool;
 
 public final class FancyDrawable {
 	private final static Logger LOG = Logger.getLogger(FancyDrawable.class);
 
-	private PoolableAtlasSprite drawableSprite = ETexture.DEFAULT.asSprite();
+	private CroppableAtlasSprite drawableSprite = ETexture.DEFAULT.asSprite();
 	private NinePatch drawableNinePatch = ResourceCache.getNinePatch(ENinePatch.DEFAULT);
 	private AtlasAnimation drawableAtlasAnimation = ResourceCache.getAnimation(EAnimation.DEFAULT);
 	private PooledEffect drawablePooledEffect = ResourcePool.obtainParticleEffect(EParticleEffect.DEFAULT);

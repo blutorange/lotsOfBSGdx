@@ -1,4 +1,4 @@
-package de.homelab.madgaksha;
+package de.homelab.madgaksha.tool;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -10,12 +10,19 @@ public class MyTexturePacker {
 	public static void main(String[] args) {
 		String inputDir, outputDir, packFileName;
 
+		System.out.println("packing test textures...");
+		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/test/poolableSpriteTest";
+		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/test/poolableSpriteTest/packed";
+		packFileName = "poolableSpriteTest";
+		TexturePacker.process(inputDir, outputDir, packFileName);
+
+		
 		System.out.println("packing bullets basic...");
 		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/bullets/basic";
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/bullets/basic-packed";
 		packFileName = "bulletsBasic";
 		TexturePacker.process(inputDir, outputDir, packFileName);
-
+		
 		System.out.println("packing bullets large...");
 		inputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/bullets/large";
 		outputDir = "/home/madgaksha/git/lotsOfBSGdx/android/assets/bullets/large-packed";
