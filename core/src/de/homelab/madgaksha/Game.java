@@ -1,5 +1,6 @@
 package de.homelab.madgaksha;
 
+import static de.homelab.madgaksha.GlobalBag.viewportGameFixed;
 import static de.homelab.madgaksha.GlobalBag.batchGame;
 import static de.homelab.madgaksha.GlobalBag.batchModel;
 import static de.homelab.madgaksha.GlobalBag.batchPixel;
@@ -57,6 +58,7 @@ import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.layer.ALayer;
 import de.homelab.madgaksha.layer.EntityLayer;
 import de.homelab.madgaksha.layer.PauseLayer;
+import de.homelab.madgaksha.level.FixedGameViewport;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.ResourceCache;
 import de.homelab.madgaksha.resourcepool.ResourcePool;
@@ -231,7 +233,10 @@ public class Game implements ApplicationListener {
 
 		viewportPixel = new ScreenViewport();
 		viewportPixel.update(currentMonitorWidth, currentMonitorHeight, true);
+		viewportGameFixed = new FixedGameViewport(currentMonitorWidth, currentMonitorHeight, true);
 		computeBackgroundImageRectangle(currentMonitorWidth, currentMonitorHeight);
+		
+		
 
 		// Initialize the layer stack.
 		// Start off with a layer stack containing only the entity engine.
@@ -321,6 +326,7 @@ public class Game implements ApplicationListener {
 			// Update our viewports.
 			viewportGame.update(width, height, false);
 			viewportPixel.update(width, height, true);
+			viewportGameFixed.update(width, height, true);
 			statusScreen.resize(width, height);
 
 			// Save current resolution.

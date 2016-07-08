@@ -336,4 +336,8 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 	public boolean isOriginRelative(Vector2 origin) {
 		return originX + region.offsetX == origin.x*region.originalWidth && originY + region.offsetY== origin.y*region.originalHeight;
 	}
+
+	public boolean isAtlasRegionEqualTo(AtlasRegion region) {
+		return this.region == region;
+	}
 }

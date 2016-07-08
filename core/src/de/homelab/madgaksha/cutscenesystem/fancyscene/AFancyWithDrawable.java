@@ -14,14 +14,14 @@ import de.homelab.madgaksha.logging.Logger;
  * @author madgaksha
  *
  */
-public abstract class DrawableFancy extends AFancyEvent {
+public abstract class AFancyWithDrawable extends AFancyEvent {
 	@SuppressWarnings("unused")
-	private final static Logger LOG = Logger.getLogger(DrawableFancy.class);
+	private final static Logger LOG = Logger.getLogger(AFancyWithDrawable.class);
 
 	protected String key;
 	protected FancyDrawable drawable;
 
-	public DrawableFancy(String key) {
+	public AFancyWithDrawable(String key) {
 		super(true);
 		this.key = key;
 	}

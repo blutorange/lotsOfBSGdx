@@ -27,7 +27,12 @@ import de.homelab.madgaksha.GlobalBag;
 import de.homelab.madgaksha.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.cutscenesystem.FancyDrawable;
+import de.homelab.madgaksha.cutscenesystem.fancyscene.drawable.DrawableAnimation;
+import de.homelab.madgaksha.cutscenesystem.fancyscene.drawable.DrawableNinePatch;
+import de.homelab.madgaksha.cutscenesystem.fancyscene.drawable.DrawableParticleEffect;
+import de.homelab.madgaksha.cutscenesystem.fancyscene.drawable.DrawableSprite;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.util.INewObject;
 
 /**
  * The following commands are available for reading from file.
@@ -124,20 +129,30 @@ import de.homelab.madgaksha.logging.Logger;
  */
 public class EventFancyScene extends ACutsceneEvent {
 	private final static Logger LOG = Logger.getLogger(EventFancyScene.class);
-
+	private final static DrawableSprite PROTOTYPE_DRAWABLE_SPRITE = new DrawableSprite();
+	private final static DrawableAnimation PROTOTYPE_DRAWABLE_ANIMATION = new DrawableAnimation();
+	private final static DrawableParticleEffect PROTOTYPE_DRAWABLE_PARTICLE_EFFECT = new DrawableParticleEffect();
+	private final static DrawableNinePatch PROTOTYPE_DRAWABLE_NINE_PATCH = new DrawableNinePatch();
+	
+	
 	private final Vector3 oldPosition = new Vector3();
 	private final List<AFancyEvent> eventList = new ArrayList<AFancyEvent>();
 	private final Stack<AFancyEvent> queueList = new Stack<AFancyEvent>();
-	private final LinkedList<AFancyEvent> activeList = new LinkedList<AFancyEvent>();// new
-																						// Stack<AFancyEvent>();
+	private final LinkedList<AFancyEvent> activeList = new LinkedList<AFancyEvent>();
+	
+	@Deprecated
 	private final Map<String, FancyDrawable> drawableMap = new HashMap<String, FancyDrawable>();
+	
+	private final Map<String, DrawableSprite> mapSprite = new HashMap<String, DrawableSprite>();
+	private final Map<String, DrawableAnimation> mapAnimation = new HashMap<String, DrawableAnimation>();
+	private final Map<String, DrawableNinePatch> mapNinePatch = new HashMap<String, DrawableNinePatch>();
+	private final Map<String, DrawableParticleEffect> mapParticleEffect = new HashMap<String, DrawableParticleEffect>();
+	
+	private final Vector3 shake = new Vector3();
 	private float totalTime = 0.0f;
 	private float deltaTime = 0.0f;
-
 	private boolean isSpedup = false;
-
 	private EventFancyScene parent;
-	private final Vector3 shake = new Vector3();
 
 	public EventFancyScene(List<AFancyEvent> eventList) {
 		this.eventList.addAll(eventList);
@@ -279,10 +294,20 @@ public class EventFancyScene extends ACutsceneEvent {
 	 * @param key
 	 *            Name of the drawable.
 	 */
+	@Deprecated
 	public void requestDrawable(String key) {
 		getDrawable(key);
 	}
 
+	/**
+	 * @param key
+	 *            Unique id for the drawable. Uniqueness is determined by
+	 *            {@link String#compareTo(String)}.
+	 * @return A fancy drawable for this string. It is either fetched from the
+	 *         cache, or newly created. For the same key, this method will
+	 *         always return the same object.
+	 */
+	@Deprecated
 	public FancyDrawable getDrawable(String key) {
 		FancyDrawable drawable = drawableMap.get(key);
 		if (drawable == null) {
@@ -290,6 +315,27 @@ public class EventFancyScene extends ACutsceneEvent {
 			drawableMap.put(key, drawable);
 		}
 		return drawable;
+	}
+	
+	private <T extends INewObject<T>> T getADrawable(String key, T prototype, Map<String, T> map) {	
+		T drawable = map.get(key);
+		if (drawable == null) {
+			drawable = prototype.newObject();
+			map.put(key, drawable);
+		}
+		return drawable;
+	}
+	public DrawableSprite requestDrawableSprite(String key) {
+		return getADrawable(key, PROTOTYPE_DRAWABLE_SPRITE, mapSprite);
+	}
+	public DrawableAnimation requestDrawableAnimation(String key) {
+		return getADrawable(key, PROTOTYPE_DRAWABLE_ANIMATION, mapAnimation);
+	}
+	public DrawableNinePatch requestDrawableNinePatch(String key) {
+		return getADrawable(key, PROTOTYPE_DRAWABLE_NINE_PATCH, mapNinePatch);
+	}
+	public DrawableParticleEffect requestDrawableParticleEffect(String key) {
+		return getADrawable(key, PROTOTYPE_DRAWABLE_PARTICLE_EFFECT, mapParticleEffect);
 	}
 
 	/**

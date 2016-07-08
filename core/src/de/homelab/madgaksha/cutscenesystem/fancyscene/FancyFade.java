@@ -10,7 +10,7 @@ import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 
-public class FancyFade extends DrawableFancy {
+public class FancyFade extends AFancyWithDrawable {
 	private final static Logger LOG = Logger.getLogger(FancyFade.class);
 
 	private Interpolation interpolation = Interpolation.linear;

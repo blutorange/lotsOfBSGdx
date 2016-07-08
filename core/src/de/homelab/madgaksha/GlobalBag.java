@@ -13,6 +13,7 @@ import com.google.common.collect.HashBiMap;
 
 import de.homelab.madgaksha.entityengine.component.ManyTrackingComponent;
 import de.homelab.madgaksha.level.ALevel;
+import de.homelab.madgaksha.level.FixedGameViewport;
 import de.homelab.madgaksha.level.GameViewport;
 import de.homelab.madgaksha.level.StatusScreen;
 import de.homelab.madgaksha.player.APlayer;
@@ -56,8 +57,9 @@ public final class GlobalBag {
 
 	public static GameViewport viewportGame;
 	public static Viewport viewportPixel;
+	public static FixedGameViewport viewportGameFixed;
 	public static StatusScreen statusScreen;
-
+	
 	/** For drawing the game window. */
 	public static SpriteBatch batchGame;
 	/** For drawing the background directly to the screen. */

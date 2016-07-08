@@ -4,10 +4,14 @@ import java.util.EnumMap;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Pool;
 
+import de.homelab.madgaksha.bettersprite.CroppableAtlasSprite;
 import de.homelab.madgaksha.entityengine.component.AnimationModeQueueComponent.AnimationModeTransition;
 import de.homelab.madgaksha.logging.Logger;
+import de.homelab.madgaksha.resourcecache.ETexture;
+import de.homelab.madgaksha.resourcecache.ResourceCache;
 
 public final class ResourcePool {
 	private final static Logger LOG = Logger.getLogger(ResourcePool.class);
@@ -22,6 +26,13 @@ public final class ResourcePool {
 			return new AnimationModeTransition();
 		}
 	};
+	
+	private final static Pool<CroppableAtlasSprite> spritePool = new Pool<CroppableAtlasSprite>(100,  10000) {
+		@Override
+		protected CroppableAtlasSprite newObject() {
+			return new CroppableAtlasSprite();
+		}		
+	};
 
 	public static void init() {
 		for (EParticleEffect resource : EParticleEffect.values()) {
@@ -33,13 +44,36 @@ public final class ResourcePool {
 	private ResourcePool() {
 	}
 
+	//===============================
+	//   Croppable Atlas Sprite
+	//===============================
+	public CroppableAtlasSprite obtainSprite(ETexture texture) {
+		return obtainSprite(ResourceCache.getTexture(texture));
+	}
+
+	public static CroppableAtlasSprite obtainSprite(AtlasRegion region) {
+		CroppableAtlasSprite sprite = spritePool.obtain();
+		sprite.setAtlasRegion(region);
+		return sprite;
+	}
+	
+	public static void freeSprite(CroppableAtlasSprite sprite) {
+		spritePool.free(sprite);
+	}
+	
+	//===============================
+	//   Animation Mode Transition
+	//===============================
 	public static AnimationModeTransition obtainAnimationModeTransition() {
 		return animationModeTransitionPool.obtain();
 	}
 	public static void freeAnimationModeTransition(AnimationModeTransition amt) {
 		animationModeTransitionPool.free(amt);
 	}
-	
+
+	//===============================
+	//        Particle Effect
+	//===============================
 	public static PooledEffect obtainParticleEffect(EParticleEffect effect) {
 		try {
 			return particleEffectPool.get(effect).obtain();
@@ -50,7 +84,6 @@ public final class ResourcePool {
 	}
 	public static void freeParticleEffect(PooledEffect pooledEffect) {
 		pooledEffect.free();
-		// particleEffectPool.get(eParticleEffect).free(pooledEffect);
 	}
 
 	public static void clearParticleEffect(EParticleEffect a) {

@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.homelab.madgaksha.bettersprite.CroppableAtlasSprite;
 import de.homelab.madgaksha.i18n.I18n;
 import de.homelab.madgaksha.logging.Logger;
-import de.homelab.madgaksha.resourcepool.SpritePool;
+import de.homelab.madgaksha.resourcepool.ResourcePool;
 
 /**
  * For loading, caching and disposing {@link Texture} resources.
@@ -311,7 +311,7 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 		final AtlasRegion ar = ResourceCache.getTexture(this);
 		if (ar == null)
 			return null;
-		final CroppableAtlasSprite sprite = SpritePool.getInstance().obtain(ar);
+		final CroppableAtlasSprite sprite = ResourcePool.obtainSprite(ar);
 		sprite.setScale(scale);
 		return sprite;
 	}

@@ -9,7 +9,7 @@ import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 
-public class FancyShow extends DrawableFancy {
+public class FancyShow extends AFancyWithDrawable {
 	private final static Logger LOG = Logger.getLogger(FancyShow.class);
 
 	private float duration;

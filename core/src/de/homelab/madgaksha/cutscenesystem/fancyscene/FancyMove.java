@@ -13,7 +13,7 @@ import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.path.APath;
 import de.homelab.madgaksha.path.EPath;
 
-public class FancyMove extends DrawableFancy {
+public class FancyMove extends AFancyWithDrawable {
 	private final static Logger LOG = Logger.getLogger(FancyMove.class);
 
 	private APath path;
@@ -36,7 +36,8 @@ public class FancyMove extends DrawableFancy {
 
 	@Override
 	public boolean begin(EventFancyScene efs) {
-		path.setOrigin(drawable.getPosition);
+		drawable.getPosition(vector);
+		path.setOrigin(vector);
 		isDone = false;
 		return true;
 	}

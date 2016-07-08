@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.homelab.madgaksha.bettersprite.CroppableAtlasSprite;
 import de.homelab.madgaksha.resourcecache.ETexture;
-import de.homelab.madgaksha.resourcepool.SpritePool;
+import de.homelab.madgaksha.resourcepool.ResourcePool;
 import de.homelab.madgaksha.util.DebugStringifier;
 
 public class SpriteComponent implements Component, Poolable {
@@ -65,12 +65,12 @@ public class SpriteComponent implements Component, Poolable {
 	public void setup(SpriteAnimationComponent sac) {
 		final AtlasRegion ar = sac.animation.getKeyFrame(0.0f);
 		this.managed = false;
-		sprite = SpritePool.getInstance().obtain(ar);
+		sprite = ResourcePool.obtainSprite(ar);
 	}
 
 	public void setup(SpriteAnimationComponent sac, Vector2 origin) {
 		final AtlasRegion ar = sac.animation.getKeyFrame(0.0f);
-		sprite = SpritePool.getInstance().obtain(ar);
+		sprite = ResourcePool.obtainSprite(ar);
 		this.managed = false;
 		sprite.setOrigin(origin.x, origin.y);
 	}
@@ -78,7 +78,7 @@ public class SpriteComponent implements Component, Poolable {
 	@Override
 	public void reset() {
 		if (managed)
-			SpritePool.getInstance().free(sprite);
+			ResourcePool.freeSprite(sprite);
 		sprite = null;
 		managed = false;
 	}

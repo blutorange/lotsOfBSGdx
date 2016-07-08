@@ -214,10 +214,6 @@ public class MyPoolableSpriteTester implements ApplicationListener {
 			sprite.draw(batch);
 			sprite.setCrop(1f,1f,1f,1f);
 			
-			//TODO
-			//sprite.setFlip(x, y);
-			//sprite.setCrop()
-			
 			if (Gdx.input.isKeyPressed(Keys.RIGHT)) centerX+=2.5f;
 			if (Gdx.input.isKeyPressed(Keys.LEFT)) centerX-=2.5f;
 			if (Gdx.input.isKeyPressed(Keys.UP)) centerY+=2.5f;

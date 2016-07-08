@@ -126,7 +126,6 @@ public enum ENinePatch implements IResource<ENinePatch, NinePatch> {
 	@Override
 	public void clear() {
 		LOG.debug("disposing nine patch: " + String.valueOf(this));
-		// final NinePatch np = ninePatchCache.get(this);
 		ninePatchCache.remove(this);
 	}
 

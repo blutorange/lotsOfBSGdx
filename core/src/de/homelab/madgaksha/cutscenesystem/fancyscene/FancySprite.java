@@ -34,8 +34,8 @@ public class FancySprite extends AFancyEvent {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
-		efs.getDrawable(key).setDrawable(texture, dpi);
+	public boolean begin(EventFancyScene scene) {
+		scene.getDrawable(key).setDrawable(texture, dpi);
 		return false;
 	}
 

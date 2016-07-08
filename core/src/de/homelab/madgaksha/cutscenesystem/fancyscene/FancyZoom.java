@@ -11,7 +11,7 @@ import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 
-public class FancyZoom extends DrawableFancy {
+public class FancyZoom extends AFancyWithDrawable {
 	private final static Logger LOG = Logger.getLogger(FancyZoom.class);
 
 	private float duration = 1.0f;
@@ -39,7 +39,7 @@ public class FancyZoom extends DrawableFancy {
 
 	@Override
 	public boolean begin(EventFancyScene efs) {
-		drawable.getScale.as(originalScale);
+		drawable.getScale(originalScale);
 		isDone = false;
 		return true;
 	}

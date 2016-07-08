@@ -11,7 +11,7 @@ import de.homelab.madgaksha.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.logging.Logger;
 
-public class FancySlide extends DrawableFancy {
+public class FancySlide extends AFancyWithDrawable {
 	private final static Logger LOG = Logger.getLogger(FancySlide.class);
 
 	private Interpolation interpolation = Interpolation.linear;
@@ -48,8 +48,8 @@ public class FancySlide extends DrawableFancy {
 
 	@Override
 	public boolean begin(EventFancyScene efs) {
-		drawable.getCropX.as(startCropX);
-		drawable.getCropY.as(startCropY);
+		drawable.getCropX(startCropX);
+		drawable.getCropY(startCropY);
 		isDone = false;
 		return true;
 	}

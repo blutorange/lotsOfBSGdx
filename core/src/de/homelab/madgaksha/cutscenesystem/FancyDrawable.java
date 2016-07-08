@@ -13,8 +13,6 @@ import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 
 import de.homelab.madgaksha.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.bettersprite.CroppableAtlasSprite;
-import de.homelab.madgaksha.getter.GetColor;
-import de.homelab.madgaksha.getter.GetVector2;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.resourcecache.EAnimation;
 import de.homelab.madgaksha.resourcecache.ENinePatch;
@@ -92,8 +90,6 @@ public final class FancyDrawable {
 		rotation = 0.0f;
 
 		scalePe = positionPe = false;
-		// scaleParticleEffectLast = scaleUnitsPerScreen * (scale.x + scale.y) *
-		// 0.5f;
 
 		mode = Mode.UNSET;
 	}
@@ -366,8 +362,8 @@ public final class FancyDrawable {
 	 * Called when the game window is resized.
 	 */
 	public void resize() {
-		scaleScreenX = viewportGame.getScreenWidth() / 8.0f;
-		scaleScreenY = viewportGame.getScreenHeight() / 9.0f;
+		scaleScreenX = viewportGame.getScreenWidth() * 0.125f;
+		scaleScreenY = viewportGame.getScreenHeight() * 0.111111111f;
 		scaleUnitsPerScreen = viewportGame.getScreenWidth() / (8.0f * dimensionsSpriteUnitsPerScreen);
 		scalePe = true;
 	}
@@ -449,41 +445,23 @@ public final class FancyDrawable {
 		mode = Mode.CLEANUP;
 	}
 
-	public final GetVector2 getPosition = new GetVector2() {
-		@Override
-		public void as(Vector2 target) {
-			target.set(position);
-		}
-	};
-	public final GetVector2 getScale = new GetVector2() {
-		@Override
-		public void as(Vector2 target) {
-			target.set(scale);
-		}
-	};
-	public final GetVector2 getCropX = new GetVector2() {
-		@Override
-		public void as(Vector2 target) {
-			target.set(cropX);
-		}
-	};
-	public final GetVector2 getCropY = new GetVector2() {
-		@Override
-		public void as(Vector2 target) {
-			target.set(cropY);
-		}
-	};
-	public final GetVector2 getOrigin = new GetVector2() {
-		@Override
-		public void as(Vector2 target) {
-			target.set(origin);
-		}
-	};
-	public final GetColor getColor = new GetColor() {
-		@Override
-		public void as(Color target) {
-			target.set(color);
-		}
-	};
+	public void getPosition(Vector2 vector) {
+		vector.set(position);
+	}
 
+	public void getCropX(Vector2 vector) {
+		vector.set(cropX);
+	}
+
+	public void getCropY(Vector2 vector) {
+		vector.set(cropY);
+	}
+
+	public void getScale(Vector2 vector) {
+		vector.set(scale);
+	}
+	
+	public void getColor(Color color) {
+		color.set(this.color);
+	}
 }

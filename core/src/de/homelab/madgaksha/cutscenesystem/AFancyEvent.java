@@ -29,7 +29,6 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 		public int compare(AFancyEvent o1, AFancyEvent o2) {
 			return (o1.priority < o2.priority) ? -1
 					: (o1.priority == o2.priority) ? ((o1.z < o2.z) ? -1 : (o1.z == o2.z) ? 0 : 1) : 1;
-			// return o1.z < o2.z ? -1 : o1.z == o2.z ? 0 : 1;
 		}
 	};
 
