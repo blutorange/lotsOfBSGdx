@@ -19,8 +19,6 @@
 
 package de.homelab.madgaksha.bettersprite;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.FloatTextureData;
@@ -59,8 +57,8 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 
 	@Override
 	public void set(CroppableSprite sprite) {
-		region.index = -1;
-		region.name = StringUtils.EMPTY;
+//		region.index = -1;
+//		region.name = StringUtils.EMPTY;
 		region.offsetX = 0.0f;
 		region.offsetY = 0.0f;
 		region.packedWidth = sprite.getRegionWidth();
@@ -68,16 +66,16 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 		region.originalWidth = sprite.getRegionWidth();
 		region.originalHeight = sprite.getRegionHeight();
 		region.rotate = false;
-		region.splits = null;
-		region.pads = null;
-		region.setRegion(sprite);
+//		region.splits = null;
+//		region.pads = null;
+//		region.setRegion(sprite);
 		setAtlasRegionInternals(region);
 		super.set(sprite);
 	}
 
 	public void setAtlasRegion(AtlasRegion atlasRegion) {
-		region.index = atlasRegion.index;
-		region.name = atlasRegion.name;
+//		region.index = atlasRegion.index;
+//		region.name = atlasRegion.name;
 		region.offsetX = atlasRegion.offsetX;
 		region.offsetY = atlasRegion.offsetY;
 		region.packedWidth = atlasRegion.packedWidth;
@@ -85,9 +83,9 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 		region.originalWidth = atlasRegion.originalWidth;
 		region.originalHeight = atlasRegion.originalHeight;
 		region.rotate = atlasRegion.rotate;
-		region.splits = atlasRegion.splits;
-		region.pads = atlasRegion.pads;
-		region.setRegion(atlasRegion);
+//		region.splits = atlasRegion.splits;
+//		region.pads = atlasRegion.pads;
+//		region.setRegion(atlasRegion);
 		setAtlasRegionInternals(atlasRegion);
 	}
 
@@ -95,7 +93,6 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 		originalOffsetX = atlasRegion.offsetX;
 		originalOffsetY = atlasRegion.offsetY;
 		setRegion(atlasRegion);
-		setOrigin(atlasRegion.originalWidth / 2f, atlasRegion.originalHeight / 2f);
 		int width = atlasRegion.getRegionWidth();
 		int height = atlasRegion.getRegionHeight();
 		if (atlasRegion.rotate) {
@@ -103,7 +100,12 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 			super.setBounds(atlasRegion.offsetX, atlasRegion.offsetY, height, width);
 		} else
 			super.setBounds(atlasRegion.offsetX, atlasRegion.offsetY, width, height);
-		setCrop(this);
+		if (cropped) {
+			setOrigin(atlasRegion.originalWidth / 2f, atlasRegion.originalHeight / 2f);
+		}
+		else {
+			super.setOrigin(atlasRegion.originalWidth / 2f, atlasRegion.originalHeight / 2f - region.offsetY);
+		}
 	}
 
 	@Override
@@ -273,10 +275,6 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 		return super.getHeight() / region.getRotatedPackedHeight();
 	}
 
-	public AtlasRegion getAtlasRegion() {
-		return region;
-	}
-
 	public String toString() {
 		return region.toString();
 	}
@@ -327,5 +325,15 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 		final float newCropTop = originY >= height ? 1f : cropTopAbsolute / (height - originY);
 		super.setCrop((newCropLeft > 1f) ? 1f : newCropLeft, (newCropRight > 1f) ? 1f : newCropRight,
 				(newCropBottom > 1f) ? 1f : newCropBottom, (newCropTop > 1f) ? 1f : newCropTop);
+	}
+	
+	@Override
+	public boolean isOrigin(Vector2 origin) {
+		return originX + region.offsetX == origin.x && originY + region.offsetY== origin.y;
+	}
+	
+	@Override
+	public boolean isOriginRelative(Vector2 origin) {
+		return originX + region.offsetX == origin.x*region.originalWidth && originY + region.offsetY== origin.y*region.originalHeight;
 	}
 }

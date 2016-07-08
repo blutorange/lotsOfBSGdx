@@ -71,10 +71,10 @@ public class CroppableSprite extends TextureRegion {
 	float originX, originY;
 	private float rotation;
 	private float scaleX = 1, scaleY = 1;
-	private float cropBottom = 1, cropTop = 1;
-	private float cropLeft = 1, cropRight = 1;
+	protected float cropBottom = 1, cropTop = 1;
+	protected float cropLeft = 1, cropRight = 1;
 	private boolean dirty = true;
-	private boolean cropped = false;
+	protected boolean cropped = false;
 	private Rectangle bounds;
 
 	/**
@@ -404,9 +404,11 @@ public class CroppableSprite extends TextureRegion {
 	 * Crops the sprites to the given boundaries, relative to the origin.
 	 * 
 	 * @param cropX
-	 *            Relative amount to crop to the left and right of the current origin.
+	 *            Relative amount to crop to the left and right of the current
+	 *            origin.
 	 * @param cropY
-	 *            Relative amount to crop to the bottom and top of the current origin.
+	 *            Relative amount to crop to the bottom and top of the current
+	 *            origin.
 	 */
 	public void setCrop(Vector2 cropX, Vector2 cropY) {
 		setCrop(cropX.x, cropX.y, cropY.x, cropY.y);
@@ -415,7 +417,7 @@ public class CroppableSprite extends TextureRegion {
 	public void setCrop(CroppableSprite sprite) {
 		setCrop(sprite.cropLeft, sprite.cropRight, sprite.cropBottom, sprite.cropTop);
 	}
-	
+
 	/**
 	 * Crops the sprites to the given boundaries, relative to the origin.
 	 * 
@@ -598,14 +600,17 @@ public class CroppableSprite extends TextureRegion {
 				final float v = getV();
 				final float v2 = getV2();
 
-				// Origin can be outside the sprite's image, so we need to clamp.
-				float originU = - (u2 - u) * MathUtils.clamp(localX / width, -1f, 0f);
-				float originV = - (v2 - v) * MathUtils.clamp(localY / height, -1f, 0f);
-				
+				// Origin can be outside the sprite's image, so we need to
+				// clamp.
+				float originU = -(u2 - u) * MathUtils.clamp(localX / width, -1f, 0f);
+				float originV = -(v2 - v) * MathUtils.clamp(localY / height, -1f, 0f);
+
 				// 0/0 is NaN, which will not be clamped.
-				if (originU != originU) originU = u;
-				if (originV != originV) originV = v;
-				
+				if (originU != originU)
+					originU = u;
+				if (originV != originV)
+					originV = v;
+
 				final float worldOriginU = u + originU;
 				final float worldOriginV = v + originV;
 
@@ -795,35 +800,35 @@ public class CroppableSprite extends TextureRegion {
 		color.a = ((intBits >>> 24) & 0xff) / 255f;
 		return color;
 	}
-	
+
 	public void getCropX(Vector2 cropX) {
 		cropX.set(cropLeft, cropRight);
 	}
-	
+
 	public Vector2 getCropX() {
 		return new Vector2(cropLeft, cropRight);
 	}
-	
+
 	public void getCropY(Vector2 cropY) {
 		cropY.set(cropBottom, cropTop);
 	}
-	
+
 	public float getCropLeft() {
 		return cropLeft;
 	}
-	
+
 	public float getCropRight() {
 		return cropRight;
 	}
-	
+
 	public float getCropBottom() {
 		return cropBottom;
 	}
-	
+
 	public float getCropTop() {
 		return cropTop;
 	}
-	
+
 	public Vector2 getCropY() {
 		return new Vector2(cropBottom, cropTop);
 	}
@@ -844,7 +849,7 @@ public class CroppableSprite extends TextureRegion {
 
 		vertices[U4] = u2;
 		vertices[V4] = v2;
-		
+
 		dirty = dirty || cropped;
 	}
 
@@ -924,4 +929,18 @@ public class CroppableSprite extends TextureRegion {
 	public void unsetCrop() {
 		setCrop(1.0f, 1.0f, 1.0f, 1.0f);
 	}
+
+	public boolean isCrop(Vector2 cropX, Vector2 cropY) {
+		return cropX.x == cropLeft && cropX.y == cropRight && cropY.x == cropBottom && cropY.y == cropTop;
+	}
+	
+	public boolean isOrigin(Vector2 origin) {
+		return originX == origin.x && originY == origin.y;
+	}
+	
+	public boolean isOriginRelative(Vector2 origin) {
+		return originX == origin.x*width && originY == origin.y*height;
+	}
+
+
 }

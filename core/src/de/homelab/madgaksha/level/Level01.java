@@ -130,6 +130,7 @@ public class Level01 extends ALevel {
 	public void initialDialog(MapProperties properties) {
 		if (!DebugMode.activated)
 			pushCutsceneLayer("cutscene/level01.initialDialog");
+		else GlobalBag.gameScore.increaseBy(1000000000L);
 	}
 
 	public void joshuaAppears(MapProperties properties) {

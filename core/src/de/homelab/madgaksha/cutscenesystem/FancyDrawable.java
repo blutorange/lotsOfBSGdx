@@ -391,12 +391,14 @@ public final class FancyDrawable {
 			// no break because the texture for the key frame needs to be
 			// processed as well
 		case TEXTURE:
+			float scaleX = scaleUnitsPerScreen * scale.x;
+			float scaleY = scaleUnitsPerScreen * scale.y;
 			drawableSprite.setColor(color);
 			drawableSprite.setAlpha(opacity);
-			drawableSprite.setScale(scaleUnitsPerScreen * scale.x, scaleUnitsPerScreen * scale.y);
+			drawableSprite.setScale(scaleX, scaleY);
 			drawableSprite.setOriginRelative(origin);
 			drawableSprite.setPositionOrigin((position.x + 4.0f) * scaleScreenX, (position.y + 4.5f) * scaleScreenY);
-			drawableSprite.setCrop(cropX, cropY);
+			drawableSprite.setCrop(cropX, cropY) ;
 			break;
 		case NINE_PATCH:
 			Color color = drawableNinePatch.getColor();
