@@ -16,6 +16,7 @@ public class DrawableAnimation extends ADrawable<EAnimation, AtlasAnimation> imp
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(DrawableAnimation.class);
 	private CroppableAtlasSprite sprite;
+	private float unitPerPixel;
 
 	@Override
 	protected void applyColor(float r, float g, float b, float a) {
@@ -53,9 +54,13 @@ public class DrawableAnimation extends ADrawable<EAnimation, AtlasAnimation> imp
 	}
 
 	@Override
-	protected AtlasAnimation loadResource(EAnimation resource) {
+	protected AtlasAnimation loadResource(EAnimation resource, float unitPerPixel) {
 		final AtlasAnimation animation = ResourceCache.getAnimation(resource);
-		if (animation != null) sprite = ResourcePool.obtainSprite(animation.getKeyFrame(0.0f));
+		if (animation != null) {
+			this.unitPerPixel = unitPerPixel;
+			sprite = ResourcePool.obtainSprite(animation.getKeyFrame(0.0f));
+			sprite.setScale(sprite.getWidth()*unitPerPixel, sprite.getHeight()*unitPerPixel);
+		}
 		return animation;
 	}
 
@@ -74,7 +79,8 @@ public class DrawableAnimation extends ADrawable<EAnimation, AtlasAnimation> imp
 	protected boolean performUpdate(float deltaTime, float passedTime) {
 		final AtlasRegion region = drawable.getKeyFrame(passedTime);
 		if (!sprite.isAtlasRegionEqualTo(region)) {
-			sprite.setAtlasRegion(drawable.getKeyFrame(passedTime));
+			sprite.setAtlasRegion(region);
+			sprite.setSize(region.originalWidth * unitPerPixel, region.originalHeight * unitPerPixel);
 			applyAll();
 		}
 		return drawable.getPlayMode() != PlayMode.NORMAL && drawable.getPlayMode() != PlayMode.REVERSED

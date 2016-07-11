@@ -26,7 +26,6 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	private float opacity = 1.0f;
 	private float rotation = 0.0f; // degrees
 	protected LOADED drawable = null;
-	private float unitPerPixel = 0.015625f;
 	private boolean disposed = true; // must be true
 
 	public ADrawable() {
@@ -55,8 +54,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 
 	public boolean setDrawable(RESOURCE resource, float pixelPerUnit) {
 		disposed = false;
-		unitPerPixel = 1.0f / pixelPerUnit;
-		drawable = loadResource(resource);
+		drawable = loadResource(resource, 1.0f / pixelPerUnit);
 		if (drawable == null) {
 			disposed = true;
 			reset();
@@ -137,14 +135,14 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 		if (disposed)
 			return;
 		this.scale.set(scale);
-		applyScale(scale.x * unitPerPixel, scale.y * unitPerPixel);
+		applyScale(scale.x, scale.y);
 	}
 
 	public void setScaleLerp(Vector2 scaleStart, Vector2 scaleEnd, float alpha) {
 		if (disposed)
 			return;
 		scale.set(scaleStart).lerp(scaleEnd, alpha);
-		applyScale(scale.x * unitPerPixel, scale.y * unitPerPixel);
+		applyScale(scale.x, scale.y);
 	}
 
 	/**
@@ -157,7 +155,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 		if (disposed)
 			return;
 		this.scale.set(scaleXY, scaleXY);
-		applyScale(scale.x * unitPerPixel, scale.y * unitPerPixel);
+		applyScale(scale.x, scale.y);
 	}
 
 	/**
@@ -172,7 +170,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 		if (disposed)
 			return;
 		this.scale.set(scaleX, scaleY);
-		applyScale(scaleX * unitPerPixel, scaleY * unitPerPixel);
+		applyScale(scaleX, scaleY);
 	}
 
 	/**
@@ -454,5 +452,5 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	 *            Resource to be loaded.
 	 * @return The resource, or null if it could not be loaded.
 	 */
-	protected abstract LOADED loadResource(RESOURCE resource);
+	protected abstract LOADED loadResource(RESOURCE resource, float unitPerPixel);
 }

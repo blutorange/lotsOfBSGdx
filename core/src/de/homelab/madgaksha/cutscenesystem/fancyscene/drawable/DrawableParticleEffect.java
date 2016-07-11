@@ -14,7 +14,7 @@ import de.homelab.madgaksha.util.INewObject;
 public class DrawableParticleEffect extends ADrawable<EParticleEffect, PooledEffect>
 		implements INewObject<DrawableParticleEffect> {
 	private final static Logger LOG = Logger.getLogger(DrawableParticleEffect.class);
-	private final static float MAX_SCALE = 10.f;
+	private final static float MAX_SCALE = 1000.0f;
 	// must be the inverse of MAX_SCALE, or resetting the particle effect will
 	// not work properly
 	private final static float MIN_SCALE = 1.0f / MAX_SCALE;
@@ -67,14 +67,16 @@ public class DrawableParticleEffect extends ADrawable<EParticleEffect, PooledEff
 		float scale = 0.5f
 				* (MathUtils.clamp(scaleX, MIN_SCALE, MAX_SCALE) + MathUtils.clamp(scaleY, MIN_SCALE, MAX_SCALE));
 		scale /= scaleLast;
-		drawable.scaleEffect(scale);
+		if (scale != 1f) drawable.scaleEffect(scale);
 		scaleLast = scale;
 	}
 
 	@Override
-	protected PooledEffect loadResource(EParticleEffect resource) {
+	protected PooledEffect loadResource(EParticleEffect resource, float unitPerPixel) {
 		scaleLast = 1.0f;
-		return ResourcePool.obtainParticleEffect(resource);
+		PooledEffect pe = ResourcePool.obtainParticleEffect(resource);
+		applyScale(unitPerPixel, unitPerPixel);
+		return pe;
 	}
 
 	@Override

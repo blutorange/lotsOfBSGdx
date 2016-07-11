@@ -9417,12 +9417,12 @@
     <property name="speed" type="float" value="45"/>
    </properties>
   </object>
-  <object id="142" name="SoldierRed" type="Enemy" x="1064" y="18817.7" width="680" height="156.667">
+  <object id="142" name="SoldierRed" type="Enemy" x="1280" y="18817.7" width="33" height="156.667">
    <properties>
     <property name="battleIn" type="float" value="20"/>
     <property name="battleOut" type="float" value="30"/>
     <property name="initDir" value="0.0"/>
-    <property name="initX" type="float" value="-4"/>
+    <property name="initX" type="float" value="0"/>
     <property name="initY" type="float" value="0"/>
     <property name="spawn" value="screen"/>
     <property name="species" value="Soldier Red"/>

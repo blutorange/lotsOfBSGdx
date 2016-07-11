@@ -23,8 +23,10 @@ public class DrawableSprite extends ADrawable<ETexture, CroppableAtlasSprite> im
 	}
 
 	@Override
-	public CroppableAtlasSprite loadResource(ETexture resource) {
-		return resource.asSprite();
+	public CroppableAtlasSprite loadResource(ETexture resource, float unitPerPixel) {
+		CroppableAtlasSprite sprite = resource.asSprite();
+		if (sprite != null) sprite.setSize(sprite.getWidth() * unitPerPixel, sprite.getHeight() * unitPerPixel);
+		return sprite;
 	}
 	
 	@Override

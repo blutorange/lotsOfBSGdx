@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import de.homelab.madgaksha.logging.Logger;
 import de.homelab.madgaksha.util.INewObject;
 
-public class DrawableNull extends ADrawable<Object, Object> implements INewObject<DrawableNull> {
-	private final static Logger LOG = Logger.getLogger(DrawableNull.class);
+public class DrawableMock extends ADrawable<Object, Object> implements INewObject<DrawableMock> {
+	private final static Logger LOG = Logger.getLogger(DrawableMock.class);
 	private final static Object mock = new Object();
 
 	@Override
@@ -38,14 +38,14 @@ public class DrawableNull extends ADrawable<Object, Object> implements INewObjec
 	}
 
 	@Override
-	protected Object loadResource(Object resource) {
-		LOG.debug("mock drawable loaded: " + mock);
+	protected Object loadResource(Object resource, float unitPerPixel) {
+		LOG.error("mock loadResource: " + this.hashCode());
 		return mock;
 	}
 
 	@Override
 	protected void performDispose() {
-		LOG.debug("mock drawable disposed: " + mock);
+		LOG.error("mock performDispose: " + this.hashCode());
 	}
 
 	@Override
@@ -58,7 +58,8 @@ public class DrawableNull extends ADrawable<Object, Object> implements INewObjec
 	}
 
 	@Override
-	public DrawableNull newObject() {
-		return new DrawableNull();
+	public DrawableMock newObject() {
+		LOG.error("mock newObject: " + this.hashCode());
+		return new DrawableMock();
 	}
 }

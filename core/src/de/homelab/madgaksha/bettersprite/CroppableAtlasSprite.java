@@ -19,17 +19,23 @@
 
 package de.homelab.madgaksha.bettersprite;
 
+import java.nio.channels.UnsupportedAddressTypeException;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.FloatTextureData;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import de.homelab.madgaksha.logging.Logger;
+
 /**
  * A sprite that, if whitespace was stripped from the region when it was packed,
  * is automatically positioned as if whitespace had not been stripped.
  */
 public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
+	@SuppressWarnings("unused")
+	private final static Logger LOG = Logger.getLogger(CroppableAtlasSprite.class);
 	private final AtlasRegion region = new AtlasRegion(new Texture(new FloatTextureData(1, 1)), 0, 0, 1, 1);
 	private float originalOffsetX, originalOffsetY;
 
@@ -57,8 +63,6 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 
 	@Override
 	public void set(CroppableSprite sprite) {
-//		region.index = -1;
-//		region.name = StringUtils.EMPTY;
 		region.offsetX = 0.0f;
 		region.offsetY = 0.0f;
 		region.packedWidth = sprite.getRegionWidth();
@@ -66,16 +70,11 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 		region.originalWidth = sprite.getRegionWidth();
 		region.originalHeight = sprite.getRegionHeight();
 		region.rotate = false;
-//		region.splits = null;
-//		region.pads = null;
-//		region.setRegion(sprite);
 		setAtlasRegionInternals(region);
 		super.set(sprite);
 	}
 
 	public void setAtlasRegion(AtlasRegion atlasRegion) {
-//		region.index = atlasRegion.index;
-//		region.name = atlasRegion.name;
 		region.offsetX = atlasRegion.offsetX;
 		region.offsetY = atlasRegion.offsetY;
 		region.packedWidth = atlasRegion.packedWidth;
@@ -83,9 +82,6 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 		region.originalWidth = atlasRegion.originalWidth;
 		region.originalHeight = atlasRegion.originalHeight;
 		region.rotate = atlasRegion.rotate;
-//		region.splits = atlasRegion.splits;
-//		region.pads = atlasRegion.pads;
-//		region.setRegion(atlasRegion);
 		setAtlasRegionInternals(atlasRegion);
 	}
 
@@ -104,13 +100,14 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 			setOrigin(atlasRegion.originalWidth / 2f, atlasRegion.originalHeight / 2f);
 		}
 		else {
-			super.setOrigin(atlasRegion.originalWidth / 2f, atlasRegion.originalHeight / 2f - region.offsetY);
+			super.setOrigin(atlasRegion.originalWidth / 2f - region.offsetX, atlasRegion.originalHeight / 2f - region.offsetY);
 		}
 	}
 
 	@Override
 	public void reset() {
 		originalOffsetX = originalOffsetY = 0.0f;
+		cropLeft = cropRight = cropBottom = cropTop = 1f;
 		super.setBounds(0f, 0f, 0f, 0f);
 		super.setColor(1f, 1f, 1f, 1f);
 		super.setScale(1f);
@@ -123,7 +120,6 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 		super.setPosition(x + region.offsetX, y + region.offsetY);
 	}
 
-	// TODO check
 	@Override
 	public void setCenterX(float x) {
 		setX(x - region.originalWidth / 2);
@@ -173,68 +169,74 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 	@Override
 	public void setOrigin(float originX, float originY) {
 		super.setOrigin(originX - region.offsetX, originY - region.offsetY);
-		setCrop(this);
+		setCrop(cropLeft, cropRight, cropBottom, cropTop);
 	}
 
 	@Override
 	public void setOriginCenter() {
 		super.setOrigin(region.originalWidth / 2 - region.offsetX, region.originalWidth / 2 - region.offsetY);
-		setCrop(this);
+		setCrop(cropLeft, cropRight, cropBottom, cropTop);
 	}
 
 	@Override
-	public void flip(boolean x, boolean y) {
-		// Flip texture.
-		if (region.rotate)
-			super.flip(y, x);
-		else
-			super.flip(x, y);
+	@Deprecated
+	public void flip(boolean x, boolean y) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException();
 
-		float oldOriginX = getOriginX();
-		float oldOriginY = getOriginY();
-		float oldOffsetX = region.offsetX;
-		float oldOffsetY = region.offsetY;
-
-		float widthRatio = getWidthRatio();
-		float heightRatio = getHeightRatio();
-
-		region.offsetX = originalOffsetX;
-		region.offsetY = originalOffsetY;
-		region.flip(x, y); // Updates x and y offsets.
-		originalOffsetX = region.offsetX;
-		originalOffsetY = region.offsetY;
-		region.offsetX *= widthRatio;
-		region.offsetY *= heightRatio;
-
-		// Update position and origin with new offsets.
-		translate(region.offsetX - oldOffsetX, region.offsetY - oldOffsetY);
-		setOrigin(oldOriginX, oldOriginY);
+//		// Flip texture.
+//		if (region.rotate)
+//			super.flip(y, x);
+//		else
+//			super.flip(x, y);
+//
+//		float oldOriginX = getOriginX();
+//		float oldOriginY = getOriginY();
+//		float oldOffsetX = region.offsetX;
+//		float oldOffsetY = region.offsetY;
+//
+//		float widthRatio = getWidthRatio();
+//		float heightRatio = getHeightRatio();
+//
+//		region.offsetX = originalOffsetX;
+//		region.offsetY = originalOffsetY;
+//		region.flip(x, y); // Updates x and y offsets.
+//		originalOffsetX = region.offsetX;
+//		originalOffsetY = region.offsetY;
+//		region.offsetX *= widthRatio;
+//		region.offsetY *= heightRatio;
+//
+//		// Update position and origin with new offsets.
+//		translate(region.offsetX - oldOffsetX, region.offsetY - oldOffsetY);
+//		setOrigin(oldOriginX, oldOriginY);
 	}
 
 	@Override
-	public void rotate90(boolean clockwise) {
-		// Rotate texture.
-		super.rotate90(clockwise);
+	@Deprecated
+	public void rotate90(boolean clockwise) throws UnsupportedOperationException {
+		throw new UnsupportedAddressTypeException();
 
-		float oldOriginX = getOriginX();
-		float oldOriginY = getOriginY();
-		float oldOffsetX = region.offsetX;
-		float oldOffsetY = region.offsetY;
-
-		float widthRatio = getWidthRatio();
-		float heightRatio = getHeightRatio();
-
-		if (clockwise) {
-			region.offsetX = oldOffsetY;
-			region.offsetY = region.originalHeight * heightRatio - oldOffsetX - region.packedWidth * widthRatio;
-		} else {
-			region.offsetX = region.originalWidth * widthRatio - oldOffsetY - region.packedHeight * heightRatio;
-			region.offsetY = oldOffsetX;
-		}
-
-		// Update position and origin with new offsets.
-		translate(region.offsetX - oldOffsetX, region.offsetY - oldOffsetY);
-		setOrigin(oldOriginX, oldOriginY);
+//		// Rotate texture.
+//		super.rotate90(clockwise);
+//
+//		float oldOriginX = getOriginX();
+//		float oldOriginY = getOriginY();
+//		float oldOffsetX = region.offsetX;
+//		float oldOffsetY = region.offsetY;
+//
+//		float widthRatio = getWidthRatio();
+//		float heightRatio = getHeightRatio();
+//
+//		if (clockwise) {
+//			region.offsetX = oldOffsetY;
+//			region.offsetY = region.originalHeight * heightRatio - oldOffsetX - region.packedWidth * widthRatio;
+//		} else {
+//			region.offsetX = region.originalWidth * widthRatio - oldOffsetY - region.packedHeight * heightRatio;
+//			region.offsetY = oldOffsetX;
+//		}
+//
+//		// Update position and origin with new offsets.
+//		translate(region.offsetX - oldOffsetX, region.offsetY - oldOffsetY);
+//		setOrigin(oldOriginX, oldOriginY);
 	}
 
 	@Override

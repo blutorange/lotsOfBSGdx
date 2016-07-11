@@ -14,6 +14,7 @@ public class DrawableNinePatch extends ADrawable<ENinePatch, NinePatch> implemen
 	private final Color c = new Color();
 	private boolean dirty = false;
 	private float x, y, w, h;
+	private float unitPerPixel;
 	
 	@Override
 	protected void applyColor(float r, float g, float b, float a) {
@@ -53,7 +54,8 @@ public class DrawableNinePatch extends ADrawable<ENinePatch, NinePatch> implemen
 	}
 
 	@Override
-	protected NinePatch loadResource(ENinePatch resource) {
+	protected NinePatch loadResource(ENinePatch resource, float unitPerPixel) {
+		this.unitPerPixel = unitPerPixel;
 		return ResourceCache.getNinePatch(resource);
 	}
 
@@ -74,8 +76,8 @@ public class DrawableNinePatch extends ADrawable<ENinePatch, NinePatch> implemen
 	
 	private void computeCoordinates() {
 		dirty = false;
-		w = getScaleX();
-		h = getScaleY();
+		w = getScaleX() * unitPerPixel;
+		h = getScaleY() * unitPerPixel;
 		x = getPositionX() - getOriginX() * w;
 		y = getPositionY() - getOriginY() * h;
 	}

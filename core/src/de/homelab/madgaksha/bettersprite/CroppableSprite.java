@@ -46,6 +46,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.NumberUtils;
 
+import de.homelab.madgaksha.logging.Logger;
+
 /**
  * Holds the geometry, color, and texture information for drawing 2D sprites
  * using {@link Batch}. A Sprite has a position and a size given as width and
@@ -61,6 +63,8 @@ import com.badlogic.gdx.utils.NumberUtils;
  * @author Nathan Sweet
  */
 public class CroppableSprite extends TextureRegion {
+	@SuppressWarnings("unused")
+	private final static Logger LOG = Logger.getLogger(CroppableSprite.class);
 	static final int VERTEX_SIZE = 2 + 1 + 2;
 	static final int SPRITE_SIZE = 4 * VERTEX_SIZE;
 
