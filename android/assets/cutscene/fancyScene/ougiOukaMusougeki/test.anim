@@ -1,3 +1,6 @@
-Sprite   A 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_STAND0
-Position A 0.000 Estelle 0.0 0.0
-Show   0 A 0.000 Estelle 20.850
+Position  A 0.000 Estelle2 0.0 0.0
+Sprite    A 0.000 Estelle2 32.0 OUGI_OUKA_MUSOUGEKI_STAND0
+
+Animation A 5.000 Estelle2 32.0 OUGI_OUKA_MUSOUGEKI_SAKURA
+
+Show    0 A 0.000 Estelle2 20

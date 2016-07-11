@@ -1,10 +1,15 @@
-package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.drawable;
+package de.homelab.madgaksha.lotsofbs.bettersprite.drawable;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.util.INewObject;
 
+/**
+ * A mock drawable for making the program harder to crash.
+ * @author madgaksha
+ *
+ */
 public class DrawableMock extends ADrawable<Object, Object> implements INewObject<DrawableMock> {
 	private final static Logger LOG = Logger.getLogger(DrawableMock.class);
 	private final static Object mock = new Object();
@@ -38,7 +43,7 @@ public class DrawableMock extends ADrawable<Object, Object> implements INewObjec
 	}
 
 	@Override
-	protected Object loadResource(Object resource, float unitPerPixel) {
+	protected Object loadResource(Object resource) {
 		LOG.error("mock loadResource: " + this.hashCode());
 		return mock;
 	}
@@ -61,5 +66,10 @@ public class DrawableMock extends ADrawable<Object, Object> implements INewObjec
 	public DrawableMock newObject() {
 		LOG.error("mock newObject: " + this.hashCode());
 		return new DrawableMock();
+	}
+
+	@Override
+	protected void initResource(float unitPerPixel) {
+		LOG.error("mock initResource: " + this.hashCode());
 	}
 }

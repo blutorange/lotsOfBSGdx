@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.homelab.madgaksha.lotsofbs.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
@@ -47,7 +48,7 @@ public class FancySpritetarget extends AFancyEvent {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
+	public boolean begin(EventFancyScene scene) {
 		// Get target
 		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
 			LOG.error("no such target");
@@ -83,12 +84,12 @@ public class FancySpritetarget extends AFancyEvent {
 			LOG.error("could not fetch animation for direction");
 			return false;
 		}
-		efs.getDrawable(key).setDrawable(animation, dpi);
+		scene.requestDrawableAnimation(key).setLoadedDrawable(animation, dpi);
 		return false;
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override
@@ -103,10 +104,14 @@ public class FancySpritetarget extends AFancyEvent {
 	@Override
 	public void end() {
 	}
+	
+	@Override
+	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	}
 
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);
+		scene.requestDrawableAnimation(key);
 	}
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

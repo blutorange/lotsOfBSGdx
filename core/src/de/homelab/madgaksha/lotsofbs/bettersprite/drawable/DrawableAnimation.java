@@ -1,4 +1,4 @@
-package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.drawable;
+package de.homelab.madgaksha.lotsofbs.bettersprite.drawable;
 
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -35,12 +35,12 @@ public class DrawableAnimation extends ADrawable<EAnimation, AtlasAnimation> imp
 
 	@Override
 	protected void applyOrigin(float originX, float originY) {
-		sprite.setOrigin(originX, originY);
+		sprite.setOriginRelative(originX, originY);
 	}
 
 	@Override
 	protected void applyPosition(float positionX, float positionY) {
-		sprite.setPosition(positionX, positionY);
+		sprite.setPositionOrigin(positionX, positionY);
 	}
 
 	@Override
@@ -54,14 +54,8 @@ public class DrawableAnimation extends ADrawable<EAnimation, AtlasAnimation> imp
 	}
 
 	@Override
-	protected AtlasAnimation loadResource(EAnimation resource, float unitPerPixel) {
-		final AtlasAnimation animation = ResourceCache.getAnimation(resource);
-		if (animation != null) {
-			this.unitPerPixel = unitPerPixel;
-			sprite = ResourcePool.obtainSprite(animation.getKeyFrame(0.0f));
-			sprite.setScale(sprite.getWidth()*unitPerPixel, sprite.getHeight()*unitPerPixel);
-		}
-		return animation;
+	protected AtlasAnimation loadResource(EAnimation resource) {
+		return ResourceCache.getAnimation(resource);
 	}
 
 	@Override
@@ -83,12 +77,19 @@ public class DrawableAnimation extends ADrawable<EAnimation, AtlasAnimation> imp
 			sprite.setSize(region.originalWidth * unitPerPixel, region.originalHeight * unitPerPixel);
 			applyAll();
 		}
-		return drawable.getPlayMode() != PlayMode.NORMAL && drawable.getPlayMode() != PlayMode.REVERSED
-				&& drawable.isAnimationFinished(passedTime);
+		return ((drawable.getPlayMode() == PlayMode.NORMAL || drawable.getPlayMode() == PlayMode.REVERSED)
+				&& drawable.isAnimationFinished(passedTime));
 	}
 
 	@Override
 	public DrawableAnimation newObject() {
 		return new DrawableAnimation();
 	}
+
+	@Override
+	protected void initResource(float unitPerPixel) {
+		this.unitPerPixel = unitPerPixel;
+		sprite = ResourcePool.obtainSprite(drawable.getKeyFrame(0.0f));
+		sprite.setSize(sprite.getWidth()*unitPerPixel, sprite.getHeight()*unitPerPixel);
+	}	
 }

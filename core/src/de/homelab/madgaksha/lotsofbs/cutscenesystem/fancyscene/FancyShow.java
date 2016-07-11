@@ -3,6 +3,7 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
@@ -29,16 +30,15 @@ public class FancyShow extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene scene) {
+	public boolean beginSubclass(EventFancyScene scene) {
 		lastTime = 0.0f;
 		isDone = false;
-		drawable.resize();
 		return true;
 	}
 
 	@Override
-	public void render() {
-		drawable.render();
+	public void render(Batch batch) {
+		drawable.render(batch);
 	}
 
 	@Override
@@ -59,7 +59,6 @@ public class FancyShow extends AFancyWithDrawable {
 
 	@Override
 	public void resize(int w, int h) {
-		drawable.resize();
 	}
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

@@ -5,6 +5,7 @@ import java.util.Scanner;
 import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
@@ -34,13 +35,13 @@ public class FancyAnimation extends AFancyEvent {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
-		efs.getDrawable(key).setDrawable(animation, dpi);
+	public boolean begin(EventFancyScene scene) {
+		scene.requestDrawableAnimation(key).setDrawable(animation, dpi);
 		return false;
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override
@@ -55,10 +56,14 @@ public class FancyAnimation extends AFancyEvent {
 	@Override
 	public void end() {
 	}
+	
+	@Override
+	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	}
 
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);
+		scene.requestDrawableAnimation(key);
 	}
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

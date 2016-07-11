@@ -3,6 +3,7 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
@@ -47,7 +48,7 @@ public class FancySlide extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
+	public boolean beginSubclass(EventFancyScene scene) {
 		drawable.getCropX(startCropX);
 		drawable.getCropY(startCropY);
 		isDone = false;
@@ -55,7 +56,7 @@ public class FancySlide extends AFancyWithDrawable {
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override

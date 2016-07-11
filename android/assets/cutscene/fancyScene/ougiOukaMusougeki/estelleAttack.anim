@@ -300,7 +300,7 @@ Spritetarget A 7.900 Enemy 32.0 0.0 DAMAGE
 Spritetarget A 10.000 Enemy 32.0 0.0 NORMAL
 
 // Explosion for final hit
-Shake     A 7.900 M8 2.2
+Shake     A 7.900 M7 2.2
 Sound     A 8.000 General Explosion1
 Sound     A 8.000 General Explosion2
 Position  A 0.000 Explosion    -1.2 -2.5
@@ -311,8 +311,8 @@ Zoom      A 8.000 DamageCircle 3.0 =sineOut= 5.0
 Fade      A 10.000 DamageCircle 1.0 =linear= 0.0 
 
 // Fade out
-Fade A 11.000 Estelle 0.400 0
-Fade A 11.000 Enemy   0.400 0
+Fade A 10.200 Estelle 0.400 0
+Fade A 10.200 Enemy   0.400 0
 
 // Show
 Include -1 A 0.050 jumpOpacity100.anim

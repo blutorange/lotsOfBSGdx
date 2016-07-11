@@ -3,6 +3,7 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
@@ -38,14 +39,14 @@ public class FancyZoom extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
+	public boolean beginSubclass(EventFancyScene scene) {
 		drawable.getScale(originalScale);
 		isDone = false;
 		return true;
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override

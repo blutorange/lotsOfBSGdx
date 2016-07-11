@@ -3,9 +3,9 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 
-import de.homelab.madgaksha.lotsofbs.GlobalBag;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvider;
@@ -47,15 +47,17 @@ public class FancyShake extends AFancyEvent {
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override
+	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	}
+	
+	@Override
 	public void update(float passedTime) {
 		currentAngle = (currentAngle + MathUtils.random(MIN_ADVANCE_ANGLE, MAX_ADVANCE_ANGLE)) % 360.0f;
-		float amplitude = MathUtils.random(MIN_AMPLITUDE_RATIO * richterScale.amplitude, richterScale.amplitude);
-		amplitude *= GlobalBag.viewportGame.getScreenWidth();
-		amplitude *= 0.01f;
+		float amplitude = 0.015f * MathUtils.random(MIN_AMPLITUDE_RATIO * richterScale.amplitude, richterScale.amplitude);
 		float dx = amplitude * MathUtils.sinDeg(currentAngle);
 		float dy = amplitude * MathUtils.cosDeg(currentAngle);
 		scene.shakeScreenBy(dx, dy);

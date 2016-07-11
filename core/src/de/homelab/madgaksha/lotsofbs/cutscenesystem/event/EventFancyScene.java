@@ -1,8 +1,7 @@
 package de.homelab.madgaksha.lotsofbs.cutscenesystem.event;
 
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.batchPixel;
-import static de.homelab.madgaksha.lotsofbs.GlobalBag.viewportGame;
-import static de.homelab.madgaksha.lotsofbs.GlobalBag.viewportPixel;
+import static de.homelab.madgaksha.lotsofbs.GlobalBag.viewportGameFixed;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,21 +17,28 @@ import java.util.Stack;
 import org.apache.commons.io.IOUtils;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.glutils.HdpiUtils;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import de.homelab.madgaksha.lotsofbs.GlobalBag;
+import de.homelab.madgaksha.lotsofbs.bettersprite.AtlasAnimation;
+import de.homelab.madgaksha.lotsofbs.bettersprite.CroppableAtlasSprite;
+import de.homelab.madgaksha.lotsofbs.bettersprite.drawable.ADrawable;
+import de.homelab.madgaksha.lotsofbs.bettersprite.drawable.DrawableAnimation;
+import de.homelab.madgaksha.lotsofbs.bettersprite.drawable.DrawableMock;
+import de.homelab.madgaksha.lotsofbs.bettersprite.drawable.DrawableNinePatch;
+import de.homelab.madgaksha.lotsofbs.bettersprite.drawable.DrawableParticleEffect;
+import de.homelab.madgaksha.lotsofbs.bettersprite.drawable.DrawableSprite;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
-import de.homelab.madgaksha.lotsofbs.cutscenesystem.FancyDrawable;
-import de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.drawable.DrawableAnimation;
-import de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.drawable.DrawableNinePatch;
-import de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.drawable.DrawableParticleEffect;
-import de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.drawable.DrawableSprite;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
-import de.homelab.madgaksha.lotsofbs.util.INewObject;
+import de.homelab.madgaksha.lotsofbs.resourcecache.EAnimation;
+import de.homelab.madgaksha.lotsofbs.resourcecache.ENinePatch;
+import de.homelab.madgaksha.lotsofbs.resourcecache.ETexture;
+import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
 
 /**
  * The following commands are available for reading from file.
@@ -129,25 +135,18 @@ import de.homelab.madgaksha.lotsofbs.util.INewObject;
  */
 public class EventFancyScene extends ACutsceneEvent {
 	private final static Logger LOG = Logger.getLogger(EventFancyScene.class);
-	private final static DrawableSprite PROTOTYPE_DRAWABLE_SPRITE = new DrawableSprite();
-	private final static DrawableAnimation PROTOTYPE_DRAWABLE_ANIMATION = new DrawableAnimation();
-	private final static DrawableParticleEffect PROTOTYPE_DRAWABLE_PARTICLE_EFFECT = new DrawableParticleEffect();
-	private final static DrawableNinePatch PROTOTYPE_DRAWABLE_NINE_PATCH = new DrawableNinePatch();
-	
-	
-	private final Vector3 oldPosition = new Vector3();
+	public final static ADrawable<Object, Object> PROTOTYPE_DRAWABLE_MOCK = new DrawableMock();
+	private final static ADrawable<ETexture, CroppableAtlasSprite> PROTOTYPE_DRAWABLE_SPRITE = new DrawableSprite();
+	private final static ADrawable<EAnimation, AtlasAnimation> PROTOTYPE_DRAWABLE_ANIMATION = new DrawableAnimation();
+	private final static ADrawable<EParticleEffect, PooledEffect> PROTOTYPE_DRAWABLE_PARTICLE_EFFECT = new DrawableParticleEffect();
+	private final static ADrawable<ENinePatch, NinePatch> PROTOTYPE_DRAWABLE_NINE_PATCH = new DrawableNinePatch();
+
 	private final List<AFancyEvent> eventList = new ArrayList<AFancyEvent>();
 	private final Stack<AFancyEvent> queueList = new Stack<AFancyEvent>();
 	private final LinkedList<AFancyEvent> activeList = new LinkedList<AFancyEvent>();
-	
-	@Deprecated
-	private final Map<String, FancyDrawable> drawableMap = new HashMap<String, FancyDrawable>();
-	
-	private final Map<String, DrawableSprite> mapSprite = new HashMap<String, DrawableSprite>();
-	private final Map<String, DrawableAnimation> mapAnimation = new HashMap<String, DrawableAnimation>();
-	private final Map<String, DrawableNinePatch> mapNinePatch = new HashMap<String, DrawableNinePatch>();
-	private final Map<String, DrawableParticleEffect> mapParticleEffect = new HashMap<String, DrawableParticleEffect>();
-	
+
+	private final Map<String, ADrawable<?, ?>> drawableMap = new HashMap<String, ADrawable<?, ?>>();
+
 	private final Vector3 shake = new Vector3();
 	private float totalTime = 0.0f;
 	private float deltaTime = 0.0f;
@@ -168,26 +167,16 @@ public class EventFancyScene extends ACutsceneEvent {
 
 	@Override
 	public void render() {
-		oldPosition.set(viewportPixel.getCamera().position);
-		// Same as viewportPixel.apply(), but restricts the drawing area to the
-		// main game screen and adds a shake effect.
-		HdpiUtils.glViewport(viewportPixel.getScreenX(), viewportPixel.getScreenY(),
-				GlobalBag.viewportGame.getScreenWidth(), GlobalBag.viewportGame.getScreenHeight());
-		viewportPixel.getCamera().viewportWidth = viewportGame.getScreenWidth();
-		viewportPixel.getCamera().viewportHeight = viewportGame.getScreenHeight();
-		viewportPixel.getCamera().position.set(shake.x + viewportGame.getScreenWidth() * 0.5f,
-				shake.y + GlobalBag.viewportGame.getScreenHeight() * 0.5f, shake.z);
-		viewportPixel.getCamera().update();
-		batchPixel.setProjectionMatrix(viewportPixel.getCamera().combined);
+		viewportGameFixed.setShake(shake.x, shake.y, shake.z);
+		viewportGameFixed.apply(false, batchPixel);
 		batchPixel.begin();
-		renderMain();
+		renderMain(batchPixel);
 		batchPixel.end();
-		viewportPixel.getCamera().position.set(oldPosition);
 	}
 
-	public void renderMain() {
+	public void renderMain(Batch batch) {
 		for (AFancyEvent fe : activeList)
-			fe.render();
+			fe.render(batch);
 	}
 
 	@Override
@@ -245,16 +234,19 @@ public class EventFancyScene extends ACutsceneEvent {
 
 	@Override
 	public void resize(int w, int h) {
-		for (AFancyEvent fe : queueList)
-			fe.resize(w, h);
-		for (AFancyEvent fe : activeList)
-			fe.resize(w, h);
+		// Not needed anymore as we are working with a virtual fixed screen size
+		// now.
+
+		// for (AFancyEvent fe : queueList)
+		// fe.resize(w, h);
+		// for (AFancyEvent fe : activeList)
+		// fe.resize(w, h);
 	}
 
 	@Override
 	public boolean begin() {
-		for (FancyDrawable fd : drawableMap.values())
-			fd.resetToDefaults();
+		for (ADrawable<?, ?> drawable : drawableMap.values())
+			drawable.reset();
 		this.activeList.clear();
 		this.queueList.clear();
 		this.queueList.addAll(eventList);
@@ -267,8 +259,9 @@ public class EventFancyScene extends ACutsceneEvent {
 
 	@Override
 	public void reset() {
-		for (FancyDrawable fd : drawableMap.values())
-			fd.cleanup();
+		for (ADrawable<?, ?> drawable : drawableMap.values()) {
+			drawable.dispose();
+		}
 		for (AFancyEvent fe : eventList)
 			// TODO call ResourcePool.freeFancyEvent(fe); instead
 			fe.reset();
@@ -288,18 +281,6 @@ public class EventFancyScene extends ACutsceneEvent {
 	}
 
 	/**
-	 * Requests a new drawable to be created for the given key. Drawables will
-	 * be created on-the-fly, use this for performance optimizations.
-	 * 
-	 * @param key
-	 *            Name of the drawable.
-	 */
-	@Deprecated
-	public void requestDrawable(String key) {
-		getDrawable(key);
-	}
-
-	/**
 	 * @param key
 	 *            Unique id for the drawable. Uniqueness is determined by
 	 *            {@link String#compareTo(String)}.
@@ -307,35 +288,67 @@ public class EventFancyScene extends ACutsceneEvent {
 	 *         cache, or newly created. For the same key, this method will
 	 *         always return the same object.
 	 */
-	@Deprecated
-	public FancyDrawable getDrawable(String key) {
-		FancyDrawable drawable = drawableMap.get(key);
+	@SuppressWarnings("unchecked")
+	private <S, T> ADrawable<S, T> getADrawable(String key, ADrawable<S, T> prototype) {
+		final ADrawable<?, ?> drawable = drawableMap.get(key);
 		if (drawable == null) {
-			drawable = new FancyDrawable();
-			drawableMap.put(key, drawable);
+			// Create new drawable.
+			final ADrawable<S, T> newObject = prototype.newObject();
+			drawableMap.put(key, newObject);
+			return newObject;
+		} else if (drawable.getClass() != prototype.getClass()) {
+			// Dispose old drawable.
+			drawable.dispose();
+			// Acquire new drawable.
+			final ADrawable<S, T> newObject = prototype.newObject();
+			drawableMap.put(key, newObject);
+			// Inform events drawables changed.
+			for (AFancyEvent fe : activeList) 
+				fe.drawableChanged(this, key);
+			return newObject;
 		}
-		return drawable;
+		// Drawable exists already with the correct type, so just return it.
+		return (ADrawable<S, T>) drawable;
 	}
-	
-	private <T extends INewObject<T>> T getADrawable(String key, T prototype, Map<String, T> map) {	
-		T drawable = map.get(key);
-		if (drawable == null) {
-			drawable = prototype.newObject();
-			map.put(key, drawable);
+
+	/**
+	 * Returns a drawable for the given key, of unknown subclass. Therefore,
+	 * you can only perform operations common to all subclasses as defined
+	 * in {@link ADrawable}.
+	 * @param key Key of the drawable.
+	 * @return The drawable, or a {@link DrawableMock} when no such drawable exists.
+	 */
+	public ADrawable<?, ?> getADrawable(String key) {
+		return drawableMap.getOrDefault(key, PROTOTYPE_DRAWABLE_MOCK);
+	}
+
+	/**
+	 * For checking for sanity while loading. It is not required, but animation
+	 * files should load an object before using it.
+	 * 
+	 * @param key
+	 *            ID of the {@link ADrawable} to check.
+	 */
+	public void checkForDrawable(String key) {
+		if (!drawableMap.containsKey(key)) {
+			LOG.error("warning: no object exists yet for " + key);
 		}
-		return drawable;
 	}
-	public DrawableSprite requestDrawableSprite(String key) {
-		return getADrawable(key, PROTOTYPE_DRAWABLE_SPRITE, mapSprite);
+
+	public ADrawable<ETexture, CroppableAtlasSprite> requestDrawableSprite(String key) {
+		return getADrawable(key, PROTOTYPE_DRAWABLE_SPRITE);
 	}
-	public DrawableAnimation requestDrawableAnimation(String key) {
-		return getADrawable(key, PROTOTYPE_DRAWABLE_ANIMATION, mapAnimation);
+
+	public ADrawable<EAnimation, AtlasAnimation> requestDrawableAnimation(String key) {
+		return getADrawable(key, PROTOTYPE_DRAWABLE_ANIMATION);
 	}
-	public DrawableNinePatch requestDrawableNinePatch(String key) {
-		return getADrawable(key, PROTOTYPE_DRAWABLE_NINE_PATCH, mapNinePatch);
+
+	public ADrawable<ENinePatch, NinePatch> requestDrawableNinePatch(String key) {
+		return getADrawable(key, PROTOTYPE_DRAWABLE_NINE_PATCH);
 	}
-	public DrawableParticleEffect requestDrawableParticleEffect(String key) {
-		return getADrawable(key, PROTOTYPE_DRAWABLE_PARTICLE_EFFECT, mapParticleEffect);
+
+	public ADrawable<EParticleEffect, PooledEffect> requestDrawableParticleEffect(String key) {
+		return getADrawable(key, PROTOTYPE_DRAWABLE_PARTICLE_EFFECT);
 	}
 
 	/**

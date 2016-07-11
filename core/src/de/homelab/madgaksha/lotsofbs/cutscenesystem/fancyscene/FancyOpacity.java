@@ -2,41 +2,36 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
 import java.util.Scanner;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
-public class FancyOpacity extends AFancyEvent {
+public class FancyOpacity extends AFancyWithDrawable {
 	private final static Logger LOG = Logger.getLogger(FancyOpacity.class);
-
-	private String key = StringUtils.EMPTY;
 	private float opacity;
 
 	public FancyOpacity(String key, float opacity) {
-		super(true);
-		this.key = key;
+		super(key);
 		this.opacity = opacity;
 	}
 
 	@Override
-	public void reset() {
+	public void resetSubclass() {
 		opacity = 1.0f;
-		key = StringUtils.EMPTY;
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
-		efs.getDrawable(key).setOpacity(opacity);
+	public boolean beginSubclass(EventFancyScene scene) {
+		drawable.setOpacity(opacity);
 		return false;
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override
@@ -50,11 +45,6 @@ public class FancyOpacity extends AFancyEvent {
 
 	@Override
 	public void end() {
-	}
-
-	@Override
-	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);
 	}
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

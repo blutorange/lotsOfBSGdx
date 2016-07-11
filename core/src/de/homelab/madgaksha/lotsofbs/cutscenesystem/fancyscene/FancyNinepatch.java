@@ -5,7 +5,7 @@ import java.util.Scanner;
 import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
@@ -17,13 +17,12 @@ public class FancyNinepatch extends AFancyEvent {
 	private final static Logger LOG = Logger.getLogger(FancyNinepatch.class);
 
 	private String key = StringUtils.EMPTY;
-	private Vector2 dimensions = new Vector2();
+	private float unitPerPixel = 1.0f;
 	private ENinePatch ninePatch;
 
-	public FancyNinepatch(String key, Vector2 dimensions, ENinePatch ninePatch) {
+	public FancyNinepatch(String key, float unitPerPixel, ENinePatch ninePatch) {
 		super(true);
 		this.key = key;
-		this.dimensions.set(dimensions);
 		this.ninePatch = ninePatch;
 	}
 
@@ -34,13 +33,13 @@ public class FancyNinepatch extends AFancyEvent {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
-		efs.getDrawable(key).setDrawable(ninePatch, dimensions);
+	public boolean begin(EventFancyScene scene) {
+		scene.requestDrawableNinePatch(key).setDrawable(ninePatch, unitPerPixel);
 		return false;
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override
@@ -55,10 +54,14 @@ public class FancyNinepatch extends AFancyEvent {
 	@Override
 	public void end() {
 	}
+	
+	@Override
+	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	}
 
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);
+		scene.requestDrawableNinePatch(key);
 	}
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
@@ -67,13 +70,15 @@ public class FancyNinepatch extends AFancyEvent {
 			return null;
 		}
 		String key = s.next();
-		Float width = FileCutsceneProvider.nextNumber(s);
-		Float height = FileCutsceneProvider.nextNumber(s);
-		if (width == null || height == null) {
-			LOG.error("expected nine patch dimensions");
+		
+		Float unitPerPixel = FileCutsceneProvider.nextNumber(s);
+		if (unitPerPixel == null) {
+			LOG.error("expected unit per pixel");
 			return null;
 		}
+		
 		ENinePatch ninePatch = FileCutsceneProvider.nextNinePatch(s);
-		return (ninePatch != null) ? new FancyNinepatch(key, new Vector2(width, height), ninePatch) : null;
+		
+		return (ninePatch != null) ? new FancyNinepatch(key, unitPerPixel, ninePatch) : null;
 	}
 }

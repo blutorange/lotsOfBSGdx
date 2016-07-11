@@ -1,4 +1,4 @@
-package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.drawable;
+package de.homelab.madgaksha.lotsofbs.bettersprite.drawable;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
@@ -23,10 +23,8 @@ public class DrawableSprite extends ADrawable<ETexture, CroppableAtlasSprite> im
 	}
 
 	@Override
-	public CroppableAtlasSprite loadResource(ETexture resource, float unitPerPixel) {
-		CroppableAtlasSprite sprite = resource.asSprite();
-		if (sprite != null) sprite.setSize(sprite.getWidth() * unitPerPixel, sprite.getHeight() * unitPerPixel);
-		return sprite;
+	public CroppableAtlasSprite loadResource(ETexture resource) {
+		return resource.asSprite();
 	}
 	
 	@Override
@@ -66,11 +64,17 @@ public class DrawableSprite extends ADrawable<ETexture, CroppableAtlasSprite> im
 
 	@Override
 	protected boolean performUpdate(float deltaTime, float passedTime) {
-		return true;
+		return false;
 	}
 
 	@Override
 	public DrawableSprite newObject() {
 		return new DrawableSprite();
+	}
+
+	@Override
+	protected void initResource(float unitPerPixel) {
+		drawable.setSize(drawable.getWidth() * unitPerPixel, drawable.getHeight() * unitPerPixel);
+		drawable.setOriginRelative(getOriginX(), getOriginY());
 	}
 }

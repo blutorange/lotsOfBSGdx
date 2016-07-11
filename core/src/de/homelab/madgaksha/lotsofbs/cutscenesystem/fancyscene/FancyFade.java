@@ -3,6 +3,7 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
@@ -39,14 +40,14 @@ public class FancyFade extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
+	public boolean beginSubclass(EventFancyScene efs) {
 		startOpacity = drawable.getOpacity();
 		isDone = false;
 		return true;
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override

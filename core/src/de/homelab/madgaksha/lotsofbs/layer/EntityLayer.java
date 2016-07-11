@@ -81,10 +81,13 @@ public class EntityLayer extends ALayer {
 			viewportGame.apply();
 			final SpriteRenderSystem spriteRenderSystem = gameEntityEngine.getSystem(SpriteRenderSystem.class);
 			final ModelRenderSystem modelRenderSystem = gameEntityEngine.getSystem(ModelRenderSystem.class);
+			final ParticleEffectRenderSystem particleEffectRenderSystem = gameEntityEngine.getSystem(ParticleEffectRenderSystem.class);
 			if (spriteRenderSystem != null)
 				spriteRenderSystem.update(deltaTime);
 			if (modelRenderSystem != null)
 				modelRenderSystem.update(deltaTime);
+			if (particleEffectRenderSystem != null)
+				particleEffectRenderSystem.update(deltaTime);
 		}
 		doUpdate = false;
 	}

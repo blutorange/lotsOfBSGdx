@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
@@ -118,7 +119,7 @@ public class FancySoundtarget extends AFancyEvent {
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override
@@ -133,6 +134,10 @@ public class FancySoundtarget extends AFancyEvent {
 
 	@Override
 	public void end() {
+	}
+	
+	@Override
+	public void drawableChanged(EventFancyScene scene, String changedKey) {
 	}
 
 	@Override

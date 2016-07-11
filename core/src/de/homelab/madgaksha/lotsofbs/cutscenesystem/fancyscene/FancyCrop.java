@@ -2,9 +2,8 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
 import java.util.Scanner;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
@@ -12,35 +11,32 @@ import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
-public class FancyCrop extends AFancyEvent {
+public class FancyCrop extends AFancyWithDrawable {
 	private final static Logger LOG = Logger.getLogger(FancyCrop.class);
 
-	private String key = StringUtils.EMPTY;
 	private Vector2 cropX = new Vector2(1.0f, 1.0f);
 	private Vector2 cropY = new Vector2(1.0f, 1.0f);
 
 	public FancyCrop(String key, float cropLeft, float cropBottom, float cropRight, float cropTop) {
-		super(true);
-		this.key = key;
+		super(key);
 		this.cropX.set(cropLeft, cropRight);
 		this.cropY.set(cropBottom, cropTop);
 	}
 
 	@Override
-	public void reset() {
+	public void resetSubclass() {
 		cropX.set(1.0f, 1.0f);
 		cropY.set(1.0f, 1.0f);
-		key = StringUtils.EMPTY;
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
-		efs.getDrawable(key).setCrop(cropX, cropY);
+	public boolean beginSubclass(EventFancyScene efs) {
+		drawable.setCrop(cropX, cropY);
 		return false;
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override
@@ -54,11 +50,6 @@ public class FancyCrop extends AFancyEvent {
 
 	@Override
 	public void end() {
-	}
-
-	@Override
-	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);
 	}
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

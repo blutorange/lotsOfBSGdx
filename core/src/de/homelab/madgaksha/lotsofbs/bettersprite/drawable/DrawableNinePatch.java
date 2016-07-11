@@ -1,4 +1,4 @@
-package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.drawable;
+package de.homelab.madgaksha.lotsofbs.bettersprite.drawable;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -54,8 +54,7 @@ public class DrawableNinePatch extends ADrawable<ENinePatch, NinePatch> implemen
 	}
 
 	@Override
-	protected NinePatch loadResource(ENinePatch resource, float unitPerPixel) {
-		this.unitPerPixel = unitPerPixel;
+	protected NinePatch loadResource(ENinePatch resource) {
 		return ResourceCache.getNinePatch(resource);
 	}
 
@@ -71,7 +70,7 @@ public class DrawableNinePatch extends ADrawable<ENinePatch, NinePatch> implemen
 
 	@Override
 	protected boolean performUpdate(float deltaTime, float passedTime) {
-		return true;
+		return false;
 	}
 	
 	private void computeCoordinates() {
@@ -85,5 +84,10 @@ public class DrawableNinePatch extends ADrawable<ENinePatch, NinePatch> implemen
 	@Override
 	public DrawableNinePatch newObject() {
 		return new DrawableNinePatch();
+	}
+	
+	@Override
+	protected void initResource(float unitPerPixel) {
+		this.unitPerPixel = unitPerPixel;
 	}
 }

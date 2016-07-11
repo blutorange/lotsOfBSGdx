@@ -458,15 +458,14 @@ public class Game implements ApplicationListener {
 		Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
 
 		// Update and render the game.
-		final float deltaTime = timeScalingFactor
-				* MathUtils.clamp(Gdx.graphics.getRawDeltaTime(), MIN_DELTA_TIME, MAX_DELTA_TIME);
+		final float deltaTime = running ? (timeScalingFactor
+				* MathUtils.clamp(Gdx.graphics.getRawDeltaTime(), MIN_DELTA_TIME, MAX_DELTA_TIME)) : 0f;
 
 		// Start with the topmost item on the layer stack and proceed
 		// with the layers down on the stack only if the layers
 		// above did not stop propagation.
 		int j = 0;
-		if (running)
-			gameClock.update(deltaTime);
+		gameClock.update(deltaTime);
 		for (int i = layerStack.size() - 1; i != -1; --i) {
 			final ALayer layer = layerStack.get(i);
 			// Save first layer that block drawing.

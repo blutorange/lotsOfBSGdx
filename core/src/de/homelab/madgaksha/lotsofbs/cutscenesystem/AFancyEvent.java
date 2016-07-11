@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
@@ -59,8 +60,15 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 	 */
 	public abstract boolean begin(EventFancyScene efs);
 
-	public abstract void render();
+	public abstract void render(Batch batch);
 
+	/**
+	 * Called when the type of a drawable changed, eg. from Animation to NinePatch.
+	 * @param scene The scene for which the drawable changed.
+	 * @param key The key of the drawable that changed.
+	 */
+	public abstract void drawableChanged(EventFancyScene scene, String key);
+	
 	/**
 	 * Called when some time has passed and this event needs to be updated.
 	 * 
@@ -203,6 +211,7 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 		FancyAnimation(1),
 		FancySpritetarget(1),
 		FancyNinepatch(1),
+		FancyPeffect(1),
 
 		FancyPosition(2),
 		FancyOrigin(2),
@@ -215,7 +224,6 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 		FancyZoom(3),
 		FancySlide(3),
 
-		FancyPeffect(4),
 		FancyShow(4),
 		FancyInclude(4),;
 

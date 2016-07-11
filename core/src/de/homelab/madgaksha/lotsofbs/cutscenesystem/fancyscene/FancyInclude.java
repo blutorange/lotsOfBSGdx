@@ -3,6 +3,7 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
@@ -37,8 +38,8 @@ public class FancyInclude extends AFancyEvent {
 	}
 
 	@Override
-	public void render() {
-		scene.renderMain();
+	public void render(Batch batch) {
+		scene.renderMain(batch);
 	}
 
 	@Override
@@ -63,6 +64,10 @@ public class FancyInclude extends AFancyEvent {
 		scene.end();
 	}
 
+	@Override
+	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	}
+	
 	@Override
 	public void attachedToScene(EventFancyScene scene) {
 	}

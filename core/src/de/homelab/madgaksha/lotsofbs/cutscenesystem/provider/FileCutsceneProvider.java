@@ -21,6 +21,7 @@ import de.homelab.madgaksha.lotsofbs.GameParameters;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.ACutsceneEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventTextbox;
+import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventWait;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.textbox.EFaceVariation;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.textbox.PlainTextbox;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.PositionComponent;
@@ -271,7 +272,7 @@ import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
 public class FileCutsceneProvider implements CutsceneEventProvider {
 	private final static Logger LOG = Logger.getLogger(FileCutsceneProvider.class);
 
-	private final static String CutsceneEventClassPackage = "de.homelab.madgaksha.cutscenesystem.event.";
+	private final static String CutsceneEventClassPackage = EventWait.class.getPackage().getName() + ".";
 
 	private final static Pattern tokenComment = Pattern.compile("//|$");
 	private final static Pattern tokenCommand = Pattern.compile(">>.+");

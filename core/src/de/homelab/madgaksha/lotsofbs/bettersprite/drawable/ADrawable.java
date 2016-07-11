@@ -1,4 +1,4 @@
-package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.drawable;
+package de.homelab.madgaksha.lotsofbs.bettersprite.drawable;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -27,14 +27,15 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	private float rotation = 0.0f; // degrees
 	protected LOADED drawable = null;
 	private boolean disposed = true; // must be true
-
+	private boolean managed = false;
+	
 	public ADrawable() {
 		reset();
 	}
 
 	@Override
 	public String toString() {
-		return "ADrawable@" + position;
+		return getClass().getSimpleName() + "@" + position + (disposed ? "Disposed" : "Loaded");
 	}
 
 	public final void reset() {
@@ -46,20 +47,27 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 		color.set(Color.WHITE);
 		opacity = 1.0f;
 		rotation = 0.0f;
-		if (!disposed)
+		if (!disposed && managed)
 			dispose();
 		drawable = null;
 		disposed = true;
+		managed = false;
 	}
 
-	public boolean setDrawable(RESOURCE resource, float pixelPerUnit) {
-		disposed = false;
-		drawable = loadResource(resource, 1.0f / pixelPerUnit);
+	public final boolean setDrawable(RESOURCE resource, float pixelPerUnit) {
+		return managed = setLoadedDrawable(loadResource(resource), pixelPerUnit);
+	}
+	
+	public final boolean setLoadedDrawable(LOADED loaded, float pixelPerUnit) {
+		drawable = loaded;
 		if (drawable == null) {
 			disposed = true;
 			reset();
 			return false;
 		} else {
+			disposed = false;
+			managed = false;
+			initResource(1.0f/pixelPerUnit);
 			applyAll();
 			return true;
 		}
@@ -138,7 +146,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 		applyScale(scale.x, scale.y);
 	}
 
-	public void setScaleLerp(Vector2 scaleStart, Vector2 scaleEnd, float alpha) {
+	public final void setScaleLerp(Vector2 scaleStart, Vector2 scaleEnd, float alpha) {
 		if (disposed)
 			return;
 		scale.set(scaleStart).lerp(scaleEnd, alpha);
@@ -285,21 +293,30 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	}
 
 	protected final void applyAll() {
+		if (disposed)
+			return;
 		applyColor(color.r, color.g, color.b, opacity);
 		applyOpacity(opacity);
 		applyOrigin(origin.x, origin.y);
+		applyScale(scale.x, scale.y);
 		applyPosition(position.x, position.y);
 		applyCrop(cropX.x, cropX.y, cropY.x, cropY.y);
 		applyRotation(rotation);
-		applyScale(scale.x, scale.y);
 	}
 
 	public final void dispose() {
-		performDispose();
+		if (managed && !disposed) performDispose();
 		disposed = true;
+		managed = false;
 		drawable = null;
 	}
 
+	/**
+	 * Updates the state of this drawable. Used for example by animations.
+	 * @param deltaTime Time since the last frame in seconds.
+	 * @param passedTime Total time since the beginning in seconds.
+	 * @return True iff this drawable is finished (eg. animations) or could not be updated.
+	 */
 	public final boolean update(float deltaTime, float passedTime) {
 		if (disposed)
 			return false;
@@ -315,9 +332,6 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 		if (disposed)
 			return;
 		performRender(batch);
-	}
-
-	public final void resize() {
 	}
 
 	public final void getPosition(Vector2 vector) {
@@ -361,7 +375,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	}
 	
 	public final boolean isColorSet() {
-		return color.toIntBits() == Color.WHITE.toIntBits();
+		return color.toIntBits() != Color.WHITE.toIntBits();
 	}
 	
 	/**
@@ -388,27 +402,27 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 		return rotation;
 	}
 
-	public float getPositionX() {
+	public final float getPositionX() {
 		return position.x;
 	}
 
-	public float getPositionY() {
+	public final float getPositionY() {
 		return position.y;
 	}
 
-	public float getScaleX() {
+	public final float getScaleX() {
 		return scale.x;
 	}
 
-	public float getScaleY() {
+	public final float getScaleY() {
 		return scale.y;
 	}
 
-	public float getOriginX() {
+	public final float getOriginX() {
 		return origin.x;
 	}
 
-	public float getOriginY() {
+	public final float getOriginY() {
 		return origin.y;
 	}
 
@@ -417,7 +431,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	 * 
 	 * @param deltaTime
 	 * @param passedTime
-	 * @return Whether this drawable is finished. Will always return true for
+	 * @return Whether this drawable is finished. Will always return false for
 	 *         {@link ENinePatch}es and {@link ETexture}s, but not for
 	 *         necessarily for {@link EAnimation}s or {@link EParticleEffect}s.
 	 */
@@ -452,5 +466,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	 *            Resource to be loaded.
 	 * @return The resource, or null if it could not be loaded.
 	 */
-	protected abstract LOADED loadResource(RESOURCE resource, float unitPerPixel);
+	protected abstract LOADED loadResource(RESOURCE resource);
+	protected abstract void initResource(float unitPerPixel);
+	public abstract ADrawable<RESOURCE, LOADED> newObject();
 }

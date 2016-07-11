@@ -39,6 +39,7 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 	private final static AtlasRegion DEFAULT_REGION = new AtlasRegion(new Texture(new FloatTextureData(1, 1)), 0, 0, 1, 1);
 	private AtlasRegion region = DEFAULT_REGION;
 	private float currentOffsetX, currentOffsetY;
+	private float originRelativeX, originRelativeY;
 
 	public CroppableAtlasSprite(AtlasRegion region) {
 		setAtlasRegion(region);
@@ -77,12 +78,13 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 			setOrigin(atlasRegion.originalWidth / 2f, atlasRegion.originalHeight / 2f);
 		}
 		else {
-			super.setOrigin(atlasRegion.originalWidth / 2f - currentOffsetX, atlasRegion.originalHeight / 2f - currentOffsetY);
+			super.setOrigin(atlasRegion.originalWidth * originRelativeX - currentOffsetX, atlasRegion.originalHeight * originRelativeY - currentOffsetY);
 		}
 	}
 
 	@Override
 	public void reset() {
+		originRelativeX = originRelativeY = 0.5f;
 		currentOffsetX = currentOffsetY = 0.0f;
 		cropLeft = cropRight = cropBottom = cropTop = 1f;
 		region = DEFAULT_REGION;
@@ -144,13 +146,16 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 
 	@Override
 	public void setOrigin(float originX, float originY) {
+		originRelativeX = originX / getWidth();
+		originRelativeY = originY / getHeight();
 		super.setOrigin(originX - currentOffsetX, originY - currentOffsetY);
 		setCrop(cropLeft, cropRight, cropBottom, cropTop);
 	}
 
 	@Override
 	public void setOriginCenter() {
-		super.setOrigin(region.originalWidth / 2 - currentOffsetX, region.originalWidth / 2 - currentOffsetY);
+		super.setOrigin(region.originalWidth / 2f - currentOffsetX, region.originalWidth / 2f - currentOffsetY);
+		originRelativeX = originRelativeY = 0.5f;
 		setCrop(cropLeft, cropRight, cropBottom, cropTop);
 	}
 
@@ -218,7 +223,7 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 	 *            Origin to be set.
 	 */
 	public void setOriginRelative(float originX, float originY) {
-		setOrigin(originX * region.originalWidth, originY * region.originalHeight);
+		setOrigin(originX * getWidth(), originY * getHeight());
 	}
 
 	/**
@@ -243,7 +248,7 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 	 *            y coordinate.
 	 */
 	public void setPositionOrigin(float x, float y) {
-		setPosition(x - getOriginX(), y - getOriginY());
+		setPosition(x - getOriginX() , y - getOriginY());
 	}
 
 	public void setCropAbsolute(float cropLeftAbsolute, float cropRightAbsolute, float cropBottomAbsolute,

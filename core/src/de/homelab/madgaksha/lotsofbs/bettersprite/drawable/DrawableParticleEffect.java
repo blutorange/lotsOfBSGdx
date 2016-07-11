@@ -1,4 +1,4 @@
-package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.drawable;
+package de.homelab.madgaksha.lotsofbs.bettersprite.drawable;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -19,6 +19,7 @@ public class DrawableParticleEffect extends ADrawable<EParticleEffect, PooledEff
 	// not work properly
 	private final static float MIN_SCALE = 1.0f / MAX_SCALE;
 	private float scaleLast;
+	private float unitPerPixel;
 
 	/**
 	 * Setting the color is a rather slow operation, try to avoid this if
@@ -64,20 +65,22 @@ public class DrawableParticleEffect extends ADrawable<EParticleEffect, PooledEff
 
 	@Override
 	protected void applyScale(float scaleX, float scaleY) {
-		float scale = 0.5f
+		float scaleNew = 0.5f * unitPerPixel
 				* (MathUtils.clamp(scaleX, MIN_SCALE, MAX_SCALE) + MathUtils.clamp(scaleY, MIN_SCALE, MAX_SCALE));
-		scale /= scaleLast;
-		if (scale != 1f) drawable.scaleEffect(scale);
-		scaleLast = scale;
+		if (scaleNew != scaleLast) {
+			drawable.scaleEffect(scaleNew / scaleLast);
+			scaleLast = scaleNew;
+		}
 	}
 
 	@Override
-	protected PooledEffect loadResource(EParticleEffect resource, float unitPerPixel) {
-		scaleLast = 1.0f;
-		PooledEffect pe = ResourcePool.obtainParticleEffect(resource);
-		applyScale(unitPerPixel, unitPerPixel);
-		return pe;
+	protected PooledEffect loadResource(EParticleEffect resource) {
+		return ResourcePool.obtainParticleEffect(resource);
 	}
+
+	// @Override
+	// protected void initResource() {
+	// }
 
 	@Override
 	protected void performDispose() {
@@ -111,5 +114,12 @@ public class DrawableParticleEffect extends ADrawable<EParticleEffect, PooledEff
 	@Override
 	public DrawableParticleEffect newObject() {
 		return new DrawableParticleEffect();
+	}
+
+	@Override
+	protected void initResource(float unitPerPixel) {
+		this.scaleLast = 1.0f;
+		this.unitPerPixel = unitPerPixel;
+		applyScale(1f, 1f);
 	}
 }

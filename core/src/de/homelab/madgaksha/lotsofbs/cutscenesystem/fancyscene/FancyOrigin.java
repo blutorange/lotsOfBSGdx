@@ -2,9 +2,8 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
 import java.util.Scanner;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
@@ -12,32 +11,29 @@ import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
-public class FancyOrigin extends AFancyEvent {
+public class FancyOrigin extends AFancyWithDrawable {
 	private final static Logger LOG = Logger.getLogger(FancyOrigin.class);
 
-	private String key = StringUtils.EMPTY;
 	private Vector2 origin = new Vector2();
 
 	public FancyOrigin(String key, float x, float y) {
-		super(true);
-		this.key = key;
+		super(key);
 		this.origin.set(x, y);
 	}
 
 	@Override
-	public void reset() {
+	public void resetSubclass() {
 		origin.set(0.0f, 0.0f);
-		key = StringUtils.EMPTY;
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
-		efs.getDrawable(key).setOrigin(origin);
+	public boolean beginSubclass(EventFancyScene efs) {
+		drawable.setOrigin(origin);
 		return false;
 	}
 
 	@Override
-	public void render() {
+	public void render(Batch batch) {
 	}
 
 	@Override
@@ -51,11 +47,6 @@ public class FancyOrigin extends AFancyEvent {
 
 	@Override
 	public void end() {
-	}
-
-	@Override
-	public void attachedToScene(EventFancyScene scene) {
-		scene.requestDrawable(key);
 	}
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {

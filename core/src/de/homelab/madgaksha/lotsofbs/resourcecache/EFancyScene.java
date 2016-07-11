@@ -23,6 +23,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
  */
 public enum EFancyScene implements IResource<EFancyScene, EventFancyScene> {
 	OUKA_MUSOUGEKI("cutscene/fancyScene/ougiOukaMusougeki/ougiOukaMusougeki.scene");
+	//OUKA_MUSOUGEKI("cutscene/fancyScene/ougiOukaMusougeki/test.anim");
 
 	private final static Logger LOG = Logger.getLogger(EFancyScene.class);
 	private final static EnumMap<EFancyScene, EventFancyScene> fancySceneCache = new EnumMap<EFancyScene, EventFancyScene>(
