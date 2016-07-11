@@ -4,12 +4,12 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 
-import de.homelab.madgaksha.Game;
-import de.homelab.madgaksha.GameParameters;
-import de.homelab.madgaksha.level.ALevel;
-import de.homelab.madgaksha.level.Level01;
-import de.homelab.madgaksha.player.APlayer;
-import de.homelab.madgaksha.player.PEstelle;
+import de.homelab.madgaksha.lotsofbs.Game;
+import de.homelab.madgaksha.lotsofbs.GameParameters;
+import de.homelab.madgaksha.lotsofbs.level.ALevel;
+import de.homelab.madgaksha.lotsofbs.level.Level01;
+import de.homelab.madgaksha.lotsofbs.player.APlayer;
+import de.homelab.madgaksha.lotsofbs.player.PEstelle;
 
 public class HtmlLauncher extends GwtApplication {
 

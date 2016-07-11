@@ -1,6 +1,6 @@
 {
-    "requestedLevel": "de.homelab.madgaksha.level.Level01",
-    "requestedPlayer": "de.homelab.madgaksha.player.PEstelle",
+    "requestedLevel": "de.homelab.madgaksha.lotsofbs.level.Level01",
+    "requestedPlayer": "de.homelab.madgaksha.lotsofbs.player.PEstelle",
     "requestedLocale": {
         "language": "de",
         "country": "",

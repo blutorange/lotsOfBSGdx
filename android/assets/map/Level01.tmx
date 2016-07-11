@@ -9157,7 +9157,7 @@
     <property name="species" value="Soldier Red"/>
    </properties>
   </object>
-  <object id="104" name="changeBattleBgm" type="Callback" x="458.667" y="15650.7" width="868" height="72.0168">
+  <object id="104" name="changeBattleBgm" type="Callback" x="569.333" y="12958.7" width="694.667" height="666.667">
    <properties>
     <property name="guid" value=""/>
     <property name="loop" type="int" value="0"/>
