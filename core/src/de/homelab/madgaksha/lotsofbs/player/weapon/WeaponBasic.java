@@ -22,7 +22,6 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.ETexture;
 import de.homelab.madgaksha.lotsofbs.resourcecache.IResource;
 
 public class WeaponBasic extends AWeapon {
-
 	private final static long BULLET_POWER = 2732L;
 	private final static float BULLET_INITIAL_SPEED = 800.0f;
 	private final static float BULLET_LIFE = 3.0f;

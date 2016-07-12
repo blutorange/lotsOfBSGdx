@@ -1,25 +1,42 @@
 package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
+import de.homelab.madgaksha.lotsofbs.util.Transient;
 
 public class FancyShow extends AFancyWithDrawable {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+	
 	private final static Logger LOG = Logger.getLogger(FancyShow.class);
 
 	private float duration;
-	private float lastTime = 0.0f;
-	private boolean isDone = false;
+	@Transient private float lastTime = 0.0f;
+	@Transient private boolean isDone = false;
 
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeFloat(duration);
+	}
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		final float duration = in.readFloat();
+		if (duration < 0f) throw new InvalidDataException("duration must be >= 0");
+		this.duration = duration;
+	}
+	
 	public FancyShow(String key, float duration) {
 		super(key);
 		this.duration = duration;
+		this.lastTime = 0.0f;
+		this.isDone = false;
 	}
 
 	@Override

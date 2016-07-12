@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -12,10 +13,26 @@ import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvide
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 public class FancyScale extends AFancyWithDrawable {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+	
 	private final static Logger LOG = Logger.getLogger(FancyScale.class);
 
 	private Vector2 scale = new Vector2();
 
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeFloat(scale.x);
+		out.writeFloat(scale.y);
+	}
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		scale = new Vector2();
+		
+		final float sx = in.readFloat();
+		final float sy = in.readFloat();
+		scale.set(sx, sy);
+	}
+
+	
 	public FancyScale(String key, float x, float y) {
 		super(key);
 		this.scale.set(x, y);

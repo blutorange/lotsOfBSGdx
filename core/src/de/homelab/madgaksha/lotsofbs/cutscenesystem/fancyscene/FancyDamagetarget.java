@@ -3,6 +3,7 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.cameraTrackingComponent;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.playerHitCircleEntity;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.badlogic.ashley.core.Entity;
@@ -17,11 +18,24 @@ import de.homelab.madgaksha.lotsofbs.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 public class FancyDamagetarget extends AFancyEvent {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+	
 	private final static Logger LOG = Logger.getLogger(FancyDamagetarget.class);
 
 	private long basePowerMin;
 	private long basePowerMax;
 
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeLong(basePowerMin);
+		out.writeLong(basePowerMax);
+	}
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		basePowerMin = in.readLong();
+		basePowerMax = in.readLong();
+	}
+
+	
 	public FancyDamagetarget(long damageMin, long damageMax) {
 		super(true);
 		this.basePowerMax = damageMax;

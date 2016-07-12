@@ -2,6 +2,7 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.cameraTrackingComponent;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
@@ -24,6 +26,9 @@ import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.BirdsViewSpriteSy
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 public class FancySpritetarget extends AFancyEvent {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+	
 	private final static Logger LOG = Logger.getLogger(FancySpritetarget.class);
 
 	private String key;
@@ -31,6 +36,25 @@ public class FancySpritetarget extends AFancyEvent {
 	private float direction;
 	private float dpi;
 
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeUTF(key);
+		out.writeObject(mode);
+		out.writeFloat(direction);
+		out.writeFloat(dpi);
+	}
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		String key = in.readUTF();
+		if (key == null || key.isEmpty()) throw new InvalidDataException("key cannot be null or empty");
+
+		Object mode = in.readObject();
+		if (mode == null || !(mode instanceof AnimationMode)) throw new InvalidDataException("unknown animation mode");
+		
+		this.key = key;
+		this.mode = (AnimationMode)mode;
+		direction = in.readFloat();
+		dpi = in.readFloat();
+	}
+	
 	public FancySpritetarget(String key, float dpi, float direction, AnimationMode mode) {
 		super(true);
 		this.dpi = dpi;

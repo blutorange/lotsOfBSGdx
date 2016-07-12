@@ -1,39 +1,95 @@
 package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
+import de.homelab.madgaksha.lotsofbs.util.Transient;
 
 public class FancySlide extends AFancyWithDrawable {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+	
 	private final static Logger LOG = Logger.getLogger(FancySlide.class);
+	private final static float MIN_DURATION = 0.01f;
+	private final static Interpolation DEFAULT_INTERPOLATION = Interpolation.linear;
+	private final static String DEFAULT_INTERPOLATION_NAME = "linear";
 
-	private Interpolation interpolation = Interpolation.linear;
 	private float duration = 1.0f;
-	private float durationInverse = 1.0f;
-	private boolean isDone = false;
-	private Vector2 startCropX = new Vector2(1.0f, 1.0f);
-	private Vector2 startCropY = new Vector2(1.0f, 1.0f);
+	private String interpolationName = DEFAULT_INTERPOLATION_NAME;
 	private Vector2 targetCropX = new Vector2(1.0f, 1.0f);
 	private Vector2 targetCropY = new Vector2(1.0f, 1.0f);
 
-	public FancySlide(String key, Float duration, Interpolation interpolation, float targetCropLeft,
+	@Transient private Vector2 startCropX = new Vector2(1.0f, 1.0f);
+	@Transient private Vector2 startCropY = new Vector2(1.0f, 1.0f);
+	@Transient private float durationInverse = 1.0f;
+	@Transient private Interpolation interpolation = DEFAULT_INTERPOLATION;
+	@Transient private boolean isDone = false;
+	
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeFloat(duration);
+		out.writeUTF(interpolationName);
+		out.writeFloat(targetCropX.x);
+		out.writeFloat(targetCropX.y);
+		out.writeFloat(targetCropY.x);
+		out.writeFloat(targetCropY.y);
+	}
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		targetCropX = new Vector2(1.0f, 1.0f);
+		targetCropY = new Vector2(1.0f, 1.0f);
+		startCropX = new Vector2(1.0f, 1.0f);
+		startCropY = new Vector2(1.0f, 1.0f);
+		
+		final float duration = in.readFloat();
+		if (duration < MIN_DURATION) throw new InvalidDataException("duration must be >= " + MIN_DURATION);
+		this.duration = duration;
+
+		final String interpolationName = in.readUTF();
+		if (interpolationName == null) throw new InvalidDataException("interpolation name must not be null");
+		final Interpolation interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
+		if (interpolation == null) throw new InvalidDataException("no such interpolation");
+		this.interpolation = interpolation;
+		
+		final float cxx = in.readFloat();
+		final float cxy = in.readFloat();
+		final float cyx = in.readFloat();
+		final float cyy = in.readFloat();
+		
+		if (cxx < 0f || cxx > 1f || cxy < 0f || cxy > 1f || cyx < 0f || cyx > 1f || cyy < 0f || cyy > 1f)
+			throw new InvalidDataException("crop must be between 0 and 1");
+		targetCropX.set(cxx,cxy);
+		targetCropY.set(cyx,cyy);
+		
+		startCropX.set(targetCropX);
+		startCropY.set(targetCropY);
+		durationInverse = 1.0f / duration;
+		isDone = false;
+	}
+	
+	public FancySlide(String key, Float duration, String interpolationName, float targetCropLeft,
 			float targetCropBottom, float targetCropRight, float targetCropTop) {
 		super(key);
-		if (duration < 0.01f)
-			throw new IllegalArgumentException("duration must be greate than 0");
+		if (duration < MIN_DURATION)
+			throw new IllegalArgumentException("duration must be >= " + MIN_DURATION);
 		this.duration = duration;
 		this.durationInverse = 1.0f / duration;
-		this.interpolation = interpolation;
+		this.interpolationName = interpolationName;
 		this.targetCropX.set(targetCropLeft, targetCropRight);
 		this.targetCropY.set(targetCropBottom, targetCropTop);
+		this.interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
+		if (this.interpolation == null) {
+			this.interpolationName = DEFAULT_INTERPOLATION_NAME;
+			this.interpolation = DEFAULT_INTERPOLATION;
+		}
 	}
 
 	@Override
@@ -98,9 +154,9 @@ public class FancySlide extends AFancyWithDrawable {
 			return null;
 		}
 
-		Interpolation interpolation = FileCutsceneProvider.readNextInterpolation(s);
-		if (interpolation == null)
-			interpolation = Interpolation.linear;
+		String interpolationName = FileCutsceneProvider.readNextInterpolationName(s);
+		if (interpolationName == null)
+			interpolationName = DEFAULT_INTERPOLATION_NAME;
 
 		Float targetCropLeft = FileCutsceneProvider.nextNumber(s);
 		if (targetCropLeft == null) {
@@ -120,7 +176,7 @@ public class FancySlide extends AFancyWithDrawable {
 		if (targetCropTop == null)
 			targetCropTop = targetCropBottom;
 
-		return new FancySlide(key, duration, interpolation, targetCropLeft, targetCropBottom, targetCropRight,
+		return new FancySlide(key, duration, interpolationName, targetCropLeft, targetCropBottom, targetCropRight,
 				targetCropTop);
 	}
 }

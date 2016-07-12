@@ -1,5 +1,7 @@
 package de.homelab.madgaksha.lotsofbs.cutscenesystem;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Scanner;
@@ -10,23 +12,34 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene.AFancyWithDrawable;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.util.LocaleRootWordUtils;
+import de.homelab.madgaksha.lotsofbs.util.Transient;
 
-public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
+public abstract class AFancyEvent implements Poolable, Serializable {
+	/**
+	 * Initial version. 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private final static Logger LOG = Logger.getLogger(AFancyEvent.class);
 	private final static String FANCY_SCENE_PREFIX = AFancyWithDrawable.class.getPackage().getName() +  ".Fancy";
 
+	private boolean originalRelative = false;
 	protected float startTime = 0.0f;
-	protected int priority = 0;
-	private boolean relative = false;
 	private int z = 0;
+	@Transient protected int priority = 0;
+	@Transient private boolean relative = false;
 
-	public final static Comparator<AFancyEvent> ORDER_Z = new Comparator<AFancyEvent>() {
+	/**
+	 * For sorting the eventList by their priority, then z-index. Lowest z-index first, highest last.
+	 */
+	public final static Comparator<AFancyEvent> ORDER_PRIORITY_Z = new Comparator<AFancyEvent>() {
 		@Override
 		public int compare(AFancyEvent o1, AFancyEvent o2) {
 			return (o1.priority < o2.priority) ? -1
@@ -34,6 +47,48 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 		}
 	};
 
+	 private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeFloat(startTime);
+		out.writeBoolean(originalRelative);
+		out.writeInt(z);
+	}
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		final float startTime = in.readFloat();
+		if (startTime < 0) throw new InvalidDataException("start time must be >= 0");
+		this.startTime = startTime;
+		
+		originalRelative = in.readBoolean();
+		z = in.readInt();
+		
+		try {
+			Priority p = Priority.valueOf(getClass().getSimpleName());
+			priority = p.getPriority();
+		} catch (IllegalArgumentException e) {
+			LOG.error("no priority given for " + getClass().getSimpleName());
+			priority = 0;
+		}
+		relative = originalRelative;
+	}
+	
+	/**
+	 * For sorting the eventList by their start time, then priority. Lowest start time first, highest last.
+	 */
+	public final static Comparator<AFancyEvent> ORDER_START_TIME_PRIORITY = new Comparator<AFancyEvent>() {
+		@Override
+		public int compare(AFancyEvent o1, AFancyEvent o2) {
+			return (o1.startTime < o2.startTime) ? -1
+					: (o1.startTime == o2.startTime)
+							? ((o1.priority < o2.priority) ? -1 : (o1.priority == o2.priority) ? 0 : 1) : 1;
+		}
+	};
+
+	/** For serialization only.
+	 * @serial
+	 */
+	protected AFancyEvent() {
+	}
+	
 	public AFancyEvent(boolean setPriority) {
 		try {
 			Priority p = Priority.valueOf(getClass().getSimpleName());
@@ -43,22 +98,16 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 		}
 	}
 
-	// /**
-	// * @param efs The cutscene event which contains this fancy event.
-	// * @return Whether this event can be played back. Should be false for
-	// configuration setters.
-	// */
-	// public abstract boolean configure(EventFancyScene efs);
-
 	/**
 	 * Called at the earliest frame the event should be active. It is not called
 	 * in the correct z-order and should thus not perform any functions related
 	 * to {@link #update(float, float)}.
 	 * 
-	 * @param efs
-	 * @return
+	 * @param scene
+	 * @return True iff this event may now be updated and rendered. Can be false for setters etc.
+	 * that only need to be called once.
 	 */
-	public abstract boolean begin(EventFancyScene efs);
+	public abstract boolean begin(EventFancyScene scene);
 
 	public abstract void render(Batch batch);
 
@@ -105,16 +154,6 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 	 * @param scene
 	 */
 	public abstract void attachedToScene(EventFancyScene scene);
-
-	/**
-	 * For sorting the eventList. Lowest start time last, highest first.
-	 */
-	@Override
-	public int compareTo(AFancyEvent you) {
-		return (startTime < you.startTime) ? -1
-				: (startTime == you.startTime) ? ((priority < you.priority) ? -1 : (priority == you.priority) ? 0 : 1)
-						: 1;
-	}
 
 	public float getStartTime() {
 		return startTime;
@@ -165,6 +204,7 @@ public abstract class AFancyEvent implements Comparable<AFancyEvent>, Poolable {
 			return null;
 		fancyEvent.startTime = startTime;
 		fancyEvent.relative = isRelative;
+		fancyEvent.originalRelative = isRelative;
 		fancyEvent.z = z;
 		return fancyEvent;
 	}

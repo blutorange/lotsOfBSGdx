@@ -1,11 +1,15 @@
 package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
@@ -14,12 +18,32 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
 
 public class FancyPeffect extends AFancyEvent {
+	/** Initial version */
+	private static final long serialVersionUID = 1L;
+
 	private final static Logger LOG = Logger.getLogger(FancyPeffect.class);
 
 	private EParticleEffect particleEffect;
 	private String key = StringUtils.EMPTY;
 	private float unitsPerScreen = 1.0f;
 
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.writeUTF(key);
+		out.writeObject(particleEffect);
+		out.writeFloat(unitsPerScreen);
+	}
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		String key = in.readUTF();
+		if (key == null || key.isEmpty()) throw new InvalidDataException("key cannot be null or empty");
+		
+		Object particleEffect = in.readObject();
+		if (particleEffect == null || !(particleEffect instanceof EParticleEffect)) throw new InvalidDataException("unknown particle effect");
+		
+		this.key = key;
+		this.particleEffect = (EParticleEffect) particleEffect;
+		unitsPerScreen = in.readFloat();
+	}
+	
 	public FancyPeffect(String key, EParticleEffect particleEffect, float unitsPerScreen) {
 		super(true);
 		this.key = key;

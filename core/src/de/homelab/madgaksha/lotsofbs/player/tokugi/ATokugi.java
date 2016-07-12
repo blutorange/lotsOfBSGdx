@@ -59,10 +59,8 @@ public abstract class ATokugi implements IMapItem {
 		return ESound.ACQUIRE_WEAPON;
 	}
 
-	public ATokugi() {
-	}
-
-	void setType(ETokugi type) {
+	void setType(ETokugi type) throws IllegalStateException {
+		if (this.type != null) throw new IllegalStateException();
 		this.type = type;
 	}
 
@@ -135,7 +133,6 @@ public abstract class ATokugi implements IMapItem {
 	public void gotItem() {
 		SoundPlayer.getInstance().play(soundOnAcquire);
 		player.learnTokugi(this);
-		statusScreen.updateWeaponAndTokugiLayout();
 	}
 
 	protected void dealFinalDamagePoint() {

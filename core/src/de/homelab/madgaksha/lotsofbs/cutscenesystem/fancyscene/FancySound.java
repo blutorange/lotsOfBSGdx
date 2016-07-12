@@ -2,12 +2,14 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.playerHitCircleEntity;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.audiosystem.VoicePlayer;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
@@ -17,15 +19,46 @@ import de.homelab.madgaksha.lotsofbs.entityengine.Mapper;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.VoiceComponent;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
+import de.homelab.madgaksha.lotsofbs.util.Transient;
 
 public class FancySound extends AFancyEvent {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+	
 	private final static Logger LOG = Logger.getLogger(FancySound.class);
 
-	private VoicePlayer voicePlayer;
 	private ESound sound;
 	private float volume;
-	private boolean isDone = false;
+	private String entityName;
+	
+	@Transient private VoicePlayer voicePlayer;
+	@Transient private boolean isDone = false;
 
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeUTF(entityName);
+		out.writeObject(sound);
+		out.writeFloat(volume);
+	}
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		String entityName = in.readUTF();
+		Entity e = FancySound.entityFromName(entityName);
+		VoiceComponent vc = e != null ? Mapper.voiceComponent.get(e) : null;
+		if (vc != null && vc.voicePlayer != null)
+			this.voicePlayer = vc.voicePlayer;
+		else
+			this.voicePlayer = new VoicePlayer();
+		
+		Object sound = in.readObject();
+		if (sound == null || !(sound instanceof ESound)) throw new InvalidDataException("no such sound");
+		this.sound = (ESound) sound;
+		
+		this.volume = in.readFloat();
+		
+		this.isDone = false;
+	}
+
+
+	
 	/**
 	 * A sound for the given entity or a general sound.
 	 * 
@@ -37,13 +70,15 @@ public class FancySound extends AFancyEvent {
 	 * @param volume
 	 *            Volume of the sound.
 	 */
-	public FancySound(Entity e, ESound sound, float volume) {
+	public FancySound(String entityName, ESound sound, float volume) {
 		super(true);
+		Entity e = FancySound.entityFromName(entityName);
 		VoiceComponent vc = e != null ? Mapper.voiceComponent.get(e) : null;
 		if (vc != null && vc.voicePlayer != null)
 			this.voicePlayer = vc.voicePlayer;
 		else
 			this.voicePlayer = new VoicePlayer();
+		this.entityName = entityName;
 		this.sound = sound;
 		this.volume = volume;
 	}
@@ -57,8 +92,8 @@ public class FancySound extends AFancyEvent {
 	 * @param sound
 	 *            The sound that should be played.
 	 */
-	public FancySound(Entity e, ESound sound) {
-		this(e, sound, 1.0f);
+	public FancySound(String entityName, ESound sound) {
+		this(entityName, sound, 1.0f);
 	}
 
 	@Override
@@ -103,24 +138,27 @@ public class FancySound extends AFancyEvent {
 
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		try {
-			Entity entity = nextEntity(s);
+			if (!s.hasNext()) {
+				LOG.error("expected entity name");
+				return null;
+			}
+			String entityName = s.next().toLowerCase(Locale.ROOT);;
 			ESound sound = FileCutsceneProvider.nextSound(s);
-			return (sound != null) ? new FancySound(entity, sound) : null;
+			return (sound != null) ? new FancySound(entityName, sound) : null;
 		} catch (IllegalArgumentException e) {
 			LOG.error("could not read entity with voice player", e);
 			return null;
 		}
 	}
 
-	private static Entity nextEntity(Scanner s) throws IllegalArgumentException {
-		if (!s.hasNext())
-			return null;
-		String name = s.next().toLowerCase(Locale.ROOT);
-		if (name.equals("player")) {
+	private static Entity entityFromName(String entityName) throws IllegalArgumentException {
+		if (entityName.equals("player"))
 			return playerHitCircleEntity;
-		} else if (name.equals("general"))
+		else if (entityName.equals("general"))
 			return null;
-		else
-			throw new IllegalArgumentException("no such entity");
+		else {
+			LOG.error("no such entity: " + entityName);
+			return null;
+		}
 	}
 }

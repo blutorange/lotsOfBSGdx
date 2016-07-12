@@ -16,6 +16,7 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.IResource;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ResourceCache;
 
 public class TokugiOukaMusougeki extends ATokugi {
+
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(TokugiOukaMusougeki.class);
 
@@ -45,7 +46,7 @@ public class TokugiOukaMusougeki extends ATokugi {
 	@Override
 	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
 		return new IResource<?, ?>[] { ETexture.TOKUGI_OUKAMUSOUGEKI_ICON_MAIN, ETexture.TOKUGI_OUKAMUSOUGEKI_ICON_SUB,
-				ETexture.TOKUGI_OUKAMUSOUGEKI_SIGN, EFancyScene.OUKA_MUSOUGEKI, EModel.ITEM_TOKUGI_OUKAMUSOUGEKI, };
+				ETexture.TOKUGI_OUKAMUSOUGEKI_SIGN, EFancyScene.OUKA_MUSOUGEKI_BIN, EModel.ITEM_TOKUGI_OUKAMUSOUGEKI, };
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class TokugiOukaMusougeki extends ATokugi {
 			return false;
 		}
 		previousTime = currentTime;
-		level.pushFancyScene(ResourceCache.getEventFancyScene(EFancyScene.OUKA_MUSOUGEKI), new Runnable() {
+		level.pushFancyScene(ResourceCache.getEventFancyScene(EFancyScene.OUKA_MUSOUGEKI_BIN), new Runnable() {
 			@Override
 			public void run() {
 				dealFinalDamagePoint();

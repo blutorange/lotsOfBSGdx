@@ -517,8 +517,10 @@ public abstract class APlayer {
 	}
 
 	public void equipWeapon(AWeapon weapon) {
-		if (supportsWeapon(weapon.getType()) && ownsWeapon(weapon))
+		if (supportsWeapon(weapon.getType()) && ownsWeapon(weapon)) {
 			currentWeapon = weapon;
+			if (statusScreen != null) statusScreen.updateWeaponAndTokugiLayout();
+		}
 	}
 
 	public AWeapon getEquippedWeapon() {
@@ -529,7 +531,6 @@ public abstract class APlayer {
 		int index = obtainedWeaponList.indexOf(currentWeapon);
 		if (index >= 0 && obtainedWeaponList.size() > 1) {
 			equipWeapon(obtainedWeaponList.get(Math.floorMod(index + amount, obtainedWeaponList.size())));
-			statusScreen.updateWeaponAndTokugiLayout();
 			// Do not switch to WeaponNone when the player has got more than one
 			// weapon.
 			if ((currentWeapon instanceof WeaponNone) && obtainedWeaponList.size() > 2) {
@@ -565,8 +566,10 @@ public abstract class APlayer {
 	}
 
 	public void equipTokugi(ATokugi tokugi) {
-		if (supportsTokugi(tokugi.getType()) && knowsTokugi(tokugi))
+		if (supportsTokugi(tokugi.getType()) && knowsTokugi(tokugi)) {
 			currentTokugi = tokugi;
+			if (statusScreen != null) statusScreen.updateWeaponAndTokugiLayout();
+		}
 	}
 
 	public ATokugi getEquippedTokugi() {
@@ -580,7 +583,6 @@ public abstract class APlayer {
 			if ((currentTokugi instanceof TokugiNone) && obtainedTokugiList.size() > 2) {
 				equipTokugi(obtainedTokugiList.get(Math.floorMod(index + amount + 1, obtainedTokugiList.size())));
 			}
-			statusScreen.updateWeaponAndTokugiLayout();
 			return true;
 		}
 		return false;

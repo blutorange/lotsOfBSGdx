@@ -20,32 +20,55 @@ import de.homelab.madgaksha.lotsofbs.level.ALevel;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 public class Score {
-	private final static Logger LOG = Logger.getLogger(Score.class);
-	private final static long scoreMax = 999999999999L;
+	public final static long MAX_SCORE = 999999999999L;
+	private final static Logger LOG = Logger.getLogger(Score.class);	
 	private final static int numberOfDigits = 12;
 
 	private final int[] digits = new int[numberOfDigits];
 	private long score = 0L;
 
+	/**
+	 * Initializes a new score object representing a score of 0.
+	 */
 	public Score() {
 	}
 
+	
+	/**
+	 * Initializes a new score object representing the given score.
+	 * @param initial The initial score. Must be >=0.
+	 */
+	public Score(long initial) {
+		increaseBy(initial);
+	}
+
+	
+	/**
+	 * Increases the score by the given amount. If the score would be higher than the {@link Score#MAX_SCORE},
+	 * it will be clamped to the maximum score.
+	 * @param ds Amount to increase the score by. Expected to be >=0, otherwise clamped.
+	 */
 	public void increaseBy(long ds) {
-		score += ds;
-		if (score > scoreMax)
-			score = scoreMax;
+		ds = ds < 0L ? 0L : ds;
+		score = ds >= MAX_SCORE - score ? MAX_SCORE : score+ds;
 		computeDigits();
 	}
 
+	/**
+	 * @param ds Amount to decrease the score by. Expected to be >=0, otherwise clamped.
+	 */
 	public void decreaseBy(long ds) {
-		score -= ds;
-		if (score < 0)
-			score = 0L;
+		ds = ds < 0L ? 0L : ds;
+		score = score < ds ? 0L : score-ds;
 		computeDigits();
 	}
 
-	public int getDigit(int i) {
-		return digits[i];
+	/**
+	 * @param n Which digit to retrieve.
+	 * @return The n-th digit of the current score, beginning at the highest digit.
+	 */
+	public int getDigit(int n) {
+		return digits[n];
 	}
 
 	public long getScore() {

@@ -3,6 +3,8 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.event;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.batchPixel;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.viewportGameFixed;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.lotsofbs.bettersprite.CroppableAtlasSprite;
@@ -39,6 +42,7 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.EAnimation;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ENinePatch;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ETexture;
 import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
+import de.homelab.madgaksha.lotsofbs.util.Transient;
 
 /**
  * The following commands are available for reading from file.
@@ -133,29 +137,63 @@ import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
  * @author madgaksha
  *
  */
-public class EventFancyScene extends ACutsceneEvent {
-	private final static Logger LOG = Logger.getLogger(EventFancyScene.class);
+public class EventFancyScene extends ACutsceneEvent implements Serializable {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+	
 	public final static ADrawable<Object, Object> PROTOTYPE_DRAWABLE_MOCK = new DrawableMock();
+	private final static Logger LOG = Logger.getLogger(EventFancyScene.class);
 	private final static ADrawable<ETexture, CroppableAtlasSprite> PROTOTYPE_DRAWABLE_SPRITE = new DrawableSprite();
 	private final static ADrawable<EAnimation, AtlasAnimation> PROTOTYPE_DRAWABLE_ANIMATION = new DrawableAnimation();
 	private final static ADrawable<EParticleEffect, PooledEffect> PROTOTYPE_DRAWABLE_PARTICLE_EFFECT = new DrawableParticleEffect();
 	private final static ADrawable<ENinePatch, NinePatch> PROTOTYPE_DRAWABLE_NINE_PATCH = new DrawableNinePatch();
 
-	private final List<AFancyEvent> eventList = new ArrayList<AFancyEvent>();
-	private final Stack<AFancyEvent> queueList = new Stack<AFancyEvent>();
-	private final LinkedList<AFancyEvent> activeList = new LinkedList<AFancyEvent>();
+	private List<AFancyEvent> eventList = new ArrayList<AFancyEvent>();
+	@Transient private  Stack<AFancyEvent> queueList = new Stack<AFancyEvent>();
+	@Transient private LinkedList<AFancyEvent> activeList = new LinkedList<AFancyEvent>();
 
-	private final Map<String, ADrawable<?, ?>> drawableMap = new HashMap<String, ADrawable<?, ?>>();
+	@Transient private Map<String, ADrawable<?, ?>> drawableMap = new HashMap<String, ADrawable<?, ?>>();
 
-	private final Vector3 shake = new Vector3();
-	private float totalTime = 0.0f;
-	private float deltaTime = 0.0f;
-	private boolean isSpedup = false;
-	private EventFancyScene parent;
+	@Transient private Vector3 shake = new Vector3();
+	@Transient private float totalTime = 0.0f;
+	@Transient private float deltaTime = 0.0f;
+	@Transient private boolean isSpedup = false;
+	@Transient private EventFancyScene parent;
 
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeInt(eventList.size());
+		for (AFancyEvent fe : eventList)
+			out.writeObject(fe);
+	}
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		eventList = new ArrayList<AFancyEvent>();
+		queueList = new Stack<AFancyEvent>();
+		activeList = new LinkedList<AFancyEvent>();
+		drawableMap = new HashMap<String, ADrawable<?, ?>>();
+		shake = new Vector3();
+		totalTime = 0.0f;
+		deltaTime = 0.0f;
+		isSpedup = false;
+		
+		reset();
+		final int size = in.readInt();
+		if (size < 0) throw new InvalidDataException("list size must be >= 0");
+		for (int i = 0 ; i != size; ++i) {
+			final Object fe = in.readObject();
+			if (fe == null || !(fe instanceof AFancyEvent)) {
+				eventList.clear();
+				throw new InvalidDataException("invalid data for fancy event");
+			}
+			eventList.add((AFancyEvent)fe);
+		}
+		for (AFancyEvent fe : eventList)
+			fe.attachedToScene(this);
+	}
+	
 	public EventFancyScene(List<AFancyEvent> eventList) {
 		this.eventList.addAll(eventList);
-		Collections.sort(this.eventList, Collections.reverseOrder());
+		Collections.sort(this.eventList, Collections.reverseOrder(AFancyEvent.ORDER_START_TIME_PRIORITY));
 		for (AFancyEvent fe : this.eventList)
 			fe.attachedToScene(this);
 	}
@@ -213,7 +251,7 @@ public class EventFancyScene extends ACutsceneEvent {
 
 		// Sort all active events by their z-index.
 		if (listChanged) {
-			Collections.sort(activeList, AFancyEvent.ORDER_Z);
+			Collections.sort(activeList, AFancyEvent.ORDER_PRIORITY_Z);
 		}
 
 		// Finally we need to update all events that have been added.
@@ -251,9 +289,9 @@ public class EventFancyScene extends ACutsceneEvent {
 		this.queueList.clear();
 		this.queueList.addAll(eventList);
 		this.isSpedup = false;
-		totalTime = 0.0f;
-		deltaTime = 0.0f;
-		shake.set(0.0f, 0.0f, 0.0f);
+		this.totalTime = 0.0f;
+		this.deltaTime = 0.0f;
+		this.shake.set(0.0f, 0.0f, 0.0f);
 		return !queueList.isEmpty();
 	}
 
@@ -262,9 +300,10 @@ public class EventFancyScene extends ACutsceneEvent {
 		for (ADrawable<?, ?> drawable : drawableMap.values()) {
 			drawable.dispose();
 		}
-		for (AFancyEvent fe : eventList)
+		for (AFancyEvent fe : eventList) {
 			// TODO call ResourcePool.freeFancyEvent(fe); instead
 			fe.reset();
+		}
 		eventList.clear();
 		drawableMap.clear();
 		queueList.clear();

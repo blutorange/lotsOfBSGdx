@@ -1,11 +1,15 @@
 package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
@@ -14,12 +18,32 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ETexture;
 
 public class FancySprite extends AFancyEvent {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+
 	private final static Logger LOG = Logger.getLogger(FancySprite.class);
 
 	private String key = StringUtils.EMPTY;
 	private float dpi;
 	private ETexture texture;
 
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.writeUTF(key);
+		out.writeObject(texture);
+		out.writeFloat(dpi);
+	}
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		String key = in.readUTF();
+		if (key == null || key.isEmpty()) throw new InvalidDataException("key cannot be null or empty");
+		
+		Object texture = in.readObject();
+		if (texture == null || !(texture instanceof ETexture)) throw new InvalidDataException("unknown sprite");
+		
+		this.key = key;
+		this.texture = (ETexture) texture;
+		dpi = in.readFloat();
+	}
+	
 	public FancySprite(String key, float dpi, ETexture texture) {
 		super(true);
 		this.dpi = dpi;

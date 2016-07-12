@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.lotsofbs.level;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -7,7 +8,11 @@ import com.badlogic.gdx.maps.MapProperties;
 
 import de.homelab.madgaksha.lotsofbs.DebugMode;
 import de.homelab.madgaksha.lotsofbs.GlobalBag;
+import de.homelab.madgaksha.lotsofbs.entityengine.entity.ITimedCallback;
+import de.homelab.madgaksha.lotsofbs.entityengine.entity.MakerUtils;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
+import de.homelab.madgaksha.lotsofbs.player.tokugi.ETokugi;
+import de.homelab.madgaksha.lotsofbs.player.weapon.EWeapon;
 import de.homelab.madgaksha.lotsofbs.resourcecache.EMusic;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ETexture;
@@ -130,7 +135,17 @@ public class Level01 extends ALevel {
 	public void initialDialog(MapProperties properties) {
 		if (!DebugMode.activated)
 			pushCutsceneLayer("cutscene/level01.initialDialog");
-		else GlobalBag.gameScore.increaseBy(1000000L);
+		else {
+			MakerUtils.addTimedRunnable(2f, new ITimedCallback() {				
+				@Override
+				public void run(Entity entity, Object data) {
+					GlobalBag.gameScore.increaseBy(1000000L);
+					GlobalBag.player.obtainWeapon(EWeapon.BASIC.getWeapon());
+					GlobalBag.player.obtainWeapon(EWeapon.MULTI.getWeapon());
+					GlobalBag.player.learnTokugi(ETokugi.OUKAMUSOUGEKI.getTokugi());
+				}
+			});
+		}
 	}
 
 	public void joshuaAppears(MapProperties properties) {

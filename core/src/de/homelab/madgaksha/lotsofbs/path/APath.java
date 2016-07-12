@@ -1,18 +1,43 @@
 package de.homelab.madgaksha.lotsofbs.path;
 
+import java.io.IOException;
+import java.io.Serializable;
+
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.getter.GetVector2;
+import de.homelab.madgaksha.lotsofbs.util.Transient;
 
-public abstract class APath {
+public abstract class APath implements Serializable {
+	/** Initial version.*/
+	private final static long serialVersionUID = 1L;
+	private final static float MIN_DURATION = 0.01f;
+	
+	protected float tmax;
+	protected boolean relative;
 
-	protected final Vector2 origin = new Vector2();
-	protected final float tmaxInverse;
-	protected final float tmax;
-	protected final boolean relative;
-	private boolean dirty = false;
+	@Transient protected Vector2 origin = new Vector2();
+	@Transient protected float tmaxInverse;	
+	@Transient private boolean dirty = false;
 
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeFloat(tmax);
+		out.writeBoolean(relative);
+	}
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		origin = new Vector2();
+		
+		final float tmax = in.readFloat();
+		if (tmax < MIN_DURATION) throw new InvalidDataException("tmax must be >= " + MIN_DURATION);
+		this.tmax = tmax;
+		
+		relative = in.readBoolean();
+		tmaxInverse = 1.0f / tmax;
+		dirty = false;
+	}
+	
 	public APath(float tmax, boolean relative) {
 		this.tmaxInverse = 1.0f / tmax;
 		this.tmax = tmax;

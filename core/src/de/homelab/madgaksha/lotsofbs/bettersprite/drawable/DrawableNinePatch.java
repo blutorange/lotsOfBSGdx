@@ -10,6 +10,7 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.ResourceCache;
 import de.homelab.madgaksha.lotsofbs.util.INewObject;
 
 public class DrawableNinePatch extends ADrawable<ENinePatch, NinePatch> implements INewObject<DrawableNinePatch> {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(DrawableNinePatch.class);
 	private final Color c = new Color();
 	private boolean dirty = false;
@@ -23,9 +24,9 @@ public class DrawableNinePatch extends ADrawable<ENinePatch, NinePatch> implemen
 		drawable.setColor(c);
 	}
 
+	/** Not supported. */
 	@Override
 	protected void applyCrop(float cropLeft, float cropRight, float cropBottom, float cropTop) {
-		LOG.error("crop not supported for nine patches");
 	}
 
 	@Override
@@ -43,9 +44,9 @@ public class DrawableNinePatch extends ADrawable<ENinePatch, NinePatch> implemen
 		dirty = true;
 	}
 
+	/** Not supported. */
 	@Override
 	protected void applyRotation(float degree) {
-		LOG.error("rotation not supported for nine patches currently");
 	}
 
 	@Override

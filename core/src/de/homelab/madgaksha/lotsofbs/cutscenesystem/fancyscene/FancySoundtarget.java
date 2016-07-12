@@ -2,11 +2,13 @@ package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.cameraTrackingComponent;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
@@ -15,14 +17,39 @@ import de.homelab.madgaksha.lotsofbs.entityengine.Mapper;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.VoiceComponent;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
+import de.homelab.madgaksha.lotsofbs.util.Transient;
 
 public class FancySoundtarget extends AFancyEvent {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+
 	private final static Logger LOG = Logger.getLogger(FancySoundtarget.class);
 
-	private VoiceRetriever voiceRetriever = null;
 	private ESound sound;
+	private VoiceRetriever voiceRetriever = null;
 	private float volume;
-	private boolean isDone;
+	
+	@Transient private boolean isDone;
+
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeObject(sound);
+		out.writeObject(voiceRetriever);
+		out.writeFloat(volume);
+	}
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		Object sound = in.readObject();
+		if (sound == null || !(sound instanceof ESound))
+			throw new InvalidDataException("unknown sound");
+
+		Object voiceRetriever = in.readObject();
+		if (voiceRetriever == null || !(voiceRetriever instanceof VoiceRetriever))
+			throw new InvalidDataException("unknown sound type");
+
+		this.sound = (ESound) sound;
+		this.voiceRetriever = (VoiceRetriever) voiceRetriever;
+		this.volume = in.readFloat();
+	}
 
 	public FancySoundtarget(VoiceRetriever voiceRetriever, float volume) {
 		super(true);
@@ -135,7 +162,7 @@ public class FancySoundtarget extends AFancyEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	@Override
 	public void drawableChanged(EventFancyScene scene, String changedKey) {
 	}

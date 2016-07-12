@@ -1,8 +1,11 @@
 package de.homelab.madgaksha.lotsofbs.path;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
@@ -46,22 +49,74 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
  *
  */
 public class PathParabola extends APath {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(PathParabola.class);
 
-	private final static float TAU_MIN = 0.0001f;
-	private final static float TAU_MAX = 0.9999f;
+	private final static float TAU_MIN = 0.001f;
+	private final static float TAU_MAX = 0.999f;
 
-	private final Vector2 p2 = new Vector2();
-	private final Vector2 p1 = new Vector2();
-	private final Vector2 p0 = new Vector2();
+	private Vector2 p2 = new Vector2();
+	private Vector2 p1 = new Vector2();
+	private Vector2 p0 = new Vector2();
 
-	private final Vector2 r2 = new Vector2();
-	private final Vector2 r1 = new Vector2();
-	private final Vector2 r0 = new Vector2();
+	private Vector2 r2 = new Vector2();
+	private Vector2 r1 = new Vector2();
+	private Vector2 r0 = new Vector2();
 
-	private final float tau;
+	private float tau;
 
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeFloat(p0.x);
+		out.writeFloat(p0.y);
+		out.writeFloat(p1.x);
+		out.writeFloat(p1.y);
+		out.writeFloat(p2.x);
+		out.writeFloat(p2.y);
+		out.writeFloat(r0.x);
+		out.writeFloat(r0.y);
+		out.writeFloat(r1.x);
+		out.writeFloat(r1.y);
+		out.writeFloat(r2.x);
+		out.writeFloat(r2.y);
+		out.writeFloat(tau);
+	}
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		p2 = new Vector2();
+		p1 = new Vector2();
+		p0 = new Vector2();
+		r0 = new Vector2();
+		r1 = new Vector2();
+		r2 = new Vector2();
+		final float p0x = in.readFloat();
+		final float p0y = in.readFloat();
+		final float p1x = in.readFloat();
+		final float p1y = in.readFloat();
+		final float p2x = in.readFloat();
+		final float p2y = in.readFloat();
+		final float r0x = in.readFloat();
+		final float r0y = in.readFloat();
+		final float r1x = in.readFloat();
+		final float r1y = in.readFloat();
+		final float r2x = in.readFloat();
+		final float r2y = in.readFloat();
+		final float tau = in.readFloat();
+		
+		if (tau < TAU_MIN || tau > TAU_MAX) throw new InvalidDataException("tau must be between " + TAU_MIN + " and " + TAU_MAX);
+		
+		this.tau = tau;
+		p0.set(p0x, p0y);
+		p1.set(p1x, p1y);
+		p2.set(p2x, p2y);
+		r0.set(r0x, r0y);
+		r1.set(r1x, r1y);
+		r2.set(r2x, r2y);
+	}
+
+
+	
 	public PathParabola(float tmax, boolean relative, float tau, float x1, float y1, float x2, float y2) {
 		super(tmax, relative);
 		this.r0.set(origin);

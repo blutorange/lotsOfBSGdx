@@ -1,34 +1,75 @@
 package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
+import com.sun.media.sound.InvalidDataException;
 
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.AFancyEvent;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
+import de.homelab.madgaksha.lotsofbs.util.Transient;
 
 public class FancyFade extends AFancyWithDrawable {
-	private final static Logger LOG = Logger.getLogger(FancyFade.class);
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
 
-	private Interpolation interpolation = Interpolation.linear;
+	private final static Logger LOG = Logger.getLogger(FancyFade.class);
+	private final static float MIN_DURATION = 0.001f;
+	private final static Interpolation DEFAULT_INTERPOLATION = Interpolation.linear;
+	private final static String DEFAULT_INTERPOLATION_NAME = "linear";
+	
+	private String interpolationName = DEFAULT_INTERPOLATION_NAME;
 	private float duration = 1.0f;
-	private float durationInverse = 1.0f;
-	private boolean isDone = false;
-	private float startOpacity = 1.0f;
 	private float targetOpacity = 1.0f;
 
-	public FancyFade(String key, float targetOpacity, Interpolation interpolation, float duration) {
+	@Transient private float startOpacity = 1.0f;
+	@Transient private Interpolation interpolation = DEFAULT_INTERPOLATION;
+	@Transient private float durationInverse = 1.0f;
+	@Transient private boolean isDone = false;
+
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeFloat(duration);
+		out.writeUTF(interpolationName);
+		out.writeFloat(targetOpacity);
+	}
+	
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {	
+		final float duration = in.readFloat();
+		if (duration < MIN_DURATION) throw new InvalidDataException("duration must be >= " + MIN_DURATION);
+		this.duration = duration;
+		
+		final String interpolationName = in.readUTF();
+		if (interpolationName == null) throw new InvalidDataException("interpolation name must not be null");
+		final Interpolation interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
+		if (interpolation == null) throw new InvalidDataException("no such interpolation");
+		this.interpolation = interpolation;
+				
+		this.interpolationName = interpolationName;
+		targetOpacity = in.readFloat();
+		
+		startOpacity = targetOpacity;
+		durationInverse = 1.0f/duration;
+		isDone = false;
+	}
+	
+	public FancyFade(String key, float targetOpacity, String interpolationName, float duration) {
 		super(key);
-		if (duration < 0.01f)
-			throw new IllegalArgumentException("duration must be greate than 0");
+		if (duration < MIN_DURATION)
+			throw new IllegalArgumentException("duration must be >= " + MIN_DURATION);
+		this.interpolationName = interpolationName;
 		this.targetOpacity = targetOpacity;
 		this.duration = duration;
 		this.durationInverse = 1.0f / duration;
-		this.interpolation = interpolation;
+		this.interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
+		if (this.interpolation == null) {
+			this.interpolationName = DEFAULT_INTERPOLATION_NAME;
+			this.interpolation = DEFAULT_INTERPOLATION;
+		}
 	}
 
 	@Override
@@ -87,15 +128,15 @@ public class FancyFade extends AFancyWithDrawable {
 			return null;
 		}
 
-		Interpolation interpolation = FileCutsceneProvider.readNextInterpolation(s);
-		if (interpolation == null)
-			interpolation = Interpolation.linear;
+		String interpolationName = FileCutsceneProvider.readNextInterpolationName(s);
+		if (interpolationName == null)
+			interpolationName = DEFAULT_INTERPOLATION_NAME;
 
 		Float targetOpacity = FileCutsceneProvider.nextNumber(s);
 		if (targetOpacity == null) {
 			LOG.error("expected target opacity");
 		}
 
-		return new FancyFade(key, targetOpacity, interpolation, duration);
+		return new FancyFade(key, targetOpacity, interpolationName, duration);
 	}
 }

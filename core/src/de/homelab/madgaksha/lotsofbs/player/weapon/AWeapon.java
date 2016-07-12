@@ -1,7 +1,6 @@
 package de.homelab.madgaksha.lotsofbs.player.weapon;
 
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.player;
-import static de.homelab.madgaksha.lotsofbs.GlobalBag.statusScreen;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.maps.MapProperties;
@@ -25,10 +24,8 @@ public abstract class AWeapon implements IMapItem {
 	private CroppableSprite iconSub = null;
 	private EWeapon type = null;
 
-	public AWeapon() {
-	}
-
-	void setType(EWeapon type) {
+	void setType(EWeapon type) throws IllegalStateException {
+		if (this.type != null) throw new IllegalStateException();
 		this.type = type;
 	}
 
@@ -111,7 +108,6 @@ public abstract class AWeapon implements IMapItem {
 	public void gotItem() {
 		SoundPlayer.getInstance().play(soundOnAcquire);
 		player.obtainWeapon(this);
-		statusScreen.updateWeaponAndTokugiLayout();
 	}
 
 	public abstract void fire(Entity player, float deltaTime);

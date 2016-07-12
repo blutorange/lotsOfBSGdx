@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -12,11 +13,32 @@ import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvide
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 public class FancyCrop extends AFancyWithDrawable {
+	/** Initial version */
+	private static final long serialVersionUID = 1L;
+
 	private final static Logger LOG = Logger.getLogger(FancyCrop.class);
 
 	private Vector2 cropX = new Vector2(1.0f, 1.0f);
 	private Vector2 cropY = new Vector2(1.0f, 1.0f);
 
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeFloat(cropX.x);
+		out.writeFloat(cropX.y);
+		out.writeFloat(cropY.x);
+		out.writeFloat(cropY.y);
+	}
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		cropX = new Vector2(1.0f, 1.0f);
+		cropY = new Vector2(1.0f, 1.0f);
+		
+		final float xx = in.readFloat();
+		final float xy = in.readFloat();
+		final float yx = in.readFloat();
+		final float yy = in.readFloat();
+		cropX.set(xx,xy);
+		cropY.set(yx,yy);
+	}
+	
 	public FancyCrop(String key, float cropLeft, float cropBottom, float cropRight, float cropTop) {
 		super(key);
 		this.cropX.set(cropLeft, cropRight);

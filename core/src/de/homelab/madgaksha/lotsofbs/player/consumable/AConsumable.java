@@ -15,10 +15,8 @@ public abstract class AConsumable implements IMapItem {
 
 	private EConsumable type = null;
 
-	public AConsumable() {
-	}
-
-	void setType(EConsumable type) {
+	void setType(EConsumable type) throws IllegalStateException {
+		if (this.type != null) throw new IllegalStateException();
 		this.type = type;
 	}
 

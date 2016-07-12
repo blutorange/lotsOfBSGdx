@@ -547,6 +547,45 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		}
 		return null;
 	}
+	
+	/**
+	 * @param name Normalized interpolation name.
+	 * @param defaultInterpolation Default return value when no such interpolation exists.
+	 * @return An {@link Interpolation} object, or defaultInterpolation if no such interpolation
+	 *         exists.
+	 */
+	public static Interpolation interpolationFromName(String name, Interpolation defaultInterpolation) {
+		try {
+			Field f = ClassReflection.getField(Interpolation.class, name);
+			Object o = f.get(null);
+			if (o instanceof Interpolation) {
+				return (Interpolation) o;
+			} else {
+				LOG.error("not an interpolation class:  " + name);
+			}
+		} catch (ReflectionException e) {
+			LOG.error("no such interpolation: " + name, e);
+		}
+		return defaultInterpolation;
+	}
+	
+	public static Interpolation interpolationFromName(String name) {
+		return interpolationFromName(name, null);
+	}
+	
+	/**
+	 * @param s
+	 *            Scanner to read from.
+	 * @return Name of the next interpolation, or null if there is no name.
+	 */
+	public static String readNextInterpolationName(Scanner s) {
+		if (s.hasNext("=.+=")) {
+			String param = s.next("=.+=");
+			String name = WordUtils.uncapitalize(param.substring(1, param.length() - 1));
+			return name;
+		}
+		return null;
+	}
 
 	/**
 	 * Reads a color from the scanner and returns it. Can be either 3 or 4

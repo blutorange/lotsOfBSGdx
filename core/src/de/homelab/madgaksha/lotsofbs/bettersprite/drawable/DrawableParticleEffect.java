@@ -13,6 +13,7 @@ import de.homelab.madgaksha.lotsofbs.util.INewObject;
 
 public class DrawableParticleEffect extends ADrawable<EParticleEffect, PooledEffect>
 		implements INewObject<DrawableParticleEffect> {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(DrawableParticleEffect.class);
 	private final static float MAX_SCALE = 1000.0f;
 	// must be the inverse of MAX_SCALE, or resetting the particle effect will
@@ -27,30 +28,21 @@ public class DrawableParticleEffect extends ADrawable<EParticleEffect, PooledEff
 	 */
 	@Override
 	protected void applyColor(float r, float g, float b, float a) {
-		LOG.debug("setting color on particle effect is potentially slow");
 	}
 
+	/** Not supported. */
 	@Override
 	protected void applyCrop(float cropLeft, float cropRight, float cropBottom, float cropTop) {
-		LOG.error("particle effect does not support cropping");
 	}
 
-	/**
-	 * Again, could be supported, but requires updating the opacity every frame
-	 * twice...
-	 */
+	/** Not supported. */
 	@Override
 	protected void applyOpacity(float opacity) {
-		LOG.error("particle effect does not support opacity");
 	}
 
-	/**
-	 * Could be supported, but would require computing the bounding box every
-	 * frame...
-	 */
+	/** Not supported. */
 	@Override
 	protected void applyOrigin(float originX, float originY) {
-		LOG.error("particle effect does not support origin");
 	}
 
 	@Override
@@ -58,9 +50,9 @@ public class DrawableParticleEffect extends ADrawable<EParticleEffect, PooledEff
 		drawable.setPosition(positionX, positionY);
 	}
 
+	/** Not supported. */
 	@Override
 	protected void applyRotation(float degree) {
-		LOG.error("particle effect does not support rotation");
 	}
 
 	@Override
@@ -77,10 +69,6 @@ public class DrawableParticleEffect extends ADrawable<EParticleEffect, PooledEff
 	protected PooledEffect loadResource(EParticleEffect resource) {
 		return ResourcePool.obtainParticleEffect(resource);
 	}
-
-	// @Override
-	// protected void initResource() {
-	// }
 
 	@Override
 	protected void performDispose() {

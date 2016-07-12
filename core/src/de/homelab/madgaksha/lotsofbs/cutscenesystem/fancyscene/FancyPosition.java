@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.lotsofbs.cutscenesystem.fancyscene;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -13,11 +14,32 @@ import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvide
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 public class FancyPosition extends AFancyWithDrawable {
+	/** Initial version. */
+	private static final long serialVersionUID = 1L;
+
 	private final static Logger LOG = Logger.getLogger(FancyPosition.class);
 
 	private Vector2 position = new Vector2();
 	private Vector2 delta = new Vector2();
 
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeFloat(position.x);
+		out.writeFloat(position.y);
+		out.writeFloat(delta.x);
+		out.writeFloat(delta.y);
+	}
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		position = new Vector2();
+		delta = new Vector2();
+		final float px = in.readFloat();
+		final float py = in.readFloat();
+		final float dx = in.readFloat();
+		final float dy = in.readFloat();
+		position.set(px,py);
+		delta.set(dx,dy);
+	}
+
+	
 	public FancyPosition(String key, float x, float y, float dx, float dy) {
 		super(key);
 		this.position.set(x, y);
