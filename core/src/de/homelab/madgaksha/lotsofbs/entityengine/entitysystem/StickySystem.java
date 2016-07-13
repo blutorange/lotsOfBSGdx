@@ -52,5 +52,4 @@ public class StickySystem extends DisableIteratingSystem {
 			spc.offsetY = sec.stickToPositionComponent.offsetY;
 		}
 	}
-
 }

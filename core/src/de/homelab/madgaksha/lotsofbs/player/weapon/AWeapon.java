@@ -101,7 +101,7 @@ public abstract class AWeapon implements IMapItem {
 	 */
 	@Override
 	public float getActivationAreaScaleFactor() {
-		return 6.5f;
+		return 6.0f;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.lotsofbs.entityengine.entitysystem;
 
+import static de.homelab.madgaksha.lotsofbs.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.cameraTrackingComponent;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.player;
@@ -17,6 +18,7 @@ import de.homelab.madgaksha.lotsofbs.KeyMapDesktop;
 import de.homelab.madgaksha.lotsofbs.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.lotsofbs.entityengine.DefaultPriority;
 import de.homelab.madgaksha.lotsofbs.entityengine.Mapper;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ConeDistributionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.InputDesktopComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.PositionComponent;
@@ -55,6 +57,15 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		final InputDesktopComponent ic = Mapper.inputDesktopComponent.get(entity);
 		final DirectionComponent dc = Mapper.directionComponent.get(entity);
 
+		// Switch active item.
+		if (KeyMapDesktop.isActiveItemSwitchJustPressed()) {
+			ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
+			if (cdc != null) {
+				cdc.apexPoint = (cdc.apexPoint + 1) % cdc.distributionPoints.size();
+			}
+		}
+		
+		
 		// Switch weapon
 		if (KeyMapDesktop.isWeaponSwitchJustPressed()) {
 			if (player.cycleWeaponForward()) {

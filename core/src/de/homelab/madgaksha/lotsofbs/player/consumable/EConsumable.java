@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 public enum EConsumable {
+	LOWHEAL(ConsumableLowHeal.class),
 	;
 
 	private final static Logger LOG = Logger.getLogger(EConsumable.class);

@@ -17,6 +17,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.CameraFocusComponent
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ColorComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ColorFlashEffectComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ComponentQueueComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ConeDistributionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.DamageQueueComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.DeathComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.DirectionComponent;
@@ -155,6 +156,8 @@ public final class Mapper {
 			.getFor(ColorFlashEffectComponent.class);
 	public final static ComponentMapper<ComponentQueueComponent> componentQueueComponent = ComponentMapper
 			.getFor(ComponentQueueComponent.class);
+	public final static ComponentMapper<ConeDistributionComponent> coneDistributionComponent = ComponentMapper
+			.getFor(ConeDistributionComponent.class);
 	public final static ComponentMapper<DamageQueueComponent> damageQueueComponent = ComponentMapper
 			.getFor(DamageQueueComponent.class);
 	public final static ComponentMapper<DeathComponent> deathComponent = ComponentMapper.getFor(DeathComponent.class);

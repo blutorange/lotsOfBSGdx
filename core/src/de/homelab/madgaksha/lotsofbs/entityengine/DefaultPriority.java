@@ -30,23 +30,24 @@ public class DefaultPriority {
 	public final static int collisionSystem = 10;
 
 	public final static int postEffectSystem = 11;
+	public final static int coneDistributionSystem = 12;
 
-	public final static int grantPositionSystem = 12;
-	public final static int grantRotationSystem = 13;
-	public final static int grantScaleSystem = 14;
-	public final static int grantDirectionSystem = 15;
+	public final static int grantPositionSystem = 13;
+	public final static int grantRotationSystem = 14;
+	public final static int grantScaleSystem = 15;
+	public final static int grantDirectionSystem = 16;
 
-	public final static int damageSystem = 16;
+	public final static int damageSystem = 17;
 
 	// drawing
-	public final static int viewportUpdateSystem = 17;
-	public final static int animationModeSystem = 18;
-	public final static int birdsViewSpriteSystem = 19;
-	public final static int spriteAnimationSystem = 20;
-	public final static int spriteRenderSystem = 21;
-	public final static int modelRenderSystem = 22;
-	public final static int particleEffectRenderSystem = 23;
+	public final static int viewportUpdateSystem = 18;
+	public final static int animationModeSystem = 19;
+	public final static int birdsViewSpriteSystem = 20;
+	public final static int spriteAnimationSystem = 21;
+	public final static int spriteRenderSystem = 22;
+	public final static int modelRenderSystem = 23;
+	public final static int particleEffectRenderSystem = 24;
 
-	public final static int timedCallbackSystem = 24;
+	public final static int timedCallbackSystem = 25;
 
 }

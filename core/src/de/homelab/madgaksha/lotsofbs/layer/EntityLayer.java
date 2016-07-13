@@ -34,6 +34,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.AnimationModeSyst
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.BirdsViewSpriteSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.CameraTracingSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.CollisionSystem;
+import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.ConeDistributionSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.ForceFieldSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.GrantDirectionSystem;
@@ -140,6 +141,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new BirdsViewSpriteSystem());
 		gameEntityEngine.addSystem(new CameraTracingSystem());
 		gameEntityEngine.addSystem(new CollisionSystem());
+		gameEntityEngine.addSystem(new ConeDistributionSystem());
 		gameEntityEngine.addSystem(new DamageSystem());
 		gameEntityEngine.addSystem(new ForceFieldSystem());
 		gameEntityEngine.addSystem(new GrantPositionSystem());

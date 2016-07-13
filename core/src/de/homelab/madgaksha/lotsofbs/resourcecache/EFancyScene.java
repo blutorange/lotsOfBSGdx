@@ -117,4 +117,14 @@ public enum EFancyScene implements IResource<EFancyScene, EventFancyScene> {
 	public void clearAllOfThisKind() {
 		EFancyScene.clearAll();
 	}
+
+	public boolean isPlainText() {
+		return !binary;
+	}
+	public boolean isBinary() {
+		return binary;
+	}
+	public FileHandle getFileHandle() {
+		return Gdx.files.internal(path);
+	}
 }

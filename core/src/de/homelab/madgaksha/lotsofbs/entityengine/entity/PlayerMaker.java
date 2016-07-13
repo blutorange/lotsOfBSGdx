@@ -25,12 +25,14 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.ABoundingBoxComponen
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AngularVelocityComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationForDirectionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeListComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeListComponent.AnimationMode;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeQueueComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AnyChildComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.BehaviourComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ColorComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ColorFlashEffectComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ConeDistributionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.DamageQueueComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.DeathComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.DirectionComponent;
@@ -58,7 +60,6 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.TimeScaleComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.TriggerTouchComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.VoiceComponent;
-import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeListComponent.AnimationMode;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.boundingbox.BoundingBoxMapComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.boundingbox.BoundingBoxRenderComponent;
@@ -152,9 +153,12 @@ public final class PlayerMaker implements IHittable, IMortal {
 		GetHitComponent ghc = new GetHitComponent();
 		VoiceComponent vcc = new VoiceComponent();
 		TriggerTouchComponent ttg1c = new TriggerTouchGroup01Component();
+		ConeDistributionComponent cdc = new ConeDistributionComponent();
+		
 		hitCircle.add(bbcc);
 		if (shc != null)
 			hitCircle.add(shc);
+		hitCircle.add(cdc);
 		hitCircle.add(svc);
 		hitCircle.add(ppc);
 		hitCircle.add(dqc);
@@ -206,6 +210,9 @@ public final class PlayerMaker implements IHittable, IMortal {
 		StatusValuesComponent svc = Mapper.statusValuesComponent.get(playerHitCircleEntity);
 		svc.setup(player.getBulletAttack(), player.getBulletResistance());
 
+		ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
+		cdc.setup(player.getItemCircleParameters());
+		
 		VoiceComponent vcc = Mapper.voiceComponent.get(playerHitCircleEntity);
 		vcc.onBattleModeStart = player.getVoiceOnBattleModeStart();
 		vcc.onBattleModeExit = player.getVoiceOnBattleModeEnd();

@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ConeDistributionComponent.ConeDistributionParameters;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.lotsofbs.player.consumable.EConsumable;
 import de.homelab.madgaksha.lotsofbs.player.tokugi.ETokugi;
@@ -109,7 +110,9 @@ public class PEstelle extends APlayer {
 
 	@Override
 	protected EConsumable[] requestedSupportedConsumable() {
-		return null;
+		return new EConsumable[] {
+				EConsumable.LOWHEAL,
+		};
 	}
 
 	@Override
@@ -195,6 +198,40 @@ public class PEstelle extends APlayer {
 	@Override
 	protected EAnimationList requestedDeathAnimationList() {
 		return EAnimationList.ESTELLE_ON_KNEES;
+	}
+
+	@Override
+	protected ConeDistributionParameters requestedItemCircleParamters() {
+		return new ConeDistributionParameters() {
+			@Override
+			public float getRadius1() {
+				return 32*4;
+			}
+			@Override
+			public float getRadius2() {
+				return 32*2;
+			}
+			@Override
+			public float getOffsetToBaseX() {
+				return 0f;
+			}
+			@Override
+			public float getOffsetToBaseY() {
+				return 0f;
+			}
+			@Override
+			public float getOffsetToApexX() {
+				return 0f;
+			}
+			@Override
+			public float getOffsetToApexY() {
+				return 32*4;
+			}
+			@Override
+			public float getAngularVelocity() {
+				return 90;
+			}
+		};
 	}
 
 }

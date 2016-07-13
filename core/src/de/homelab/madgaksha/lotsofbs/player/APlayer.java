@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ConeDistributionComponent.ConeDistributionParameters;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ShadowComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.lotsofbs.player.consumable.EConsumable;
@@ -83,6 +84,8 @@ public abstract class APlayer {
 
 	private final Color battleStigmaColorWhenHit;
 
+	private final ConeDistributionParameters itemCircleParameters;
+	
 	private final ESound voiceOnBattleModeStart;
 	private final ESound voiceOnBattleModeEnd;
 	private final ESound voiceOnBattleModeFlee;
@@ -111,6 +114,7 @@ public abstract class APlayer {
 	private ATokugi currentTokugi = null;
 
 	public APlayer() {
+		this.itemCircleParameters = requestedItemCircleParamters();
 		this.movementAccelerationFactorLow = requestedMovementAccelerationFactorLow();
 		this.movementAccelerationFactorHigh = requestedMovementAccelerationFactorHigh();
 		this.movementFrictionFactor = requestedMovementFrictionFactor();
@@ -196,6 +200,9 @@ public abstract class APlayer {
 	 */
 	protected abstract float requestedMovementAccelerationFactorHigh();
 
+	/** Shape of the circle/ellipsis of the collected item floating around the player. */
+	protected abstract ConeDistributionParameters requestedItemCircleParamters();
+	
 	/** @return Low acceleration of the player. */
 	protected abstract float requestedMovementAccelerationFactorLow();
 
@@ -403,6 +410,10 @@ public abstract class APlayer {
 		return battleStigmaColorWhenHit;
 	}
 
+	public ConeDistributionParameters getItemCircleParameters() {
+		return itemCircleParameters;
+	}
+	
 	public float getBattleStigmaAngularVelocity() {
 		return battleStigmaAngularVelocity;
 	}

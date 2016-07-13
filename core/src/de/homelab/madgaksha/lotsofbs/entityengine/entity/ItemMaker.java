@@ -14,6 +14,7 @@ import de.homelab.madgaksha.lotsofbs.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.lotsofbs.entityengine.Mapper;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AngularVelocityComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ComponentQueueComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ConeDistributionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.LifeComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ModelComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ParticleEffectComponent;
@@ -32,6 +33,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.boundingbox.Bounding
 import de.homelab.madgaksha.lotsofbs.entityengine.component.boundingbox.BoundingBoxRenderComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.collision.ReceiveTouchGroup01Component;
 import de.homelab.madgaksha.lotsofbs.entityengine.entityutils.ComponentUtils;
+import de.homelab.madgaksha.lotsofbs.grantstrategy.ExponentialGrantStrategy;
 import de.homelab.madgaksha.lotsofbs.grantstrategy.ImmediateGrantStrategy;
 import de.homelab.madgaksha.lotsofbs.grantstrategy.SpeedIncreaseGrantStrategy;
 import de.homelab.madgaksha.lotsofbs.level.ALevel;
@@ -43,7 +45,7 @@ import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
 
 public class ItemMaker extends EntityMaker {
 
-	private final static Logger LOG = Logger.getLogger(EntityMaker.class);
+	private final static Logger LOG = Logger.getLogger(ItemMaker.class);
 
 	// Singleton
 	private static class SingletonHolder {
@@ -82,7 +84,7 @@ public class ItemMaker extends EntityMaker {
 			Vector3 axis) {
 
 		if (!mapItem.isSupportedByPlayer(player)) {
-			LOG.info("player " + player + " does not support weapon " + mapItem);
+			LOG.info("player " + player + " does not support item " + mapItem);
 			return false;
 		}
 
@@ -136,7 +138,7 @@ public class ItemMaker extends EntityMaker {
 		ReceiveTouchComponent rtcAcquire = new ReceiveTouchGroup01Component(onAcquire);
 		ScaleComponent scc = new ScaleComponent();
 		ScaleFromDistanceComponent sfdc = new ScaleFromDistanceComponent(playerHitCircleEntity, 0.0f, 1.0f, 0.0f,
-				0.9f * mapItem.getActivationAreaScaleFactor()
+				1.0f * mapItem.getActivationAreaScaleFactor()
 						* (float) Math.sqrt(halfWidth * halfWidth + halfHeight * halfHeight));
 		ShouldPositionComponent spc = new ShouldPositionComponent(new SpeedIncreaseGrantStrategy(10.0f, 250.0f));
 		ShouldScaleComponent ssc = new ShouldScaleComponent(new ImmediateGrantStrategy());
@@ -182,6 +184,35 @@ public class ItemMaker extends EntityMaker {
 		mapItem.setup(entity, props);
 
 		return true;
+	}
+	
+	public void setupCirclingItem(Entity entity, IMapItem mapItem, ConeDistributionComponent cdc, PositionComponent currentPc) {
+		// Create new components.
+		final AngularVelocityComponent avc = gameEntityEngine.createComponent(AngularVelocityComponent.class);
+		final ModelComponent mc = gameEntityEngine.createComponent(ModelComponent.class);
+		final PositionComponent pc = gameEntityEngine.createComponent(PositionComponent.class);
+		final RotationComponent rc = gameEntityEngine.createComponent(RotationComponent.class);
+		final ShouldPositionComponent spc = gameEntityEngine.createComponent(ShouldPositionComponent.class);
+		final TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
+		
+		// Setup components.
+		// TODO take angularVelocity and axis as specified on the map
+		avc.setup(mapItem.getDefaultAngularVelocity());
+		mc.setup(mapItem.getModel());
+		pc.setup(currentPc);
+		rc.setup(mapItem.getDefaultAxisOfRotation());
+		spc.setup(new ExponentialGrantStrategy(0.25f));
+		
+		// Add all components.
+		entity.add(avc)
+			.add(mc)
+			.add(pc)
+			.add(rc)
+			.add(spc)
+			.add(tc);
+		
+		// Add item to cone distribution component.
+		cdc.distributionPoints.add(spc);
 	}
 
 	@Override
