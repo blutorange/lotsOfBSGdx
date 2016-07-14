@@ -30,6 +30,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.ShouldScaleComponent
 import de.homelab.madgaksha.lotsofbs.entityengine.component.StickyComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.TimedCallbackComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.VoiceComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.boundingbox.BoundingBoxCollisionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.boundingbox.BoundingBoxRenderComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.collision.ReceiveTouchGroup01Component;
@@ -38,7 +39,9 @@ import de.homelab.madgaksha.lotsofbs.grantstrategy.ExponentialGrantStrategy;
 import de.homelab.madgaksha.lotsofbs.grantstrategy.SpeedIncreaseGrantStrategy;
 import de.homelab.madgaksha.lotsofbs.level.ALevel;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
+import de.homelab.madgaksha.lotsofbs.player.IConsumableMapItem;
 import de.homelab.madgaksha.lotsofbs.player.IMapItem;
+import de.homelab.madgaksha.lotsofbs.player.consumable.AConsumable;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.resourcecache.IResource;
 import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
@@ -204,7 +207,7 @@ public class ItemMaker extends EntityMaker {
 		return true;
 	}
 
-	public void setupCirclingItem(Entity entity, IMapItem mapItem, ConeDistributionComponent cdc,
+	public void setupCirclingItem(Entity entity, IConsumableMapItem consumable, ConeDistributionComponent cdc,
 			PositionComponent currentPc) {
 		// Create new components.
 		final AngularVelocityComponent avc = gameEntityEngine.createComponent(AngularVelocityComponent.class);
@@ -216,38 +219,121 @@ public class ItemMaker extends EntityMaker {
 		final ShouldPositionComponent spc = gameEntityEngine.createComponent(ShouldPositionComponent.class);
 		final ShouldScaleComponent ssc = gameEntityEngine.createComponent(ShouldScaleComponent.class);
 		final TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
-
+		final ComponentQueueComponent cqc = gameEntityEngine.createComponent(ComponentQueueComponent.class);
+		
 		final float maxScale = player.getItemCircleParameters().getItemScaleMaxValue();
 		final float maxDistance = player.getItemCircleParameters().getItemScaleMaxDistance();
 		final float exponentialGrantFactor = player.getItemCircleParameters().getItemExponentialGrantFactor();
-
+		
 		// Setup components.
-		avc.setup(mapItem.getMapAngularVelocity());
-		mc.setup(mapItem.getModel());
+		avc.setup(consumable.getMapAngularVelocity());
+		mc.setup(consumable.getModel());
 		pc.setup(currentPc);
-		rc.setup(mapItem.getMapAxisOfRotation());
+		rc.setup(consumable.getMapAxisOfRotation());
 		sc.setup(0.0f);
 		sfdc.setup(playerHitCircleEntity, 0f, maxScale, 0f, maxDistance);
 		spc.setup(new ExponentialGrantStrategy(exponentialGrantFactor));
+		
+		// Setup component queue, ie. when consuming the consumable.
+		final TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);
+		final LifeComponent lc = gameEntityEngine.createComponent(LifeComponent.class);
+		final StickyComponent stc = gameEntityEngine.createComponent(StickyComponent.class);
+		lc.setup(consumable.getDelayOnConsumption()*1.1f);
+		tcc.setup(onConsumableUse, consumable);
+		cqc.setup(isConsumableUsable, consumable);
+		stc.setup(playerHitCircleEntity);
+		cqc.remove.add(ScaleFromDistanceComponent.class);
+		cqc.add.add(tcc);
+		cqc.add.add(lc);
+		cqc.add.add(stc);
 
 		// Add all components.
-		entity.add(avc).add(mc).add(pc).add(rc).add(sc).add(sfdc).add(spc).add(ssc).add(tc);
+		entity.add(avc).add(mc).add(pc).add(rc).add(sc).add(sfdc).add(spc).add(ssc).add(tc).add(cqc);
 
 		// Add item to cone distribution component.
-		cdc.distributionPoints.add(spc);
+		cdc.distributionPoints.add(entity);
 	}
 
 	@Override
 	protected IResource<? extends Enum<?>, ?>[] requestedResources() {
 		return new IResource<?, ?>[] { ESound.ACTIVATE_ITEM, };
 	}
+	
+	public static void resetItemToWaitingState(Entity item) {
+		final MapItemDataComponent midc = Mapper.mapItemDataComponent.get(item);
+		if (midc != null) {
+			final PositionComponent pcNew = Mapper.positionComponent.get(item);
+			final Entity newItem = gameEntityEngine.createEntity();
+			GeoUtil.translateShape(midc.shape, pcNew.x - midc.originalPosition.x, pcNew.y - midc.originalPosition.y);
+			if (ItemMaker.getInstance().setup(newItem, midc.shape, midc.props, midc.mapItem)) {
+				gameEntityEngine.addEntity(newItem);
+			}
+		}
+		gameEntityEngine.removeEntity(item);
 
+	}
+
+	public static void useActiveConsumable() {
+		ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
+		if (cdc.apexPoint >= cdc.distributionPoints.size()) return;
+		Entity item = cdc.distributionPoints.get(cdc.apexPoint); 
+		if (item != null) {
+			if (ComponentUtils.applyComponentQueue(item)) {
+				ComponentUtils.removeActiveItemFromConeDistribution(cdc);
+			}
+			else {
+				SoundPlayer.getInstance().play(ESound.CANNOT_USE);
+			}
+		}
+		else {
+			SoundPlayer.getInstance().play(ESound.CANNOT_USE);
+		}
+	}
+
+	private final static IEntityFeedback isConsumableUsable;
+	private final static IEntityCallback onConsumableUse;
+	private final static IEntityCallback onConsumableEffect;
 	private final static IReceive onCollect;
 	private final static IReceive onAcquire;
 	private final static IMortal onDeath;
 	private final static IEntityCallback onGet;
-
+	
 	static {
+		isConsumableUsable = new IEntityFeedback() {
+			@Override
+			public boolean check(Entity entity, Object data) {
+				return (data instanceof IConsumableMapItem) ? ((IConsumableMapItem)data).isConsumableNow() : false;
+			}
+		};
+		
+		onConsumableUse = new IEntityCallback() {
+			@Override
+			public void run(Entity entity, Object data) {
+				final ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(entity);
+				final ShouldPositionComponent spc = Mapper.shouldPositionComponent.get(entity);
+				ssc.setup(0f);
+				if (data instanceof IConsumableMapItem) {
+					final VoiceComponent vc = Mapper.voiceComponent.get(playerHitCircleEntity);
+					final IConsumableMapItem consumable = (IConsumableMapItem)data;
+					vc.voicePlayer.play(vc.onConsumableUse);
+					spc.setup(ExponentialGrantStrategy.exp09);
+					ssc.setup(new ExponentialGrantStrategy(2.0f,consumable.getDelayOnConsumption()));
+					MakerUtils.addTimedRunnable(consumable.getDelayOnConsumption(), onConsumableEffect, consumable);
+				}
+			}
+		};
+		
+		onConsumableEffect = new IEntityCallback() {
+			@Override
+			public void run(Entity entity, Object data) {
+				if (data instanceof IConsumableMapItem) {
+					final IConsumableMapItem consumable = (IConsumableMapItem)data;
+					SoundPlayer.getInstance().play(consumable.getSoundOnConsumption());
+					consumable.usedItem();
+				}
+			}
+		};
+		
 		onCollect = new IReceive() {
 			@Override
 			public void callbackTouched(Entity me, Entity you) {
@@ -282,25 +368,15 @@ public class ItemMaker extends EntityMaker {
 		onGet = new IEntityCallback() {
 			@Override
 			public void run(Entity entity, Object data) {
+				if (data instanceof AConsumable) {
+					ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
+					if (cdc.distributionPoints.size() >= player.getMaximumHoldableItems()) {
+						resetItemToWaitingState(entity);
+						return;
+					}
+				}
 				((IMapItem) data).gotItem();
 			}
 		};
 	}
-
-	public static void resetItemToWaitingState(Entity item) {
-		// TODO
-		LOG.error("resetting item to waiting state, REMEMBER TO SWITCH SETUP TO ENGINE_CREATE_COMPONENT!");
-		final MapItemDataComponent midc = Mapper.mapItemDataComponent.get(item);
-		if (midc != null) {
-			final PositionComponent pcNew = Mapper.positionComponent.get(item);
-			final Entity newItem = gameEntityEngine.createEntity();
-			GeoUtil.translateShape(midc.shape, pcNew.x - midc.originalPosition.x, pcNew.y - midc.originalPosition.y);
-			if (ItemMaker.getInstance().setup(newItem, midc.shape, midc.props, midc.mapItem)) {
-				gameEntityEngine.addEntity(newItem);
-			}
-		}
-		gameEntityEngine.removeEntity(item);
-
-	}
-
 }

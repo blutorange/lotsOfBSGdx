@@ -22,6 +22,18 @@ public class ExponentialGrantStrategy implements IGrantStrategy {
 	private final static float DEFAULT_TARGET_TIME = 0.033f;
 	private final static float DEFAULT_COMBINED_FACTOR = 1.0f / DEFAULT_TARGET_TIME;
 
+	public final static ExponentialGrantStrategy exp01 = new ExponentialGrantStrategy(0.1f);
+	public final static ExponentialGrantStrategy exp02 = new ExponentialGrantStrategy(0.2f);
+	public final static ExponentialGrantStrategy exp03 = new ExponentialGrantStrategy(0.3f);
+	public final static ExponentialGrantStrategy exp04 = new ExponentialGrantStrategy(0.4f);
+	public final static ExponentialGrantStrategy exp05 = new ExponentialGrantStrategy(0.5f);
+	public final static ExponentialGrantStrategy exp06 = new ExponentialGrantStrategy(0.6f);
+	public final static ExponentialGrantStrategy exp07 = new ExponentialGrantStrategy(0.7f);
+	public final static ExponentialGrantStrategy exp08 = new ExponentialGrantStrategy(0.8f);
+	public final static ExponentialGrantStrategy exp09 = new ExponentialGrantStrategy(0.9f);
+	public final static ExponentialGrantStrategy exp095 = new ExponentialGrantStrategy(0.95f);
+	public final static ExponentialGrantStrategy exp099 = new ExponentialGrantStrategy(0.99f);
+	
 	private float combinedFactor = DEFAULT_COMBINED_FACTOR;
 	private final Vector2 v = new Vector2();
 

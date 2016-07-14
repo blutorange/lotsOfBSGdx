@@ -255,14 +255,24 @@ public final class MakerUtils {
 	 */
 	public static void addTimedRunnable(float duration, IEntityCallback timedCallback) {
 		final Entity e = gameEntityEngine.createEntity();
-		addTimedRunnableTo(e, duration, timedCallback);
+		addTimedRunnableTo(e, duration, timedCallback, null);
+		gameEntityEngine.addEntity(e);
+	}
+	
+	public static void addTimedRunnable(float duration, IEntityCallback timedCallback, Object data) {
+		final Entity e = gameEntityEngine.createEntity();
+		addTimedRunnableTo(e, duration, timedCallback, data);
 		gameEntityEngine.addEntity(e);
 	}
 
 	public static void addTimedRunnableTo(Entity e, float duration, IEntityCallback timedCallback) {
+		addTimedRunnableTo(e, duration, timedCallback, null);		
+	}
+	
+	public static void addTimedRunnableTo(Entity e, float duration, IEntityCallback timedCallback, Object data) {
 		TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
 		TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);
-		tcc.setup(timedCallback, null, duration, 1);
+		tcc.setup(timedCallback, data, duration, 1);
 		e.add(tc).add(tcc);
 	}
 

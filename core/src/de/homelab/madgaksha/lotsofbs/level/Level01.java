@@ -10,6 +10,7 @@ import de.homelab.madgaksha.lotsofbs.DebugMode;
 import de.homelab.madgaksha.lotsofbs.GlobalBag;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.IEntityCallback;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.MakerUtils;
+import de.homelab.madgaksha.lotsofbs.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.player.tokugi.ETokugi;
 import de.homelab.madgaksha.lotsofbs.player.weapon.EWeapon;
@@ -143,6 +144,7 @@ public class Level01 extends ALevel {
 					GlobalBag.player.obtainWeapon(EWeapon.BASIC.getWeapon());
 					GlobalBag.player.obtainWeapon(EWeapon.MULTI.getWeapon());
 					GlobalBag.player.learnTokugi(ETokugi.OUKAMUSOUGEKI.getTokugi());
+					ComponentUtils.dealDamage(GlobalBag.playerHitCircleEntity, GlobalBag.playerHitCircleEntity, 10000000000L, true);
 				}
 			});
 		}

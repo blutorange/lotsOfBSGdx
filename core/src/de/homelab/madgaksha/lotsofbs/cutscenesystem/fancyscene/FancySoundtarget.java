@@ -15,6 +15,7 @@ import de.homelab.madgaksha.lotsofbs.cutscenesystem.event.EventFancyScene;
 import de.homelab.madgaksha.lotsofbs.cutscenesystem.provider.FileCutsceneProvider;
 import de.homelab.madgaksha.lotsofbs.entityengine.Mapper;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.VoiceComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.VoiceComponent.VoiceRetriever;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.util.Transient;
@@ -65,57 +66,7 @@ public class FancySoundtarget extends AFancyEvent {
 		isDone = false;
 	}
 
-	public static enum VoiceRetriever {
-		onLightDamage {
-			@Override
-			public ESound fetch(VoiceComponent vc) {
-				return vc.onLightDamage;
-			}
-		},
-		onHeavyDamage {
-			@Override
-			public ESound fetch(VoiceComponent vc) {
-				return vc.onHeavyDamage;
-			}
-		},
-		onBattleModeExit {
-			@Override
-			public ESound fetch(VoiceComponent vc) {
-				return vc.onBattleModeExit;
-			}
-		},
-		onBattleModeFlee {
-			@Override
-			public ESound fetch(VoiceComponent vc) {
-				return vc.onBattleModeFlee;
-			}
-		},
-		onBattleModeStart {
-			@Override
-			public ESound fetch(VoiceComponent vc) {
-				return vc.onBattleModeStart;
-			}
-		},
-		onDeath {
-			@Override
-			public ESound fetch(VoiceComponent vc) {
-				return vc.onDeath;
-			}
-		},
-		onEnemyKilled {
-			@Override
-			public ESound fetch(VoiceComponent vc) {
-				return vc.onEnemyKilled;
-			}
-		},
-		onSpawn {
-			@Override
-			public ESound fetch(VoiceComponent vc) {
-				return vc.onSpawn;
-			}
-		},;
-		public abstract ESound fetch(VoiceComponent vc);
-	}
+	
 
 	@Override
 	public boolean begin(EventFancyScene efs) {

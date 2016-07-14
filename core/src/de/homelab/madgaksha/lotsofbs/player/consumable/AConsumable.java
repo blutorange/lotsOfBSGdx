@@ -20,11 +20,12 @@ import de.homelab.madgaksha.lotsofbs.entityengine.entity.ItemMaker;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.player.AItem;
 import de.homelab.madgaksha.lotsofbs.player.APlayer;
+import de.homelab.madgaksha.lotsofbs.player.IConsumableMapItem;
 import de.homelab.madgaksha.lotsofbs.player.IMapItem;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ResourceCache;
 
-public abstract class AConsumable extends AItem {
+public abstract class AConsumable extends AItem implements IConsumableMapItem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(AConsumable.class);
 
@@ -107,7 +108,7 @@ public abstract class AConsumable extends AItem {
 	public void gotItem() {
 		final ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
 		final PositionComponent pc = Mapper.positionComponent.get(playerHitCircleEntity);
-
+		
 		SoundPlayer.getInstance().play(soundOnAcquire);
 
 		// Setup new item entity.
@@ -133,9 +134,6 @@ public abstract class AConsumable extends AItem {
 			if (cdc != null && cdc.distributionPoints.size() >= player.getMaximumHoldableItems()) {
 				entity.remove(TimedCallbackComponent.class);
 				ItemMaker.resetItemToWaitingState(entity);
-			}
-			else {
-				if (data instanceof IMapItem) ((IMapItem)data).gotItem();
 			}
 		}
 	};

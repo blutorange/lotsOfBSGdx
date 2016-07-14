@@ -57,8 +57,7 @@ public class DrawableParticleEffect extends ADrawable<EParticleEffect, PooledEff
 
 	@Override
 	protected void applyScale(float scaleX, float scaleY) {
-		float scaleNew = 0.5f * unitPerPixel
-				* (MathUtils.clamp(scaleX, MIN_SCALE, MAX_SCALE) + MathUtils.clamp(scaleY, MIN_SCALE, MAX_SCALE));
+		float scaleNew = MathUtils.clamp(0.5f * unitPerPixel * (scaleX+scaleY), MIN_SCALE, MAX_SCALE);
 		if (scaleNew != scaleLast) {
 			drawable.scaleEffect(scaleNew / scaleLast);
 			scaleLast = scaleNew;

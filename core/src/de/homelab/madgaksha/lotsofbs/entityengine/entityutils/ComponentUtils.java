@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.homelab.madgaksha.lotsofbs.entityengine.Mapper;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ABoundingBoxComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeListComponent.AnimationMode;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeQueueComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.BulletStatusComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ComponentQueueComponent;
@@ -27,9 +28,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.StatusValuesComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.VelocityComponent;
-import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeListComponent.AnimationMode;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.EnemyMaker;
-import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.lotsofbs.enums.RichterScale;
 import de.homelab.madgaksha.lotsofbs.field.SpiralVelocityField;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
@@ -155,7 +154,7 @@ public final class ComponentUtils {
 			damage /= 100L;
 
 			// Queue defender to take damage.
-			dqc.queuedDamage += MathUtils.clamp(damage, 0L, DamageSystem.MAX_PAIN_POINTS - damage);
+			PainBarUtils.queueDamage(damage, dqc);
 			dqc.keepOneHp = dqc.keepOneHp || keepOneHp;
 
 			// Custom stuff on getting hit.
@@ -274,5 +273,14 @@ public final class ComponentUtils {
 			if (cdc.apexPoint == 0)	cdc.degrees -= 360f / ((float) cdc.distributionPoints.size() - 1f);
 			cdc.apexPoint = (cdc.apexPoint - 1) % cdc.distributionPoints.size();
 		}		
+	}
+	
+	public static Entity removeActiveItemFromConeDistribution(ConeDistributionComponent cdc) {
+		if (cdc.apexPoint >= cdc.distributionPoints.size()) return null;
+		final Entity e = cdc.distributionPoints.remove(cdc.apexPoint);
+		cdc.apexPoint -= 1;
+		if (cdc.apexPoint >= cdc.distributionPoints.size()) cdc.apexPoint = cdc.distributionPoints.size() - 1;
+		if (cdc.apexPoint < 0) cdc.apexPoint = 0;
+		return e;
 	}
 }

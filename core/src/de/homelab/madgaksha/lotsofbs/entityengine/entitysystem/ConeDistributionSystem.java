@@ -43,29 +43,29 @@ public class ConeDistributionSystem extends DisableIteratingSystem {
 		// sanitize
 		final int size = cdc.distributionPoints.size();
 		if (size == 0) return;
-		cdc.apexPoint = cdc.apexPoint < size ? cdc.apexPoint : size;
+		cdc.apexPoint = cdc.apexPoint < size ? cdc.apexPoint : (size-1);
 
 		// move to apex point and position component 
 		v1.set(pc.x, pc.y).add(cdc.offsetToApex);
-		cdc.distributionPoints.get(cdc.apexPoint).setup(v1);
+		Mapper.shouldPositionComponent.get(cdc.distributionPoints.get(cdc.apexPoint)).setup(v1);
 		
 		// move to the center
 		v1.add(cdc.offsetToBase);
 		
 		// update the current rotation
-		cdc.degrees += (cdc.angularVelocity * tc.deltaTime) % 360f;
+		cdc.degrees += cdc.angularVelocity * tc.deltaTime;
 		
 		// and position the other components on an ellipse
 		final float deltaAngle = 360.0f / (float)(size-1);
 		float angle = cdc.degrees;
 		for (int i = 0; i != cdc.apexPoint; ++i) {
-			final PositionComponent point = cdc.distributionPoints.get(i);
+			final PositionComponent point = Mapper.shouldPositionComponent.get(cdc.distributionPoints.get(i));
 			point.x = v1.x + MathUtils.cosDeg(angle) * cdc.radius1;
 			point.y = v1.y + MathUtils.sinDeg(angle) * cdc.radius2;
 			angle += deltaAngle;			
 		}
 		for (int i = cdc.apexPoint + 1; i != size; ++i) {
-			final PositionComponent point = cdc.distributionPoints.get(i);
+			final PositionComponent point = Mapper.shouldPositionComponent.get(cdc.distributionPoints.get(i));
 			point.x = v1.x + MathUtils.cosDeg(angle) * cdc.radius1;
 			point.y = v1.y + MathUtils.sinDeg(angle) * cdc.radius2;
 			angle += deltaAngle;			

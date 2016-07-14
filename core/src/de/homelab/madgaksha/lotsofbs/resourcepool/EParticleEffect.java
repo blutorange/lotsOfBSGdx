@@ -85,7 +85,7 @@ public enum EParticleEffect implements IPooledResource<ParticleEffect, PooledEff
 			final ParticleEffect particleEffect = new ParticleEffect();
 			particleEffect.load(handle, atlas, atlasPrefix);
 			return particleEffect;
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 			return null;
 		}

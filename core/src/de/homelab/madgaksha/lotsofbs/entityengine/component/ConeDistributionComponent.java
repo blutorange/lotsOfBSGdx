@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
@@ -41,7 +42,7 @@ public class ConeDistributionComponent implements Component, Poolable {
 	public float radius2 = DEFAULT_RADIUS_2;
 	public final Vector2 offsetToApex = new Vector2();
 	public final Vector2 offsetToBase = new Vector2();
-	public final List<PositionComponent> distributionPoints = new ArrayList<PositionComponent>(10);
+	public final List<Entity> distributionPoints = new ArrayList<Entity>(10);
 
 	public ConeDistributionComponent() {
 	}

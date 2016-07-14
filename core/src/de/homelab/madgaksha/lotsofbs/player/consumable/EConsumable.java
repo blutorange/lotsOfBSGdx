@@ -7,6 +7,8 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 public enum EConsumable {
 	LOWHEAL(ConsumableLowHeal.class),
+	MIDHEAL(ConsumableMidHeal.class),
+	HIGHHEAL(ConsumableHighHeal.class),
 	;
 
 	private final static Logger LOG = Logger.getLogger(EConsumable.class);

@@ -219,8 +219,11 @@ public final class PlayerMaker implements IHittable, IMortal {
 		vcc.onBattleModeFlee = player.getVoiceOnBattleModeFlee();
 		vcc.onLightDamage = player.getVoiceOnLightDamage();
 		vcc.onHeavyDamage = player.getVoiceOnHeavyDamage();
+		vcc.onLightHeal = player.getVoiceOnLightHeal();
+		vcc.onHeavyHeal = player.getVoiceOnHeavyHeal();
 		vcc.onDeath = player.getVoiceOnDeath();
 		vcc.onEnemyKilled = player.getVoiceOnEnemyKilled();
+		vcc.onConsumableUse = player.getVoiceOnConsumableUse();
 		vcc.voicePlayer = new VoicePlayer();
 	}
 

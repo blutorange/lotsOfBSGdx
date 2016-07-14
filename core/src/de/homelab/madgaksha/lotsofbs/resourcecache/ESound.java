@@ -27,6 +27,7 @@ public enum ESound implements IResource<ESound, Sound> {
 	TEXTBOX_ADVANCE("sound/ed6se002.wav", 0.200f),
 	TEXT_ADVANCE("sound/ed6se005.wav", 0.033f),
 
+	HEAL1("sound/ed6se540.wav", 4.006f),
 	CRYING1("sound/ed7se934.wav", 6.224f),
 	HUMMING1("sound/ed7se968.wav", 3.832f),
 	SAW1("sound/ed7se948.wav", 1.733f),
@@ -61,6 +62,7 @@ public enum ESound implements IResource<ESound, Sound> {
 	// ===================
 	ESTELLE_YOSOMI_SITARA_BUTTOBASU_WAYO("sound/ed6t1006.wav", 1.998f),
 	ESTELLE_HYAA("sound/ed6t1011.wav", 2.787f),
+	ESTELLE_OKAY("sound/ed6t1033.wav", 0.647f),
 	ESTELLE_HAAAAA("sound/ed6t1007.wav", 2.590f),
 	ESTELLE_HAHHA("sound/ed6t1014.wav", 1.573f),
 	ESTELLE_HAA("sound/ed6t1008.wav", 1.086f),

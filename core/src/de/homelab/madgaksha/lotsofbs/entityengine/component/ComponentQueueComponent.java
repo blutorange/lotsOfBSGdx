@@ -25,7 +25,17 @@ public class ComponentQueueComponent implements Component, Poolable {
 		add = new ArrayList<Component>(10);
 		remove = new ArrayList<Class<? extends Component>>(10);
 	}
+	
+	public ComponentQueueComponent(IEntityFeedback applicable, Object callbackData) {
+		this();
+		setup(applicable, callbackData);		
+	}
 
+	public void setup(IEntityFeedback applicable, Object callbackData) {
+		if (applicable != null) this.applicable = applicable;
+		this.callbackData = callbackData;
+	}
+	
 	@Override
 	public void reset() {
 		add.clear();

@@ -22,8 +22,8 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.collision.ReceiveTouchGroup01Component;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.collision.ReceiveTouchGroup02Component;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.zorder.ZOrder1Component;
-import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.DamageSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entityutils.ComponentUtils;
+import de.homelab.madgaksha.lotsofbs.entityengine.entityutils.PainBarUtils;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ETextureAtlas;
@@ -178,7 +178,7 @@ public class BulletMaker extends EntityMaker {
 				damage /= 100L;
 
 				// Queue defender to take damage.
-				dqc.queuedDamage += MathUtils.clamp(damage, 0L, DamageSystem.MAX_PAIN_POINTS - damage);
+				PainBarUtils.queueDamage(damage, dqc);
 
 				// Custom stuff on getting hit.
 				GetHitComponent ghc = Mapper.getHitComponent.get(you);

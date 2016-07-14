@@ -112,6 +112,8 @@ public class PEstelle extends APlayer {
 	protected EConsumable[] requestedSupportedConsumable() {
 		return new EConsumable[] {
 				EConsumable.LOWHEAL,
+				EConsumable.MIDHEAL,
+				EConsumable.HIGHHEAL,
 		};
 	}
 
@@ -209,5 +211,21 @@ public class PEstelle extends APlayer {
 	protected int requestedMaximumHoldableItems() {
 		return 3;
 	}
+
+	@Override
+	protected ESound requestedVoiceOnConsumableUse() {
+		return ESound.ESTELLE_OKAY;
+	}
+	
+	@Override
+	protected ESound requestedVoiceOnLightHeal() {
+		return ESound.ESTELLE_HAA;
+	}
+	
+	@Override
+	protected ESound requestedVoiceOnHeavyHeal() {
+		return ESound.ESTELLE_HAAAAA;
+	}
+	
 
 }

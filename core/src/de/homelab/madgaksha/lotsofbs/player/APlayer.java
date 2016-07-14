@@ -93,8 +93,11 @@ public abstract class APlayer {
 	private final ESound voiceOnBattleModeEnd;
 	private final ESound voiceOnBattleModeFlee;
 	private final ESound voiceOnEnemyKilled;
+	private final ESound voiceOnConsumableUse;
 	private final ESound voiceOnHeavyDamage;
 	private final ESound voiceOnLightDamage;
+	private final ESound voiceOnLightHeal;
+	private final ESound voiceOnHeavyHeal;
 	private final ESound voiceOnDeath;
 
 	private final EParticleEffect particleEffectOnDeath;
@@ -148,8 +151,11 @@ public abstract class APlayer {
 		this.voiceOnBattleModeEnd = requestedVoiceOnBattleModeEnd();
 		this.voiceOnBattleModeFlee = requestedVoiceOnBattleModeFlee();
 		this.voiceOnEnemyKilled = requestedVoiceOnEnemyKilled();
+		this.voiceOnConsumableUse = requestedVoiceOnConsumableUse();
 		this.voiceOnLightDamage = requestedVoiceOnLightDamage();
 		this.voiceOnHeavyDamage = requestedVoiceOnHeavyDamage();
+		this.voiceOnLightHeal = requestedVoiceOnLightHeal();
+		this.voiceOnHeavyHeal = requestedVoiceOnHeavyHeal();
 		this.voiceOnDeath = requestedVoiceOnDeath();
 		this.battleStigmaColorWhenHit = requestedBattleStigmaColorWhenHit();
 		this.particleEffectOnDeath = requestedParticleEffectOnDeath();
@@ -287,6 +293,10 @@ public abstract class APlayer {
 	/** @return Voice played when battle mode ends. */
 	protected abstract ESound requestedVoiceOnBattleModeEnd();
 
+	protected abstract ESound requestedVoiceOnLightHeal();
+	
+	protected abstract ESound requestedVoiceOnHeavyHeal();
+	
 	/**
 	 * @return Voice played when battle mode ends as a result of the player
 	 *         fleeing.
@@ -296,6 +306,9 @@ public abstract class APlayer {
 	/** @return Voice played when player kills an enemy. */
 	protected abstract ESound requestedVoiceOnEnemyKilled();
 
+	/** @return Voice played when player uses a consumable (item). */
+	protected abstract ESound requestedVoiceOnConsumableUse();
+	
 	/**
 	 * @see DamageSystem#THRESHOLD_LIGHT_HEAVY_DAMAGE
 	 * @return Voice played when taking heavy damage.
@@ -436,7 +449,7 @@ public abstract class APlayer {
 	public long getMaxPainPoints() {
 		return maxPainPoints;
 	}
-
+	
 	public float getBulletAttack() {
 		return bulletAttack;
 	}
@@ -444,7 +457,7 @@ public abstract class APlayer {
 	public float getBulletResistance() {
 		return bulletResistance;
 	}
-
+	
 	/**
 	 * Can be overridden for a custom HP bar color.
 	 * 
@@ -629,6 +642,10 @@ public abstract class APlayer {
 	public ESound getVoiceOnEnemyKilled() {
 		return voiceOnEnemyKilled;
 	}
+	
+	public ESound getVoiceOnConsumableUse() {
+		return voiceOnConsumableUse;
+	}
 
 	public ESound getVoiceOnLightDamage() {
 		return voiceOnLightDamage;
@@ -637,6 +654,15 @@ public abstract class APlayer {
 	public ESound getVoiceOnHeavyDamage() {
 		return voiceOnHeavyDamage;
 	}
+	
+	public ESound getVoiceOnLightHeal() {
+		return voiceOnLightHeal;
+	}
+	
+	public ESound getVoiceOnHeavyHeal() {
+		return voiceOnHeavyHeal;
+	}
+
 
 	public ESound getVoiceOnDeath() {
 		return voiceOnDeath;

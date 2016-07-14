@@ -48,6 +48,7 @@ public class DamageSystem extends IteratingSystem {
 
 		// Change pain points accordingly.
 		if (dqc.queuedDamage != 0L) {
+			// take damage
 			VoiceComponent vc = Mapper.voiceComponent.get(entity);
 
 			ppc.painPoints = MathUtils.clamp(ppc.painPoints + dqc.queuedDamage, 0L, ppc.maxPainPoints);
@@ -67,12 +68,17 @@ public class DamageSystem extends IteratingSystem {
 				}
 			}
 			// Otherwise, play sound on taking damage
-			else if (vc != null && vc.voicePlayer != null && dqc.queuedDamage > 0) {
-				vc.voicePlayer.play((dqc.queuedDamage * 1000L < THRESHOLD_LIGHT_HEAVY_DAMAGE * ppc.maxPainPoints)
-						? vc.onLightDamage : vc.onHeavyDamage);
+			else if (vc != null && vc.voicePlayer != null) {
+				if (dqc.queuedDamage > 0L) {
+					vc.voicePlayer.play((dqc.queuedDamage * 1000L < THRESHOLD_LIGHT_HEAVY_DAMAGE * ppc.maxPainPoints)
+							? vc.onLightDamage : vc.onHeavyDamage);
+				}
+				else {
+					vc.voicePlayer.play((-dqc.queuedDamage * 1000L < THRESHOLD_LIGHT_HEAVY_DAMAGE * ppc.maxPainPoints)
+							? vc.onLightHeal : vc.onHeavyHeal);
+				}
 			}
-			dqc.queuedDamage = 0L;
 		}
-
+		dqc.queuedDamage = 0L;
 	}
 }

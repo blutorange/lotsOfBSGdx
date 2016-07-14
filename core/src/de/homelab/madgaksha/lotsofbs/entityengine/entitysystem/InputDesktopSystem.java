@@ -25,6 +25,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.EnemyMaker;
+import de.homelab.madgaksha.lotsofbs.entityengine.entity.ItemMaker;
 import de.homelab.madgaksha.lotsofbs.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
@@ -66,13 +67,7 @@ public class InputDesktopSystem extends IteratingSystem {
 		
 		// Use active item.
 		if (KeyMapDesktop.isActiveItemUseJustPressed()) {
-			ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
-			if (cdc.apexPoint >= cdc.distributionPoints.size()) {
-				SoundPlayer.getInstance().play(ESound.CANNOT_USE);
-			}
-			else {
-				cdc.distributionPoints.get(cdc.apexPoint);
-			}
+			ItemMaker.useActiveConsumable();
 		}
 		
 		// Switch weapon

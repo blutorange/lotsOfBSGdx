@@ -11,22 +11,22 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.EModel;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.resourcecache.IResource;
 
-public class ConsumableLowHeal extends AConsumable {
+public class ConsumableMidHeal extends AConsumable {
 	@SuppressWarnings("unused")
-	private final static Logger LOG = Logger.getLogger(ConsumableLowHeal.class);
+	private final static Logger LOG = Logger.getLogger(ConsumableMidHeal.class);
 
-	private final static long HEAL_RATIO_NUM = 20L;
+	private final static long HEAL_RATIO_NUM = 40L;
 	private final static long HEAL_RATIO_DEN = 100L;
 	
 	@Override
 	public EModel getModel() {
-		return EModel.ITEM_TOKUGI_OUKAMUSOUGEKI;
+		return EModel.ITEM_WEAPON_BASIC;
 	}
 
 	@Override
 	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
 		return new IResource<?, ?>[] {
-			EModel.ITEM_TOKUGI_OUKAMUSOUGEKI,
+			EModel.ITEM_WEAPON_BASIC,
 			ESound.HEAL1,
 		};
 	}
@@ -56,6 +56,6 @@ public class ConsumableLowHeal extends AConsumable {
 	
 	@Override
 	public float getDelayOnConsumption() {
-		return 2.0f;
+		return 3.0f;
 	}
 }
