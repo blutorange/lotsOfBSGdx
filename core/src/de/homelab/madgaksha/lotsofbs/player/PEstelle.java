@@ -202,36 +202,12 @@ public class PEstelle extends APlayer {
 
 	@Override
 	protected ConeDistributionParameters requestedItemCircleParamters() {
-		return new ConeDistributionParameters() {
-			@Override
-			public float getRadius1() {
-				return 32*4;
-			}
-			@Override
-			public float getRadius2() {
-				return 32*2;
-			}
-			@Override
-			public float getOffsetToBaseX() {
-				return 0f;
-			}
-			@Override
-			public float getOffsetToBaseY() {
-				return 0f;
-			}
-			@Override
-			public float getOffsetToApexX() {
-				return 0f;
-			}
-			@Override
-			public float getOffsetToApexY() {
-				return 32*4;
-			}
-			@Override
-			public float getAngularVelocity() {
-				return 90;
-			}
-		};
+		return ConeDistributionParameters.DEFAULT;
+	}
+
+	@Override
+	protected int requestedMaximumHoldableItems() {
+		return 3;
 	}
 
 }

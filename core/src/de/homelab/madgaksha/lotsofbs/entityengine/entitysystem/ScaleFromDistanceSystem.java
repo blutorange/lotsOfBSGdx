@@ -42,10 +42,14 @@ public class ScaleFromDistanceSystem extends DisableIteratingSystem {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		if (sfdc.positionComponent != null) {
 			v.set(sfdc.positionComponent.x - pc.x, sfdc.positionComponent.y - pc.y);
-			ssc.scaleX = ssc.scaleY = ssc.scaleZ = MathUtils.clamp(sfdc.minScale + (sfdc.maxScale - sfdc.minScale)
-					* (v.len() - sfdc.minDistance) / (sfdc.maxDistance - sfdc.minDistance), sfdc.minScale,
-					sfdc.maxScale);
+			final float len2 = v.len2();
+			if (len2 > sfdc.maxDistance * sfdc.maxDistance)
+				ssc.scaleX = ssc.scaleY = ssc.scaleZ = sfdc.maxScale;
+			else {
+				ssc.scaleX = ssc.scaleY = ssc.scaleZ = MathUtils.clamp(sfdc.minScale + (sfdc.maxScale - sfdc.minScale)
+						* ((float) Math.sqrt(len2) - sfdc.minDistance) / (sfdc.maxDistance - sfdc.minDistance),
+						sfdc.minScale, sfdc.maxScale);
+			}
 		}
 	}
-
 }

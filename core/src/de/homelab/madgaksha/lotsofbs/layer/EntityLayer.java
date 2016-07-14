@@ -32,6 +32,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.AiSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.AngularMovementSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.AnimationModeSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.BirdsViewSpriteSystem;
+import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.CallbackOnReenterSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.CameraTracingSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.CollisionSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.ConeDistributionSystem;
@@ -41,7 +42,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.GrantDirectionSys
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.GrantPositionSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.GrantRotationSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.GrantScaleSystem;
-import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.InputPlayerDesktopSystem;
+import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.InputDesktopSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.LifeSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.ModelRenderSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.entitysystem.MovementSystem;
@@ -140,6 +141,7 @@ public class EntityLayer extends ALayer {
 		gameEntityEngine.addSystem(new AngularMovementSystem());
 		gameEntityEngine.addSystem(new BirdsViewSpriteSystem());
 		gameEntityEngine.addSystem(new CameraTracingSystem());
+		gameEntityEngine.addSystem(new CallbackOnReenterSystem());
 		gameEntityEngine.addSystem(new CollisionSystem());
 		gameEntityEngine.addSystem(new ConeDistributionSystem());
 		gameEntityEngine.addSystem(new DamageSystem());
@@ -171,7 +173,7 @@ public class EntityLayer extends ALayer {
 			// TODO
 			break;
 		case Desktop:
-			gameEntityEngine.addSystem(new InputPlayerDesktopSystem());
+			gameEntityEngine.addSystem(new InputDesktopSystem());
 			break;
 		case HeadlessDesktop:
 			// TODO

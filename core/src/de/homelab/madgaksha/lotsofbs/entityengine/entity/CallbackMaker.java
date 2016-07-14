@@ -109,7 +109,7 @@ public class CallbackMaker extends EntityMaker implements ITrigger, IReceive {
 		return null;
 	}
 
-	private final static ITimedCallback LOOP_CALLBACK = new ITimedCallback() {
+	private final static IEntityCallback LOOP_CALLBACK = new IEntityCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
 			try {
@@ -122,7 +122,7 @@ public class CallbackMaker extends EntityMaker implements ITrigger, IReceive {
 		}
 	};
 
-	public final static ITimedCallback LOOP_CALLBACK_ONCE = new ITimedCallback() {
+	public final static IEntityCallback LOOP_CALLBACK_ONCE = new IEntityCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
 			LOOP_CALLBACK.run(entity, data);

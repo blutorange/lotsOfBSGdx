@@ -766,7 +766,9 @@ public class MapData {
 		}
 
 		Entity entity = new Entity();
-		if (!ItemMaker.getInstance().setup(entity, shape, props, mapItem, angularVelocity, axis))
+		mapItem.setMapAngularVelocity(angularVelocity);
+		mapItem.setMapAxisOfRotation(axis);
+		if (!ItemMaker.getInstance().setup(entity, shape, props, mapItem))
 			return null;
 		return entity;
 	}

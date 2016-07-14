@@ -49,5 +49,6 @@ public class DefaultPriority {
 	public final static int particleEffectRenderSystem = 24;
 
 	public final static int timedCallbackSystem = 25;
+	public final static int callbackOnReenterSystem = 26;
 
 }

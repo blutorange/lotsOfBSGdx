@@ -46,5 +46,4 @@ public class TimedCallbackSystem extends IteratingSystem {
 			tcc.totalTime = 0.0f;
 		}
 	}
-
 }

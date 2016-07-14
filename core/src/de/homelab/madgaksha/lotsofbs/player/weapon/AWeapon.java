@@ -8,14 +8,16 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.homelab.madgaksha.lotsofbs.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.lotsofbs.bettersprite.CroppableSprite;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ComponentQueueComponent;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
+import de.homelab.madgaksha.lotsofbs.player.AItem;
 import de.homelab.madgaksha.lotsofbs.player.APlayer;
 import de.homelab.madgaksha.lotsofbs.player.IMapItem;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ETexture;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ResourceCache;
 
-public abstract class AWeapon implements IMapItem {
+public abstract class AWeapon extends AItem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(AWeapon.class);
 
@@ -66,7 +68,7 @@ public abstract class AWeapon implements IMapItem {
 	}
 
 	@Override
-	public void setup(Entity e, MapProperties props) {
+	public void setup(Entity e, MapProperties props, ComponentQueueComponent queueForAcquisition) {
 	}
 
 	/**

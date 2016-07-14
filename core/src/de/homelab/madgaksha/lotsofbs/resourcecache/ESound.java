@@ -15,7 +15,7 @@ public enum ESound implements IResource<ESound, Sound> {
 	EQUIP_TOKUGI("sound/ed6se155.wav"),
 	ENEMY_SPAWN_FLASH("sound/ed6se579.wav", 1.470f),
 	ENEMY_DIE_EXPLOSION("sound/ed6se556Multi+565.wav"),
-	CANNOT_EQUIP("sound/ed6se003.wav"),
+	CANNOT_USE("sound/ed6se003.wav"),
 	ACTIVATE_ITEM("sound/ed6se145.wav"),
 	ACQUIRE_WEAPON("sound/ed6se045.wav", 1.706f),
 	BATTLE_STIGMA_APPEAR("sound/ed6se543.wav"),

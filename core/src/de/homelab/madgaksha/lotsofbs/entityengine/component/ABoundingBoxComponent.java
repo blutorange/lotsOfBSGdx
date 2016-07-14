@@ -86,7 +86,19 @@ public abstract class ABoundingBoxComponent implements Component, Poolable {
 		this.maxX = r.x + r.width;
 		this.maxY = r.y + r.height;
 	}
-
+	
+	public void setup(BoundingBoxCollisionComponent bbcc) {
+		setup(bbcc.minX, bbcc.minY, bbcc.maxX, bbcc.maxY);
+	}
+	
+	public void setup(BoundingBoxMapComponent bbmc) {
+		setup(bbmc.minX, bbmc.minY, bbmc.maxX, bbmc.maxY);
+	}
+	
+	public void setup(BoundingBoxRenderComponent bbrc) {
+		setup(bbrc.minX, bbrc.minY, bbrc.maxX, bbrc.maxY);
+	}
+	
 	public void setup(float minX, float minY, float maxX, float maxY) {
 		this.minX = minX;
 		this.minY = minY;
@@ -95,11 +107,17 @@ public abstract class ABoundingBoxComponent implements Component, Poolable {
 	}
 
 	public void setup(ModelInstance modelInstance) {
+		// take bounding box of the bounding sphere of the model's bounding box
+		// to account for rotation around the center.
 		modelInstance.calculateBoundingBox(boundingBox);
-		this.minX = boundingBox.getCenterX() - 0.5f * boundingBox.getWidth();
-		this.minY = boundingBox.getCenterY() - 0.5f * boundingBox.getHeight();
-		this.maxX = boundingBox.getCenterX() + 0.5f * boundingBox.getWidth();
-		this.maxY = boundingBox.getCenterY() + 0.5f * boundingBox.getHeight();
+		this.minX = boundingBox.getCenterX() - (0.5f*1.5f) * boundingBox.getWidth();
+		this.minY = boundingBox.getCenterY() - (0.5f*1.5f) * boundingBox.getHeight();
+		this.maxX = boundingBox.getCenterX() + (0.5f*1.5f) * boundingBox.getWidth();
+		this.maxY = boundingBox.getCenterY() + (0.5f*1.5f) * boundingBox.getHeight();
+	}
+	
+	public void setup(ModelComponent modelComponent) {
+		setup(modelComponent.modelInstance);
 	}
 
 	@Override

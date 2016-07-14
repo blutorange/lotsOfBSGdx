@@ -11,18 +11,18 @@ public class ConsumableLowHeal extends AConsumable {
 
 	@Override
 	public EModel getModel() {
-		return EModel.ITEM_WEAPON_BASIC;
+		return EModel.ITEM_TOKUGI_OUKAMUSOUGEKI;
 	}
 
 	@Override
 	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
 		return new IResource<?, ?>[] {
-			EModel.ITEM_WEAPON_BASIC,
+			EModel.ITEM_TOKUGI_OUKAMUSOUGEKI,
 		};
 	}
 
 	@Override
 	protected ESound requestedSoundOnAcquire() {
-		return ESound.ACTIVATE_ITEM;
+		return ESound.ACQUIRE_WEAPON;
 	}
 }

@@ -3,7 +3,9 @@ package de.homelab.madgaksha.lotsofbs.player;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector3;
+import com.sun.istack.internal.Nullable;
 
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ComponentQueueComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.ItemMaker;
 import de.homelab.madgaksha.lotsofbs.resourcecache.EModel;
 import de.homelab.madgaksha.lotsofbs.resourcecache.IResource;
@@ -16,6 +18,58 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.IResource;
  *
  */
 public interface IMapItem {
+	public final static IMapItem MOCK = new IMapItem() {
+		@Override
+		public void setup(Entity e, MapProperties props, ComponentQueueComponent queueForAcquisition) {
+		}
+		@Override
+		public void setMapAxisOfRotation(Vector3 axis) {
+		}	
+		@Override
+		public void setMapAngularVelocity(Float angularVelocity) {
+		}	
+		@Override
+		public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
+			return null;
+		}	
+		@Override
+		public boolean isSupportedByPlayer(APlayer player) {
+			return false;
+		}
+		@Override
+		public boolean initialize() {
+			return true;
+		}		
+		@Override
+		public void gotItem() {
+		}	
+		@Override
+		public EModel getModel() {
+			return EModel.ITEM_WEAPON_BASIC;
+		}
+		@Override
+		public Vector3 getMapAxisOfRotation() {
+			return Vector3.X;
+		}
+		@Override
+		public float getMapAngularVelocity() {
+			return 0;
+		}	
+		@Override
+		public Vector3 getDefaultAxisOfRotation() {
+			return Vector3.X;
+		}
+		
+		@Override
+		public float getDefaultAngularVelocity() {
+			return 0;
+		}		
+		@Override
+		public float getActivationAreaScaleFactor() {
+			return 1;
+		}
+	};
+	
 	/** @return The model for this item that will be displayed on the map. */
 	public EModel getModel();
 
@@ -27,14 +81,22 @@ public interface IMapItem {
 	 * @param props
 	 *            Map properties for this item object.
 	 */
-	public void setup(Entity e, MapProperties props);
+	public void setup(Entity e, MapProperties props, ComponentQueueComponent queueForAcquisition);
 
 	/** @return The axis around which the item should rotate. */
 	public Vector3 getDefaultAxisOfRotation();
+	/** @return The axis of rotation as specified by the level's map, or the default when none was specified. */
+	public Vector3 getMapAxisOfRotation();
 
+	public void setMapAngularVelocity(@Nullable Float angularVelocity);
+	public void setMapAxisOfRotation(@Nullable Vector3 axis);
+
+	
 	/** @return The angular velocity at which the item should rotate. */
 	public float getDefaultAngularVelocity();
-
+	/** @return The angular velocity as specified by the level's map, or the default when none was specified. */
+	public float getMapAngularVelocity();
+	
 	public boolean isSupportedByPlayer(APlayer player);
 
 	/**

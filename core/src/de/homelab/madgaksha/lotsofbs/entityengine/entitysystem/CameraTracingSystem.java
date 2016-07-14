@@ -30,9 +30,6 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(CameraTracingSystem.class);
 
-	/** In seconds. */
-	// private final static float DEFAULT_UPDATE_INTERVAL = 0.05f;
-
 	/** Last vector longer than the threshold. */
 	private Vector2 lastDirAboveThreshold = new Vector2(0, 1);
 
@@ -138,11 +135,11 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 		// Margin
 		if (mtc.adjustmentPointLeft < minx)
 			minx = mtc.adjustmentPointLeft;
-		else if (mtc.adjustmentPointRight > maxx)
+		if (mtc.adjustmentPointRight > maxx)
 			maxx = mtc.adjustmentPointRight;
 		if (mtc.adjustmentPointBottom < miny)
 			miny = mtc.adjustmentPointBottom;
-		else if (mtc.adjustmentPointTop > maxy)
+		if (mtc.adjustmentPointTop > maxy)
 			maxy = mtc.adjustmentPointTop;
 
 		// Get the center of the rectangle
@@ -188,14 +185,15 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 			spc.z = hh * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF_INV;
 		}
 		// Apply minimum elevation.
-		if (spc.z < mtc.minimumElevation)
+		if (spc.z < mtc.minimumElevation) {
 			spc.z = mtc.minimumElevation;
+		}
 		// Apply maximum elevation
 		else if (spc.z > mtc.maximumElevation) {
 			spc.z = mtc.maximumElevation;
 			float ratio = spc.z * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF / hh;
-			cy *= ratio;
 			cx *= ratio;
+			cy *= ratio;
 		}
 		// Compute the position the camera should be located
 		// at. We need to convert the coordinates back to the

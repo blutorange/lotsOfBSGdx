@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-import de.homelab.madgaksha.lotsofbs.entityengine.entity.ITimedCallback;
+import de.homelab.madgaksha.lotsofbs.entityengine.entity.IEntityCallback;
 
 /**
  * Frequency pre-multiplied by 2*pi. The variable {@link #frequency} corresponds
@@ -25,7 +25,7 @@ public class FadeEffectComponent implements Component, Poolable {
 	public float end = DEFAULT_END;
 	public float duration = DEFAULT_DURATION;
 	public Interpolation interpolation = DEFAULT_INTERPOLATION;
-	public ITimedCallback callback = null;
+	public IEntityCallback callback = null;
 	public Object customData = DEFAULT_CUSTOM_DATA;
 
 	public FadeEffectComponent() {
@@ -42,7 +42,7 @@ public class FadeEffectComponent implements Component, Poolable {
 		this.interpolation = interpolation;
 	}
 
-	public void setup(float duration, float start, float end, Interpolation interpolation, ITimedCallback callback) {
+	public void setup(float duration, float start, float end, Interpolation interpolation, IEntityCallback callback) {
 		this.duration = duration;
 		this.start = start;
 		this.end = end;

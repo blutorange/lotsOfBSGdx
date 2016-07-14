@@ -253,13 +253,13 @@ public final class MakerUtils {
 	 * @param iTimedCallback
 	 *            Callback to call.
 	 */
-	public static void addTimedRunnable(float duration, ITimedCallback timedCallback) {
+	public static void addTimedRunnable(float duration, IEntityCallback timedCallback) {
 		final Entity e = gameEntityEngine.createEntity();
 		addTimedRunnableTo(e, duration, timedCallback);
 		gameEntityEngine.addEntity(e);
 	}
 
-	public static void addTimedRunnableTo(Entity e, float duration, ITimedCallback timedCallback) {
+	public static void addTimedRunnableTo(Entity e, float duration, IEntityCallback timedCallback) {
 		TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
 		TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);
 		tcc.setup(timedCallback, null, duration, 1);
@@ -280,7 +280,7 @@ public final class MakerUtils {
 	}
 
 	public static void addParticleEffectGame(EParticleEffect particleEffect, PositionComponent positionComponent,
-			ITimedCallback callback) {
+			IEntityCallback callback) {
 		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectGameComponent.class);
 		addParticleEffect(particleEffect, positionComponent, pec, callback);
 	}
@@ -300,13 +300,13 @@ public final class MakerUtils {
 	}
 
 	public static void addParticleEffectScreen(EParticleEffect particleEffect, PositionComponent positionComponent,
-			ITimedCallback callback) {
+			IEntityCallback callback) {
 		final ParticleEffectComponent pec = gameEntityEngine.createComponent(ParticleEffectScreenComponent.class);
 		addParticleEffect(particleEffect, positionComponent, pec, callback);
 	}
 
 	private static void addParticleEffect(EParticleEffect particleEffect, PositionComponent positionComponent,
-			ParticleEffectComponent pec, ITimedCallback callback) {
+			ParticleEffectComponent pec, IEntityCallback callback) {
 		final Entity entity = gameEntityEngine.createEntity();
 		final TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
 		pec.setup(ResourcePool.obtainParticleEffect(particleEffect));

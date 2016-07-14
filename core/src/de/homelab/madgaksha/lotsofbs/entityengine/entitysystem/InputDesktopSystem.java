@@ -1,10 +1,10 @@
 package de.homelab.madgaksha.lotsofbs.entityengine.entitysystem;
 
-import static de.homelab.madgaksha.lotsofbs.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.battleModeActive;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.cameraTrackingComponent;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.player;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.playerEntity;
+import static de.homelab.madgaksha.lotsofbs.GlobalBag.playerHitCircleEntity;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.viewportGame;
 
 import com.badlogic.ashley.core.Entity;
@@ -25,6 +25,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.TemporalComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.VelocityComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.EnemyMaker;
+import de.homelab.madgaksha.lotsofbs.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 
@@ -34,19 +35,19 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
  * @author madgaksha
  *
  */
-public class InputPlayerDesktopSystem extends IteratingSystem {
+public class InputDesktopSystem extends IteratingSystem {
 
 	@SuppressWarnings("unused")
-	private final static Logger LOG = Logger.getLogger(InputPlayerDesktopSystem.class);
+	private final static Logger LOG = Logger.getLogger(InputDesktopSystem.class);
 	private static Vector2 v = new Vector2();
 	private static Vector2 w = new Vector2();
 
-	public InputPlayerDesktopSystem() {
+	public InputDesktopSystem() {
 		this(DefaultPriority.inputPlayerDesktopSystem);
 	}
 
 	@SuppressWarnings("unchecked")
-	public InputPlayerDesktopSystem(int priority) {
+	public InputDesktopSystem(int priority) {
 		super(Family.all(VelocityComponent.class, InputDesktopComponent.class, DirectionComponent.class).get(),
 				priority);
 	}
@@ -60,34 +61,45 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 		// Switch active item.
 		if (KeyMapDesktop.isActiveItemSwitchJustPressed()) {
 			ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
-			if (cdc != null) {
-				cdc.apexPoint = (cdc.apexPoint + 1) % cdc.distributionPoints.size();
-			}
+			ComponentUtils.cycleConeDistributionForward(cdc);
 		}
 		
+		// Use active item.
+		if (KeyMapDesktop.isActiveItemUseJustPressed()) {
+			ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
+			if (cdc.apexPoint >= cdc.distributionPoints.size()) {
+				SoundPlayer.getInstance().play(ESound.CANNOT_USE);
+			}
+			else {
+				cdc.distributionPoints.get(cdc.apexPoint);
+			}
+		}
 		
 		// Switch weapon
 		if (KeyMapDesktop.isWeaponSwitchJustPressed()) {
 			if (player.cycleWeaponForward()) {
 				SoundPlayer.getInstance().play(ESound.EQUIP_WEAPON);
 			} else
-				SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
+				SoundPlayer.getInstance().play(ESound.CANNOT_USE);
 		} else if (KeyMapDesktop.isTokugiSwitchJustPressed()) {
 			if (player.cycleTokugiForward()) {
 				SoundPlayer.getInstance().play(ESound.EQUIP_TOKUGI);
 			} else
-				SoundPlayer.getInstance().play(ESound.CANNOT_EQUIP);
+				SoundPlayer.getInstance().play(ESound.CANNOT_USE);
 		}
 
-		// Arrow keys direction.
+		// Get direction vector from pressed arrow keys.
 		v.set((KeyMapDesktop.isPlayerMoveRightPressed()) ? 1.0f
 				: (KeyMapDesktop.isPlayerMoveLeftPressed()) ? -1.0f : 0.0f,
 				(KeyMapDesktop.isPlayerMoveUpPressed()) ? 1.0f
 						: (KeyMapDesktop.isPlayerMoveDownPressed()) ? -1.0f : 0.0f);
 
+		// Adjust direction vector relative to the camera direction.
 		if (ic.relativeToCamera)
 			v.rotate(-viewportGame.getRotationUpXY());
 
+		// During battle mode, do not apply any friction or acceleration as
+		// maximum responsiveness is needed to dodge bullets.
 		if (battleModeActive) {
 			final float f = KeyMapDesktop.isSpeedupPressed() ? ic.battleSpeedHigh : ic.battleSpeedLow;
 			vc.x = v.x * f;
@@ -104,7 +116,7 @@ public class InputPlayerDesktopSystem extends IteratingSystem {
 				dc.degree = 630.0f - w.set(vc.x, vc.y).angle() + viewportGame.getRotationUpXY();
 		}
 
-		// Random randomness
+		// Make random generator a bit more unpredictable.
 		if (v.x * v.y > 0.0f)
 			MathUtils.random.nextInt();
 

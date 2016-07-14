@@ -18,7 +18,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.Mapper;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.PositionComponent;
-import de.homelab.madgaksha.lotsofbs.entityengine.entity.ITimedCallback;
+import de.homelab.madgaksha.lotsofbs.entityengine.entity.IEntityCallback;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.MakerUtils;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
@@ -138,13 +138,13 @@ public class EventStage extends ACutsceneEvent {
 	public void end() {
 	}
 
-	private final ITimedCallback ON_PARTICLE_EFFECT_BEFORE_DONE = new ITimedCallback() {
+	private final IEntityCallback ON_PARTICLE_EFFECT_BEFORE_DONE = new IEntityCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
 			state = State.SWITCH_STAGE;
 		}
 	};
-	private final ITimedCallback ON_PARTICLE_EFFECT_AFTER_DONE = new ITimedCallback() {
+	private final IEntityCallback ON_PARTICLE_EFFECT_AFTER_DONE = new IEntityCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
 			state = State.FINISH;

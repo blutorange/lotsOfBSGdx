@@ -15,19 +15,21 @@ import de.homelab.madgaksha.lotsofbs.GlobalBag;
 import de.homelab.madgaksha.lotsofbs.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.lotsofbs.bettersprite.CroppableSprite;
 import de.homelab.madgaksha.lotsofbs.entityengine.Mapper;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ComponentQueueComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.DamageQueueComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.PainPointsComponent;
-import de.homelab.madgaksha.lotsofbs.entityengine.entity.ITimedCallback;
+import de.homelab.madgaksha.lotsofbs.entityengine.entity.IEntityCallback;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.MakerUtils;
 import de.homelab.madgaksha.lotsofbs.entityengine.entityutils.ComponentUtils;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
+import de.homelab.madgaksha.lotsofbs.player.AItem;
 import de.homelab.madgaksha.lotsofbs.player.APlayer;
 import de.homelab.madgaksha.lotsofbs.player.IMapItem;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ETexture;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ResourceCache;
 
-public abstract class ATokugi implements IMapItem {
+public abstract class ATokugi extends AItem {
 	private final static Logger LOG = Logger.getLogger(ATokugi.class);
 
 	private CroppableSprite iconMain = null;
@@ -60,7 +62,8 @@ public abstract class ATokugi implements IMapItem {
 	}
 
 	void setType(ETokugi type) throws IllegalStateException {
-		if (this.type != null) throw new IllegalStateException();
+		if (this.type != null)
+			throw new IllegalStateException();
 		this.type = type;
 	}
 
@@ -91,7 +94,7 @@ public abstract class ATokugi implements IMapItem {
 	}
 
 	@Override
-	public void setup(Entity e, MapProperties props) {
+	public void setup(Entity e, MapProperties props, ComponentQueueComponent queueForAcquisition) {
 	}
 
 	/**
@@ -154,7 +157,7 @@ public abstract class ATokugi implements IMapItem {
 				if (!openFire(player, deltaTime))
 					return;
 				gameScore.decreaseBy(requestedRequiredScore());
-				MakerUtils.addTimedRunnable(requestedSignDelay(), new ITimedCallback() {
+				MakerUtils.addTimedRunnable(requestedSignDelay(), new IEntityCallback() {
 					@Override
 					public void run(Entity entity, Object data) {
 						statusScreen.addTokugiSign(tokugi);
@@ -166,9 +169,10 @@ public abstract class ATokugi implements IMapItem {
 	}
 
 	protected boolean isSomethingTargetted() {
-		return battleModeActive && cameraTrackingComponent.trackedPointIndex < cameraTrackingComponent.focusPoints.size();
+		return battleModeActive
+				&& cameraTrackingComponent.trackedPointIndex < cameraTrackingComponent.focusPoints.size();
 	}
-	
+
 	/**
 	 * Fires the tokugi. May return false when tokugi cannot be used right now.
 	 * 
@@ -179,5 +183,4 @@ public abstract class ATokugi implements IMapItem {
 	 * @return Whether the tokugi has been fired.
 	 */
 	public abstract boolean openFire(Entity player, float deltaTime);
-
 }

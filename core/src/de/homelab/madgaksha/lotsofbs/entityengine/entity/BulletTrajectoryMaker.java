@@ -34,7 +34,7 @@ public abstract class BulletTrajectoryMaker implements IMortal {
 	private float initialScaleY = 1.0f;
 
 	protected VoicePlayer voicePlayer;
-	private final ITimedCallback onBulletDeath = new ITimedCallback() {
+	private final IEntityCallback onBulletDeath = new IEntityCallback() {
 		@Override
 		public void run(Entity bullet, Object data) {
 			BulletMaker.detachBulletFromSiblings(bullet);

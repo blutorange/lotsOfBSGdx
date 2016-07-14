@@ -379,7 +379,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 			SystemUtils.disableAction();
 			game.setGlobalTimeScale(0.12f);
 			MakerUtils.addTimedRunnable(level.getSoundOnBattleWin().getDurationInMilliseconds() * 0.12f * 0.001f,
-					new ITimedCallback() {
+					new IEntityCallback() {
 						@Override
 						public void run(Entity entity, Object data) {
 							SystemUtils.enableAction();
@@ -499,7 +499,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 	}
 
 	/** Called on battle mode exit, after the battle stigma has gone. */
-	private final static ITimedCallback onBattleStigmaVanished = new ITimedCallback() {
+	private final static IEntityCallback onBattleStigmaVanished = new IEntityCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
 			// Check player did not enter battle mode again.
@@ -511,7 +511,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 	};
 
 	/** Called on battle mode exit, after the target cross has gone. */
-	private final static ITimedCallback onTargetCrossVanished = new ITimedCallback() {
+	private final static IEntityCallback onTargetCrossVanished = new IEntityCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
 			// Check player did not enter battle mode again.
@@ -522,11 +522,11 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		}
 	};
 
-	private final static ITimedCallback onEnemyPreviewFinish = new ITimedCallback() {
+	private final static IEntityCallback onEnemyPreviewFinish = new IEntityCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
 			cameraTrackingComponent.playerPoint = playerEntity;
-			MakerUtils.addTimedRunnable(0.3f, new ITimedCallback() {
+			MakerUtils.addTimedRunnable(0.3f, new IEntityCallback() {
 				@Override
 				public void run(Entity entity, Object data) {
 					SystemUtils.enableAction();

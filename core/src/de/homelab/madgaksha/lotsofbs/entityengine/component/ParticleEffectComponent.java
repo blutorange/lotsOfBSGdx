@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-import de.homelab.madgaksha.lotsofbs.entityengine.entity.ITimedCallback;
+import de.homelab.madgaksha.lotsofbs.entityengine.entity.IEntityCallback;
 import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
 import de.homelab.madgaksha.lotsofbs.resourcepool.ResourcePool;
 
@@ -20,7 +20,7 @@ public class ParticleEffectComponent implements Component, Poolable {
 	private final static PooledEffect DEFAULT_PARTICLE_EFFECT = null;
 
 	public PooledEffect particleEffect = DEFAULT_PARTICLE_EFFECT;
-	public ITimedCallback callback = null;
+	public IEntityCallback callback = null;
 	public Object data = null;
 
 	public ParticleEffectComponent() {

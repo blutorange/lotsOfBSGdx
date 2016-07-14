@@ -51,19 +51,22 @@ public abstract class APlayer {
 	 * x,y are the offset relative to the center of the sprites (bottom left).
 	 * Radius is the circe's size.
 	 */
-	final private Shape2D exactShapeCollision;
-	final private Circle boundingCircle;
-	final private Rectangle boundingBoxMap;
-	final private Rectangle boundingBoxRender;
-	final private Rectangle boundingBoxCollision;
-	final private Vector2 offsetPlayerToHitCircle;
-	final private Vector2 spriteOrigin;
+	private final Shape2D exactShapeCollision;
+	private final Circle boundingCircle;
+	private final Rectangle boundingBoxMap;
+	private final Rectangle boundingBoxRender;
+	private final Rectangle boundingBoxCollision;
+	private final Vector2 offsetPlayerToHitCircle;
+	private final Vector2 spriteOrigin;
 	/**
 	 * x,y are the offset relative to the center of the sprites (bottom left).
 	 * Width and height are the dimensions.
 	 */
-	final private IResource<? extends Enum<?>, ?>[] requiredResources;
+	private final IResource<? extends Enum<?>, ?>[] requiredResources;
 
+	/** Maximum number of items this player can hold at once, including the items
+	 * that is currently active. */
+	private final int maximumHoldableItems;
 	/** Player maximum paint points. */
 	private final long maxPainPoints;
 	/** Bullet attack power. Default 1.0 */
@@ -114,6 +117,7 @@ public abstract class APlayer {
 	private ATokugi currentTokugi = null;
 
 	public APlayer() {
+		this.maximumHoldableItems = requestedMaximumHoldableItems();
 		this.itemCircleParameters = requestedItemCircleParamters();
 		this.movementAccelerationFactorLow = requestedMovementAccelerationFactorLow();
 		this.movementAccelerationFactorHigh = requestedMovementAccelerationFactorHigh();
@@ -202,6 +206,9 @@ public abstract class APlayer {
 
 	/** Shape of the circle/ellipsis of the collected item floating around the player. */
 	protected abstract ConeDistributionParameters requestedItemCircleParamters();
+	
+	/** Maximum number of items this player can hold at once. */
+	protected abstract int requestedMaximumHoldableItems();
 	
 	/** @return Low acceleration of the player. */
 	protected abstract float requestedMovementAccelerationFactorLow();
@@ -641,6 +648,10 @@ public abstract class APlayer {
 
 	public EAnimationList getDeathAnimationList() {
 		return deathAnimationList;
+	}
+	
+	public int getMaximumHoldableItems() {
+		return maximumHoldableItems;
 	}
 
 	@Override

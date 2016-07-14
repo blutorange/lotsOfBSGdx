@@ -8,7 +8,7 @@ import com.badlogic.gdx.maps.MapProperties;
 
 import de.homelab.madgaksha.lotsofbs.DebugMode;
 import de.homelab.madgaksha.lotsofbs.GlobalBag;
-import de.homelab.madgaksha.lotsofbs.entityengine.entity.ITimedCallback;
+import de.homelab.madgaksha.lotsofbs.entityengine.entity.IEntityCallback;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.MakerUtils;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.player.tokugi.ETokugi;
@@ -136,7 +136,7 @@ public class Level01 extends ALevel {
 		if (!DebugMode.activated)
 			pushCutsceneLayer("cutscene/level01.initialDialog");
 		else {
-			MakerUtils.addTimedRunnable(2f, new ITimedCallback() {				
+			MakerUtils.addTimedRunnable(2f, new IEntityCallback() {				
 				@Override
 				public void run(Entity entity, Object data) {
 					GlobalBag.gameScore.increaseBy(1000000L);

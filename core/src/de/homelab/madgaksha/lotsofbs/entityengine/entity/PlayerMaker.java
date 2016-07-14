@@ -416,11 +416,11 @@ public final class PlayerMaker implements IHittable, IMortal {
 
 		// Show death animation and and pause after a few seconds after it
 		// finishes.
-		final ITimedCallback onDeathEffectDone = new ITimedCallback() {
+		final IEntityCallback onDeathEffectDone = new IEntityCallback() {
 			@Override
 			public void run(Entity entity, Object data) {
 				ComponentUtils.transitionToSpriteMode(playerEntity, AnimationMode.DEATH);
-				MakerUtils.addTimedRunnable(6.0f, new ITimedCallback() {
+				MakerUtils.addTimedRunnable(6.0f, new IEntityCallback() {
 					@Override
 					public void run(Entity entity, Object data) {
 						game.pause();

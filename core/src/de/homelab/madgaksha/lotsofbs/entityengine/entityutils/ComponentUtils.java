@@ -14,6 +14,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.ABoundingBoxComponen
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeQueueComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.BulletStatusComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ComponentQueueComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ConeDistributionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.DamageQueueComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.DirectionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.EnemyIconComponent;
@@ -57,20 +58,23 @@ public final class ComponentUtils {
 	/** Upper range of the random damage variance, in percent. */
 	public final static long DAMAGE_UPPER_RANGE = 120L;
 
-	public static void applyComponentQueue(Entity e, ComponentQueueComponent cqc) {
+	public static boolean applyComponentQueue(Entity e, ComponentQueueComponent cqc) {
+		if (!cqc.applicable.check(e, cqc.callbackData)) return false;
 		for (Class<? extends Component> c : cqc.remove)
 			e.remove(c);
 		for (Component c : cqc.add)
 			e.add(c);
 		cqc.add.clear();
 		cqc.remove.clear();
+		return true;
 	}
 
-	/** Applied the component queue of the entity, if it exists. */
-	public static void applyComponentQueue(Entity e) {
+	/** Applied the component queue of the entity, if it exists.
+	 * @return Whether the component queue could be applied.
+	 */
+	public static boolean applyComponentQueue(Entity e) {
 		final ComponentQueueComponent cqc = Mapper.componentQueueComponent.get(e);
-		if (cqc != null)
-			applyComponentQueue(e, cqc);
+		return cqc != null ? applyComponentQueue(e, cqc) : false;
 	}
 
 	public static void enableScreenQuake(float amplitude, float frequency) {
@@ -256,5 +260,19 @@ public final class ComponentUtils {
 	 */
 	public static void transitionToSpriteMode(Entity e, AnimationMode targetMode) {
 		transitionToSpriteMode(e, targetMode, true, true);
+	}
+
+	public static void cycleConeDistributionForward(ConeDistributionComponent cdc) {
+		if (cdc != null) {	
+			cdc.apexPoint = (cdc.apexPoint + 1) % cdc.distributionPoints.size();
+			if (cdc.apexPoint == 0)	cdc.degrees += 360f / ((float) cdc.distributionPoints.size() - 1f);
+		}		
+	}
+	
+	public static void cycleConeDistributionBackward(ConeDistributionComponent cdc) {
+		if (cdc != null) {	
+			if (cdc.apexPoint == 0)	cdc.degrees -= 360f / ((float) cdc.distributionPoints.size() - 1f);
+			cdc.apexPoint = (cdc.apexPoint - 1) % cdc.distributionPoints.size();
+		}		
 	}
 }

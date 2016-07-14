@@ -27,8 +27,10 @@ public class GrantScaleSystem extends DisableIteratingSystem {
 		final ScaleComponent sc = Mapper.scaleComponent.get(entity);
 		final ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;
-		sc.scaleX = sc.scaleY = ssc.grantStrategy.compromise(sc.scaleX, ssc.scaleX, deltaTime);
+		sc.scaleX = sc.scaleY = sc.scaleZ = ssc.grantStrategy.compromise(sc.scaleX, ssc.scaleX, deltaTime);
 		if (ssc.scaleX != ssc.scaleY)
 			sc.scaleY = ssc.grantStrategy.compromise(sc.scaleY, ssc.scaleY, deltaTime);
+		if (ssc.scaleZ != ssc.scaleX)
+			sc.scaleZ = ssc.grantStrategy.compromise(sc.scaleZ, ssc.scaleZ, deltaTime);
 	}
 }

@@ -586,4 +586,34 @@ public class GeoUtil {
 			return shape;
 		}
 	}
+
+	public static void translateShape(Shape2D shape, float dx, float dy) {
+		switch (EShapeType.valueOf(shape)) {
+		case CIRCLE:
+			((Circle)shape).x += dx;
+			((Circle)shape).y += dy;
+			break;
+		case ELLIPSE:
+			((Ellipse)shape).x += dx;
+			((Ellipse)shape).y += dy;
+			break;
+		case POINT:
+			((Point)shape).x += dx;
+			((Point)shape).y += dy;
+			break;
+		case POLYGON:
+			((Polygon)shape).translate(dx, dy);
+			break;
+		case POLYLINE:
+			((Polyline)shape).translate(dx, dy);
+			break;
+		case RECTANGLE:
+			((Rectangle)shape).x += dx;
+			((Rectangle)shape).y += dy;
+			break;
+		default:
+			LOG.error("unkown shape type: " + shape);
+			break;
+		}
+	}
 }

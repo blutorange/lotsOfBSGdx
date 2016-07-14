@@ -53,7 +53,7 @@ public class ConeDistributionSystem extends DisableIteratingSystem {
 		v1.add(cdc.offsetToBase);
 		
 		// update the current rotation
-		cdc.degrees += cdc.angularVelocity * tc.deltaTime;
+		cdc.degrees += (cdc.angularVelocity * tc.deltaTime) % 360f;
 		
 		// and position the other components on an ellipse
 		final float deltaAngle = 360.0f / (float)(size-1);

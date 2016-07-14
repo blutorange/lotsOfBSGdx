@@ -66,4 +66,8 @@ public final class KeyMapDesktop {
 	public static boolean isActiveItemSwitchJustPressed() {
 		return Gdx.input.isKeyJustPressed(Keys.HOME) || Gdx.input.isKeyJustPressed(Keys.E);
 	}
+
+	public static boolean isActiveItemUseJustPressed() {
+		return Gdx.input.isKeyJustPressed(Keys.END) || Gdx.input.isKeyJustPressed(Keys.D);
+	}
 }

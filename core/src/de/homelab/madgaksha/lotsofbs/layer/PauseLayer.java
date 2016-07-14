@@ -40,7 +40,7 @@ public class PauseLayer extends ALayer {
 	private BitmapFont bitmapFont = null;
 	private boolean allowInput = false;
 	private boolean anyButtonPressed = false;
-	private boolean exitButtonJustPressed = false;
+	private boolean exitButtonPressed = false;
 	private float exitPressedTime = 0.0f;
 	private boolean blockUpdate;
 
@@ -70,7 +70,7 @@ public class PauseLayer extends ALayer {
 			@Override
 			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 				anyButtonPressed = true;
-				if (!exitButtonJustPressed) {
+				if (!exitButtonPressed) {
 					allowInput = true;
 					anyButtonPressed = false;
 				}
@@ -86,7 +86,7 @@ public class PauseLayer extends ALayer {
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 				anyButtonPressed = true;
-				exitButtonJustPressed = KeyMapDesktop.isPauseButtonPressed();
+				exitButtonPressed = KeyMapDesktop.isPauseButtonPressed();
 				return true;
 			}
 
@@ -102,7 +102,7 @@ public class PauseLayer extends ALayer {
 
 			@Override
 			public boolean keyUp(int keycode) {
-				if (!exitButtonJustPressed) {
+				if (!exitButtonPressed) {
 					allowInput = true;
 					anyButtonPressed = false;
 				}
@@ -118,7 +118,7 @@ public class PauseLayer extends ALayer {
 			@Override
 			public boolean keyDown(int keycode) {
 				anyButtonPressed = true;
-				exitButtonJustPressed = KeyMapDesktop.isPauseButtonPressed();
+				exitButtonPressed = KeyMapDesktop.isPauseButtonPressed();
 				return true;
 			}
 		});
@@ -138,13 +138,14 @@ public class PauseLayer extends ALayer {
 
 	@Override
 	public void update(float deltaTime) {
-		if (exitButtonJustPressed) {
+		deltaTime = Gdx.graphics.getRawDeltaTime();
+		if (exitButtonPressed) {
 			if (KeyMapDesktop.isPauseButtonPressed()) {
 				exitPressedTime += deltaTime;
 				if (allowInput && exitPressedTime > THRESHOLD_FOR_EXIT)
 					Gdx.app.exit();
 			} else
-				exitButtonJustPressed = false;
+				exitButtonPressed = false;
 		} else {
 			exitPressedTime = 0.0f;
 			if (allowInput && anyButtonPressed)

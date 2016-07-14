@@ -13,6 +13,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.BehaviourComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.BoundingSphereComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.BulletStatusComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.CallbackComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.CallbackOnReenterComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.CameraFocusComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ColorComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ColorFlashEffectComponent;
@@ -35,6 +36,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.InvisibleComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.LeanEffectComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.LifeComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ManyTrackingComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.MapItemDataComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ModelComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.PainPointsComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ParentComponent;
@@ -151,6 +153,8 @@ public final class Mapper {
 			.getFor(CameraFocusComponent.class);
 	public final static ComponentMapper<CallbackComponent> callbackComponent = ComponentMapper
 			.getFor(CallbackComponent.class);
+	public final static ComponentMapper<CallbackOnReenterComponent> callbackOnReenterComponent = ComponentMapper
+			.getFor(CallbackOnReenterComponent.class);
 	public final static ComponentMapper<ColorComponent> colorComponent = ComponentMapper.getFor(ColorComponent.class);
 	public final static ComponentMapper<ColorFlashEffectComponent> colorFlashEffectComponent = ComponentMapper
 			.getFor(ColorFlashEffectComponent.class);
@@ -186,6 +190,8 @@ public final class Mapper {
 	public final static ComponentMapper<LifeComponent> lifeComponent = ComponentMapper.getFor(LifeComponent.class);
 	public final static ComponentMapper<LeanEffectComponent> leanEffectComponent = ComponentMapper
 			.getFor(LeanEffectComponent.class);
+	public final static ComponentMapper<MapItemDataComponent> mapItemDataComponent = ComponentMapper
+			.getFor(MapItemDataComponent.class);
 	public final static ComponentMapper<ManyTrackingComponent> manyTrackingComponent = ComponentMapper
 			.getFor(ManyTrackingComponent.class);
 	public final static ComponentMapper<ModelComponent> modelComponent = ComponentMapper.getFor(ModelComponent.class);
