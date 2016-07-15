@@ -106,8 +106,9 @@ public class PostEffectSystem extends EntitySystem {
 			final HoverEffectComponent hec = Mapper.hoverEffectComponent.get(entity);
 			final TemporalComponent tc = Mapper.temporalComponent.get(entity);
 			a = MathUtils.sin(hec.frequency * tc.totalTime);
-			pc.offsetX = hec.amplitude * upVector.x * a;
-			pc.offsetY = hec.amplitude * upVector.y * a;
+			//upVector.x
+			pc.offsetX = hec.amplitude * hec.direction.x * a;
+			pc.offsetY = hec.amplitude * hec.direction.y * a;
 		}
 
 		// Color flash effect.

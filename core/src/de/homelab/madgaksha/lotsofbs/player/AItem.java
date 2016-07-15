@@ -20,4 +20,13 @@ public abstract class AItem implements IMapItem {
 	public void setMapAngularVelocity(Float angularVelocity) {
 		this.mapAngularVelocity = angularVelocity;
 	}
+	/**
+	 * Can be overridden for other values.
+	 * 
+	 * @see IMapItem#getActivationAreaRadius()
+	 */
+	@Override
+	public float getActivationAreaRadius() {
+		return 32*8;
+	}
 }

@@ -11,6 +11,12 @@ public class Logger {
 	private final Class<?> loggerClass;
 	private final static String format = "[%s] - %s - %s";
 
+	public final static int ALL = Application.LOG_DEBUG;
+	public final static int DEBUG = Application.LOG_DEBUG;
+	public final static int NONE = Application.LOG_NONE;
+	public final static int INFO = Application.LOG_INFO;
+	public final static int ERROR = Application.LOG_ERROR;
+	
 	private Logger(Class<?> c) {
 		loggerClass = c;
 	}

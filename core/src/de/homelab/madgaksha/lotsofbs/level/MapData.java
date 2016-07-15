@@ -30,9 +30,11 @@ import com.badlogic.gdx.utils.reflect.Method;
 import de.homelab.madgaksha.lotsofbs.GlobalBag;
 import de.homelab.madgaksha.lotsofbs.entityengine.ETrigger;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.IdComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.PositionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.CallbackMaker;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.EnemyMaker;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.ItemMaker;
+import de.homelab.madgaksha.lotsofbs.entityengine.entity.MakerUtils;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.NpcMaker;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.ParticleEffectMaker;
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.enemy.SoldierRedMaker;
@@ -768,7 +770,8 @@ public class MapData {
 		Entity entity = new Entity();
 		mapItem.setMapAngularVelocity(angularVelocity);
 		mapItem.setMapAxisOfRotation(axis);
-		if (!ItemMaker.getInstance().setup(entity, shape, props, mapItem))
+		PositionComponent pcCenter = MakerUtils.makePositionAtCenter(shape);
+		if (!ItemMaker.getInstance().setup(entity, pcCenter, props, mapItem))
 			return null;
 		return entity;
 	}

@@ -20,13 +20,13 @@ public class ConsumableHighHeal extends AConsumable {
 	
 	@Override
 	public EModel getModel() {
-		return EModel.ITEM_WEAPON_MULTI;
+		return EModel.ITEM_CONSUMABLE_HIGHHEAL;
 	}
 
 	@Override
 	public IResource<? extends Enum<?>, ?>[] requestedRequiredResources() {
 		return new IResource<?, ?>[] {
-			EModel.ITEM_WEAPON_MULTI,
+			EModel.ITEM_CONSUMABLE_HIGHHEAL,
 			ESound.HEAL1,
 		};
 	}
@@ -50,12 +50,12 @@ public class ConsumableHighHeal extends AConsumable {
 	}
 
 	@Override
-	public ESound getSoundOnConsumption() {
+	public ESound requestedSoundOnConsumption() {
 		return ESound.HEAL1;
 	}
 	
 	@Override
-	public float getDelayOnConsumption() {
+	public float requestedDelayOnConsumption() {
 		return 4.0f;
 	}
 }

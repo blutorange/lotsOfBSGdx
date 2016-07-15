@@ -65,7 +65,7 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 			// Remove particle effect when done.
 			if (pec.particleEffect.isComplete()) {
 				if (pec.callback != null)
-					pec.callback.run(entity, pec.data);
+					pec.callback.run(entity, pec.callbackData);
 				entity.remove(ParticleEffectGameComponent.class);
 			}
 		}
@@ -93,7 +93,7 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 			// Remove particle effect when done.
 			if (pec.particleEffect.isComplete()) {
 				if (pec.callback != null)
-					pec.callback.run(entity, pec.data);
+					pec.callback.run(entity, pec.callbackData);
 				entity.remove(ParticleEffectScreenComponent.class);
 			}
 

@@ -21,7 +21,6 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.player.AItem;
 import de.homelab.madgaksha.lotsofbs.player.APlayer;
 import de.homelab.madgaksha.lotsofbs.player.IConsumableMapItem;
-import de.homelab.madgaksha.lotsofbs.player.IMapItem;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ResourceCache;
 
@@ -50,7 +49,7 @@ public abstract class AConsumable extends AItem implements IConsumableMapItem {
 	}
 
 	protected abstract ESound requestedSoundOnAcquire();
-
+	
 	/**
 	 * May be overridden by specific items for further custom initialization.
 	 * Remember to call super().
@@ -94,16 +93,6 @@ public abstract class AConsumable extends AItem implements IConsumableMapItem {
 		return type == null ? true : player.supportsConsumable(type);
 	}
 
-	/**
-	 * Can be overridden for other values.
-	 * 
-	 * @see IMapItem#getActivationAreaScaleFactor()
-	 */
-	@Override
-	public float getActivationAreaScaleFactor() {
-		return 3.5f;
-	}
-
 	@Override
 	public void gotItem() {
 		final ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
@@ -119,6 +108,12 @@ public abstract class AConsumable extends AItem implements IConsumableMapItem {
 		gameEntityEngine.addEntity(item);
 	}
 
+	/** May be overridden for other sounds. */
+	@Override
+	public ESound requestedSoundOnUse() {
+		return ESound.BEEP2;
+	}
+	
 	private final static IEntityFeedback APPLICABLE_WHEN_FREE_ITEM_SLOTS = new IEntityFeedback() {
 		@Override
 		public boolean check(Entity entity, Object data) {

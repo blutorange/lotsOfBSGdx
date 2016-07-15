@@ -116,11 +116,6 @@ public class ConeDistributionComponent implements Component, Poolable {
 			}
 
 			@Override
-			public float getItemScaleMaxDistance() {
-				return 48f;
-			}
-
-			@Override
 			public float getItemExponentialGrantFactor() {
 				return 0.25f;
 			}
@@ -141,8 +136,6 @@ public class ConeDistributionComponent implements Component, Poolable {
 		public float getOffsetToBaseY();
 
 		public float getItemScaleMaxValue();
-
-		public float getItemScaleMaxDistance();
 
 		public float getItemExponentialGrantFactor();
 	}

@@ -65,7 +65,7 @@ public interface IMapItem {
 			return 0;
 		}		
 		@Override
-		public float getActivationAreaScaleFactor() {
+		public float getActivationAreaRadius() {
 			return 1;
 		}
 	};
@@ -108,7 +108,7 @@ public interface IMapItem {
 	 * @return The factor by which the item's model bounding box is multiplied
 	 *         to obtain the active area.
 	 */
-	public float getActivationAreaScaleFactor();
+	public float getActivationAreaRadius();
 
 	public boolean initialize();
 

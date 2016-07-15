@@ -18,9 +18,13 @@ public class TimedCallbackComponent implements Component, Poolable {
 	private final static int DEFAULT_CALLBACKS_LEFT = 1;
 	private final static IEntityCallback DEFAULT_TIMED_CALLBACK = IEntityCallback.NOOP;
 	private final static Object DEFAULT_CALLBACK_DATA = null;
+	private final static boolean DEFAULT_REMOVE_ENTITY = false;
 
 	public IEntityCallback timedCallback = DEFAULT_TIMED_CALLBACK;
 
+	/** Whether the entity with this component should be removed automatically upon completion. */
+	public boolean removeEntity = DEFAULT_REMOVE_ENTITY;
+	
 	/** Internal use. */
 	public float totalTime = DEFAULT_TOTAL_TIME;
 
@@ -62,6 +66,12 @@ public class TimedCallbackComponent implements Component, Poolable {
 		setup(timedCallback, callbackData, duration, numberOfCallbacks);
 	}
 
+	public TimedCallbackComponent(IEntityCallback timedCallback, Object callbackData, float duration,
+			int numberOfCallbacks, boolean removeEntity) {
+		setup(timedCallback, callbackData, duration, numberOfCallbacks, removeEntity);
+	}
+
+	
 	public void setup(IEntityCallback timedCallback) {
 		setup(timedCallback, DEFAULT_CALLBACK_DATA, DEFAULT_DURATION, DEFAULT_CALLBACKS_LEFT);
 	}
@@ -89,6 +99,15 @@ public class TimedCallbackComponent implements Component, Poolable {
 		this.callbacksLeft = numberOfCallbacks;
 		this.callbackData = callbackData;
 	}
+	
+	public void setup(IEntityCallback timedCallback, Object callbackData, float duration, int numberOfCallbacks, boolean removeEntity) {
+		this.totalTime = 0.0f;
+		this.timedCallback = timedCallback;
+		this.duration = duration;
+		this.callbacksLeft = numberOfCallbacks;
+		this.callbackData = callbackData;
+		this.removeEntity = removeEntity;
+	}
 
 	@Override
 	public void reset() {
@@ -96,5 +115,6 @@ public class TimedCallbackComponent implements Component, Poolable {
 		duration = DEFAULT_DURATION;
 		totalTime = DEFAULT_DURATION;
 		callbacksLeft = DEFAULT_CALLBACKS_LEFT;
+		removeEntity = DEFAULT_REMOVE_ENTITY;
 	}
 }

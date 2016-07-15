@@ -16,10 +16,12 @@ import de.homelab.madgaksha.lotsofbs.grantstrategy.IGrantStrategy;
 public class ShouldPositionComponent extends PositionComponent implements Component, Poolable {
 	private final static IGrantStrategy DEFAULT_GRANT_STRATEGY = new ExponentialGrantStrategy();
 	private final static boolean DEFAULT_GRANT_OFFSET = false;
+	private final static boolean DEFAULT_REMOVE_ON_FULLFILL = false;
 
 	public IGrantStrategy grantStrategy = DEFAULT_GRANT_STRATEGY;
 	public boolean grantOffset = DEFAULT_GRANT_OFFSET;
-
+	public boolean removeOnFulfill = DEFAULT_REMOVE_ON_FULLFILL;
+	
 	public ShouldPositionComponent() {
 
 	}
@@ -40,10 +42,17 @@ public class ShouldPositionComponent extends PositionComponent implements Compon
 		this.grantStrategy = grantStrategy;
 		this.grantOffset = grantOffset;
 	}
+	
+	public void setup(IGrantStrategy grantStrategy, boolean grantOffset, boolean removeOnFullfill) {
+		this.grantStrategy = grantStrategy;
+		this.grantOffset = grantOffset;
+		this.removeOnFulfill = removeOnFullfill;
+	}
 
 	public void reset() {
 		super.reset();
 		grantStrategy = DEFAULT_GRANT_STRATEGY;
 		grantOffset = DEFAULT_GRANT_OFFSET;
+		removeOnFulfill = DEFAULT_REMOVE_ON_FULLFILL;
 	}
 }

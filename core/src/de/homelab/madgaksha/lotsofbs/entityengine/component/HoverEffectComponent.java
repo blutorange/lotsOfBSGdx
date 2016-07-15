@@ -2,6 +2,7 @@ package de.homelab.madgaksha.lotsofbs.entityengine.component;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
@@ -16,6 +17,7 @@ public class HoverEffectComponent implements Component, Poolable {
 
 	public float frequency = DEFAULT_FREQUENCY;
 	public float amplitude = DEFAULT_AMPLITUDE;
+	public final Vector2 direction = new Vector2(0f, 1f);
 
 	public HoverEffectComponent() {
 	}
@@ -31,6 +33,7 @@ public class HoverEffectComponent implements Component, Poolable {
 
 	@Override
 	public void reset() {
+		direction.set(0f, 1f);
 		frequency = DEFAULT_FREQUENCY;
 		amplitude = DEFAULT_AMPLITUDE;
 	}

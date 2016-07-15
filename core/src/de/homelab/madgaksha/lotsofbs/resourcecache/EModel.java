@@ -7,6 +7,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.BaseJsonReader;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.UBJsonReader;
@@ -22,11 +23,16 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 public enum EModel implements IResource<EModel, Model> {
 	ITEM_WEAPON_BASIC("model/itemBasicWeapon.g3db"),
 	ITEM_WEAPON_MULTI("model/itemMultiWeapon.g3db"),
-	ITEM_TOKUGI_OUKAMUSOUGEKI("model/itemOukaMusougekiTokugi.g3db"),;
+	ITEM_TOKUGI_OUKAMUSOUGEKI("model/itemOukaMusougekiTokugi.g3db"),
+	ITEM_CONSUMABLE_LOWHEAL("model/itemConsumableLowHeal.g3db"),
+	ITEM_CONSUMABLE_MIDHEAL("model/itemConsumableMidHeal.g3db"),
+	ITEM_CONSUMABLE_HIGHHEAL("model/itemConsumableHighHeal.g3db"),
+	;
 
 	private final static Logger LOG = Logger.getLogger(EModel.class);
 	private final static EnumMap<EModel, Model> modelCache = new EnumMap<EModel, Model>(EModel.class);
 
+	private BoundingBox boundingBox = null;
 	private String filename;
 	private ModelInstance modelInstance = null;
 
@@ -49,6 +55,10 @@ public enum EModel implements IResource<EModel, Model> {
 			G3dModelLoader loader = new G3dModelLoader(reader);
 			Model model = loader.loadModel(fileHandle);
 			modelInstance = new ModelInstance(model);
+			if (boundingBox == null) {
+				boundingBox = new BoundingBox();
+				modelInstance.calculateBoundingBox(boundingBox);
+			}
 			return model;
 		} catch (GdxRuntimeException e) {
 			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
@@ -92,5 +102,9 @@ public enum EModel implements IResource<EModel, Model> {
 	@Override
 	public void clearAllOfThisKind() {
 		EModel.clearAll();
+	}
+
+	public void getBoundingBox(BoundingBox out) {
+		out.set(boundingBox);
 	}
 }

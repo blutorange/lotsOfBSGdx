@@ -57,6 +57,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
 import de.homelab.madgaksha.lotsofbs.resourcepool.ResourcePool;
 import de.homelab.madgaksha.lotsofbs.util.GeoUtil;
+import javafx.geometry.Pos;
 
 public final class MakerUtils {
 	@SuppressWarnings("unused")
@@ -255,13 +256,13 @@ public final class MakerUtils {
 	 */
 	public static void addTimedRunnable(float duration, IEntityCallback timedCallback) {
 		final Entity e = gameEntityEngine.createEntity();
-		addTimedRunnableTo(e, duration, timedCallback, null);
+		addTimedRunnableTo(e, duration, timedCallback, null, true);
 		gameEntityEngine.addEntity(e);
 	}
 	
 	public static void addTimedRunnable(float duration, IEntityCallback timedCallback, Object data) {
 		final Entity e = gameEntityEngine.createEntity();
-		addTimedRunnableTo(e, duration, timedCallback, data);
+		addTimedRunnableTo(e, duration, timedCallback, data, true);
 		gameEntityEngine.addEntity(e);
 	}
 
@@ -269,10 +270,13 @@ public final class MakerUtils {
 		addTimedRunnableTo(e, duration, timedCallback, null);		
 	}
 	
-	public static void addTimedRunnableTo(Entity e, float duration, IEntityCallback timedCallback, Object data) {
+	public static void addTimedRunnableTo(Entity e, float duration, IEntityCallback callback, Object data) {
+		addTimedRunnableTo(e, duration, callback, data, false);
+	}
+	public static void addTimedRunnableTo(Entity e, float duration, IEntityCallback timedCallback, Object data, boolean removeEntityOnCompletion) {
 		TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
 		TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);
-		tcc.setup(timedCallback, data, duration, 1);
+		tcc.setup(timedCallback, data, duration, 1, removeEntityOnCompletion);
 		e.add(tc).add(tcc);
 	}
 
@@ -319,12 +323,24 @@ public final class MakerUtils {
 			ParticleEffectComponent pec, IEntityCallback callback) {
 		final Entity entity = gameEntityEngine.createEntity();
 		final TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
+		final PositionComponent pc = gameEntityEngine.createComponent(PositionComponent.class);
+		pc.setup(positionComponent);
 		pec.setup(ResourcePool.obtainParticleEffect(particleEffect));
-		pec.callback = callback;
+		pec.callback = REMOVE_ENTITY;
+		pec.callbackData = callback;
 		entity.add(tc);
 		entity.add(pec);
-		entity.add(positionComponent);
+		entity.add(pc);
+		LOG.debug("add " + entity.hashCode());
 		gameEntityEngine.addEntity(entity);
 	}
 
+	private final static IEntityCallback REMOVE_ENTITY = new IEntityCallback() {
+		@Override
+		public void run(Entity entity, Object data) {
+			LOG.debug("remove " + entity.hashCode());
+			if (data != null && (data instanceof IEntityCallback)) ((IEntityCallback)data).run(entity, null);
+			gameEntityEngine.removeEntity(entity);
+		}
+	};
 }

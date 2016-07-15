@@ -7,8 +7,9 @@ import static de.homelab.madgaksha.lotsofbs.GlobalBag.playerHitCircleEntity;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.math.Shape2D;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 
 import de.homelab.madgaksha.lotsofbs.audiosystem.SoundPlayer;
 import de.homelab.madgaksha.lotsofbs.entityengine.Mapper;
@@ -25,6 +26,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.ReceiveTouchComponen
 import de.homelab.madgaksha.lotsofbs.entityengine.component.RotationComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ScaleComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ScaleFromDistanceComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.ShapeComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ShouldPositionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.ShouldScaleComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.StickyComponent;
@@ -45,12 +47,12 @@ import de.homelab.madgaksha.lotsofbs.player.consumable.AConsumable;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.resourcecache.IResource;
 import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
-import de.homelab.madgaksha.lotsofbs.util.GeoUtil;
 
 public class ItemMaker extends EntityMaker {
 
 	private final static Logger LOG = Logger.getLogger(ItemMaker.class);
-
+	private final BoundingBox boundingBox = new BoundingBox();
+	
 	// Singleton
 	private static class SingletonHolder {
 		private static final ItemMaker INSTANCE = new ItemMaker();
@@ -84,7 +86,7 @@ public class ItemMaker extends EntityMaker {
 	 *            Interval between loops in seconds.
 	 * @return Whether the entity could be setup.
 	 */
-	public boolean setup(Entity entity, Shape2D shape, MapProperties props, IMapItem mapItem) {
+	public boolean setup(Entity entity, PositionComponent center, MapProperties props, IMapItem mapItem) {
 
 		if (!mapItem.isSupportedByPlayer(player)) {
 			LOG.info("player " + player + " does not support item " + mapItem);
@@ -111,8 +113,8 @@ public class ItemMaker extends EntityMaker {
 		ReceiveTouchComponent rtcCollect = gameEntityEngine.createComponent(ReceiveTouchGroup01Component.class);
 		ModelComponent mc = gameEntityEngine.createComponent(ModelComponent.class);
 		BoundingBoxRenderComponent bbrc = gameEntityEngine.createComponent(BoundingBoxRenderComponent.class);
-		BoundingBoxCollisionComponent bbccCollect = gameEntityEngine
-				.createComponent(BoundingBoxCollisionComponent.class);
+		BoundingBoxCollisionComponent bbccCollect = gameEntityEngine.createComponent(BoundingBoxCollisionComponent.class);
+		ShapeComponent scCollect = gameEntityEngine.createComponent(ShapeComponent.class);
 		PositionComponent pc = gameEntityEngine.createComponent(PositionComponent.class);
 		TemporalComponent tc = gameEntityEngine.createComponent(TemporalComponent.class);
 		RotationComponent rc = gameEntityEngine.createComponent(RotationComponent.class);
@@ -126,29 +128,29 @@ public class ItemMaker extends EntityMaker {
 		// Setup basic components
 		rtcCollect.setup(onCollect);
 		mc.setup(mapItem.getModel());
-		bbrc.setup(mc);
-		bbccCollect.setup(bbrc);
-		pc.setup(MakerUtils.makePositionAtCenter(shape));
+		mapItem.getModel().getBoundingBox(boundingBox);
+		bbrc.setup(boundingBox);
+		pc.setup(center);
 		rc.setup(axis);
 		avc.setup(angularVelocity);
-		midc.setup(shape, props, mapItem, pc);
+		midc.setup(pc, props, mapItem);
 
-		// Enlarge bounding box for the area when the item starts to move
-		// towards the player by the desired factor.
-		float halfWidth = 0.5f * bbccCollect.maxX - bbccCollect.minX;
-		float halfHeight = 0.5f * bbccCollect.maxY - bbccCollect.minY;
-		bbccCollect.minX -= halfWidth * mapItem.getActivationAreaScaleFactor();
-		bbccCollect.maxX += halfWidth * mapItem.getActivationAreaScaleFactor();
-		bbccCollect.minY -= halfHeight * mapItem.getActivationAreaScaleFactor();
-		bbccCollect.maxY += halfHeight * mapItem.getActivationAreaScaleFactor();
-
+		// Setup area when the item activates and moves towards the player.
+		final float centerX = 0.5f * (bbrc.maxX + bbrc.minX);
+		final float centerY = 0.5f * (bbrc.maxY + bbrc.minY);
+		final float size = mapItem.getActivationAreaRadius();
+		bbccCollect.minX = centerX - size;
+		bbccCollect.minY = centerY - size;
+		bbccCollect.maxX = centerX + size;
+		bbccCollect.maxY = centerY + size;
+		scCollect.setup(new Circle(centerX, centerY, size));
+		
 		// Make item smaller the closer it gets to the player.
-		sfdc.setup(playerHitCircleEntity, 0.0f, 1.0f, 0.0f,
-				mapItem.getActivationAreaScaleFactor() * Math.min(halfWidth, halfHeight));
-		ssc.setup(new ExponentialGrantStrategy(0.5f));
+		sfdc.setup(playerHitCircleEntity, 0.0f, 1.0f, 0.0f,	mapItem.getActivationAreaRadius());
+		ssc.setup(ExponentialGrantStrategy.exp05);
 
 		// Add components.
-		entity.add(avc).add(bbrc).add(cqcCollect).add(bbccCollect).add(mc).add(pc).add(tc).add(rtcCollect).add(rc)
+		entity.add(avc).add(bbrc).add(cqcCollect).add(bbccCollect).add(scCollect).add(mc).add(pc).add(tc).add(rtcCollect).add(rc)
 				.add(midc).add(sfdc).add(scc).add(ssc);
 
 		// Make item move towards player once he enters the active area.
@@ -162,10 +164,11 @@ public class ItemMaker extends EntityMaker {
 		// Setup components above
 		bbccAcquire.setup(bbrc);
 		rtcAcquire.setup(onAcquire);
-		spc.setup(new SpeedIncreaseGrantStrategy(10.0f, 250.0f));
+		spc.setup(SpeedIncreaseGrantStrategy.mid());
 		sc.setup(playerHitCircleEntity);
 
 		// Change bounding box once the item activates.
+		cqcCollect.remove.add(ShapeComponent.class);
 		cqcCollect.remove.add(BoundingBoxCollisionComponent.class);
 		cqcCollect.remove.add(ReceiveTouchGroup01Component.class);
 		cqcCollect.add.add(bbccAcquire);
@@ -222,7 +225,6 @@ public class ItemMaker extends EntityMaker {
 		final ComponentQueueComponent cqc = gameEntityEngine.createComponent(ComponentQueueComponent.class);
 		
 		final float maxScale = player.getItemCircleParameters().getItemScaleMaxValue();
-		final float maxDistance = player.getItemCircleParameters().getItemScaleMaxDistance();
 		final float exponentialGrantFactor = player.getItemCircleParameters().getItemExponentialGrantFactor();
 		
 		// Setup components.
@@ -230,15 +232,16 @@ public class ItemMaker extends EntityMaker {
 		mc.setup(consumable.getModel());
 		pc.setup(currentPc);
 		rc.setup(consumable.getMapAxisOfRotation());
-		sc.setup(0.0f);
-		sfdc.setup(playerHitCircleEntity, 0f, maxScale, 0f, maxDistance);
+		sc.setup(0.0f);	
+		consumable.getModel().getBoundingBox(boundingBox);
+		sfdc.setup(playerHitCircleEntity, 0f, maxScale, 0f, 0.75f*Math.max(Math.max(boundingBox.getWidth(), boundingBox.getHeight()), boundingBox.getDepth()));
 		spc.setup(new ExponentialGrantStrategy(exponentialGrantFactor));
 		
 		// Setup component queue, ie. when consuming the consumable.
 		final TimedCallbackComponent tcc = gameEntityEngine.createComponent(TimedCallbackComponent.class);
 		final LifeComponent lc = gameEntityEngine.createComponent(LifeComponent.class);
 		final StickyComponent stc = gameEntityEngine.createComponent(StickyComponent.class);
-		lc.setup(consumable.getDelayOnConsumption()*1.1f);
+		lc.setup(consumable.requestedDelayOnConsumption()*1.1f);
 		tcc.setup(onConsumableUse, consumable);
 		cqc.setup(isConsumableUsable, consumable);
 		stc.setup(playerHitCircleEntity);
@@ -262,10 +265,15 @@ public class ItemMaker extends EntityMaker {
 	public static void resetItemToWaitingState(Entity item) {
 		final MapItemDataComponent midc = Mapper.mapItemDataComponent.get(item);
 		if (midc != null) {
-			final PositionComponent pcNew = Mapper.positionComponent.get(item);
 			final Entity newItem = gameEntityEngine.createEntity();
-			GeoUtil.translateShape(midc.shape, pcNew.x - midc.originalPosition.x, pcNew.y - midc.originalPosition.y);
-			if (ItemMaker.getInstance().setup(newItem, midc.shape, midc.props, midc.mapItem)) {
+			final PositionComponent pcOld = Mapper.positionComponent.get(item);
+			if (ItemMaker.getInstance().setup(newItem, pcOld, midc.props, midc.mapItem)) {
+				final ShouldPositionComponent spc = gameEntityEngine.createComponent(ShouldPositionComponent.class);
+				final MapItemDataComponent midcNew= Mapper.mapItemDataComponent.get(newItem);
+				midcNew.originalPosition.setup(midc.originalPosition);
+				spc.setup(midc.originalPosition.x, midc.originalPosition.y);
+				spc.setup(SpeedIncreaseGrantStrategy.mid(), false ,true);
+				newItem.add(spc);
 				gameEntityEngine.addEntity(newItem);
 			}
 		}
@@ -316,9 +324,10 @@ public class ItemMaker extends EntityMaker {
 					final VoiceComponent vc = Mapper.voiceComponent.get(playerHitCircleEntity);
 					final IConsumableMapItem consumable = (IConsumableMapItem)data;
 					vc.voicePlayer.play(vc.onConsumableUse);
+					SoundPlayer.getInstance().play(consumable.requestedSoundOnUse());
 					spc.setup(ExponentialGrantStrategy.exp09);
-					ssc.setup(new ExponentialGrantStrategy(2.0f,consumable.getDelayOnConsumption()));
-					MakerUtils.addTimedRunnable(consumable.getDelayOnConsumption(), onConsumableEffect, consumable);
+					ssc.setup(new ExponentialGrantStrategy(2.0f,consumable.requestedDelayOnConsumption()));
+					MakerUtils.addTimedRunnable(consumable.requestedDelayOnConsumption(), onConsumableEffect, consumable);
 				}
 			}
 		};
@@ -328,8 +337,9 @@ public class ItemMaker extends EntityMaker {
 			public void run(Entity entity, Object data) {
 				if (data instanceof IConsumableMapItem) {
 					final IConsumableMapItem consumable = (IConsumableMapItem)data;
-					SoundPlayer.getInstance().play(consumable.getSoundOnConsumption());
+					SoundPlayer.getInstance().play(consumable.requestedSoundOnConsumption());
 					consumable.usedItem();
+					gameEntityEngine.removeEntity(entity);
 				}
 			}
 		};

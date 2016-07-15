@@ -38,6 +38,11 @@ public class GrantPositionSystem extends DisableIteratingSystem {
 			pc.offsetY = spc.grantStrategy.compromise(pc.offsetY, spc.offsetY, deltaTime);
 			pc.offsetZ = spc.grantStrategy.compromise(pc.offsetZ, spc.offsetZ, deltaTime);
 		}
+		if (spc.removeOnFulfill)
+			if (spc.x == pc.x && spc.y == pc.y && spc.z == pc.z) {
+				entity.remove(ShouldPositionComponent.class);
+				System.out.println("remove " + entity);
+			}
 	}
 
 }

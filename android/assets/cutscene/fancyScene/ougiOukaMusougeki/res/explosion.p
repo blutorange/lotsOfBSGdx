@@ -32,16 +32,7 @@ timeline1: 0.66
 - Life Offset - 
 active: false
 - X Offset - 
-active: true
-lowMin: -100.0
-lowMax: -100.0
-highMin: 0.0
-highMax: 0.0
-relative: false
-scalingCount: 1
-scaling0: 1.0
-timelineCount: 1
-timeline0: 0.0
+active: false
 - Y Offset - 
 active: false
 - Spawn Shape - 
@@ -49,8 +40,8 @@ shape: line
 - Spawn Width - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 200.0
-highMax: 200.0
+highMin: 6.0
+highMax: 6.0
 relative: false
 scalingCount: 1
 scaling0: 1.0

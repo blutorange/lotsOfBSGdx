@@ -9454,9 +9454,12 @@
   </object>
   <object id="149" name="LowHeal" type="Item" x="1655.83" y="18458" width="32.3333" height="32">
    <properties>
+    <property name="axisX" type="float" value="0"/>
+    <property name="axisY" type="float" value="0"/>
+    <property name="axisZ" type="float" value="0"/>
     <property name="category" value="consumable"/>
     <property name="name" value="LowHeal"/>
-    <property name="speed" type="float" value="45"/>
+    <property name="speed" type="float" value="0"/>
    </properties>
   </object>
  </objectgroup>

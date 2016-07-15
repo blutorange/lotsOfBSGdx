@@ -1,5 +1,7 @@
 package de.homelab.madgaksha.lotsofbs.player;
 
+import com.sun.istack.internal.Nullable;
+
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.ItemMaker;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 
@@ -18,8 +20,19 @@ public interface IConsumableMapItem extends IMapItem {
 	public boolean isConsumableNow();
 
 	/** @return Sound player when this item is consumed. */
-	public ESound getSoundOnConsumption();
+	@Nullable
+	public ESound requestedSoundOnConsumption();
 
-	/** Delay between pressing the button and the effect taking place, in seconds. */
-	public float getDelayOnConsumption();
+	/**
+	 * @return Sound player when this item is used/activated. There may be some
+	 *         delay before the item is consumed.
+	 */
+	@Nullable
+	public ESound requestedSoundOnUse();
+
+	/**
+	 * Delay between pressing the button and the effect taking place, in
+	 * seconds.
+	 */
+	public float requestedDelayOnConsumption();
 }

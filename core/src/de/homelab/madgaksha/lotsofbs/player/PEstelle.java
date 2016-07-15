@@ -226,6 +226,5 @@ public class PEstelle extends APlayer {
 	protected ESound requestedVoiceOnHeavyHeal() {
 		return ESound.ESTELLE_HAAAAA;
 	}
-	
 
 }

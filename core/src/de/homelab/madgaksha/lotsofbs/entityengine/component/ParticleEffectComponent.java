@@ -21,7 +21,7 @@ public class ParticleEffectComponent implements Component, Poolable {
 
 	public PooledEffect particleEffect = DEFAULT_PARTICLE_EFFECT;
 	public IEntityCallback callback = null;
-	public Object data = null;
+	public Object callbackData = null;
 
 	public ParticleEffectComponent() {
 	}
@@ -48,6 +48,6 @@ public class ParticleEffectComponent implements Component, Poolable {
 			ResourcePool.freeParticleEffect(particleEffect);
 		particleEffect = DEFAULT_PARTICLE_EFFECT;
 		callback = null;
-		data = null;
+		callbackData = null;
 	}
 }

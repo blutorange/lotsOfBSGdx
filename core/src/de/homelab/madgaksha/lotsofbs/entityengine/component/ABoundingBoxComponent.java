@@ -60,10 +60,12 @@ public abstract class ABoundingBoxComponent implements Component, Poolable {
 		setup(minX, minY, maxX, maxY);
 	}
 
+	@Deprecated
 	public ABoundingBoxComponent(ModelInstance modelInstance) {
 		setup(modelInstance);
 	}
 
+	@Deprecated
 	public ABoundingBoxComponent(ModelComponent modelComponent) {
 		setup(modelComponent.modelInstance);
 	}
@@ -87,6 +89,13 @@ public abstract class ABoundingBoxComponent implements Component, Poolable {
 		this.maxY = r.y + r.height;
 	}
 	
+	public void setup(BoundingBox boundingBox) {
+		this.minX = boundingBox.getCenterX() - 0.5f * boundingBox.getWidth();
+		this.minY = boundingBox.getCenterY() - 0.5f * boundingBox.getHeight();
+		this.maxX = boundingBox.getCenterX() + 0.5f * boundingBox.getWidth();
+		this.maxY = boundingBox.getCenterY() + 0.5f * boundingBox.getHeight();
+	}
+	
 	public void setup(BoundingBoxCollisionComponent bbcc) {
 		setup(bbcc.minX, bbcc.minY, bbcc.maxX, bbcc.maxY);
 	}
@@ -106,16 +115,18 @@ public abstract class ABoundingBoxComponent implements Component, Poolable {
 		this.maxY = maxY;
 	}
 
+	@Deprecated
 	public void setup(ModelInstance modelInstance) {
 		// take bounding box of the bounding sphere of the model's bounding box
 		// to account for rotation around the center.
 		modelInstance.calculateBoundingBox(boundingBox);
-		this.minX = boundingBox.getCenterX() - (0.5f*1.5f) * boundingBox.getWidth();
-		this.minY = boundingBox.getCenterY() - (0.5f*1.5f) * boundingBox.getHeight();
-		this.maxX = boundingBox.getCenterX() + (0.5f*1.5f) * boundingBox.getWidth();
-		this.maxY = boundingBox.getCenterY() + (0.5f*1.5f) * boundingBox.getHeight();
+		this.minX = boundingBox.getCenterX() - 0.5f * boundingBox.getWidth();
+		this.minY = boundingBox.getCenterY() - 0.5f * boundingBox.getHeight();
+		this.maxX = boundingBox.getCenterX() + 0.5f * boundingBox.getWidth();
+		this.maxY = boundingBox.getCenterY() + 0.5f * boundingBox.getHeight();
 	}
 	
+	@Deprecated
 	public void setup(ModelComponent modelComponent) {
 		setup(modelComponent.modelInstance);
 	}

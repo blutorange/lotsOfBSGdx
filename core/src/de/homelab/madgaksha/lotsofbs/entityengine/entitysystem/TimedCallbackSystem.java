@@ -1,5 +1,6 @@
 package de.homelab.madgaksha.lotsofbs.entityengine.entitysystem;
 
+import static de.homelab.madgaksha.lotsofbs.GlobalBag.gameEntityEngine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -41,7 +42,8 @@ public class TimedCallbackSystem extends IteratingSystem {
 			--tcc.callbacksLeft;
 			if (tcc.callbacksLeft >= 0 && --tcc.callbacksLeft <= 0) {
 				// everything done
-				entity.remove(TimedCallbackComponent.class);
+				if (tcc.removeEntity) gameEntityEngine.removeEntity(entity);
+				else entity.remove(TimedCallbackComponent.class);
 			}
 			tcc.totalTime = 0.0f;
 		}

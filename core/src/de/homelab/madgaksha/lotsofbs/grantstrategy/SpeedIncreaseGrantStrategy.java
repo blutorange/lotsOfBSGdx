@@ -14,7 +14,7 @@ public class SpeedIncreaseGrantStrategy implements IGrantStrategy {
 	private final static float DEFAULT_MAX_SPEED = 500.0f;
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(SpeedIncreaseGrantStrategy.class);
-
+	
 	private float increase = DEFAULT_INCREASE;
 
 	private float maxSpeed = DEFAULT_MAX_SPEED;
@@ -48,5 +48,9 @@ public class SpeedIncreaseGrantStrategy implements IGrantStrategy {
 		v.x = isX < shouldX ? Math.min(v.x, shouldX) : Math.max(v.x, shouldX);
 		v.y = isY < shouldY ? Math.min(v.y, shouldY) : Math.max(v.y, shouldY);
 		return v;
+	}
+	
+	public static IGrantStrategy mid() {
+		return new SpeedIncreaseGrantStrategy(10.0f, 250.0f);
 	}
 }
