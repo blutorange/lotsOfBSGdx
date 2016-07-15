@@ -331,14 +331,12 @@ public final class MakerUtils {
 		entity.add(tc);
 		entity.add(pec);
 		entity.add(pc);
-		LOG.debug("add " + entity.hashCode());
 		gameEntityEngine.addEntity(entity);
 	}
 
 	private final static IEntityCallback REMOVE_ENTITY = new IEntityCallback() {
 		@Override
 		public void run(Entity entity, Object data) {
-			LOG.debug("remove " + entity.hashCode());
 			if (data != null && (data instanceof IEntityCallback)) ((IEntityCallback)data).run(entity, null);
 			gameEntityEngine.removeEntity(entity);
 		}
