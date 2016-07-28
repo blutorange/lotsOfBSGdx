@@ -73,7 +73,7 @@ public class FixedGameViewport extends Viewport {
 		HdpiUtils.glViewport(0, 0, getScreenWidth(), getScreenHeight());
 		camera.viewportWidth = Game.VIEWPORT_GAME_AR_NUM;
 		camera.viewportHeight = Game.VIEWPORT_GAME_AR_DEN;
-		if (centerCamera) camera.position.set(Game.VIEWPORT_GAME_AR_NUM / 2f, Game.VIEWPORT_GAME_AR_DEN / 2f, 0);
+		if (centerCamera) camera.position.set(Game.VIEWPORT_GAME_AR_NUM * (0.5f + shake.x) , Game.VIEWPORT_GAME_AR_DEN * (0.5f+shake.y), 0);
 		else camera.position.set(shake.x*Game.VIEWPORT_GAME_AR_NUM, shake.y*Game.VIEWPORT_GAME_AR_DEN, shake.z);
 		camera.update();
 	}
@@ -82,7 +82,7 @@ public class FixedGameViewport extends Viewport {
 		HdpiUtils.glViewport(0, 0, getScreenWidth(), getScreenHeight());
 		camera.viewportWidth = Game.VIEWPORT_GAME_AR_NUM;
 		camera.viewportHeight = Game.VIEWPORT_GAME_AR_DEN;
-		if (centerCamera) camera.position.set(Game.VIEWPORT_GAME_AR_NUM / 2f, Game.VIEWPORT_GAME_AR_DEN / 2f, 0);
+		if (centerCamera) camera.position.set(Game.VIEWPORT_GAME_AR_NUM * (0.5f + shake.x) , Game.VIEWPORT_GAME_AR_DEN * (0.5f+shake.y), 0);
 		else camera.position.set(shake.x*Game.VIEWPORT_GAME_AR_NUM, shake.y*Game.VIEWPORT_GAME_AR_DEN, shake.z);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);

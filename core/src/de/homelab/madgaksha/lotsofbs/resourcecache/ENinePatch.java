@@ -36,8 +36,7 @@ public enum ENinePatch implements IResource<ENinePatch, NinePatch> {
 	STATUS_SCREEN_HP_BAR_FILL(ETextureAtlas.STATUS_SCREEN, "hpBarFill"),
 	STATUS_SCREEN_DATA_FRAME(ETextureAtlas.STATUS_SCREEN, "bracketsLrtd"),
 
-	PAUSE_LAYER_OVERLAY(ETextureAtlas.NINE_PATCHES, "whiteRectangle"),
-
+	WHITE_RECTANGLE(ETextureAtlas.NINE_PATCHES, "whiteRectangle"),
 	;
 
 	private final static Logger LOG = Logger.getLogger(ENinePatch.class);

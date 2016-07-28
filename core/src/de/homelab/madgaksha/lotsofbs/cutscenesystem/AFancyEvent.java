@@ -277,4 +277,9 @@ public abstract class AFancyEvent implements Poolable, Serializable {
 			return p;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "@" + startTime;
+	}
 }

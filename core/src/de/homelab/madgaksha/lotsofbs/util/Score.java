@@ -131,7 +131,7 @@ public class Score {
 	}
 
 	/**
-	 * Reads the score file and returns is as a map with the level class as the
+	 * Reads the score file and returns it as a map with the level class as the
 	 * key and the score as the value.
 	 * 
 	 * @return The score for each level. Empty map when file not found or if it

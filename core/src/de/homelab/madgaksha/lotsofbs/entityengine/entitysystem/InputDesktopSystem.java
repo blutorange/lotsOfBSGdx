@@ -62,7 +62,9 @@ public class InputDesktopSystem extends IteratingSystem {
 		// Switch active item.
 		if (KeyMapDesktop.isActiveItemSwitchJustPressed()) {
 			ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
-			ComponentUtils.cycleConeDistributionForward(cdc);
+			if (ComponentUtils.cycleConeDistributionForward(cdc)) {
+				SoundPlayer.getInstance().play(ESound.SWITCH_ITEM);
+			}
 		}
 		
 		// Use active item.
@@ -92,7 +94,7 @@ public class InputDesktopSystem extends IteratingSystem {
 		// Adjust direction vector relative to the camera direction.
 		if (ic.relativeToCamera)
 			v.rotate(-viewportGame.getRotationUpXY());
-
+		
 		// During battle mode, do not apply any friction or acceleration as
 		// maximum responsiveness is needed to dodge bullets.
 		if (battleModeActive) {
@@ -108,9 +110,9 @@ public class InputDesktopSystem extends IteratingSystem {
 			vc.x = (vc.x + f * v.x) * ic.frictionFactor;
 			vc.y = (vc.y + f * v.y) * ic.frictionFactor;
 			if (v.x * v.y != 0.0f)
-				dc.degree = 630.0f - w.set(vc.x, vc.y).angle() + viewportGame.getRotationUpXY();
+				dc.degree = 630.0f - w.set(vc.x, vc.y).angle();// + viewportGame.getRotationUpXY();
 		}
-
+		
 		// Make random generator a bit more unpredictable.
 		if (v.x * v.y > 0.0f)
 			MathUtils.random.nextInt();

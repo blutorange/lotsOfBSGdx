@@ -71,6 +71,7 @@ public final class ResourcePool {
 		animationModeTransitionPool.free(amt);
 	}
 
+
 	//===============================
 	//        Particle Effect
 	//===============================

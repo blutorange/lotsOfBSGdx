@@ -3,6 +3,7 @@
  <objecttype name="NPC" color="#55ff00">
   <property name="animation" type="string"/>
   <property name="animationList" type="string"/>
+  <property name="debug" type="bool"/>
   <property name="guid" type="string"/>
   <property name="initDir" type="float"/>
   <property name="initX" type="float"/>
@@ -13,6 +14,7 @@
  <objecttype name="Enemy" color="#ff0000">
   <property name="battleIn" type="float" default="35"/>
   <property name="battleOut" type="float" default="45"/>
+  <property name="debug" type="bool"/>
   <property name="guid" type="string"/>
   <property name="initDir" type="float"/>
   <property name="initX" type="float"/>
@@ -21,6 +23,7 @@
   <property name="species" type="string"/>
  </objecttype>
  <objecttype name="Callback" color="#ffff00">
+  <property name="debug" type="bool"/>
   <property name="guid" type="string"/>
   <property name="interval" type="float"/>
   <property name="loop" type="int"/>
@@ -32,6 +35,7 @@
   <property name="axisY" type="float" default="1"/>
   <property name="axisZ" type="float"/>
   <property name="category" type="string"/>
+  <property name="debug" type="bool"/>
   <property name="guid" type="string"/>
   <property name="name" type="string"/>
   <property name="speed" type="float" default="45"/>

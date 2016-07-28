@@ -57,7 +57,6 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcepool.EParticleEffect;
 import de.homelab.madgaksha.lotsofbs.resourcepool.ResourcePool;
 import de.homelab.madgaksha.lotsofbs.util.GeoUtil;
-import javafx.geometry.Pos;
 
 public final class MakerUtils {
 	@SuppressWarnings("unused")
@@ -221,8 +220,7 @@ public final class MakerUtils {
 		final Entity myCamera = new Entity();
 		final Family familyFocusPoints = makeFocusPointsFamily();
 
-		final ManyTrackingComponent mtc = new ManyTrackingComponent(level.getMapXW(), level.getMapYW(),
-				level.getMapWidthW(), level.getMapHeightW());
+		final ManyTrackingComponent mtc = new ManyTrackingComponent();
 		mtc.minimumElevation = level.getMapData().getMinimumCameraElevation();
 		mtc.maximumElevation = level.getMapData().getMaximumCameraElevation();
 		mtc.focusPoints = gameEntityEngine.getEntitiesFor(familyFocusPoints);

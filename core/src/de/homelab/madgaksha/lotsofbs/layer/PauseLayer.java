@@ -46,7 +46,7 @@ public class PauseLayer extends ALayer {
 
 	public PauseLayer(boolean blockUpdate) throws IOException {
 		this.blockUpdate = blockUpdate;
-		background = ResourceCache.getNinePatch(ENinePatch.PAUSE_LAYER_OVERLAY);
+		background = ResourceCache.getNinePatch(ENinePatch.WHITE_RECTANGLE);
 		if (background == null)
 			throw new IOException("failed to load resources");
 		background.setColor(new Color(0.0f, 0.0f, 0.0f, 0.5f));

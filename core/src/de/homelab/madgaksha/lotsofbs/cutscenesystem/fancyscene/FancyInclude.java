@@ -62,7 +62,7 @@ public class FancyInclude extends AFancyEvent {
 	@Override
 	public void update(float currentTime) {
 		if (lastTime != currentTime)
-			scene.update(parent.getDeltaTime(), parent.isSpedup());
+			scene.update(currentTime-lastTime, parent.isSpedup());
 		lastTime = currentTime;
 	}
 

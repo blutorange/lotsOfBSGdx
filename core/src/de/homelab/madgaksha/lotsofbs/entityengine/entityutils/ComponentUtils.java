@@ -261,18 +261,22 @@ public final class ComponentUtils {
 		transitionToSpriteMode(e, targetMode, true, true);
 	}
 
-	public static void cycleConeDistributionForward(ConeDistributionComponent cdc) {
+	public static boolean cycleConeDistributionForward(ConeDistributionComponent cdc) {
 		if (cdc != null) {	
 			cdc.apexPoint = (cdc.apexPoint + 1) % cdc.distributionPoints.size();
 			if (cdc.apexPoint == 0)	cdc.degrees += 360f / ((float) cdc.distributionPoints.size() - 1f);
+			return cdc.distributionPoints.size() > 1;
 		}		
+		return false;
 	}
 	
-	public static void cycleConeDistributionBackward(ConeDistributionComponent cdc) {
+	public static boolean cycleConeDistributionBackward(ConeDistributionComponent cdc) {
 		if (cdc != null) {	
 			if (cdc.apexPoint == 0)	cdc.degrees -= 360f / ((float) cdc.distributionPoints.size() - 1f);
 			cdc.apexPoint = (cdc.apexPoint - 1) % cdc.distributionPoints.size();
+			return cdc.distributionPoints.size() > 1;
 		}		
+		return false;
 	}
 	
 	public static Entity removeActiveItemFromConeDistribution(ConeDistributionComponent cdc) {

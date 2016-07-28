@@ -40,7 +40,7 @@ Sprite R 0.050 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_KNEEL0
 // Jump
 Sound  A 1.4   General JUMP1
 Sprite R 0.200 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_RUN5
-Move   R 0.600 Estelle Line 0.450 =pow2Out= R 0.0 14.0
+Move   A 1.400 Estelle Line 0.450 =pow2Out= R 0.0 14.0
 
 // Dust animation for jumping
 Peffect  A 0.000 Dust 50.0  OUGI_OUKA_MUSOUGEKI_JUMP_DUST

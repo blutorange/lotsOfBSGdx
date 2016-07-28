@@ -27,6 +27,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 
+import de.homelab.madgaksha.lotsofbs.DebugMode;
 import de.homelab.madgaksha.lotsofbs.GlobalBag;
 import de.homelab.madgaksha.lotsofbs.entityengine.ETrigger;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.IdComponent;
@@ -416,7 +417,12 @@ public class MapData {
 		// Read properties
 		MapProperties props = mapObject.getProperties();
 		if (props == null) {
-			LOG.error("object does not specify map properties");
+			LOG.error("object does not specify map properties: " + mapObject.getName());
+			return;
+		}
+		
+		if (isDebugObject(props)) {
+			LOG.debug("skipping map item as it is marked debug-only: " + mapObject.getName());
 			return;
 		}
 
@@ -424,7 +430,7 @@ public class MapData {
 		Entity entity = createEntityForMapObject(mapObject, props, shape);
 		// Unknown or invalid object.
 		if (entity == null) {
-			LOG.error("failed to read object");
+			LOG.error("failed to read object: " + mapObject.getName());
 			return;
 		}
 
@@ -441,7 +447,7 @@ public class MapData {
 		Entity entity = null;
 		try {
 			if (!props.containsKey("type")) {
-				LOG.error("no type has been set for map object");
+				LOG.error("no type has been set for map object: " + mapObject.getName());
 			} else {
 				String type = String.valueOf(props.get("type"));
 				type = type.toLowerCase(Locale.ROOT);
@@ -460,7 +466,7 @@ public class MapData {
 				}
 			}
 		} catch (Exception e) {
-			LOG.error("failed to read map object: " + mapObject, e);
+			LOG.error("failed to read map object: " + mapObject.getName(), e);
 		}
 		return entity;
 	}
@@ -871,4 +877,8 @@ public class MapData {
 		return o == null ? defaultValue : Boolean.valueOf(String.valueOf(o));
 	}
 
+	@SuppressWarnings("unused")
+	private boolean isDebugObject(MapProperties props) {
+		return !DebugMode.activated && props.containsKey("debug") && Boolean.valueOf(String.valueOf(props.get("debug")));
+	}
 }

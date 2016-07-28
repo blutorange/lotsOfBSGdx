@@ -15,6 +15,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
  *
  */
 public enum ETiledMap implements IResource<ETiledMap, TiledMap> {
+	LEVEL_MOCK("map/LevelMock.tmx", Type.TMX),
 	LEVEL_01("map/Level01.tmx", Type.TMX);
 
 	private static enum Type {

@@ -49,18 +49,17 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 	private SoldierGreenMaker() {
 		super();
 		linearMotionTrajectory = new LinearMotionTrajectory();
-		linearMotionTrajectory.life(10.0f);
+		linearMotionTrajectory.life(13.0f);
 		linearMotionTrajectory.angularSpeed(540.0f);
 
 		fadeInAimTrajectory = new FadeInAimTrajectory();
 		fadeInAimTrajectory.timeFadeIn(0.1f);
-		fadeInAimTrajectory.life(8.5f);
+		fadeInAimTrajectory.life(15f);
 		fadeInAimTrajectory.velocityAim(250.0f);
 		fadeInAimTrajectory.soundOnFire(ESound.ENEMY_SPAWN_FLASH);
 		fadeInAimTrajectory.voicePlayer(new VoicePlayer());
 		fadeInAimTrajectory.waveAmplitude(50f);
 		fadeInAimTrajectory.waveFrequency(0.273f);
-
 	}
 
 	@SuppressWarnings("unchecked")
@@ -117,15 +116,15 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 	@Override
 	protected IBehaving getBehaviour(MapProperties props) {
 		return new IBehaving() {
-			private Vector2 v = new Vector2(350.0f, 0.0f);
-			private Vector2 w = new Vector2();
+			private Vector2 v = new Vector2(250.0f, 0.0f);
+			private Vector2 w = new Vector2(250.0f, 0.0f);
 			private BulletShapeMaker[] shapes = new BulletShapeMaker[] { BulletShapeMaker.FLOWER_BLUE,
 					BulletShapeMaker.FLOWER_CYAN, BulletShapeMaker.FLOWER_GREEN, BulletShapeMaker.FLOWER_PINK,
 					BulletShapeMaker.FLOWER_RED, BulletShapeMaker.FLOWER_WHITE, BulletShapeMaker.FLOWER_YELLOW };
 			private final BulletShapeMaker[] shapes2 = new BulletShapeMaker[] { BulletShapeMaker.PACMAN_BLUE,
 					BulletShapeMaker.PACMAN_GREEN, BulletShapeMaker.PACMAN_ORANGE, BulletShapeMaker.PACMAN_RED,
 					BulletShapeMaker.PACMAN_PINK, BulletShapeMaker.PACMAN_YELLOW, BulletShapeMaker.PACMAN_BLACK, };
-
+			
 			@Override
 			public boolean behave(Entity enemy) {
 				final PositionComponent pcEnemy = Mapper.positionComponent.get(enemy);
@@ -133,27 +132,29 @@ public class SoldierGreenMaker extends NormalEnemyMaker {
 				if (tc.totalTime > 2.5f) {
 					voicePlayer.play(ESound.ENEMY_DIE_EXPLOSION);
 					final PositionComponent pcPlayer = Mapper.positionComponent.get(GlobalBag.playerEntity);
-					float angle = w.set(pcPlayer.x, pcPlayer.y).sub(pcEnemy.x, pcEnemy.y).angle();
+					float angle = v.set(pcPlayer.x, pcPlayer.y).sub(pcEnemy.x, pcEnemy.y).angle();
 					tc.totalTime = 0.0f;
 					linearMotionTrajectory.position(pcEnemy.x, pcEnemy.y);
-					for (int i = 0; i != 60; ++i) {
-						v.set(250.0f, 0.0f).rotate(angle - 80.0f + 160.0f * i / 39.0f);
+					for (int i = 0; i != 40; ++i) {
+						v.set(250.0f, 0.0f).rotate(angle - 80.0f + 160.0f * i / 40.0f);
 						linearMotionTrajectory.velocity(v.x, v.y);
 						BulletMaker.makeForEnemy(enemy, shapes[MathUtils.random(shapes.length - 1)],
 								linearMotionTrajectory, 23000000L);
 					}
 				}
-				for (int i = 0; i != 4; ++i) {
-					v.set(250.0f, 0.0f).rotate(MathUtils.random(0.0f, 360.0f));
-					linearMotionTrajectory.velocity(v.x, v.y);
+//				for (int i = 0; i != 4; ++i) {
+					w.rotate(MathUtils.random(5.0f, 10.0f));
+					linearMotionTrajectory.velocity(w.x, w.y);
 					BulletMaker.makeForEnemy(enemy, BulletShapeMaker.FLOWER_BLACK, linearMotionTrajectory, 7000000L);
 
-					fadeInAimTrajectory.waveAmplitude(45.0f);
-					fadeInAimTrajectory.position(pcEnemy.x, pcEnemy.y);
-					fadeInAimTrajectory.aim(playerEntity);
-					BulletMaker.makeForEnemy(enemy, shapes2[MathUtils.random(shapes2.length - 1)], fadeInAimTrajectory,
-							500000L);
-				}
+					if (tc.totalTime < 1.5f) {
+						fadeInAimTrajectory.waveAmplitude(45.0f);
+						fadeInAimTrajectory.position(pcEnemy.x, pcEnemy.y);
+						fadeInAimTrajectory.aim(playerEntity);
+						BulletMaker.makeForEnemy(enemy, shapes2[MathUtils.random(shapes2.length - 1)], fadeInAimTrajectory,
+								500000L);
+					}
+//				}
 				return true;
 			}
 		};

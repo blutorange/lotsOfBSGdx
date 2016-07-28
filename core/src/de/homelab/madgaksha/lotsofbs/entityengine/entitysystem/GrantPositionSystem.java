@@ -39,10 +39,7 @@ public class GrantPositionSystem extends DisableIteratingSystem {
 			pc.offsetZ = spc.grantStrategy.compromise(pc.offsetZ, spc.offsetZ, deltaTime);
 		}
 		if (spc.removeOnFulfill)
-			if (spc.x == pc.x && spc.y == pc.y && spc.z == pc.z) {
+			if (spc.x == pc.x && spc.y == pc.y && spc.z == pc.z)
 				entity.remove(ShouldPositionComponent.class);
-				System.out.println("remove " + entity);
-			}
 	}
-
 }

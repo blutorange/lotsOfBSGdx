@@ -176,7 +176,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 		cqc.remove.add(BoundingBoxCollisionComponent.class);
 		cqc.remove.add(InactiveComponent.class);
 		cqc.remove.add(InvisibleComponent.class);
-		cqc.remove.add(tc.getClass());
+		if (tc != null) cqc.remove.add(tc.getClass());
 		cqc.remove.add(PositionComponent.class);
 
 		// Add components to entity.

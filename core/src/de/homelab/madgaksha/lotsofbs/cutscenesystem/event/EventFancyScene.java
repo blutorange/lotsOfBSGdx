@@ -22,11 +22,13 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.sun.media.sound.InvalidDataException;
 
+import de.homelab.madgaksha.lotsofbs.Game;
 import de.homelab.madgaksha.lotsofbs.bettersprite.AtlasAnimation;
 import de.homelab.madgaksha.lotsofbs.bettersprite.CroppableAtlasSprite;
 import de.homelab.madgaksha.lotsofbs.bettersprite.drawable.ADrawable;
@@ -212,11 +214,29 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 		batchPixel.end();
 	}
 
+	/**
+	 * Renders to the given batch on which {@link Batch#begin()} should have been
+	 * called, applying shaking as well via batch transforms.
+	 * This is used by the {@link de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.MyFancySceneEditor}.
+	 * @param batch Batch to draw with. {@link Batch#begin()} should have been called.
+	 */
+	private Matrix4 oldTransform;
+	public void render(Batch batch) {
+		if (oldTransform == null) {
+			oldTransform = new Matrix4();
+		}
+		oldTransform.set(batch.getTransformMatrix());
+		batch.setTransformMatrix(batch.getTransformMatrix().translate(shake.x*Game.VIEWPORT_GAME_AR_NUM, shake.y*Game.VIEWPORT_GAME_AR_DEN, shake.z));
+		renderMain(batch);
+		batch.setTransformMatrix(oldTransform);
+	}
+	
 	public void renderMain(Batch batch) {
 		for (AFancyEvent fe : activeList)
 			fe.render(batch);
 	}
 
+	//TODO need to remove events that have ended in the corrected order, depending on their end time
 	@Override
 	public void update(float deltaTime, boolean isSpedup) {
 		this.deltaTime = deltaTime;
@@ -485,5 +505,9 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 
 	public boolean isSpedup() {
 		return isSpedup;
+	}
+	
+	public float getStateTime() {
+		return totalTime; 
 	}
 }

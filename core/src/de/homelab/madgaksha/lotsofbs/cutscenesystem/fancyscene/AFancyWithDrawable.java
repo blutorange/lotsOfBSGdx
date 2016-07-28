@@ -75,4 +75,8 @@ public abstract class AFancyWithDrawable extends AFancyEvent {
 
 	protected abstract void resetSubclass();
 	protected abstract boolean beginSubclass(EventFancyScene scene);
+	
+	public String getKey() {
+		return key;
+	}
 }
