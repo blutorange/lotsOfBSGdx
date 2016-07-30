@@ -72,7 +72,7 @@ public class WeaponMulti extends AWeapon {
 			final PositionComponent pcEnemy = Mapper.positionComponent.get(enemy);
 			final PositionComponent pcPlayer = Mapper.positionComponent.get(player);
 			float deltaSpread = (BULLET_FORWARD_SPREAD_MAX - BULLET_FORWARD_SPREAD_MIN)
-					/ (float) (BULLET_FORWARD_SPREAD_COUNT - 1);
+					/ (BULLET_FORWARD_SPREAD_COUNT - 1);
 
 			v.set(pcEnemy.x - pcPlayer.x, pcEnemy.y - pcPlayer.y).nor().scl(BULLET_SPEED);
 

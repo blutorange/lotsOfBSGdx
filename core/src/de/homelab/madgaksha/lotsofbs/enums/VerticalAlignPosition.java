@@ -36,7 +36,7 @@ public enum VerticalAlignPosition {
 		if (lineCount < 1)
 			throw new IllegalArgumentException("lineCount cannot be smaller than 1");
 		float posY = box.y + box.height
-				- 0.5f * ((box.height - lineSpacing * (((float) lineCount) - 1.0f)) / (float) lineCount);
+				- 0.5f * ((box.height - lineSpacing * ((lineCount) - 1.0f)) / lineCount);
 		switch (this) {
 		case BETWEEN_BASE_LINE_AND_CAP_HEIGHT:
 			posY += 0.5f * font.getCapHeight();

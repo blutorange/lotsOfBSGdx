@@ -47,7 +47,7 @@ public class ShadowComponent implements Component, Poolable {
 	}
 
 	public ShadowComponent(CroppableAtlasSprite sprite, float offsetX, float offsetY) {
-		setup(sprite, offsetX, offsetRotateY);
+		setup(sprite, offsetX, offsetY);
 	}
 
 	public ShadowComponent(ETexture texture, float offsetX, float offsetY, float scaleFactorX, float scaleFactorY) {

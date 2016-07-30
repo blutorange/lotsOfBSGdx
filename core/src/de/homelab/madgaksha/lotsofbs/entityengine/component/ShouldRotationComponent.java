@@ -28,6 +28,7 @@ public class ShouldRotationComponent extends RotationComponent implements Compon
 		grantStrategy = gs;
 	}
 
+	@Override
 	public void reset() {
 		super.reset();
 		grantStrategy = DEFAULT_GRANT_STRATEGY;

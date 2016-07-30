@@ -265,6 +265,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 			setIcon(icon);
 		}
 
+		@Override
 		public void setIcon(Icon icon) {
 			super.setIcon(icon);
 			if (icon instanceof ImageIcon) {

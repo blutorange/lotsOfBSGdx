@@ -90,6 +90,7 @@ public abstract class AFancyEvent implements Poolable, Serializable {
 	}
 	
 	public AFancyEvent(boolean setPriority) {
+		if (!setPriority) return;
 		try {
 			Priority p = Priority.valueOf(getClass().getSimpleName());
 			this.priority = p.getPriority();
@@ -142,6 +143,10 @@ public abstract class AFancyEvent implements Poolable, Serializable {
 	 */
 	public abstract void end();
 
+	/**
+	 * @param w The new width.
+	 * @param h The new height.
+	 */
 	public void resize(int w, int h) {
 	}
 
@@ -231,7 +236,6 @@ public abstract class AFancyEvent implements Poolable, Serializable {
 			LOG.error("fancy event " + type + " without static method readNextObject that returns a fancy event");
 			return null;
 		}
-		;
 
 		try {
 			return (AFancyEvent) method.invoke(null, scanner, parentFile);

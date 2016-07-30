@@ -28,6 +28,7 @@ public class ShouldScaleComponent extends ScaleComponent implements Component, P
 		grantStrategy = gs;
 	}
 
+	@Override
 	public void reset() {
 		super.reset();
 		grantStrategy = DEFAULT_GRANT_STRATEGY;

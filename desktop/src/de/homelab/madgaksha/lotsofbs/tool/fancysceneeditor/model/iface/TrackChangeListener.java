@@ -18,4 +18,6 @@ public interface TrackChangeListener {
 		/** Issued when the end time has actually changed. */
 		END_TIME,
 	}
+	public static interface TrackChangeListenable extends ChangeListenable<TrackChangeType, TrackChangeListener> {
+	}
 }

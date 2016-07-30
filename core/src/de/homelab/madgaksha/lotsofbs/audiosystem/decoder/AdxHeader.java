@@ -107,7 +107,7 @@ public class AdxHeader implements Serializable {
 		sampleRate = (int) MoreMathUtils.signedToUnsigned(dis.readInt());
 		totalSamples = (int) MoreMathUtils.signedToUnsigned(dis.readInt()); // per
 																			// channel!!
-		highPassFrequency = (int) dis.readShort();
+		highPassFrequency = dis.readShort();
 		version = Version.getType(MoreMathUtils.signedToUnsigned(dis.readByte()));
 		final int flags = MoreMathUtils.signedToUnsigned(dis.readByte());
 

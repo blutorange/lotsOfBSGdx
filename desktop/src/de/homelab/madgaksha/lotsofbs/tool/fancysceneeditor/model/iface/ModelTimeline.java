@@ -2,11 +2,14 @@ package de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface;
 
 import java.util.Iterator;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ClipChangeListener.ClipChangeType;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener.TimelineChangeListenable;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener.TimelineChangeType;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TrackChangeListener.TrackChangeType;
 
-public interface ModelTimeline extends Iterable<ModelTrack> {
+public interface ModelTimeline extends Iterable<ModelTrack>, TimelineChangeListenable, LifeSpanTeller {
 
 	/**
 	 * Zoom factor in time-direction.
@@ -15,14 +18,12 @@ public interface ModelTimeline extends Iterable<ModelTrack> {
 	public float getPixelPerSecond();
 
 	/**
-	 * @return The position at which the timeline starts, in seconds. Must not be greater than the end time.
-	 */
-	public float getStartTime();
-	
-	/**
 	 * @return The current position on the timeline in seconds. Must be between the start and end time.
 	 */
 	public float getCurrentTime();
+	default int getCurrentFrame() {
+		return MathUtils.round(getCurrentTime() / getDeltaTime());
+	}
 	
 	/**
 	 * Precautions should be taken such that {@link #getStartTime()} time will not be greater than {@link #getEndTime()},
@@ -59,9 +60,6 @@ public interface ModelTimeline extends Iterable<ModelTrack> {
 	 */
 	public void setEndTime(float endTime);
 	
-	/** @return The position at which the timeline ends, in seconds. Must not be smaller than the start time. */
-	public float getEndTime();
-
 	/**
 	 * @return An iterator for the tracks this model contains.
 	 */
@@ -88,10 +86,16 @@ public interface ModelTimeline extends Iterable<ModelTrack> {
 	 */
 	public ModelTrack newTrack(float startTime, float endTime, String label);
 	
-	public void registerChangeListener(TimelineChangeType type, TimelineChangeListener listener);
 	public void registerChangeListener(TrackChangeType type, TrackChangeListener listener);
 	public void registerChangeListener(ClipChangeType type, ClipChangeListener listener);
+	default void registerChangeListener(TrackChangeListener listener, TrackChangeType... typeList) {
+		for (TrackChangeType type : typeList) registerChangeListener(type, listener);
+	}
+	default void registerChangeListener(ClipChangeListener listener, ClipChangeType... typeList) {
+		for (ClipChangeType type : typeList) registerChangeListener(type, listener);
+	}
 
+	
 	/**
 	 * Must not be less or equal to 0. Can be used for frame stepping etc.
 	 * @return Inverse of the frame rate of this timeline in seconds.
@@ -115,6 +119,8 @@ public interface ModelTimeline extends Iterable<ModelTrack> {
 
 	/** @return The currently selected details panel, or null when none is selected. */
 	public DetailsPanel getSelected();
-	public boolean hasSelected();
+	default boolean hasSelected() {
+		return getSelected() != null;
+	}
 	
 }

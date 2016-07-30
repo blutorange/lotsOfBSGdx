@@ -49,6 +49,7 @@ public class ShouldPositionComponent extends PositionComponent implements Compon
 		this.removeOnFulfill = removeOnFullfill;
 	}
 
+	@Override
 	public void reset() {
 		super.reset();
 		grantStrategy = DEFAULT_GRANT_STRATEGY;

@@ -46,7 +46,8 @@ public class MyPoolableSpriteTester implements ApplicationListener {
 		config.height = 480;
 		config.fullscreen = false;
 		config.backgroundFPS = config.foregroundFPS = 30;
-		new LwjglApplication(checker, config);
+		@SuppressWarnings("unused")
+		LwjglApplication lwjglApplication = new LwjglApplication(checker, config);
 	}
 
 	private MyPoolableSpriteTester(Test... testList) {

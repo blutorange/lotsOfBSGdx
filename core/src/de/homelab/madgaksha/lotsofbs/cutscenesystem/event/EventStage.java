@@ -200,6 +200,10 @@ public class EventStage extends ACutsceneEvent {
 		public abstract void setup(Scanner s, EventStage e);
 	}
 
+	/**
+	 * @param s Scanner from which to read.
+	 * @param fh The file handle of the file being used. Should be used only for directories.
+	 */
 	public static ACutsceneEvent readNextObject(Scanner s, FileHandle fh) {
 		// Read entity name
 		String guid = FileCutsceneProvider.readNextGuid(s);

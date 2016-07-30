@@ -57,21 +57,21 @@ public final class ResourceCache {
 	private static Object getResource(IResource<? extends Enum<?>, ?> res, boolean cached) {
 		if (res == null)
 			return null;
+		final Object r;
 		if (cached && res.getMap().containsKey(res)) {
 			// Fetch from cache.
-			return res.getMap().get(res);
+			r = res.getMap().get(res);
 		} else {
 			// Load the object from disk.
 			if (res.getMap().size() > res.getLimit()) {
 				LOG.error("limit reached for resource type " + String.valueOf(res.getEnum().getClass()));
 				LOG.error("@level designer: please check");
-//				res.clearAllOfThisKind();
 			}
-			final Object r = res.getObject();
+			r = res.getObject();
 			if (r != null && cached)
 				res.getMap().put(res.getEnum(), r);
-			return r;
 		}
+		return r;
 	}
 
 	/**

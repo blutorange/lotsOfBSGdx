@@ -870,24 +870,28 @@ public class CroppableSprite extends TextureRegion {
 		dirty = dirty || cropped;
 	}
 
+	@Override
 	public void setU(float u) {
 		super.setU(u);
 		vertices[U1] = u;
 		vertices[U2] = u;
 	}
 
+	@Override
 	public void setV(float v) {
 		super.setV(v);
 		vertices[V2] = v;
 		vertices[V3] = v;
 	}
 
+	@Override
 	public void setU2(float u2) {
 		super.setU2(u2);
 		vertices[U3] = u2;
 		vertices[U4] = u2;
 	}
 
+	@Override
 	public void setV2(float v2) {
 		super.setV2(v2);
 		vertices[V1] = v2;
@@ -922,6 +926,7 @@ public class CroppableSprite extends TextureRegion {
 	 * @param y
 	 *            perform vertical flip
 	 */
+	@Override
 	public void flip(boolean x, boolean y) {
 		super.flip(x, y);
 		float[] vertices = CroppableSprite.this.vertices;

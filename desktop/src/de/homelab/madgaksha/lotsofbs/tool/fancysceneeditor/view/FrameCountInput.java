@@ -9,6 +9,7 @@ import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelTime
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProvider;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener.TimelineChangeType;
+import de.homelab.madgaksha.scene2dext.widget.NumericInput;
 
 public class FrameCountInput extends NumericInput {
 	@SuppressWarnings("unused")
@@ -27,7 +28,7 @@ public class FrameCountInput extends NumericInput {
 		setFormat("%.0f");
 		setMinMax(0f, (int)(timelineProvider.getTimeline().getEndTime() / timelineProvider.getTimeline().getDeltaTime()));
 		setQuantizer(1);
-		addListener(new NumericInputChangeListener() {
+		addListener(new NumericInputListener() {
 			@Override
 			protected void changed(float frameCount, Actor actor) {
 				if (!setTimeDisabled) timelineProvider.getTimeline().setCurrentTime(timelineProvider.getTimeline().getDeltaTime()*frameCount);

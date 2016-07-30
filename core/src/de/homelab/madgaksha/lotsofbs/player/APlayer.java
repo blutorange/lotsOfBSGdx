@@ -331,7 +331,7 @@ public abstract class APlayer {
 	 */
 	protected EParticleEffect requestedParticleEffectOnDeath() {
 		return EParticleEffect.DEFAULT_PLAYER_DEATH;
-	};
+	}
 
 	/**
 	 * Must return a list of all resources that the level requires. They will
@@ -687,5 +687,9 @@ public abstract class APlayer {
 		final APlayer you = (APlayer) object;
 		return you.getClass().equals(getClass());
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
 }

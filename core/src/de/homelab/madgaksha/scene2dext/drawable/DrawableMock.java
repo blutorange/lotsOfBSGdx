@@ -1,4 +1,4 @@
-package de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view;
+package de.homelab.madgaksha.scene2dext.drawable;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;

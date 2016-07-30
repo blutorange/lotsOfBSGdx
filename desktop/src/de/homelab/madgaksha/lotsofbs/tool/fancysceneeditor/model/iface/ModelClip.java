@@ -1,12 +1,9 @@
 package de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface;
 
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ClipChangeListener.ClipChangeListenable;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ClipChangeListener.ClipChangeType;
 
-public interface ModelClip {
-	public float getStartTime();
-
-	public float getEndTime();
-
+public interface ModelClip extends CustomDataHolder, ClipChangeListenable, LifeSpanTeller {
 	public CharSequence getLabel();
 
 	/**

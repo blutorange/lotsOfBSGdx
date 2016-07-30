@@ -2,7 +2,7 @@ package de.homelab.madgaksha.lotsofbs.util;
 
 public final class MoreMathUtils {
 	private MoreMathUtils() {
-	};
+	}
 
 	public static int signedToUnsigned(final byte b) {
 		return b < 0 ? b + 256 : b;

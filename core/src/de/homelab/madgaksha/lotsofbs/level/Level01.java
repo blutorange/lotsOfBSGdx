@@ -18,7 +18,7 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.EMusic;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ETexture;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ETiledMap;
-import de.homelab.madgaksha.lotsofbs.resourcecache.IResource;;
+import de.homelab.madgaksha.lotsofbs.resourcecache.IResource;
 
 /**
  * Only for testing purposes.
@@ -133,6 +133,7 @@ public class Level01 extends ALevel {
 	// Callback methods
 	// =========================
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void initialDialog(MapProperties properties) {
 		if (!DebugMode.activated)
 			pushCutsceneLayer("cutscene/level01.initialDialog");
@@ -150,27 +151,33 @@ public class Level01 extends ALevel {
 		}
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void joshuaAppears(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.joshuaAppears");
 		joshuaAppearsTriggered = true;
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void signKikiRight(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.signKikiRight");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void signRiverFloat(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.signRiverFloat");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void signPoisonFlower(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.signPoisonFlower");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void signIsekaiGate(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.signIsekaiGate");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void signDangerNorth(MapProperties properties) {
 		++counterDangerNorth;
 		if (counterDangerNorth == 1)
@@ -179,27 +186,33 @@ public class Level01 extends ALevel {
 			pushCutsceneLayer("cutscene/level01.signDangerNorth2");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void monologueForSign(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.monologueForSign");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void turnBackJoshua(MapProperties properties) {
 		if (!joshuaAppearsTriggered)
 			pushCutsceneLayer("cutscene/level01.turnBackJoshua");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void investigateTent(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.investigateTent");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void weaponTutorial(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.weaponTutorial");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void ourAmbush(MapProperties properties) {
 		pushCutsceneLayer("cutscene/level01.ourAmbush");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void demoEnd(MapProperties properties) {
 		if (GlobalBag.enemyKillCount >= 35)
 			pushCutsceneLayer("cutscene/level01.demoEnd");
@@ -207,6 +220,7 @@ public class Level01 extends ALevel {
 			pushCutsceneLayer("cutscene/level01.demoNotEnd");
 	}
 
+	/** @param properties Map properties, can be used for setting options on the map. Must check for sanity */
 	public void changeBattleBgm(MapProperties properties) {
 		switchBattleBgm(EMusic.SILVER_WILL);
 	}

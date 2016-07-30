@@ -4,12 +4,12 @@ import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ClipChang
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener.TimelineChangeType;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TrackChangeListener.TrackChangeType;
 
-public interface ModelTrack extends Iterable<ModelClip> {
+public interface ModelTrack extends Iterable<ModelClip>, LifeSpanTeller {
 
 	/**
 	 * @return The name of this track. This is displayed to the left of the timeline.
 	 */
-	public CharSequence getLabel();
+	public String getLabel();
 
 	/**
 	 * Creates a new empty clip and adds it to this track.
@@ -27,11 +27,6 @@ public interface ModelTrack extends Iterable<ModelClip> {
 	public void sortByStartTime(boolean ascending);
 	public void sortByEndTime(boolean ascending);
 	
-	/** @return The start time. Must not be greater than the end time. */
-	public float getStartTime();
-	/** @return The end time. Must not be less than the start time. */
-	public float getEndTime();
-
 	/**
 	 * Precautions should be taken such that the start time will not be greater than the end time,
 	 * and not smaller than 0.

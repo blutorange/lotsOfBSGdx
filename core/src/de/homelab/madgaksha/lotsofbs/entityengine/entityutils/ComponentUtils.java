@@ -198,16 +198,16 @@ public final class ComponentUtils {
 	public static void scaleBoundingBoxRenderOfEntityBy(Entity e, float initialScaleX, float initialScaleY) {
 		ABoundingBoxComponent bbrc = Mapper.boundingBoxRenderComponent.get(e);
 		if (bbrc != null)
-			scaleBoundingBoxOfEntityBy(bbrc, e, initialScaleX, initialScaleY);
+			scaleBoundingBoxOfEntityBy(bbrc, initialScaleX, initialScaleY);
 	}
 
 	public static void scaleBoundingBoxCollisionOfEntityBy(Entity e, float initialScaleX, float initialScaleY) {
 		ABoundingBoxComponent bbcc = Mapper.boundingBoxCollisionComponent.get(e);
 		if (bbcc != null)
-			scaleBoundingBoxOfEntityBy(bbcc, e, initialScaleX, initialScaleY);
+			scaleBoundingBoxOfEntityBy(bbcc, initialScaleX, initialScaleY);
 	}
 
-	public static void scaleBoundingBoxOfEntityBy(ABoundingBoxComponent bbc, Entity e, float initialScaleX,
+	public static void scaleBoundingBoxOfEntityBy(ABoundingBoxComponent bbc, float initialScaleX,
 			float initialScaleY) {
 		float cx = 0.5f * (bbc.maxX + bbc.minX);
 		float cy = 0.5f * (bbc.maxY + bbc.minY);
@@ -264,7 +264,7 @@ public final class ComponentUtils {
 	public static boolean cycleConeDistributionForward(ConeDistributionComponent cdc) {
 		if (cdc != null) {	
 			cdc.apexPoint = (cdc.apexPoint + 1) % cdc.distributionPoints.size();
-			if (cdc.apexPoint == 0)	cdc.degrees += 360f / ((float) cdc.distributionPoints.size() - 1f);
+			if (cdc.apexPoint == 0)	cdc.degrees += 360f / (cdc.distributionPoints.size() - 1f);
 			return cdc.distributionPoints.size() > 1;
 		}		
 		return false;
@@ -272,7 +272,7 @@ public final class ComponentUtils {
 	
 	public static boolean cycleConeDistributionBackward(ConeDistributionComponent cdc) {
 		if (cdc != null) {	
-			if (cdc.apexPoint == 0)	cdc.degrees -= 360f / ((float) cdc.distributionPoints.size() - 1f);
+			if (cdc.apexPoint == 0)	cdc.degrees -= 360f / (cdc.distributionPoints.size() - 1f);
 			cdc.apexPoint = (cdc.apexPoint - 1) % cdc.distributionPoints.size();
 			return cdc.distributionPoints.size() > 1;
 		}		

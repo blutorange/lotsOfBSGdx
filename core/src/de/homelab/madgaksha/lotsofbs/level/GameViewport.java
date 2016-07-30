@@ -151,7 +151,7 @@ public class GameViewport extends Viewport {
 			gameWidth = screenHeight * Game.VIEWPORT_GAME_AR_NUM / Game.VIEWPORT_GAME_AR_DEN;
 			// Allocate enough space to the right of the game window.
 			if (gameWidth > (1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * screenWidth) {
-				gameWidth = (int) ((1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * (float) screenWidth);
+				gameWidth = (int) ((1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * screenWidth);
 				gameHeight = gameWidth * Game.VIEWPORT_GAME_AR_DEN / Game.VIEWPORT_GAME_AR_NUM;
 			}
 		} else {
@@ -160,14 +160,14 @@ public class GameViewport extends Viewport {
 			gameHeight = gameWidth * Game.VIEWPORT_GAME_AR_DEN / Game.VIEWPORT_GAME_AR_NUM;
 			// Allocate enough space to the top of the game window.
 			if (gameHeight > (1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * screenHeight) {
-				gameHeight = (int) ((1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * (float) screenHeight);
+				gameHeight = (int) ((1.0f - Game.VIEWPORT_INFO_WIDTH_MIN_S) * screenHeight);
 				gameWidth = gameHeight * Game.VIEWPORT_GAME_AR_NUM / Game.VIEWPORT_GAME_AR_DEN;
 			}
 		}
 
 		// Floats can store ints exactly, unless too large
 		// which screen dimensions are not. Mantissa 23 bit.
-		return new Vector2((float) gameWidth, (float) gameHeight);
+		return new Vector2(gameWidth, gameHeight);
 	}
 
 	public PerspectiveCamera getPerspectiveCamera() {
@@ -204,6 +204,7 @@ public class GameViewport extends Viewport {
 		return angleDirXY;
 	}
 
+	@Override
 	public Vector2 project(Vector2 v) {
 		super.project(v);
 		v.x *= ratioScreenGameWidth;

@@ -57,6 +57,10 @@ public class EventScore extends ACutsceneEvent {
 	public void end() {
 	}
 
+	/**
+	 * @param s Scanner from which to read.
+	 * @param fh The file handle of the file being used. Should be used only for directories.
+	 */
 	public static ACutsceneEvent readNextObject(Scanner s, FileHandle fh) {
 		Long score = FileCutsceneProvider.nextLong(s);
 		if (score == null) {

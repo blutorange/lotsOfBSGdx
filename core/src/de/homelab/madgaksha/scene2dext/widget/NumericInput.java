@@ -1,4 +1,4 @@
-package de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view;
+package de.homelab.madgaksha.scene2dext.widget;
 
 import java.util.Locale;
 import java.util.Scanner;
@@ -12,12 +12,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
@@ -53,6 +54,7 @@ public class NumericInput extends TextField {
 	}
 
 	private final void init() {
+		setProgrammaticChangeEvents(false);
 		addListener(changeListener);
 		addListener(inputListener);
 		addListener(focusListener);
@@ -100,7 +102,7 @@ public class NumericInput extends TextField {
 		setText(formattedValue);
 		setColor(Color.WHITE);
 		if (hasChanged) {
-			fire(new NumericInputChangeEvent(value));
+			fire(new NumericInputEvent(value));
 		}
 	}
 
@@ -165,10 +167,12 @@ public class NumericInput extends TextField {
 	}
 
 	private final FocusListener focusListener = new FocusListener() {
+		@Override
 		public void scrollFocusChanged(FocusEvent event, Actor actor, boolean focused) {
 			refreshValue();
 		}
 
+		@Override
 		public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
 			refreshValue();
 		}
@@ -178,6 +182,7 @@ public class NumericInput extends TextField {
 		private final Vector2 touchStart = new Vector2();
 		private float touchStartValue;
 
+		@Override
 		public boolean keyDown(InputEvent event, int keycode) {
 			switch (keycode) {
 			case Keys.PLUS:
@@ -199,6 +204,7 @@ public class NumericInput extends TextField {
 			}
 		}
 
+		@Override
 		public boolean keyUp(InputEvent event, int keycode) {
 			switch (keycode) {
 			case Keys.PLUS:
@@ -216,6 +222,7 @@ public class NumericInput extends TextField {
 			}
 		}
 
+		@Override
 		public boolean scrolled(InputEvent event, float x, float y, int amount) {
 			if (Math.abs(amount) > dragThreshold) {
 				float amountFloat = amount < 0 ? amount + dragThreshold : amount - dragThreshold;
@@ -224,6 +231,7 @@ public class NumericInput extends TextField {
 			return true;
 		}
 
+		@Override
 		public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 			if (pointer > 0)
 				return false;
@@ -232,6 +240,7 @@ public class NumericInput extends TextField {
 			return true;
 		}
 
+		@Override
 		public void touchDragged(InputEvent event, float x, float y, int pointer) {
 			float amount = y - touchStart.y;
 			if (Math.abs(amount) > dragThreshold) {
@@ -275,22 +284,27 @@ public class NumericInput extends TextField {
 		}
 	};
 
-	public static abstract class NumericInputChangeListener extends ChangeListener {
+	public static abstract class NumericInputListener implements EventListener {
 		@Override
-		public void changed(ChangeEvent event, Actor actor) {
-			if (event instanceof NumericInputChangeEvent) {
-				changed(((NumericInputChangeEvent) event).value, actor);
-			}
+		public boolean handle (Event event) {
+			if (!(event instanceof NumericInputEvent)) return false;
+			changed(((NumericInputEvent)event).value, event.getTarget());
+			return false;
 		}
 
 		protected abstract void changed(float value, Actor actor);
 	}
 
-	public static class NumericInputChangeEvent extends ChangeEvent {
+	public static class NumericInputEvent extends Event {
 		public final float value;
 
-		public NumericInputChangeEvent(float value) {
+		public NumericInputEvent(float value) {
 			this.value = value;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return "NumericInput@" + oldValue;
 	}
 }

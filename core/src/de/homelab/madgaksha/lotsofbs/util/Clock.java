@@ -12,7 +12,7 @@ public class Clock {
 	private int h = 0;
 
 	public Clock() {
-	};
+	}
 
 	/**
 	 * Updates the clock.

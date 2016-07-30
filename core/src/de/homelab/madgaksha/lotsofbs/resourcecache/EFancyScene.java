@@ -25,8 +25,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
  */
 public enum EFancyScene implements IResource<EFancyScene, EventFancyScene> {
 	OUKA_MUSOUGEKI("cutscene/fancyScene/ougiOukaMusougeki/ougiOukaMusougeki.scene", false),
-	OUKA_MUSOUGEKI_BIN("cutscene/fancyScene/ougiOukaMusougeki/ougiOukaMusougeki.bin", true)
-	;
+	OUKA_MUSOUGEKI_BIN("cutscene/fancyScene/ougiOukaMusougeki/ougiOukaMusougeki.bin", true);
 
 	private final static Logger LOG = Logger.getLogger(EFancyScene.class);
 	private final static EnumMap<EFancyScene, EventFancyScene> fancySceneCache = new EnumMap<EFancyScene, EventFancyScene>(
@@ -34,7 +33,7 @@ public enum EFancyScene implements IResource<EFancyScene, EventFancyScene> {
 
 	private final String path;
 	private final boolean binary;
-	
+
 	private EFancyScene(String path, boolean isBinary) {
 		this.path = path;
 		this.binary = isBinary;
@@ -53,40 +52,35 @@ public enum EFancyScene implements IResource<EFancyScene, EventFancyScene> {
 
 	@Override
 	public EventFancyScene getObject() {
-			FileHandle inputFile = Gdx.files.internal(path);
-			if (binary) {
-				ObjectInputStream ois = null;
-				try {
-					InputStream is = inputFile.read();
-					ois = new ObjectInputStream(is);
-					Object scene = ois.readObject();
-					if (scene == null || !(scene instanceof EventFancyScene)) return null;
-					return (EventFancyScene) scene;
-				}
-				catch (Exception e) {
-					LOG.error("could not locate or open resource: " + String.valueOf(this), e);
+		FileHandle inputFile = Gdx.files.internal(path);
+		if (binary) {
+			ObjectInputStream ois = null;
+			try {
+				InputStream is = inputFile.read();
+				ois = new ObjectInputStream(is);
+				Object scene = ois.readObject();
+				if (scene == null || !(scene instanceof EventFancyScene))
 					return null;
-				}
-				finally {
-					IOUtils.closeQuietly(ois);
-				}
+				return (EventFancyScene) scene;
+			} catch (Exception e) {
+				LOG.error("could not locate or open resource: " + String.valueOf(this), e);
+				return null;
+			} finally {
+				IOUtils.closeQuietly(ois);
 			}
-			else {
-				Scanner scanner = null;
-				try {
-					scanner = new Scanner(inputFile.name());
-					scanner.useLocale(Locale.ROOT);
-					EventFancyScene scene = EventFancyScene.readNextObject(scanner, inputFile);
-					return scene;
-				}
-				catch (GdxRuntimeException e) {
-					LOG.error("could not locate or open resource: " + String.valueOf(this), e);
-					return null;
-				}
-				finally {
-					IOUtils.closeQuietly(scanner);
-				}
-			}
+		}
+		Scanner scanner = null;
+		try {
+			scanner = new Scanner(inputFile.name());
+			scanner.useLocale(Locale.ROOT);
+			EventFancyScene scene = EventFancyScene.readNextObject(scanner, inputFile);
+			return scene;
+		} catch (GdxRuntimeException e) {
+			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
+			return null;
+		} finally {
+			IOUtils.closeQuietly(scanner);
+		}
 	}
 
 	@Override
@@ -121,9 +115,11 @@ public enum EFancyScene implements IResource<EFancyScene, EventFancyScene> {
 	public boolean isPlainText() {
 		return !binary;
 	}
+
 	public boolean isBinary() {
 		return binary;
 	}
+
 	public FileHandle getFileHandle() {
 		return Gdx.files.internal(path);
 	}

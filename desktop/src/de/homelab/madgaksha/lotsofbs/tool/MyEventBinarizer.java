@@ -156,6 +156,7 @@ public class MyEventBinarizer implements ApplicationListener {
 			
 		MyEventBinarizer binarizer = new MyEventBinarizer(resourceList);
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(binarizer, config);
+		@SuppressWarnings("unused")
+		LwjglApplication lwjglApplication = new LwjglApplication(binarizer, config);
 	}
 }

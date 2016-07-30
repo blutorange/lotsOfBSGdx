@@ -32,12 +32,14 @@ import de.homelab.madgaksha.lotsofbs.logging.LoggerFactory;
  * @author madgaksha
  */
 public class KeyAssigner implements ApplicationListener {
+	@SuppressWarnings("unused")
 	private final static Logger LOG = LoggerFactory.getLogger(KeyAssigner.class);
 	
 	public static void main(String args[]) {	
 		KeyAssigner assigner = new KeyAssigner();
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(assigner, config);
+		@SuppressWarnings("unused")
+		LwjglApplication lwjglApplication = new LwjglApplication(assigner, config);
 	}
 
 	private KeyAssigner() throws GdxRuntimeException {
@@ -92,6 +94,7 @@ public class KeyAssigner implements ApplicationListener {
 		// ClickListener could have been used, but would only fire when clicked. Also, canceling a ClickListener event won't
 		// revert the checked state.
 		button.addListener(new ChangeListener() {
+			@Override
 			public void changed (ChangeEvent event, Actor actor) {
 				System.out.println("Clicked! Is checked: " + button.isChecked());
 				button.setText("Good job!");

@@ -142,7 +142,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 
 		ABoundingBoxComponent bbcc = new BoundingBoxCollisionComponent();
 		ShapeComponent shc = null;
-		Shape2D exactShape = player.getExactShapeCollision();
+		Shape2D exactShape = playerA.getExactShapeCollision();
 		if (exactShape != null)
 			shc = new ShapeComponent();
 		StatusValuesComponent svc = new StatusValuesComponent();
@@ -317,7 +317,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 		bc.setup(onBehave);
 	}
 
-	public Entity makePlayer(final APlayer player) {
+	public Entity makePlayer() {
 		final Entity e = new Entity();
 
 		// Use appropriate input scheme for device.
@@ -385,6 +385,7 @@ public final class PlayerMaker implements IHittable, IMortal {
 		return e;
 	}
 
+	@Override
 	public void kill(Entity hitCircle) {
 		game.setGameLost();
 		EnemyMaker.exitBattleMode(false);

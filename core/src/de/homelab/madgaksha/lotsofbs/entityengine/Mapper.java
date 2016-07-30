@@ -89,7 +89,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.zorder.ZOrder4Compon
 
 public final class Mapper {
 	private Mapper() {
-	};
+	}
 
 	public final static ComponentMapper<TriggerTouchGroup01Component> triggerTouchGroup01Component = ComponentMapper
 			.getFor(TriggerTouchGroup01Component.class);

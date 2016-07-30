@@ -28,6 +28,7 @@ public class ShouldDirectionComponent extends DirectionComponent implements Comp
 		grantStrategy = gs;
 	}
 
+	@Override
 	public void reset() {
 		super.reset();
 		grantStrategy = DEFAULT_GRANT_STRATEGY;

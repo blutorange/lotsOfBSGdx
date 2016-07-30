@@ -205,7 +205,7 @@ public class Game implements ApplicationListener {
 		EntityLayer.addEntityListeners();
 
 		// Create the player entity.
-		playerEntity = PlayerMaker.getInstance().makePlayer(player);
+		playerEntity = PlayerMaker.getInstance().makePlayer();
 		playerHitCircleEntity = PlayerMaker.getInstance().makePlayerHitCircle(player);
 		if (playerEntity == null || playerHitCircleEntity == null) {
 			exitRequested = true;

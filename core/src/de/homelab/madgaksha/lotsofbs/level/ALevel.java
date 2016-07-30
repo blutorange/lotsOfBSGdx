@@ -179,7 +179,7 @@ public abstract class ALevel {
 	 *            The viewport to setup.
 	 */
 	protected void setupInitialGameViewport(GameViewport viewport) {
-	};
+	}
 
 	/**
 	 * Must return a list of all resources that the level requires. They will
@@ -330,7 +330,7 @@ public abstract class ALevel {
 	/**
 	 * The viewport for drawing general elements directly in screen coordinates.
 	 */
-	public Viewport getScreenViewport(int screenWidth, int screenHeight) {
+	public Viewport getScreenViewport() {
 		// OrthographicCamera is created automatically by the FillViewport.
 		final Viewport viewport = new FillViewport(VIEWPORT_SCREEN_VIRTUAL_WIDTH, VIEWPORT_SCREEN_VIRTUAL_HEIGHT);
 		final Camera camera = viewport.getCamera();

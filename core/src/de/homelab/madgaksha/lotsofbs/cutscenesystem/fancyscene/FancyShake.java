@@ -109,6 +109,10 @@ public class FancyShake extends AFancyEvent {
 		this.scene = scene;
 	}
 
+	/**
+	 * @param s Scanner from which to read.
+	 * @param parentFile The file handle of the file being used. Should be used only for directories.
+	 */
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		RichterScale richterScale = FileCutsceneProvider.nextRichterScale(s);
 		if (richterScale == null) {
@@ -123,5 +127,5 @@ public class FancyShake extends AFancyEvent {
 		}
 
 		return new FancyShake(richterScale, duration);
-	}
+	}	
 }

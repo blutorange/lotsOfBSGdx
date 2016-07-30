@@ -21,7 +21,7 @@ public class I18n {
 	
 	// not instantiable
 	private I18n() {
-	};
+	}
 
 	/**
 	 * Initializes the localization module with the given locale and loads all

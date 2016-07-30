@@ -17,6 +17,9 @@ public abstract class EntityMaker {
 			initializedSuccessfully = true;
 	}
 
+	/**
+	 * @param e The entity to be setup. 
+	 */
 	public void setup(Entity e) {
 
 	}

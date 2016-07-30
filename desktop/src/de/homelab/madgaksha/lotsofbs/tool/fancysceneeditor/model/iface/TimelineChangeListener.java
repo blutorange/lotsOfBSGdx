@@ -23,4 +23,6 @@ public interface TimelineChangeListener {
 		END_TIME,
 		;
 	}
+	public static interface TimelineChangeListenable extends ChangeListenable<TimelineChangeType, TimelineChangeListener> {
+	}
 }

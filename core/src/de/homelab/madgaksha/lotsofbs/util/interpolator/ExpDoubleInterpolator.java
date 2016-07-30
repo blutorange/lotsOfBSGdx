@@ -37,8 +37,8 @@ public class ExpDoubleInterpolator extends AInterpolator<Double> {
 	@Override
 	protected void doSetup(Object options) {
 		ILogExpInterpolatorOptions o = (ILogExpInterpolatorOptions) options;
-		double a = (double) start;
-		double b = (double) end;
+		double a = start;
+		double b = end;
 		double x1 = o.getX1();
 		double x2 = o.getX2();
 		k1 = (b - a) / (Math.exp(x2) - Math.exp(x1));

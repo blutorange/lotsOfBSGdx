@@ -183,7 +183,7 @@ public class FancyTextbox extends PlainTextbox {
 			setFullHeight(true);
 			layoutMainBox(1.0f, ninePatchBottomLeftBox);
 			layoutFaceBox(mainBoxFrame.height, ninePatchBottomRightBox);
-			layoutMainBox(1.0f - ((float) faceBoxFrame.width) / ((float) viewportGame.getScreenWidth()),
+			layoutMainBox(1.0f - (faceBoxFrame.width) / (viewportGame.getScreenWidth()),
 					ninePatchBottomLeftBox);
 			layoutSpeakerBox(mainBoxFrame.height, ninePatchTopBox);
 			ninePatchText = ninePatchBottomLeftBox;
@@ -201,7 +201,7 @@ public class FancyTextbox extends PlainTextbox {
 			setFullHeight(true);
 			layoutMainBox(1.0f, ninePatchLeftBox);
 			layoutFaceBox(mainBoxFrame.height, ninePatchRightBox);
-			layoutMainBox(1.0f - ((float) faceBoxFrame.width) / ((float) viewportGame.getScreenWidth()),
+			layoutMainBox(1.0f - faceBoxFrame.width / viewportGame.getScreenWidth(),
 					ninePatchLeftBox);
 			speakerBoxFrame.set(0, 0, 0, 0);
 			ninePatchText = ninePatchLeftBox;

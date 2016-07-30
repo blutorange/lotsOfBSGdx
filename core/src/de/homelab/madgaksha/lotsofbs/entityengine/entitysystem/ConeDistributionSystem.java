@@ -56,7 +56,7 @@ public class ConeDistributionSystem extends DisableIteratingSystem {
 		cdc.degrees += cdc.angularVelocity * tc.deltaTime;
 		
 		// and position the other components on an ellipse
-		final float deltaAngle = 360.0f / (float)(size-1);
+		final float deltaAngle = 360.0f / (size-1);
 		float angle = cdc.degrees;
 		for (int i = 0; i != cdc.apexPoint; ++i) {
 			final PositionComponent point = Mapper.shouldPositionComponent.get(cdc.distributionPoints.get(i));

@@ -34,16 +34,15 @@ public class ResourceLoader {
 		final int o = res.getEnum().ordinal();
 		if (map.containsKey(o)) {
 			return map.get(o);
-		} else {
-			if (map.size() > res.getLimit()) {
-				LOG.info("Clearing cache for resources of type " + res.getEnum().toString());
-				map.clear();
-			}
-			final Object r = res.getObject();
-			if (r != null)
-				map.put(o, r);
-			return r;
 		}
+		if (map.size() > res.getLimit()) {
+			LOG.info("Clearing cache for resources of type " + res.getEnum().toString());
+			map.clear();
+		}
+		final Object r = res.getObject();
+		if (r != null)
+			map.put(o, r);
+		return r;
 	}
 
 	/**

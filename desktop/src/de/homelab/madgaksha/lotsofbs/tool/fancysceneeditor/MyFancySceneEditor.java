@@ -43,9 +43,9 @@ import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.clipdata.DrawableClipData;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.clipdata.ShakeClipData;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.BeginningEndButton;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.ClipTable;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.DetailsWindow;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.EnemySelector;
-import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.ClipTable;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.FpsInput;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.FrameCountInput;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.FrameSeekButton;
@@ -87,16 +87,9 @@ public class MyFancySceneEditor implements ApplicationListener, TimelineProvider
 	private void initialize() {	
 		skin = new Skin(Gdx.files.internal("skin/default/uiskin.json"));
 		timeline = BasicTimeline.newTimeline(15f);
-		timeline.newTrack(0f, 1f, null).newClip(0f, 1f, new DrawableClipData());
-		timeline.newTrack(0f, 1f, null).newClip(0f, 1f, new ShakeClipData());
-		timeline.newTrack(0f, 1f, null).newClip(0f, 1f, new DrawableClipData());
-		timeline.newTrack(0f, 1f, null).newClip(0f, 1f, new DrawableClipData());
-		timeline.newTrack(0f, 1f, null).newClip(0f, 1f, new DrawableClipData());
-		timeline.newTrack(0f, 1f, null).newClip(0f, 1f, new DrawableClipData());
-		timeline.newTrack(0f, 1f, null).newClip(0f, 1f, new DrawableClipData());
-		timeline.newTrack(0f, 1f, null).newClip(0f, 1f, new DrawableClipData());
-		timeline.newTrack(0f, 1f, null).newClip(0f, 1f, new DrawableClipData());
-		timeline.newTrack(0f, 1f, null).newClip(0f, 1f, new DrawableClipData());
+		timeline.newTrack(0f, 10f, null).newClip(0f, 1f, new DrawableClipData());
+		timeline.newTrack(0f, 10f, null).newClip(0f, 1f, new ShakeClipData());
+		timeline.newTrack(0f, 10f, null).newClip(0f, 1f, new DrawableClipData());
 		
 		table = new Table(skin);
 		table.debug();
@@ -184,7 +177,8 @@ public class MyFancySceneEditor implements ApplicationListener, TimelineProvider
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1280;
 		config.height = 720;
-		new LwjglApplication(editor, config);
+		@SuppressWarnings("unused")
+		LwjglApplication lwjglApplication = new LwjglApplication(editor, config);
 	}
 
 	@Override
@@ -200,7 +194,7 @@ public class MyFancySceneEditor implements ApplicationListener, TimelineProvider
 		level = new LevelMock();
 		cameraTrackingComponent = new ManyTrackingComponent();
 		player = new PEstelle();
-		playerEntity = PlayerMaker.getInstance().makePlayer(player);
+		playerEntity = PlayerMaker.getInstance().makePlayer();
 		playerBattleStigmaEntity = PlayerMaker.getInstance().makePlayerBattleStigma(playerEntity, player);
 		playerHitCircleEntity = PlayerMaker.getInstance().makePlayerHitCircle(player);
 		level.initialize(batchPixel);

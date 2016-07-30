@@ -1,10 +1,10 @@
 //Background
-NinePatch A 0.0 Background1 1.0 OUGI_OUKA_MUSOUGEKI_BACKGROUND_1
+NinePatch A 0.0 Background1 OUGI_OUKA_MUSOUGEKI_BACKGROUND_1
 Scale     A 0.0 Background1 14.0 15.0 
 Position  A 0.0 Background1 -3 -3
 Opacity   A 0.0 Background1 0
 
-NinePatch A 0.0 Background2 1.0 OUGI_OUKA_MUSOUGEKI_BACKGROUND_2
+NinePatch A 0.0 Background2 OUGI_OUKA_MUSOUGEKI_BACKGROUND_2
 Scale     A 0.0 Background2 11.0 12.0
 Position  A 0.0 Background1 -1.5 -1.5
 Opacity   A 0.0 Background2 0

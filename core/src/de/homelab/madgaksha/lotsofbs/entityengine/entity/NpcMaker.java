@@ -55,6 +55,15 @@ public class NpcMaker extends EntityMaker {
 
 	}
 
+	//TODO
+	/**
+	 * @param entity
+	 * @param shape
+	 * @param animation
+	 * @param initiallyInactive
+	 * @param initialPosition
+	 * @param initDir
+	 */
 	public void setup(Entity entity, Shape2D shape, EAnimation animation, boolean initiallyInactive,
 			Vector2 initialPosition, Float initDir) {
 	}

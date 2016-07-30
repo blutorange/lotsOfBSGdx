@@ -15,4 +15,7 @@ public interface ClipChangeListener {
 		/** Issued when the end time of a clip has changed. Not issued when a new clip has been created. */
 		END_TIME
 	}
+	
+	public static interface ClipChangeListenable extends ChangeListenable<ClipChangeType, ClipChangeListener> {
+	}
 }

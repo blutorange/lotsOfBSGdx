@@ -14,9 +14,11 @@ public abstract class AItem implements IMapItem {
 	public float getMapAngularVelocity() {
 		return mapAngularVelocity == null ? getDefaultAngularVelocity() : mapAngularVelocity;
 	}	
+	@Override
 	public void setMapAxisOfRotation(Vector3 axis) {
 		mapAxisOfRotation = axis == null ? null : new Vector3(axis);
 	}
+	@Override
 	public void setMapAngularVelocity(Float angularVelocity) {
 		this.mapAngularVelocity = angularVelocity;
 	}

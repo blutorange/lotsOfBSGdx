@@ -231,7 +231,7 @@ public abstract class PlainTextbox implements Disposable {
 		// Height and width, and difference between the actual number of lines
 		// and the reserved number of lines.
 		float boxHeight = getLineHeight() * (numberOfLines + textLineSpacing * (numberOfLines - 1.0f));
-		float boxWidth = widthRatio * (float) viewportGame.getScreenWidth();
+		float boxWidth = widthRatio * viewportGame.getScreenWidth();
 		float textHeightDifference = boxHeight
 				- (getLineHeight() * (reservedNumberOfLines + textLineSpacing * (reservedNumberOfLines - 1)));
 
@@ -281,7 +281,7 @@ public abstract class PlainTextbox implements Disposable {
 		bitmapFontReference = null;
 
 		int fontSize = Math.max(5, Math.round(viewportGame.getScreenHeight() * textHeightRatio));
-		float targetFontSize = textHeightRatio * (float) viewportGame.getScreenHeight();
+		float targetFontSize = textHeightRatio * viewportGame.getScreenHeight();
 
 		// Setup font parameters.
 		freeTypeFontParameter.size = fontSize;
@@ -308,7 +308,7 @@ public abstract class PlainTextbox implements Disposable {
 				if (currentWidth < 1.0f)
 					scale = 1.0f;
 				else {
-					float targetWidth = referenceWidth * targetFontSize / (float) REFERENCE_FONT_SIZE;
+					float targetWidth = referenceWidth * targetFontSize / REFERENCE_FONT_SIZE;
 					scale = targetWidth / currentWidth;
 				}
 				bitmapFont.getData().setScale(scale);
@@ -378,6 +378,10 @@ public abstract class PlainTextbox implements Disposable {
 		bitmapFont.getCache().draw(batchPixel, 0, renderedGlyphCount);
 	}
 
+	/**
+	 * @param width New width in pixels.
+	 * @param height New height in pixels.
+	 */
 	public void resize(int width, int height) {
 		dirty = true;
 	}
@@ -409,7 +413,7 @@ public abstract class PlainTextbox implements Disposable {
 		}
 		applySlideEffect();
 		mainRender();
-	};
+	}
 
 	protected int getEffectiveLineCount() {
 		return fullHeight ? MAX_LINE_COUNT : lineCount;

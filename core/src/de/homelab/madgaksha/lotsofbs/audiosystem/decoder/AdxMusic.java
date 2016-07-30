@@ -8,6 +8,8 @@ import java.io.InputStream;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import org.apache.commons.io.IOUtils;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.Music;
@@ -186,6 +188,7 @@ public class AdxMusic implements Music, Runnable {
 			state = true;
 		}
 
+		@Override
 		public int nextDecodedSample() {
 			// read 4 bits as unsigned
 			if (state) {
@@ -203,7 +206,7 @@ public class AdxMusic implements Music, Runnable {
 			// and apply the error correction that
 			// is stored in the current sample.
 			prediction = (coeff1 * sampleM1 + coeff2 * sampleM2) >> 12;
-			sampleCur = (int) (prediction) + error * scale;
+			sampleCur = (prediction) + error * scale;
 			// Clamp sample to the range of a short.
 			if (sampleCur < -0x8000)
 				sampleCur = -0x8000;
@@ -249,11 +252,13 @@ public class AdxMusic implements Music, Runnable {
 			fullway = halfway * 2;
 		}
 
+		@Override
 		public void swapBuffer(byte[] b, int s, int p) {
 			super.swapBuffer(b, s, p);
 			bis = new BitInputStream(new ByteArrayInputStream(b));
 		}
 
+		@Override
 		public int nextDecodedSample() {
 			try {
 				// Read n bits from the input stream
@@ -272,7 +277,7 @@ public class AdxMusic implements Music, Runnable {
 			// and apply the error correction that
 			// is stored in the current sample.
 			prediction = (coeff1 * sampleM1 + coeff2 * sampleM2) >> 12;
-			sampleCur = (int) (prediction) + error * scale;
+			sampleCur = (prediction) + error * scale;
 			// Clamp sample to the range of a short.
 			if (sampleCur < -0x8000)
 				sampleCur = -0x8000;
@@ -460,10 +465,9 @@ public class AdxMusic implements Music, Runnable {
 			// decoded thus far.
 			if (!rewindToLoopBegin())
 				return 0;
-			else
-				// Return the number of samples
-				// we read from this frame.
-				return jEnd * __ChannelCount;
+			// Return the number of samples
+			// we read from this frame.
+			return jEnd * __ChannelCount;
 		}
 
 		// Write one sample of each channel per frame.
@@ -585,13 +589,13 @@ public class AdxMusic implements Music, Runnable {
 		bufferedAdx = buffered;
 		fileHandle = file;
 
-		InputStream is = null;
+		DataInputStream dis = null;
 		try {
-			is = file.read();
-			adxHeader = new AdxHeader(new DataInputStream(is));
+			final InputStream is = file.read();
+			dis = new DataInputStream(is);
+			adxHeader = new AdxHeader(dis);
 		} finally {
-			if (is != null)
-				is.close();
+			IOUtils.closeQuietly(dis);
 		}
 
 		// Setup a new audio device for playback.
@@ -658,6 +662,7 @@ public class AdxMusic implements Music, Runnable {
 		}
 	}
 
+	@Override
 	public void run() {
 
 		LOG.debug("creating new thread for adx");
@@ -994,7 +999,7 @@ public class AdxMusic implements Music, Runnable {
 
 	@Override
 	public synchronized float getPosition() {
-		return (float) position / ((float) adxHeader.getChannelCount() * (float) position);
+		return position / ((float) adxHeader.getChannelCount() * (float) position);
 	}
 
 	@Override

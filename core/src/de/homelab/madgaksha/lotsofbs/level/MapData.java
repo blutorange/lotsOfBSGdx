@@ -380,8 +380,8 @@ public class MapData {
 				heightTiles = Math.max(heightTiles, tmtl.getTileHeight());
 			}
 		}
-		widthTilesInverse = 1.0f / (float) widthTiles;
-		heightTilesInverse = 1.0f / (float) heightTiles;
+		widthTilesInverse = 1.0f / widthTiles;
+		heightTilesInverse = 1.0f / heightTiles;
 		widthPixel = (int) (width * widthTiles);
 		heightPixel = (int) (height * heightTiles);
 	}
@@ -877,7 +877,6 @@ public class MapData {
 		return o == null ? defaultValue : Boolean.valueOf(String.valueOf(o));
 	}
 
-	@SuppressWarnings("unused")
 	private boolean isDebugObject(MapProperties props) {
 		return !DebugMode.activated && props.containsKey("debug") && Boolean.valueOf(String.valueOf(props.get("debug")));
 	}

@@ -318,14 +318,14 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 
 	@Override
 	public AtlasRegion getObject() {
+		final AtlasRegion ar;
 		if (textureAtlas != null) {
 			TextureAtlas ta = ResourceCache.getTextureAtlas(textureAtlas);
 			if (ta == null)
 				return null;
-			AtlasRegion ar = ta.findRegion(filename);
+			ar = ta.findRegion(filename);
 			if (ar == null)
 				LOG.error("could not locate or open resource: " + String.valueOf(this));
-			return ar;
 		} else {
 			String path;
 			if (basename != null) {
@@ -337,14 +337,14 @@ public enum ETexture implements IResource<ETexture, AtlasRegion> {
 			try {
 				Texture t = new Texture(fileHandle);
 				TextureRegion tr = new TextureRegion(t);
-				AtlasRegion ar = new AtlasRegion(tr.getTexture(), tr.getRegionX(), tr.getRegionY(), tr.getRegionWidth(),
+				ar = new AtlasRegion(tr.getTexture(), tr.getRegionX(), tr.getRegionY(), tr.getRegionWidth(),
 						tr.getRegionHeight());
-				return ar;
 			} catch (GdxRuntimeException e) {
 				LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 				return null;
 			}
 		}
+		return ar;
 	}
 
 	@Override

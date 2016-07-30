@@ -55,7 +55,7 @@ public abstract class Shader {
 	 * @param sp
 	 */
 	protected void forShaderProgram(ShaderProgram sp) {
-	};
+	}
 
 	/**
 	 * @return The shader program to which this shader belongs to.

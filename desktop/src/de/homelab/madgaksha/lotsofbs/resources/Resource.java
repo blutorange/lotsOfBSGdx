@@ -22,18 +22,22 @@ public class Resource {
 			url = getResourceURL("icon", file);
 		}
 
+		@Override
 		public URL getUrl() {
 			return url;
 		}
 
+		@Override
 		public EIcon getEnum() {
 			return this;
 		}
 
+		@Override
 		public int getLimit() {
 			return LIMIT;
 		}
 
+		@Override
 		public Icon getObject() {
 			return new ImageIcon(this.getUrl());
 		}

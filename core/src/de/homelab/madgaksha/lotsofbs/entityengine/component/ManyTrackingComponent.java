@@ -27,10 +27,6 @@ public class ManyTrackingComponent implements Component, Poolable {
 	private final static float DEFAULT_ADJUSTMENT_POINT_RIGHT = 64.0f;
 
 	private final static float DEFAULT_PLAYER_BOSS_THRESHOLD = 75.0f * 75.0f;
-	private final static float DEFAULTORLD_BORDER_LEFT = 0.0f;
-	private final static float DEFAULTORLD_BORDER_RIGHT = 100.0f;
-	private final static float DEFAULTORLD_BORDER_TOP = 100.0f;
-	private final static float DEFAULTORLD_BORDER_BOTTOM = 0.0f;
 
 	private final static float DEFAULT_MARGIN_SCALING_FACTOR = 1.1f;
 
@@ -43,10 +39,6 @@ public class ManyTrackingComponent implements Component, Poolable {
 	private final static Gravity DEFAULT_GRAVITY = Gravity.SOUTH;
 
 	public ManyTrackingComponent() {
-//		this.worldBorderTop = worldBorderTop;
-//		this.worldBorderBottom = worldBorderBottom;
-//		this.worldBorderLeft = worldBorderLeft;
-//		this.worldBorderRight = worldBorderRight;
 	}
 
 	@Override
@@ -56,10 +48,6 @@ public class ManyTrackingComponent implements Component, Poolable {
 		adjustmentPointLeft = DEFAULT_ADJUSTMENT_POINT_LEFT;
 		adjustmentPointRight = DEFAULT_ADJUSTMENT_POINT_RIGHT;
 		playerBossThreshold = DEFAULT_PLAYER_BOSS_THRESHOLD;
-//		worldBorderTop = DEFAULTORLD_BORDER_TOP;
-//		worldBorderBottom = DEFAULTORLD_BORDER_BOTTOM;
-//		worldBorderLeft = DEFAULTORLD_BORDER_LEFT;
-//		worldBorderRight = DEFAULT_ADJUSTMENT_POINT_RIGHT;
 
 		trackedPointIndex = DEFAULT_TRACKED_POINT_INDEX;
 
@@ -148,15 +136,6 @@ public class ManyTrackingComponent implements Component, Poolable {
 	 * This is the square of the distance.
 	 */
 	public float playerBossThreshold = DEFAULT_PLAYER_BOSS_THRESHOLD;
-
-//	/** Left boundary of world in world coordinates. */
-//	public float worldBorderLeft = DEFAULTORLD_BORDER_LEFT;
-//	/** Right boundary of world in world coordinates. */
-//	public float worldBorderRight = DEFAULTORLD_BORDER_RIGHT;
-//	/** Top boundary of world in world coordinates. */
-//	public float worldBorderTop = DEFAULTORLD_BORDER_TOP;
-//	/** Bottom boundary of world in world coordinates. */
-//	public float worldBorderBottom = DEFAULTORLD_BORDER_BOTTOM;
 
 	/** Relative margin to be added to the computed camera world rectangle. */
 	public float marginScalingFactor = DEFAULT_MARGIN_SCALING_FACTOR;

@@ -99,12 +99,7 @@ public class BasicTimeline implements ModelTimeline {
 	public DetailsPanel getSelected() {
 		return selectedDetailsPanel;
 	}
-	
-	@Override
-	public boolean hasSelected() {
-		return selectedDetailsPanel != null;
-	}
-	
+		
 	@Override
 	public void setDeltaTime(float deltaTime) {
 		deltaTime = Math.max(Float.MIN_NORMAL, deltaTime);
@@ -137,23 +132,23 @@ public class BasicTimeline implements ModelTimeline {
 	
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "=" + hashCode();
+		return getClass().getSimpleName() + "@" + getLabel() + "@" + getStartTime() + "-" + getEndTime();
 	}
 
 	@Override
 	public void registerChangeListener(TimelineChangeType type, TimelineChangeListener listener) {
-		if (listener != null)
-			getTimelineChangeListenerFor(type).add(listener);
+		if (listener == null) throw new NullPointerException("listener cannot be null");
+		getTimelineChangeListenerFor(type).add(listener);
 	}
 	@Override
 	public void registerChangeListener(TrackChangeType type, TrackChangeListener listener) {
-		if (listener != null)
-			getTrackChangeListenerFor(type).add(listener);
+		if (listener == null) throw new NullPointerException("listener cannot be null");
+		getTrackChangeListenerFor(type).add(listener);
 	}
 	@Override
 	public void registerChangeListener(ClipChangeType type, ClipChangeListener listener) {
-		if (listener != null)
-			getClipChangeListenerFor(type).add(listener);
+		if (listener == null) throw new NullPointerException("listener cannot be null");
+		getClipChangeListenerFor(type).add(listener);
 	}
 
 	@Override

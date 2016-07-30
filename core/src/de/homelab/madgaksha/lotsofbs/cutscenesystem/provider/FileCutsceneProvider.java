@@ -433,12 +433,11 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 	private boolean getEventClass(String className) {
 		String fullClassName = CutsceneEventClassPackage + className;
 		try {
-			nextCutsceneClass = (Class<? extends ACutsceneEvent>) ClassReflection.forName(fullClassName);
+			nextCutsceneClass = ClassReflection.forName(fullClassName);
 			if (!ClassReflection.isAssignableFrom(ACutsceneEvent.class, nextCutsceneClass)) {
 				LOG.error("not a cutscene event: " + nextCutsceneClass);
 				return false;
 			}
-			;
 		} catch (ReflectionException e) {
 			LOG.error("no such cutscene event class: " + fullClassName);
 			return false;
@@ -536,11 +535,9 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 			try {
 				Field f = ClassReflection.getField(Interpolation.class, name);
 				Object o = f.get(null);
-				if (o instanceof Interpolation) {
+				if (o instanceof Interpolation)
 					return (Interpolation) o;
-				} else {
-					LOG.error("not an interpolation class:  " + name);
-				}
+				LOG.error("not an interpolation class:  " + name);
 			} catch (ReflectionException e) {
 				LOG.error("no such interpolation: " + name, e);
 			}
@@ -558,11 +555,9 @@ public class FileCutsceneProvider implements CutsceneEventProvider {
 		try {
 			Field f = ClassReflection.getField(Interpolation.class, name);
 			Object o = f.get(null);
-			if (o instanceof Interpolation) {
+			if (o instanceof Interpolation)
 				return (Interpolation) o;
-			} else {
-				LOG.error("not an interpolation class:  " + name);
-			}
+			LOG.error("not an interpolation class:  " + name);
 		} catch (ReflectionException e) {
 			LOG.error("no such interpolation: " + name, e);
 		}

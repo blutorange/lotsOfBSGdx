@@ -111,6 +111,10 @@ public class FancyFade extends AFancyWithDrawable {
 		update(duration);
 	}
 
+	/**
+	 * @param s Scanner from which to read.
+	 * @param parentFile The file handle of the file being used. Should be used only for directories.
+	 */
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
@@ -135,6 +139,7 @@ public class FancyFade extends AFancyWithDrawable {
 		Float targetOpacity = FileCutsceneProvider.nextNumber(s);
 		if (targetOpacity == null) {
 			LOG.error("expected target opacity");
+			return null;
 		}
 
 		return new FancyFade(key, targetOpacity, interpolationName, duration);

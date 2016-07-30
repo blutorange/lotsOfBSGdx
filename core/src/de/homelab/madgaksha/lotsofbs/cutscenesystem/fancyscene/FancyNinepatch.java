@@ -44,7 +44,7 @@ public class FancyNinepatch extends AFancyEvent {
 		unitPerPixel = in.readFloat();
 	}
 	
-	public FancyNinepatch(String key, float unitPerPixel, ENinePatch ninePatch) {
+	public FancyNinepatch(String key, ENinePatch ninePatch) {
 		super(true);
 		this.key = key;
 		this.ninePatch = ninePatch;
@@ -88,21 +88,19 @@ public class FancyNinepatch extends AFancyEvent {
 		scene.requestDrawableNinePatch(key);
 	}
 
+	/**
+	 * @param s Scanner from which to read.
+	 * @param parentFile The file handle of the file being used. Should be used only for directories.
+	 */
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected nine patch name");
 			return null;
 		}
 		String key = s.next();
-		
-		Float unitPerPixel = FileCutsceneProvider.nextNumber(s);
-		if (unitPerPixel == null) {
-			LOG.error("expected unit per pixel");
-			return null;
-		}
-		
+			
 		ENinePatch ninePatch = FileCutsceneProvider.nextNinePatch(s);
 		
-		return (ninePatch != null) ? new FancyNinepatch(key, unitPerPixel, ninePatch) : null;
+		return (ninePatch != null) ? new FancyNinepatch(key, ninePatch) : null;
 	}
 }

@@ -20,7 +20,7 @@ public final class Layouter {
 	private final static Logger LOG = Logger.getLogger(Layouter.class);
 
 	private Layouter() {
-	};
+	}
 
 	public static Rectangle layoutCenteredInBoxAndKeepAspectRatio(Rectangle rectangle, Padding padding,
 			float aspectRatio) {

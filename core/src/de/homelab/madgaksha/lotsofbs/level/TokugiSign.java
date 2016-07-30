@@ -61,6 +61,7 @@ public class TokugiSign implements Poolable {
 		resize();
 	}
 
+	@Override
 	public void reset() {
 		mode = Mode.SETUP;
 		sign = null;
@@ -71,6 +72,7 @@ public class TokugiSign implements Poolable {
 	public void begin() {
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public boolean update(float deltaTime) {
 		totalTime += deltaTime;
 		float x = centerPosition.x;
@@ -95,11 +97,10 @@ public class TokugiSign implements Poolable {
 			if (totalTime >= DURATION_OUT) {
 				mode = Mode.FIN;
 				return false;
-			} else {
-				float alpha = INTERPOLATION_OUT.apply(totalTime * DURATION_OUT_INVERSE);
-				x -= OFFSET_OUT * alpha * viewportGame.getScreenWidth();
-				opacity = 1.0f - alpha;
 			}
+			float alpha = INTERPOLATION_OUT.apply(totalTime * DURATION_OUT_INVERSE);
+			x -= OFFSET_OUT * alpha * viewportGame.getScreenWidth();
+			opacity = 1.0f - alpha;
 			break;
 		default:
 			break;

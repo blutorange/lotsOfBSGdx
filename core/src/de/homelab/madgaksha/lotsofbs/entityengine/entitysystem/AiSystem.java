@@ -34,7 +34,6 @@ public class AiSystem extends DisableIteratingSystem {
 		final BehaviourComponent bc = Mapper.behaviourComponent.get(entity);
 		if (bc.brain.behave(entity) && bc.cortex != null)
 			bc.cortex.behave(entity);
-		;
 	}
 
 }

@@ -67,7 +67,8 @@ public class MyResourceChecker implements ApplicationListener {
 		
 		MyResourceChecker checker = new MyResourceChecker(resourceList, locale);
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(checker, config);
+		@SuppressWarnings("unused")
+		LwjglApplication lwjglApplication = new LwjglApplication(checker, config);
 	}
 
 	private MyResourceChecker(List<IResource<?, ?>> resourceList, Locale locale) throws GdxRuntimeException {

@@ -136,13 +136,17 @@ public class FancySound extends AFancyEvent {
 	public void attachedToScene(EventFancyScene scene) {
 	}
 
+	/**
+	 * @param s Scanner from which to read.
+	 * @param parentFile The file handle of the file being used. Should be used only for directories.
+	 */
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		try {
 			if (!s.hasNext()) {
 				LOG.error("expected entity name");
 				return null;
 			}
-			String entityName = s.next().toLowerCase(Locale.ROOT);;
+			String entityName = s.next().toLowerCase(Locale.ROOT);
 			ESound sound = FileCutsceneProvider.nextSound(s);
 			return (sound != null) ? new FancySound(entityName, sound) : null;
 		} catch (IllegalArgumentException e) {

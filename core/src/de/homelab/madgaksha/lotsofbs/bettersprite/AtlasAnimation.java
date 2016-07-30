@@ -31,14 +31,17 @@ public class AtlasAnimation extends Animation {
 		super(frameDuration, keyFrames, playMode);
 	}
 
+	@Override
 	public AtlasRegion getKeyFrame(float stateTime) {
 		return (AtlasRegion) super.getKeyFrame(stateTime);
 	}
 
+	@Override
 	public AtlasRegion getKeyFrame(float stateTime, boolean looping) {
 		return (AtlasRegion) super.getKeyFrame(stateTime, looping);
 	}
 
+	@Override
 	public AtlasRegion[] getKeyFrames() {
 		return (AtlasRegion[]) super.getKeyFrames();
 	}

@@ -214,7 +214,7 @@ public abstract class AAudioPlayer {
 		final Timer.Task fadeTask = interpolator.run(timer, time, INTERPOLATOR_UPDATE_INTERVAL, timerCallback);
 		if (fadeTask != null)
 			fadeTask.run();
-		return (IInterpolatorFinished) timerCallback;
+		return timerCallback;
 	}
 
 	protected void dispose() {

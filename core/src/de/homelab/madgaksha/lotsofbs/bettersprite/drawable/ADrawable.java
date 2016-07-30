@@ -38,6 +38,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 		return getClass().getSimpleName() + "@" + position + (disposed ? "Disposed" : "Loaded");
 	}
 
+	@Override
 	public final void reset() {
 		position.set(0f, 0f);
 		origin.set(0.5f, 0.5f);
@@ -64,13 +65,12 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 			disposed = true;
 			reset();
 			return false;
-		} else {
-			disposed = false;
-			managed = false;
-			initResource(1.0f/pixelPerUnit);
-			applyAll();
-			return true;
 		}
+		disposed = false;
+		managed = false;
+		initResource(1.0f/pixelPerUnit);
+		applyAll();
+		return true;
 	}
 
 	/**

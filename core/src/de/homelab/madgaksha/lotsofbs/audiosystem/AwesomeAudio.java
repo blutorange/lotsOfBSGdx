@@ -81,8 +81,8 @@ public class AwesomeAudio implements Audio {
 					}
 				}
 				return AdxMusic.newAdxMusic(dest, true);
-			} else
-				return oldAudio.newMusic(file);
+			}
+			return oldAudio.newMusic(file);
 		} catch (Exception e) {
 			LOG.error("could not open music file", e);
 			return null;

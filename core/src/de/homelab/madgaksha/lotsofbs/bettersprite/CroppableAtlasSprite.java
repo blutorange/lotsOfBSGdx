@@ -209,6 +209,7 @@ public class CroppableAtlasSprite extends CroppableSprite implements Poolable {
 		return super.getHeight() / region.packedHeight;
 	}
 
+	@Override
 	public String toString() {
 		return region.toString();
 	}

@@ -19,6 +19,7 @@ import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelTime
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProvider;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener.TimelineChangeType;
+import de.homelab.madgaksha.scene2dext.drawable.DrawableMock;
 
 public class Preview extends Widget implements Closeable {
 	@SuppressWarnings("unused")

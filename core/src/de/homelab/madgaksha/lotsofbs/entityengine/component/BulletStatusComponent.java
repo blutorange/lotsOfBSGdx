@@ -15,6 +15,7 @@ import de.homelab.madgaksha.lotsofbs.enums.ElementalType;
 public class BulletStatusComponent implements Component, Poolable {
 	private final static long DEFAULT_POWER = 1L;
 	private final static long DEFAULT_SCORE = 0L;
+	@SuppressWarnings("unused")
 	private final static ElementalType DEFAULT_ELEMENTAL_TYPE = ElementalType.NORMAL;
 
 	public long power = DEFAULT_POWER;
@@ -29,7 +30,7 @@ public class BulletStatusComponent implements Component, Poolable {
 	}
 
 	public BulletStatusComponent(long power, long score) {
-		setup(power);
+		setup(power, score);
 	}
 
 	public void setup(long power) {

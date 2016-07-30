@@ -7,8 +7,6 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
-
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -110,7 +108,6 @@ public class Score {
 		} else
 			scoreMap.put(levelClass, score);
 		// Write scores to file.
-		OutputStream os = null;
 		try {
 			Json json = new Json();
 			StringWriter sw = new StringWriter();
@@ -124,9 +121,6 @@ public class Score {
 			scoreOutputStream.write(serialized.getBytes(Charset.forName("UTF-8")));
 		} catch (Exception e) {
 			LOG.error("could not write score", e);
-		} finally {
-			if (os != null)
-				IOUtils.closeQuietly(os);
 		}
 	}
 
@@ -150,8 +144,7 @@ public class Score {
 					long score = val.asLong();
 					try {
 						@SuppressWarnings("unchecked")
-						Class<? extends ALevel> levelClass = (Class<? extends ALevel>) ClassReflection
-								.forName(levelName);
+						Class<? extends ALevel> levelClass = ClassReflection.forName(levelName);
 						scoreMap.put(levelClass, score);
 					} catch (ReflectionException e) {
 						LOG.error("no such level: " + levelName);

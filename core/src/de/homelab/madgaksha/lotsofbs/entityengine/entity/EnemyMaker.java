@@ -366,10 +366,8 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 
 		// Play player win phrase and enemy explosion.
 		VoiceComponent vc = Mapper.voiceComponent.get(playerHitCircleEntity);
-		if (won && vc != null) {
-			vc.voicePlayer.play(vc.onBattleModeExit);
-		} else
-			vc.voicePlayer.play(vc.onBattleModeFlee);
+		if (vc != null)
+			vc.voicePlayer.play(won ? vc.onBattleModeExit : vc.onBattleModeFlee);
 
 		// Add slow-motion effect and battle fanfare.
 		if (won && level.getSoundOnBattleWin() != null) {
@@ -494,7 +492,7 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 					/ Math.min(bbrc.maxX - bbrc.minX, bbrc.maxY - bbrc.minY));
 
 		// Make target cross stick to enemy
-		if (sec != null)
+		if (sec != null && bbcc != null)
 			sec.setup(enemy, (bbcc.minX + bbcc.maxX) * 0.5f, (bbcc.minY + bbcc.maxY) * 0.5f, true, true);
 	}
 
@@ -582,11 +580,12 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 
 	protected abstract ETexture requestedIconSub();
 
+	@Override
 	protected IResource<? extends Enum<?>, ?>[] requestedResources() {
 		IResource<?, ?>[] myRes = new IResource<?, ?>[] { EParticleEffect.ENEMY_APPEAR_FLASH.getTextureAtlas() };
 		IResource<? extends Enum<?>, ?>[] yourRes = requestedAdditionalResources();
 		return ArrayUtils.addAll(myRes, yourRes);
-	};
+	}
 
 	protected abstract IResource<? extends Enum<?>, ?>[] requestedAdditionalResources();
 
@@ -648,5 +647,5 @@ public abstract class EnemyMaker extends EntityMaker implements ITrigger, IRecei
 	 */
 	protected float requestedBattleOutDistance(Float valueFromMap) {
 		return valueFromMap == null ? 45.0f : valueFromMap;
-	};
+	}
 }

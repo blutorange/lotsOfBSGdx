@@ -54,7 +54,7 @@ public abstract class AInterpolator<T> {
 	 *            Optional options given to the constructor. May be null.
 	 */
 	protected void doSetup(Object options) {
-	};
+	}
 
 	/**
 	 * Performs the interpolation.
@@ -141,7 +141,7 @@ public abstract class AInterpolator<T> {
 	 * @return The timer used for calling the callback.
 	 */
 	public Timer.Task run(Timer timer, float time, float dt, IInterpolatorCallback<T> cb) {
-		float step = (float) dt / time;
+		float step = dt / time;
 		final Timer.Task task = new InterpolatorTimerTask(step, cb);
 		timer.scheduleTask(task, dt, dt, (int) (time / dt) * 2); // Make sure it
 																	// won't

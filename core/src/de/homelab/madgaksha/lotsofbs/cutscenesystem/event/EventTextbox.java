@@ -159,11 +159,9 @@ public class EventTextbox extends ACutsceneEvent {
 	public boolean setTextbox(FancyTextbox textbox) {
 		if (enforceModificationsPolicy())
 			return false;
-		if (textbox != null) {
-			this.textbox = textbox;
-			return true;
-		} else
-			return false;
+		if (textbox == null) return false;
+		this.textbox = textbox;
+		return true;
 	}
 
 	/**
@@ -470,8 +468,7 @@ public class EventTextbox extends ACutsceneEvent {
 			if (DebugMode.activated)
 				throw new IllegalStateException(
 						"EventTextbox parameters may not be modified while the textbox is active.");
-			else
-				LOG.error("EventTextbox parameters may not be modified while the textbox is active.");
+			LOG.error("EventTextbox parameters may not be modified while the textbox is active.");
 			return true;
 		}
 		return false;
@@ -1030,6 +1027,10 @@ public class EventTextbox extends ACutsceneEvent {
 		}
 	}
 
+	/**
+	 * @param s Scanner from which to read.
+	 * @param fh The file handle of the file being used. Should be used only for directories.
+	 */
 	public static ACutsceneEvent readNextObject(Scanner s, FileHandle fh) {
 		// Set defaults.
 		Builder builder = new Builder();
@@ -1053,9 +1054,8 @@ public class EventTextbox extends ACutsceneEvent {
 				EventTextboxPool.getInstance().free(eventTextbox);
 			}
 			return eventTextbox;
-		} else {
-			LOG.error("event textbox requires at least a box and some lines of text");
-			return null;
 		}
+		LOG.error("event textbox requires at least a box and some lines of text");
+		return null;
 	}
 }

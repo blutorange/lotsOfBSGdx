@@ -89,6 +89,10 @@ public class FancyAnimation extends AFancyEvent {
 		scene.requestDrawableAnimation(key);
 	}
 
+	/**
+	 * @param s Scanner from which to read.
+	 * @param parentFile The file handle of the file being used. Should be used only for directories.
+	 */
 	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");

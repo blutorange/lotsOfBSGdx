@@ -1,4 +1,4 @@
-package junit;
+package de.homelab.madgaksha.lotsofbs.junit;
 
 import static org.junit.Assert.assertEquals;
 

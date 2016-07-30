@@ -93,16 +93,15 @@ public enum EAnimation implements IResource<EAnimation, AtlasAnimation> {
 			AtlasAnimation animation = new AtlasAnimation(frameDuration, atlasRegionArray);
 			animation.setPlayMode(playMode);
 			return animation;
-		} else {
-			// Retrieve texture and split as tiles.
-			AtlasRegion atlasRegion = ResourceCache.getTexture(texture);
-			if (atlasRegion == null)
-				return null;
-			AtlasRegion[] atlasRegionArray = splitAtlasRegion(atlasRegion, tileWidth, tileHeight, count);
-			AtlasAnimation animation = new AtlasAnimation(frameDuration, atlasRegionArray);
-			animation.setPlayMode(playMode);
-			return animation;
 		}
+		// Retrieve texture and split as tiles.
+		AtlasRegion atlasRegion = ResourceCache.getTexture(texture);
+		if (atlasRegion == null)
+			return null;
+		AtlasRegion[] atlasRegionArray = splitAtlasRegion(atlasRegion, tileWidth, tileHeight, count);
+		AtlasAnimation animation = new AtlasAnimation(frameDuration, atlasRegionArray);
+		animation.setPlayMode(playMode);
+		return animation;
 	}
 
 	@Override

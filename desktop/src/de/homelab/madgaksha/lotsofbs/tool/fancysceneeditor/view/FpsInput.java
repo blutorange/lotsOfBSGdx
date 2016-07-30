@@ -8,6 +8,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelTimeline;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener.TimelineChangeType;
+import de.homelab.madgaksha.scene2dext.widget.NumericInput;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProvider;
 
 public class FpsInput extends NumericInput {
@@ -28,7 +29,7 @@ public class FpsInput extends NumericInput {
 		setMinMax(1f, 120f);
 		setQuantizer(1);
 		setValue(1.0f / timelineProvider.getTimeline().getDeltaTime());
-		addListener(new NumericInputChangeListener() {
+		addListener(new NumericInputListener() {
 			@Override
 			protected void changed(float value, Actor actor) {
 				timelineProvider.getTimeline().setDeltaTime(1.0f/value);

@@ -43,17 +43,12 @@ class BasicTrack implements ModelTrack {
 		if (label == null) return;
 		final boolean hasChanged = !this.label.equals(label);
 		this.label = label;
-		if (hasChanged) timeline.trackChanged(this, TrackChangeType.LABEL);;
+		if (hasChanged) timeline.trackChanged(this, TrackChangeType.LABEL);
 	}
 	
 	@Override
-	public CharSequence getLabel() {
+	public String getLabel() {
 		return label;
-	}
-
-	@Override
-	public String toString() {
-		return "BasicTrack@" + hashCode();
 	}
 
 	@Override
@@ -154,5 +149,10 @@ class BasicTrack implements ModelTrack {
 				return c1.getEndTime() < c2.getEndTime() ? -1 : c1.getEndTime() == c2.getEndTime() ? 0 : 1;
 			}
 		};
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "@" + getLabel() + "@" + startTime + "-" + endTime;
 	}
 }

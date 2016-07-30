@@ -321,6 +321,7 @@ public class DesktopLauncher extends JFrame {
 		}
 
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					DesktopLauncher.instance = new DesktopLauncher(fullscreen, width, height, fps, textboxSpeed, locale,
@@ -366,11 +367,9 @@ public class DesktopLauncher extends JFrame {
 				optionArray[defaultOption]));
 
 		// Evaluate user's choice and set the locale to the user's choice.
-		if (localeMap.containsKey(choice)) {
-			LOG.log(Level.INFO, "got user language of choice: " + choice);
-			return localeMap.get(choice);
-		} else
-			return null;
+		if (!localeMap.containsKey(choice)) return null;
+		LOG.log(Level.INFO, "got user language of choice: " + choice);
+		return localeMap.get(choice);
 	}
 
 	private DesktopLauncher(Boolean fullscreen, Integer width, Integer height, Integer fps, Float textboxSpeed,
@@ -535,10 +534,9 @@ public class DesktopLauncher extends JFrame {
 					}
 				}).start();
 				return true;
-			} else {
-				enableUI();
-				return false;
 			}
+			enableUI();
+			return false;
 		} catch (Exception e) {
 			LOG.log(Level.SEVERE, "unable to launch game", e);
 			enableUI();
