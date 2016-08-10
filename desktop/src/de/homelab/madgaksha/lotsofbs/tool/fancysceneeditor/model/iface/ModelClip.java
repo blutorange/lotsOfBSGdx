@@ -3,7 +3,7 @@ package de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ClipChangeListener.ClipChangeListenable;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ClipChangeListener.ClipChangeType;
 
-public interface ModelClip extends CustomDataHolder, ClipChangeListenable, LifeSpanTeller {
+public interface ModelClip extends CustomDataHolder, ClipChangeListenable, TimeIntervalListenable {
 	public CharSequence getLabel();
 
 	/**
@@ -18,6 +18,7 @@ public interface ModelClip extends CustomDataHolder, ClipChangeListenable, LifeS
 	 * <br><br>
 	 * @param startTime New start time in seconds.
 	 */
+	@Override
 	public void setStartTime(float startTime);
 	
 	/**
@@ -32,6 +33,7 @@ public interface ModelClip extends CustomDataHolder, ClipChangeListenable, LifeS
 	 * <br><br>
 	 * @param startTime New end time in seconds.
 	 */
+	@Override
 	public void setEndTime(float startTime);
 
 	/**
@@ -47,7 +49,13 @@ public interface ModelClip extends CustomDataHolder, ClipChangeListenable, LifeS
 	/**
 	 * @see ModelTrack#getParentTimeline()
 	 */
-	public ModelTimeline getParentTimeline();
+	public Seekable getParentTimeline();
 	
 	public ModelClipData getClipData();
+	
+	/**
+	 * Usually called by an implementation of the ModelClipData.
+	 * Must trigger {@link ClipChangeType#CLIP_DATA}.
+	 */
+	public void invalidateClipData();
 }

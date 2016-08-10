@@ -9,7 +9,7 @@ import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineC
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener.TimelineChangeType;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TrackChangeListener.TrackChangeType;
 
-public interface ModelTimeline extends Iterable<ModelTrack>, TimelineChangeListenable, LifeSpanTeller {
+public interface ModelTimeline extends CustomDataHolder, Iterable<ModelTrack>, TimelineChangeListenable, TimeIntervalListenable, Seekable {
 
 	/**
 	 * Zoom factor in time-direction.
@@ -17,10 +17,6 @@ public interface ModelTimeline extends Iterable<ModelTrack>, TimelineChangeListe
 	 */
 	public float getPixelPerSecond();
 
-	/**
-	 * @return The current position on the timeline in seconds. Must be between the start and end time.
-	 */
-	public float getCurrentTime();
 	default int getCurrentFrame() {
 		return MathUtils.round(getCurrentTime() / getDeltaTime());
 	}
@@ -37,15 +33,8 @@ public interface ModelTimeline extends Iterable<ModelTrack>, TimelineChangeListe
 	 * free to decide whether tracks of length zero should be deleted.
 	 * @param startTime New start time in seconds.  
 	 */
+	@Override
 	public void setStartTime(float startTime);
-
-	/**
-	 * Precautions should be taken such that #{@link #getCurrentTime()} does not return a value
-	 * smaller than the start time or greater than the end time.
-	 * Sets the current time in seconds.
-	 * {@link TimelineChangeType#SEEK} must be triggered only when the time has changed.
-	 */
-	public void setCurrentTime(float time);
 
 	/**
 	 * Precautions should be taken such that {@link #getEndTime()} will not be smaller than {@link #getStartTime()}.
@@ -58,6 +47,7 @@ public interface ModelTimeline extends Iterable<ModelTrack>, TimelineChangeListe
 	 * free to decide whether tracks of length zero should be deleted.
 	 * @param startTime New end time in seconds.  
 	 */
+	@Override
 	public void setEndTime(float endTime);
 	
 	/**
@@ -115,10 +105,10 @@ public interface ModelTimeline extends Iterable<ModelTrack>, TimelineChangeListe
 	 * details will be shown on screen.
 	 * @param detailsPanel The selected details panel. May be null to indicate no selection.
 	 */
-	public void setSelected(DetailsPanel detailsPanel);
+	public void setSelected(DetailsPanel<?> detailsPanel);
 
 	/** @return The currently selected details panel, or null when none is selected. */
-	public DetailsPanel getSelected();
+	public DetailsPanel<?> getSelected();
 	default boolean hasSelected() {
 		return getSelected() != null;
 	}

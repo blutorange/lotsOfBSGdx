@@ -463,11 +463,15 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 		return new EventFancyScene(eventList);
 	}
 
-	private static boolean readEventList(FileHandle fileHandle, List<AFancyEvent> eventList) {
+	public static boolean readEventList(FileHandle fileHandle, List<AFancyEvent> eventList) {
+		final String content = fileHandle.readString("UTF-8");
+		return readEventList(fileHandle, eventList, content);
+	}
+	
+	public static boolean readEventList(FileHandle fileHandle, List<AFancyEvent> eventList, String content) {
 		Scanner scanner = null;
 		Map<Class<?>, Float> startMap = new HashMap<Class<?>, Float>();
 		try {
-			String content = fileHandle.readString("UTF-8");
 			scanner = new Scanner(content);
 			scanner.useLocale(Locale.ROOT);
 			while (scanner.hasNextLine()) {

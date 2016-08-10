@@ -20,13 +20,13 @@ import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineC
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TrackChangeListener;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TrackChangeListener.TrackChangeType;
 
-public class BasicTimeline implements ModelTimeline {
+public class BasicTimeline extends ABasicPart implements ModelTimeline {
 
 	private float deltaTime = 0.0166667f;
 	private float currentTime;
 	private float startTime;
 	private float endTime;
-	
+
 	private final List<ModelTrack> trackList = new ArrayList<ModelTrack>();
 	private final EnumMap<TimelineChangeType, Set<TimelineChangeListener>> timelineChangeListener = new EnumMap<TimelineChangeType, Set<TimelineChangeListener>>(
 			TimelineChangeType.class);
@@ -35,13 +35,15 @@ public class BasicTimeline implements ModelTimeline {
 	private final EnumMap<ClipChangeType, Set<ClipChangeListener>> clipChangeListener = new EnumMap<ClipChangeType, Set<ClipChangeListener>>(
 			ClipChangeType.class);
 	private int trackCounter = 0;
-	
-	private DetailsPanel selectedDetailsPanel;
-	
+
+	private DetailsPanel<?> selectedDetailsPanel;
+
 	/** Creates a new timeline. */
 	BasicTimeline() {
 	}
-	
+
+
+
 	@Override
 	public float getPixelPerSecond() {
 		return 16;
@@ -56,12 +58,12 @@ public class BasicTimeline implements ModelTimeline {
 	public float getCurrentTime() {
 		return currentTime;
 	}
-	
+
 	@Override
 	public float getEndTime() {
 		return 60;
 	}
-	
+
 	@Override
 	public void setStartTime(float startTime) {
 		startTime = MathUtils.clamp(startTime, 0f, endTime);
@@ -71,7 +73,7 @@ public class BasicTimeline implements ModelTimeline {
 		adjustTrackTime();
 		if (hasChanged) timelineChanged(TimelineChangeType.START_TIME);
 	}
-	
+
 	@Override
 	public void setCurrentTime(float currentTime) {
 		currentTime = MathUtils.clamp(currentTime, startTime, endTime);
@@ -89,17 +91,17 @@ public class BasicTimeline implements ModelTimeline {
 		adjustTrackTime();
 		if (hasChanged) timelineChanged(TimelineChangeType.END_TIME);
 	}
-	
+
 	@Override
 	public float getDeltaTime() {
 		return deltaTime;
 	}
 
 	@Override
-	public DetailsPanel getSelected() {
+	public DetailsPanel<?> getSelected() {
 		return selectedDetailsPanel;
 	}
-		
+
 	@Override
 	public void setDeltaTime(float deltaTime) {
 		deltaTime = Math.max(Float.MIN_NORMAL, deltaTime);
@@ -107,14 +109,14 @@ public class BasicTimeline implements ModelTimeline {
 		this.deltaTime = deltaTime;
 		if (hasChanged) timelineChanged(TimelineChangeType.DELTA_TIME);
 	}
-	
+
 	@Override
-	public void setSelected(DetailsPanel detailsPanel) {		
-		final boolean hasChanged = detailsPanel == null ? this.selectedDetailsPanel != null : !((Object)detailsPanel).equals(this.selectedDetailsPanel);
-		selectedDetailsPanel = detailsPanel;	
+	public void setSelected(final DetailsPanel<?> detailsPanel) {
+		final boolean hasChanged = detailsPanel == null ? selectedDetailsPanel != null : !((Object)detailsPanel).equals(selectedDetailsPanel);
+		selectedDetailsPanel = detailsPanel;
 		if (hasChanged) timelineChanged(TimelineChangeType.SELECTED);
 	}
-	
+
 	@Override
 	public Iterator<ModelTrack> iterator() {
 		return trackList.iterator();
@@ -129,37 +131,36 @@ public class BasicTimeline implements ModelTimeline {
 	public CharSequence getLabel() {
 		return toString();
 	}
-	
+
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + "@" + getLabel() + "@" + getStartTime() + "-" + getEndTime();
 	}
 
 	@Override
-	public void registerChangeListener(TimelineChangeType type, TimelineChangeListener listener) {
+	public void registerChangeListener(final TimelineChangeType type, final TimelineChangeListener listener) {
 		if (listener == null) throw new NullPointerException("listener cannot be null");
 		getTimelineChangeListenerFor(type).add(listener);
 	}
 	@Override
-	public void registerChangeListener(TrackChangeType type, TrackChangeListener listener) {
+	public void registerChangeListener(final TrackChangeType type, final TrackChangeListener listener) {
 		if (listener == null) throw new NullPointerException("listener cannot be null");
 		getTrackChangeListenerFor(type).add(listener);
 	}
 	@Override
-	public void registerChangeListener(ClipChangeType type, ClipChangeListener listener) {
+	public void registerChangeListener(final ClipChangeType type, final ClipChangeListener listener) {
 		if (listener == null) throw new NullPointerException("listener cannot be null");
 		getClipChangeListenerFor(type).add(listener);
 	}
 
 	@Override
-	public ModelTrack newTrack(float startTime, float endTime, String label) {
-		ModelTrack track = new BasicTrack(this);
+	public ModelTrack newTrack(final float startTime, final float endTime, String label) {
+		final ModelTrack track = new BasicTrack(this);
 		trackList.add(track);
 		track.setStartTime(startTime);
 		track.setEndTime(endTime);
-		if (label == null) {
+		if (label == null)
 			label = "Track " + (++trackCounter );
-		}
 		track.setLabel(label);
 		trackChanged(track, TrackChangeType.ATTACHED_TO_TIMELINE);
 		timelineChanged(TimelineChangeType.TRACK_ATTACHED);
@@ -167,22 +168,22 @@ public class BasicTimeline implements ModelTimeline {
 	}
 
 	/** Informs all clip listeners for the given type about the change. */
-	void clipChanged(ModelClip clip, ClipChangeType type) {
-		for (ClipChangeListener l : getClipChangeListenerFor(type))
+	void clipChanged(final ModelClip clip, final ClipChangeType type) {
+		for (final ClipChangeListener l : getClipChangeListenerFor(type))
 			l.handle(clip, type);
 	}
 	/** Informs all track listeners for the given type about the change. */
-	void trackChanged(ModelTrack track, TrackChangeType type) {
-		for (TrackChangeListener l : getTrackChangeListenerFor(type))
+	void trackChanged(final ModelTrack track, final TrackChangeType type) {
+		for (final TrackChangeListener l : getTrackChangeListenerFor(type))
 			l.handle(track, type);
 	}
 	/** Informs all timeline listeners for the given type about the change. */
-	void timelineChanged(TimelineChangeType type) {
-		for (TimelineChangeListener l : getTimelineChangeListenerFor(type))
+	void timelineChanged(final TimelineChangeType type) {
+		for (final TimelineChangeListener l : getTimelineChangeListenerFor(type))
 			l.handle(this, type);
 	}
-	
-	private Set<TimelineChangeListener> getTimelineChangeListenerFor(TimelineChangeType type) {
+
+	private Set<TimelineChangeListener> getTimelineChangeListenerFor(final TimelineChangeType type) {
 		Set<TimelineChangeListener> set = timelineChangeListener.get(type);
 		if (set == null) {
 			set = new HashSet<TimelineChangeListener>();
@@ -190,7 +191,7 @@ public class BasicTimeline implements ModelTimeline {
 		}
 		return set;
 	}
-	private Set<TrackChangeListener> getTrackChangeListenerFor(TrackChangeType type) {
+	private Set<TrackChangeListener> getTrackChangeListenerFor(final TrackChangeType type) {
 		Set<TrackChangeListener> set = trackChangeListener.get(type);
 		if (set == null) {
 			set = new HashSet<TrackChangeListener>();
@@ -198,7 +199,7 @@ public class BasicTimeline implements ModelTimeline {
 		}
 		return set;
 	}
-	private Set<ClipChangeListener> getClipChangeListenerFor(ClipChangeType type) {
+	private Set<ClipChangeListener> getClipChangeListenerFor(final ClipChangeType type) {
 		Set<ClipChangeListener> set = clipChangeListener.get(type);
 		if (set == null) {
 			set = new HashSet<ClipChangeListener>();
@@ -206,32 +207,76 @@ public class BasicTimeline implements ModelTimeline {
 		}
 		return set;
 	}
-	
+
 	/** Adjusts the start and end time of all tracks
 	 * such that they are not smaller than the start time
 	 * or greater than the end time of this timeline.
 	 */
 	private void adjustTrackTime() {
-		for (ModelTrack track : this) {
-			if (track.getStartTime() < startTime) {
+		for (final ModelTrack track : this) {
+			if (track.getStartTime() < startTime)
 				track.setStartTime(startTime);
-			}
-			if (track.getEndTime() > endTime) {
-				track.setEndTime(startTime);				
-			}
+			if (track.getEndTime() > endTime)
+				track.setEndTime(startTime);
 		}
 	}
-	
+
 	/**
 	 * @param duration Duration of the timeline in seconds.
 	 * @return Returns a timeline starting a 0 and ending at duration. The current position is set to the start time.
 	 */
-	public static BasicTimeline newTimeline(float duration) {
+	public static BasicTimeline newTimeline(final float duration) {
 		final BasicTimeline timeline = new BasicTimeline();
 		timeline.setStartTime(0f);
 		timeline.setEndTime(duration);
 		timeline.setCurrentTime(0f);
 		return timeline;
+	}
+
+	@Override
+	public TimelineChangeListener setStartTimeListener(final TimeIntervalListener listener) {
+		final TimelineChangeListener listenerId = new TimelineChangeListener() {
+			@Override
+			public void handle(final ModelTimeline timeline, final TimelineChangeType type) {
+				listener.handle(getStartTime(), BasicTimeline.this);
+			}
+		};
+		registerChangeListener(TimelineChangeType.START_TIME, listenerId);
+		return listenerId;
+	}
+
+	@Override
+	public TimelineChangeListener setEndTimeListener(final TimeIntervalListener listener) {
+		final TimelineChangeListener listenerId = new TimelineChangeListener() {
+			@Override
+			public void handle(final ModelTimeline timeline, final TimelineChangeType type) {
+				listener.handle(getEndTime(), BasicTimeline.this);
+			}
+		};
+		registerChangeListener(TimelineChangeType.END_TIME, listenerId);
+		return listenerId;
+	}
+
+	@Override
+	public void removeStartTimeListener(final Object listenerId) {
+		if (!(listenerId instanceof TimelineChangeListener)) return;
+		getTimelineChangeListenerFor(TimelineChangeType.START_TIME).remove(listenerId);
+	}
+
+	@Override
+	public void removeEndTimeListener(final Object listenerId) {
+		if (!(listenerId instanceof TimelineChangeListener)) return;
+		getTimelineChangeListenerFor(TimelineChangeType.END_TIME).remove(listenerId);
+	}
+
+	@Override
+	public float getMinTime() {
+		return 0f;
+	}
+
+	@Override
+	public float getMaxTime() {
+		return Float.MAX_VALUE;
 	}
 
 }

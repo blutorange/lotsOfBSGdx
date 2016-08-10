@@ -8,5 +8,5 @@ public interface IdProvider {
 	 * @return The unique ID.
 	 * @throws InsufficientResourcesException When no more unique IDs are available that could be returned.
 	 */
-	public String unique() throws InsufficientResourcesException;
+	public String uniqueId() throws InsufficientResourcesException;
 }

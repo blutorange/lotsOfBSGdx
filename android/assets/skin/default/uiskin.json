@@ -69,7 +69,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 		background: default-pane, wrapWidth: 150
 	}
 },
-de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.Preview$PreviewStyle: {
+de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.basic.FancySceneTimeline$FancySceneTimelineStyle: {
     default: { overscanArea: white, overscanColor: { r: 0.0, g: 0.0, b: 0.0, a: 0.6 } }
 },
 de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.FrameSeekButton$FrameSeekButtonStyle: {
@@ -77,9 +77,17 @@ de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.FrameSeekButton$FrameSe
     next: { down: player-next, up: player-next },
     prev: { down: player-prev, up: player-prev }
 },
+de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.AddDelButton$AddDelButtonStyle: {
+    default: { down: tree-plus, up: tree-plus },
+    add: { down: tree-plus, up: tree-plus },
+    del: { down: tree-minus, up: tree-minus }
+},
 de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.BeginningEndButton$BeginningEndButtonStyle: {
     default: { down: player-beg, up: player-beg },
     beg: { down: player-beg, up: player-beg },
     end: { down: player-end, up: player-end }
+},
+de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.DetailsTitleLabel$DetailsTitleLabelStyle: {
+    default: { font: default-font, fontColor: white }
 },
 }

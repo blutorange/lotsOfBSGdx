@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import de.homelab.madgaksha.lotsofbs.enums.RichterScale;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.IdProvider;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelClip;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProvider;
 import de.homelab.madgaksha.scene2dext.util.TableUtils;
 import de.homelab.madgaksha.scene2dext.widget.NumericInput;
@@ -19,6 +20,10 @@ public class ShakeClipData extends AClipData {
 	
 	private RichterScale richterScale = RichterScale.M5;
 	private Table table;
+
+	protected ShakeClipData(ModelClip clip) {
+		super(clip);
+	}
 	
 	@Override
 	public Actor getActor(TimelineProvider timelineProvider, Skin skin) {
@@ -49,6 +54,7 @@ public class ShakeClipData extends AClipData {
 				if (!(selected instanceof RichterScale)) return;
 				final RichterScale rs = (RichterScale)selected;
 				richterScale = rs;
+				getClip().invalidateClipData();
 			}
 		});
 		
@@ -76,7 +82,7 @@ public class ShakeClipData extends AClipData {
 
 	// Shake A 0.300 M3 0.25
 	@Override
-	public void renderEvent(StringBuilder builder, IdProvider idProvider) {
+	public void performRenderEvent(StringBuilder builder, IdProvider idProvider) {
 		builder.append("Shake A ").append(getStartTime()).append(" ").append(richterScale.toString()).append(" ").append(getDuration());
 	}
 

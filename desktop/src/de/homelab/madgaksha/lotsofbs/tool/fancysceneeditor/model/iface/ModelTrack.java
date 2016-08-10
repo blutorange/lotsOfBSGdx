@@ -2,9 +2,10 @@ package de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface;
 
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ClipChangeListener.ClipChangeType;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineChangeListener.TimelineChangeType;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TrackChangeListener.TrackChangeListenable;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TrackChangeListener.TrackChangeType;
 
-public interface ModelTrack extends Iterable<ModelClip>, LifeSpanTeller {
+public interface ModelTrack extends Iterable<ModelClip>, TimeIntervalListenable, TrackChangeListenable {
 
 	/**
 	 * @return The name of this track. This is displayed to the left of the timeline.
@@ -19,10 +20,10 @@ public interface ModelTrack extends Iterable<ModelClip>, LifeSpanTeller {
 	 * and {@link TimelineChangeType#CLIP_ATTACHED} must be called, in this order.
 	 * @param startTime The start time in seconds.
 	 * @param endTime The end time in seconds.
-	 * @param clipData Clip data that cannot be changed later.
+	 * @param clipDataClazz Clip data that cannot be changed later.
 	 * @return The newly created clip.
 	 */
-	public ModelClip newClip(float startTime, float endTime, ModelClipData clipData);
+	public ModelClip newClip(float startTime, float endTime, Class<? extends ModelClipData> clipDataClazz) throws NoSuchMethodException;
 
 	public void sortByStartTime(boolean ascending);
 	public void sortByEndTime(boolean ascending);
@@ -41,6 +42,7 @@ public interface ModelTrack extends Iterable<ModelClip>, LifeSpanTeller {
 	 * free to decide whether clips of length zero should be deleted.
 	 * @param startTime New start time in seconds.
 	 */
+	@Override
 	public void setStartTime(float startTime);
 	
 	/**
@@ -56,6 +58,7 @@ public interface ModelTrack extends Iterable<ModelClip>, LifeSpanTeller {
 	 * free to decide whether clips of length zero should be deleted.
 	 * @param startTime New end time in seconds.
 	 */
+	@Override
 	public void setEndTime(float startTime);
 	
 	/**
@@ -65,7 +68,7 @@ public interface ModelTrack extends Iterable<ModelClip>, LifeSpanTeller {
 	 * been deleted.
 	 * @return The timeline this track is attached to.
 	 */
-	public ModelTimeline getParentTimeline();	
+	public Seekable getParentTimeline();	
 	
 	/**
 	 * Changes the label of the track, must not be null.

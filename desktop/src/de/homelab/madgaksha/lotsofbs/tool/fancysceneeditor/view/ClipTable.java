@@ -16,9 +16,14 @@ import com.badlogic.gdx.utils.Array;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ClipChangeListener;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ClipChangeListener.ClipChangeType;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.DetailsPanel;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelClip;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelTimeline;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelTrack;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProvider;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProvider.TimelineGetter;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProviderChangeListener;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProviderChangeListener.TimelineProviderChangeType;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TrackChangeListener;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TrackChangeListener.TrackChangeType;
 import de.homelab.madgaksha.scene2dext.listener.ButtonListener;
@@ -27,71 +32,30 @@ import de.homelab.madgaksha.scene2dext.widget.NumericInput.NumericInputListener;
 
 public class ClipTable extends Table {
 	private final static Logger LOG = Logger.getLogger(ClipTable.class);
-	private final TimelineProvider timelineProvider;
 	private final List<DataRow> dataRowList = new ArrayList<>();
 	private boolean ascStartTime, ascEndTime, ascTrack, ascClip;
 	
-	public ClipTable(Skin skin, TimelineProvider timelineProvider) {
+	public ClipTable(TimelineProvider timelineProvider, Skin skin) {
 		super(skin);
-		this.timelineProvider = timelineProvider;
-		initialize();
-	}
-	
-	private void initialize() {
-		timelineProvider.getTimeline().registerChangeListener(TrackChangeType.CLIP_ATTACHED, new TrackChangeListener() {
+		timelineProvider.registerChangeListener(TimelineProviderChangeType.SWITCHED, new TimelineProviderChangeListener() {
 			@Override
-			public void handle(ModelTrack track, TrackChangeType type) {
-				rebuildTable();
+			public void handle(TimelineGetter getter, TimelineProviderChangeType type) {
+				connectTimeline(getter);
 			}
 		});
-		rebuildTable();
-	}
-
-	private static class DataRow {
-		private final Actor a1, a2, a3, a4;
-		private final ModelClip clip;
-		public DataRow(Actor a1, Actor a2, Actor a3, Actor a4, ModelClip clip) {
-			this.a1 = a1;
-			this.a2 = a2;
-			this.a3 = a3;
-			this.a4 = a4;
-			this.clip = clip;
-		}
-		public final static Comparator<DataRow> START_TIME = new Comparator<ClipTable.DataRow>() {
-			@Override
-			public int compare(DataRow row1, DataRow row2) {
-				final float t1 = row1.clip.getStartTime();
-				final float t2 = row2.clip.getStartTime();
-				return t1 < t2 ? -1 : t1 == t2 ? 0 : 1; 
-			}
-		};
-		public final static Comparator<DataRow> END_TIME = new Comparator<ClipTable.DataRow>() {
-			@Override
-			public int compare(DataRow row1, DataRow row2) {
-				final float t1 = row1.clip.getEndTime();
-				final float t2 = row2.clip.getEndTime();
-				return t1 < t2 ? -1 : t1 == t2 ? 0 : 1; 
-			}
-		};
-		public final static Comparator<DataRow> TRACK = new Comparator<ClipTable.DataRow>() {
-			@Override
-			public int compare(DataRow row1, DataRow row2) {
-				final String s1 = row1.clip.getParentTrack().getLabel();
-				final String s2 = row2.clip.getParentTrack().getLabel();
-				return s1.compareTo(s2); 
-			}
-		};
-		public final static Comparator<DataRow> CLIP = new Comparator<ClipTable.DataRow>() {
-			@Override
-			public int compare(DataRow row1, DataRow row2) {
-				final String s1 = row1.clip.getClipData().getTitle();
-				final String s2 = row2.clip.getClipData().getTitle();
-				return s1.compareTo(s2); 
-			}
-		};
 	}
 	
-	protected void rebuildTable() {
+	protected void connectTimeline(TimelineGetter getter) {
+		getter.getTimeline().registerChangeListener(TrackChangeType.CLIP_ATTACHED, new TrackChangeListener() {
+			@Override
+			public void handle(ModelTrack track, TrackChangeType type) {
+				rebuildTable(getter.getTimeline());
+			}
+		});
+		rebuildTable(getter.getTimeline());
+	}
+
+	protected void rebuildTable(ModelTimeline timeline) {
 		LOG.debug("rebuilding table");
 		ascStartTime = ascEndTime = ascTrack = ascClip = false;
 		clear();
@@ -106,7 +70,17 @@ public class ClipTable extends Table {
 		add(colClip).expandX();
 		row().pad(2, 2, 2, 2);
 		
-		for (final ModelTrack track : timelineProvider.getTimeline()) {
+		for (final ModelTrack track : timeline) {			
+			ButtonListener trackDetailListener = null;
+			if (track instanceof DetailsPanel<?>) {
+				trackDetailListener = new ButtonListener() {
+					@Override
+					public void pressed(Button button) {
+						timeline.setSelected((DetailsPanel<?>)track);
+					}
+				};
+			}
+			
 			for (final ModelClip clip : track) {
 				// Create input fields and buttons
 				final NumericInput niStart = new NumericInput(clip.getStartTime(), getSkin());
@@ -114,8 +88,8 @@ public class ClipTable extends Table {
 				final TextButton tbTrack = new TextButton(track.getLabel().toString(), getSkin());
 				final TextButton tbClip = new TextButton(clip.getClipData().getTitle(), getSkin());				
 				setMinMax(niStart, niEnd, track, clip);
-				niStart.setQuantizer(0.01f);
-				niEnd.setQuantizer(0.01f);
+				niStart.setStep(0.01f);
+				niEnd.setStep(0.01f);
 				dataRowList.add(new DataRow(niStart, niEnd, tbTrack, tbClip, clip));
 				
 				// Add row
@@ -150,9 +124,12 @@ public class ClipTable extends Table {
 				tbClip.addListener(new ButtonListener() {
 					@Override
 					public void pressed(Button button) {
-						timelineProvider.getTimeline().setSelected(clip.getClipData());						
+						timeline.setSelected(clip.getClipData());
 					}
 				});
+				
+				// Show details when clicking track.
+				tbTrack.addListener(trackDetailListener);
 			}
 		}
 		
@@ -224,7 +201,6 @@ public class ClipTable extends Table {
 				ascEndTime = ascTrack = ascStartTime = false;
 				dataRowList.sort(ascClip ? DataRow.CLIP : Collections.reverseOrder(DataRow.CLIP));
 				refillTable();
-
 			}			
 		});
 	}
@@ -246,4 +222,49 @@ public class ClipTable extends Table {
 			setMinMax(niStart, niEnd, clip.getParentTrack(), clip);
 		}
 	};
+	
+	private static class DataRow {
+		private final Actor a1, a2, a3, a4;
+		private final ModelClip clip;
+		public DataRow(Actor a1, Actor a2, Actor a3, Actor a4, ModelClip clip) {
+			this.a1 = a1;
+			this.a2 = a2;
+			this.a3 = a3;
+			this.a4 = a4;
+			this.clip = clip;
+		}
+		public final static Comparator<DataRow> START_TIME = new Comparator<ClipTable.DataRow>() {
+			@Override
+			public int compare(DataRow row1, DataRow row2) {
+				final float t1 = row1.clip.getStartTime();
+				final float t2 = row2.clip.getStartTime();
+				return t1 < t2 ? -1 : t1 == t2 ? 0 : 1; 
+			}
+		};
+		public final static Comparator<DataRow> END_TIME = new Comparator<ClipTable.DataRow>() {
+			@Override
+			public int compare(DataRow row1, DataRow row2) {
+				final float t1 = row1.clip.getEndTime();
+				final float t2 = row2.clip.getEndTime();
+				return t1 < t2 ? -1 : t1 == t2 ? 0 : 1; 
+			}
+		};
+		public final static Comparator<DataRow> TRACK = new Comparator<ClipTable.DataRow>() {
+			@Override
+			public int compare(DataRow row1, DataRow row2) {
+				final String s1 = row1.clip.getParentTrack().getLabel();
+				final String s2 = row2.clip.getParentTrack().getLabel();
+				return s1.compareTo(s2); 
+			}
+		};
+		public final static Comparator<DataRow> CLIP = new Comparator<ClipTable.DataRow>() {
+			@Override
+			public int compare(DataRow row1, DataRow row2) {
+				final String s1 = row1.clip.getClipData().getTitle();
+				final String s2 = row2.clip.getClipData().getTitle();
+				return s1.compareTo(s2); 
+			}
+		};
+	}
+
 }

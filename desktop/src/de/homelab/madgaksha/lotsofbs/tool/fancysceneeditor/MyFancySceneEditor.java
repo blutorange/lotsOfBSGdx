@@ -9,7 +9,10 @@ import static de.homelab.madgaksha.lotsofbs.GlobalBag.playerBattleStigmaEntity;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.playerEntity;
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.playerHitCircleEntity;
 
+import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
@@ -39,7 +42,10 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.ResourceCache;
 import de.homelab.madgaksha.lotsofbs.resourcepool.ResourcePool;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelTimeline;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProvider;
-import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.basic.BasicTimeline;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProvider.TimelineGetter;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProviderChangeListener;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProviderChangeListener.TimelineProviderChangeType;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.basic.FancySceneTimeline;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.clipdata.DrawableClipData;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.clipdata.ShakeClipData;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.BeginningEndButton;
@@ -58,7 +64,7 @@ import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.Preview;
  * 
  * @author madgaksha
  */
-public class MyFancySceneEditor implements ApplicationListener, TimelineProvider {
+public class MyFancySceneEditor implements ApplicationListener, TimelineProvider, TimelineGetter {
 	private Logger LOG;	
 
 	private Preview preview;
@@ -66,6 +72,10 @@ public class MyFancySceneEditor implements ApplicationListener, TimelineProvider
 	private Table table;
 	private Skin skin;
 	private ModelTimeline timeline;
+	
+	private final EnumMap<TimelineProviderChangeType, Set<TimelineProviderChangeListener>> timelineProviderChangeListener = 
+			new EnumMap<>(TimelineProviderChangeType.class);
+
 	
 	private MyFancySceneEditor() throws GdxRuntimeException {
 	}
@@ -86,29 +96,27 @@ public class MyFancySceneEditor implements ApplicationListener, TimelineProvider
 
 	private void initialize() {	
 		skin = new Skin(Gdx.files.internal("skin/default/uiskin.json"));
-		timeline = BasicTimeline.newTimeline(15f);
-		timeline.newTrack(0f, 10f, null).newClip(0f, 1f, new DrawableClipData());
-		timeline.newTrack(0f, 10f, null).newClip(0f, 1f, new ShakeClipData());
-		timeline.newTrack(0f, 10f, null).newClip(0f, 1f, new DrawableClipData());
+		
+		final TimelineProvider timelineProvider = this;
 		
 		table = new Table(skin);
 		table.debug();
 		table.setFillParent(true);
 		
 		Table previewTable = new Table();
-		ClipTable eventTable = new ClipTable(skin, this);
+		ClipTable eventTable = new ClipTable(timelineProvider, skin);
 
-		preview = new Preview(this, skin);
+		preview = new Preview(timelineProvider);
 		
-		DetailsWindow detailsWindow = new DetailsWindow(this, skin);
+		DetailsWindow detailsWindow = new DetailsWindow(timelineProvider, skin);
 		
-		FrameSeekButton buttonNextFrame = new FrameSeekButton(skin, "next", this, true);
-		FrameSeekButton buttonPreviousFrame = new FrameSeekButton(skin, "prev", this, false);
-		PlayPauseButton buttonPlayPause = new PlayPauseButton(skin, "play", "pause", this);
-		BeginningEndButton buttonBeginning = new BeginningEndButton(skin, "beg", this, true);
-		BeginningEndButton buttonEnd = new BeginningEndButton(skin, "end", this, false);
-		FpsInput fpsInput = new FpsInput(this, skin);
-		FrameCountInput frameInput = new FrameCountInput(this, skin);
+		FrameSeekButton buttonNextFrame = new FrameSeekButton(skin, "next", timelineProvider, true);
+		FrameSeekButton buttonPreviousFrame = new FrameSeekButton(skin, "prev", timelineProvider, false);
+		PlayPauseButton buttonPlayPause = new PlayPauseButton(skin, "play", "pause", timelineProvider);
+		BeginningEndButton buttonBeginning = new BeginningEndButton(skin, "beg", timelineProvider, true);
+		BeginningEndButton buttonEnd = new BeginningEndButton(skin, "end", timelineProvider, false);
+		FpsInput fpsInput = new FpsInput(timelineProvider, skin);
+		FrameCountInput frameInput = new FrameCountInput(timelineProvider, skin);
 		EnemySelector enemySelector = new EnemySelector(skin);
 		
 		Table hgPreviewControls = new Table(skin);
@@ -137,8 +145,18 @@ public class MyFancySceneEditor implements ApplicationListener, TimelineProvider
 		table.setFillParent(true);
 		table.invalidateHierarchy();
 		
-		
 		stage.addActor(table);
+		
+		timeline = FancySceneTimeline.newTimeline(15f, skin, null);
+		try {
+			timeline.newTrack(0f, 10f, null).newClip(0f, 1f, DrawableClipData.class);
+			timeline.newTrack(0f, 10f, null).newClip(0f, 1f, ShakeClipData.class);
+			timeline.newTrack(0f, 10f, null).newClip(0f, 1f, DrawableClipData.class);
+		}
+		catch (NoSuchMethodException e) {
+			LOG.debug("failed to init timeline", e);
+		}
+		triggerEvent(TimelineProviderChangeType.SWITCHED);
 	}
 	
 	@Override
@@ -186,6 +204,16 @@ public class MyFancySceneEditor implements ApplicationListener, TimelineProvider
 		return timeline;
 	}
 	
+	@Override
+	public void registerChangeListener(TimelineProviderChangeType type, TimelineProviderChangeListener listener) {
+		getTimelineProviderChangeListenerFor(type).add(listener);
+	}
+	
+	private void triggerEvent(TimelineProviderChangeType type) {
+		for (TimelineProviderChangeListener l : getTimelineProviderChangeListenerFor(type))
+			l.handle(this, type);
+	}
+	
 	private void setupGameDependencies() {
 		ResourcePool.init();
 		I18n.init(Locale.ENGLISH);
@@ -201,4 +229,15 @@ public class MyFancySceneEditor implements ApplicationListener, TimelineProvider
 		PlayerMaker.getInstance().setupPlayer(player);
 		PlayerMaker.getInstance().setupPlayerHitCircle(player);
 	}
+
+	private Set<TimelineProviderChangeListener> getTimelineProviderChangeListenerFor(TimelineProviderChangeType type) {
+		Set<TimelineProviderChangeListener> set = timelineProviderChangeListener.get(type);
+		if (set == null) {
+			set = new HashSet<TimelineProviderChangeListener>();
+			timelineProviderChangeListener.put(type, set);
+		}
+		return set;
+	}
+
+	
 }

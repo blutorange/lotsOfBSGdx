@@ -8,6 +8,10 @@ public interface ClipChangeListener {
 	public void handle(ModelClip clip, ClipChangeType type);
 	
 	public static enum ClipChangeType {
+		/** All of the below. */
+		ALL,
+		/** When any relevant data of the clip data have changed */
+		CLIP_DATA,
 		/** Issued when this clip was attached to a track. The track can be accessed via {@link ModelClip#getParentTimeline()}.*/
 		ATTACHED_TO_TRACK,
 		/** Issued when the start time of a clip has changed. Not issued when a new clip has been created. */

@@ -365,18 +365,11 @@ sakura
   index: 10
 sakura
   rotate: false
-  xy: 922, 703
-  size: 15, 18
-  orig: 15, 18
+  xy: 922, 688
+  size: 15, 15
+  orig: 15, 15
   offset: 0, 0
   index: 14
-sakura
-  rotate: false
-  xy: 922, 688
-  size: 20, 13
-  orig: 20, 13
-  offset: 0, 0
-  index: 1
 sakura
   rotate: false
   xy: 118, 5
@@ -386,6 +379,13 @@ sakura
   index: 0
 sakura
   rotate: false
+  xy: 953, 754
+  size: 20, 13
+  orig: 20, 13
+  offset: 0, 0
+  index: 1
+sakura
+  rotate: false
   xy: 997, 883
   size: 9, 23
   orig: 9, 23
@@ -393,7 +393,7 @@ sakura
   index: 4
 sakura
   rotate: false
-  xy: 953, 754
+  xy: 142, 3
   size: 20, 13
   orig: 20, 13
   offset: 0, 0
@@ -405,13 +405,6 @@ sakura
   orig: 9, 20
   offset: 0, 0
   index: 12
-sakura
-  rotate: false
-  xy: 142, 3
-  size: 16, 13
-  orig: 16, 13
-  offset: 0, 0
-  index: 15
 sakura
   rotate: false
   xy: 250, 432
@@ -428,6 +421,13 @@ sakura
   index: 7
 sakura
   rotate: false
+  xy: 941, 714
+  size: 16, 13
+  orig: 16, 13
+  offset: 0, 0
+  index: 15
+sakura
+  rotate: false
   xy: 937, 611
   size: 7, 19
   orig: 7, 19
@@ -435,7 +435,7 @@ sakura
   index: 13
 sakura
   rotate: false
-  xy: 224, 17
+  xy: 997, 866
   size: 11, 15
   orig: 11, 15
   offset: 0, 0
@@ -470,7 +470,7 @@ simpleHit4
   index: -1
 simpleHit5
   rotate: false
-  xy: 205, 16
+  xy: 922, 705
   size: 17, 16
   orig: 17, 16
   offset: 0, 0

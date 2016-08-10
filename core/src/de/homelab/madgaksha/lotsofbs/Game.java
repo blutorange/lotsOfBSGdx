@@ -70,9 +70,13 @@ public class Game implements ApplicationListener {
 
 	private final static Logger LOG = Logger.getLogger(Game.class);
 
+	/** 8 */
 	public final static int VIEWPORT_GAME_AR_NUM = 8;
+	/** 9 */
 	public final static int VIEWPORT_GAME_AR_DEN = 9;
+	/** 0.3 */
 	public final static float VIEWPORT_INFO_WIDTH_MIN_S = 0.3f;
+	/** 0.3 */
 	public final static float VIEWPORT_INFO_HEIGHT_MIN_S = 0.3f;
 	/** 8/9 */
 	public final static float VIEWPORT_GAME_AR = (float) VIEWPORT_GAME_AR_NUM / (float) VIEWPORT_GAME_AR_DEN;
