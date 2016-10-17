@@ -17,13 +17,13 @@ import de.homelab.madgaksha.lotsofbs.GameParameters;
 import de.homelab.madgaksha.lotsofbs.logging.LoggerFactory;
 
 /**
- * Based upon http://stackoverflow.com/a/31120304/3925216 
- * 
+ * Based upon http://stackoverflow.com/a/31120304/3925216
+ *
  * The game itself consists of one level, the desktop launcher is responsible
  * for selecting a level and launching the lwglj game. Having more than one
  * OpenGL context per thread does not seem to work well, so we need to start
  * each {@link LwjglApplication} as a separate process.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -31,11 +31,11 @@ public class ProcessLauncher {
 	private final static Object lock = new Object();
 	private final static Logger LOG = LoggerFactory.getLogger(Process.class);
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		if (DebugMode.activated) {
 			try {
 				System.setIn(new FileInputStream(DebugMode.debugConfiguration));
-			} catch (FileNotFoundException e1) {
+			} catch (final FileNotFoundException e1) {
 				e1.printStackTrace();
 				return;
 			}
@@ -73,13 +73,13 @@ public class ProcessLauncher {
 			lwjglApplication.stop();
 			// Exit normally.
 			System.exit(0);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.log(Level.SEVERE, "failed to launch game", e);
 			System.exit(-1);
 		}
 	}
 
-	private static LwjglApplicationConfiguration getConfig(GameParameters params) {
+	private static LwjglApplicationConfiguration getConfig(final GameParameters params) {
 		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.backgroundFPS = 5;
 		config.foregroundFPS = params.requestedFps;

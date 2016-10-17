@@ -27,25 +27,29 @@ public class FancyPeffect extends AFancyEvent {
 	private String key = StringUtils.EMPTY;
 	private float unitsPerScreen = 1.0f;
 
-	private void writeObject(ObjectOutputStream out) throws IOException {
+	private void writeObject(final ObjectOutputStream out) throws IOException {
 		out.writeUTF(key);
 		out.writeObject(particleEffect);
 		out.writeFloat(unitsPerScreen);
 	}
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		String key = in.readUTF();
+	private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+		final String key = in.readUTF();
 		if (key == null || key.isEmpty()) throw new InvalidDataException("key cannot be null or empty");
-		
-		Object particleEffect = in.readObject();
+
+		final Object particleEffect = in.readObject();
 		if (particleEffect == null || !(particleEffect instanceof EParticleEffect)) throw new InvalidDataException("unknown particle effect");
-		
+
 		this.key = key;
 		this.particleEffect = (EParticleEffect) particleEffect;
 		unitsPerScreen = in.readFloat();
 	}
-	
-	public FancyPeffect(String key, EParticleEffect particleEffect, float unitsPerScreen) {
-		super(true);
+
+	public FancyPeffect(final String key, final EParticleEffect particleEffect, final float unitsPerScreen) {
+		this(0, 0, key, particleEffect, unitsPerScreen);
+	}
+
+	public FancyPeffect(final float startTime, final int z, final String key, final EParticleEffect particleEffect, final float unitsPerScreen) {
+		super(startTime, z, true);
 		this.key = key;
 		this.unitsPerScreen = unitsPerScreen;
 		this.particleEffect = particleEffect;
@@ -59,17 +63,17 @@ public class FancyPeffect extends AFancyEvent {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene scene) {
+	public boolean begin(final EventFancyScene scene) {
 		scene.requestDrawableParticleEffect(key).setDrawable(particleEffect, unitsPerScreen);
 		return false;
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
-	public void update(float currentTime) {
+	public void update(final float currentTime) {
 	}
 
 	@Override
@@ -77,20 +81,20 @@ public class FancyPeffect extends AFancyEvent {
 	}
 
 	@Override
-	public void resize(int w, int h) {
+	public void resize(final int w, final int h) {
 	}
 
 	@Override
 	public boolean isFinished() {
 		return true;
 	}
-	
+
 	@Override
-	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	public void drawableChanged(final EventFancyScene scene, final String changedKey) {
 	}
 
 	@Override
-	public void attachedToScene(EventFancyScene scene) {
+	public void attachedToScene(final EventFancyScene scene) {
 		scene.requestDrawableParticleEffect(key);
 	}
 
@@ -98,20 +102,20 @@ public class FancyPeffect extends AFancyEvent {
 	 * @param s Scanner from which to read.
 	 * @param parentFile The file handle of the file being used. Should be used only for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
+		final String key = s.next();
 
-		Float unitsPerScreen = FileCutsceneProvider.nextNumber(s);
+		final Float unitsPerScreen = FileCutsceneProvider.nextNumber(s);
 		if (unitsPerScreen == null) {
 			LOG.error("expected unitsPerScreen");
 			return null;
 		}
 
-		EParticleEffect effect = FileCutsceneProvider.nextParticleEffect(s);
+		final EParticleEffect effect = FileCutsceneProvider.nextParticleEffect(s);
 		if (effect == null) {
 			LOG.error("expected particle effect");
 			return null;

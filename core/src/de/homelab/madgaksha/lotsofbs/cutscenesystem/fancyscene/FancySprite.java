@@ -27,25 +27,29 @@ public class FancySprite extends AFancyEvent {
 	private float dpi;
 	private ETexture texture;
 
-	private void writeObject(ObjectOutputStream out) throws IOException {
+	private void writeObject(final ObjectOutputStream out) throws IOException {
 		out.writeUTF(key);
 		out.writeObject(texture);
 		out.writeFloat(dpi);
 	}
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		String key = in.readUTF();
+	private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+		final String key = in.readUTF();
 		if (key == null || key.isEmpty()) throw new InvalidDataException("key cannot be null or empty");
-		
-		Object texture = in.readObject();
+
+		final Object texture = in.readObject();
 		if (texture == null || !(texture instanceof ETexture)) throw new InvalidDataException("unknown sprite");
-		
+
 		this.key = key;
 		this.texture = (ETexture) texture;
 		dpi = in.readFloat();
 	}
-	
-	public FancySprite(String key, float dpi, ETexture texture) {
-		super(true);
+
+	public FancySprite(final String key, final float dpi, final ETexture texture) {
+		this(0, 0, key, dpi, texture);
+	}
+
+	public FancySprite(final float startTime, final int z, final String key, final float dpi, final ETexture texture) {
+		super(startTime, z, true);
 		this.dpi = dpi;
 		this.key = key;
 		this.texture = texture;
@@ -59,17 +63,17 @@ public class FancySprite extends AFancyEvent {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene scene) {
+	public boolean begin(final EventFancyScene scene) {
 		scene.requestDrawableSprite(key).setDrawable(texture, dpi);
 		return false;
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
-	public void update(float passedTime) {
+	public void update(final float passedTime) {
 	}
 
 	@Override
@@ -80,13 +84,13 @@ public class FancySprite extends AFancyEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	@Override
-	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	public void drawableChanged(final EventFancyScene scene, final String changedKey) {
 	}
 
 	@Override
-	public void attachedToScene(EventFancyScene scene) {
+	public void attachedToScene(final EventFancyScene scene) {
 		scene.requestDrawableSprite(key);
 	}
 
@@ -94,19 +98,19 @@ public class FancySprite extends AFancyEvent {
 	 * @param s Scanner from which to read.
 	 * @param parentFile The file handle of the file being used. Should be used only for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
+		final String key = s.next();
 
-		Float dpi = FileCutsceneProvider.nextNumber(s);
+		final Float dpi = FileCutsceneProvider.nextNumber(s);
 		if (dpi == null) {
 			LOG.error("expected dpi");
 			return null;
 		}
-		ETexture texture = FileCutsceneProvider.nextTexture(s);
+		final ETexture texture = FileCutsceneProvider.nextTexture(s);
 		if (texture == null) {
 			LOG.error("expected texture");
 			return null;

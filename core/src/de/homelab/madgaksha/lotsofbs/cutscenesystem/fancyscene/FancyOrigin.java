@@ -20,21 +20,26 @@ public class FancyOrigin extends AFancyWithDrawable {
 
 	private Vector2 origin = new Vector2();
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeFloat(origin.x);
 		out.writeFloat(origin.y);
 	}
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		origin = new Vector2();
-		
+
 		final float x = in.readFloat();
 		final float y = in.readFloat();
-		origin.set(x,y);
+		origin.set(x, y);
 	}
 
-	public FancyOrigin(String key, float x, float y) {
-		super(key);
-		this.origin.set(x, y);
+	public FancyOrigin(final String key, final float x, final float y) {
+		this(0, 0 , key, x, y);
+	}
+
+	public FancyOrigin(final float startTime, final int z, final String key, final float x, final float y) {
+		super(startTime, z, key);
+		origin.set(x, y);
 	}
 
 	@Override
@@ -43,17 +48,17 @@ public class FancyOrigin extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean beginSubclass(EventFancyScene efs) {
+	public boolean beginSubclass(final EventFancyScene efs) {
 		drawable.setOrigin(origin);
 		return false;
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
-	public void update(float passedTime) {
+	public void update(final float passedTime) {
 	}
 
 	@Override
@@ -66,17 +71,20 @@ public class FancyOrigin extends AFancyWithDrawable {
 	}
 
 	/**
-	 * @param s Scanner from which to read.
-	 * @param parentFile The file handle of the file being used. Should be used only for directories.
+	 * @param s
+	 *            Scanner from which to read.
+	 * @param parentFile
+	 *            The file handle of the file being used. Should be used only
+	 *            for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
-		Float x = FileCutsceneProvider.nextNumber(s);
-		Float y = FileCutsceneProvider.nextNumber(s);
+		final String key = s.next();
+		final Float x = FileCutsceneProvider.nextNumber(s);
+		final Float y = FileCutsceneProvider.nextNumber(s);
 		if (x == null || y == null) {
 			LOG.error("expected position");
 			return null;

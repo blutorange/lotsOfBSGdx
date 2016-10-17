@@ -18,17 +18,21 @@ public class FancyOpacity extends AFancyWithDrawable {
 	private final static Logger LOG = Logger.getLogger(FancyOpacity.class);
 	private float opacity;
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeFloat(opacity);
 	}
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		final float opacity = in.readFloat();
 		if (opacity < 0f || opacity > 1f) throw new InvalidDataException("opacity must be between 0 and 1");
 		this.opacity = opacity;
 	}
-	
-	public FancyOpacity(String key, float opacity) {
-		super(key);
+
+	public FancyOpacity(final String key, final float opacity) {
+		this(0, 0, key, opacity);
+	}
+
+	public FancyOpacity(final float startTime, final int z, final String key, final float opacity) {
+		super(startTime, z, key);
 		this.opacity = opacity;
 	}
 
@@ -38,17 +42,17 @@ public class FancyOpacity extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean beginSubclass(EventFancyScene scene) {
+	public boolean beginSubclass(final EventFancyScene scene) {
 		drawable.setOpacity(opacity);
 		return false;
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
-	public void update(float passedTime) {
+	public void update(final float passedTime) {
 	}
 
 	@Override
@@ -64,13 +68,13 @@ public class FancyOpacity extends AFancyWithDrawable {
 	 * @param s Scanner from which to read.
 	 * @param parentFile The file handle of the file being used. Should be used only for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
-		Float opacity = FileCutsceneProvider.nextNumber(s);
+		final String key = s.next();
+		final Float opacity = FileCutsceneProvider.nextNumber(s);
 		if (opacity == null) {
 			LOG.error("expected opacity");
 			return null;

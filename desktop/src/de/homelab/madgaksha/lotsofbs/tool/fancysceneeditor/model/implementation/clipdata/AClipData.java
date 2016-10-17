@@ -7,8 +7,9 @@ import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.IdProvide
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelClip;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelClipData;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimeInterval;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.ACustomDataHolder;
 
-public abstract class AClipData implements ModelClipData, TimeInterval {
+public abstract class AClipData extends ACustomDataHolder implements ModelClipData, TimeInterval {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(AClipData.class);
 	private final ModelClip clip;
@@ -64,4 +65,7 @@ public abstract class AClipData implements ModelClipData, TimeInterval {
 	}
 
 	protected abstract void performRenderEvent(StringBuilder builder, IdProvider idProvider) throws InsufficientResourcesException;
+
+	public abstract void clipStartTimeChanged(float startTime);
+	public abstract void clipEndTimeChanged(float endTime);
 }

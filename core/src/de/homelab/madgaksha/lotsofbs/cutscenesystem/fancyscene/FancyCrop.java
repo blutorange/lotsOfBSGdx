@@ -21,16 +21,16 @@ public class FancyCrop extends AFancyWithDrawable {
 	private Vector2 cropX = new Vector2(1.0f, 1.0f);
 	private Vector2 cropY = new Vector2(1.0f, 1.0f);
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeFloat(cropX.x);
 		out.writeFloat(cropX.y);
 		out.writeFloat(cropY.x);
 		out.writeFloat(cropY.y);
 	}
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		cropX = new Vector2(1.0f, 1.0f);
 		cropY = new Vector2(1.0f, 1.0f);
-		
+
 		final float xx = in.readFloat();
 		final float xy = in.readFloat();
 		final float yx = in.readFloat();
@@ -38,11 +38,15 @@ public class FancyCrop extends AFancyWithDrawable {
 		cropX.set(xx,xy);
 		cropY.set(yx,yy);
 	}
-	
-	public FancyCrop(String key, float cropLeft, float cropBottom, float cropRight, float cropTop) {
-		super(key);
-		this.cropX.set(cropLeft, cropRight);
-		this.cropY.set(cropBottom, cropTop);
+
+	public FancyCrop(final String key, final float cropLeft, final float cropBottom, final float cropRight, final float cropTop) {
+		this(0, 0, key, cropLeft, cropBottom, cropRight, cropTop);
+	}
+
+	public FancyCrop(final float startTime, final int z, final String key, final float cropLeft, final float cropBottom, final float cropRight, final float cropTop) {
+		super(startTime, z, key);
+		cropX.set(cropLeft, cropRight);
+		cropY.set(cropBottom, cropTop);
 	}
 
 	@Override
@@ -52,17 +56,17 @@ public class FancyCrop extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean beginSubclass(EventFancyScene efs) {
+	public boolean beginSubclass(final EventFancyScene efs) {
 		drawable.setCrop(cropX, cropY);
 		return false;
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
-	public void update(float passedTime) {
+	public void update(final float passedTime) {
 	}
 
 	@Override
@@ -78,20 +82,20 @@ public class FancyCrop extends AFancyWithDrawable {
 	 * @param s Scanner from which to read.
 	 * @param parentFile The file handle of the file being used. Should be used only for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
+		final String key = s.next();
 
-		Float cropLeft = FileCutsceneProvider.nextNumber(s);
+		final Float cropLeft = FileCutsceneProvider.nextNumber(s);
 		if (cropLeft == null) {
 			LOG.error("expected crop left");
 			return null;
 		}
 
-		Float cropBottom = FileCutsceneProvider.nextNumber(s);
+		final Float cropBottom = FileCutsceneProvider.nextNumber(s);
 		if (cropBottom == null) {
 			LOG.error("expected crop bottom");
 			return null;

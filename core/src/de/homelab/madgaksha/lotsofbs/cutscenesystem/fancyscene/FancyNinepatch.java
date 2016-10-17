@@ -27,25 +27,29 @@ public class FancyNinepatch extends AFancyEvent {
 	private float unitPerPixel = 1.0f;
 	private ENinePatch ninePatch;
 
-	private void writeObject(ObjectOutputStream out) throws IOException {
+	private void writeObject(final ObjectOutputStream out) throws IOException {
 		out.writeUTF(key);
 		out.writeObject(ninePatch);
 		out.writeFloat(unitPerPixel);
 	}
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		String key = in.readUTF();
+	private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+		final String key = in.readUTF();
 		if (key == null || key.isEmpty()) throw new InvalidDataException("key cannot be null or empty");
-		
-		Object ninePatch = in.readObject();
+
+		final Object ninePatch = in.readObject();
 		if (ninePatch == null || !(ninePatch instanceof ENinePatch)) throw new InvalidDataException("unknown nine patch");
-		
+
 		this.key = key;
 		this.ninePatch = (ENinePatch) ninePatch;
 		unitPerPixel = in.readFloat();
 	}
-	
-	public FancyNinepatch(String key, ENinePatch ninePatch) {
-		super(true);
+
+	public FancyNinepatch(final String key, final ENinePatch ninePatch) {
+		this(0, 0, key, ninePatch);
+	}
+
+	public FancyNinepatch(final float startTime, final int z, final String key, final ENinePatch ninePatch) {
+		super(startTime, z, true);
 		this.key = key;
 		this.ninePatch = ninePatch;
 	}
@@ -57,17 +61,17 @@ public class FancyNinepatch extends AFancyEvent {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene scene) {
+	public boolean begin(final EventFancyScene scene) {
 		scene.requestDrawableNinePatch(key).setDrawable(ninePatch, unitPerPixel);
 		return false;
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
-	public void update(float passedTime) {
+	public void update(final float passedTime) {
 	}
 
 	@Override
@@ -78,13 +82,13 @@ public class FancyNinepatch extends AFancyEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	@Override
-	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	public void drawableChanged(final EventFancyScene scene, final String changedKey) {
 	}
 
 	@Override
-	public void attachedToScene(EventFancyScene scene) {
+	public void attachedToScene(final EventFancyScene scene) {
 		scene.requestDrawableNinePatch(key);
 	}
 
@@ -92,15 +96,15 @@ public class FancyNinepatch extends AFancyEvent {
 	 * @param s Scanner from which to read.
 	 * @param parentFile The file handle of the file being used. Should be used only for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected nine patch name");
 			return null;
 		}
-		String key = s.next();
-			
-		ENinePatch ninePatch = FileCutsceneProvider.nextNinePatch(s);
-		
-		return (ninePatch != null) ? new FancyNinepatch(key, ninePatch) : null;
+		final String key = s.next();
+
+		final ENinePatch ninePatch = FileCutsceneProvider.nextNinePatch(s);
+
+		return ninePatch != null ? new FancyNinepatch(key, ninePatch) : null;
 	}
 }

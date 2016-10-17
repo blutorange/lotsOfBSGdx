@@ -16,7 +16,7 @@ import de.homelab.madgaksha.lotsofbs.util.Transient;
 /**
  * Provides subclasses with access to the {@link ADrawable} for the key
  * given to the constructor via the the variable {@link #drawable}.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -36,26 +36,30 @@ public abstract class AFancyWithDrawable extends AFancyEvent {
 	private String key;
 	@Transient protected ADrawable<?,?> drawable;
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeUTF(key);
 	}
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+	private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
 		final String key = in.readUTF();
 		if (key == null || key.isEmpty()) throw new InvalidDataException("key cannot be null or empty");
 		this.key = key;
 	}
-	
-	public AFancyWithDrawable(String key) {
-		super(true);
+
+	public AFancyWithDrawable(final String key) {
+		this(0, 0, key);
+	}
+
+	public AFancyWithDrawable(final float startTime, final int z, final String key) {
+		super(startTime, z, true);
 		this.key = key;
 	}
 
 	@Override
-	public final boolean begin(EventFancyScene scene) {
+	public final boolean begin(final EventFancyScene scene) {
 		drawable = scene.getADrawable(key);
 		return beginSubclass(scene);
 	}
-	
+
 	@Override
 	public final void reset() {
 		key = StringUtils.EMPTY;
@@ -64,18 +68,19 @@ public abstract class AFancyWithDrawable extends AFancyEvent {
 	}
 
 	@Override
-	public final void attachedToScene(EventFancyScene scene) {
+	public final void attachedToScene(final EventFancyScene scene) {
 		drawable = scene.getADrawable(key);
 	}
-	
+
 	@Override
-	public final void drawableChanged(EventFancyScene scene, String changedKey) {
-		if (this.key.equals(changedKey)) drawable = scene.getADrawable(key);
+	public final void drawableChanged(final EventFancyScene scene, final String changedKey) {
+		if (key.equals(changedKey))
+			drawable = scene.getADrawable(key);
 	}
 
 	protected abstract void resetSubclass();
 	protected abstract boolean beginSubclass(EventFancyScene scene);
-	
+
 	public String getKey() {
 		return key;
 	}

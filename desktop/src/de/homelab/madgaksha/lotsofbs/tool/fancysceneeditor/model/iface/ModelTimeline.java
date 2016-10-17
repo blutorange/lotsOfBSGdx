@@ -20,7 +20,7 @@ public interface ModelTimeline extends CustomDataHolder, Iterable<ModelTrack>, T
 	default int getCurrentFrame() {
 		return MathUtils.round(getCurrentTime() / getDeltaTime());
 	}
-	
+
 	/**
 	 * Precautions should be taken such that {@link #getStartTime()} time will not be greater than {@link #getEndTime()},
 	 * and not smaller than 0.
@@ -31,7 +31,7 @@ public interface ModelTimeline extends CustomDataHolder, Iterable<ModelTrack>, T
 	 * <br><br>
 	 * The start and end times of all tracks must be adjusted as well when necessary. Implementations are
 	 * free to decide whether tracks of length zero should be deleted.
-	 * @param startTime New start time in seconds.  
+	 * @param startTime New start time in seconds.
 	 */
 	@Override
 	public void setStartTime(float startTime);
@@ -45,24 +45,24 @@ public interface ModelTimeline extends CustomDataHolder, Iterable<ModelTrack>, T
 	 * <br><br>
 	 * The start and end times of all tracks must be adjusted as well when necessary. Implementations are
 	 * free to decide whether tracks of length zero should be deleted.
-	 * @param startTime New end time in seconds.  
+	 * @param startTime New end time in seconds.
 	 */
 	@Override
 	public void setEndTime(float endTime);
-	
+
 	/**
 	 * @return An iterator for the tracks this model contains.
 	 */
 	@Override
 	public Iterator<ModelTrack> iterator();
-	
+
 	public int getTrackCount();
 
 	/**
 	 * @return The name of this timeline. Displayed to the top left of the timeline.
 	 */
 	public CharSequence getLabel();
-	
+
 	/**
 	 * Creates a new, empty track and adds it to this timeline. This is only way
 	 * to add tracks to a timeline.
@@ -75,23 +75,25 @@ public interface ModelTimeline extends CustomDataHolder, Iterable<ModelTrack>, T
 	 * @return The newly created track added to the timeline.
 	 */
 	public ModelTrack newTrack(float startTime, float endTime, String label);
-	
-	public void registerChangeListener(TrackChangeType type, TrackChangeListener listener);
-	public void registerChangeListener(ClipChangeType type, ClipChangeListener listener);
-	default void registerChangeListener(TrackChangeListener listener, TrackChangeType... typeList) {
-		for (TrackChangeType type : typeList) registerChangeListener(type, listener);
+
+	public void registerChangeListener(final TrackChangeType type, final TrackChangeListener listener);
+	public void registerChangeListener(final ClipChangeType type, final ClipChangeListener listener);
+	public void removeChangeListener(final TrackChangeType type, final TrackChangeListener listener);
+	public void removeChangeListener(final ClipChangeType type, final ClipChangeListener listener);
+	default void registerChangeListener(final TrackChangeListener listener, final TrackChangeType... typeList) {
+		for (final TrackChangeType type : typeList) registerChangeListener(type, listener);
 	}
-	default void registerChangeListener(ClipChangeListener listener, ClipChangeType... typeList) {
-		for (ClipChangeType type : typeList) registerChangeListener(type, listener);
+	default void registerChangeListener(final ClipChangeListener listener, final ClipChangeType... typeList) {
+		for (final ClipChangeType type : typeList) registerChangeListener(type, listener);
 	}
 
-	
+
 	/**
 	 * Must not be less or equal to 0. Can be used for frame stepping etc.
 	 * @return Inverse of the frame rate of this timeline in seconds.
 	 */
 	public float getDeltaTime();
-	
+
 	/**
 	 * Precautions should be taken such that {@link #getDeltaTime()} does return a value greater than 0.
 	 * <br><br>
@@ -99,7 +101,7 @@ public interface ModelTimeline extends CustomDataHolder, Iterable<ModelTrack>, T
 	 * @param deltaTime The new delta time in seconds.
 	 */
 	public void setDeltaTime(float deltaTime);
-	
+
 	/**
 	 * Sets the track, clip, clip data etc. that has been selected currently and whose
 	 * details will be shown on screen.
@@ -112,5 +114,5 @@ public interface ModelTimeline extends CustomDataHolder, Iterable<ModelTrack>, T
 	default boolean hasSelected() {
 		return getSelected() != null;
 	}
-	
+
 }

@@ -20,26 +20,30 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 public class FancyDamagetarget extends AFancyEvent {
 	/** Initial version. */
 	private static final long serialVersionUID = 1L;
-	
+
 	private final static Logger LOG = Logger.getLogger(FancyDamagetarget.class);
 
 	private long basePowerMin;
 	private long basePowerMax;
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeLong(basePowerMin);
 		out.writeLong(basePowerMax);
 	}
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		basePowerMin = in.readLong();
 		basePowerMax = in.readLong();
 	}
 
-	
-	public FancyDamagetarget(long damageMin, long damageMax) {
-		super(true);
-		this.basePowerMax = damageMax;
-		this.basePowerMin = damageMin;
+	public FancyDamagetarget(final long damageMin, final long damageMax) {
+		this(0, 0, damageMin, damageMax);
+	}
+
+	public FancyDamagetarget(final float startTime, final int z, final long damageMin, final long damageMax) {
+		super(startTime, z, true);
+		basePowerMax = damageMax;
+		basePowerMin = damageMin;
 	}
 
 	@Override
@@ -49,24 +53,24 @@ public class FancyDamagetarget extends AFancyEvent {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
+	public boolean begin(final EventFancyScene efs) {
 		// Get damage component for current target.
 		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
 			LOG.error("no such target");
 			return false;
 		}
-		Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
-		long basePower = MathUtils.random(basePowerMin, basePowerMax);
+		final Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
+		final long basePower = MathUtils.random(basePowerMin, basePowerMax);
 		ComponentUtils.dealDamage(playerHitCircleEntity, target, basePower, true);
 		return false;
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
-	public void update(float passedTime) {
+	public void update(final float passedTime) {
 	}
 
 	@Override
@@ -77,21 +81,24 @@ public class FancyDamagetarget extends AFancyEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	@Override
-	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	public void drawableChanged(final EventFancyScene scene, final String changedKey) {
 	}
 
 	@Override
-	public void attachedToScene(EventFancyScene scene) {
+	public void attachedToScene(final EventFancyScene scene) {
 	}
 
 	/**
-	 * @param s Scanner from which to read.
-	 * @param parentFile The file handle of the file being used. Should be used only for directories.
+	 * @param s
+	 *            Scanner from which to read.
+	 * @param parentFile
+	 *            The file handle of the file being used. Should be used only
+	 *            for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
-		Long basePowerMin = FileCutsceneProvider.nextLong(s);
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
+		final Long basePowerMin = FileCutsceneProvider.nextLong(s);
 		if (basePowerMin == null) {
 			LOG.error("expected damage min");
 			return null;

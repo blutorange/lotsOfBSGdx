@@ -27,39 +27,43 @@ public class FancyMove extends AFancyWithDrawable {
 
 	private APath path;
 	private String interpolationName = DEFAULT_INTERPOLATION_NAME;
-	
+
 	@Transient private Vector2 vector = new Vector2();
 	@Transient private Interpolation interpolation = DEFAULT_INTERPOLATION;
 	@Transient private boolean isDone = false;
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeObject(path);
 		out.writeUTF(interpolationName);
 	}
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		vector = new Vector2();
-		
-		Object path = in.readObject();
+
+		final Object path = in.readObject();
 		if (path == null || !(path instanceof APath)) throw new InvalidDataException("unknown path");
 		this.path = (APath) path;
-		
+
 		final String interpolationName = in.readUTF();
 		if (interpolationName == null) throw new InvalidDataException("interpolation name must not be null");
 		final Interpolation interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
 		if (interpolation == null) throw new InvalidDataException("no such interpolation");
 		this.interpolation = interpolation;
-		
+
 		vector = new Vector2();
 		isDone = false;
 	}
-	
-	public FancyMove(String key, APath path, String interpolationName) {
-		super(key);
+
+	public FancyMove(final String key, final APath path, final String interpolationName) {
+		this(0, 0, key, path, interpolationName);
+	}
+
+	public FancyMove(final float startTime, final int z, final String key, final APath path, final String interpolationName) {
+		super(startTime, z, key);
 		this.path = path;
-		this.interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
-		if (this.interpolation == null) {
+		interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
+		if (interpolation == null) {
 			this.interpolationName = DEFAULT_INTERPOLATION_NAME;
-			this.interpolation = DEFAULT_INTERPOLATION;
+			interpolation = DEFAULT_INTERPOLATION;
 		}
 	}
 
@@ -71,7 +75,7 @@ public class FancyMove extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean beginSubclass(EventFancyScene efs) {
+	public boolean beginSubclass(final EventFancyScene efs) {
 		drawable.getPosition(vector);
 		path.setOrigin(vector);
 		isDone = false;
@@ -79,7 +83,7 @@ public class FancyMove extends AFancyWithDrawable {
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
@@ -107,20 +111,20 @@ public class FancyMove extends AFancyWithDrawable {
 	 * @param s Scanner from which to read.
 	 * @param parentFile The file handle of the file being used. Should be used only for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
+		final String key = s.next();
 
-		EPath path = FileCutsceneProvider.nextPath(s);
+		final EPath path = FileCutsceneProvider.nextPath(s);
 		if (path == null) {
 			LOG.error("expected path");
 			return null;
 		}
 
-		Float duration = FileCutsceneProvider.nextNumber(s);
+		final Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {
 			LOG.error("expected duration");
 			return null;
@@ -138,9 +142,9 @@ public class FancyMove extends AFancyWithDrawable {
 			LOG.error("expected relative/absolute flag");
 			return null;
 		}
-		boolean relativePath = s.next().equalsIgnoreCase("r");
+		final boolean relativePath = s.next().equalsIgnoreCase("r");
 
-		APath newPath = path.readNextObject(duration, relativePath, 1.0f, 1.0f, s);
+		final APath newPath = path.readNextObject(duration, relativePath, 1.0f, 1.0f, s);
 		if (newPath == null) {
 			LOG.error("expected path data");
 			return null;

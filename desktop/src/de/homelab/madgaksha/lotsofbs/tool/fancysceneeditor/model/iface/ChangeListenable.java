@@ -8,7 +8,13 @@ public interface ChangeListenable<TYPE,LISTENER> {
 	 * @param listener For handling the change event.
 	 */
 	public void registerChangeListener(TYPE type, LISTENER listener);
-	default void registerChangeListener(LISTENER listener, @SuppressWarnings("unchecked") TYPE... typeList) {
-		for (TYPE type : typeList) registerChangeListener(type, listener);
+	/**
+	 * Removes the listener of the given type. NoOp when no such listener was registered.
+	 * @param type Type of the event.
+	 * @param listener Listener to remove.
+	 */
+	public void removeChangeListener(TYPE type, LISTENER listener);
+	default void registerChangeListener(final LISTENER listener, @SuppressWarnings("unchecked") final TYPE... typeList) {
+		for (final TYPE type : typeList) registerChangeListener(type, listener);
 	}
 }

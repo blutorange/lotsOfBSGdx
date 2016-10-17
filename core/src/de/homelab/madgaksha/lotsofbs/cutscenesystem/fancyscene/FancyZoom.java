@@ -18,7 +18,7 @@ import de.homelab.madgaksha.lotsofbs.util.Transient;
 public class FancyZoom extends AFancyWithDrawable {
 	/** Initial version. */
 	private static final long serialVersionUID = 1L;
-	
+
 	private final static Logger LOG = Logger.getLogger(FancyZoom.class);
 	private final static float MIN_DURATION = 0.01f;
 	private final static Interpolation DEFAULT_INTERPOLATION = Interpolation.linear;
@@ -28,53 +28,67 @@ public class FancyZoom extends AFancyWithDrawable {
 	private String interpolationName = DEFAULT_INTERPOLATION_NAME;
 	private Vector2 targetScale = new Vector2(1f, 1f);
 
-	@Transient private Vector2 startScale = new Vector2(1f, 1f);
-	@Transient private Interpolation interpolation = DEFAULT_INTERPOLATION;
-	@Transient private float durationInverse = 1.0f;
-	@Transient private boolean isDone = false;
+	@Transient
+	private Vector2 startScale = new Vector2(1f, 1f);
+	@Transient
+	private Interpolation interpolation = DEFAULT_INTERPOLATION;
+	@Transient
+	private float durationInverse = 1.0f;
+	@Transient
+	private boolean isDone = false;
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeFloat(duration);
 		out.writeUTF(interpolationName);
 		out.writeFloat(targetScale.x);
 		out.writeFloat(targetScale.y);
 	}
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		startScale = new Vector2(1f, 1f);
 		targetScale = new Vector2(1f, 1f);
-				
+
 		final float duration = in.readFloat();
-		if (duration < MIN_DURATION) throw new InvalidDataException("duration must be >= " + MIN_DURATION);
+		if (duration < MIN_DURATION)
+			throw new InvalidDataException("duration must be >= " + MIN_DURATION);
 		this.duration = duration;
-		
+
 		final String interpolationName = in.readUTF();
-		if (interpolationName == null) throw new InvalidDataException("interpolation name must not be null");
+		if (interpolationName == null)
+			throw new InvalidDataException("interpolation name must not be null");
 		final Interpolation interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
-		if (interpolation == null) throw new InvalidDataException("no such interpolation");
+		if (interpolation == null)
+			throw new InvalidDataException("no such interpolation");
 		this.interpolation = interpolation;
-		
+
 		final float sx = in.readFloat();
 		final float sy = in.readFloat();
-		if (sx < 0f || sy < 0f) throw new InvalidDataException("scale must be >= 0");
-		this.targetScale.set(sx, sy);
-		
-		durationInverse = 1.0f/duration;
+		if (sx < 0f || sy < 0f)
+			throw new InvalidDataException("scale must be >= 0");
+		targetScale.set(sx, sy);
+
+		durationInverse = 1.0f / duration;
 		isDone = false;
 	}
 
-	
-	public FancyZoom(String key, float targetScaleX, float targetScaleY, String interpolationName, float duration) {
-		super(key);
+	public FancyZoom(final String key, final float targetScaleX, final float targetScaleY,
+			final String interpolationName, final float duration) {
+		this(0, 0, key, targetScaleX, targetScaleY, interpolationName, duration);
+	}
+
+	public FancyZoom(final float startTime, final int z, final String key, final float targetScaleX, final float targetScaleY,
+			final String interpolationName, final float duration) {
+		super(startTime, z, key);
 		if (duration < MIN_DURATION)
 			throw new IllegalArgumentException("duration must be >= " + MIN_DURATION);
 		this.interpolationName = interpolationName;
-		this.targetScale.set(targetScaleX, targetScaleY);
+		targetScale.set(targetScaleX, targetScaleY);
 		this.duration = duration;
-		this.durationInverse = 1.0f / duration;
-		this.interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
-		if (this.interpolation == null) {
+		durationInverse = 1.0f / duration;
+		interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
+		if (interpolation == null) {
 			this.interpolationName = DEFAULT_INTERPOLATION_NAME;
-			this.interpolation = DEFAULT_INTERPOLATION;
+			interpolation = DEFAULT_INTERPOLATION;
 		}
 	}
 
@@ -87,14 +101,14 @@ public class FancyZoom extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean beginSubclass(EventFancyScene scene) {
+	public boolean beginSubclass(final EventFancyScene scene) {
 		drawable.getScale(startScale);
 		isDone = false;
 		return true;
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
@@ -103,7 +117,7 @@ public class FancyZoom extends AFancyWithDrawable {
 			passedTime = duration;
 			isDone = true;
 		}
-		float alpha = interpolation.apply(passedTime * durationInverse);
+		final float alpha = interpolation.apply(passedTime * durationInverse);
 		drawable.setScaleLerp(startScale, targetScale, alpha);
 	}
 
@@ -119,17 +133,20 @@ public class FancyZoom extends AFancyWithDrawable {
 	}
 
 	/**
-	 * @param s Scanner from which to read.
-	 * @param parentFile The file handle of the file being used. Should be used only for directories.
+	 * @param s
+	 *            Scanner from which to read.
+	 * @param parentFile
+	 *            The file handle of the file being used. Should be used only
+	 *            for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
+		final String key = s.next();
 
-		Float duration = FileCutsceneProvider.nextNumber(s);
+		final Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {
 			LOG.error("expected duration");
 			return null;
@@ -143,7 +160,7 @@ public class FancyZoom extends AFancyWithDrawable {
 		if (interpolationName == null)
 			interpolationName = DEFAULT_INTERPOLATION_NAME;
 
-		Float targetScaleX = FileCutsceneProvider.nextNumber(s);
+		final Float targetScaleX = FileCutsceneProvider.nextNumber(s);
 		if (targetScaleX == null) {
 			LOG.error("expected target scale");
 			return null;

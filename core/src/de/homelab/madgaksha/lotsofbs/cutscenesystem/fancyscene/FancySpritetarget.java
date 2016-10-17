@@ -28,7 +28,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 public class FancySpritetarget extends AFancyEvent {
 	/** Initial version. */
 	private static final long serialVersionUID = 1L;
-	
+
 	private final static Logger LOG = Logger.getLogger(FancySpritetarget.class);
 
 	private String key;
@@ -36,32 +36,37 @@ public class FancySpritetarget extends AFancyEvent {
 	private float direction;
 	private float dpi;
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeUTF(key);
 		out.writeObject(mode);
 		out.writeFloat(direction);
 		out.writeFloat(dpi);
 	}
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-		String key = in.readUTF();
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		final String key = in.readUTF();
 		if (key == null || key.isEmpty()) throw new InvalidDataException("key cannot be null or empty");
 
-		Object mode = in.readObject();
+		final Object mode = in.readObject();
 		if (mode == null || !(mode instanceof AnimationMode)) throw new InvalidDataException("unknown animation mode");
-		
+
 		this.key = key;
 		this.mode = (AnimationMode)mode;
 		direction = in.readFloat();
 		dpi = in.readFloat();
 	}
-	
-	public FancySpritetarget(String key, float dpi, float direction, AnimationMode mode) {
-		super(true);
+
+	public FancySpritetarget(final String key, final float dpi, final float direction, final AnimationMode mode) {
+		this(0, 0, key, dpi, direction, mode);
+	}
+
+	public FancySpritetarget(final float startTime, final int z, final String key, final float dpi, final float direction, final AnimationMode mode) {
+		super(startTime, z, true);
 		this.dpi = dpi;
 		this.key = key;
 		this.direction = direction;
 		this.mode = mode;
 	}
+
 
 	@Override
 	public void reset() {
@@ -72,17 +77,17 @@ public class FancySpritetarget extends AFancyEvent {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene scene) {
+	public boolean begin(final EventFancyScene scene) {
 		// Get target
 		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
 			LOG.error("no such target");
 			return false;
 		}
-		Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
+		final Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
 
 		// Animation
 		AtlasAnimation animation = null;
-		AnimationModeListComponent sfdcl = Mapper.animationModeListComponent.get(target);
+		final AnimationModeListComponent sfdcl = Mapper.animationModeListComponent.get(target);
 		if (sfdcl != null) {
 			AnimationForDirection sd = mode.getAnimationForDirection(sfdcl);
 			if (sd == null) {
@@ -95,7 +100,7 @@ public class FancySpritetarget extends AFancyEvent {
 			}
 			animation = BirdsViewSpriteSystem.getForDirection(direction, sd);
 		} else {
-			AnimationForDirectionComponent sfdc = Mapper.animationForDirectionComponent.get(target);
+			final AnimationForDirectionComponent sfdc = Mapper.animationForDirectionComponent.get(target);
 			if (sfdc == null) {
 				LOG.error("target does not possess sprite for direction component");
 				return false;
@@ -113,11 +118,11 @@ public class FancySpritetarget extends AFancyEvent {
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
-	public void update(float passedTime) {
+	public void update(final float passedTime) {
 	}
 
 	@Override
@@ -128,13 +133,13 @@ public class FancySpritetarget extends AFancyEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	@Override
-	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	public void drawableChanged(final EventFancyScene scene, final String changedKey) {
 	}
 
 	@Override
-	public void attachedToScene(EventFancyScene scene) {
+	public void attachedToScene(final EventFancyScene scene) {
 		scene.requestDrawableAnimation(key);
 	}
 
@@ -142,20 +147,20 @@ public class FancySpritetarget extends AFancyEvent {
 	 * @param s Scanner from which to read.
 	 * @param parentFile The file handle of the file being used. Should be used only for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
+		final String key = s.next();
 
-		Float dpi = FileCutsceneProvider.nextNumber(s);
+		final Float dpi = FileCutsceneProvider.nextNumber(s);
 		if (dpi == null) {
 			LOG.error("expected dpi");
 			return null;
 		}
 
-		Float direction = FileCutsceneProvider.nextNumber(s);
+		final Float direction = FileCutsceneProvider.nextNumber(s);
 		if (direction == null) {
 			LOG.error("expected direction");
 			return null;
@@ -163,10 +168,10 @@ public class FancySpritetarget extends AFancyEvent {
 
 		AnimationMode mode = AnimationMode.NORMAL;
 		if (s.hasNext()) {
-			String name = s.next().toUpperCase(Locale.ROOT);
+			final String name = s.next().toUpperCase(Locale.ROOT);
 			try {
 				mode = AnimationMode.valueOf(name);
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				LOG.error("no such sprite mode", e);
 				mode = AnimationMode.NORMAL;
 			}

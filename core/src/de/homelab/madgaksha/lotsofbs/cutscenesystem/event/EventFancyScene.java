@@ -6,6 +6,7 @@ import static de.homelab.madgaksha.lotsofbs.GlobalBag.viewportGameFixed;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -94,7 +95,7 @@ import de.homelab.madgaksha.lotsofbs.util.Transient;
  * &lt;SpriteName&gt; &lt;Duration&gt; [Interpolation=linear]
  * &lt;TargetOpacity&gt;</li>
  * </ul>
- * 
+ *
  * Additionally, a z-index may be given immediately after the event name (and
  * before the absolute/relative flag). The higher the z-index, the earlier
  * events are processed (updated/rendered). This applies only to events of the
@@ -108,7 +109,7 @@ import de.homelab.madgaksha.lotsofbs.util.Transient;
  * <br>
  * For example, a simple fade in with an image that move from the bottom left to
  * the center:
- * 
+ *
  * <pre>
  * Sprite R 0.0 Joshua  100.0 FACE_JOSHUA_01
  * Sprite R 0.0 Estelle 100.0 FACE_ESTELLE_01
@@ -120,29 +121,29 @@ import de.homelab.madgaksha.lotsofbs.util.Transient;
  * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_07
  * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_08
  * Sprite R 0.2 Estelle 100.0 FACE_ESTELLE_09
- * 
+ *
  * Position R 0.0 Estelle -4.0 -4.5
  * Position R 0.0 Joshua  -4.0 -4.0
  * Opacity R 0.0 Estelle 0.0
- * 
+ *
  * Move R 0.0 Estelle Line 0.5 A 0.0 0.0
  * Fade R 0.0 Estelle 0.5 1.0 Linear
- * 
+ *
  * Show 1 R 0.0 Estelle 2.0
  * Show 2 R 0.0 Joshua 2.0
- * 
+ *
  * Sound R 0.5 Player ESTELLE_TOTTEOKI_O_MISETE_AGERU
  * </pre>
- * 
+ *
  * If there is any overlap, sprite Joshua will be drawn over sprite Estelle.
- * 
+ *
  * @author madgaksha
  *
  */
 public class EventFancyScene extends ACutsceneEvent implements Serializable {
 	/** Initial version. */
 	private static final long serialVersionUID = 1L;
-	
+
 	public final static ADrawable<Object, Object> PROTOTYPE_DRAWABLE_MOCK = new DrawableMock();
 	private final static Logger LOG = Logger.getLogger(EventFancyScene.class);
 	private final static ADrawable<ETexture, CroppableAtlasSprite> PROTOTYPE_DRAWABLE_SPRITE = new DrawableSprite();
@@ -162,13 +163,13 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 	@Transient private boolean isSpedup = false;
 	@Transient private EventFancyScene parent;
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeInt(eventList.size());
-		for (AFancyEvent fe : eventList)
+		for (final AFancyEvent fe : eventList)
 			out.writeObject(fe);
 	}
 
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		eventList = new ArrayList<AFancyEvent>();
 		queueList = new Stack<AFancyEvent>();
 		activeList = new LinkedList<AFancyEvent>();
@@ -177,7 +178,7 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 		totalTime = 0.0f;
 		deltaTime = 0.0f;
 		isSpedup = false;
-		
+
 		reset();
 		final int size = in.readInt();
 		if (size < 0) throw new InvalidDataException("list size must be >= 0");
@@ -189,14 +190,14 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 			}
 			eventList.add((AFancyEvent)fe);
 		}
-		for (AFancyEvent fe : eventList)
+		for (final AFancyEvent fe : eventList)
 			fe.attachedToScene(this);
 	}
-	
-	public EventFancyScene(List<AFancyEvent> eventList) {
+
+	public EventFancyScene(final Collection<AFancyEvent> eventList) {
 		this.eventList.addAll(eventList);
 		Collections.sort(this.eventList, Collections.reverseOrder(AFancyEvent.ORDER_START_TIME_PRIORITY));
-		for (AFancyEvent fe : this.eventList)
+		for (final AFancyEvent fe : this.eventList)
 			fe.attachedToScene(this);
 	}
 
@@ -221,24 +222,23 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 	 * @param batch Batch to draw with. {@link Batch#begin()} should have been called.
 	 */
 	private Matrix4 oldTransform;
-	public void render(Batch batch) {
-		if (oldTransform == null) {
+	public void render(final Batch batch) {
+		if (oldTransform == null)
 			oldTransform = new Matrix4();
-		}
 		oldTransform.set(batch.getTransformMatrix());
 		batch.setTransformMatrix(batch.getTransformMatrix().translate(shake.x*Game.VIEWPORT_GAME_AR_NUM, shake.y*Game.VIEWPORT_GAME_AR_DEN, shake.z));
 		renderMain(batch);
 		batch.setTransformMatrix(oldTransform);
 	}
-	
-	public void renderMain(Batch batch) {
-		for (AFancyEvent fe : activeList)
+
+	public void renderMain(final Batch batch) {
+		for (final AFancyEvent fe : activeList)
 			fe.render(batch);
 	}
 
 	//TODO need to remove events that have ended in the corrected order, depending on their end time
 	@Override
-	public void update(float deltaTime, boolean isSpedup) {
+	public void update(final float deltaTime, final boolean isSpedup) {
 		this.deltaTime = deltaTime;
 		this.isSpedup = isSpedup;
 		totalTime += deltaTime;
@@ -246,12 +246,12 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 		boolean listChanged = false;
 		boolean eventsStarted = false;
 
-		this.shake.set(0.0f, 0.0f, 0.0f);
+		shake.set(0.0f, 0.0f, 0.0f);
 
 		// We need to update all events currently active and remove those that
 		// are done before we can add new events.
-		for (Iterator<AFancyEvent> it = activeList.iterator(); it.hasNext();) {
-			AFancyEvent fe = it.next();
+		for (final Iterator<AFancyEvent> it = activeList.iterator(); it.hasNext();) {
+			final AFancyEvent fe = it.next();
 			fe.update(totalTime - fe.getStartTime());
 			if (fe.isFinished()) {
 				fe.end();
@@ -261,7 +261,7 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 
 		// Now we can add all new events that should start now.
 		while (!queueList.empty() && totalTime >= queueList.peek().getStartTime()) {
-			AFancyEvent fe = queueList.pop();
+			final AFancyEvent fe = queueList.pop();
 			if (fe.begin(this)) {
 				activeList.push(fe);
 				listChanged = true;
@@ -270,28 +270,26 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 		}
 
 		// Sort all active events by their z-index.
-		if (listChanged) {
+		if (listChanged)
 			Collections.sort(activeList, AFancyEvent.ORDER_PRIORITY_Z);
-		}
 
 		// Finally we need to update all events that have been added.
 		// As events may depend on each other, we need to update all events
 		// again,
 		// not only those that have been added.
-		if (eventsStarted) {
-			for (Iterator<AFancyEvent> it = activeList.iterator(); it.hasNext();) {
-				AFancyEvent fe = it.next();
+		if (eventsStarted)
+			for (final Iterator<AFancyEvent> it = activeList.iterator(); it.hasNext();) {
+				final AFancyEvent fe = it.next();
 				fe.update(totalTime - fe.getStartTime());
 				if (fe.isFinished()) {
 					fe.end();
 					it.remove();
 				}
 			}
-		}
 	}
 
 	@Override
-	public void resize(int w, int h) {
+	public void resize(final int w, final int h) {
 		// Not needed anymore as we are working with a virtual fixed screen size
 		// now.
 
@@ -303,27 +301,25 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 
 	@Override
 	public boolean begin() {
-		for (ADrawable<?, ?> drawable : drawableMap.values())
+		for (final ADrawable<?, ?> drawable : drawableMap.values())
 			drawable.reset();
-		this.activeList.clear();
-		this.queueList.clear();
-		this.queueList.addAll(eventList);
-		this.isSpedup = false;
-		this.totalTime = 0.0f;
-		this.deltaTime = 0.0f;
-		this.shake.set(0.0f, 0.0f, 0.0f);
+		activeList.clear();
+		queueList.clear();
+		queueList.addAll(eventList);
+		isSpedup = false;
+		totalTime = 0.0f;
+		deltaTime = 0.0f;
+		shake.set(0.0f, 0.0f, 0.0f);
 		return !queueList.isEmpty();
 	}
 
 	@Override
 	public void reset() {
-		for (ADrawable<?, ?> drawable : drawableMap.values()) {
+		for (final ADrawable<?, ?> drawable : drawableMap.values())
 			drawable.dispose();
-		}
-		for (AFancyEvent fe : eventList) {
+		for (final AFancyEvent fe : eventList)
 			// TODO call ResourcePool.freeFancyEvent(fe); instead
 			fe.reset();
-		}
 		eventList.clear();
 		drawableMap.clear();
 		queueList.clear();
@@ -348,7 +344,7 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 	 *         always return the same object.
 	 */
 	@SuppressWarnings("unchecked")
-	private <S, T> ADrawable<S, T> getADrawable(String key, ADrawable<S, T> prototype) {
+	private <S, T> ADrawable<S, T> getADrawable(final String key, final ADrawable<S, T> prototype) {
 		final ADrawable<?, ?> drawable = drawableMap.get(key);
 		if (drawable == null) {
 			// Create new drawable.
@@ -362,7 +358,7 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 			final ADrawable<S, T> newObject = prototype.newObject();
 			drawableMap.put(key, newObject);
 			// Inform events drawables changed.
-			for (AFancyEvent fe : activeList) 
+			for (final AFancyEvent fe : activeList)
 				fe.drawableChanged(this, key);
 			return newObject;
 		}
@@ -377,36 +373,35 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 	 * @param key Key of the drawable.
 	 * @return The drawable, or a {@link DrawableMock} when no such drawable exists.
 	 */
-	public ADrawable<?, ?> getADrawable(String key) {
+	public ADrawable<?, ?> getADrawable(final String key) {
 		return drawableMap.getOrDefault(key, PROTOTYPE_DRAWABLE_MOCK);
 	}
 
 	/**
 	 * For checking for sanity while loading. It is not required, but animation
 	 * files should load an object before using it.
-	 * 
+	 *
 	 * @param key
 	 *            ID of the {@link ADrawable} to check.
 	 */
-	public void checkForDrawable(String key) {
-		if (!drawableMap.containsKey(key)) {
+	public void checkForDrawable(final String key) {
+		if (!drawableMap.containsKey(key))
 			LOG.error("warning: no object exists yet for " + key);
-		}
 	}
 
-	public ADrawable<ETexture, CroppableAtlasSprite> requestDrawableSprite(String key) {
+	public ADrawable<ETexture, CroppableAtlasSprite> requestDrawableSprite(final String key) {
 		return getADrawable(key, PROTOTYPE_DRAWABLE_SPRITE);
 	}
 
-	public ADrawable<EAnimation, AtlasAnimation> requestDrawableAnimation(String key) {
+	public ADrawable<EAnimation, AtlasAnimation> requestDrawableAnimation(final String key) {
 		return getADrawable(key, PROTOTYPE_DRAWABLE_ANIMATION);
 	}
 
-	public ADrawable<ENinePatch, NinePatch> requestDrawableNinePatch(String key) {
+	public ADrawable<ENinePatch, NinePatch> requestDrawableNinePatch(final String key) {
 		return getADrawable(key, PROTOTYPE_DRAWABLE_NINE_PATCH);
 	}
 
-	public ADrawable<EParticleEffect, PooledEffect> requestDrawableParticleEffect(String key) {
+	public ADrawable<EParticleEffect, PooledEffect> requestDrawableParticleEffect(final String key) {
 		return getADrawable(key, PROTOTYPE_DRAWABLE_PARTICLE_EFFECT);
 	}
 
@@ -416,75 +411,75 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 	 * prevent rounding errors from propagating. Note, however, that
 	 * {@link #update(float)} may be called more than once per frame.
 	 * Implemented events need to check the argument passedTime.
-	 * 
+	 *
 	 * @return Time since the last frame.
 	 */
 	public float getDeltaTime() {
 		return deltaTime;
 	}
 
-	public void setParent(EventFancyScene scene) {
+	public void setParent(final EventFancyScene scene) {
 		// Prevent stack overflow when this scene is provided as the argument.
 		if (this != scene)
-			this.parent = scene;
+			parent = scene;
 	}
 
-	public void shakeScreenBy(Vector3 shake) {
+	public void shakeScreenBy(final Vector3 shake) {
 		this.shake.add(shake);
 		if (parent != null)
 			parent.shakeScreenBy(shake);
 	}
 
-	public void shakeScreenBy(float shakeX, float shakeY) {
+	public void shakeScreenBy(final float shakeX, final float shakeY) {
 		shake.x += shakeX;
 		shake.y += shakeY;
 		if (parent != null)
 			parent.shakeScreenBy(shakeX, shakeY);
 	}
 
-	public void shakeScreenBy(Vector2 shake) {
+	public void shakeScreenBy(final Vector2 shake) {
 		this.shake.x += shake.x;
 		this.shake.y += shake.y;
 		if (parent != null)
 			parent.shakeScreenBy(shake);
 	}
 
-	public static EventFancyScene readNextObject(Scanner s, FileHandle inputFile) {
+	public static EventFancyScene readNextObject(final Scanner s, final FileHandle inputFile) {
 		if (!s.hasNextLine()) {
 			LOG.error("expected file name for fancyScene configuration file");
 			return null;
 		}
-		String relativeFilePath = s.nextLine().trim();
-		FileHandle fileHandle = inputFile.isDirectory() ? inputFile.child(relativeFilePath)
+		final String relativeFilePath = s.nextLine().trim();
+		final FileHandle fileHandle = inputFile.isDirectory() ? inputFile.child(relativeFilePath)
 				: inputFile.parent().child(relativeFilePath);
-		List<AFancyEvent> eventList = new ArrayList<AFancyEvent>();
+		final List<AFancyEvent> eventList = new ArrayList<AFancyEvent>();
 		if (!readEventList(fileHandle, eventList))
 			return null;
 		return new EventFancyScene(eventList);
 	}
 
-	public static boolean readEventList(FileHandle fileHandle, List<AFancyEvent> eventList) {
+	public static boolean readEventList(final FileHandle fileHandle, final List<AFancyEvent> eventList) {
 		final String content = fileHandle.readString("UTF-8");
 		return readEventList(fileHandle, eventList, content);
 	}
-	
-	public static boolean readEventList(FileHandle fileHandle, List<AFancyEvent> eventList, String content) {
+
+	public static boolean readEventList(final FileHandle fileHandle, final List<AFancyEvent> eventList, final String content) {
 		Scanner scanner = null;
-		Map<Class<?>, Float> startMap = new HashMap<Class<?>, Float>();
+		final Map<Class<?>, Float> startMap = new HashMap<Class<?>, Float>();
 		try {
 			scanner = new Scanner(content);
 			scanner.useLocale(Locale.ROOT);
 			while (scanner.hasNextLine()) {
 				Scanner lineScanner = null;
 				try {
-					String line = scanner.nextLine().trim();
+					final String line = scanner.nextLine().trim();
 					// Skip comments
 					if (line.isEmpty() || line.length() >= 2 && line.substring(0, 2).equals("//"))
 						continue;
 					// Read this fancy event
 					lineScanner = new Scanner(line);
 					lineScanner.useLocale(Locale.ROOT);
-					AFancyEvent fancyEvent = AFancyEvent.readNextEvent(lineScanner, fileHandle);
+					final AFancyEvent fancyEvent = AFancyEvent.readNextEvent(lineScanner, fileHandle);
 					if (fancyEvent == null) {
 						LOG.error("failed to read fancy event for parameters: " + line);
 						return false;
@@ -498,7 +493,7 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 					IOUtils.closeQuietly(lineScanner);
 				}
 			}
-		} catch (GdxRuntimeException e) {
+		} catch (final GdxRuntimeException e) {
 			LOG.error("could not read fancy event configuration file", e);
 			return false;
 		} finally {
@@ -510,8 +505,8 @@ public class EventFancyScene extends ACutsceneEvent implements Serializable {
 	public boolean isSpedup() {
 		return isSpedup;
 	}
-	
+
 	public float getStateTime() {
-		return totalTime; 
+		return totalTime;
 	}
 }

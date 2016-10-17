@@ -22,8 +22,8 @@ import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineP
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProviderChangeListener;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProviderChangeListener.TimelineProviderChangeType;
 import de.homelab.madgaksha.scene2dext.util.TableUtils;
-import de.homelab.madgaksha.scene2dext.widget.NumericInput;
-import de.homelab.madgaksha.scene2dext.widget.NumericInput.NumericInputListener;
+import de.homelab.madgaksha.scene2dext.view.NumericInput.FloatNumericInput;
+import de.homelab.madgaksha.scene2dext.view.NumericInput.NumericInputListener;
 
 public class DetailsWindow extends Table {
 	@SuppressWarnings("unused")
@@ -35,12 +35,12 @@ public class DetailsWindow extends Table {
 
 	private TimeIntervalListenable listenable;
 	private Object listenerIdStart, listenerIdEnd;
-	private NumericInputListener listenerStart, listenerDuration;
+	private NumericInputListener<Float> listenerStart, listenerDuration;
 	private final Label heading;
 	private final Label description;
 	private final ScrollPane scrollPane;
-	private final NumericInput niStart;
-	private final NumericInput niDuration;
+	private final FloatNumericInput niStart;
+	private final FloatNumericInput niDuration;
 	private final Table table;
 	private final TimelineProvider timelineProvider;
 
@@ -50,8 +50,8 @@ public class DetailsWindow extends Table {
 		heading = new Label(StringUtils.EMPTY, skin);
 		description = new Label(StringUtils.EMPTY, skin);
 		scrollPane = new ScrollPane(null, skin);
-		niStart = new NumericInput(0f, skin);
-		niDuration = new NumericInput(0f, skin);
+		niStart = new FloatNumericInput(0f, skin);
+		niDuration = new FloatNumericInput(0f, skin);
 		table = new Table(skin);
 		timelineProvider.registerChangeListener(TimelineProviderChangeType.SWITCHED, new TimelineProviderChangeListener() {
 			@Override
@@ -87,7 +87,9 @@ public class DetailsWindow extends Table {
 		niStart.setStep(0.01f);
 		niDuration.setStep(0.01f);
 
-		if (hasTime) connectTimeIntervalListenable((TimeIntervalListenable)parent);
+		if (hasTime) {
+			connectTimeIntervalListenable((TimeIntervalListenable)parent);
+		}
 
 		heading.invalidateHierarchy();
 		description.invalidateHierarchy();
@@ -101,8 +103,12 @@ public class DetailsWindow extends Table {
 			this.listenable.removeStartTimeListener(listenerIdStart);
 			this.listenable.removeEndTimeListener(listenerIdEnd);
 		}
-		if (listenerStart != null) niStart.removeListener(listenerStart);
-		if (listenerDuration != null) niDuration.removeListener(listenerDuration);
+		if (listenerStart != null) {
+			niStart.removeListener(listenerStart);
+		}
+		if (listenerDuration != null) {
+			niDuration.removeListener(listenerDuration);
+		}
 
 		// Create new listeners and connect
 		final TimeIntervalListener listenerTime = new TimeIntervalListener() {
@@ -111,17 +117,17 @@ public class DetailsWindow extends Table {
 				setTimeInput(listenable);
 			}
 		};
-		listenerStart = new NumericInputListener() {
+		listenerStart = new NumericInputListener<Float>() {
 			@Override
-			protected void changed(final float value, final Actor actor) {
+			protected void changed(final Float value, final Actor actor) {
 				final float endTime = value + listenable.getDuration();
 				listenable.setStartTime(value);
 				listenable.setEndTime(endTime);
 			}
 		};
-		listenerDuration = new NumericInputListener() {
+		listenerDuration = new NumericInputListener<Float>() {
 			@Override
-			protected void changed(final float value, final Actor actor) {
+			protected void changed(final Float value, final Actor actor) {
 				listenable.setEndTime(listenable.getStartTime()+value);
 			}
 		};

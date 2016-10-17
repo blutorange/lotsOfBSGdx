@@ -22,53 +22,66 @@ public class FancyFade extends AFancyWithDrawable {
 	private final static float MIN_DURATION = 0.001f;
 	private final static Interpolation DEFAULT_INTERPOLATION = Interpolation.linear;
 	private final static String DEFAULT_INTERPOLATION_NAME = "linear";
-	
+
 	private String interpolationName = DEFAULT_INTERPOLATION_NAME;
 	private float duration = 1.0f;
 	private float targetOpacity = 1.0f;
 
-	@Transient private float startOpacity = 1.0f;
-	@Transient private Interpolation interpolation = DEFAULT_INTERPOLATION;
-	@Transient private float durationInverse = 1.0f;
-	@Transient private boolean isDone = false;
+	@Transient
+	private float startOpacity = 1.0f;
+	@Transient
+	private Interpolation interpolation = DEFAULT_INTERPOLATION;
+	@Transient
+	private float durationInverse = 1.0f;
+	@Transient
+	private boolean isDone = false;
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeFloat(duration);
 		out.writeUTF(interpolationName);
 		out.writeFloat(targetOpacity);
 	}
-	
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {	
+
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		final float duration = in.readFloat();
-		if (duration < MIN_DURATION) throw new InvalidDataException("duration must be >= " + MIN_DURATION);
+		if (duration < MIN_DURATION)
+			throw new InvalidDataException("duration must be >= " + MIN_DURATION);
 		this.duration = duration;
-		
+
 		final String interpolationName = in.readUTF();
-		if (interpolationName == null) throw new InvalidDataException("interpolation name must not be null");
+		if (interpolationName == null)
+			throw new InvalidDataException("interpolation name must not be null");
 		final Interpolation interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
-		if (interpolation == null) throw new InvalidDataException("no such interpolation");
+		if (interpolation == null)
+			throw new InvalidDataException("no such interpolation");
 		this.interpolation = interpolation;
-				
+
 		this.interpolationName = interpolationName;
 		targetOpacity = in.readFloat();
-		
+
 		startOpacity = targetOpacity;
-		durationInverse = 1.0f/duration;
+		durationInverse = 1.0f / duration;
 		isDone = false;
 	}
-	
-	public FancyFade(String key, float targetOpacity, String interpolationName, float duration) {
-		super(key);
+
+	public FancyFade(final String key, final float targetOpacity, final String interpolationName,
+			final float duration) {
+		this(0, 0, key, targetOpacity, interpolationName, duration);
+	}
+
+	public FancyFade(final float startTime, final int z, final String key, final float targetOpacity, final String interpolationName,
+			final float duration) {
+		super(startTime, z, key);
 		if (duration < MIN_DURATION)
 			throw new IllegalArgumentException("duration must be >= " + MIN_DURATION);
 		this.interpolationName = interpolationName;
 		this.targetOpacity = targetOpacity;
 		this.duration = duration;
-		this.durationInverse = 1.0f / duration;
-		this.interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
-		if (this.interpolation == null) {
+		durationInverse = 1.0f / duration;
+		interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
+		if (interpolation == null) {
 			this.interpolationName = DEFAULT_INTERPOLATION_NAME;
-			this.interpolation = DEFAULT_INTERPOLATION;
+			interpolation = DEFAULT_INTERPOLATION;
 		}
 	}
 
@@ -81,14 +94,14 @@ public class FancyFade extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean beginSubclass(EventFancyScene efs) {
+	public boolean beginSubclass(final EventFancyScene efs) {
 		startOpacity = drawable.getOpacity();
 		isDone = false;
 		return true;
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
@@ -112,17 +125,20 @@ public class FancyFade extends AFancyWithDrawable {
 	}
 
 	/**
-	 * @param s Scanner from which to read.
-	 * @param parentFile The file handle of the file being used. Should be used only for directories.
+	 * @param s
+	 *            Scanner from which to read.
+	 * @param parentFile
+	 *            The file handle of the file being used. Should be used only
+	 *            for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
+		final String key = s.next();
 
-		Float duration = FileCutsceneProvider.nextNumber(s);
+		final Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {
 			LOG.error("expected duration");
 			return null;
@@ -136,7 +152,7 @@ public class FancyFade extends AFancyWithDrawable {
 		if (interpolationName == null)
 			interpolationName = DEFAULT_INTERPOLATION_NAME;
 
-		Float targetOpacity = FileCutsceneProvider.nextNumber(s);
+		final Float targetOpacity = FileCutsceneProvider.nextNumber(s);
 		if (targetOpacity == null) {
 			LOG.error("expected target opacity");
 			return null;

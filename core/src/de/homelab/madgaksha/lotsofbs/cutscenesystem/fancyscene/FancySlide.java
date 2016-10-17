@@ -18,7 +18,7 @@ import de.homelab.madgaksha.lotsofbs.util.Transient;
 public class FancySlide extends AFancyWithDrawable {
 	/** Initial version. */
 	private static final long serialVersionUID = 1L;
-	
+
 	private final static Logger LOG = Logger.getLogger(FancySlide.class);
 	private final static float MIN_DURATION = 0.01f;
 	private final static Interpolation DEFAULT_INTERPOLATION = Interpolation.linear;
@@ -34,8 +34,8 @@ public class FancySlide extends AFancyWithDrawable {
 	@Transient private float durationInverse = 1.0f;
 	@Transient private Interpolation interpolation = DEFAULT_INTERPOLATION;
 	@Transient private boolean isDone = false;
-	
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeFloat(duration);
 		out.writeUTF(interpolationName);
 		out.writeFloat(targetCropX.x);
@@ -43,12 +43,12 @@ public class FancySlide extends AFancyWithDrawable {
 		out.writeFloat(targetCropY.x);
 		out.writeFloat(targetCropY.y);
 	}
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		targetCropX = new Vector2(1.0f, 1.0f);
 		targetCropY = new Vector2(1.0f, 1.0f);
 		startCropX = new Vector2(1.0f, 1.0f);
 		startCropY = new Vector2(1.0f, 1.0f);
-		
+
 		final float duration = in.readFloat();
 		if (duration < MIN_DURATION) throw new InvalidDataException("duration must be >= " + MIN_DURATION);
 		this.duration = duration;
@@ -58,37 +58,42 @@ public class FancySlide extends AFancyWithDrawable {
 		final Interpolation interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
 		if (interpolation == null) throw new InvalidDataException("no such interpolation");
 		this.interpolation = interpolation;
-		
+
 		final float cxx = in.readFloat();
 		final float cxy = in.readFloat();
 		final float cyx = in.readFloat();
 		final float cyy = in.readFloat();
-		
+
 		if (cxx < 0f || cxx > 1f || cxy < 0f || cxy > 1f || cyx < 0f || cyx > 1f || cyy < 0f || cyy > 1f)
 			throw new InvalidDataException("crop must be between 0 and 1");
 		targetCropX.set(cxx,cxy);
 		targetCropY.set(cyx,cyy);
-		
+
 		startCropX.set(targetCropX);
 		startCropY.set(targetCropY);
 		durationInverse = 1.0f / duration;
 		isDone = false;
 	}
-	
-	public FancySlide(String key, Float duration, String interpolationName, float targetCropLeft,
-			float targetCropBottom, float targetCropRight, float targetCropTop) {
-		super(key);
+
+	public FancySlide(final String key, final Float duration, final String interpolationName, final float targetCropLeft,
+			final float targetCropBottom, final float targetCropRight, final float targetCropTop) {
+		this(0, 0, key, duration, interpolationName, targetCropLeft, targetCropBottom, targetCropRight, targetCropTop);
+	}
+
+	public FancySlide(final float startTime, final int z, final String key, final Float duration, final String interpolationName, final float targetCropLeft,
+			final float targetCropBottom, final float targetCropRight, final float targetCropTop) {
+		super(startTime, z, key);
 		if (duration < MIN_DURATION)
 			throw new IllegalArgumentException("duration must be >= " + MIN_DURATION);
 		this.duration = duration;
-		this.durationInverse = 1.0f / duration;
+		durationInverse = 1.0f / duration;
 		this.interpolationName = interpolationName;
-		this.targetCropX.set(targetCropLeft, targetCropRight);
-		this.targetCropY.set(targetCropBottom, targetCropTop);
-		this.interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
-		if (this.interpolation == null) {
+		targetCropX.set(targetCropLeft, targetCropRight);
+		targetCropY.set(targetCropBottom, targetCropTop);
+		interpolation = FileCutsceneProvider.interpolationFromName(interpolationName);
+		if (interpolation == null) {
 			this.interpolationName = DEFAULT_INTERPOLATION_NAME;
-			this.interpolation = DEFAULT_INTERPOLATION;
+			interpolation = DEFAULT_INTERPOLATION;
 		}
 	}
 
@@ -104,7 +109,7 @@ public class FancySlide extends AFancyWithDrawable {
 	}
 
 	@Override
-	public boolean beginSubclass(EventFancyScene scene) {
+	public boolean beginSubclass(final EventFancyScene scene) {
 		drawable.getCropX(startCropX);
 		drawable.getCropY(startCropY);
 		isDone = false;
@@ -112,7 +117,7 @@ public class FancySlide extends AFancyWithDrawable {
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
@@ -121,7 +126,7 @@ public class FancySlide extends AFancyWithDrawable {
 			passedTime = duration;
 			isDone = true;
 		}
-		float alpha = interpolation.apply(passedTime * durationInverse);
+		final float alpha = interpolation.apply(passedTime * durationInverse);
 		drawable.setCropXLerp(startCropX, targetCropX, alpha);
 		drawable.setCropYLerp(startCropY, targetCropY, alpha);
 	}
@@ -141,14 +146,14 @@ public class FancySlide extends AFancyWithDrawable {
 	 * @param s Scanner from which to read.
 	 * @param parentFile The file handle of the file being used. Should be used only for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
+		final String key = s.next();
 
-		Float duration = FileCutsceneProvider.nextNumber(s);
+		final Float duration = FileCutsceneProvider.nextNumber(s);
 		if (duration == null) {
 			LOG.error("expected duration");
 			return null;
@@ -162,13 +167,13 @@ public class FancySlide extends AFancyWithDrawable {
 		if (interpolationName == null)
 			interpolationName = DEFAULT_INTERPOLATION_NAME;
 
-		Float targetCropLeft = FileCutsceneProvider.nextNumber(s);
+		final Float targetCropLeft = FileCutsceneProvider.nextNumber(s);
 		if (targetCropLeft == null) {
 			LOG.error("expected crop left");
 			return null;
 		}
 
-		Float targetCropBottom = FileCutsceneProvider.nextNumber(s);
+		final Float targetCropBottom = FileCutsceneProvider.nextNumber(s);
 		if (targetCropBottom == null) {
 			LOG.error("expected crop bottom");
 			return null;

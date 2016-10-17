@@ -26,25 +26,29 @@ public class FancyAnimation extends AFancyEvent {
 	private float dpi;
 	private EAnimation animation;
 
-	private void writeObject(ObjectOutputStream out) throws IOException {
+	private void writeObject(final ObjectOutputStream out) throws IOException {
 		out.writeUTF(key);
 		out.writeObject(animation);
 		out.writeFloat(dpi);
 	}
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		String key = in.readUTF();
+	private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+		final String key = in.readUTF();
 		if (key == null || key.isEmpty()) throw new InvalidDataException("key cannot be null or empty");
-		
-		Object animation = in.readObject();
+
+		final Object animation = in.readObject();
 		if (animation == null || !(animation instanceof EAnimation)) throw new InvalidDataException("unknown animation");
-		
+
 		this.key = key;
 		this.animation = (EAnimation) animation;
 		dpi = in.readFloat();
 	}
-	
-	public FancyAnimation(String key, float dpi, EAnimation animation) {
-		super(true);
+
+	public FancyAnimation(final String key, final float dpi, final EAnimation animation) {
+		this(0, 0, key, dpi, animation);
+	}
+
+	public FancyAnimation(final float startTime, final int z, final String key, final float dpi, final EAnimation animation) {
+		super(startTime, z, true);
 		this.dpi = dpi;
 		this.key = key;
 		this.animation = animation;
@@ -58,17 +62,17 @@ public class FancyAnimation extends AFancyEvent {
 	}
 
 	@Override
-	public boolean begin(EventFancyScene scene) {
+	public boolean begin(final EventFancyScene scene) {
 		scene.requestDrawableAnimation(key).setDrawable(animation, dpi);
 		return false;
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
-	public void update(float passedTime) {
+	public void update(final float passedTime) {
 	}
 
 	@Override
@@ -79,13 +83,13 @@ public class FancyAnimation extends AFancyEvent {
 	@Override
 	public void end() {
 	}
-	
+
 	@Override
-	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	public void drawableChanged(final EventFancyScene scene, final String changedKey) {
 	}
 
 	@Override
-	public void attachedToScene(EventFancyScene scene) {
+	public void attachedToScene(final EventFancyScene scene) {
 		scene.requestDrawableAnimation(key);
 	}
 
@@ -93,19 +97,19 @@ public class FancyAnimation extends AFancyEvent {
 	 * @param s Scanner from which to read.
 	 * @param parentFile The file handle of the file being used. Should be used only for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sprite name");
 			return null;
 		}
-		String key = s.next();
+		final String key = s.next();
 
-		Float dpi = FileCutsceneProvider.nextNumber(s);
+		final Float dpi = FileCutsceneProvider.nextNumber(s);
 		if (dpi == null) {
 			LOG.error("expected dpi");
 			return null;
 		}
-		EAnimation animation = FileCutsceneProvider.nextAnimation(s);
+		final EAnimation animation = FileCutsceneProvider.nextAnimation(s);
 		if (animation == null) {
 			LOG.error("expected animation");
 			return null;

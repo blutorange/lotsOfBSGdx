@@ -1,121 +1,88 @@
 package de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface;
 
-import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.DimensionalValue.Value1D;
-import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.DimensionalValue.Value2D;
-import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.DimensionalValue.Value4D;
-import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelDrawableProperty.PropertyEntry;
+import java.util.NoSuchElementException;
 
-public interface ModelDrawableProperty<T extends DimensionalValue> extends Iterable<PropertyEntry<T>>, TimeIntervalGetter {
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.DrawablePropertyChangeListener.DrawablePropertyChangeListenable;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelDrawableProperty.PropertyEntry;
+import de.homelab.madgaksha.safemutable.Clone;
+import de.homelab.madgaksha.safemutable.DimensionalValue;
+
+public interface ModelDrawableProperty<T extends DimensionalValue> extends Iterable<PropertyEntry<T>>, TimeIntervalGetter, DrawablePropertyChangeListenable, CustomDataHolder {
 	public String getName();
 	public int getDimension();
 	public int size();
 	public T getMinValue();
 	public T getMaxValue();
-	public void setClipData(ModelClipData clipData);
 
-	public static interface PropertyEntry<T extends DimensionalValue> extends Clone<PropertyEntry<T>> {
+	/**
+	 * @param entry The entry to search for.
+	 * @return The index of the given entry.
+	 * @throw {@link NoSuchElementException} When this property does not contain such an entry.
+	 */
+	public int getIndex(PropertyEntry<?> entry) throws NoSuchElementException;
+	/**
+	 * Inserts a new property entry at the given position.
+	 * @param position Position at which to insert the new entry. 0 is at the beginning {@link #size()} at the end.
+	 * @return The newly inserted entry.
+	 * @throws IndexOutOfBoundsException When position is smaller than 0 or greater than {@link #size()}.
+	 */
+	public PropertyEntry<T> insertPropertyEntry(int position) throws IndexOutOfBoundsException;
+	public void removePropertyEntry(int position) throws IndexOutOfBoundsException;
+	/**
+	 * Inserts a new element after the given entry. When the entry does not exist,
+	 * appends a new entry to the end of this property list.
+	 * @param entry Entry after which a new entry should be added.
+	 */
+	default void insertAfter(final PropertyEntry<?> entry) {
+		int position;
+		try {
+			position = getIndex(entry) + 1;
+		}
+		catch (final NoSuchElementException e) {
+			position = size();
+		}
+		insertPropertyEntry(position);
+	}
+	default void insertBefore(final PropertyEntry<?> entry) {
+		int position;
+		try {
+			position = getIndex(entry);
+		}
+		catch (final NoSuchElementException e) {
+			position = 0;
+		}
+		insertPropertyEntry(position);
+	}
+	/**
+	 * Removes the given entry. Does nothing if the entry does not exist.
+	 * @param entry The entry to be removed.
+	 */
+	default void remove(final PropertyEntry<?> entry) {
+		try {
+			final int position = getIndex(entry);
+			removePropertyEntry(position);
+		}
+		catch (final NoSuchElementException e) {
+		}
+	}
+
+
+	public static interface PropertyEntry<T extends DimensionalValue> extends Clone<PropertyEntry<T>>, CustomDataHolder {
 		public float getTime();
 		public void setTime(float startTime);
+		public float getMinTime();
+		public float getMaxTime();
 		public T getValue();
-		public PropertyEntry<T> newObject();
+		public Object getParent();
+		public PropertyEntry<T> newObject(Object parent);
+		public ModelInterpolation getModelInterpolation();
+
 		@Override
 		default PropertyEntry<T> cloneObject() {
-			final PropertyEntry<T> entry = newObject();
+			final PropertyEntry<T> entry = newObject(getParent());
 			entry.setTime(getTime());
 			entry.getValue().setValues(getValue().getValues());
 			return entry;
-		}
-	}
-
-	public static class PropertyEntry1D implements PropertyEntry<Value1D> {
-		private float time;
-		private final Value1D value = new Value1D();
-		public PropertyEntry1D() {}
-		public PropertyEntry1D(final float time, final float x) {
-			this.time = time;
-			value.getValues()[0] = x;
-		}
-		@Override
-		public float getTime() {
-			return time;
-		}
-
-		@Override
-		public Value1D getValue() {
-			return value;
-		}
-
-		@Override
-		public void setTime(final float startTime) {
-			this.time = startTime;
-		}
-
-		@Override
-		public PropertyEntry<Value1D> newObject() {
-			return new PropertyEntry1D();
-		}
-	}
-
-	public static class PropertyEntry2D implements PropertyEntry<Value2D> {
-		private float time;
-		private final Value2D value = new Value2D();
-		public PropertyEntry2D() {}
-		public PropertyEntry2D(final float time, final float x, final float y) {
-			this.time = time;
-			value.getValues()[0] = x;
-			value.getValues()[1] = y;
-		}
-		@Override
-		public float getTime() {
-			return time;
-		}
-
-		@Override
-		public Value2D getValue() {
-			return value;
-		}
-
-		@Override
-		public void setTime(final float startTime) {
-			this.time = startTime;
-		}
-
-		@Override
-		public PropertyEntry<Value2D> newObject() {
-			return new PropertyEntry2D();
-		}
-	}
-
-	public static class PropertyEntry4D implements PropertyEntry<Value4D> {
-		private float time;
-		private final Value4D value = new Value4D();
-		public PropertyEntry4D() {}
-		public PropertyEntry4D(final float time, final float x1, final float x2, final float x3, final float x4) {
-			this.time = time;
-			final float values[] = value.getValues();
-			values[0] = x1;
-			values[1] = x2;
-			values[2] = x3;
-			values[3] = x4;
-		}
-		@Override
-		public float getTime() {
-			return time;
-		}
-
-		@Override
-		public Value4D getValue() {
-			return value;
-		}
-
-		@Override
-		public void setTime(final float startTime) {
-			this.time = startTime;
-		}
-
-		@Override
-		public PropertyEntry<Value4D> newObject() {
-			return new PropertyEntry4D();
 		}
 	}
 }

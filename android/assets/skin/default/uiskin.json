@@ -69,7 +69,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 		background: default-pane, wrapWidth: 150
 	}
 },
-de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.basic.FancySceneTimeline$FancySceneTimelineStyle: {
+de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.timeline.FancySceneTimeline$FancySceneTimelineStyle: {
     default: { overscanArea: white, overscanColor: { r: 0.0, g: 0.0, b: 0.0, a: 0.6 } }
 },
 de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.FrameSeekButton$FrameSeekButtonStyle: {

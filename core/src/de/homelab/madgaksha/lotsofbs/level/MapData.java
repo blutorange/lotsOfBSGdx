@@ -59,12 +59,12 @@ import de.homelab.madgaksha.lotsofbs.util.LocaleRootWordUtils;
  * Reads a tiled map and extracts properties for later use. Objects can be added
  * directly via the map editor. All tile layer must have the same tile size.
  * Tile height and width may be different.
- * 
+ *
  * <br>
  * <br>
- * 
+ *
  * <h2>Map properties</h2>
- * 
+ *
  * <ul>
  * <li>baseDirX: X-component of the base direction of the camera when there are
  * no target points.</li>
@@ -77,9 +77,9 @@ import de.homelab.madgaksha.lotsofbs.util.LocaleRootWordUtils;
  * <li>playerX: Initial position x of the player in tiles.</li>
  * <li>playerY: Initial position y of the player in tiles.</li>
  * </ul>
- * 
+ *
  * <h2>Global properties</h2>
- * 
+ *
  * <ul>
  * <li>type : Object type set in tiled map editor on the top right panel. Case
  * insensitive.</li>
@@ -88,7 +88,7 @@ import de.homelab.madgaksha.lotsofbs.util.LocaleRootWordUtils;
  * contain any characters other than letters and number (a-z, A-Z, 0-9). See
  * also {@link IdComponent}.</li>
  * </ul>
- * 
+ *
  * For convenience, if an event specifies a name (eg. Callback) and there is no
  * event with that GUID, one event with that name is added to the GUID list with
  * its name. <br>
@@ -96,12 +96,12 @@ import de.homelab.madgaksha.lotsofbs.util.LocaleRootWordUtils;
  * name. In that case, give the events a unique GUID. <br>
  * For example, when you've got excactly one callback with the name
  * "turnbackPlayer" you do not need to specify a GUID separately.
- * 
+ *
  * <br>
  * <br>
- * 
+ *
  * The following types and properties are supported:
- * 
+ *
  * <h3>type: Enemy</h3> <br>
  * Represents an enemy that can engage in combat with the player.
  * <ul>
@@ -128,13 +128,13 @@ import de.homelab.madgaksha.lotsofbs.util.LocaleRootWordUtils;
  * <li>initDir: (optional) Initial looking direction in degrees. 0 is down, 90
  * is to the right. Default 0.</li>
  * </ul>
- * 
+ *
  * <h3>type: Callback</h3> <br>
  * An event with a backing callback java function that will be invoked when the
  * event triggers. The callback function must have this signature:
- * 
+ *
  * <code>public void myCallback(MapProperties properties)</code>
- * 
+ *
  * <ul>
  * <li>name: Name of the callback function. Must be defined in the implementing
  * {@link ALevel} class.</li>
@@ -152,8 +152,8 @@ import de.homelab.madgaksha.lotsofbs.util.LocaleRootWordUtils;
  * <li>interval: Time in seconds between two loops, see the <code>loop</code>
  * property.
  * </ul>
- * 
- * 
+ *
+ *
  * <h3>type: ParticleEffect</h3> Adds a particle effect positioned at the center
  * of the event shape.
  * <ul>
@@ -165,9 +165,9 @@ import de.homelab.madgaksha.lotsofbs.util.LocaleRootWordUtils;
  * unaffected, but useful for rotation if particle effect should always point
  * upwards (as seen on the screen).</li>
  * </ul>
- * 
+ *
  * <h3>type: NPC</h3>
- * 
+ *
  * <ul>
  * <li>animation: The NPC's {@link EAnimation}.</li>
  * <li>animationList: The NPC's {@link EAnimationList}. Takes priority if
@@ -184,11 +184,11 @@ import de.homelab.madgaksha.lotsofbs.util.LocaleRootWordUtils;
  * <li>initDir: (optional) Initial looking direction in degrees. 0 is down, 90
  * is to the right. Default 0.</li>
  * </ul>
- * 
+ *
  * <h3>type: Item</h3> <br>
  * An collectible item. Items are divided into weapons, specials (special
  * attack) and consumables (recovery).
- * 
+ *
  * <ul>
  * <li>category: Category of this item. Possible values are <code>weapon</code>,
  * <code>tokugi</code>, and <code>consumable</code></li>
@@ -202,7 +202,7 @@ import de.homelab.madgaksha.lotsofbs.util.LocaleRootWordUtils;
  * <li>axisX, axisY, axisZ: (optional) Axis around which the item model should
  * rotate. Does not need be normed. Default (1,1,0)(</li>
  * </ul>
- * 
+ *
  * @author madgaksha
  *
  */
@@ -218,7 +218,7 @@ public class MapData {
 	 * 1: Bit 1: is blocking Bit 2: Bit 3: Bit 4: Bit 5: Bit 6: Bit 7: Bit 8:
 	 * Byte 2: Byte 3: Byte 4:
 	 */
-	private int[][] tileFlags;
+	private final int[][] tileFlags;
 
 	private final Class<? extends ALevel> levelClass;
 
@@ -270,37 +270,37 @@ public class MapData {
 
 	/**
 	 * This performs sanity checks.
-	 * 
+	 *
 	 * @param x
 	 *            Position (width) on the map in pixels.
 	 * @param y
 	 *            Position (height) on the map in pixels.
 	 * @return Whether the tile is blocking.
 	 */
-	public boolean isTileBlocking(float w, float h) {
-		int x = (int) (w * widthTilesInverse);
-		int y = (int) (h * heightTilesInverse);
+	public boolean isTileBlocking(final float w, final float h) {
+		final int x = (int) (w * widthTilesInverse);
+		final int y = (int) (h * heightTilesInverse);
 		return isTileBlocking(x < 0 ? 0 : x >= width ? width - 1 : x, y < 0 ? 0 : y >= height ? height - 1 : y);
 	}
 
-	public int getTileX(float w) {
+	public int getTileX(final float w) {
 		return (int) (w * widthTilesInverse);
 	}
 
-	public int getTileY(float h) {
+	public int getTileY(final float h) {
 		return (int) (h * heightTilesInverse);
 	}
 
 	/**
 	 * This will not perform sanity checks.
-	 * 
+	 *
 	 * @param x
 	 *            Position (width) on the map in tiles.
 	 * @param y
 	 *            Position (height) on the map in tiles.
 	 * @return Whether the tile is blocking.
 	 */
-	public boolean isTileBlocking(int x, int y) {
+	public boolean isTileBlocking(final int x, final int y) {
 		return (tileFlags[x][y] & 1) != 0;
 	}
 
@@ -313,7 +313,7 @@ public class MapData {
 	 *            Range upper.
 	 * @return True iff any tile within the range (xMin..xMax,y) is blocking.
 	 */
-	public boolean isTileRangeXAnyBlocking(int y, int xMin, int xMax) {
+	public boolean isTileRangeXAnyBlocking(final int y, final int xMin, final int xMax) {
 		for (int x = xMin; x <= xMax; ++x)
 			if ((tileFlags[x][y] & 1) != 0)
 				return true;
@@ -329,14 +329,14 @@ public class MapData {
 	 *            Range upper.
 	 * @return True iff any tile within the range (x,yMin..yMax) is blocking.
 	 */
-	public boolean isTileRangeYAnyBlocking(int x, int yMin, int yMax) {
+	public boolean isTileRangeYAnyBlocking(final int x, final int yMin, final int yMax) {
 		for (int y = yMin; y <= yMax; ++y)
 			if ((tileFlags[x][y] & 1) != 0)
 				return true;
 		return false;
 	}
 
-	public boolean isTileAreaAnyBlocking(int xMin, int xMax, int yMin, int yMax) {
+	public boolean isTileAreaAnyBlocking(final int xMin, final int xMax, final int yMin, final int yMax) {
 		for (int x = xMin; x <= xMax; ++x)
 			for (int y = yMin; y <= yMax; ++y)
 				if ((tileFlags[x][y] & 1) != 0)
@@ -344,7 +344,7 @@ public class MapData {
 		return false;
 	}
 
-	public MapData(TiledMap map, Class<? extends ALevel> levelClass) {
+	public MapData(final TiledMap map, final Class<? extends ALevel> levelClass) {
 		setMapDimensions(map);
 		tileFlags = new int[width][height]; // initialized to 0
 		this.levelClass = levelClass;
@@ -352,11 +352,11 @@ public class MapData {
 		processMapProperties(map.getProperties());
 
 		for (int i = 0; i != map.getLayers().getCount(); ++i) {
-			MapLayer mapLayer = map.getLayers().get(i);
+			final MapLayer mapLayer = map.getLayers().get(i);
 			if (mapLayer instanceof TiledMapTileLayer) {
 				processTiledMapLayer(((TiledMapTileLayer) map.getLayers().get(i)));
 			} else {
-				for (MapObject mapObject : mapLayer.getObjects())
+				for (final MapObject mapObject : mapLayer.getObjects())
 					processMapObject(mapObject);
 			}
 		}
@@ -366,12 +366,12 @@ public class MapData {
 	// Internal private methods.
 	// =========================
 
-	private void setMapDimensions(TiledMap map) {
+	private void setMapDimensions(final TiledMap map) {
 		width = height = 0;
 		widthTiles = heightTiles = 0.0f;
 		// Get map height and width
 		for (int i = 0; i != map.getLayers().getCount(); ++i) {
-			MapLayer ml = map.getLayers().get(i);
+			final MapLayer ml = map.getLayers().get(i);
 			if (ml instanceof TiledMapTileLayer) {
 				final TiledMapTileLayer tmtl = ((TiledMapTileLayer) map.getLayers().get(i));
 				width = Math.max(width, tmtl.getWidth());
@@ -386,15 +386,15 @@ public class MapData {
 		heightPixel = (int) (height * heightTiles);
 	}
 
-	private void processTiledMapLayer(TiledMapTileLayer tmtl) {
-		int layerWidth = tmtl.getWidth();
-		int layerHeight = tmtl.getHeight();
+	private void processTiledMapLayer(final TiledMapTileLayer tmtl) {
+		final int layerWidth = tmtl.getWidth();
+		final int layerHeight = tmtl.getHeight();
 		for (int x = 0; x != layerWidth; ++x) {
 			for (int y = 0; y != layerHeight; ++y) {
 				final Cell c = tmtl.getCell(x, y);
 				if (c != null) {
-					com.badlogic.gdx.maps.MapProperties props = c.getTile().getProperties();
-					if (props.containsKey("blocking") && Boolean.valueOf(props.get("blocking", String.class))) {
+					final com.badlogic.gdx.maps.MapProperties props = c.getTile().getProperties();
+					if (props.containsKey("blocking") && props.get("blocking", Boolean.class)) {
 						tileFlags[x][y] = 1; // 0b00000001;
 					} else {
 						tileFlags[x][y] = 0;
@@ -404,30 +404,30 @@ public class MapData {
 		}
 	}
 
-	private void processMapObject(MapObject mapObject) {
+	private void processMapObject(final MapObject mapObject) {
 		if (!mapObject.isVisible())
 			return;
 
 		// Get shape of the object.
-		Shape2D shape = getMapObjectShape(mapObject);
+		final Shape2D shape = getMapObjectShape(mapObject);
 		// Unknown shape.
 		if (shape == null)
 			return;
 
 		// Read properties
-		MapProperties props = mapObject.getProperties();
+		final MapProperties props = mapObject.getProperties();
 		if (props == null) {
 			LOG.error("object does not specify map properties: " + mapObject.getName());
 			return;
 		}
-		
+
 		if (isDebugObject(props)) {
 			LOG.debug("skipping map item as it is marked debug-only: " + mapObject.getName());
 			return;
 		}
 
 		// Try and create a new map object of the specified type.
-		Entity entity = createEntityForMapObject(mapObject, props, shape);
+		final Entity entity = createEntityForMapObject(mapObject, props, shape);
 		// Unknown or invalid object.
 		if (entity == null) {
 			LOG.error("failed to read object: " + mapObject.getName());
@@ -443,7 +443,7 @@ public class MapData {
 		LOG.debug("read map object:  " + mapObject.getName());
 	}
 
-	private Entity createEntityForMapObject(MapObject mapObject, MapProperties props, Shape2D shape) {
+	private Entity createEntityForMapObject(final MapObject mapObject, final MapProperties props, final Shape2D shape) {
 		Entity entity = null;
 		try {
 			if (!props.containsKey("type")) {
@@ -465,13 +465,13 @@ public class MapData {
 					LOG.info("unknown map object type: " + type);
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.error("failed to read map object: " + mapObject.getName(), e);
 		}
 		return entity;
 	}
 
-	private Shape2D getMapObjectShape(MapObject mapObject) {
+	private Shape2D getMapObjectShape(final MapObject mapObject) {
 		Shape2D shape = null;
 		Float rotation = null;
 
@@ -500,16 +500,16 @@ public class MapData {
 				shape = ellipse;
 			}
 		} else if (mapObject instanceof RectangleMapObject) {
-			Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
+			final Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
 			shape = rotation == null ? rect : GeoUtil.getRotatedRectangle(rect, rotation);
 		} else if (mapObject instanceof PolylineMapObject) {
-			Polygon poly = ((PolygonMapObject) mapObject).getPolygon();
+			final Polygon poly = ((PolygonMapObject) mapObject).getPolygon();
 			GeoUtil.boundingBoxCenter(shape, v1);
 			if (rotation != null)
 				GeoUtil.rotatePolygon(poly, v1, rotation);
 			shape = poly;
 		} else if (mapObject instanceof PolygonMapObject) {
-			Polygon poly = ((PolygonMapObject) mapObject).getPolygon();
+			final Polygon poly = ((PolygonMapObject) mapObject).getPolygon();
 			GeoUtil.boundingBoxCenter(poly, v1);
 			if (rotation != null)
 				GeoUtil.rotatePolygon(poly, v1, rotation);
@@ -525,14 +525,14 @@ public class MapData {
 	 * Read the id (name) of the map object and adds it to the
 	 * {@link GlobalBag#idEntityMap} map. Also adds an appropriate
 	 * {@link IdComponent} to the entity.
-	 * 
+	 *
 	 * @param props
 	 *            MapProperties for this map object.
 	 * @param entity
 	 *            Entity created for this map object.
 	 */
-	private void processMapObjectGuid(MapProperties props, Entity entity) {
-		String id = String.valueOf(props.get("guid"));
+	private void processMapObjectGuid(final MapProperties props, final Entity entity) {
+		final String id = String.valueOf(props.get("guid"));
 		if (props.containsKey("guid") && !id.isEmpty()) {
 			final IdComponent ic = new IdComponent(id);
 			if (!ic.getId().isEmpty()) {
@@ -540,7 +540,7 @@ public class MapData {
 				entity.add(ic);
 			}
 		} else if (props.containsKey("name")) {
-			String name = String.valueOf(props.get("name"));
+			final String name = String.valueOf(props.get("name"));
 			final IdComponent ic = new IdComponent(name);
 			if (!name.isEmpty() && !idEntityMap.containsKey(ic.getId())) {
 				// This will add the entity to the idEntityMap automatically.
@@ -549,7 +549,7 @@ public class MapData {
 		}
 	}
 
-	private void processMapProperties(MapProperties props) {
+	private void processMapProperties(final MapProperties props) {
 		// Default data.
 		Integer playerX = 0;
 		Integer playerY = 0;
@@ -587,15 +587,15 @@ public class MapData {
 		preferredPlayerLocation = gravity;
 	}
 
-	private Entity processObjectEnemy(MapProperties props, Shape2D shape) {
+	private Entity processObjectEnemy(final MapProperties props, final Shape2D shape) {
 		Float initX = 0f;
 		Float initY = 0f;
 		Float initDir = 0.0f;
 
 		// Fetch parameters.
-		String species = LocaleRootWordUtils.capitalizeFully(props.get("species", String.class)).replace(" ", "");
+		final String species = LocaleRootWordUtils.capitalizeFully(props.get("species", String.class)).replace(" ", "");
 
-		String spawn = props.get("spawn", String.class).toUpperCase(Locale.ROOT);
+		final String spawn = props.get("spawn", String.class).toUpperCase(Locale.ROOT);
 		if (props.containsKey("initX"))
 			initX = Float.valueOf(String.valueOf(props.get("initX")));
 		if (props.containsKey("initY"))
@@ -613,11 +613,12 @@ public class MapData {
 		EnemyMaker enemyMaker;
 		try {
 			@SuppressWarnings("unchecked")
+			final
 			Class<? extends EnemyMaker> enemyClass = ClassReflection.forName(ENEMY_PACKAGE + species + "Maker");
 			enemyMaker = (EnemyMaker) ClassReflection.getDeclaredMethod(enemyClass, "getInstance").invoke(null);
 			enemySetupMethod = ClassReflection.getDeclaredMethod(enemyClass, "setup", Entity.class, Shape2D.class,
 					MapProperties.class, ETrigger.class, Vector2.class, Float.class, Float.class);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.error("no such enemy class with appropriate constructor: " + (ENEMY_PACKAGE + species + "Maker"), e);
 			return null;
 		}
@@ -626,28 +627,28 @@ public class MapData {
 		ETrigger spawnEnum;
 		try {
 			spawnEnum = ETrigger.valueOf(spawn);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.error("invalid spawn type for enemy", e);
 			return null;
 		}
 
 		// Try to initialize a new enemy of the given class.
 		try {
-			Entity entity = new Entity();
-			float tileRadius = Math.max(widthTiles, heightTiles);
+			final Entity entity = new Entity();
+			final float tileRadius = Math.max(widthTiles, heightTiles);
 			enemySetupMethod.invoke(enemyMaker, entity, shape, props, spawnEnum, new Vector2(initX, initY), initDir,
 					tileRadius);
 			return enemyMaker.isInitializedSuccessfully() ? entity : null;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.error("failed to initialize enemy instance: " + species, e);
 			return null;
 		}
 	}
 
-	private Entity processObjectCallback(MapProperties props, Shape2D shape) {
+	private Entity processObjectCallback(final MapProperties props, final Shape2D shape) {
 		// Fetch parameters.
-		String name = props.get("name", String.class);
-		String trigger = props.get("trigger", String.class).toUpperCase(Locale.ROOT);
+		final String name = props.get("name", String.class);
+		final String trigger = props.get("trigger", String.class).toUpperCase(Locale.ROOT);
 		Integer loop = 0;
 		Float interval = 1.0f;
 		if (props.containsKey("loop"))
@@ -667,7 +668,7 @@ public class MapData {
 				LOG.error("callback method must be public");
 				return null;
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.error("cannot instantiate callback map object: no such method: " + name, e);
 			return null;
 		}
@@ -676,7 +677,7 @@ public class MapData {
 		ETrigger triggerEnum;
 		try {
 			triggerEnum = ETrigger.valueOf(trigger);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.error("invalid callback trigger type: " + trigger, e);
 			return null;
 		}
@@ -687,9 +688,9 @@ public class MapData {
 		return e;
 	}
 
-	private Entity processObjectParticleEffect(MapProperties props, Shape2D shape) {
+	private Entity processObjectParticleEffect(final MapProperties props, final Shape2D shape) {
 		// Fetch parameters.
-		String name = props.get("name", String.class).toUpperCase(Locale.ROOT);
+		final String name = props.get("name", String.class).toUpperCase(Locale.ROOT);
 		Float spin = 0.0f;
 		String renderMode = "game";
 		if (props.containsKey("spin"))
@@ -701,7 +702,7 @@ public class MapData {
 		EParticleEffect particleEffect;
 		try {
 			particleEffect = EParticleEffect.valueOf(name);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.error("no such particle effect: " + name, e);
 			return null;
 		}
@@ -718,17 +719,17 @@ public class MapData {
 
 	/**
 	 * Reads an item object from the map.
-	 * 
+	 *
 	 * @param props
 	 *            Map properties for the item.
 	 * @param shape
 	 *            Shape of the item.
 	 * @return The entity representing the item, or null if an error occurred.
 	 */
-	private Entity processObjectItem(MapProperties props, Shape2D shape) {
+	private Entity processObjectItem(final MapProperties props, final Shape2D shape) {
 		// Fetch parameters.
-		String category = props.get("category", String.class).toLowerCase(Locale.ROOT);
-		String name = props.get("name", String.class).toUpperCase(Locale.ROOT);
+		final String category = props.get("category", String.class).toLowerCase(Locale.ROOT);
+		final String name = props.get("name", String.class).toUpperCase(Locale.ROOT);
 
 		Float angularVelocity = null;
 		Vector3 axis = null;
@@ -773,16 +774,16 @@ public class MapData {
 			return null;
 		}
 
-		Entity entity = new Entity();
+		final Entity entity = new Entity();
 		mapItem.setMapAngularVelocity(angularVelocity);
 		mapItem.setMapAxisOfRotation(axis);
-		PositionComponent pcCenter = MakerUtils.makePositionAtCenter(shape);
+		final PositionComponent pcCenter = MakerUtils.makePositionAtCenter(shape);
 		if (!ItemMaker.getInstance().setup(entity, pcCenter, props, mapItem))
 			return null;
 		return entity;
 	}
 
-	private Entity processObjectNpc(MapProperties props, Shape2D shape) {
+	private Entity processObjectNpc(final MapProperties props, final Shape2D shape) {
 		// Defaults
 		Float initX = 0.0f;
 		Float initY = 0.0f;
@@ -816,24 +817,24 @@ public class MapData {
 		if (animationList != null) {
 			try {
 				animationList = animationList.toUpperCase(Locale.ROOT).replaceAll(" +", "_");
-				EAnimationList eal = EAnimationList.valueOf(animationList);
-				Entity entity = new Entity();
+				final EAnimationList eal = EAnimationList.valueOf(animationList);
+				final Entity entity = new Entity();
 				NpcMaker.getInstance().setup(entity, shape, eal, startup.equalsIgnoreCase("invisible"),
 						new Vector2(initX, initY), initDir);
 				return entity;
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				LOG.error("no such animationList: " + animationList, e);
 				return null;
 			}
 		} else if (animation != null) {
 			try {
 				animation = animation.toUpperCase(Locale.ROOT).replaceAll(" +", "_");
-				EAnimation ea = EAnimation.valueOf(animation);
-				Entity entity = new Entity();
+				final EAnimation ea = EAnimation.valueOf(animation);
+				final Entity entity = new Entity();
 				NpcMaker.getInstance().setup(entity, shape, ea, startup.equalsIgnoreCase("invisible"),
 						new Vector2(initX, initY), initDir);
 				return entity;
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				LOG.error("no such animation: " + animation, e);
 				return null;
 			}
@@ -867,17 +868,17 @@ public class MapData {
 		return preferredPlayerLocation;
 	}
 
-	public static float getNumber(MapProperties props, String key, float defaultValue) {
-		Object o = props.get(key);
+	public static float getNumber(final MapProperties props, final String key, final float defaultValue) {
+		final Object o = props.get(key);
 		return o == null ? defaultValue : Float.valueOf(String.valueOf(o));
 	}
 
-	public static boolean getBoolean(MapProperties props, String key, boolean defaultValue) {
-		Object o = props.get(key);
+	public static boolean getBoolean(final MapProperties props, final String key, final boolean defaultValue) {
+		final Object o = props.get(key);
 		return o == null ? defaultValue : Boolean.valueOf(String.valueOf(o));
 	}
 
-	private boolean isDebugObject(MapProperties props) {
+	private boolean isDebugObject(final MapProperties props) {
 		return !DebugMode.activated && props.containsKey("debug") && Boolean.valueOf(String.valueOf(props.get("debug")));
 	}
 }

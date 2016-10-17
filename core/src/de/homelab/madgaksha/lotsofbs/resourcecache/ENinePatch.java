@@ -12,7 +12,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * For loading, caching and disposing {@link Texture} resources.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -55,7 +55,7 @@ public enum ENinePatch implements IResource<ENinePatch, NinePatch> {
 	 * @param p
 	 *            Name of the nine patch.
 	 */
-	private ENinePatch(ETextureAtlas ta, String p) {
+	private ENinePatch(final ETextureAtlas ta, final String p) {
 		patchName = p;
 		textureAtlas = ta;
 		offsetSpeaker = null;
@@ -65,7 +65,7 @@ public enum ENinePatch implements IResource<ENinePatch, NinePatch> {
 
 	public static void clearAll() {
 		LOG.debug("clearing all nine patches");
-		for (ENinePatch np : ninePatchCache.keySet()) {
+		for (final ENinePatch np : ninePatchCache.keySet()) {
 			np.clear();
 		}
 	}
@@ -98,15 +98,19 @@ public enum ENinePatch implements IResource<ENinePatch, NinePatch> {
 	public NinePatch getObject() {
 		try {
 			final TextureAtlas atlas = ResourceCache.getTextureAtlas(textureAtlas);
+			if (atlas == null) {
+				LOG.error("could not load ninepatch " + String.valueOf(this) + " because atlas could not be loaded");
+				return null;
+			}
 			final NinePatch ninePatch = atlas.createPatch(patchName);
 			if (ninePatch == null) {
 				LOG.error("could not locate or open resource: " + String.valueOf(this));
 			}
 			return ninePatch;
-		} catch (GdxRuntimeException e) {
+		} catch (final GdxRuntimeException e) {
 			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 			return null;
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			LOG.error("could not locate or open resource: " + String.valueOf(this), e);
 			return null;
 		}

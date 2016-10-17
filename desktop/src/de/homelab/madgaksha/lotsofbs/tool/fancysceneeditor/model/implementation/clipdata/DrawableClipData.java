@@ -28,15 +28,17 @@ import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.IdProvide
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelClip;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.ModelDrawableProperty;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.iface.TimelineProvider;
-import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.drawableproperty.PropertyCrop;
-import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.drawableproperty.PropertyOpacity;
-import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.drawableproperty.PropertyPosition;
-import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.drawableproperty.PropertyScale;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.property.AProperty;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.property.PropertyCrop;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.property.PropertyOpacity;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.property.PropertyPosition;
+import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.model.implementation.property.PropertyScale;
 import de.homelab.madgaksha.lotsofbs.tool.fancysceneeditor.view.DrawablePropertyEditor;
+import de.homelab.madgaksha.safemutable.DimensionalValue;
 import de.homelab.madgaksha.scene2dext.listener.ButtonListener.ButtonAdapter;
 import de.homelab.madgaksha.scene2dext.util.TableUtils;
-import de.homelab.madgaksha.scene2dext.widget.NumericInput;
-import de.homelab.madgaksha.scene2dext.widget.NumericInput.NumericInputListener;
+import de.homelab.madgaksha.scene2dext.view.NumericInput.FloatNumericInput;
+import de.homelab.madgaksha.scene2dext.view.NumericInput.NumericInputListener;
 
 public class DrawableClipData extends AClipData {
 
@@ -59,8 +61,8 @@ public class DrawableClipData extends AClipData {
 	private Table tablePropertyButtons;
 	private SelectBox<Enum<?>> sbResource;
 	private SelectBox<Type> sbType;
-	private NumericInput niDpi;
-	private NumericInput niZOrder;
+	private FloatNumericInput niDpi;
+	private FloatNumericInput niZOrder;
 	private Table table;
 	private Skin oldSkin = new Skin();
 
@@ -69,10 +71,10 @@ public class DrawableClipData extends AClipData {
 	protected DrawableClipData(final ModelClip clip) {
 		super(clip);
 		drawablePropertyList = new ModelDrawableProperty[]{
-				new PropertyPosition(),
-				new PropertyOpacity(),
-				new PropertyScale(),
-				new PropertyCrop(),
+				new PropertyPosition(this),
+				new PropertyOpacity(this),
+				new PropertyScale(this),
+				new PropertyCrop(this),
 		};
 	}
 
@@ -83,8 +85,9 @@ public class DrawableClipData extends AClipData {
 
 	@Override
 	public Actor getActor(final TimelineProvider timelineProvider, final Skin skin) {
-		if (table == null)
+		if (table == null) {
 			createElements(skin);
+		}
 		if (!((Object) oldSkin).equals(skin)) {
 			layout(skin);
 			oldSkin = skin;
@@ -130,25 +133,25 @@ public class DrawableClipData extends AClipData {
 			}
 		});
 
-		niZOrder = new NumericInput(1, skin);
+		niZOrder = new FloatNumericInput(1, skin);
 		niZOrder.setFormat("%.0f");
-		niZOrder.setMinMax(0, 1000);
-		niZOrder.setStep(1);
-		niZOrder.addListener(new NumericInputListener() {
+		niZOrder.setMinMax(0f, 1000f);
+		niZOrder.setStep(1f);
+		niZOrder.addListener(new NumericInputListener<Float>() {
 			@Override
-			protected void changed(final float value, final Actor actor) {
+			protected void changed(final Float value, final Actor actor) {
 				zOrder = MathUtils.round(value);
 				getClip().invalidateClipData();
 			}
 		});
 
-		niDpi = new NumericInput(1f, skin);
+		niDpi = new FloatNumericInput(1f, skin);
 		niDpi.setFormat("%.1f");
 		niDpi.setStep(0.1f);
 		niDpi.setMinMax(0.1f, 400f);
-		niDpi.addListener(new NumericInputListener() {
+		niDpi.addListener(new NumericInputListener<Float>() {
 			@Override
-			protected void changed(final float value, final Actor actor) {
+			protected void changed(final Float value, final Actor actor) {
 				dpi = value;
 				getClip().invalidateClipData();
 			}
@@ -163,9 +166,11 @@ public class DrawableClipData extends AClipData {
 				public void checked(final Button button) {
 					for (final Cell<?> c : tablePropertyButtons.getCells()) {
 						final Object a = c.getActor();
-						if (a instanceof Button && !a.equals(button)) ((Button)a).setChecked(false);
+						if (a instanceof Button && !a.equals(button)) {
+							((Button)a).setChecked(false);
+						}
 					}
-					modelProperty.setClipData(DrawableClipData.this);
+					//					modelProperty.setClipData(DrawableClipData.this);
 					drawablePropertyEditor.setModel(modelProperty);
 				}
 			});
@@ -177,7 +182,7 @@ public class DrawableClipData extends AClipData {
 		sbType.setSelected(type);
 		sbResource.setSelected(initialResource);
 		niDpi.setValue(dpi);
-		niZOrder.setValue(1);
+		niZOrder.setValue(1f);
 		((Button)tablePropertyButtons.getCells().get(0).getActor()).setChecked(true);
 	}
 
@@ -221,6 +226,21 @@ public class DrawableClipData extends AClipData {
 	public String getDescription() {
 		return "A drawable entity has got a drawable, which can be an image, an animation, a nine patch, or a particle effect. Each drawable possess various propertoes such as position, scale, size, and rotation that can be freely set and animated. The drawable entity allows for the drawable to be changed, which can be used, for example, to create custom sprite animations.";
 	}
+
+	@Override
+	public void clipStartTimeChanged(final float startTime) {
+		for (final ModelDrawableProperty<? extends DimensionalValue> prop : drawablePropertyList) {
+			((AProperty<? extends DimensionalValue>)prop).timeChanged();
+		}
+	}
+
+	@Override
+	public void clipEndTimeChanged(final float endTime) {
+		for (final ModelDrawableProperty<? extends DimensionalValue> prop : drawablePropertyList) {
+			((AProperty<? extends DimensionalValue>)prop).timeChanged();
+		}
+	}
+
 
 	// Sprite A 0.000 Estelle 32.0 OUGI_OUKA_MUSOUGEKI_JUMP3
 	// Show 11 A 0.425 SimpleHit 1.0

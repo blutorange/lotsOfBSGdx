@@ -29,31 +29,35 @@ public class FancySoundtarget extends AFancyEvent {
 	private ESound sound;
 	private VoiceRetriever voiceRetriever = null;
 	private float volume;
-	
+
 	@Transient private boolean isDone;
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		out.writeObject(sound);
 		out.writeObject(voiceRetriever);
 		out.writeFloat(volume);
 	}
 
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-		Object sound = in.readObject();
+	private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		final Object sound = in.readObject();
 		if (sound == null || !(sound instanceof ESound))
 			throw new InvalidDataException("unknown sound");
 
-		Object voiceRetriever = in.readObject();
+		final Object voiceRetriever = in.readObject();
 		if (voiceRetriever == null || !(voiceRetriever instanceof VoiceRetriever))
 			throw new InvalidDataException("unknown sound type");
 
 		this.sound = (ESound) sound;
 		this.voiceRetriever = (VoiceRetriever) voiceRetriever;
-		this.volume = in.readFloat();
+		volume = in.readFloat();
 	}
 
-	public FancySoundtarget(VoiceRetriever voiceRetriever, float volume) {
-		super(true);
+	public FancySoundtarget(final VoiceRetriever voiceRetriever, final float volume) {
+		this(0, 0, voiceRetriever, volume);
+	}
+
+	public FancySoundtarget(final float startTime, final int z, final VoiceRetriever voiceRetriever, final float volume) {
+		super(startTime, z, true);
 		this.voiceRetriever = voiceRetriever;
 		this.volume = volume;
 	}
@@ -66,17 +70,17 @@ public class FancySoundtarget extends AFancyEvent {
 		isDone = false;
 	}
 
-	
+
 
 	@Override
-	public boolean begin(EventFancyScene efs) {
+	public boolean begin(final EventFancyScene efs) {
 		// Get voice component for current target.
 		if (cameraTrackingComponent.trackedPointIndex >= cameraTrackingComponent.focusPoints.size()) {
 			LOG.error("no such target");
 			return false;
 		}
-		Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
-		VoiceComponent vc = Mapper.voiceComponent.get(target);
+		final Entity target = cameraTrackingComponent.focusPoints.get(cameraTrackingComponent.trackedPointIndex);
+		final VoiceComponent vc = Mapper.voiceComponent.get(target);
 		if (vc == null) {
 			LOG.error("target does not possess voice component");
 			return false;
@@ -97,11 +101,11 @@ public class FancySoundtarget extends AFancyEvent {
 	}
 
 	@Override
-	public void render(Batch batch) {
+	public void render(final Batch batch) {
 	}
 
 	@Override
-	public void update(float passedTime) {
+	public void update(final float passedTime) {
 		isDone = sound == null || passedTime >= sound.getDuration();
 	}
 
@@ -115,28 +119,28 @@ public class FancySoundtarget extends AFancyEvent {
 	}
 
 	@Override
-	public void drawableChanged(EventFancyScene scene, String changedKey) {
+	public void drawableChanged(final EventFancyScene scene, final String changedKey) {
 	}
 
 	@Override
-	public void attachedToScene(EventFancyScene scene) {
+	public void attachedToScene(final EventFancyScene scene) {
 	}
 
 	/**
 	 * @param s Scanner from which to read.
 	 * @param parentFile The file handle of the file being used. Should be used only for directories.
 	 */
-	public static AFancyEvent readNextObject(Scanner s, FileHandle parentFile) {
+	public static AFancyEvent readNextObject(final Scanner s, final FileHandle parentFile) {
 		if (!s.hasNext()) {
 			LOG.error("expected sound type");
 			return null;
 		}
-		String soundType = s.next();
+		final String soundType = s.next();
 
 		VoiceRetriever voiceRetriever = null;
 		try {
 			voiceRetriever = VoiceRetriever.valueOf(soundType);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			LOG.error("no such sound type", e);
 		}
 		if (voiceRetriever == null)
