@@ -21,7 +21,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Computes the ideal position for the camera.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -31,21 +31,20 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 	private final static Logger LOG = Logger.getLogger(CameraTracingSystem.class);
 
 	/** Last vector longer than the threshold. */
-	private Vector2 lastDirAboveThreshold = new Vector2(0, 1);
+	private final Vector2 lastDirAboveThreshold = new Vector2(0, 1);
 
 	public CameraTracingSystem() {
 		this(DefaultPriority.cameraZoomingSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public CameraTracingSystem(int priority) {
+	public CameraTracingSystem(final int priority) {
 		super(DisableIteratingSystem.all(ManyTrackingComponent.class, ShouldPositionComponent.class,
 				ShouldRotationComponent.class), priority);
 	}
 
 	@SuppressWarnings("incomplete-switch")
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final ShouldPositionComponent spc = Mapper.shouldPositionComponent.get(entity);
 		final ShouldRotationComponent src = Mapper.shouldRotationComponent.get(entity);
 		final ManyTrackingComponent mtc = Mapper.manyTrackingComponent.get(entity);
@@ -55,7 +54,7 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 
 		// Determine the direction the player
 		// should be looking in.
-		Vector2 dir = new Vector2();
+		final Vector2 dir = new Vector2();
 		if (mtc.focusPoints.size() > 0 && mtc.trackingOrientationStrategy == TrackingOrientationStrategy.RELATIVE) {
 			if (mtc.trackedPointIndex >= mtc.focusPoints.size())
 				mtc.trackedPointIndex = mtc.focusPoints.size() - 1;
@@ -84,9 +83,9 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 		case WEST:
 			dir.rotate(180.0f);
 			break;
-		/*
-		 * case EAST: dir.rotate(0.0f); break;
-		 */
+			/*
+			 * case EAST: dir.rotate(0.0f); break;
+			 */
 		case SOUTH:
 			dir.rotate(90.0f);
 			break;
@@ -99,7 +98,7 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 		// Vector orthogonal to the looking
 		// direction. We use it to create
 		// a rotated coordinate system.
-		Vector2 base = dir.cpy().rotate90(-1);
+		final Vector2 base = dir.cpy().rotate90(-1);
 
 		// Project all focusPoints to new coordinate system
 		// and get min / max coordinates to determine
@@ -111,7 +110,7 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 		float maxx = 0.0f;
 		float maxy = 0.0f;
 		final Vector2 v = new Vector2();
-		for (Entity e : mtc.focusPoints) {
+		for (final Entity e : mtc.focusPoints) {
 			final PositionComponent vpc = Mapper.positionComponent.get(e);
 			final BoundingSphereComponent bsc = Mapper.boundingSphereComponent.get(e);
 			v.set(vpc.x - playerPoint.x, vpc.y - playerPoint.y);
@@ -191,7 +190,7 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 		// Apply maximum elevation
 		else if (spc.z > mtc.maximumElevation) {
 			spc.z = mtc.maximumElevation;
-			float ratio = spc.z * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF / hh;
+			final float ratio = spc.z * ALevel.CAMERA_GAME_TAN_FIELD_OF_VIEW_Y_HALF / hh;
 			cx *= ratio;
 			cy *= ratio;
 		}

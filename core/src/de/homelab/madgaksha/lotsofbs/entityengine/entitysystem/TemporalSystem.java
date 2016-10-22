@@ -12,7 +12,7 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.TimeScaleComponent;
 
 /**
  * Updates an object's position its velocity over a small time step dt.
- * 
+ *
  * @author madgaksha
  */
 public class TemporalSystem extends IteratingSystem {
@@ -21,13 +21,12 @@ public class TemporalSystem extends IteratingSystem {
 		this(DefaultPriority.temporalSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public TemporalSystem(int priority) {
+	public TemporalSystem(final int priority) {
 		super(Family.all(TemporalComponent.class).get(), priority);
 	}
 
 	@Override
-	public void processEntity(Entity entity, float deltaTime) {
+	public void processEntity(final Entity entity, final float deltaTime) {
 		final TemporalComponent tc = Mapper.temporalComponent.get(entity);
 		final TimeScaleComponent tsfc = Mapper.timeScaleComponent.get(entity);
 		tc.deltaTime = deltaTime;

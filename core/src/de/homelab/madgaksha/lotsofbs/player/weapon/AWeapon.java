@@ -25,7 +25,7 @@ public abstract class AWeapon extends AItem {
 	private CroppableSprite iconSub = null;
 	private EWeapon type = null;
 
-	void setType(EWeapon type) throws IllegalStateException {
+	void setType(final EWeapon type) throws IllegalStateException {
 		if (this.type != null) throw new IllegalStateException();
 		this.type = type;
 	}
@@ -41,7 +41,7 @@ public abstract class AWeapon extends AItem {
 	/**
 	 * Can be overriden for custom sound when acquiring an item with a weapon of
 	 * this type.
-	 * 
+	 *
 	 * @return The sound played when the player acquires an item with this
 	 *         weapon.
 	 */
@@ -62,17 +62,17 @@ public abstract class AWeapon extends AItem {
 		iconMain = requestedIconMain().asSprite();
 		iconSub = requestedIconSub().asSprite();
 		soundOnAcquire = requestedSoundOnAcquire();
-		boolean success = ResourceCache.loadToRam(requestedRequiredResources());
-		return (iconMain != null) && (iconSub != null) && (iconSub != null) && success;
+		final boolean success = ResourceCache.loadToRam(requestedRequiredResources());
+		return (iconMain != null) && (iconSub != null) && success;
 	}
 
 	@Override
-	public void setup(Entity e, MapProperties props, ComponentQueueComponent queueForAcquisition) {
+	public void setup(final Entity e, final MapProperties props, final ComponentQueueComponent queueForAcquisition) {
 	}
 
 	/**
 	 * Can be overridden for other values.
-	 * 
+	 *
 	 * @return The default axis of rotation around which the item model rotates.
 	 */
 	@Override
@@ -82,7 +82,7 @@ public abstract class AWeapon extends AItem {
 
 	/**
 	 * Can be overridden for other values.
-	 * 
+	 *
 	 * @return The angular velocity at which the item model rotates.
 	 */
 	@Override
@@ -91,7 +91,7 @@ public abstract class AWeapon extends AItem {
 	}
 
 	@Override
-	public boolean isSupportedByPlayer(APlayer player) {
+	public boolean isSupportedByPlayer(final APlayer player) {
 		return type == null ? true : player.supportsWeapon(type);
 	}
 

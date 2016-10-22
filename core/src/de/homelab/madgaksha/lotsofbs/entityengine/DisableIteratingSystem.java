@@ -18,68 +18,74 @@ public abstract class DisableIteratingSystem extends EntitySystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(DisableIteratingSystem.class);
 
-	private Family familyAll;
-	private Family familyExclude;
+	private final Family familyAll;
+	private final Family familyExclude;
 	private ImmutableArray<Entity> entitiesAll;
 	private ImmutableArray<Entity> entitiesExclude;
 
 	/**
 	 * Instantiates a system that will iterate over the entities described by
 	 * the Family.
-	 * 
+	 *
 	 * @param family
 	 *            The family of entities iterated over in this System
 	 */
-	public DisableIteratingSystem(DisableIteratingSystem.Builder builder) {
+	public DisableIteratingSystem(final DisableIteratingSystem.Builder builder) {
 		this(builder, 0);
 	}
 
 	/**
 	 * Instantiates a system that will iterate over the entities described by
 	 * the Family, with a specific priority.
-	 * 
+	 *
 	 * @param family
 	 *            The family of entities iterated over in this System
 	 * @param priority
 	 *            The priority to execute this system with (lower means higher
 	 *            priority)
 	 */
-	public DisableIteratingSystem(DisableIteratingSystem.Builder builder, int priority) {
+	public DisableIteratingSystem(final DisableIteratingSystem.Builder builder, final int priority) {
 		super(priority);
 		this.familyAll = builder.getAll();
 		this.familyExclude = builder.getExclude();
 	}
 
-	public static Builder all(Class<? extends Component>... c) {
+	@SafeVarargs
+	public static Builder all(final Class<? extends Component>... c) {
 		return new Builder().all(c);
 	}
 
-	public static Builder one(Class<? extends Component>... c) {
+	@SafeVarargs
+	public static Builder one(final Class<? extends Component>... c) {
 		return new Builder().one(c);
 	}
 
-	public static Builder exclude(Class<? extends Component>... c) {
+	@SafeVarargs
+	public static Builder exclude(final Class<? extends Component>... c) {
 		return new Builder().exclude(c);
 	}
 
 	public static class Builder {
-		private List<Class<? extends Component>> componentTypesAll = new ArrayList<Class<? extends Component>>();
-		private List<Class<? extends Component>> componentTypesOne = new ArrayList<Class<? extends Component>>();
-		private List<Class<? extends Component>> componentTypesExclude = new ArrayList<Class<? extends Component>>();
+		private final List<Class<? extends Component>> componentTypesAll = new ArrayList<Class<? extends Component>>();
+		private final List<Class<? extends Component>> componentTypesOne = new ArrayList<Class<? extends Component>>();
+		private final List<Class<? extends Component>> componentTypesExclude = new ArrayList<Class<? extends Component>>();
 
-		public Builder all(Class<? extends Component>... c) {
+		@SafeVarargs
+		public final Builder all(final Class<? extends Component>... c) {
 			componentTypesAll.clear();
 			componentTypesAll.addAll(Arrays.asList(c));
 			return this;
 		}
 
-		public Builder exclude(Class<? extends Component>... c) {
+		@SafeVarargs
+		public final Builder exclude(final Class<? extends Component>... c) {
 			componentTypesExclude.clear();
 			componentTypesExclude.addAll(Arrays.asList(c));
 			return this;
 		}
 
-		public Builder one(Class<? extends Component>... c) {
+		@SafeVarargs
+		public final Builder one(final Class<? extends Component>... c) {
 			componentTypesOne.clear();
 			componentTypesOne.addAll(Arrays.asList(c));
 			return this;
@@ -87,7 +93,7 @@ public abstract class DisableIteratingSystem extends EntitySystem {
 
 		private Family getAll() {
 			componentTypesAll.add(DisableAllExceptTheseComponent.class);
-			Family f = get();
+			final Family f = get();
 			componentTypesAll.remove(componentTypesAll.size() - 1);
 			return f;
 		}
@@ -105,26 +111,26 @@ public abstract class DisableIteratingSystem extends EntitySystem {
 
 		private Family getExclude() {
 			componentTypesExclude.add(DisableAllExceptTheseComponent.class);
-			Family f = get();
+			final Family f = get();
 			componentTypesExclude.remove(componentTypesExclude.size() - 1);
 			return f;
 		}
 	}
 
 	@Override
-	public void addedToEngine(Engine engine) {
+	public void addedToEngine(final Engine engine) {
 		entitiesAll = engine.getEntitiesFor(familyAll);
 		entitiesExclude = engine.getEntitiesFor(familyExclude);
 	}
 
 	@Override
-	public void removedFromEngine(Engine engine) {
+	public void removedFromEngine(final Engine engine) {
 		entitiesAll = null;
 		entitiesExclude = null;
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(final float deltaTime) {
 		if (entitiesAll.size() != 0) {
 			for (int i = 0; i < entitiesAll.size(); ++i)
 				processEntity(entitiesAll.get(i), deltaTime);
@@ -137,7 +143,7 @@ public abstract class DisableIteratingSystem extends EntitySystem {
 	 * This method is called on every entity on every update call of the
 	 * EntitySystem. Override this to implement your system's specific
 	 * processing.
-	 * 
+	 *
 	 * @param entity
 	 *            The current Entity being processed
 	 * @param deltaTime

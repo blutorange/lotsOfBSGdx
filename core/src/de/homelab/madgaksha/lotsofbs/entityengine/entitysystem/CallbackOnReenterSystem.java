@@ -1,6 +1,7 @@
 package de.homelab.madgaksha.lotsofbs.entityengine.entitysystem;
 
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.gameEntityEngine;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
@@ -16,7 +17,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 /**
  * Calls a callback after a given time, and keeps calling it a certain number of
  * times again.
- * 
+ *
  * @author madgaksha
  */
 public class CallbackOnReenterSystem extends IteratingSystem implements EntityListener {
@@ -27,16 +28,15 @@ public class CallbackOnReenterSystem extends IteratingSystem implements EntityLi
 		this(DefaultPriority.callbackOnReenterSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public CallbackOnReenterSystem(int priority) {
+	public CallbackOnReenterSystem(final int priority) {
 		super(Family.all(CallbackOnReenterComponent.class, PositionComponent.class).exclude(InactiveComponent.class)
 				.get(), priority);
-		Family family = getFamily();
+		final Family family = getFamily();
 		gameEntityEngine.addEntityListener(family, this);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		final CallbackOnReenterComponent corc = Mapper.callbackOnReenterComponent.get(entity);
 		if (!corc.shape.contains(pc.x, pc.y)) {
@@ -52,16 +52,16 @@ public class CallbackOnReenterSystem extends IteratingSystem implements EntityLi
 			}
 		}
 	}
-	
+
 	@Override
-	public void entityRemoved(Entity entity) {
+	public void entityRemoved(final Entity entity) {
 	}
-	
+
 	@Override
-	public void entityAdded(Entity entity) {
+	public void entityAdded(final Entity entity) {
 		// check whether entity is inside or outside the shape initially
-		CallbackOnReenterComponent corc = Mapper.callbackOnReenterComponent.get(entity);
-		PositionComponent pc = Mapper.positionComponent.get(entity);
+		final CallbackOnReenterComponent corc = Mapper.callbackOnReenterComponent.get(entity);
+		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		corc.hasLeftShape = !corc.shape.contains(pc.x, pc.y);
 	}
 }

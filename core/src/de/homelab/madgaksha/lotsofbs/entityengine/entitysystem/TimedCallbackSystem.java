@@ -1,6 +1,7 @@
 package de.homelab.madgaksha.lotsofbs.entityengine.entitysystem;
 
 import static de.homelab.madgaksha.lotsofbs.GlobalBag.gameEntityEngine;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -15,7 +16,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 /**
  * Calls a callback after a given time, and keeps calling it a certain number of
  * times again.
- * 
+ *
  * @author madgaksha
  */
 public class TimedCallbackSystem extends IteratingSystem {
@@ -26,14 +27,13 @@ public class TimedCallbackSystem extends IteratingSystem {
 		this(DefaultPriority.timedCallbackSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public TimedCallbackSystem(int priority) {
+	public TimedCallbackSystem(final int priority) {
 		super(Family.all(TimedCallbackComponent.class, TemporalComponent.class).exclude(InactiveComponent.class).get(),
 				priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final TimedCallbackComponent tcc = Mapper.timedCallbackComponent.get(entity);
 		final TemporalComponent tc = Mapper.temporalComponent.get(entity);
 		tcc.totalTime += tc.deltaTime;

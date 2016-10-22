@@ -18,7 +18,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Updates camera and viewport.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -31,14 +31,13 @@ public class ViewportUpdateSystem extends DisableIteratingSystem {
 		this(DefaultPriority.viewportUpdateSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public ViewportUpdateSystem(int priority) {
+	public ViewportUpdateSystem(final int priority) {
 		super(DisableIteratingSystem.all(ViewportComponent.class, PositionComponent.class, RotationComponent.class),
 				priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final ViewportComponent vc = Mapper.viewportComponent.get(entity);
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		final RotationComponent rc = Mapper.rotationComponent.get(entity);

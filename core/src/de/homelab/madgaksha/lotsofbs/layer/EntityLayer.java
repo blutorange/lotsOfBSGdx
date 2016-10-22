@@ -60,7 +60,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Creates and renders the main entity engine.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -76,7 +76,7 @@ public class EntityLayer extends ALayer {
 	}
 
 	@Override
-	public void draw(float deltaTime) {
+	public void draw(final float deltaTime) {
 		if (doUpdate)
 			gameEntityEngine.update(deltaTime);
 		else {
@@ -95,7 +95,7 @@ public class EntityLayer extends ALayer {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(final float deltaTime) {
 		doUpdate = true;
 	}
 
@@ -103,7 +103,7 @@ public class EntityLayer extends ALayer {
 	public void removedFromStack() {
 		if (gameEntityEngine != null) {
 			gameEntityEngine.removeAllEntities();
-			for (EntitySystem es : gameEntityEngine.getSystems()) {
+			for (final EntitySystem es : gameEntityEngine.getSystems()) {
 				gameEntityEngine.removeSystem(es);
 			}
 		}
@@ -116,13 +116,12 @@ public class EntityLayer extends ALayer {
 		// entities will be processed.
 		// Call all callback entities set to callback on startup.
 		final List<Entity> myList = new ArrayList<Entity>(20);
-		@SuppressWarnings("unchecked")
 		final Family family = Family.all(TriggerStartupComponent.class).get();
-		for (Entity e : gameEntityEngine.getEntitiesFor(family)) {
+		for (final Entity e : gameEntityEngine.getEntitiesFor(family)) {
 			myList.add(e);
 		}
-		for (Entity e : myList) {
-			TriggerStartupComponent tsc = Mapper.triggerStartupComponent.get(e);
+		for (final Entity e : myList) {
+			final TriggerStartupComponent tsc = Mapper.triggerStartupComponent.get(e);
 			tsc.triggerAcceptingObject.callbackTrigger(e, ETrigger.STARTUP);
 			e.remove(TriggerStartupComponent.class);
 		}
@@ -191,9 +190,9 @@ public class EntityLayer extends ALayer {
 	}
 
 	private boolean addMainEntites() {
-		Entity battleStigma = PlayerMaker.getInstance().makePlayerBattleStigma(playerEntity, player);
-		Entity targetCross = MakerUtils.makeEnemyTargetCross();
-		Entity myCamera = MakerUtils.makeCamera(level, playerEntity);
+		final Entity battleStigma = PlayerMaker.getInstance().makePlayerBattleStigma(playerEntity, player);
+		final Entity targetCross = MakerUtils.makeEnemyTargetCross();
+		final Entity myCamera = MakerUtils.makeCamera(level, playerEntity);
 		if (battleStigma == null || myCamera == null)
 			return false;
 
@@ -221,27 +220,26 @@ public class EntityLayer extends ALayer {
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void resize(final int width, final int height) {
 	}
 
 	public static void addEntityListeners() {
 		addIdListener();
 	}
 
-	@SuppressWarnings("unchecked")
 	private static void addIdListener() {
 		// Add entity to idEntityMap when an IdComponent is added or removed.
 		gameEntityEngine.addEntityListener(Family.all(IdComponent.class).get(), new EntityListener() {
 			@Override
-			public void entityAdded(Entity entity) {
+			public void entityAdded(final Entity entity) {
 				final IdComponent ic = Mapper.idComponent.get(entity);
 				if (ic != null)
 					idEntityMap.put(ic.getId(), entity);
 			}
 
 			@Override
-			public void entityRemoved(Entity entity) {
-				String id = idEntityMap.inverse().get(entity);
+			public void entityRemoved(final Entity entity) {
+				final String id = idEntityMap.inverse().get(entity);
 				if (id != null)
 					idEntityMap.remove(id);
 			}

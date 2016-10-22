@@ -29,7 +29,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Updates an object's position its velocity over a small time step dt.
- * 
+ *
  * @author madgaksha
  */
 public class ParticleEffectRenderSystem extends EntitySystem {
@@ -101,9 +101,8 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 		batchPixel.end();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void addedToEngine(Engine engine) {
+	public void addedToEngine(final Engine engine) {
 		entitiesGame = engine.getEntitiesFor(Family.all(TemporalComponent.class, ParticleEffectGameComponent.class)
 				.exclude(InvisibleComponent.class, InactiveComponent.class).get());
 		entitiesScreen = engine.getEntitiesFor(Family.all(TemporalComponent.class, ParticleEffectScreenComponent.class)
@@ -111,14 +110,14 @@ public class ParticleEffectRenderSystem extends EntitySystem {
 	}
 
 	@Override
-	public void removedFromEngine(Engine engine) {
+	public void removedFromEngine(final Engine engine) {
 		entitiesGame = null;
 		entitiesScreen = null;
 	}
 
-	public void setAngle(PooledEffect pe, float angle) {
-		float r = pe.getEmitters().get(0).getAngle().getLowMin();
-		for (ParticleEmitter e : pe.getEmitters()) {
+	public void setAngle(final PooledEffect pe, final float angle) {
+		final float r = pe.getEmitters().get(0).getAngle().getLowMin();
+		for (final ParticleEmitter e : pe.getEmitters()) {
 			final ScaledNumericValue snv = e.getAngle();
 			snv.setHighMax(snv.getHighMax() - r + angle);
 			snv.setHighMin(snv.getHighMin() - r + angle);

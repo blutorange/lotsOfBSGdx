@@ -47,10 +47,10 @@ public class SpriteRenderSystem extends EntitySystem {
 	private ImmutableArray<Entity> entitiesZ3;
 	private ImmutableArray<Entity> entitiesZ4;
 
-	private float mapBoundaryMinX;
-	private float mapBoundaryMinY;
-	private float mapBoundaryMaxX;
-	private float mapBoundaryMaxY;
+	private final float mapBoundaryMinX;
+	private final float mapBoundaryMinY;
+	private final float mapBoundaryMaxX;
+	private final float mapBoundaryMaxY;
 
 	private float shadowRotateX;
 	private float shadowRotateY;
@@ -59,8 +59,7 @@ public class SpriteRenderSystem extends EntitySystem {
 		this(DefaultPriority.spriteRenderSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public SpriteRenderSystem(int priority) {
+	public SpriteRenderSystem(final int priority) {
 		super(priority);
 		this.familyZ0 = Family.all(SpriteComponent.class, PositionComponent.class, ZOrder0Component.class)
 				.exclude(InvisibleComponent.class).get();
@@ -80,7 +79,7 @@ public class SpriteRenderSystem extends EntitySystem {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(final float deltaTime) {
 		// Apply projection matrix.
 		batchGame.setProjectionMatrix(viewportGame.getCamera().combined);
 
@@ -104,7 +103,7 @@ public class SpriteRenderSystem extends EntitySystem {
 		batchGame.end();
 	}
 
-	private void renderEntities(ImmutableArray<Entity> entities) {
+	private void renderEntities(final ImmutableArray<Entity> entities) {
 		// Get rotation of camera relative to xy plane.
 		final float cameraUpAngleXY = viewportGame.getRotationUpXY();
 
@@ -155,9 +154,9 @@ public class SpriteRenderSystem extends EntitySystem {
 				if (kc.relativeToCamera) {
 					kc.sprite.setCenter(
 							pc.x + shadowRotateY * viewportGame.getCamera().up.x
-									+ shadowRotateX * viewportGame.getCamera().up.y,
+							+ shadowRotateX * viewportGame.getCamera().up.y,
 							pc.y + shadowRotateY * viewportGame.getCamera().up.y
-									- shadowRotateX * viewportGame.getCamera().up.x);
+							- shadowRotateX * viewportGame.getCamera().up.x);
 				} else {
 					kc.sprite.setCenter(pc.x + shadowRotateX, pc.y + shadowRotateY);
 				}
@@ -172,7 +171,7 @@ public class SpriteRenderSystem extends EntitySystem {
 	}
 
 	@Override
-	public void addedToEngine(Engine engine) {
+	public void addedToEngine(final Engine engine) {
 		entitiesZ0 = engine.getEntitiesFor(familyZ0);
 		entitiesZ1 = engine.getEntitiesFor(familyZ1);
 		entitiesZ2 = engine.getEntitiesFor(familyZ2);
@@ -181,7 +180,7 @@ public class SpriteRenderSystem extends EntitySystem {
 	}
 
 	@Override
-	public void removedFromEngine(Engine engine) {
+	public void removedFromEngine(final Engine engine) {
 		entitiesZ0 = null;
 		entitiesZ1 = null;
 		entitiesZ2 = null;

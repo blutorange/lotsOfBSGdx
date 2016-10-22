@@ -67,7 +67,7 @@ import de.homelab.madgaksha.lotsofbs.util.GeoUtil;
  * <td></td>
  * </tr>
  * </table>
- * 
+ *
  * @author madgaksha
  *
  */
@@ -109,8 +109,7 @@ public class CollisionSystem extends EntitySystem {
 		this(DefaultPriority.collisionSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public CollisionSystem(int priority) {
+	public CollisionSystem(final int priority) {
 		super(priority);
 		this.familyTouch01 = Family
 				.all(PositionComponent.class, TriggerTouchGroup01Component.class, BoundingBoxCollisionComponent.class)
@@ -149,55 +148,55 @@ public class CollisionSystem extends EntitySystem {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(final float deltaTime) {
 		TriggerTouchComponent ttc;
 		ReceiveTouchComponent rtc;
 
 		// Collide entities within the same group.
 
-		for (Entity alice : entitiesTouch01) {
-			for (Entity bob : entitiesReceive01) {
+		for (final Entity alice : entitiesTouch01) {
+			for (final Entity bob : entitiesReceive01) {
 				ttc = Mapper.triggerTouchGroup01Component.get(alice);
 				rtc = Mapper.receiveTouchGroup01Component.get(bob);
 				collide(alice, bob, ttc, rtc);
 			}
 		}
-		for (Entity alice : entitiesTouch02) {
-			for (Entity bob : entitiesReceive02) {
+		for (final Entity alice : entitiesTouch02) {
+			for (final Entity bob : entitiesReceive02) {
 				ttc = Mapper.triggerTouchGroup02Component.get(alice);
 				rtc = Mapper.receiveTouchGroup02Component.get(bob);
 				collide(alice, bob, ttc, rtc);
 			}
 		}
-		for (Entity alice : entitiesTouch03) {
-			for (Entity bob : entitiesReceive03) {
+		for (final Entity alice : entitiesTouch03) {
+			for (final Entity bob : entitiesReceive03) {
 				ttc = Mapper.triggerTouchGroup03Component.get(alice);
 				rtc = Mapper.receiveTouchGroup03Component.get(bob);
 				collide(alice, bob, ttc, rtc);
 			}
 		}
-		for (Entity alice : entitiesTouch04) {
-			for (Entity bob : entitiesReceive04) {
+		for (final Entity alice : entitiesTouch04) {
+			for (final Entity bob : entitiesReceive04) {
 				ttc = Mapper.triggerTouchGroup04Component.get(alice);
 				rtc = Mapper.receiveTouchGroup04Component.get(bob);
 				collide(alice, bob, ttc, rtc);
 			}
 		}
-		for (Entity alice : entitiesTouch05) {
-			for (Entity bob : entitiesReceive05) {
+		for (final Entity alice : entitiesTouch05) {
+			for (final Entity bob : entitiesReceive05) {
 				ttc = Mapper.triggerTouchGroup05Component.get(alice);
 				rtc = Mapper.receiveTouchGroup05Component.get(bob);
 				collide(alice, bob, ttc, rtc);
 			}
 		}
 
-		for (Entity odo : entitiesScreen) {
+		for (final Entity odo : entitiesScreen) {
 			collideScreen(odo);
 		}
 	}
 
 	@Override
-	public void addedToEngine(Engine engine) {
+	public void addedToEngine(final Engine engine) {
 		entitiesTouch01 = engine.getEntitiesFor(familyTouch01);
 		entitiesTouch02 = engine.getEntitiesFor(familyTouch02);
 		entitiesTouch03 = engine.getEntitiesFor(familyTouch03);
@@ -214,7 +213,7 @@ public class CollisionSystem extends EntitySystem {
 	}
 
 	@Override
-	public void removedFromEngine(Engine engine) {
+	public void removedFromEngine(final Engine engine) {
 		entitiesTouch01 = null;
 		entitiesTouch02 = null;
 		entitiesTouch03 = null;
@@ -228,7 +227,7 @@ public class CollisionSystem extends EntitySystem {
 		entitiesReceive05 = null;
 	}
 
-	private void collide(Entity alice, Entity bob, TriggerTouchComponent ttc, ReceiveTouchComponent rtc) {
+	private void collide(final Entity alice, final Entity bob, final TriggerTouchComponent ttc, final ReceiveTouchComponent rtc) {
 		final PositionComponent pcAlice = Mapper.positionComponent.get(alice);
 		final PositionComponent pcBob = Mapper.positionComponent.get(bob);
 		final BoundingBoxCollisionComponent bbccAlice = Mapper.boundingBoxCollisionComponent.get(alice);
@@ -273,7 +272,7 @@ public class CollisionSystem extends EntitySystem {
 		pcBob.y -= pcBob.offsetY;
 	}
 
-	private void collideScreen(Entity odo) {
+	private void collideScreen(final Entity odo) {
 		final PositionComponent pc = Mapper.positionComponent.get(odo);
 		final BoundingBoxCollisionComponent bbcc = Mapper.boundingBoxCollisionComponent.get(odo);
 		final ShapeComponent sc = Mapper.shapeComponent.get(odo);

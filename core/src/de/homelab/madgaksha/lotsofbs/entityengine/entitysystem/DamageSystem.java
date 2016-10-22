@@ -16,7 +16,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Updates an object's position its velocity over a small time step dt.
- * 
+ *
  * @author madgaksha
  */
 public class DamageSystem extends IteratingSystem {
@@ -35,21 +35,20 @@ public class DamageSystem extends IteratingSystem {
 		this(DefaultPriority.damageSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public DamageSystem(int priority) {
+	public DamageSystem(final int priority) {
 		super(Family.all(PainPointsComponent.class, DamageQueueComponent.class).exclude(InactiveComponent.class).get(),
 				priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final PainPointsComponent ppc = Mapper.painPointsComponent.get(entity);
 		final DamageQueueComponent dqc = Mapper.damageQueueComponent.get(entity);
 
 		// Change pain points accordingly.
 		if (dqc.queuedDamage != 0L) {
 			// take damage
-			VoiceComponent vc = Mapper.voiceComponent.get(entity);
+			final VoiceComponent vc = Mapper.voiceComponent.get(entity);
 
 			ppc.painPoints = MathUtils.clamp(ppc.painPoints + dqc.queuedDamage, 0L, ppc.maxPainPoints);
 			if (dqc.keepOneHp) {
@@ -59,7 +58,7 @@ public class DamageSystem extends IteratingSystem {
 			ppc.updatePainPoints();
 			// Check if entity just died :(
 			if (ppc.painPoints == ppc.maxPainPoints) {
-				DeathComponent dc = Mapper.deathComponent.get(entity);
+				final DeathComponent dc = Mapper.deathComponent.get(entity);
 				if (dc != null && !dc.dead) {
 					if (vc != null && vc.voicePlayer != null)
 						vc.voicePlayer.playUnconditionally(vc.onDeath);

@@ -32,7 +32,7 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 
 /**
  * Updates velocity from the force applied to a component and its mass.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -47,31 +47,30 @@ public class InputDesktopSystem extends IteratingSystem {
 		this(DefaultPriority.inputPlayerDesktopSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public InputDesktopSystem(int priority) {
+	public InputDesktopSystem(final int priority) {
 		super(Family.all(VelocityComponent.class, InputDesktopComponent.class, DirectionComponent.class).get(),
 				priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final VelocityComponent vc = Mapper.velocityComponent.get(entity);
 		final InputDesktopComponent ic = Mapper.inputDesktopComponent.get(entity);
 		final DirectionComponent dc = Mapper.directionComponent.get(entity);
 
 		// Switch active item.
 		if (KeyMapDesktop.isActiveItemSwitchJustPressed()) {
-			ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
+			final ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(playerHitCircleEntity);
 			if (ComponentUtils.cycleConeDistributionForward(cdc)) {
 				SoundPlayer.getInstance().play(ESound.SWITCH_ITEM);
 			}
 		}
-		
+
 		// Use active item.
 		if (KeyMapDesktop.isActiveItemUseJustPressed()) {
 			ItemMaker.useActiveConsumable();
 		}
-		
+
 		// Switch weapon
 		if (KeyMapDesktop.isWeaponSwitchJustPressed()) {
 			if (player.cycleWeaponForward()) {
@@ -88,13 +87,13 @@ public class InputDesktopSystem extends IteratingSystem {
 		// Get direction vector from pressed arrow keys.
 		v.set((KeyMapDesktop.isPlayerMoveRightPressed()) ? 1.0f
 				: (KeyMapDesktop.isPlayerMoveLeftPressed()) ? -1.0f : 0.0f,
-				(KeyMapDesktop.isPlayerMoveUpPressed()) ? 1.0f
-						: (KeyMapDesktop.isPlayerMoveDownPressed()) ? -1.0f : 0.0f);
+						(KeyMapDesktop.isPlayerMoveUpPressed()) ? 1.0f
+								: (KeyMapDesktop.isPlayerMoveDownPressed()) ? -1.0f : 0.0f);
 
 		// Adjust direction vector relative to the camera direction.
 		if (ic.relativeToCamera)
 			v.rotate(-viewportGame.getRotationUpXY());
-		
+
 		// During battle mode, do not apply any friction or acceleration as
 		// maximum responsiveness is needed to dodge bullets.
 		if (battleModeActive) {
@@ -112,7 +111,7 @@ public class InputDesktopSystem extends IteratingSystem {
 			if (v.x * v.y != 0.0f)
 				dc.degree = 630.0f - w.set(vc.x, vc.y).angle();// + viewportGame.getRotationUpXY();
 		}
-		
+
 		// Make random generator a bit more unpredictable.
 		if (v.x * v.y > 0.0f)
 			MathUtils.random.nextInt();
@@ -141,7 +140,7 @@ public class InputDesktopSystem extends IteratingSystem {
 
 		// Fire tokugi.
 		if (battleModeActive && KeyMapDesktop.isTokugiFireJustPressed()) {
-			TemporalComponent tc = Mapper.temporalComponent.get(entity);
+			final TemporalComponent tc = Mapper.temporalComponent.get(entity);
 			player.getEquippedTokugi().fire(playerEntity, tc.deltaTime);
 		}
 	}

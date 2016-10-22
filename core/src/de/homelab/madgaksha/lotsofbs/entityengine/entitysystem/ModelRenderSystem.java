@@ -29,21 +29,20 @@ public class ModelRenderSystem extends EntitySystem {
 	private Family family = null;
 	private ImmutableArray<Entity> entities;
 
-	private Environment environment;
+	private final Environment environment;
 
 	public ModelRenderSystem() {
 		this(DefaultPriority.modelRenderSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public ModelRenderSystem(int priority) {
+	public ModelRenderSystem(final int priority) {
 		super(priority);
 		this.family = Family.all(ModelComponent.class, PositionComponent.class).exclude(InvisibleComponent.class).get();
 		environment = level.getEnvironment();
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(final float deltaTime) {
 		// Apply projection matrix and render models.
 		batchModel.begin(viewportGame.getCamera());
 
@@ -79,12 +78,12 @@ public class ModelRenderSystem extends EntitySystem {
 	}
 
 	@Override
-	public void addedToEngine(Engine engine) {
+	public void addedToEngine(final Engine engine) {
 		entities = engine.getEntitiesFor(family);
 	}
 
 	@Override
-	public void removedFromEngine(Engine engine) {
+	public void removedFromEngine(final Engine engine) {
 		entities = null;
 	}
 }

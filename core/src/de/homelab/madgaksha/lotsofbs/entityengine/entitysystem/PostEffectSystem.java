@@ -32,11 +32,11 @@ public class PostEffectSystem extends EntitySystem {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(PostEffectSystem.class);
 
-	private Family familyLeanEffect;
-	private Family familyHoverEffect;
-	private Family familyColorFlashEffect;
-	private Family familyFadeEffect;
-	private Family familyQuakeEffect;
+	private final Family familyLeanEffect;
+	private final Family familyHoverEffect;
+	private final Family familyColorFlashEffect;
+	private final Family familyFadeEffect;
+	private final Family familyQuakeEffect;
 
 	private ImmutableArray<Entity> entitiesLeanEffect;
 	private ImmutableArray<Entity> entitiesHoverEffect;
@@ -52,8 +52,7 @@ public class PostEffectSystem extends EntitySystem {
 		this(DefaultPriority.postEffectSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public PostEffectSystem(int priority) {
+	public PostEffectSystem(final int priority) {
 		super(priority);
 		this.upVector = viewportGame.getCamera().up;
 		this.familyLeanEffect = Family.all(ShouldRotationComponent.class, ShouldScaleComponent.class,
@@ -71,7 +70,7 @@ public class PostEffectSystem extends EntitySystem {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(final float deltaTime) {
 		// Lean effect.
 		for (int i = 0; i < entitiesLeanEffect.size(); ++i) {
 			final Entity entity = entitiesLeanEffect.get(i);
@@ -89,10 +88,10 @@ public class PostEffectSystem extends EntitySystem {
 			if (Math.abs(a) > Math.abs(b)) {
 				if (a > 0) // up
 					ssc.scaleX = ssc.scaleY = 1.0f
-							- lec.targetScale * (1.0f - (float) Math.exp(-lec.leanFactor * a * a));
+					- lec.targetScale * (1.0f - (float) Math.exp(-lec.leanFactor * a * a));
 				else // down
 					ssc.scaleX = ssc.scaleY = 1.0f
-							+ lec.targetScale * (1.0f - (float) Math.exp(-lec.leanFactor * a * a));
+					+ lec.targetScale * (1.0f - (float) Math.exp(-lec.leanFactor * a * a));
 			} else if (b > 0) // right
 				src.thetaZ = -lec.targetAngle * (1.0f - (float) Math.exp(-lec.leanFactor * b * b));
 			else // left
@@ -160,7 +159,7 @@ public class PostEffectSystem extends EntitySystem {
 			if (qec.minusT <= 0.0f) {
 				qec.minusT = 1.0f;
 				qec.angle = (qec.angle + MathUtils.random(qec.minAdvanceAngle, qec.maxAdvanceAngle)) % 360.0f;
-				float amplitude = MathUtils.random(qec.minAmplitudeRatio * qec.amplitude, qec.amplitude);
+				final float amplitude = MathUtils.random(qec.minAmplitudeRatio * qec.amplitude, qec.amplitude);
 				pc.offsetX = amplitude * MathUtils.sinDeg(qec.angle);
 				pc.offsetY = amplitude * MathUtils.cosDeg(qec.angle);
 			}
@@ -169,7 +168,7 @@ public class PostEffectSystem extends EntitySystem {
 	}
 
 	@Override
-	public void addedToEngine(Engine engine) {
+	public void addedToEngine(final Engine engine) {
 		entitiesLeanEffect = engine.getEntitiesFor(familyLeanEffect);
 		entitiesHoverEffect = engine.getEntitiesFor(familyHoverEffect);
 		entitiesColorFlashEffect = engine.getEntitiesFor(familyColorFlashEffect);
@@ -178,7 +177,7 @@ public class PostEffectSystem extends EntitySystem {
 	}
 
 	@Override
-	public void removedFromEngine(Engine engine) {
+	public void removedFromEngine(final Engine engine) {
 		entitiesLeanEffect = null;
 		entitiesHoverEffect = null;
 		entitiesColorFlashEffect = null;

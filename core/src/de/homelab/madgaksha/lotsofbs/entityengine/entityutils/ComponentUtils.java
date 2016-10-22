@@ -36,7 +36,7 @@ import de.homelab.madgaksha.lotsofbs.util.GeoUtil;
 
 /**
  * Utilities for working with an entity's pain points.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -44,9 +44,7 @@ public final class ComponentUtils {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = Logger.getLogger(ComponentUtils.class);
 	private final static Vector2 v1 = new Vector2();
-	@SuppressWarnings("unchecked")
 	private final static Family FAMILY_BULLET = Family.all(BulletStatusComponent.class).get();
-	@SuppressWarnings("unchecked")
 	private final static Family FAMILY_ENEMY = Family.all(EnemyIconComponent.class).exclude(InactiveComponent.class)
 			.get();
 
@@ -57,11 +55,11 @@ public final class ComponentUtils {
 	/** Upper range of the random damage variance, in percent. */
 	public final static long DAMAGE_UPPER_RANGE = 120L;
 
-	public static boolean applyComponentQueue(Entity e, ComponentQueueComponent cqc) {
+	public static boolean applyComponentQueue(final Entity e, final ComponentQueueComponent cqc) {
 		if (!cqc.applicable.check(e, cqc.callbackData)) return false;
-		for (Class<? extends Component> c : cqc.remove)
+		for (final Class<? extends Component> c : cqc.remove)
 			e.remove(c);
-		for (Component c : cqc.add)
+		for (final Component c : cqc.add)
 			e.add(c);
 		cqc.add.clear();
 		cqc.remove.clear();
@@ -71,18 +69,18 @@ public final class ComponentUtils {
 	/** Applied the component queue of the entity, if it exists.
 	 * @return Whether the component queue could be applied.
 	 */
-	public static boolean applyComponentQueue(Entity e) {
+	public static boolean applyComponentQueue(final Entity e) {
 		final ComponentQueueComponent cqc = Mapper.componentQueueComponent.get(e);
 		return cqc != null ? applyComponentQueue(e, cqc) : false;
 	}
 
-	public static void enableScreenQuake(float amplitude, float frequency) {
+	public static void enableScreenQuake(final float amplitude, final float frequency) {
 		final QuakeEffectComponent qec = gameEntityEngine.createComponent(QuakeEffectComponent.class);
 		qec.setup(amplitude, frequency);
 		cameraEntity.add(qec);
 	}
 
-	public static void enableScreenQuake(RichterScale quake) {
+	public static void enableScreenQuake(final RichterScale quake) {
 		enableScreenQuake(quake.amplitude, quake.frequency);
 	}
 
@@ -90,7 +88,7 @@ public final class ComponentUtils {
 		cameraEntity.remove(QuakeEffectComponent.class);
 	}
 
-	public static void lookIntoDirection(Entity who, Entity atWhom) {
+	public static void lookIntoDirection(final Entity who, final Entity atWhom) {
 		final PositionComponent pcWho = Mapper.positionComponent.get(who);
 		final PositionComponent pcAtWhom = Mapper.positionComponent.get(atWhom);
 		final DirectionComponent dc = Mapper.directionComponent.get(who);
@@ -98,23 +96,23 @@ public final class ComponentUtils {
 		dc.degree = 630.0f - v1.angle();
 	}
 
-	public static void setBulletAction(boolean active) {
+	public static void setBulletAction(final boolean active) {
 		if (active)
-			for (Entity e : gameEntityEngine.getEntitiesFor(FAMILY_BULLET))
+			for (final Entity e : gameEntityEngine.getEntitiesFor(FAMILY_BULLET))
 				e.remove(InactiveComponent.class);
 		else
-			for (Entity e : gameEntityEngine.getEntitiesFor(FAMILY_BULLET))
+			for (final Entity e : gameEntityEngine.getEntitiesFor(FAMILY_BULLET))
 				e.add(gameEntityEngine.createComponent(InactiveComponent.class));
 
 	}
 
 	public static void convertAllActiveBulletsToScoreBullets() {
-		for (Entity enemy : gameEntityEngine.getEntitiesFor(FAMILY_ENEMY)) {
+		for (final Entity enemy : gameEntityEngine.getEntitiesFor(FAMILY_ENEMY)) {
 			EnemyMaker.releaseBullets(enemy, true);
 		}
 	}
 
-	public static void dealDamage(Entity attacker, Entity defender, long basePower, boolean keepOneHp) {
+	public static void dealDamage(final Entity attacker, final Entity defender, final long basePower, final boolean keepOneHp) {
 		// Read basic info for damage calculation.
 		final StatusValuesComponent svcAttacker = attacker == null ? null : Mapper.statusValuesComponent.get(attacker);
 		final PainPointsComponent ppcAttacker = attacker == null ? null : Mapper.painPointsComponent.get(attacker);
@@ -158,7 +156,7 @@ public final class ComponentUtils {
 			dqc.keepOneHp = dqc.keepOneHp || keepOneHp;
 
 			// Custom stuff on getting hit.
-			GetHitComponent ghc = Mapper.getHitComponent.get(defender);
+			final GetHitComponent ghc = Mapper.getHitComponent.get(defender);
 			if (ghc != null)
 				ghc.hittable.hitByBullet(defender, attacker);
 		}
@@ -188,38 +186,38 @@ public final class ComponentUtils {
 	// vcWho.y = speedRadial * v1.y - speedTangential * v1.x;
 	// }
 
-	public static void lookIntoMovementDirection(Entity who) {
+	public static void lookIntoMovementDirection(final Entity who) {
 		final VelocityComponent vc = Mapper.velocityComponent.get(who);
 		final DirectionComponent dc = Mapper.directionComponent.get(who);
 		v1.set(vc.x, vc.y);
 		dc.degree = 630.0f - v1.angle();
 	}
 
-	public static void scaleBoundingBoxRenderOfEntityBy(Entity e, float initialScaleX, float initialScaleY) {
-		ABoundingBoxComponent bbrc = Mapper.boundingBoxRenderComponent.get(e);
+	public static void scaleBoundingBoxRenderOfEntityBy(final Entity e, final float initialScaleX, final float initialScaleY) {
+		final ABoundingBoxComponent bbrc = Mapper.boundingBoxRenderComponent.get(e);
 		if (bbrc != null)
 			scaleBoundingBoxOfEntityBy(bbrc, initialScaleX, initialScaleY);
 	}
 
-	public static void scaleBoundingBoxCollisionOfEntityBy(Entity e, float initialScaleX, float initialScaleY) {
-		ABoundingBoxComponent bbcc = Mapper.boundingBoxCollisionComponent.get(e);
+	public static void scaleBoundingBoxCollisionOfEntityBy(final Entity e, final float initialScaleX, final float initialScaleY) {
+		final ABoundingBoxComponent bbcc = Mapper.boundingBoxCollisionComponent.get(e);
 		if (bbcc != null)
 			scaleBoundingBoxOfEntityBy(bbcc, initialScaleX, initialScaleY);
 	}
 
-	public static void scaleBoundingBoxOfEntityBy(ABoundingBoxComponent bbc, float initialScaleX,
-			float initialScaleY) {
-		float cx = 0.5f * (bbc.maxX + bbc.minX);
-		float cy = 0.5f * (bbc.maxY + bbc.minY);
-		float hw = 0.5f * (bbc.maxX - bbc.minX);
-		float hh = 0.5f * (bbc.maxY - bbc.minY);
+	public static void scaleBoundingBoxOfEntityBy(final ABoundingBoxComponent bbc, final float initialScaleX,
+			final float initialScaleY) {
+		final float cx = 0.5f * (bbc.maxX + bbc.minX);
+		final float cy = 0.5f * (bbc.maxY + bbc.minY);
+		final float hw = 0.5f * (bbc.maxX - bbc.minX);
+		final float hh = 0.5f * (bbc.maxY - bbc.minY);
 		bbc.maxX = cx + initialScaleX * hw;
 		bbc.minX = cx - initialScaleX * hw;
 		bbc.maxY = cy + initialScaleY * hh;
 		bbc.minY = cy - initialScaleY * hh;
 	}
 
-	public static void scaleShapeOfEntityBy(Entity e, float initialScaleX, float initialScaleY) {
+	public static void scaleShapeOfEntityBy(final Entity e, final float initialScaleX, final float initialScaleY) {
 		final ShapeComponent sc = Mapper.shapeComponent.get(e);
 		if (sc == null)
 			return;
@@ -229,7 +227,7 @@ public final class ComponentUtils {
 	/**
 	 * Adds the given sprite mode to the entities queue. It needs a
 	 * {@link AnimationModeQueueComponent}.
-	 * 
+	 *
 	 * @param e
 	 *            Entity to setup.
 	 * @param targetMode
@@ -239,8 +237,8 @@ public final class ComponentUtils {
 	 * @param resetAnimation
 	 *            Whether the new animation should be reset.
 	 */
-	public static void transitionToSpriteMode(Entity e, AnimationMode targetMode, boolean waitForCompletion,
-			boolean resetAnimation) {
+	public static void transitionToSpriteMode(final Entity e, final AnimationMode targetMode, final boolean waitForCompletion,
+			final boolean resetAnimation) {
 		final AnimationModeQueueComponent smqc = Mapper.animationModeQueueComponent.get(e);
 		if (smqc != null) {
 			smqc.queue(targetMode, waitForCompletion, resetAnimation);
@@ -251,35 +249,35 @@ public final class ComponentUtils {
 	 * Same as
 	 * {@link #transitionToSpriteMode(Entity, AnimationMode, boolean, boolean)},
 	 * but defaults to true for waitForCompletion and resetAnimation.
-	 * 
+	 *
 	 * @param e
 	 *            Entity to setup.
 	 * @param targetMode
 	 *            Mode to transition to.
 	 */
-	public static void transitionToSpriteMode(Entity e, AnimationMode targetMode) {
+	public static void transitionToSpriteMode(final Entity e, final AnimationMode targetMode) {
 		transitionToSpriteMode(e, targetMode, true, true);
 	}
 
-	public static boolean cycleConeDistributionForward(ConeDistributionComponent cdc) {
-		if (cdc != null) {	
+	public static boolean cycleConeDistributionForward(final ConeDistributionComponent cdc) {
+		if (cdc != null) {
 			cdc.apexPoint = (cdc.apexPoint + 1) % cdc.distributionPoints.size();
 			if (cdc.apexPoint == 0)	cdc.degrees += 360f / (cdc.distributionPoints.size() - 1f);
 			return cdc.distributionPoints.size() > 1;
-		}		
+		}
 		return false;
 	}
-	
-	public static boolean cycleConeDistributionBackward(ConeDistributionComponent cdc) {
-		if (cdc != null) {	
+
+	public static boolean cycleConeDistributionBackward(final ConeDistributionComponent cdc) {
+		if (cdc != null) {
 			if (cdc.apexPoint == 0)	cdc.degrees -= 360f / (cdc.distributionPoints.size() - 1f);
 			cdc.apexPoint = (cdc.apexPoint - 1) % cdc.distributionPoints.size();
 			return cdc.distributionPoints.size() > 1;
-		}		
+		}
 		return false;
 	}
-	
-	public static Entity removeActiveItemFromConeDistribution(ConeDistributionComponent cdc) {
+
+	public static Entity removeActiveItemFromConeDistribution(final ConeDistributionComponent cdc) {
 		if (cdc.apexPoint >= cdc.distributionPoints.size()) return null;
 		final Entity e = cdc.distributionPoints.remove(cdc.apexPoint);
 		cdc.apexPoint -= 1;

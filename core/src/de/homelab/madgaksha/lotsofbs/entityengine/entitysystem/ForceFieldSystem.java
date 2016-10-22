@@ -13,7 +13,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Computes the force applied to an object.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -25,14 +25,13 @@ public class ForceFieldSystem extends IteratingSystem {
 		this(DefaultPriority.forceFieldSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public ForceFieldSystem(int priority) {
+	public ForceFieldSystem(final int priority) {
 		super(Family.all(ForceComponent.class, ForceFieldComponent.class).exclude(InactiveComponent.class).get(),
 				priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final ForceComponent fc = Mapper.forceComponent.get(entity);
 		final ForceFieldComponent ffc = Mapper.forceFieldComponent.get(entity);
 		ffc.field.apply(entity, fc);
