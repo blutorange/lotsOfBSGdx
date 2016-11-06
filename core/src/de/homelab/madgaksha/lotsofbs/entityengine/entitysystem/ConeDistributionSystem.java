@@ -15,7 +15,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Updates an object's position its velocity over a small time step dt.
- * 
+ *
  * @author madgaksha
  */
 public class ConeDistributionSystem extends DisableIteratingSystem {
@@ -23,19 +23,18 @@ public class ConeDistributionSystem extends DisableIteratingSystem {
 	private final static Logger LOG = Logger.getLogger(ConeDistributionSystem.class);
 
 	private final Vector2 v1 = new Vector2();
-	
+
 	public ConeDistributionSystem() {
 		this(DefaultPriority.coneDistributionSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public ConeDistributionSystem(int priority) {
+	public ConeDistributionSystem(final int priority) {
 		super(DisableIteratingSystem.all(PositionComponent.class, ConeDistributionComponent.class, TemporalComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		final ConeDistributionComponent cdc = Mapper.coneDistributionComponent.get(entity);
 		final TemporalComponent tc = Mapper.temporalComponent.get(entity);
@@ -45,16 +44,16 @@ public class ConeDistributionSystem extends DisableIteratingSystem {
 		if (size == 0) return;
 		cdc.apexPoint = cdc.apexPoint < size ? cdc.apexPoint : (size-1);
 
-		// move to apex point and position component 
+		// move to apex point and position component
 		v1.set(pc.x, pc.y).add(cdc.offsetToApex);
 		Mapper.shouldPositionComponent.get(cdc.distributionPoints.get(cdc.apexPoint)).setup(v1);
-		
+
 		// move to the center
 		v1.add(cdc.offsetToBase);
-		
+
 		// update the current rotation
 		cdc.degrees += cdc.angularVelocity * tc.deltaTime;
-		
+
 		// and position the other components on an ellipse
 		final float deltaAngle = 360.0f / (size-1);
 		float angle = cdc.degrees;
@@ -62,13 +61,13 @@ public class ConeDistributionSystem extends DisableIteratingSystem {
 			final PositionComponent point = Mapper.shouldPositionComponent.get(cdc.distributionPoints.get(i));
 			point.x = v1.x + MathUtils.cosDeg(angle) * cdc.radius1;
 			point.y = v1.y + MathUtils.sinDeg(angle) * cdc.radius2;
-			angle += deltaAngle;			
+			angle += deltaAngle;
 		}
 		for (int i = cdc.apexPoint + 1; i != size; ++i) {
 			final PositionComponent point = Mapper.shouldPositionComponent.get(cdc.distributionPoints.get(i));
 			point.x = v1.x + MathUtils.cosDeg(angle) * cdc.radius1;
 			point.y = v1.y + MathUtils.sinDeg(angle) * cdc.radius2;
-			angle += deltaAngle;			
+			angle += deltaAngle;
 		}
 	}
 }

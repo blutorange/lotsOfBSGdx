@@ -208,7 +208,6 @@ public class ClipTable extends Table {
 	}
 
 	private final static ClipChangeListener clipChangeListener = new ClipChangeListener() {
-		@SuppressWarnings("incomplete-switch")
 		@Override
 		public void handle(final ModelClip clip, final ClipChangeType type) {
 			final FloatNumericInput niStart = clip.getData("start", FloatNumericInput.class);
@@ -219,6 +218,11 @@ public class ClipTable extends Table {
 				break;
 			case END_TIME:
 				niEnd.setValue(clip.getEndTime());
+				break;
+			case ALL:
+			case ATTACHED_TO_TRACK:
+			case CLIP_DATA:
+			default:
 				break;
 			}
 			setMinMax(niStart, niEnd, clip.getParentTrack(), clip);

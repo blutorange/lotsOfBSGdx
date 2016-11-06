@@ -16,15 +16,14 @@ public class GrantRotationSystem extends DisableIteratingSystem {
 		this(DefaultPriority.grantPositionSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public GrantRotationSystem(int priority) {
+	public GrantRotationSystem(final int priority) {
 		super(DisableIteratingSystem
 				.all(TemporalComponent.class, RotationComponent.class, ShouldRotationComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, float deltaTime) {
 		final RotationComponent rc = Mapper.rotationComponent.get(entity);
 		final ShouldRotationComponent src = Mapper.shouldRotationComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;

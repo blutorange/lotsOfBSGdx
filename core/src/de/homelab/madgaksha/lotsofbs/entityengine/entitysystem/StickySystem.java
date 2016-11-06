@@ -17,7 +17,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Updates an object's position its velocity over a small time step dt.
- * 
+ *
  * @author madgaksha
  */
 public class StickySystem extends DisableIteratingSystem {
@@ -29,15 +29,14 @@ public class StickySystem extends DisableIteratingSystem {
 		this(DefaultPriority.stickySystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public StickySystem(int priority) {
+	public StickySystem(final int priority) {
 		super(DisableIteratingSystem.all(ShouldPositionComponent.class, StickyComponent.class, TemporalComponent.class)
 				.exclude(InactiveComponent.class, VelocityComponent.class), priority);
 		upVector = viewportGame.getPerspectiveCamera().up;
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final ShouldPositionComponent spc = Mapper.shouldPositionComponent.get(entity);
 		final StickyComponent sec = Mapper.stickyComponent.get(entity);
 		if (sec.offsetRelativeToCamera) {

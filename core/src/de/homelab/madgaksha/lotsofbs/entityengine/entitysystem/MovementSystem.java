@@ -17,7 +17,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Updates an object's position its velocity over a small time step dt.
- * 
+ *
  * @author madgaksha
  */
 public class MovementSystem extends DisableIteratingSystem {
@@ -36,8 +36,7 @@ public class MovementSystem extends DisableIteratingSystem {
 		this(DefaultPriority.movementSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public MovementSystem(int priority) {
+	public MovementSystem(final int priority) {
 		super(DisableIteratingSystem.all(PositionComponent.class, VelocityComponent.class, TemporalComponent.class)
 				.exclude(InactiveComponent.class), priority);
 		mapData = level.getMapData();
@@ -50,7 +49,7 @@ public class MovementSystem extends DisableIteratingSystem {
 	}
 
 	@Override
-	public void processEntity(Entity entity, float deltaTime) {
+	public void processEntity(final Entity entity, float deltaTime) {
 		final PositionComponent pc = Mapper.positionComponent.get(entity);
 		final VelocityComponent vc = Mapper.velocityComponent.get(entity);
 		final BoundingBoxMapComponent bbmc = Mapper.boundingBoxMapComponent.get(entity);
@@ -59,8 +58,8 @@ public class MovementSystem extends DisableIteratingSystem {
 		// BoundingBoxMapComponent.
 		if (pc.limitToMap && bbmc != null) {
 			// Move position component to the center of the bounding box.
-			float dx = bbmc.minX + 0.5f * (bbmc.maxX - bbmc.minX);
-			float dy = bbmc.minY + 0.5f * (bbmc.maxY - bbmc.minY);
+			final float dx = bbmc.minX + 0.5f * (bbmc.maxX - bbmc.minX);
+			final float dy = bbmc.minY + 0.5f * (bbmc.maxY - bbmc.minY);
 			pc.x += dx;
 			pc.y += dy;
 			// Move on the map, respecting blocking tiles
@@ -79,16 +78,16 @@ public class MovementSystem extends DisableIteratingSystem {
 	// Still needs some work with bounding boxes.
 	@SuppressWarnings("unused")
 	@Deprecated
-	private void mapMovement(PositionComponent pc, float deltaX, float deltaY, float hw, float hh) {
+	private void mapMovement(final PositionComponent pc, float deltaX, float deltaY, final float hw, final float hh) {
 		// Target position.
-		float targetX = pc.x + deltaX;
-		float targetY = pc.y + deltaY;
+		final float targetX = pc.x + deltaX;
+		final float targetY = pc.y + deltaY;
 		// Tile coordinates of the current position.
 		int tileCurX = (int) (pc.x * tileWidthInverse);
 		int tileCurY = (int) (pc.y * tileHeightInverse);
 		// Tile coordinates of the current position.
-		int tileTargetX = (int) (targetX * tileWidthInverse);
-		int tileTargetY = (int) (targetY * tileHeightInverse);
+		final int tileTargetX = (int) (targetX * tileWidthInverse);
+		final int tileTargetY = (int) (targetY * tileHeightInverse);
 		// Tile coordinates of the top and right edges.
 		// int tileRight = (int) ((pc.x + hw) * tileWidthInverse);
 		// int tileTop = (int) ((pc.y + hh) * tileHeightInverse);
@@ -116,12 +115,12 @@ public class MovementSystem extends DisableIteratingSystem {
 					return;
 				while (true) {
 					// Distance of the bounding box to the next map tile.
-					float distRight = tileWidth * (tileRight + 1) - (pc.x + hw);
-					float distTop = tileHeight * (tileTop + 1) - (pc.y + hh);
+					final float distRight = tileWidth * (tileRight + 1) - (pc.x + hw);
+					final float distTop = tileHeight * (tileTop + 1) - (pc.y + hh);
 					// Distance we could move up if we want all the way right,
 					// and vice versa.
-					float mx = distTop * deltaX;
-					float my = distRight * deltaY;
+					final float mx = distTop * deltaX;
+					final float my = distRight * deltaY;
 					// No movement possible.
 					if (mx == 0.0f && my == 0.0f)
 						break;
@@ -139,8 +138,8 @@ public class MovementSystem extends DisableIteratingSystem {
 							break;
 						}
 						// Check if there is a blocking tile in our way.
-						int tileRangeMin = (int) ((pc.x - hw) * tileWidthInverse);
-						int tileRangeMax = (int) ((pc.x + hw) * tileWidthInverse);
+						final int tileRangeMin = (int) ((pc.x - hw) * tileWidthInverse);
+						final int tileRangeMax = (int) ((pc.x + hw) * tileWidthInverse);
 						if (mapData.isTileRangeXAnyBlocking(tileCurY, tileRangeMin, tileRangeMax)) {
 							break;
 						}
@@ -158,8 +157,8 @@ public class MovementSystem extends DisableIteratingSystem {
 							break;
 						}
 						// Check if there is a blocking tile in our way.
-						int tileRangeMin = (int) ((pc.y - hh) * tileHeightInverse);
-						int tileRangeMax = (int) ((pc.y + hh) * tileHeightInverse);
+						final int tileRangeMin = (int) ((pc.y - hh) * tileHeightInverse);
+						final int tileRangeMax = (int) ((pc.y + hh) * tileHeightInverse);
 						if (mapData.isTileRangeYAnyBlocking(tileCurX, tileRangeMin, tileRangeMax)) {
 							break;
 						}
@@ -179,12 +178,12 @@ public class MovementSystem extends DisableIteratingSystem {
 					return;
 				while (true) {
 					// Distance of the bounding box to the next map tile.
-					float distRight = tileWidth * (tileRight + 1) - (pc.x + hw);
-					float distBottom = (pc.y - hh) - tileHeight * (tileBottom);
+					final float distRight = tileWidth * (tileRight + 1) - (pc.x + hw);
+					final float distBottom = (pc.y - hh) - tileHeight * (tileBottom);
 					// Distance we could move up if we want all the way right,
 					// and vice versa.
-					float mx = distBottom * deltaX;
-					float my = distRight * deltaY;
+					final float mx = distBottom * deltaX;
+					final float my = distRight * deltaY;
 					// No movement possible.
 					if (mx == 0.0f && my == 0.0f)
 						break;
@@ -202,8 +201,8 @@ public class MovementSystem extends DisableIteratingSystem {
 							break;
 						}
 						// Check if there is a blocking tile in our way.
-						int tileRangeMin = (int) ((pc.x - hw) * tileWidthInverse);
-						int tileRangeMax = (int) ((pc.x + hw) * tileWidthInverse);
+						final int tileRangeMin = (int) ((pc.x - hw) * tileWidthInverse);
+						final int tileRangeMax = (int) ((pc.x + hw) * tileWidthInverse);
 						if (mapData.isTileRangeXAnyBlocking(tileCurY, tileRangeMin, tileRangeMax))
 							break;
 					}
@@ -220,8 +219,8 @@ public class MovementSystem extends DisableIteratingSystem {
 							break;
 						}
 						// Check if there is a blocking tile in our way.
-						int tileRangeMin = (int) ((pc.y - hh) * tileHeightInverse);
-						int tileRangeMax = (int) ((pc.y + hh) * tileHeightInverse);
+						final int tileRangeMin = (int) ((pc.y - hh) * tileHeightInverse);
+						final int tileRangeMax = (int) ((pc.y + hh) * tileHeightInverse);
 						if (mapData.isTileRangeYAnyBlocking(tileCurX, tileRangeMin, tileRangeMax)) {
 							break;
 						}
@@ -241,12 +240,12 @@ public class MovementSystem extends DisableIteratingSystem {
 				return;
 			while (true) {
 				// Distance of the bounding box to the next map tile.
-				float distLeft = (pc.x - hw) - tileWidth * tileLeft;
-				float distTop = tileHeight * (tileTop + 1) - (pc.y + hh);
+				final float distLeft = (pc.x - hw) - tileWidth * tileLeft;
+				final float distTop = tileHeight * (tileTop + 1) - (pc.y + hh);
 				// Distance we could move up if we want all the way right,
 				// and vice versa.
-				float mx = distTop * deltaX;
-				float my = distLeft * deltaY;
+				final float mx = distTop * deltaX;
+				final float my = distLeft * deltaY;
 				// No movement possible.
 				if (mx == 0.0f && my == 0.0f)
 					break;
@@ -264,8 +263,8 @@ public class MovementSystem extends DisableIteratingSystem {
 						break;
 					}
 					// Check if there is a blocking tile in our way.
-					int tileRangeMin = (int) ((pc.x - hw) * tileWidthInverse);
-					int tileRangeMax = (int) ((pc.x + hw) * tileWidthInverse);
+					final int tileRangeMin = (int) ((pc.x - hw) * tileWidthInverse);
+					final int tileRangeMax = (int) ((pc.x + hw) * tileWidthInverse);
 					if (mapData.isTileRangeXAnyBlocking(tileCurY, tileRangeMin, tileRangeMax)) {
 						break;
 					}
@@ -283,8 +282,8 @@ public class MovementSystem extends DisableIteratingSystem {
 						break;
 					}
 					// Check if there is a blocking tile in our way.
-					int tileRangeMin = (int) ((pc.y - hh) * tileHeightInverse);
-					int tileRangeMax = (int) ((pc.y + hh) * tileHeightInverse);
+					final int tileRangeMin = (int) ((pc.y - hh) * tileHeightInverse);
+					final int tileRangeMax = (int) ((pc.y + hh) * tileHeightInverse);
 					if (mapData.isTileRangeYAnyBlocking(tileCurX, tileRangeMin, tileRangeMax)) {
 						break;
 					}
@@ -303,12 +302,12 @@ public class MovementSystem extends DisableIteratingSystem {
 				return;
 			while (true) {
 				// Distance of the bounding box to the next map tile.
-				float distLeft = (pc.x - hw) - tileWidth * tileLeft;
-				float distBottom = (pc.y - hh) - tileHeight * (tileBottom);
+				final float distLeft = (pc.x - hw) - tileWidth * tileLeft;
+				final float distBottom = (pc.y - hh) - tileHeight * (tileBottom);
 				// Distance we could move up if we want all the way right,
 				// and vice versa.
-				float mx = distBottom * deltaX;
-				float my = distLeft * deltaY;
+				final float mx = distBottom * deltaX;
+				final float my = distLeft * deltaY;
 				// No movement possible.
 				if (mx == 0.0f && my == 0.0f)
 					break;
@@ -326,8 +325,8 @@ public class MovementSystem extends DisableIteratingSystem {
 						break;
 					}
 					// Check if there is a blocking tile in our way.
-					int tileRangeMin = (int) ((pc.x - hw) * tileWidthInverse);
-					int tileRangeMax = (int) ((pc.x + hw) * tileWidthInverse);
+					final int tileRangeMin = (int) ((pc.x - hw) * tileWidthInverse);
+					final int tileRangeMax = (int) ((pc.x + hw) * tileWidthInverse);
 					if (mapData.isTileRangeXAnyBlocking(tileCurY, tileRangeMin, tileRangeMax))
 						break;
 				}
@@ -344,8 +343,8 @@ public class MovementSystem extends DisableIteratingSystem {
 						break;
 					}
 					// Check if there is a blocking tile in our way.
-					int tileRangeMin = (int) ((pc.y - hh) * tileHeightInverse);
-					int tileRangeMax = (int) ((pc.y + hh) * tileHeightInverse);
+					final int tileRangeMin = (int) ((pc.y - hh) * tileHeightInverse);
+					final int tileRangeMax = (int) ((pc.y + hh) * tileHeightInverse);
 					if (mapData.isTileRangeYAnyBlocking(tileCurX, tileRangeMin, tileRangeMax)) {
 						break;
 					}
@@ -354,11 +353,11 @@ public class MovementSystem extends DisableIteratingSystem {
 		}
 	}
 
-	private void mapMovement(PositionComponent pc, VelocityComponent vc, float deltaTime) {
+	private void mapMovement(final PositionComponent pc, final VelocityComponent vc, final float deltaTime) {
 		// Limit movement speed to avoid clipping.
 		float f = 1.0f;
-		float dx = Math.abs(vc.x * deltaTime);
-		float dy = Math.abs(vc.y * deltaTime);
+		final float dx = Math.abs(vc.x * deltaTime);
+		final float dy = Math.abs(vc.y * deltaTime);
 		if (dx > dy) {
 			if (dx > tileWidth * 0.9f) {
 				f = reducedTileWidth / dx;
@@ -374,8 +373,8 @@ public class MovementSystem extends DisableIteratingSystem {
 		int tx = (int) (pc.x * tileWidthInverse);
 		int ty = (int) (pc.y * tileHeightInverse);
 
-		int newTileX = (int) (newx * tileWidthInverse);
-		int newTileY = (int) (newy * tileWidthInverse);
+		final int newTileX = (int) (newx * tileWidthInverse);
+		final int newTileY = (int) (newy * tileWidthInverse);
 
 		if (!mapData.isTileBlocking(newx, newy) && (newTileX == tx || newTileY == ty)) {
 			// Allow move immediately when we do not move diagonally.

@@ -227,7 +227,7 @@ public class CollisionSystem extends EntitySystem {
 		entitiesReceive05 = null;
 	}
 
-	private void collide(final Entity alice, final Entity bob, final TriggerTouchComponent ttc, final ReceiveTouchComponent rtc) {
+	private static void collide(final Entity alice, final Entity bob, final TriggerTouchComponent ttc, final ReceiveTouchComponent rtc) {
 		final PositionComponent pcAlice = Mapper.positionComponent.get(alice);
 		final PositionComponent pcBob = Mapper.positionComponent.get(bob);
 		final BoundingBoxCollisionComponent bbccAlice = Mapper.boundingBoxCollisionComponent.get(alice);
@@ -272,7 +272,7 @@ public class CollisionSystem extends EntitySystem {
 		pcBob.y -= pcBob.offsetY;
 	}
 
-	private void collideScreen(final Entity odo) {
+	private static void collideScreen(final Entity odo) {
 		final PositionComponent pc = Mapper.positionComponent.get(odo);
 		final BoundingBoxCollisionComponent bbcc = Mapper.boundingBoxCollisionComponent.get(odo);
 		final ShapeComponent sc = Mapper.shapeComponent.get(odo);

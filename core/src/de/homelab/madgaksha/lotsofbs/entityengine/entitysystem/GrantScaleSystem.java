@@ -16,14 +16,13 @@ public class GrantScaleSystem extends DisableIteratingSystem {
 		this(DefaultPriority.grantScaleSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public GrantScaleSystem(int priority) {
+	public GrantScaleSystem(final int priority) {
 		super(DisableIteratingSystem.all(ScaleComponent.class, ShouldScaleComponent.class, TemporalComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, float deltaTime) {
 		final ScaleComponent sc = Mapper.scaleComponent.get(entity);
 		final ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;

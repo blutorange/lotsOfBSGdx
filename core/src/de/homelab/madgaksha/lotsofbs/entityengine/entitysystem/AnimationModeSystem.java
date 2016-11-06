@@ -7,20 +7,20 @@ import de.homelab.madgaksha.lotsofbs.entityengine.DisableIteratingSystem;
 import de.homelab.madgaksha.lotsofbs.entityengine.Mapper;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationForDirectionComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeListComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeListComponent.AnimationForDirection;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeQueueComponent;
+import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeQueueComponent.AnimationModeTransition;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.InactiveComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.SpriteAnimationComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.TemporalComponent;
-import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeListComponent.AnimationForDirection;
-import de.homelab.madgaksha.lotsofbs.entityengine.component.AnimationModeQueueComponent.AnimationModeTransition;
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcepool.ResourcePool;
 
 /**
  * Sets the spriteForDirectionComponent for the current mode.
- * 
+ *
  * @author madgaksha
- * 
+ *
  */
 public class AnimationModeSystem extends DisableIteratingSystem {
 
@@ -31,14 +31,13 @@ public class AnimationModeSystem extends DisableIteratingSystem {
 		this(DefaultPriority.animationModeSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public AnimationModeSystem(int priority) {
+	public AnimationModeSystem(final int priority) {
 		super(DisableIteratingSystem.all(AnimationForDirectionComponent.class, AnimationModeListComponent.class,
 				AnimationModeQueueComponent.class, TemporalComponent.class).exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		// This will happen almost always, as transitions are usually rare and
 		// quick.
 		final AnimationModeQueueComponent smqc = Mapper.animationModeQueueComponent.get(entity);
@@ -57,7 +56,7 @@ public class AnimationModeSystem extends DisableIteratingSystem {
 			return;
 
 		// Transition to requested animation.
-		AnimationModeTransition amt = smqc.queue.pop();
+		final AnimationModeTransition amt = smqc.queue.pop();
 		smqc.currentMode = amt.targetMode;
 		AnimationForDirection sd = smqc.currentMode.getAnimationForDirection(sfdlc);
 		if (sd == null)

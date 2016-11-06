@@ -12,7 +12,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Updates an object's position its velocity over a small time step dt.
- * 
+ *
  * @author madgaksha
  */
 public class AiSystem extends DisableIteratingSystem {
@@ -23,14 +23,13 @@ public class AiSystem extends DisableIteratingSystem {
 		this(DefaultPriority.aiSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public AiSystem(int priority) {
+	public AiSystem(final int priority) {
 		super(DisableIteratingSystem.all(BehaviourComponent.class, TemporalComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final BehaviourComponent bc = Mapper.behaviourComponent.get(entity);
 		if (bc.brain.behave(entity) && bc.cortex != null)
 			bc.cortex.behave(entity);

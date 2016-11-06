@@ -16,15 +16,14 @@ public class GrantDirectionSystem extends DisableIteratingSystem {
 		this(DefaultPriority.grantDirectionSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public GrantDirectionSystem(int priority) {
+	public GrantDirectionSystem(final int priority) {
 		super(DisableIteratingSystem
 				.all(TemporalComponent.class, DirectionComponent.class, ShouldDirectionComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	public void processEntity(Entity entity, float deltaTime) {
+	public void processEntity(final Entity entity, float deltaTime) {
 		final DirectionComponent dc = Mapper.directionComponent.get(entity);
 		final ShouldDirectionComponent sdc = Mapper.shouldDirectionComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;

@@ -49,12 +49,12 @@ public class TokugiSign implements Poolable {
 		mode = Mode.SETUP;
 	}
 
-	public TokugiSign(ETexture texture) {
+	public TokugiSign(final ETexture texture) {
 		this();
 		setup(texture);
 	}
 
-	public void setup(ETexture texture) {
+	public void setup(final ETexture texture) {
 		sign = texture.asSprite();
 		mode = Mode.IN;
 		totalTime = 0.0f;
@@ -72,8 +72,7 @@ public class TokugiSign implements Poolable {
 	public void begin() {
 	}
 
-	@SuppressWarnings("incomplete-switch")
-	public boolean update(float deltaTime) {
+	public boolean update(final float deltaTime) {
 		totalTime += deltaTime;
 		float x = centerPosition.x;
 		float opacity = 1.0f;
@@ -98,10 +97,12 @@ public class TokugiSign implements Poolable {
 				mode = Mode.FIN;
 				return false;
 			}
-			float alpha = INTERPOLATION_OUT.apply(totalTime * DURATION_OUT_INVERSE);
+			final float alpha = INTERPOLATION_OUT.apply(totalTime * DURATION_OUT_INVERSE);
 			x -= OFFSET_OUT * alpha * viewportGame.getScreenWidth();
 			opacity = 1.0f - alpha;
 			break;
+		case FIN:
+		case SETUP:
 		default:
 			break;
 
@@ -116,13 +117,16 @@ public class TokugiSign implements Poolable {
 		sign.setScale((2.0f * viewportGame.getScreenHeight() * HALFHEIGHT) / sign.getHeight());
 	}
 
-	@SuppressWarnings("incomplete-switch")
 	public void render() {
 		switch (mode) {
 		case IN:
 		case MID:
 		case OUT:
 			sign.draw(batchPixel);
+		case FIN:
+		case SETUP:
+		default:
+			break;
 		}
 	}
 }

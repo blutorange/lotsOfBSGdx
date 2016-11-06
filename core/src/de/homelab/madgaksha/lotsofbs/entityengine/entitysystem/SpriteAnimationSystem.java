@@ -12,19 +12,18 @@ import de.homelab.madgaksha.lotsofbs.entityengine.component.SpriteComponent;
 import de.homelab.madgaksha.lotsofbs.entityengine.component.TemporalComponent;
 
 public class SpriteAnimationSystem extends DisableIteratingSystem {
-	
+
 	public SpriteAnimationSystem() {
 		this(DefaultPriority.spriteAnimationSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public SpriteAnimationSystem(int priority) {
+	public SpriteAnimationSystem(final int priority) {
 		super(DisableIteratingSystem.all(TemporalComponent.class, SpriteAnimationComponent.class, SpriteComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final SpriteComponent sc = Mapper.spriteComponent.get(entity);
 		final SpriteAnimationComponent sac = Mapper.spriteAnimationComponent.get(entity);
 		final AtlasRegion ar = sac.animation.getKeyFrame(Mapper.temporalComponent.get(entity).totalTime - sac.startTime);

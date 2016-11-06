@@ -13,7 +13,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Updates velocity from the force applied to a component and its mass.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -25,14 +25,13 @@ public class AccelerationSystem extends DisableIteratingSystem {
 		this(DefaultPriority.accelerationSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public AccelerationSystem(int priority) {
+	public AccelerationSystem(final int priority) {
 		super(DisableIteratingSystem.all(TemporalComponent.class, VelocityComponent.class, ForceComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, float deltaTime) {
 		final VelocityComponent v = Mapper.velocityComponent.get(entity);
 		final ForceComponent f = Mapper.forceComponent.get(entity);
 		deltaTime = Mapper.temporalComponent.get(entity).deltaTime;

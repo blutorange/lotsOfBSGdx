@@ -12,7 +12,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Computes the force applied to an object.
- * 
+ *
  * @author madgaksha
  *
  */
@@ -24,14 +24,13 @@ public class VelocityFieldSystem extends DisableIteratingSystem {
 		this(DefaultPriority.velocityFieldSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public VelocityFieldSystem(int priority) {
+	public VelocityFieldSystem(final int priority) {
 		super(DisableIteratingSystem.all(VelocityComponent.class, VelocityFieldComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final VelocityComponent vc = Mapper.velocityComponent.get(entity);
 		final VelocityFieldComponent vfc = Mapper.velocityFieldComponent.get(entity);
 		vfc.field.apply(entity, vc);

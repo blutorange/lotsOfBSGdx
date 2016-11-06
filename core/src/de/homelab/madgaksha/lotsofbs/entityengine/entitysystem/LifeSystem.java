@@ -21,14 +21,13 @@ public class LifeSystem extends DisableIteratingSystem {
 		this(DefaultPriority.lifeSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public LifeSystem(int priority) {
+	public LifeSystem(final int priority) {
 		super(DisableIteratingSystem.all(LifeComponent.class, TemporalComponent.class).exclude(InactiveComponent.class),
 				priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final LifeComponent lc = Mapper.lifeComponent.get(entity);
 		final TemporalComponent tc = Mapper.temporalComponent.get(entity);
 		lc.remainingLife -= tc.deltaTime;

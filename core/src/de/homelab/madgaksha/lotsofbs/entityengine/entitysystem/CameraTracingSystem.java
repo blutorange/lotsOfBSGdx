@@ -42,7 +42,6 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 				ShouldRotationComponent.class), priority);
 	}
 
-	@SuppressWarnings("incomplete-switch")
 	@Override
 	protected void processEntity(final Entity entity, final float deltaTime) {
 		final ShouldPositionComponent spc = Mapper.shouldPositionComponent.get(entity);
@@ -88,6 +87,10 @@ public class CameraTracingSystem extends DisableIteratingSystem {
 			 */
 		case SOUTH:
 			dir.rotate(90.0f);
+			break;
+		case EAST:
+			break;
+		default:
 			break;
 		}
 		// Normalize, we need a unit vector

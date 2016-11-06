@@ -14,7 +14,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Updates an object's direction.
- * 
+ *
  * @author madgaksha
  */
 public class AngularMovementSystem extends DisableIteratingSystem {
@@ -25,14 +25,13 @@ public class AngularMovementSystem extends DisableIteratingSystem {
 		this(DefaultPriority.movementSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public AngularMovementSystem(int priority) {
+	public AngularMovementSystem(final int priority) {
 		super(DisableIteratingSystem.all(AngularVelocityComponent.class, TemporalComponent.class)
 				.one(DirectionComponent.class, RotationComponent.class).exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, float deltaTime) {
 		final DirectionComponent dc = Mapper.directionComponent.get(entity);
 		final RotationComponent rc = Mapper.rotationComponent.get(entity);
 		final AngularVelocityComponent avc = Mapper.angularVelocityComponent.get(entity);

@@ -15,7 +15,7 @@ import de.homelab.madgaksha.lotsofbs.logging.Logger;
 
 /**
  * Sets an object's scale depending on its position from another entity.
- * 
+ *
  * @author madgaksha
  */
 public class ScaleFromDistanceSystem extends DisableIteratingSystem {
@@ -28,15 +28,14 @@ public class ScaleFromDistanceSystem extends DisableIteratingSystem {
 		this(DefaultPriority.scaleFromDistanceSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	public ScaleFromDistanceSystem(int priority) {
+	public ScaleFromDistanceSystem(final int priority) {
 		super(DisableIteratingSystem
 				.all(PositionComponent.class, ShouldScaleComponent.class, ScaleFromDistanceComponent.class)
 				.exclude(InactiveComponent.class), priority);
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(final Entity entity, final float deltaTime) {
 		final ShouldScaleComponent ssc = Mapper.shouldScaleComponent.get(entity);
 		final ScaleFromDistanceComponent sfdc = Mapper.scaleFromDistanceComponent.get(entity);
 		final PositionComponent pc = Mapper.positionComponent.get(entity);

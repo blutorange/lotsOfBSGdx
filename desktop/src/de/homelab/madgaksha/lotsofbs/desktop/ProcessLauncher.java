@@ -31,6 +31,7 @@ public class ProcessLauncher {
 	private final static Object lock = new Object();
 	private final static Logger LOG = LoggerFactory.getLogger(Process.class);
 
+	@SuppressWarnings("resource")
 	public static void main(final String[] args) {
 		if (DebugMode.activated) {
 			try {
