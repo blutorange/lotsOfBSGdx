@@ -28,6 +28,7 @@ allprojects {
         guavaVersion = '19.0'
         miniballVersion = '1.0.3'
         junitVersion = '4.11'
+        findbugsVersion = '3.0.2'
     }
 
     repositories {
@@ -97,6 +98,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
         compile "com.dreizak:miniball:$miniballVersion"
+        compile "com.google.code.findbugs:jsr305:$findbugsVersion"
         compile "commons-io:commons-io:$apacheCommonsIOVersion"
         compile "commons-cli:commons-cli:$apacheCommonsCLIVersion"
         compile "com.google.guava:guava:$guavaVersion"
