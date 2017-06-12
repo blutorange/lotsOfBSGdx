@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 
 import de.homelab.madgaksha.lotsofbs.logging.Logger;
 import de.homelab.madgaksha.lotsofbs.resourcecache.EAnimation;
@@ -28,7 +27,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	protected LOADED drawable = null;
 	private boolean disposed = true; // must be true
 	private boolean managed = false;
-	
+
 	public ADrawable() {
 		reset();
 	}
@@ -55,11 +54,11 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 		managed = false;
 	}
 
-	public final boolean setDrawable(RESOURCE resource, float pixelPerUnit) {
+	public final boolean setDrawable(final RESOURCE resource, final float pixelPerUnit) {
 		return managed = setLoadedDrawable(loadResource(resource), pixelPerUnit);
 	}
-	
-	public final boolean setLoadedDrawable(LOADED loaded, float pixelPerUnit) {
+
+	public final boolean setLoadedDrawable(final LOADED loaded, final float pixelPerUnit) {
 		drawable = loaded;
 		if (drawable == null) {
 			disposed = true;
@@ -74,13 +73,13 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	}
 
 	/**
-	 * 
+	 *
 	 * Sets the position relative to the {@link #origin}.
-	 * 
+	 *
 	 * @param position
 	 *            relative to the origin.
 	 */
-	public final void setPosition(Vector2 position) {
+	public final void setPosition(final Vector2 position) {
 		if (disposed)
 			return;
 		this.position.set(position);
@@ -89,13 +88,13 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 
 	/**
 	 * Sets the position relative to the {@link #origin}.
-	 * 
+	 *
 	 * @param x
 	 *            position coordinate.
 	 * @param y
 	 *            position coordinate.
 	 */
-	public final void setPosition(float x, float y) {
+	public final void setPosition(final float x, final float y) {
 		if (disposed)
 			return;
 		this.position.set(x, y);
@@ -103,13 +102,13 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	}
 
 	/**
-	 * 
-	 * Sets the origin relative to which {@link #rotation} and {@link Position}
+	 *
+	 * Sets the origin relative to which {@link #rotation} and {@link #position}
 	 * are specified.
-	 * 
+	 *
 	 * @param position
 	 */
-	public final void setOrigin(Vector2 origin) {
+	public final void setOrigin(final Vector2 origin) {
 		if (disposed)
 			return;
 		this.origin.set(origin);
@@ -117,15 +116,15 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	}
 
 	/**
-	 * Sets the origin relative to which {@link #rotation} and {@link Position}
+	 * Sets the origin relative to which {@link #rotation} and {@link #position}
 	 * are specified.
-	 * 
+	 *
 	 * @param originX
 	 *            origin coordinate.
 	 * @param originY
 	 *            origin coordinate.
 	 */
-	public final void setOrigin(float originX, float originY) {
+	public final void setOrigin(final float originX, final float originY) {
 		if (disposed)
 			return;
 		this.origin.set(originX, originY);
@@ -133,20 +132,20 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	}
 
 	/**
-	 * 
+	 *
 	 * Sets the scale relative to the {@link ADrawable#origin}.
-	 * 
+	 *
 	 * @param scale
 	 *            scaleX and scaleY.
 	 */
-	public final void setScale(Vector2 scale) {
+	public final void setScale(final Vector2 scale) {
 		if (disposed)
 			return;
 		this.scale.set(scale);
 		applyScale(scale.x, scale.y);
 	}
 
-	public final void setScaleLerp(Vector2 scaleStart, Vector2 scaleEnd, float alpha) {
+	public final void setScaleLerp(final Vector2 scaleStart, final Vector2 scaleEnd, final float alpha) {
 		if (disposed)
 			return;
 		scale.set(scaleStart).lerp(scaleEnd, alpha);
@@ -155,11 +154,11 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 
 	/**
 	 * Sets the scale relative to the {@link ADrawable#origin}.
-	 * 
+	 *
 	 * @param scaleXY
 	 *            Scale in both x and y direction.
 	 */
-	public final void setScale(float scaleXY) {
+	public final void setScale(final float scaleXY) {
 		if (disposed)
 			return;
 		this.scale.set(scaleXY, scaleXY);
@@ -168,13 +167,13 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 
 	/**
 	 * Sets the scale relative to the {@link ADrawable#origin}.
-	 * 
+	 *
 	 * @param scaleX
 	 *            Scale factor.
 	 * @param scaleY
 	 *            Scale factor.
 	 */
-	public final void setScale(float scaleX, float scaleY) {
+	public final void setScale(final float scaleX, final float scaleY) {
 		if (disposed)
 			return;
 		this.scale.set(scaleX, scaleY);
@@ -186,13 +185,13 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	 * cropLeft=1.0 means that nothing left of the origin will be cropped
 	 * Setting cropLeft=0.0 means that everything to the left of the origin will
 	 * be cropped.
-	 * 
+	 *
 	 * @param cropLeft
 	 * @param cropRight
 	 * @param cropBottom
 	 * @param cropTop
 	 */
-	public final void setCrop(float cropLeft, float cropRight, float cropBottom, float cropTop) {
+	public final void setCrop(final float cropLeft, final float cropRight, final float cropBottom, final float cropTop) {
 		if (disposed)
 			return;
 		this.cropX.set(cropLeft, cropRight);
@@ -205,13 +204,13 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	 * cropLeft=1.0 means that nothing left of the origin will be cropped
 	 * Setting cropLeft=0.0 means that everything to the left of the origin will
 	 * be cropped.
-	 * 
+	 *
 	 * @param cropLeft
 	 * @param cropRight
 	 * @param cropBottom
 	 * @param cropTop
 	 */
-	public final void setCrop(Vector2 cropX, Vector2 cropY) {
+	public final void setCrop(final Vector2 cropX, final Vector2 cropY) {
 		if (disposed)
 			return;
 		this.cropX.set(cropX);
@@ -224,17 +223,17 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	 * cropLeft=1.0 means that nothing left of the origin will be cropped
 	 * Setting cropLeft=0.0 means that everything to the left of the origin will
 	 * be cropped.
-	 * 
+	 *
 	 * @param cropX
 	 */
-	public final void setCropX(Vector2 cropX) {
+	public final void setCropX(final Vector2 cropX) {
 		if (disposed)
 			return;
 		this.cropX.set(cropX);
 		applyCrop(cropX.x, cropX.y, cropY.x, cropY.y);
 	}
 
-	public final void setCropXLerp(Vector2 cropXStart, Vector2 cropXEnd, float alpha) {
+	public final void setCropXLerp(final Vector2 cropXStart, final Vector2 cropXEnd, final float alpha) {
 		if (disposed)
 			return;
 		cropX.set(cropXStart).lerp(cropXEnd, alpha);
@@ -246,31 +245,31 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	 * cropLeft=1.0 means that nothing left of the origin will be cropped
 	 * Setting cropLeft=0.0 means that everything to the left of the origin will
 	 * be cropped.
-	 * 
+	 *
 	 * @param cropY
 	 */
-	public final void setCropY(Vector2 cropY) {
+	public final void setCropY(final Vector2 cropY) {
 		if (disposed)
 			return;
 		this.cropY.set(cropY);
 		applyCrop(cropX.x, cropX.y, cropY.x, cropY.y);
 	}
 
-	public final void setCropYLerp(Vector2 cropYStart, Vector2 cropYEnd, float alpha) {
+	public final void setCropYLerp(final Vector2 cropYStart, final Vector2 cropYEnd, final float alpha) {
 		if (disposed)
 			return;
 		this.cropY.set(cropYStart).lerp(cropYEnd, alpha);
 		applyCrop(cropX.x, cropX.y, cropY.x, cropY.y);
 	}
 
-	public final void setOpacity(float opacity) {
+	public final void setOpacity(final float opacity) {
 		if (disposed)
 			return;
 		this.opacity = opacity;
 		applyOpacity(opacity);
 	}
 
-	public final void setColor(Color color) {
+	public final void setColor(final Color color) {
 		if (disposed)
 			return;
 		this.color.set(color);
@@ -278,14 +277,14 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 		applyColor(color.r, color.g, color.b, opacity);
 	}
 
-	public final void setColor(float r, float g, float b) {
+	public final void setColor(final float r, final float g, final float b) {
 		if (disposed)
 			return;
 		this.color.set(r, g, b, opacity);
 		applyColor(color.r, color.g, color.b, opacity);
 	}
 
-	public final void setRotation(float rotation) {
+	public final void setRotation(final float rotation) {
 		if (disposed)
 			return;
 		this.rotation = rotation;
@@ -317,7 +316,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	 * @param passedTime Total time since the beginning in seconds.
 	 * @return True iff this drawable is finished (eg. animations) or could not be updated.
 	 */
-	public final boolean update(float deltaTime, float passedTime) {
+	public final boolean update(final float deltaTime, final float passedTime) {
 		if (disposed)
 			return false;
 		return performUpdate(deltaTime, passedTime);
@@ -328,56 +327,56 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	 * a virtual screen size.
 	 * @param batch Batch to be used for drawing.
 	 */
-	public final void render(Batch batch) {
+	public final void render(final Batch batch) {
 		if (disposed)
 			return;
 		performRender(batch);
 	}
 
-	public final void getPosition(Vector2 vector) {
+	public final void getPosition(final Vector2 vector) {
 		vector.set(position);
 	}
 
-	public final void getCropX(Vector2 vector) {
+	public final void getCropX(final Vector2 vector) {
 		vector.set(cropX);
 	}
 
-	public final void getCropY(Vector2 vector) {
+	public final void getCropY(final Vector2 vector) {
 		vector.set(cropY);
 	}
 
-	public final void getScale(Vector2 vector) {
+	public final void getScale(final Vector2 vector) {
 		vector.set(scale);
 	}
 
-	public final void getOrigin(Vector2 vector) {
+	public final void getOrigin(final Vector2 vector) {
 		vector.set(origin);
 	}
 
-	public final void getColor(Color color) {
+	public final void getColor(final Color color) {
 		color.set(this.color);
 	}
-	
+
 	public final float getColorR() {
 		return color.r;
 	}
-	
+
 	public final float getColorG() {
 		return color.g;
 	}
-	
+
 	public final float getColorB() {
 		return color.b;
 	}
-	
+
 	public final float getColorA() {
 		return color.a;
 	}
-	
+
 	public final boolean isColorSet() {
 		return color.toIntBits() != Color.WHITE.toIntBits();
 	}
-	
+
 	/**
 	 * @see Color#toFloatBits()
 	 * @return Current color.
@@ -385,7 +384,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 	public final float getColorAsFloat() {
 		return color.toFloatBits();
 	}
-	
+
 	/**
 	 * @see Color#toIntBits()
 	 * @return Current color.
@@ -428,7 +427,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 
 	/**
 	 * Called when this drawable gets updated.
-	 * 
+	 *
 	 * @param deltaTime
 	 * @param passedTime
 	 * @return Whether this drawable is finished. Will always return false for
@@ -461,7 +460,7 @@ public abstract class ADrawable<RESOURCE, LOADED> implements Poolable {
 
 	/**
 	 * Loads the resource for this drawable.
-	 * 
+	 *
 	 * @param resource
 	 *            Resource to be loaded.
 	 * @return The resource, or null if it could not be loaded.

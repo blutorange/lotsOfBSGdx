@@ -1,6 +1,7 @@
 package de.homelab.madgaksha.lotsofbs.player;
 
-import com.sun.istack.internal.Nullable;
+
+import javax.annotation.Nullable;
 
 import de.homelab.madgaksha.lotsofbs.entityengine.entity.ItemMaker;
 import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
@@ -8,7 +9,7 @@ import de.homelab.madgaksha.lotsofbs.resourcecache.ESound;
 /**
  * Used by {@link ItemMaker} for methods common to weapons, tokugis, and
  * consumables.
- * 
+ *
  * @author madgaksha
  *
  */
